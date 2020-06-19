@@ -21,10 +21,9 @@ package digital.inception.messaging;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
 
 /**
  * The <code>MessageReceivedRequest</code> class represents a request sent by a mobile device to
@@ -32,9 +31,9 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "WeakerAccess" })
-public class MessageReceivedRequest
-{
+@SuppressWarnings({"WeakerAccess"})
+public class MessageReceivedRequest {
+
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
    * received request originated from.
@@ -53,8 +52,7 @@ public class MessageReceivedRequest
    *
    * @param document the WBXML document containing the message received request information
    */
-  public MessageReceivedRequest(Document document)
-  {
+  public MessageReceivedRequest(Document document) {
     Element rootElement = document.getRootElement();
 
     this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
@@ -69,8 +67,7 @@ public class MessageReceivedRequest
    * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
    *                  that was successfully downloaded
    */
-  public MessageReceivedRequest(UUID deviceId, UUID messageId)
-  {
+  public MessageReceivedRequest(UUID deviceId, UUID messageId) {
     this.deviceId = deviceId;
     this.messageId = messageId;
   }
@@ -84,8 +81,7 @@ public class MessageReceivedRequest
    * @return <code>true</code> if the WBXML document contains valid message received request
    * information or <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessageReceivedRequest")
@@ -99,22 +95,20 @@ public class MessageReceivedRequest
    * message received request originated from.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         message received request originated from
+   * message received request originated from
    */
-  public UUID getDeviceId()
-  {
+  public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message that
-   * was successfully downloaded.
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message that was
+   * successfully downloaded.
    *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message that
-   *         was successfully downloaded
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message that was
+   * successfully downloaded
    */
-  public UUID getMessageId()
-  {
+  public UUID getMessageId() {
     return messageId;
   }
 
@@ -124,8 +118,7 @@ public class MessageReceivedRequest
    * @return the String representation of the message received request.
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return String.format("<MessageReceivedRequest deviceId=\"%s\" messageId=\"%s\"/>", deviceId,
         messageId);
   }
@@ -135,8 +128,7 @@ public class MessageReceivedRequest
    *
    * @return the WBXML representation of the message received request
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("MessageReceivedRequest");
 
     rootElement.setAttribute("deviceId", deviceId.toString());

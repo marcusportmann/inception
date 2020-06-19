@@ -18,15 +18,22 @@ package digital.inception.codes.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.ICodesService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -34,28 +41,20 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import static org.junit.Assert.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 /**
- * The <code>CodesServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>CodesService</code> class.
+ * The <code>CodesServiceTest</code> class contains the implementation of the JUnit tests for the
+ * <code>CodesService</code> class.
  *
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-public class CodesServiceTest
-{
+@ContextConfiguration(classes = {TestConfiguration.class})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+public class CodesServiceTest {
+
   private static int codeCategoryCount;
   private static int codeCount;
 
@@ -65,13 +64,49 @@ public class CodesServiceTest
   @Autowired
   private ICodesService codesService;
 
+  private static synchronized CodeCategory getTestCodeCategoryDetails() {
+    codeCategoryCount++;
+
+    CodeCategory codeCategory = new CodeCategory();
+
+    codeCategory.setId("TestCodeCategory" + codeCategoryCount);
+    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
+    codeCategory.setData("Test Code Category Data " + codeCategoryCount);
+    codeCategory.setUpdated(null);
+
+    return codeCategory;
+  }
+
+  private static synchronized Code getTestCodeDetails(String codeCategoryId) {
+    codeCount++;
+
+    Code code = new Code();
+    code.setId("Test Code Id " + codeCount);
+    code.setCodeCategoryId(codeCategoryId);
+    code.setName("Test Code Name " + codeCount);
+    code.setValue("Test Code Value " + codeCount);
+
+    return code;
+  }
+
+  @SuppressWarnings("unused")
+  private static synchronized Code getTestCodeWithoutIdDetails(String codeCategoryId) {
+    codeCount++;
+
+    Code code = new Code();
+    code.setCodeCategoryId(codeCategoryId);
+    code.setName("Test Code Name " + codeCount);
+    code.setValue("Test Code Value " + codeCount);
+
+    return code;
+  }
+
   /**
    * Test the local custom code category functionality.
    */
   @Test
   public void codeCategoryTest()
-    throws Exception
-  {
+      throws Exception {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
 
     codesService.createCodeCategory(codeCategory);
@@ -95,8 +130,7 @@ public class CodesServiceTest
 
     LocalDateTime lastUpdated = codesService.getCodeCategoryUpdated(codeCategory.getId());
 
-    if (!lastUpdated.isEqual(updatedCodeCategory.getUpdated()))
-    {
+    if (!lastUpdated.isEqual(updatedCodeCategory.getUpdated())) {
       fail("The date and time the code category was last updated was not correct");
     }
 
@@ -110,8 +144,7 @@ public class CodesServiceTest
 
     String retrievedCodeCategoryData = codesService.getCodeCategoryData(codeCategory.getId());
 
-    if (!codeCategoryData.equals(retrievedCodeCategoryData))
-    {
+    if (!codeCategoryData.equals(retrievedCodeCategoryData)) {
       fail("Failed to retrieve the correct data for the code category (" + codeCategory.getId()
           + ")");
     }
@@ -119,16 +152,14 @@ public class CodesServiceTest
     retrievedCodeCategoryData = codesService.getCodeCategoryDataWithParameters(
         codeCategory.getId(), new HashMap<>());
 
-    if (!codeCategoryData.equals(retrievedCodeCategoryData))
-    {
+    if (!codeCategoryData.equals(retrievedCodeCategoryData)) {
       fail("Failed to retrieve the correct data for the code category (" + codeCategory.getId()
           + ")");
     }
 
     codesService.deleteCodeCategory(codeCategory.getId());
 
-    if (codesService.codeCategoryExists(codeCategory.getId()))
-    {
+    if (codesService.codeCategoryExists(codeCategory.getId())) {
       fail("Retrieved the code category (" + codeCategory.getId()
           + ") that should have been deleted");
     }
@@ -139,8 +170,7 @@ public class CodesServiceTest
    */
   @Test
   public void codeProviderTest()
-    throws Exception
-  {
+      throws Exception {
     CodeCategory retrievedCodeCategory = codesService.getCodeCategory("TestCodeCategory");
 
     assertNotNull("The code category is null", retrievedCodeCategory);
@@ -151,8 +181,7 @@ public class CodesServiceTest
    */
   @Test
   public void codeTest()
-    throws Exception
-  {
+      throws Exception {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
 
     codesService.createCodeCategory(codeCategory);
@@ -189,8 +218,7 @@ public class CodesServiceTest
 
     codesService.deleteCode(codeCategory.getId(), code.getId());
 
-    if (codesService.codeExists(codeCategory.getId(), code.getId()))
-    {
+    if (codesService.codeExists(codeCategory.getId(), code.getId())) {
       fail("Retrieved the code (" + code.getId() + ") for the code category ("
           + codeCategory.getId() + ") that should have been deleted");
     }
@@ -201,8 +229,7 @@ public class CodesServiceTest
    */
   @Test
   public void codesTest()
-    throws Exception
-  {
+      throws Exception {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
 
     codesService.createCodeCategory(codeCategory);
@@ -213,13 +240,11 @@ public class CodesServiceTest
 
     List<Code> codes = new ArrayList<>();
 
-    for (int i = 0; i < 10; i++)
-    {
+    for (int i = 0; i < 10; i++) {
       codes.add(getTestCodeDetails(codeCategory.getId()));
     }
 
-    for (Code code : codes)
-    {
+    for (Code code : codes) {
       codesService.createCode(code);
     }
 
@@ -240,8 +265,7 @@ public class CodesServiceTest
    * Test the code category and code constructors.
    */
   @Test
-  public void constructorTest()
-  {
+  public void constructorTest() {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
 
     CodeCategory codeCategory1 = new CodeCategory(codeCategory.getId(), codeCategory.getName(),
@@ -265,8 +289,7 @@ public class CodesServiceTest
    */
   @Test
   public void getCodeCategoriesTest()
-    throws Exception
-  {
+      throws Exception {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
 
     codesService.createCodeCategory(codeCategory);
@@ -289,48 +312,7 @@ public class CodesServiceTest
         codesService.getNumberOfCodeCategories());
   }
 
-  private static synchronized CodeCategory getTestCodeCategoryDetails()
-  {
-    codeCategoryCount++;
-
-    CodeCategory codeCategory = new CodeCategory();
-
-    codeCategory.setId("TestCodeCategory" + codeCategoryCount);
-    codeCategory.setName("Test Code Category Name " + codeCategoryCount);
-    codeCategory.setData("Test Code Category Data " + codeCategoryCount);
-    codeCategory.setUpdated(null);
-
-    return codeCategory;
-  }
-
-  private static synchronized Code getTestCodeDetails(String codeCategoryId)
-  {
-    codeCount++;
-
-    Code code = new Code();
-    code.setId("Test Code Id " + codeCount);
-    code.setCodeCategoryId(codeCategoryId);
-    code.setName("Test Code Name " + codeCount);
-    code.setValue("Test Code Value " + codeCount);
-
-    return code;
-  }
-
-  @SuppressWarnings("unused")
-  private static synchronized Code getTestCodeWithoutIdDetails(String codeCategoryId)
-  {
-    codeCount++;
-
-    Code code = new Code();
-    code.setCodeCategoryId(codeCategoryId);
-    code.setName("Test Code Name " + codeCount);
-    code.setValue("Test Code Value " + codeCount);
-
-    return code;
-  }
-
-  private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2)
-  {
+  private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2) {
     assertEquals("The ID values for the two code categories do not match", codeCategory1.getId(),
         codeCategory2.getId());
     assertEquals("The name values for the two code categories do not match",
@@ -341,8 +323,7 @@ public class CodesServiceTest
         codeCategory1.getUpdated(), codeCategory2.getUpdated());
   }
 
-  private void compareCodes(Code code1, Code code2)
-  {
+  private void compareCodes(Code code1, Code code2) {
     assertEquals("The ID values for the two codes do not match", code1.getId(), code2.getId());
     assertEquals("The category ID values for the two codes do not match",
         code1.getCodeCategoryId(), code2.getCodeCategoryId());
@@ -352,16 +333,12 @@ public class CodesServiceTest
         code2.getValue());
   }
 
-  private void compareCodes(List<Code> codes1, List<Code> codes2)
-  {
-    for (Code code1 : codes1)
-    {
+  private void compareCodes(List<Code> codes1, List<Code> codes2) {
+    for (Code code1 : codes1) {
       boolean foundCode = false;
 
-      for (Code code2 : codes2)
-      {
-        if (code1.getId().equals(code2.getId()))
-        {
+      for (Code code2 : codes2) {
+        if (code1.getId().equals(code2.getId())) {
           compareCodes(code1, code2);
 
           foundCode = true;
@@ -370,8 +347,7 @@ public class CodesServiceTest
         }
       }
 
-      if (!foundCode)
-      {
+      if (!foundCode) {
         fail("Failed to find the code (" + code1.getId() + ") in the list of codes");
       }
     }

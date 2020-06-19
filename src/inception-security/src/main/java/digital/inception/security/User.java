@@ -22,30 +22,32 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>User</code> class holds the information for a user.
@@ -54,19 +56,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "User")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-    "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry" })
+@JsonPropertyOrder({"userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
+    "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry"})
 @XmlRootElement(name = "User", namespace = "http://security.inception.digital")
 @XmlType(name = "User", namespace = "http://security.inception.digital",
-    propOrder = { "userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
-        "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry" })
+    propOrder = {"userDirectoryId", "username", "firstName", "lastName", "mobileNumber",
+        "phoneNumber", "email", "status", "password", "passwordAttempts", "passwordExpiry"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "users")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class User
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -154,10 +156,9 @@ public class User
 
   /**
    * The password or password hash for the user.
-   *
-   * NOTE: The password is not required as part of the JSON or XML representation of the user,
-   *       other than when creating the user, so the field is nullable but the database column is
-   *       not.
+   * <p>
+   * NOTE: The password is not required as part of the JSON or XML representation of the user, other
+   * than when creating the user, so the field is nullable but the database column is not.
    */
   @ApiModelProperty(value = "The password or password hash for the user")
   @JsonProperty
@@ -167,7 +168,8 @@ public class User
   private String password;
 
   /**
-   * The number of failed authentication attempts as a result of an incorrect password for the user.
+   * The number of failed authentication attempts as a result of an incorrect password for the
+   * user.
    */
   @ApiModelProperty(
       value = "The number of failed authentication attempts as a result of an incorrect password for the user",
@@ -237,7 +239,8 @@ public class User
   /**
    * Constructs a new <code>User</code>.
    */
-  public User() {}
+  public User() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -245,23 +248,19 @@ public class User
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -275,9 +274,17 @@ public class User
    *
    * @return the e-mail address for the user
    */
-  public String getEmail()
-  {
+  public String getEmail() {
     return email;
+  }
+
+  /**
+   * Set the e-mail address for the user.
+   *
+   * @param email the e-mail address for the user
+   */
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   /**
@@ -285,9 +292,17 @@ public class User
    *
    * @return the first name for the user
    */
-  public String getFirstName()
-  {
+  public String getFirstName() {
     return firstName;
+  }
+
+  /**
+   * Set the first name for the user.
+   *
+   * @param firstName the first name for the user
+   */
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
   }
 
   /**
@@ -295,9 +310,17 @@ public class User
    *
    * @return the groups the user is associated with
    */
-  public Set<Group> getGroups()
-  {
+  public Set<Group> getGroups() {
     return groups;
+  }
+
+  /**
+   * Set the groups the user is associated with.
+   *
+   * @param groups the groups the user is associated with
+   */
+  public void setGroups(Set<Group> groups) {
+    this.groups = groups;
   }
 
   /**
@@ -305,9 +328,17 @@ public class User
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -315,9 +346,17 @@ public class User
    *
    * @return the last name for the user
    */
-  public String getLastName()
-  {
+  public String getLastName() {
     return lastName;
+  }
+
+  /**
+   * Set the last name for the user.
+   *
+   * @param lastName the last name for the user
+   */
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
   }
 
   /**
@@ -325,9 +364,17 @@ public class User
    *
    * @return the mobile number for the user
    */
-  public String getMobileNumber()
-  {
+  public String getMobileNumber() {
     return mobileNumber;
+  }
+
+  /**
+   * Set the mobile number for the user.
+   *
+   * @param mobileNumber the mobile number for the user
+   */
+  public void setMobileNumber(String mobileNumber) {
+    this.mobileNumber = mobileNumber;
   }
 
   /**
@@ -335,9 +382,17 @@ public class User
    *
    * @return the password or password hash for the user
    */
-  public String getPassword()
-  {
+  public String getPassword() {
     return password;
+  }
+
+  /**
+   * Set the password or password hash for the user.
+   *
+   * @param password the password or password hash for the user
+   */
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   /**
@@ -345,11 +400,19 @@ public class User
    * the user
    *
    * @return the number of failed authentication attempts as a result of an incorrect password for
-   *         the user
+   * the user
    */
-  public Integer getPasswordAttempts()
-  {
+  public Integer getPasswordAttempts() {
     return passwordAttempts;
+  }
+
+  /**
+   * Set the password attempts for the user.
+   *
+   * @param passwordAttempts the password attempts for the user
+   */
+  public void setPasswordAttempts(Integer passwordAttempts) {
+    this.passwordAttempts = passwordAttempts;
   }
 
   /**
@@ -357,9 +420,17 @@ public class User
    *
    * @return the date and time the password for the user expires
    */
-  public LocalDateTime getPasswordExpiry()
-  {
+  public LocalDateTime getPasswordExpiry() {
     return passwordExpiry;
+  }
+
+  /**
+   * Set the date and time the password for the user expires.
+   *
+   * @param passwordExpiry the date and time the password for the user expires
+   */
+  public void setPasswordExpiry(LocalDateTime passwordExpiry) {
+    this.passwordExpiry = passwordExpiry;
   }
 
   /**
@@ -367,9 +438,17 @@ public class User
    *
    * @return the phone number for the user
    */
-  public String getPhoneNumber()
-  {
+  public String getPhoneNumber() {
     return phoneNumber;
+  }
+
+  /**
+   * Set the phone number for the user.
+   *
+   * @param phoneNumber the phone number for the user
+   */
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
   }
 
   /**
@@ -377,9 +456,17 @@ public class User
    *
    * @return the status for the user
    */
-  public UserStatus getStatus()
-  {
+  public UserStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Set the status for the user.
+   *
+   * @param status the status for the user
+   */
+  public void setStatus(UserStatus status) {
+    this.status = status;
   }
 
   /**
@@ -387,11 +474,21 @@ public class User
    * the user is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the user is associated with
+   * the user is associated with
    */
-  public UUID getUserDirectoryId()
-  {
+  public UUID getUserDirectoryId() {
     return userDirectoryId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * user is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the user is associated with
+   */
+  public void setUserDirectoryId(UUID userDirectoryId) {
+    this.userDirectoryId = userDirectoryId;
   }
 
   /**
@@ -399,10 +496,8 @@ public class User
    *
    * @return the username for the user
    */
-  public String getUsername()
-  {
-    if (username != null)
-    {
+  public String getUsername() {
+    if (username != null) {
       username = username.toLowerCase();
     }
 
@@ -410,15 +505,22 @@ public class User
   }
 
   /**
+   * Set the username for the user.
+   *
+   * @param username the username for the user
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  /**
    * Has the password for the user expired?
    *
    * @return <code>true</code> if the password for the user has expired or <code>false</code>
-   *         otherwise
+   * otherwise
    */
-  public boolean hasPasswordExpired()
-  {
-    if (passwordExpiry != null)
-    {
+  public boolean hasPasswordExpired() {
+    if (passwordExpiry != null) {
       return LocalDateTime.now().isAfter(passwordExpiry);
     }
 
@@ -431,8 +533,7 @@ public class User
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -445,8 +546,7 @@ public class User
    */
   @JsonIgnore
   @XmlTransient
-  public boolean isActive()
-  {
+  public boolean isActive() {
     return (status == UserStatus.ACTIVE);
   }
 
@@ -457,8 +557,7 @@ public class User
    */
   @JsonIgnore
   @XmlTransient
-  public boolean isExpired()
-  {
+  public boolean isExpired() {
     return (status == UserStatus.EXPIRED);
   }
 
@@ -469,140 +568,7 @@ public class User
    */
   @JsonIgnore
   @XmlTransient
-  public boolean isLocked()
-  {
+  public boolean isLocked() {
     return (status == UserStatus.LOCKED);
-  }
-
-  /**
-   * Set the e-mail address for the user.
-   *
-   * @param email the e-mail address for the user
-   */
-  public void setEmail(String email)
-  {
-    this.email = email;
-  }
-
-  /**
-   * Set the first name for the user.
-   *
-   * @param firstName the first name for the user
-   */
-  public void setFirstName(String firstName)
-  {
-    this.firstName = firstName;
-  }
-
-  /**
-   * Set the groups the user is associated with.
-   *
-   * @param groups the groups the user is associated with
-   */
-  public void setGroups(Set<Group> groups)
-  {
-    this.groups = groups;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the last name for the user.
-   *
-   * @param lastName the last name for the user
-   */
-  public void setLastName(String lastName)
-  {
-    this.lastName = lastName;
-  }
-
-  /**
-   * Set the mobile number for the user.
-   *
-   * @param mobileNumber the mobile number for the user
-   */
-  public void setMobileNumber(String mobileNumber)
-  {
-    this.mobileNumber = mobileNumber;
-  }
-
-  /**
-   * Set the password or password hash for the user.
-   *
-   * @param password the password or password hash for the user
-   */
-  public void setPassword(String password)
-  {
-    this.password = password;
-  }
-
-  /**
-   * Set the password attempts for the user.
-   *
-   * @param passwordAttempts the password attempts for the user
-   */
-  public void setPasswordAttempts(Integer passwordAttempts)
-  {
-    this.passwordAttempts = passwordAttempts;
-  }
-
-  /**
-   * Set the date and time the password for the user expires.
-   *
-   * @param passwordExpiry the date and time the password for the user expires
-   */
-  public void setPasswordExpiry(LocalDateTime passwordExpiry)
-  {
-    this.passwordExpiry = passwordExpiry;
-  }
-
-  /**
-   * Set the phone number for the user.
-   *
-   * @param phoneNumber the phone number for the user
-   */
-  public void setPhoneNumber(String phoneNumber)
-  {
-    this.phoneNumber = phoneNumber;
-  }
-
-  /**
-   * Set the status for the user.
-   *
-   * @param status the status for the user
-   */
-  public void setStatus(UserStatus status)
-  {
-    this.status = status;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * user is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the user is associated with
-   */
-  public void setUserDirectoryId(UUID userDirectoryId)
-  {
-    this.userDirectoryId = userDirectoryId;
-  }
-
-  /**
-   * Set the username for the user.
-   *
-   * @param username the username for the user
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
   }
 }

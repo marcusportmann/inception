@@ -18,15 +18,20 @@ package digital.inception.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.transaction.*;
 
 /**
  * The <code>UserTransactionProxy</code> class provides a proxy that tracks the Java Transaction
@@ -35,10 +40,10 @@ import javax.transaction.*;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class UserTransactionProxy
-  implements UserTransaction
-{
+    implements UserTransaction {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserTransactionProxy.class);
 
@@ -61,30 +66,33 @@ public class UserTransactionProxy
   /**
    * Constructs a new <code>UserTransactionProxy</code>.
    *
-   * @param userTransaction the JTA user transaction
+   * @param userTransaction    the JTA user transaction
    * @param transactionManager the JTA transaction manager
    */
   public UserTransactionProxy(UserTransaction userTransaction,
-      TransactionManager transactionManager)
-  {
+      TransactionManager transactionManager) {
     this.transactionManager = transactionManager;
     this.userTransaction = userTransaction;
   }
 
+  /**
+   * Returns the active transaction stack traces for the current thread.
+   *
+   * @return the active transaction stack traces for the current thread
+   */
+  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces() {
+    return activeTransactionStackTraces.get();
+  }
+
   @Override
   public void begin()
-    throws NotSupportedException, SystemException
-  {
-    try
-    {
+      throws NotSupportedException, SystemException {
+    try {
       userTransaction.begin();
-    }
-    finally
-    {
+    } finally {
       Transaction afterTransaction = getCurrentTransaction();
 
-      if (afterTransaction != null)
-      {
+      if (afterTransaction != null) {
         getActiveTransactionStackTraces().put(afterTransaction, Thread.currentThread()
             .getStackTrace());
       }
@@ -93,21 +101,16 @@ public class UserTransactionProxy
 
   @Override
   public void commit()
-    throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-        SecurityException, IllegalStateException, SystemException
-  {
+      throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
+      SecurityException, IllegalStateException, SystemException {
     Transaction beforeTransaction = getCurrentTransaction();
 
-    try
-    {
+    try {
       userTransaction.commit();
-    }
-    finally
-    {
+    } finally {
       Transaction afterTransaction = getCurrentTransaction();
 
-      if ((beforeTransaction != null) && (afterTransaction == null))
-      {
+      if ((beforeTransaction != null) && (afterTransaction == null)) {
         getActiveTransactionStackTraces().remove(beforeTransaction);
       }
     }
@@ -115,27 +118,21 @@ public class UserTransactionProxy
 
   @Override
   public int getStatus()
-    throws SystemException
-  {
+      throws SystemException {
     return userTransaction.getStatus();
   }
 
   @Override
   public void rollback()
-    throws IllegalStateException, SecurityException, SystemException
-  {
+      throws IllegalStateException, SecurityException, SystemException {
     Transaction beforeTransaction = getCurrentTransaction();
 
-    try
-    {
+    try {
       userTransaction.rollback();
-    }
-    finally
-    {
+    } finally {
       Transaction afterTransaction = getCurrentTransaction();
 
-      if ((beforeTransaction != null) && (afterTransaction == null))
-      {
+      if ((beforeTransaction != null) && (afterTransaction == null)) {
         getActiveTransactionStackTraces().remove(beforeTransaction);
       }
     }
@@ -143,26 +140,14 @@ public class UserTransactionProxy
 
   @Override
   public void setRollbackOnly()
-    throws IllegalStateException, SystemException
-  {
+      throws IllegalStateException, SystemException {
     userTransaction.setRollbackOnly();
   }
 
   @Override
   public void setTransactionTimeout(int i)
-    throws SystemException
-  {
+      throws SystemException {
     userTransaction.setTransactionTimeout(i);
-  }
-
-  /**
-   * Returns the active transaction stack traces for the current thread.
-   *
-   * @return the active transaction stack traces for the current thread
-   */
-  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces()
-  {
-    return activeTransactionStackTraces.get();
   }
 
   /**
@@ -170,14 +155,10 @@ public class UserTransactionProxy
    *
    * @return the current transaction or <code>null</code> if there is no current transaction
    */
-  private Transaction getCurrentTransaction()
-  {
-    try
-    {
+  private Transaction getCurrentTransaction() {
+    try {
       return transactionManager.getTransaction();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error("Failed to retrieve the current transaction", e);
 
       return null;

@@ -22,39 +22,45 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.springframework.util.StringUtils;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import org.xml.sax.InputSource;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
-
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-
-import javax.persistence.*;
-
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.springframework.util.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectory</code> class holds the information for a user directory.
@@ -63,17 +69,17 @@ import javax.xml.parsers.DocumentBuilderFactory;
  */
 @ApiModel(value = "UserDirectory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "type", "name", "parameters" })
+@JsonPropertyOrder({"id", "type", "name", "parameters"})
 @XmlRootElement(name = "UserDirectory", namespace = "http://security.inception.digital")
 @XmlType(name = "UserDirectory", namespace = "http://security.inception.digital",
-    propOrder = { "id", "type", "name", "parameters" })
+    propOrder = {"id", "type", "name", "parameters"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "user_directories")
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class UserDirectory
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -132,7 +138,8 @@ public class UserDirectory
   /**
    * Constructs a new <code>UserDirectory</code>.
    */
-  public UserDirectory() {}
+  public UserDirectory() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -140,23 +147,19 @@ public class UserDirectory
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -174,16 +177,14 @@ public class UserDirectory
   @XmlTransient
   @Access(AccessType.PROPERTY)
   @Column(name = "configuration", nullable = false, length = 4000)
-  public String getConfiguration()
-  {
+  public String getConfiguration() {
     StringBuilder buffer = new StringBuilder();
 
     buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     buffer.append(
         "<!DOCTYPE userDirectory SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>");
 
-    for (UserDirectoryParameter parameter : parameters)
-    {
+    for (UserDirectoryParameter parameter : parameters) {
       buffer.append("<parameter>");
       buffer.append("<name>").append(parameter.getName()).append("</name>");
       buffer.append("<value>").append(StringUtils.isEmpty(parameter.getValue())
@@ -198,78 +199,13 @@ public class UserDirectory
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the name of the user directory.
-   *
-   * @return the name of the user directory
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the organizations the user directory is associated with.
-   *
-   * @return the organizations the user directory is associated with
-   */
-  public Set<Organization> getOrganizations()
-  {
-    return organizations;
-  }
-
-  /**
-   * Returns the parameters for the user directory.
-   *
-   * @return the parameters for the user directory
-   */
-  public List<UserDirectoryParameter> getParameters()
-  {
-    return parameters;
-  }
-
-  /**
-   * Returns the code used to uniquely identify the user directory type.
-   *
-   * @return the code used to uniquely identify the user directory type
-   */
-  public String getType()
-  {
-    return type;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return (id == null)
-        ? 0
-        : id.hashCode();
-  }
-
-  /**
    * Set the XML configuration data for the user directory.
    *
    * @param configuration the XML configuration data for the user directory
    */
   public void setConfiguration(String configuration)
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       // Parse the XML configuration data
       DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
 
@@ -291,29 +227,44 @@ public class UserDirectory
 
       NodeList parameterElements = rootElement.getElementsByTagName("parameter");
 
-      for (int i = 0; i < parameterElements.getLength(); i++)
-      {
+      for (int i = 0; i < parameterElements.getLength(); i++) {
         Element parameterElement = (Element) parameterElements.item(i);
 
         parameters.add(new UserDirectoryParameter(XmlUtil.getChildElementText(parameterElement,
             "name"), XmlUtil.getChildElementText(parameterElement, "value")));
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to parse the XML configuration data for the user directory", e);
     }
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   */
+  public UUID getId() {
+    return id;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
    *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
+   *           directory
    */
-  public void setId(UUID id)
-  {
+  public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Returns the name of the user directory.
+   *
+   * @return the name of the user directory
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -321,9 +272,17 @@ public class UserDirectory
    *
    * @param name the name of the user directory
    */
-  public void setName(String name)
-  {
+  public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Returns the organizations the user directory is associated with.
+   *
+   * @return the organizations the user directory is associated with
+   */
+  public Set<Organization> getOrganizations() {
+    return organizations;
   }
 
   /**
@@ -331,9 +290,17 @@ public class UserDirectory
    *
    * @param organizations the organizations the user directory is associated with
    */
-  public void setOrganizations(Set<Organization> organizations)
-  {
+  public void setOrganizations(Set<Organization> organizations) {
     this.organizations = organizations;
+  }
+
+  /**
+   * Returns the parameters for the user directory.
+   *
+   * @return the parameters for the user directory
+   */
+  public List<UserDirectoryParameter> getParameters() {
+    return parameters;
   }
 
   /**
@@ -341,9 +308,17 @@ public class UserDirectory
    *
    * @param parameters the parameters for the user directory
    */
-  public void setParameters(List<UserDirectoryParameter> parameters)
-  {
+  public void setParameters(List<UserDirectoryParameter> parameters) {
     this.parameters = parameters;
+  }
+
+  /**
+   * Returns the code used to uniquely identify the user directory type.
+   *
+   * @return the code used to uniquely identify the user directory type
+   */
+  public String getType() {
+    return type;
   }
 
   /**
@@ -351,8 +326,19 @@ public class UserDirectory
    *
    * @param type the code used to uniquely identify the user directory type
    */
-  public void setType(String type)
-  {
+  public void setType(String type) {
     this.type = type;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 }

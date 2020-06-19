@@ -20,7 +20,6 @@ package digital.inception.sms;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,8 +33,8 @@ import org.springframework.stereotype.Service;
 @Service
 @SuppressWarnings("unused")
 public class BackgroundSMSSender
-  implements InitializingBean
-{
+    implements InitializingBean {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundSMSSender.class);
 
@@ -47,8 +46,7 @@ public class BackgroundSMSSender
    *
    * @param smsService the SMS Service
    */
-  public BackgroundSMSSender(ISMSService smsService)
-  {
+  public BackgroundSMSSender(ISMSService smsService) {
     this.smsService = smsService;
   }
 
@@ -56,29 +54,22 @@ public class BackgroundSMSSender
    * Initialize the Background SMS Sender.
    */
   @Override
-  public void afterPropertiesSet()
-  {
+  public void afterPropertiesSet() {
     logger.info("Initializing the Background SMS Sender");
 
-    if (smsService != null)
-    {
+    if (smsService != null) {
       /*
        * Reset any locks for SMS that were previously being sent by the background
        * SMS sender.
        */
-      try
-      {
+      try {
         logger.info("Resetting the SMS locks for the SMSs being sent");
 
         smsService.resetSMSLocks(SMSStatus.SENDING, SMSStatus.QUEUED_FOR_SENDING);
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to reset the SMS locks for the SMSs being sent", e);
       }
-    }
-    else
-    {
+    } else {
       logger.error(
           "Failed to initialize the Background SMS Sender: The SMS Service was NOT injected");
     }
@@ -89,79 +80,59 @@ public class BackgroundSMSSender
    */
   @Scheduled(cron = "0 * * * * *")
   @Async
-  void sendSMSs()
-  {
+  void sendSMSs() {
     SMS sms;
 
-    while (true)
-    {
+    while (true) {
       // Retrieve the next SMS queued for sending
-      try
-      {
+      try {
         sms = smsService.getNextSMSQueuedForSending();
 
-        if (sms == null)
-        {
-          if (logger.isDebugEnabled())
-          {
+        if (sms == null) {
+          if (logger.isDebugEnabled()) {
             logger.debug("No SMSs queued for sending");
           }
 
           return;
         }
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to retrieve the next SMS queued for sending", e);
 
         return;
       }
 
       // Send the SMS
-      try
-      {
-        if (logger.isDebugEnabled())
-        {
+      try {
+        if (logger.isDebugEnabled()) {
           logger.debug(String.format("Sending the queued SMS (%d)", sms.getId()));
         }
 
-        if (smsService.sendSMSSynchronously(sms.getId(), sms.getMobileNumber(), sms.getMessage()))
-        {
+        if (smsService.sendSMSSynchronously(sms.getId(), sms.getMobileNumber(), sms.getMessage())) {
           // Delete the SMS
           smsService.deleteSMS(sms.getId());
-        }
-        else
-        {
+        } else {
           // Unlock the SMS and mark it as failed
           smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
         }
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error(String.format("Failed to send the queued SMS (%d)", sms.getId()), e);
 
-        try
-        {
+        try {
           /*
            * If the SMS has exceeded the maximum number of processing attempts then unlock it
            * and set its status to "Failed" otherwise unlock it and set its status to
            * "QueuedForSending".
            */
-          if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts())
-          {
+          if (sms.getSendAttempts() >= smsService.getMaximumSendAttempts()) {
             logger.warn(String.format(
                 "The queued SMS (%d) has exceeded the maximum number of send attempts and will be "
-                + "marked as \"Failed\"", sms.getId()));
+                    + "marked as \"Failed\"", sms.getId()));
 
             smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
-          }
-          else
-          {
+          } else {
             smsService.unlockSMS(sms.getId(), SMSStatus.QUEUED_FOR_SENDING);
           }
-        }
-        catch (Throwable f)
-        {
+        } catch (Throwable f) {
           logger.error(String.format("Failed to unlock and set the status for the queued SMS (%d)",
               sms.getId()), f);
         }

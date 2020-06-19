@@ -19,10 +19,8 @@ package digital.inception.core.util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.nio.charset.StandardCharsets;
-
 import java.security.MessageDigest;
 import java.security.SecureRandom;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -36,10 +34,10 @@ import java.util.stream.Stream;
  *
  * @author Marcus Portmann
  */
-public class PasswordUtil
-{
+public class PasswordUtil {
+
   /**
-   *  Special characters allowed in password.
+   * Special characters allowed in password.
    */
   private static final String ALLOWED_SPL_CHARACTERS = "!@#$%^&*()_+";
 
@@ -55,18 +53,14 @@ public class PasswordUtil
    *
    * @return the SHA-256 hash of the password
    */
-  public static final String createPasswordHash(String password)
-  {
-    try
-    {
+  public static final String createPasswordHash(String password) {
+    try {
       MessageDigest md = MessageDigest.getInstance("SHA-256");
 
       md.update(password.getBytes(StandardCharsets.ISO_8859_1), 0, password.length());
 
       return Base64Util.encodeBytes(md.digest());
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException(String.format(
           "Failed to generate a SHA-256 hash of the password (%s)", password), e);
     }
@@ -77,11 +71,10 @@ public class PasswordUtil
    *
    * @return the random password
    */
-  public static String generateRandomPassword()
-  {
+  public static String generateRandomPassword() {
     Stream<Character> pwdStream = Stream.concat(getRandomNumbers(2), Stream.concat(
         getRandomSpecialChars(2), Stream.concat(getRandomAlphabets(2, true), getRandomAlphabets(4,
-        false))));
+            false))));
     List<Character> charList = pwdStream.collect(Collectors.toList());
     Collections.shuffle(charList);
 
@@ -91,30 +84,24 @@ public class PasswordUtil
     return password;
   }
 
-  private static Stream<Character> getRandomAlphabets(int count, boolean upperCase)
-  {
+  private static Stream<Character> getRandomAlphabets(int count, boolean upperCase) {
     IntStream characters = null;
-    if (upperCase)
-    {
+    if (upperCase) {
       characters = random.ints(count, 65, 90);
-    }
-    else
-    {
+    } else {
       characters = random.ints(count, 97, 122);
     }
 
     return characters.mapToObj(data -> (char) data);
   }
 
-  private static Stream<Character> getRandomNumbers(int count)
-  {
+  private static Stream<Character> getRandomNumbers(int count) {
     IntStream numbers = random.ints(count, 48, 57);
 
     return numbers.mapToObj(data -> (char) data);
   }
 
-  private static Stream<Character> getRandomSpecialChars(int count)
-  {
+  private static Stream<Character> getRandomSpecialChars(int count) {
     IntStream specialChars = random.ints(count, 33, 45);
 
     return specialChars.mapToObj(data -> (char) data);

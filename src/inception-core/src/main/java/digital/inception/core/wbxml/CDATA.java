@@ -24,24 +24,23 @@ import java.io.PrintStream;
 import java.io.Serializable;
 
 /**
- * The <code>CDATA</code> class stores the data for a CDATA (Character Data) content type in a
- * WBXML document.
+ * The <code>CDATA</code> class stores the data for a CDATA (Character Data) content type in a WBXML
+ * document.
  * <p/>
  * This content type is used to store a text string.
  *
  * @author Marcus Portmann
  */
 public class CDATA
-  implements Serializable, Content
-{
+    implements Serializable, Content {
+
   private static final long serialVersionUID = 1000000;
   private String text;
 
   /**
    * Constructs a new empty <code>CDATA</code>.
    */
-  public CDATA()
-  {
+  public CDATA() {
     text = "";
   }
 
@@ -50,8 +49,7 @@ public class CDATA
    *
    * @param text the text content
    */
-  public CDATA(String text)
-  {
+  public CDATA(String text) {
     this.text = text;
   }
 
@@ -60,9 +58,17 @@ public class CDATA
    *
    * @return the text content for the <code>CDATA</code> instance
    */
-  public String getText()
-  {
+  public String getText() {
     return text;
+  }
+
+  /**
+   * Set the text content for the <code>CDATA</code> instance.
+   *
+   * @param text the text content for the <code>CDATA</code> instance
+   */
+  public void setText(String text) {
+    this.text = text;
   }
 
   /**
@@ -70,8 +76,7 @@ public class CDATA
    *
    * @param indent the indent level
    */
-  public void print(int indent)
-  {
+  public void print(int indent) {
     print(System.out, indent);
   }
 
@@ -81,8 +86,7 @@ public class CDATA
    * @param out    the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
-  public void print(OutputStream out, int indent)
-  {
+  public void print(OutputStream out, int indent) {
     PrintStream pout = new PrintStream(out);
 
     pout.print(text);
@@ -94,25 +98,13 @@ public class CDATA
   }
 
   /**
-   * Set the text content for the <code>CDATA</code> instance.
-   *
-   * @param text the text content for the <code>CDATA</code> instance
-   */
-  public void setText(String text)
-  {
-    this.text = text;
-  }
-
-  /**
    * @return the string representation of the <code>CDATA</code> instance
    *
    * @see Object#toString()
    */
   @Override
-  public String toString()
-  {
-    try
-    {
+  public String toString() {
+    try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
       print(baos, 0);
@@ -122,9 +114,7 @@ public class CDATA
       baos.close();
 
       return result;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       return super.toString();
     }
   }

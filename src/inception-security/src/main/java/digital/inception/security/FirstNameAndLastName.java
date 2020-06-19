@@ -17,13 +17,13 @@
 package digital.inception.security;
 
 /**
- * The <code>FirstNameAndLastName</code> interface allows the first name and last name for a
- * user to be retrieved.
+ * The <code>FirstNameAndLastName</code> interface allows the first name and last name for a user to
+ * be retrieved.
  *
  * @author Marcus Portmann
  */
-public interface FirstNameAndLastName
-{
+public interface FirstNameAndLastName {
+
   /**
    * Returns the first name for the user.
    *

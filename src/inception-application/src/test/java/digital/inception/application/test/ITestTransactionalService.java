@@ -17,20 +17,20 @@
 package digital.inception.application.test;
 
 /**
- * The <code>ITestTransactionalService</code> interface defines the functionality provided by a
- * Test Transactional Service implementation.
+ * The <code>ITestTransactionalService</code> interface defines the functionality provided by a Test
+ * Transactional Service implementation.
  *
  * @author Marcus Portmann
  */
-public interface ITestTransactionalService
-{
+public interface ITestTransactionalService {
+
   /**
    * Create the test data.
    *
    * @param testData the test data
    */
   void createTestData(TestData testData)
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction.
@@ -38,7 +38,7 @@ public interface ITestTransactionalService
    * @param testData the test data
    */
   void createTestDataInNewTransaction(TestData testData)
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction with a checked exception.
@@ -46,7 +46,7 @@ public interface ITestTransactionalService
    * @param testData the test data
    */
   void createTestDataInNewTransactionWithCheckedException(TestData testData)
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 
   /**
    * Create the test data in a new transaction with a runtime exception.
@@ -54,7 +54,7 @@ public interface ITestTransactionalService
    * @param testData the test data
    */
   void createTestDataInNewTransactionWithRuntimeException(TestData testData)
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 
   /**
    * Create the test data with a checked exception.
@@ -62,7 +62,7 @@ public interface ITestTransactionalService
    * @param testData the test data
    */
   void createTestDataWithCheckedException(TestData testData)
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 
   /**
    * Create the test data with a runtime exception.
@@ -70,7 +70,7 @@ public interface ITestTransactionalService
    * @param testData the test data
    */
   void createTestDataWithRuntimeException(TestData testData)
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 
   /**
    * Retrieve the next ID and throw an exception.
@@ -78,7 +78,7 @@ public interface ITestTransactionalService
    * @return the next ID
    */
   long getNextIDWithException()
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 
   /**
    * Retrieve the next ID without throwing an exception.
@@ -86,7 +86,7 @@ public interface ITestTransactionalService
    * @return the next ID
    */
   long getNextIDWithoutException()
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 
   /**
    * Retrieve the test data.
@@ -96,5 +96,5 @@ public interface ITestTransactionalService
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   TestData getTestData(String id)
-    throws TestTransactionalServiceException;
+      throws TestTransactionalServiceException;
 }

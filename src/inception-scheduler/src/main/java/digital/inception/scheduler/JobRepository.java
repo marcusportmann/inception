@@ -18,6 +18,10 @@ package digital.inception.scheduler;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import javax.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -27,21 +31,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.LockModeType;
-
 /**
  * The <code>JobRepository</code> interface declares the repository for the
  * <code>Job</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface JobRepository extends JpaRepository<Job, String>
-{
+public interface JobRepository extends JpaRepository<Job, String> {
+
   @Modifying
   @Query("delete from Job j where j.id = :jobId")
   void deleteById(@Param("jobId") String jobId);
@@ -52,8 +49,8 @@ public interface JobRepository extends JpaRepository<Job, String>
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("select j from Job j where j.enabled = true and j.status = 1 and "
-     + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts is null) "
-     + "and j.nextExecution <= current_timestamp")
+      + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts is null) "
+      + "and j.nextExecution <= current_timestamp")
   List<Job> findJobsScheduledForExecutionForWrite(@Param(
       "lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
 

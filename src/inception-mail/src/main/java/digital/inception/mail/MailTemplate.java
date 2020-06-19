@@ -21,28 +21,26 @@ package digital.inception.mail;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailTemplate</code> class holds the information for a mail template.
@@ -51,17 +49,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "MailTemplate")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "contentType", "template", "updated" })
+@JsonPropertyOrder({"id", "name", "contentType", "template", "updated"})
 @XmlRootElement(name = "MailTemplate", namespace = "http://mail.inception.digital")
 @XmlType(name = "MailTemplate", namespace = "http://mail.inception.digital",
-    propOrder = { "id", "name", "contentType", "template", "updated" })
+    propOrder = {"id", "name", "contentType", "template", "updated"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "mail", name = "mail_templates")
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class MailTemplate
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -122,7 +120,8 @@ public class MailTemplate
   /**
    * Constructs a new <code>MailTemplate</code>.
    */
-  public MailTemplate() {}
+  public MailTemplate() {
+  }
 
   /**
    * Constructs a new <code>MailTemplate</code>.
@@ -132,8 +131,8 @@ public class MailTemplate
    * @param contentType the content type for the mail template
    * @param template    the Apache FreeMarker template for the mail template
    */
-  public MailTemplate(String id, String name, MailTemplateContentType contentType, byte[] template)
-  {
+  public MailTemplate(String id, String name, MailTemplateContentType contentType,
+      byte[] template) {
     this.id = id;
     this.name = name;
     this.contentType = contentType;
@@ -146,23 +145,19 @@ public class MailTemplate
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -176,9 +171,17 @@ public class MailTemplate
    *
    * @return the content type for the mail template
    */
-  public MailTemplateContentType getContentType()
-  {
+  public MailTemplateContentType getContentType() {
     return contentType;
+  }
+
+  /**
+   * Set the content type for the mail template.
+   *
+   * @param contentType the content type for the mail template
+   */
+  public void setContentType(MailTemplateContentType contentType) {
+    this.contentType = contentType;
   }
 
   /**
@@ -186,9 +189,17 @@ public class MailTemplate
    *
    * @return the ID used to uniquely identify the mail template
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the mail template.
+   *
+   * @param id the ID used to uniquely identify the mail template
+   */
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**
@@ -196,9 +207,17 @@ public class MailTemplate
    *
    * @return the name of the mail template
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the mail template.
+   *
+   * @param name the name of the mail template
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -206,9 +225,17 @@ public class MailTemplate
    *
    * @return the Apache FreeMarker template for the mail template
    */
-  public byte[] getTemplate()
-  {
+  public byte[] getTemplate() {
     return template;
+  }
+
+  /**
+   * Set the Apache FreeMarker template for the mail template.
+   *
+   * @param template the Apache FreeMarker template for the mail template
+   */
+  public void setTemplate(byte[] template) {
+    this.template = template;
   }
 
   /**
@@ -216,9 +243,17 @@ public class MailTemplate
    *
    * @return the date and time the mail template was last updated
    */
-  public LocalDateTime getUpdated()
-  {
+  public LocalDateTime getUpdated() {
     return updated;
+  }
+
+  /**
+   * Set the date and time the mail template was last updated.
+   *
+   * @param updated the date and time the mail template was last updated
+   */
+  public void setUpdated(LocalDateTime updated) {
+    this.updated = updated;
   }
 
   /**
@@ -227,61 +262,10 @@ public class MailTemplate
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
-  }
-
-  /**
-   * Set the content type for the mail template.
-   *
-   * @param contentType the content type for the mail template
-   */
-  public void setContentType(MailTemplateContentType contentType)
-  {
-    this.contentType = contentType;
-  }
-
-  /**
-   * Set the ID used to uniquely identify the mail template.
-   *
-   * @param id the ID used to uniquely identify the mail template
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the mail template.
-   *
-   * @param name the name of the mail template
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the Apache FreeMarker template for the mail template.
-   *
-   * @param template the Apache FreeMarker template for the mail template
-   */
-  public void setTemplate(byte[] template)
-  {
-    this.template = template;
-  }
-
-  /**
-   * Set the date and time the mail template was last updated.
-   *
-   * @param updated the date and time the mail template was last updated
-   */
-  public void setUpdated(LocalDateTime updated)
-  {
-    this.updated = updated;
   }
 
   /**
@@ -290,8 +274,7 @@ public class MailTemplate
    * @return a string representation of the object
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "MailTemplate {id=\"" + getId() + "\", name=\"" + getName() + "\", contentType=\""
         + getContentType() + "\"}";
   }

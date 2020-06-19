@@ -18,6 +18,7 @@ package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,16 +26,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Optional;
-
 /**
  * The <code>ReportDefinitionRepository</code> interface declares the repository for the
  * <code>ReportDefinition</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ReportDefinitionRepository extends JpaRepository<ReportDefinition, String>
-{
+public interface ReportDefinitionRepository extends JpaRepository<ReportDefinition, String> {
+
   @Modifying
   @Query("delete from ReportDefinition rd where rd.id = :reportDefinitionId")
   void deleteById(@Param("reportDefinitionId") String reportDefinitionId);

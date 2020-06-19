@@ -21,18 +21,18 @@ package digital.inception.bmi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CaseDefinitionSummary</code> class holds the summary information for a case
@@ -42,22 +42,22 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "CaseDefinitionSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name" })
+@JsonPropertyOrder({"id", "name"})
 @XmlRootElement(name = "CaseDefinitionSummary", namespace = "http://bmi.inception.digital")
 @XmlType(name = "CaseDefinitionSummary", namespace = "http://bmi.inception.digital",
-  propOrder = { "id", "name" })
+    propOrder = {"id", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class CaseDefinitionSummary
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
    * The ID used to uniquely identify the case definition.
    */
   @ApiModelProperty(value = "The ID used to uniquely identify the case definition",
-    required = true)
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -77,16 +77,16 @@ public class CaseDefinitionSummary
   /**
    * Constructs a new <code>CaseDefinitionSummary</code>.
    */
-  public CaseDefinitionSummary() {}
+  public CaseDefinitionSummary() {
+  }
 
   /**
    * Constructs a new <code>CaseDefinitionSummary</code>.
    *
-   * @param id      the ID used to uniquely identify the case definition
-   * @param name    the name of the case definition
+   * @param id   the ID used to uniquely identify the case definition
+   * @param name the name of the case definition
    */
-  public CaseDefinitionSummary(String id, String name)
-  {
+  public CaseDefinitionSummary(String id, String name) {
     this.id = id;
     this.name = name;
   }
@@ -97,23 +97,19 @@ public class CaseDefinitionSummary
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -127,8 +123,7 @@ public class CaseDefinitionSummary
    *
    * @return the ID used to uniquely identify the case definition
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
   }
 
@@ -137,8 +132,7 @@ public class CaseDefinitionSummary
    *
    * @return the name of the case definition
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -148,11 +142,10 @@ public class CaseDefinitionSummary
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
-      ? 0
-      : id.hashCode();
+        ? 0
+        : id.hashCode();
   }
 
   /**
@@ -161,9 +154,8 @@ public class CaseDefinitionSummary
    * @return a string representation of the object
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "CaseDefinitionSummary {id=\"" + getId() + "\", name=\"" + getName()
-      + "\"}";
+        + "\"}";
   }
 }

@@ -22,17 +22,15 @@ package digital.inception.core.util;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class Base64Exception extends RuntimeException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class Base64Exception extends RuntimeException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>Base64Exception</code> with <code>null</code> as its
-   * message.
+   * Constructs a new <code>Base64Exception</code> with <code>null</code> as its message.
    */
-  public Base64Exception()
-  {
+  public Base64Exception() {
     super();
   }
 
@@ -41,21 +39,19 @@ public class Base64Exception extends RuntimeException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public Base64Exception(String message)
-  {
+  public Base64Exception(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>Base64Exception</code> with the specified cause and a
-   * message of <code>(cause==null ? null : cause.toString())</code> (which typically contains the
-   * class and message of cause).
+   * Constructs a new <code>Base64Exception</code> with the specified cause and a message of
+   * <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
+   * message of cause).
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public Base64Exception(Throwable cause)
-  {
+  public Base64Exception(Throwable cause) {
     super(cause);
   }
 
@@ -63,11 +59,10 @@ public class Base64Exception extends RuntimeException
    * Constructs a new <code>Base64Exception</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public Base64Exception(String message, Throwable cause)
-  {
+  public Base64Exception(String message, Throwable cause) {
     super(message, cause);
   }
 }

@@ -22,24 +22,30 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
-import javax.persistence.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Organization</code> class holds the information for an organization.
@@ -48,17 +54,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "Organization")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "status" })
+@JsonPropertyOrder({"id", "name", "status"})
 @XmlRootElement(name = "Organization", namespace = "http://security.inception.digital")
 @XmlType(name = "Organization", namespace = "http://security.inception.digital",
-    propOrder = { "id", "name", "status" })
+    propOrder = {"id", "name", "status"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "organizations")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Organization
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -99,16 +105,17 @@ public class Organization
    */
   @JsonIgnore
   @XmlTransient
-  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(schema = "security", name = "user_directory_to_organization_map",
-      joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id") ,
+      joinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
   private Set<UserDirectory> userDirectories = new HashSet<>();
 
   /**
    * Constructs a new <code>Organization</code>.
    */
-  public Organization() {}
+  public Organization() {
+  }
 
   /**
    * Constructs a new <code>Organization</code>.
@@ -116,8 +123,7 @@ public class Organization
    * @param name   the name of the organization
    * @param status the status for the organization
    */
-  public Organization(String name, OrganizationStatus status)
-  {
+  public Organization(String name, OrganizationStatus status) {
     this.name = name;
     this.status = status;
   }
@@ -130,8 +136,7 @@ public class Organization
    * @param name   the name of the organization
    * @param status the status for the organization
    */
-  public Organization(UUID id, String name, OrganizationStatus status)
-  {
+  public Organization(UUID id, String name, OrganizationStatus status) {
     this.id = id;
     this.name = name;
     this.status = status;
@@ -143,23 +148,19 @@ public class Organization
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -173,9 +174,17 @@ public class Organization
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -183,9 +192,17 @@ public class Organization
    *
    * @return the name of the organization
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the organization.
+   *
+   * @param name the name of the organization
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -193,9 +210,17 @@ public class Organization
    *
    * @return the status for the organization
    */
-  public OrganizationStatus getStatus()
-  {
+  public OrganizationStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Set the status for the organization.
+   *
+   * @param status the status for the organization
+   */
+  public void setStatus(OrganizationStatus status) {
+    this.status = status;
   }
 
   /**
@@ -203,9 +228,17 @@ public class Organization
    *
    * @return the user directories associated with the organization
    */
-  public Set<UserDirectory> getUserDirectories()
-  {
+  public Set<UserDirectory> getUserDirectories() {
     return userDirectories;
+  }
+
+  /**
+   * Set the user directories associated with the organization.
+   *
+   * @param userDirectories the user directories associated with the organization
+   */
+  public void setUserDirectories(Set<UserDirectory> userDirectories) {
+    this.userDirectories = userDirectories;
   }
 
   /**
@@ -214,8 +247,7 @@ public class Organization
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -226,50 +258,9 @@ public class Organization
    *
    * @param userDirectory the user directory
    */
-  public void linkUserDirectory(UserDirectory userDirectory)
-  {
+  public void linkUserDirectory(UserDirectory userDirectory) {
     userDirectories.add(userDirectory);
     userDirectory.getOrganizations().add(this);
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the organization.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the organization.
-   *
-   * @param name the name of the organization
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the status for the organization.
-   *
-   * @param status the status for the organization
-   */
-  public void setStatus(OrganizationStatus status)
-  {
-    this.status = status;
-  }
-
-  /**
-   * Set the user directories associated with the organization.
-   *
-   * @param userDirectories the user directories associated with the organization
-   */
-  public void setUserDirectories(Set<UserDirectory> userDirectories)
-  {
-    this.userDirectories = userDirectories;
   }
 
   /**
@@ -277,8 +268,7 @@ public class Organization
    *
    * @param userDirectory the user directory
    */
-  public void unlinkUserDirectory(UserDirectory userDirectory)
-  {
+  public void unlinkUserDirectory(UserDirectory userDirectory) {
     userDirectories.remove(userDirectory);
     userDirectory.getOrganizations().remove(this);
   }

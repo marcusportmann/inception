@@ -30,8 +30,8 @@ import javax.persistence.Converter;
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
 public class JobStatusConverter
-  implements AttributeConverter<JobStatus, Integer>
-{
+    implements AttributeConverter<JobStatus, Integer> {
+
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
@@ -41,8 +41,7 @@ public class JobStatusConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(JobStatus attribute)
-  {
+  public Integer convertToDatabaseColumn(JobStatus attribute) {
     return attribute.code();
   }
 
@@ -57,8 +56,7 @@ public class JobStatusConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public JobStatus convertToEntityAttribute(Integer dbData)
-  {
+  public JobStatus convertToEntityAttribute(Integer dbData) {
     return JobStatus.fromCode(dbData);
   }
 }

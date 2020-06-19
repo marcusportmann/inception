@@ -17,13 +17,13 @@
 package digital.inception.ws.security;
 
 /**
- * The <code>WebServiceClientSecurityException</code> exception is thrown to indicate a
- * web service client security error.
+ * The <code>WebServiceClientSecurityException</code> exception is thrown to indicate a web service
+ * client security error.
  *
  * @author Marcus Portmann
  */
-public class WebServiceClientSecurityException extends RuntimeException
-{
+public class WebServiceClientSecurityException extends RuntimeException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -31,8 +31,7 @@ public class WebServiceClientSecurityException extends RuntimeException
    * message.
    */
   @SuppressWarnings("unused")
-  public WebServiceClientSecurityException()
-  {
+  public WebServiceClientSecurityException() {
     super();
   }
 
@@ -41,21 +40,19 @@ public class WebServiceClientSecurityException extends RuntimeException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public WebServiceClientSecurityException(String message)
-  {
+  public WebServiceClientSecurityException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>WebServiceClientSecurityException</code> with the specified message
-   * and cause.
+   * Constructs a new <code>WebServiceClientSecurityException</code> with the specified message and
+   * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public WebServiceClientSecurityException(String message, Throwable cause)
-  {
+  public WebServiceClientSecurityException(String message, Throwable cause) {
     super(message, cause);
   }
 }

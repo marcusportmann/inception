@@ -19,17 +19,14 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import java.util.UUID;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * A <code>DuplicateOrganizationException</code> is thrown to indicate that a security operation
@@ -45,9 +42,9 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused" })
-public class DuplicateOrganizationException extends ServiceException
-{
+@SuppressWarnings({"unused"})
+public class DuplicateOrganizationException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -55,8 +52,7 @@ public class DuplicateOrganizationException extends ServiceException
    *
    * @param name the name of the organization
    */
-  public DuplicateOrganizationException(String name)
-  {
+  public DuplicateOrganizationException(String name) {
     super("DuplicateOrganizationError", "An organization with the name (" + name
         + ") already exists");
   }
@@ -67,8 +63,7 @@ public class DuplicateOrganizationException extends ServiceException
    * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       organization
    */
-  public DuplicateOrganizationException(UUID organizationId)
-  {
+  public DuplicateOrganizationException(UUID organizationId) {
     super("DuplicateOrganizationError", "An organization with the ID (" + organizationId
         + ") already exists");
   }

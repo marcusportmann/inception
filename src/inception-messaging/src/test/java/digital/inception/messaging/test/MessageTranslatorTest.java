@@ -18,28 +18,26 @@ package digital.inception.messaging.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.CryptoUtil;
-import digital.inception.messaging.MessageTranslator;
-
-import org.junit.Test;
-
 import static org.junit.Assert.assertArrayEquals;
 
+import digital.inception.core.util.CryptoUtil;
+import digital.inception.messaging.MessageTranslator;
+import org.junit.Test;
+
 /**
- * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>MessageTranslator</code> class.
+ * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit tests for
+ * the <code>MessageTranslator</code> class.
  *
  * @author Marcus Portmann
  */
-public class MessageTranslatorTest
-{
+public class MessageTranslatorTest {
+
   /**
    * Test the encryption and decryption functionality.
    */
   @Test
   public void encryptionTest()
-    throws Exception
-  {
+      throws Exception {
     byte[] encryptionIV = CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE);
 
     byte[] encryptionKey = CryptoUtil.passwordToAESKey("ThisIsAPassword");

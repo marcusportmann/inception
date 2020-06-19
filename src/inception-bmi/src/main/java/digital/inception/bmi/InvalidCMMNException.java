@@ -19,15 +19,13 @@ package digital.inception.bmi;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * The <code>InvalidCMMNException</code> exception is thrown to indicate an error condition as a
@@ -39,18 +37,17 @@ import javax.xml.ws.WebFault;
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "The CMMN 1.1 XML data is invalid")
 @WebFault(name = "InvalidCMMNException", targetNamespace = "http://bmi.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused" })
-public class InvalidCMMNException extends ServiceException
-{
+@SuppressWarnings({"unused"})
+public class InvalidCMMNException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
    * Constructs a new <code>InvalidCMMNException</code>.
    */
-  public InvalidCMMNException()
-  {
+  public InvalidCMMNException() {
     super("InvalidCMMNError", "The CMMN 1.1 XML data is invalid");
   }
 
@@ -59,19 +56,17 @@ public class InvalidCMMNException extends ServiceException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public InvalidCMMNException(String message)
-  {
+  public InvalidCMMNException(String message) {
     super("InvalidCMMNError", message);
   }
 
   /**
    * Constructs a new <code>InvalidCMMNException</code>.
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public InvalidCMMNException(Throwable cause)
-  {
+  public InvalidCMMNException(Throwable cause) {
     super("InvalidCMMNError", "The CMMN 1.1 XML data is invalid", cause);
   }
 }

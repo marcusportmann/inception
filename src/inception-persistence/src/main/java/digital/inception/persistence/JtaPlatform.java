@@ -18,14 +18,12 @@ package digital.inception.persistence;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javax.transaction.TransactionManager;
+import javax.transaction.UserTransaction;
 import org.hibernate.engine.transaction.jta.platform.internal.AbstractJtaPlatform;
-
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.transaction.TransactionManager;
-import javax.transaction.UserTransaction;
 
 /**
  * The <code>JtaPlatform</code> class.
@@ -33,8 +31,8 @@ import javax.transaction.UserTransaction;
  * @author Marcus Portmann
  */
 
-public class JtaPlatform extends AbstractJtaPlatform
-{
+public class JtaPlatform extends AbstractJtaPlatform {
+
   private final JtaTransactionManager transactionManager;
 
   /**
@@ -42,20 +40,17 @@ public class JtaPlatform extends AbstractJtaPlatform
    *
    * @param transactionManager the JTA transaction manager
    */
-  JtaPlatform(JtaTransactionManager transactionManager)
-  {
+  JtaPlatform(JtaTransactionManager transactionManager) {
     this.transactionManager = transactionManager;
   }
 
   @Override
-  protected TransactionManager locateTransactionManager()
-  {
+  protected TransactionManager locateTransactionManager() {
     return transactionManager.getTransactionManager();
   }
 
   @Override
-  protected UserTransaction locateUserTransaction()
-  {
+  protected UserTransaction locateUserTransaction() {
     return transactionManager.getUserTransaction();
   }
 }

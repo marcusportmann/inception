@@ -21,20 +21,19 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GroupMember</code> class holds the information for a group member.
@@ -43,15 +42,15 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "GroupMember")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "userDirectoryId", "groupName", "memberName", "memberType" })
+@JsonPropertyOrder({"userDirectoryId", "groupName", "memberName", "memberType"})
 @XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")
 @XmlType(name = "GroupMember", namespace = "http://security.inception.digital",
-    propOrder = { "userDirectoryId", "groupName", "memberName", "memberType" })
+    propOrder = {"userDirectoryId", "groupName", "memberName", "memberType"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class GroupMember
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -98,7 +97,8 @@ public class GroupMember
   /**
    * Constructs a new <code>GroupMember</code>.
    */
-  public GroupMember() {}
+  public GroupMember() {
+  }
 
   /**
    * Constructs a new <code>GroupMember</code>.
@@ -110,8 +110,7 @@ public class GroupMember
    * @param memberName      the name identifying the group member
    */
   public GroupMember(UUID userDirectoryId, String groupName, GroupMemberType memberType,
-      String memberName)
-  {
+      String memberName) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.memberType = memberType;
@@ -123,41 +122,8 @@ public class GroupMember
    *
    * @return the name identifying the group
    */
-  public String getGroupName()
-  {
+  public String getGroupName() {
     return groupName;
-  }
-
-  /**
-   * Returns the name identifying the group member.
-   *
-   * @return the name identifying the group member
-   */
-  public String getMemberName()
-  {
-    return memberName;
-  }
-
-  /**
-   * Returns the group member type.
-   *
-   * @return the group member type
-   */
-  public GroupMemberType getMemberType()
-  {
-    return memberType;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the group is associated with
-   */
-  public UUID getUserDirectoryId()
-  {
-    return userDirectoryId;
   }
 
   /**
@@ -165,9 +131,17 @@ public class GroupMember
    *
    * @param groupName the name identifying the group
    */
-  public void setGroupName(String groupName)
-  {
+  public void setGroupName(String groupName) {
     this.groupName = groupName;
+  }
+
+  /**
+   * Returns the name identifying the group member.
+   *
+   * @return the name identifying the group member
+   */
+  public String getMemberName() {
+    return memberName;
   }
 
   /**
@@ -175,9 +149,17 @@ public class GroupMember
    *
    * @param memberName the name identifying the group member
    */
-  public void setMemberName(String memberName)
-  {
+  public void setMemberName(String memberName) {
     this.memberName = memberName;
+  }
+
+  /**
+   * Returns the group member type.
+   *
+   * @return the group member type
+   */
+  public GroupMemberType getMemberType() {
+    return memberType;
   }
 
   /**
@@ -185,9 +167,19 @@ public class GroupMember
    *
    * @param memberType the group member type
    */
-  public void setMemberType(GroupMemberType memberType)
-  {
+  public void setMemberType(GroupMemberType memberType) {
     this.memberType = memberType;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with
+   */
+  public UUID getUserDirectoryId() {
+    return userDirectoryId;
   }
 
   /**
@@ -197,8 +189,7 @@ public class GroupMember
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory the group is associated with
    */
-  public void setUserDirectoryId(UUID userDirectoryId)
-  {
+  public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;
   }
 }

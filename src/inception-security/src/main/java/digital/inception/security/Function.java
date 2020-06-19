@@ -22,21 +22,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Function</code> class holds the information for an authorised function that can be
@@ -46,17 +50,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "Function")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "code", "name", "description" })
+@JsonPropertyOrder({"code", "name", "description"})
 @XmlRootElement(name = "Function", namespace = "http://security.inception.digital")
 @XmlType(name = "Function", namespace = "http://security.inception.digital",
-    propOrder = { "code", "name", "description" })
+    propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "functions")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Function
-  implements java.io.Serializable
-{
+    implements java.io.Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -103,7 +107,8 @@ public class Function
   /**
    * Constructs a new <code>Function</code>.
    */
-  public Function() {}
+  public Function() {
+  }
 
   /**
    * Constructs a new <code>Function</code>.
@@ -112,8 +117,7 @@ public class Function
    * @param name        the name of the function
    * @param description the description for the function
    */
-  public Function(String code, String name, String description)
-  {
+  public Function(String code, String name, String description) {
     this.code = code;
     this.name = name;
     this.description = description;
@@ -125,23 +129,19 @@ public class Function
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -155,9 +155,17 @@ public class Function
    *
    * @return the code used to uniquely identify the function
    */
-  public String getCode()
-  {
+  public String getCode() {
     return code;
+  }
+
+  /**
+   * Set the code used to uniquely identify the function.
+   *
+   * @param code the code used to uniquely identify the function
+   */
+  public void setCode(String code) {
+    this.code = code;
   }
 
   /**
@@ -165,9 +173,17 @@ public class Function
    *
    * @return the description for the function
    */
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
+  }
+
+  /**
+   * Set the description for the function.
+   *
+   * @param description the description for the function
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**
@@ -175,9 +191,17 @@ public class Function
    *
    * @return the name of the function
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the function.
+   *
+   * @param name the name of the function
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -185,9 +209,17 @@ public class Function
    *
    * @return the roles the user is associated with
    */
-  public Set<Role> getRoles()
-  {
+  public Set<Role> getRoles() {
     return roles;
+  }
+
+  /**
+   * Set the roles the user is associated with.
+   *
+   * @param roles the roles the user is associated with
+   */
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
   }
 
   /**
@@ -196,50 +228,9 @@ public class Function
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (code == null)
         ? 0
         : code.hashCode();
-  }
-
-  /**
-   * Set the code used to uniquely identify the function.
-   *
-   * @param code the code used to uniquely identify the function
-   */
-  public void setCode(String code)
-  {
-    this.code = code;
-  }
-
-  /**
-   * Set the description for the function.
-   *
-   * @param description the description for the function
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
-   * Set the name of the function.
-   *
-   * @param name the name of the function
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the roles the user is associated with.
-   *
-   * @param roles the roles the user is associated with
-   */
-  public void setRoles(Set<Role> roles)
-  {
-    this.roles = roles;
   }
 }

@@ -20,14 +20,12 @@ package digital.inception.messaging;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The enumeration giving the possible statuses for a message part.
@@ -35,8 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "MessagePartStatus")
 @XmlEnum
 @XmlType(name = "MessagePartStatus", namespace = "http://messaging.inception.digital")
-public enum MessagePartStatus
-{
+public enum MessagePartStatus {
   @XmlEnumValue("Initialized")
   INITIALIZED(0, "Initialized"),
   @XmlEnumValue("QueuedForSending")
@@ -61,8 +58,7 @@ public enum MessagePartStatus
   private int code;
   private String description;
 
-  MessagePartStatus(int code, String description)
-  {
+  MessagePartStatus(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -75,10 +71,8 @@ public enum MessagePartStatus
    * @return the message part status given by the specified numeric code value
    */
   @JsonCreator
-  public static MessagePartStatus fromCode(int code)
-  {
-    switch (code)
-    {
+  public static MessagePartStatus fromCode(int code) {
+    switch (code) {
       case 0:
         return MessagePartStatus.INITIALIZED;
 
@@ -117,8 +111,7 @@ public enum MessagePartStatus
    * @return the numeric code value identifying the message part status
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -127,8 +120,7 @@ public enum MessagePartStatus
    *
    * @return the description for the message part status
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 
@@ -137,8 +129,7 @@ public enum MessagePartStatus
    *
    * @return the string representation of the message part status enumeration value
    */
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
 }

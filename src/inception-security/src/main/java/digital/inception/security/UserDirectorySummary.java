@@ -22,22 +22,29 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
-import javax.persistence.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectorySummary</code> class holds the summary information for a user directory.
@@ -46,17 +53,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "UserDirectorySummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "type", "name" })
+@JsonPropertyOrder({"id", "type", "name"})
 @XmlRootElement(name = "UserDirectorySummary", namespace = "http://security.inception.digital")
 @XmlType(name = "UserDirectorySummary", namespace = "http://security.inception.digital",
-    propOrder = { "id", "type", "name" })
+    propOrder = {"id", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "user_directories")
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class UserDirectorySummary
-  implements java.io.Serializable
-{
+    implements java.io.Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -86,9 +93,9 @@ public class UserDirectorySummary
    */
   @JsonIgnore
   @XmlTransient
-  @ManyToMany(cascade = { CascadeType.REFRESH })
+  @ManyToMany(cascade = {CascadeType.REFRESH})
   @JoinTable(schema = "security", name = "user_directory_to_organization_map",
-      joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id") ,
+      joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
   private Set<Organization> organizations = new HashSet<>();
 
@@ -107,7 +114,8 @@ public class UserDirectorySummary
   /**
    * Constructs a new <code>UserDirectorySummary</code>.
    */
-  public UserDirectorySummary() {}
+  public UserDirectorySummary() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -115,23 +123,19 @@ public class UserDirectorySummary
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -145,9 +149,18 @@ public class UserDirectorySummary
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user
+   *           directory
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -155,9 +168,17 @@ public class UserDirectorySummary
    *
    * @return the name of the user directory
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the user directory.
+   *
+   * @param name the name of the user directory
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -165,9 +186,17 @@ public class UserDirectorySummary
    *
    * @return the code used to uniquely identify the user directory type
    */
-  public String getType()
-  {
+  public String getType() {
     return type;
+  }
+
+  /**
+   * Set the code used to uniquely identify the user directory type.
+   *
+   * @param type the code used to uniquely identify the user directory type
+   */
+  public void setType(String type) {
+    this.type = type;
   }
 
   /**
@@ -176,40 +205,9 @@ public class UserDirectorySummary
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
-      ? 0
-      : id.hashCode();
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the user directory.
-   *
-   * @param name the name of the user directory
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the code used to uniquely identify the user directory type.
-   *
-   * @param type the code used to uniquely identify the user directory type
-   */
-  public void setType(String type)
-  {
-    this.type = type;
+        ? 0
+        : id.hashCode();
   }
 }

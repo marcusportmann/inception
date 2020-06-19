@@ -30,8 +30,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema = "TEST", name = "TEST_DATA")
-public class TestData
-{
+public class TestData {
+
   /**
    * The ID.
    */
@@ -55,7 +55,8 @@ public class TestData
    * Constructs a new <code>TestData</code>.
    */
   @SuppressWarnings("unused")
-  TestData() {}
+  TestData() {
+  }
 
   /**
    * Constructs a new <code>TestData</code>.
@@ -64,8 +65,7 @@ public class TestData
    * @param name  the name
    * @param value the value
    */
-  TestData(String id, String name, String value)
-  {
+  TestData(String id, String name, String value) {
     this.id = id;
     this.name = name;
     this.value = value;
@@ -77,23 +77,19 @@ public class TestData
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -108,8 +104,7 @@ public class TestData
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -120,8 +115,7 @@ public class TestData
    *
    * @return the ID
    */
-  String getId()
-  {
+  String getId() {
     return id;
   }
 
@@ -130,8 +124,7 @@ public class TestData
    *
    * @return the name
    */
-  String getName()
-  {
+  String getName() {
     return name;
   }
 
@@ -140,8 +133,7 @@ public class TestData
    *
    * @return the value
    */
-  String getValue()
-  {
+  String getValue() {
     return value;
   }
 }

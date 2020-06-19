@@ -18,19 +18,18 @@ package digital.inception.core.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javax.naming.InitialContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.naming.InitialContext;
-
 /**
  * The <code>ServiceUtil</code> class provides utility methods that are useful when creating
  * internal application services.
  */
-public class ServiceUtil
-{
+public class ServiceUtil {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ServiceUtil.class);
 
@@ -41,37 +40,30 @@ public class ServiceUtil
    *
    * @return the service instance name for the service with the specified name
    */
-  public static String getServiceInstanceName(String serviceName)
-  {
+  public static String getServiceInstanceName(String serviceName) {
     String applicationName = null;
 
-    try
-    {
+    try {
       applicationName = InitialContext.doLookup("java:app/AppName");
+    } catch (Throwable ignored) {
     }
-    catch (Throwable ignored) {}
 
-    if (applicationName == null)
-    {
-      try
-      {
+    if (applicationName == null) {
+      try {
         applicationName = InitialContext.doLookup("java:comp/env/ApplicationName");
+      } catch (Throwable ignored) {
       }
-      catch (Throwable ignored) {}
     }
 
     String instanceName = (applicationName == null)
         ? ""
         : applicationName + "::";
 
-    try
-    {
+    try {
       java.net.InetAddress localMachine = java.net.InetAddress.getLocalHost();
 
       instanceName += localMachine.getHostName().toLowerCase();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error(String.format(
           "Failed to retrieve the server hostname while constructing the %s instance name",
           serviceName), e);
@@ -79,26 +71,22 @@ public class ServiceUtil
     }
 
     // Check if we are running under JBoss and if so retrieve the server name
-    if (System.getProperty("jboss.server.name") != null)
-    {
+    if (System.getProperty("jboss.server.name") != null) {
       instanceName = instanceName + "::" + System.getProperty("jboss.server.name");
     }
 
     // Check if we are running under Glassfish and if so retrieve the server name
-    else if (System.getProperty("glassfish.version") != null)
-    {
+    else if (System.getProperty("glassfish.version") != null) {
       instanceName = instanceName + "::" + System.getProperty("com.sun.aas.instanceName");
     }
 
     // Check if we are running under WebSphere Application Server Community Edition (Geronimo)
-    else if (System.getProperty("org.apache.geronimo.server.dir") != null)
-    {
+    else if (System.getProperty("org.apache.geronimo.server.dir") != null) {
       instanceName = instanceName + "::Geronimo";
     }
 
     // Check if we are running under WebSphere Application Server Liberty Profile
-    else if (System.getProperty("wlp.user.dir") != null)
-    {
+    else if (System.getProperty("wlp.user.dir") != null) {
       instanceName = instanceName + "::WLP";
     }
 
@@ -106,28 +94,22 @@ public class ServiceUtil
      * Check if we are running under WebSphere and if so execute the code below to retrieve the
      * server name.
      */
-    else
-    {
+    else {
       Class<?> clazz = null;
 
-      try
-      {
+      try {
         clazz = Thread.currentThread().getContextClassLoader().loadClass(
             "com.ibm.websphere.management.configservice.ConfigurationService");
+      } catch (Throwable ignored) {
       }
-      catch (Throwable ignored) {}
 
-      if (clazz != null)
-      {
-        try
-        {
+      if (clazz != null) {
+        try {
           instanceName = instanceName + "::" + InitialContext.doLookup("servername").toString();
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           logger.error(String.format(
               "Failed to retrieve the name of the WebSphere server instance from JNDI while "
-              + "constructing the %s instance name", serviceName), e);
+                  + "constructing the %s instance name", serviceName), e);
           instanceName = instanceName + "::Unknown";
         }
       }

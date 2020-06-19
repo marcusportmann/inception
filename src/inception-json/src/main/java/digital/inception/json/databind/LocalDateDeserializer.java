@@ -21,14 +21,11 @@ package digital.inception.json.databind;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-
 import digital.inception.core.util.ISO8601Util;
+import java.io.IOException;
+import java.time.LocalDate;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-
-import java.time.LocalDate;
 
 /**
  * The <code>LocalDateDeserializer</code> class implements the Jackson deserializer for the
@@ -36,18 +33,14 @@ import java.time.LocalDate;
  *
  * @author Marcus Portmann
  */
-public class LocalDateDeserializer extends JsonDeserializer<LocalDate>
-{
+public class LocalDateDeserializer extends JsonDeserializer<LocalDate> {
+
   @Override
   public LocalDate deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-    throws IOException
-  {
-    try
-    {
+      throws IOException {
+    try {
       return ISO8601Util.toLocalDate(jsonParser.getValueAsString());
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new IOException("Failed to deserialize the ISO 8601 value ("
           + jsonParser.getValueAsString() + ")");
     }

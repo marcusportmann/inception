@@ -18,14 +18,18 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.security.authentication.*;
+import java.util.UUID;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
 
 /**
  * The <code>SecurityServiceAuthenticationManager</code> provides an authentication manager
@@ -35,8 +39,8 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 public class SecurityServiceAuthenticationManager
-  implements AuthenticationManager
-{
+    implements AuthenticationManager {
+
   /**
    * The Security Service.
    */
@@ -54,8 +58,7 @@ public class SecurityServiceAuthenticationManager
    * @param userDetailsService the User Details Service
    */
   public SecurityServiceAuthenticationManager(ISecurityService securityService,
-      UserDetailsService userDetailsService)
-  {
+      UserDetailsService userDetailsService) {
     this.securityService = securityService;
     this.userDetailsService = userDetailsService;
   }
@@ -86,10 +89,8 @@ public class SecurityServiceAuthenticationManager
    */
   @Override
   public Authentication authenticate(Authentication authentication)
-    throws AuthenticationException
-  {
-    try
-    {
+      throws AuthenticationException {
+    try {
       // Authenticate the user
       UUID authenticationUserDirectoryId = securityService.authenticate(
           authentication.getPrincipal().toString(), authentication.getCredentials().toString());
@@ -99,24 +100,16 @@ public class SecurityServiceAuthenticationManager
           .toString());
 
       return new AuthenticationToken(userDetails);
-    }
-    catch (AuthenticationFailedException | UserNotFoundException e)
-    {
+    } catch (AuthenticationFailedException | UserNotFoundException e) {
       throw new BadCredentialsException("Failed to authenticate the user ("
           + authentication.getPrincipal() + "): Bad credentials");
-    }
-    catch (UserLockedException e)
-    {
+    } catch (UserLockedException e) {
       throw new LockedException("Failed to authenticate the user (" + authentication.getPrincipal()
           + "): User locked");
-    }
-    catch (ExpiredPasswordException e)
-    {
+    } catch (ExpiredPasswordException e) {
       throw new CredentialsExpiredException("Failed to authenticate the user ("
           + authentication.getPrincipal() + "): Credentials expired");
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new AuthenticationServiceException("Failed to authenticate the user ("
           + authentication.getPrincipal() + ")", e);
     }

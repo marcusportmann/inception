@@ -18,6 +18,10 @@ package digital.inception.sms.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import digital.inception.sms.ISMSService;
 import digital.inception.sms.SMS;
 import digital.inception.sms.SMSStatus;
@@ -36,24 +40,22 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.util.StringUtils;
 
-import static org.junit.Assert.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>SMSServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>SMSService</code> class.
+ * The <code>SMSServiceTest</code> class contains the implementation of the JUnit tests for the
+ * <code>SMSService</code> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
+@ContextConfiguration(classes = {TestConfiguration.class})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
-public class SMSServiceTest
-{
+public class SMSServiceTest {
+
   /**
    * The SMS Service.
    */
@@ -72,15 +74,22 @@ public class SMSServiceTest
   @Value("${application.sms.myMobileAPIPassword:#{null}}")
   private String myMobileApiPassword;
 
+  private static synchronized SMS getTestSMSDetails() {
+    SMS sms = new SMS();
+    sms.setMobileNumber("0832763107");
+    sms.setMessage("Testing 1.. 2.. 3..");
+    sms.setStatus(SMSStatus.UNKNOWN);
+
+    return sms;
+  }
+
   /**
    * Test the get number of SMS credits remaining functionality.
    */
   @Test
   public void getNumberOfSMSCreditsRemainingTest()
-    throws Exception
-  {
-    if ((!StringUtils.isEmpty(myMobileApiUsername)) && (!myMobileApiUsername.equals("USERNAME")))
-    {
+      throws Exception {
+    if ((!StringUtils.isEmpty(myMobileApiUsername)) && (!myMobileApiUsername.equals("USERNAME"))) {
       int numberOfSMSCreditsRemaining = smsService.getNumberOfSMSCreditsRemaining();
     }
   }
@@ -88,8 +97,7 @@ public class SMSServiceTest
   /**
    * Test the send SMS synchronously functionality
    */
-  public void sendSMSSynchronouslyTest()
-  {
+  public void sendSMSSynchronouslyTest() {
     // smsService.sendSMSSynchronously(1, "0832763107", "Testing at 23:02...");
   }
 
@@ -98,10 +106,8 @@ public class SMSServiceTest
    */
   @Test
   public void sendSMSTest()
-    throws Exception
-  {
-    if ((!StringUtils.isEmpty(myMobileApiUsername)) && (!myMobileApiUsername.equals("USERNAME")))
-    {
+      throws Exception {
+    if ((!StringUtils.isEmpty(myMobileApiUsername)) && (!myMobileApiUsername.equals("USERNAME"))) {
       smsService.sendSMS("0832763107", "Testing 1.. 2.. 3..");
 
       Thread.sleep(100000L);
@@ -113,8 +119,7 @@ public class SMSServiceTest
    */
   @Test
   public void smsTest()
-    throws Exception
-  {
+      throws Exception {
     SMS sms = getTestSMSDetails();
 
     smsService.createSMS(sms);
@@ -162,18 +167,7 @@ public class SMSServiceTest
         retrievedSMS.getStatus());
   }
 
-  private static synchronized SMS getTestSMSDetails()
-  {
-    SMS sms = new SMS();
-    sms.setMobileNumber("0832763107");
-    sms.setMessage("Testing 1.. 2.. 3..");
-    sms.setStatus(SMSStatus.UNKNOWN);
-
-    return sms;
-  }
-
-  private void compareSMSs(SMS sms1, SMS sms2)
-  {
+  private void compareSMSs(SMS sms1, SMS sms2) {
     assertEquals("The ID values for the two SMSs do not match", sms1.getId(), sms2.getId());
     assertEquals("The mobile number values for the two SMSs do not match", sms1.getMobileNumber(),
         sms2.getMobileNumber());

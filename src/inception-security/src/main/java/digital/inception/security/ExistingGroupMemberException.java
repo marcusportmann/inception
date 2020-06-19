@@ -19,15 +19,13 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * A <code>ExistingGroupMemberException</code> is thrown to indicate that a security operation
@@ -39,12 +37,12 @@ import javax.xml.ws.WebFault;
  */
 @ResponseStatus(value = HttpStatus.CONFLICT, reason = "The group member already exists")
 @WebFault(name = "ExistingGroupMemberException",
-  targetNamespace = "http://security.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+    targetNamespace = "http://security.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused" })
-public class ExistingGroupMemberException extends ServiceException
-{
+@SuppressWarnings({"unused"})
+public class ExistingGroupMemberException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -53,9 +51,9 @@ public class ExistingGroupMemberException extends ServiceException
    * @param memberType the group member type
    * @param memberName the group member name
    */
-  public ExistingGroupMemberException(GroupMemberType memberType, String memberName)
-  {
-    super("ExistingGroupMemberError", "The group member with type (" + memberType.description() + ") and name (" + memberName
-      + ") already exists");
+  public ExistingGroupMemberException(GroupMemberType memberType, String memberName) {
+    super("ExistingGroupMemberError",
+        "The group member with type (" + memberType.description() + ") and name (" + memberName
+            + ") already exists");
   }
 }

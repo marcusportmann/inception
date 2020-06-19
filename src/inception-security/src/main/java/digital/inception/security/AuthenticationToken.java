@@ -26,8 +26,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  *
  * @author Marcus Portmann
  */
-public class AuthenticationToken extends AbstractAuthenticationToken
-{
+public class AuthenticationToken extends AbstractAuthenticationToken {
+
   private UserDetails userDetails;
 
   /**
@@ -35,28 +35,24 @@ public class AuthenticationToken extends AbstractAuthenticationToken
    *
    * @param userDetails
    */
-  public AuthenticationToken(UserDetails userDetails)
-  {
+  public AuthenticationToken(UserDetails userDetails) {
     super(userDetails.getAuthorities());
 
     this.userDetails = userDetails;
   }
 
   @Override
-  public Object getCredentials()
-  {
+  public Object getCredentials() {
     return null;
   }
 
   @Override
-  public Object getPrincipal()
-  {
+  public Object getPrincipal() {
     return userDetails;
   }
 
   @Override
-  public boolean isAuthenticated()
-  {
+  public boolean isAuthenticated() {
     return true;
   }
 }

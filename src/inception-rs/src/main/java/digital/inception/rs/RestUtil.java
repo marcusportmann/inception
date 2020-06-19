@@ -18,11 +18,10 @@ package digital.inception.rs;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.io.StringWriter;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.StringWriter;
 
 /**
  * The <code>RestUtil</code> class provides utility methods that are useful when working with
@@ -30,23 +29,19 @@ import java.io.StringWriter;
  *
  * @author Marcus Portmann
  */
-public class RestUtil
-{
+public class RestUtil {
+
   /**
-   * Produce a string in double quotes with backslash sequences in all the
-   * right places. A backslash will be inserted within &lt;/, producing
-   * &lt;\/, allowing JSON text to be delivered in HTML. In JSON text, a
-   * string cannot contain a control character or an unescaped quote or
-   * backslash.
+   * Produce a string in double quotes with backslash sequences in all the right places. A backslash
+   * will be inserted within &lt;/, producing &lt;\/, allowing JSON text to be delivered in HTML. In
+   * JSON text, a string cannot contain a control character or an unescaped quote or backslash.
    *
    * @param string a String
    *
    * @return a String correctly formatted for insertion in a JSON text
    */
-  public static String quote(String string)
-  {
-    if (StringUtils.isEmpty(string))
-    {
+  public static String quote(String string) {
+    if (StringUtils.isEmpty(string)) {
       return "\"\"";
     }
 
@@ -60,13 +55,11 @@ public class RestUtil
 
     sw.write('"');
 
-    for (i = 0; i < len; i += 1)
-    {
+    for (i = 0; i < len; i += 1) {
       b = c;
       c = string.charAt(i);
 
-      switch (c)
-      {
+      switch (c) {
         case '\\':
         case '"':
           sw.write('\\');
@@ -75,8 +68,7 @@ public class RestUtil
           break;
 
         case '/':
-          if (b == '<')
-          {
+          if (b == '<') {
             sw.write('\\');
           }
 
@@ -112,15 +104,12 @@ public class RestUtil
         default:
           if ((c < ' ')
               || ((c >= '\u0080') && (c < '\u00a0'))
-              || ((c >= '\u2000') && (c < '\u2100')))
-          {
+              || ((c >= '\u2000') && (c < '\u2100'))) {
             sw.write("\\u");
             hhhh = Integer.toHexString(c);
             sw.write("0000", 0, 4 - hhhh.length());
             sw.write(hhhh);
-          }
-          else
-          {
+          } else {
             sw.write(c);
           }
       }

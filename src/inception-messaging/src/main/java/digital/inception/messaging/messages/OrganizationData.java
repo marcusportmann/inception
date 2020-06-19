@@ -20,14 +20,11 @@ package digital.inception.messaging.messages;
 
 import digital.inception.core.wbxml.Element;
 import digital.inception.security.Organization;
-
+import java.io.Serializable;
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
-import java.util.UUID;
 
 /**
  * The <code>OrganizationData</code> class holds the information for an organization.
@@ -35,8 +32,8 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public class OrganizationData
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -54,17 +51,13 @@ public class OrganizationData
    *
    * @param element the WBXML element containing the organization data
    */
-  OrganizationData(Element element)
-  {
-    try
-    {
+  OrganizationData(Element element) {
+    try {
       this.id = UUID.fromString(element.getChildText("Id"));
       this.name = StringUtils.isEmpty(element.getChildText("Name"))
           ? ""
           : element.getChildText("Name");
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to extract the organization data from the WBXML", e);
     }
   }
@@ -74,8 +67,7 @@ public class OrganizationData
    *
    * @param organization the <code>Organization</code> instance containing the organization data
    */
-  OrganizationData(Organization organization)
-  {
+  OrganizationData(Organization organization) {
     this.id = organization.getId();
     this.name = organization.getName();
   }
@@ -85,19 +77,8 @@ public class OrganizationData
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
-  }
-
-  /**
-   * Returns the name of the organization.
-   *
-   * @return the name of the organization
-   */
-  public String getName()
-  {
-    return name;
   }
 
   /**
@@ -105,9 +86,17 @@ public class OrganizationData
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public void setId(UUID id)
-  {
+  public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Returns the name of the organization.
+   *
+   * @return the name of the organization
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -115,8 +104,7 @@ public class OrganizationData
    *
    * @param name the name of the organization
    */
-  public void setName(String name)
-  {
+  public void setName(String name) {
     this.name = name;
   }
 
@@ -125,8 +113,7 @@ public class OrganizationData
    *
    * @return the WBXML element containing the organization data
    */
-  Element toElement()
-  {
+  Element toElement() {
     Element organizationElement = new Element("Organization");
 
     organizationElement.addContent(new Element("Id", id.toString()));

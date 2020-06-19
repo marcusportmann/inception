@@ -19,12 +19,10 @@ package digital.inception.core.xml;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
+import java.time.LocalTime;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.time.LocalTime;
-
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * The <code>LocalTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert between
@@ -32,9 +30,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class LocalTimeAdapter extends XmlAdapter<String, LocalTime>
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class LocalTimeAdapter extends XmlAdapter<String, LocalTime> {
+
   /**
    * Marshals the <code>java.time.LocalTime</code> value as an ISO8601Util string.
    *
@@ -43,10 +41,8 @@ public class LocalTimeAdapter extends XmlAdapter<String, LocalTime>
    * @return the <code>java.time.LocalTime</code> value as an ISO8601Util string
    */
   @Override
-  public String marshal(LocalTime value)
-  {
-    if (value == null)
-    {
+  public String marshal(LocalTime value) {
+    if (value == null) {
       return null;
     }
 
@@ -61,19 +57,14 @@ public class LocalTimeAdapter extends XmlAdapter<String, LocalTime>
    * @return the ISO8601Util string value as a <code>java.time.LocalTime</code>
    */
   @Override
-  public LocalTime unmarshal(String value)
-  {
-    if (value == null)
-    {
+  public LocalTime unmarshal(String value) {
+    if (value == null) {
       return null;
     }
 
-    try
-    {
+    try {
       return ISO8601Util.toLocalTime(value);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to parse the xs:time value (" + value + ")");
     }
   }

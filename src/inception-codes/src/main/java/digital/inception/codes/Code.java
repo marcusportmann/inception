@@ -21,20 +21,23 @@ package digital.inception.codes;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Code</code> class holds the information for a code.
@@ -43,17 +46,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "Code")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "codeCategoryId", "name", "value" })
+@JsonPropertyOrder({"id", "codeCategoryId", "name", "value"})
 @XmlRootElement(name = "Code", namespace = "http://codes.inception.digital")
 @XmlType(name = "Code", namespace = "http://codes.inception.digital",
-    propOrder = { "id", "codeCategoryId", "name", "value" })
+    propOrder = {"id", "codeCategoryId", "name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "codes")
 @IdClass(CodeId.class)
 public class Code
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -107,7 +110,8 @@ public class Code
   /**
    * Constructs a new <code>Code</code>.
    */
-  public Code() {}
+  public Code() {
+  }
 
   /**
    * Constructs a new <code>Code</code>.
@@ -115,8 +119,7 @@ public class Code
    * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
    *                       with
    */
-  public Code(String codeCategoryId)
-  {
+  public Code(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
   }
 
@@ -129,8 +132,7 @@ public class Code
    * @param name           the name of the code
    * @param value          the value for the code
    */
-  public Code(String id, String codeCategoryId, String name, String value)
-  {
+  public Code(String id, String codeCategoryId, String name, String value) {
     this.id = id;
     this.codeCategoryId = codeCategoryId;
     this.name = name;
@@ -143,23 +145,19 @@ public class Code
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -173,52 +171,8 @@ public class Code
    *
    * @return the ID used to uniquely identify the code category the code is associated with
    */
-  public String getCodeCategoryId()
-  {
+  public String getCodeCategoryId() {
     return codeCategoryId;
-  }
-
-  /**
-   * Returns the ID used to uniquely identify the code.
-   *
-   * @return the ID used to uniquely identify the code
-   */
-  public String getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the name of the code.
-   *
-   * @return the name of the code
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the value for the code.
-   *
-   * @return the value for the code
-   */
-  public String getValue()
-  {
-    return this.value;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return (id == null)
-        ? 0
-        : id.hashCode();
   }
 
   /**
@@ -227,9 +181,17 @@ public class Code
    * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
    *                       with
    */
-  public void setCodeCategoryId(String codeCategoryId)
-  {
+  public void setCodeCategoryId(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
+  }
+
+  /**
+   * Returns the ID used to uniquely identify the code.
+   *
+   * @return the ID used to uniquely identify the code
+   */
+  public String getId() {
+    return id;
   }
 
   /**
@@ -237,9 +199,17 @@ public class Code
    *
    * @param id the ID used to uniquely identify the code
    */
-  public void setId(String id)
-  {
+  public void setId(String id) {
     this.id = id;
+  }
+
+  /**
+   * Returns the name of the code.
+   *
+   * @return the name of the code
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -247,9 +217,17 @@ public class Code
    *
    * @param name the name of the code
    */
-  public void setName(String name)
-  {
+  public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Returns the value for the code.
+   *
+   * @return the value for the code
+   */
+  public String getValue() {
+    return this.value;
   }
 
   /**
@@ -257,8 +235,19 @@ public class Code
    *
    * @param value the value for the code
    */
-  public void setValue(String value)
-  {
+  public void setValue(String value) {
     this.value = value;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 }

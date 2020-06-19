@@ -18,12 +18,18 @@ package digital.inception.error.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import static org.junit.Assert.assertEquals;
+
 import digital.inception.core.util.Base64Util;
 import digital.inception.error.ErrorReport;
 import digital.inception.error.ErrorReportSummary;
 import digital.inception.error.IErrorService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,40 +39,38 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
-
 //~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ErrorServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>ErrorService</code> class.
+ * The <code>ErrorServiceTest</code> class contains the implementation of the JUnit tests for the
+ * <code>ErrorService</code> class.
  *
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
-  DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
-public class ErrorServiceTest
-{
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+public class ErrorServiceTest {
+
   /**
    * The Error Service.
    */
   @Autowired
   private IErrorService errorService;
 
+  private static synchronized ErrorReport getTestErrorReport() {
+    return new ErrorReport(UUID.randomUUID(), "ApplicationId", "ApplicationVersion", "Description",
+        "Detail", LocalDateTime.now(), "Who", UUID.randomUUID(), "Feedback",
+        Base64Util.encodeBytes("Data".getBytes()));
+  }
+
   /**
    * Test the error report functionality.
    */
   @Test
   public void errorReportTest()
-    throws Exception
-  {
+      throws Exception {
     ErrorReport errorReport = getTestErrorReport();
 
     errorService.createErrorReport(errorReport);
@@ -76,18 +80,18 @@ public class ErrorServiceTest
     compareErrorReports(errorReport, retrievedErrorReport);
 
     ErrorReportSummary retrievedErrorReportSummary = errorService.getErrorReportSummary(
-      errorReport.getId());
+        errorReport.getId());
 
     compareErrorReportAndErrorReportSummary(errorReport, retrievedErrorReportSummary);
 
     assertEquals("The number of error reports is incorrect", 1,
-      errorService.getNumberOfErrorReports());
+        errorService.getNumberOfErrorReports());
 
     List<ErrorReportSummary> errorReportSummaries = errorService.getMostRecentErrorReportSummaries(
-      1000);
+        1000);
 
     assertEquals("The number of error report summaries is incorrect", 1,
-      errorReportSummaries.size());
+        errorReportSummaries.size());
 
     compareErrorReportAndErrorReportSummary(errorReport, errorReportSummaries.get(0));
   }
@@ -97,12 +101,10 @@ public class ErrorServiceTest
    */
   @Test
   public void getMostRecentErrorReportSummariesTest()
-    throws Exception
-  {
+      throws Exception {
     List<ErrorReport> errorReports = new ArrayList<>();
 
-    for (int i = 0; i < 20; i++)
-    {
+    for (int i = 0; i < 20; i++) {
       ErrorReport errorReport = getTestErrorReport();
 
       errorService.createErrorReport(errorReport);
@@ -113,66 +115,56 @@ public class ErrorServiceTest
     }
 
     List<ErrorReportSummary> errorReportSummaries = errorService.getMostRecentErrorReportSummaries(
-      10);
+        10);
 
     assertEquals("The number of error report summaries is incorrect", 10,
-      errorReportSummaries.size());
+        errorReportSummaries.size());
 
-    for (int i = 0; i < 10; i++)
-    {
+    for (int i = 0; i < 10; i++) {
       assertEquals("The error report summary does not match the error report",
-        errorReportSummaries.get(i).getId(),
-        errorReports.get((errorReports.size() - 1) - i).getId());
+          errorReportSummaries.get(i).getId(),
+          errorReports.get((errorReports.size() - 1) - i).getId());
     }
   }
 
-  private static synchronized ErrorReport getTestErrorReport()
-  {
-    return new ErrorReport(UUID.randomUUID(), "ApplicationId", "ApplicationVersion", "Description",
-      "Detail", LocalDateTime.now(), "Who", UUID.randomUUID(), "Feedback",
-      Base64Util.encodeBytes("Data".getBytes()));
-  }
-
   private void compareErrorReportAndErrorReportSummary(
-    ErrorReport errorReport, ErrorReportSummary errorReportSummary)
-  {
+      ErrorReport errorReport, ErrorReportSummary errorReportSummary) {
     assertEquals("The ID values for the two error reports do not match", errorReport.getId(),
-      errorReportSummary.getId());
+        errorReportSummary.getId());
     assertEquals("The application ID values for the two error reports do not match",
-      errorReport.getApplicationId(), errorReportSummary.getApplicationId());
+        errorReport.getApplicationId(), errorReportSummary.getApplicationId());
     assertEquals("The application version values for the two error reports do not match",
-      errorReport.getApplicationVersion(), errorReportSummary.getApplicationVersion());
+        errorReport.getApplicationVersion(), errorReportSummary.getApplicationVersion());
     assertEquals("The description values for the two error reports do not match",
-      errorReport.getDescription(), errorReportSummary.getDescription());
+        errorReport.getDescription(), errorReportSummary.getDescription());
     assertEquals("The created values for the two error reports do not match",
-      errorReport.getCreated(), errorReportSummary.getCreated());
+        errorReport.getCreated(), errorReportSummary.getCreated());
     assertEquals("The who values for the two error reports do not match", errorReport.getWho(),
-      errorReportSummary.getWho());
+        errorReportSummary.getWho());
     assertEquals("The device ID values for the two error reports do not match",
-      errorReport.getDeviceId(), errorReportSummary.getDeviceId());
+        errorReport.getDeviceId(), errorReportSummary.getDeviceId());
   }
 
-  private void compareErrorReports(ErrorReport errorReport1, ErrorReport errorReport2)
-  {
+  private void compareErrorReports(ErrorReport errorReport1, ErrorReport errorReport2) {
     assertEquals("The ID values for the two error reports do not match", errorReport1.getId(),
-      errorReport2.getId());
+        errorReport2.getId());
     assertEquals("The application ID values for the two error reports do not match",
-      errorReport1.getApplicationId(), errorReport2.getApplicationId());
+        errorReport1.getApplicationId(), errorReport2.getApplicationId());
     assertEquals("The application version values for the two error reports do not match",
-      errorReport1.getApplicationVersion(), errorReport2.getApplicationVersion());
+        errorReport1.getApplicationVersion(), errorReport2.getApplicationVersion());
     assertEquals("The description values for the two error reports do not match",
-      errorReport1.getDescription(), errorReport2.getDescription());
+        errorReport1.getDescription(), errorReport2.getDescription());
     assertEquals("The detail values for the two error reports do not match",
-      errorReport1.getDetail(), errorReport2.getDetail());
+        errorReport1.getDetail(), errorReport2.getDetail());
     assertEquals("The created values for the two error reports do not match",
-      errorReport1.getCreated(), errorReport2.getCreated());
+        errorReport1.getCreated(), errorReport2.getCreated());
     assertEquals("The who values for the two error reports do not match", errorReport1.getWho(),
-      errorReport2.getWho());
+        errorReport2.getWho());
     assertEquals("The device ID values for the two error reports do not match",
-      errorReport1.getDeviceId(), errorReport2.getDeviceId());
+        errorReport1.getDeviceId(), errorReport2.getDeviceId());
     assertEquals("The feedback values for the two error reports do not match",
-      errorReport1.getFeedback(), errorReport2.getFeedback());
+        errorReport1.getFeedback(), errorReport2.getFeedback());
     assertEquals("The data values for the two error reports do not match", errorReport1.getData(),
-      errorReport2.getData());
+        errorReport2.getData());
   }
 }

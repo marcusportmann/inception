@@ -20,14 +20,12 @@ package digital.inception.scheduler;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The enumeration giving the possible statuses for a job.
@@ -37,8 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "JobStatus")
 @XmlEnum
 @XmlType(name = "JobStatus", namespace = "http://scheduler.inception.digital")
-public enum JobStatus
-{
+public enum JobStatus {
   @XmlEnumValue("Unscheduled")
   UNSCHEDULED(0, "Unscheduled"),
   @XmlEnumValue("Scheduled")
@@ -59,8 +56,7 @@ public enum JobStatus
   private int code;
   private String description;
 
-  JobStatus(int code, String description)
-  {
+  JobStatus(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -73,10 +69,8 @@ public enum JobStatus
    * @return the status given by the specified numeric code value
    */
   @JsonCreator
-  public static JobStatus fromCode(int code)
-  {
-    switch (code)
-    {
+  public static JobStatus fromCode(int code) {
+    switch (code) {
       case 0:
         return JobStatus.UNSCHEDULED;
 
@@ -109,8 +103,7 @@ public enum JobStatus
    * @return the numeric code value identifying the status
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -119,8 +112,7 @@ public enum JobStatus
    *
    * @return the <code>String</code> value of the numeric code value identifying the status
    */
-  public String codeAsString()
-  {
+  public String codeAsString() {
     return String.valueOf(code);
   }
 
@@ -129,8 +121,7 @@ public enum JobStatus
    *
    * @return the description for the status
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 
@@ -139,8 +130,7 @@ public enum JobStatus
    *
    * @return the string representation of the status enumeration value
    */
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
 }

@@ -18,6 +18,12 @@ package digital.inception.messaging.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.ICodesService;
@@ -25,14 +31,33 @@ import digital.inception.core.util.Base64Util;
 import digital.inception.messaging.IMessagingService;
 import digital.inception.messaging.Message;
 import digital.inception.messaging.MessageTranslator;
-import digital.inception.messaging.messages.*;
+import digital.inception.messaging.messages.AnotherTestRequestData;
+import digital.inception.messaging.messages.AnotherTestResponseData;
+import digital.inception.messaging.messages.AuthenticateRequestData;
+import digital.inception.messaging.messages.AuthenticateResponseData;
+import digital.inception.messaging.messages.CheckUserExistsRequestData;
+import digital.inception.messaging.messages.CheckUserExistsResponseData;
+import digital.inception.messaging.messages.CodeCategoryData;
+import digital.inception.messaging.messages.CodeData;
+import digital.inception.messaging.messages.GetCodeCategoryRequestData;
+import digital.inception.messaging.messages.GetCodeCategoryResponseData;
+import digital.inception.messaging.messages.OrganizationData;
+import digital.inception.messaging.messages.SubmitErrorReportRequestData;
+import digital.inception.messaging.messages.SubmitErrorReportResponseData;
+import digital.inception.messaging.messages.TestRequestData;
+import digital.inception.messaging.messages.TestResponseData;
 import digital.inception.security.SecurityService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
@@ -42,29 +67,22 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import static org.junit.Assert.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-import java.util.*;
-
 /**
- * The <code>SystemMessageTest</code> class contains the implementation of the JUnit
- * tests for the "system" messages supported by the messaging infrastructure.
+ * The <code>SystemMessageTest</code> class contains the implementation of the JUnit tests for the
+ * "system" messages supported by the messaging infrastructure.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
+@ContextConfiguration(classes = {TestConfiguration.class})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
-public class SystemMessageTest
-{
+public class SystemMessageTest {
+
   private static final UUID DEVICE_ID = UUID.randomUUID();
   private static final String PASSWORD = "Password1";
   private static final String USERNAME = "Administrator";
@@ -86,8 +104,7 @@ public class SystemMessageTest
    */
   @Test
   public void anotherTestMessageTest()
-    throws Exception
-  {
+      throws Exception {
     String testValue = "This is the test value";
     byte[] testData = "This is test data".getBytes();
 
@@ -114,8 +131,7 @@ public class SystemMessageTest
    */
   @Test
   public void authenticationTest()
-    throws Exception
-  {
+      throws Exception {
     AuthenticateRequestData requestData = new AuthenticateRequestData(USERNAME, PASSWORD,
         DEVICE_ID);
 
@@ -154,8 +170,7 @@ public class SystemMessageTest
    */
   @Test
   public void checkUserExistsTest()
-    throws Exception
-  {
+      throws Exception {
     CheckUserExistsRequestData requestData = new CheckUserExistsRequestData(USERNAME);
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
@@ -177,19 +192,16 @@ public class SystemMessageTest
    */
   @Test
   public void getGetCodeCategoryTest()
-    throws Exception
-  {
+      throws Exception {
     CodeCategory testStandardCodeCategory = new CodeCategory("TestStandardCodeCategory1",
         "Test Standard Code Category 1", "", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
-    if (testStandardCodeCategory != null)
-    {
+    if (testStandardCodeCategory != null) {
       codesService.createCodeCategory(testStandardCodeCategory);
 
       List<Code> testCodes = new ArrayList<>();
 
-      for (int i = 1; i <= 10; i++)
-      {
+      for (int i = 1; i <= 10; i++) {
         Code testStandardCode = new Code("Test Standard Code ID " + i,
             testStandardCodeCategory.getId(), "Test Standard Code Name " + i,
             "Test Standard Code Value " + i);
@@ -223,12 +235,9 @@ public class SystemMessageTest
 
       boolean foundMatchingCode = false;
 
-      for (Code testCode : testCodes)
-      {
-        for (CodeData code : codeCategory.getCodes())
-        {
-          if (testCode.getId().equals(code.getId()))
-          {
+      for (Code testCode : testCodes) {
+        for (CodeData code : codeCategory.getCodes()) {
+          if (testCode.getId().equals(code.getId())) {
             assertEquals(testCode.getCodeCategoryId(), code.getCodeCategoryId());
             assertEquals(testCode.getName(), code.getName());
             assertEquals(testCode.getValue(), code.getValue());
@@ -239,8 +248,7 @@ public class SystemMessageTest
           }
         }
 
-        if (!foundMatchingCode)
-        {
+        if (!foundMatchingCode) {
           fail(String.format("Failed to find the matching code (%s)", testCode));
         }
 
@@ -251,8 +259,7 @@ public class SystemMessageTest
     CodeCategory testCustomCodeCategory = new CodeCategory("TestCustomCodeCategory2",
         "Test Custom Code Category 2", "", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
-    if (testCustomCodeCategory != null)
-    {
+    if (testCustomCodeCategory != null) {
       codesService.createCodeCategory(testCustomCodeCategory);
 
       GetCodeCategoryRequestData requestData = new GetCodeCategoryRequestData(
@@ -283,8 +290,7 @@ public class SystemMessageTest
    */
   @Test
   public void getGetCodeCategoryWithParametersTest()
-    throws Exception
-  {
+      throws Exception {
     Map<String, String> parameters = new HashMap<>();
 
     parameters.put("Parameter Name 1", "Parameter Value 1");
@@ -293,14 +299,12 @@ public class SystemMessageTest
     CodeCategory testStandardCodeCategory = new CodeCategory("TestStandardCodeCategory2",
         "Test Standard Code Category 2", "", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
-    if (testStandardCodeCategory != null)
-    {
+    if (testStandardCodeCategory != null) {
       codesService.createCodeCategory(testStandardCodeCategory);
 
       List<Code> testCodes = new ArrayList<>();
 
-      for (int i = 1; i <= 10; i++)
-      {
+      for (int i = 1; i <= 10; i++) {
         Code testStandardCode = new Code("Test Standard Code ID " + i,
             testStandardCodeCategory.getId(), "Test Standard Code Name " + i,
             "Test Standard Code Value " + i);
@@ -334,12 +338,9 @@ public class SystemMessageTest
 
       boolean foundMatchingCode = false;
 
-      for (Code testCode : testCodes)
-      {
-        for (CodeData code : codeCategory.getCodes())
-        {
-          if (testCode.getId().equals(code.getId()))
-          {
+      for (Code testCode : testCodes) {
+        for (CodeData code : codeCategory.getCodes()) {
+          if (testCode.getId().equals(code.getId())) {
             assertEquals(testCode.getCodeCategoryId(), code.getCodeCategoryId());
             assertEquals(testCode.getName(), code.getName());
             assertEquals(testCode.getValue(), code.getValue());
@@ -350,8 +351,7 @@ public class SystemMessageTest
           }
         }
 
-        if (!foundMatchingCode)
-        {
+        if (!foundMatchingCode) {
           fail(String.format("Failed to find the matching code (%s)", testCode));
         }
 
@@ -362,8 +362,7 @@ public class SystemMessageTest
     CodeCategory testCustomCodeCategory = new CodeCategory("TestCustomCodeCategory1",
         "Test Custom Code Category 1", "", LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
 
-    if (testCustomCodeCategory != null)
-    {
+    if (testCustomCodeCategory != null) {
       codesService.createCodeCategory(testCustomCodeCategory);
 
       GetCodeCategoryRequestData requestData = new GetCodeCategoryRequestData(
@@ -394,8 +393,7 @@ public class SystemMessageTest
    */
   @Test
   public void submitErrorReportTest()
-    throws Exception
-  {
+      throws Exception {
     SubmitErrorReportRequestData requestData = new SubmitErrorReportRequestData(UUID.randomUUID(),
         "ApplicationId", "1.0.0", "Test Description", "Test Detail", "Test Feedback",
         LocalDateTime.now(), "Administrator", UUID.randomUUID(), Base64Util.encodeBytes(
@@ -420,8 +418,7 @@ public class SystemMessageTest
    */
   @Test
   public void testMessageTest()
-    throws Exception
-  {
+      throws Exception {
     String testValue = "This is the test value";
 
     TestRequestData requestData = new TestRequestData(testValue);

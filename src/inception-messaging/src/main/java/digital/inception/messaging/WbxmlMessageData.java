@@ -20,10 +20,9 @@ package digital.inception.messaging;
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
 
 /**
  * The <code>WbxmlMessageData</code> class provides the abstract base class from which all
@@ -31,8 +30,8 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public abstract class WbxmlMessageData
-{
+public abstract class WbxmlMessageData {
+
   /**
    * The UUID identifying the type of message the message data is associated with.
    */
@@ -51,8 +50,7 @@ public abstract class WbxmlMessageData
    * @param messageTypePriority the priority for the message type the message data is associated
    *                            with
    */
-  public WbxmlMessageData(UUID messageTypeId, MessagePriority messageTypePriority)
-  {
+  public WbxmlMessageData(UUID messageTypeId, MessagePriority messageTypePriority) {
     this.messageTypeId = messageTypeId;
     this.messageTypePriority = messageTypePriority;
   }
@@ -66,15 +64,14 @@ public abstract class WbxmlMessageData
    * <code>false</code> otherwise
    */
   public abstract boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException;
+      throws MessagingServiceException;
 
   /**
    * Returns the UUID identifying the type of message the message data is associated with.
    *
    * @return the UUID identifying the type of message the message data is associated with
    */
-  public UUID getMessageTypeId()
-  {
+  public UUID getMessageTypeId() {
     return messageTypeId;
   }
 
@@ -83,8 +80,7 @@ public abstract class WbxmlMessageData
    *
    * @return the priority for the message type the message data is associated with
    */
-  public MessagePriority getMessageTypePriority()
-  {
+  public MessagePriority getMessageTypePriority() {
     return messageTypePriority;
   }
 
@@ -96,7 +92,7 @@ public abstract class WbxmlMessageData
    * message
    */
   public abstract byte[] toMessageData()
-    throws MessagingServiceException;
+      throws MessagingServiceException;
 
   /**
    * Parse the WBXML data representation of the message data.
@@ -106,16 +102,12 @@ public abstract class WbxmlMessageData
    * @return the WBXML document representing the message data
    */
   protected Document parseWBXML(byte[] data)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       Parser parser = new Parser();
 
       return parser.parse(data);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to parse the WBXML message data", e);
     }
   }

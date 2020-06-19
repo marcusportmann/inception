@@ -26,8 +26,8 @@ import java.io.Serializable;
  * @author Marcus Portmann
  */
 public class Attribute
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
   private String name;
   private String value;
@@ -35,8 +35,7 @@ public class Attribute
   /**
    * Constructs a new <code>Attribute</code>.
    */
-  public Attribute()
-  {
+  public Attribute() {
     name = "";
     value = "";
   }
@@ -47,8 +46,7 @@ public class Attribute
    * @param name  the name of the attribute
    * @param value the value for the attribute
    */
-  public Attribute(String name, String value)
-  {
+  public Attribute(String name, String value) {
     this.name = name;
     this.value = value;
   }
@@ -58,19 +56,8 @@ public class Attribute
    *
    * @return the name of the attribute
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
-  }
-
-  /**
-   * Returns the value of the attribute.
-   *
-   * @return the value of the attribute
-   */
-  public String getValue()
-  {
-    return value;
   }
 
   /**
@@ -78,9 +65,17 @@ public class Attribute
    *
    * @param name the name of the attribute
    */
-  public void setName(String name)
-  {
+  public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Returns the value of the attribute.
+   *
+   * @return the value of the attribute
+   */
+  public String getValue() {
+    return value;
   }
 
   /**
@@ -88,8 +83,7 @@ public class Attribute
    *
    * @param value the value of the attribute
    */
-  public void setValue(String value)
-  {
+  public void setValue(String value) {
     this.value = value;
   }
 }

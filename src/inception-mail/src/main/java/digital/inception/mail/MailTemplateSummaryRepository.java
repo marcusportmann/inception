@@ -22,12 +22,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
  * The <code>MailTemplateSummaryRepository</code> interface declares the repository for the
  * <code>MailTemplateSummary</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {}
+public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {
+
+}

@@ -21,20 +21,19 @@ package digital.inception.messaging;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
- * The <code>MessagePartReceivedRequest</code> class represents a request sent by a mobile device
- * to acknowledge the successful download of a message part.
+ * The <code>MessagePartReceivedRequest</code> class represents a request sent by a mobile device to
+ * acknowledge the successful download of a message part.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "WeakerAccess" })
-public class MessagePartReceivedRequest
-{
+@SuppressWarnings({"WeakerAccess"})
+public class MessagePartReceivedRequest {
+
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the device the message part
    * received request originated from.
@@ -53,8 +52,7 @@ public class MessagePartReceivedRequest
    *
    * @param document the WBXML document containing the message part received request information
    */
-  public MessagePartReceivedRequest(Document document)
-  {
+  public MessagePartReceivedRequest(Document document) {
     Element rootElement = document.getRootElement();
 
     this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
@@ -69,8 +67,7 @@ public class MessagePartReceivedRequest
    * @param messagePartId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                      message part that was successfully downloaded
    */
-  public MessagePartReceivedRequest(UUID deviceId, UUID messagePartId)
-  {
+  public MessagePartReceivedRequest(UUID deviceId, UUID messagePartId) {
     this.deviceId = deviceId;
     this.messagePartId = messagePartId;
   }
@@ -84,14 +81,13 @@ public class MessagePartReceivedRequest
    * @return <code>true</code> if the WBXML document contains valid message part received request
    * information or <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartReceivedRequest")
-      && (rootElement.getAttributes().size() == 2)
-      && !((!rootElement.hasAttribute("deviceId")) || (!rootElement.hasAttribute(
-      "messagePartId")));
+        && (rootElement.getAttributes().size() == 2)
+        && !((!rootElement.hasAttribute("deviceId")) || (!rootElement.hasAttribute(
+        "messagePartId")));
   }
 
   /**
@@ -101,8 +97,7 @@ public class MessagePartReceivedRequest
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
    * message part received request originated from
    */
-  public UUID getDeviceId()
-  {
+  public UUID getDeviceId() {
     return deviceId;
   }
 
@@ -113,8 +108,7 @@ public class MessagePartReceivedRequest
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the message part
    * that was successfully downloaded
    */
-  public UUID getMessagePartId()
-  {
+  public UUID getMessagePartId() {
     return messagePartId;
   }
 
@@ -124,10 +118,9 @@ public class MessagePartReceivedRequest
    * @return the String representation of the message part received request.
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return String.format("<MessagePartReceivedRequest deviceId=\"%s\" messagePartId=\"%s\"/>",
-      deviceId, messagePartId);
+        deviceId, messagePartId);
   }
 
   /**
@@ -135,8 +128,7 @@ public class MessagePartReceivedRequest
    *
    * @return the WBXML representation of the message part received request
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("MessagePartReceivedRequest");
 
     rootElement.setAttribute("deviceId", deviceId.toString());

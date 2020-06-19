@@ -18,6 +18,10 @@ package digital.inception.ws.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.security.KeyStore;
+import java.util.HashMap;
+import java.util.Map;
+import javax.xml.ws.Endpoint;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
@@ -27,13 +31,6 @@ import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.security.KeyStore;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.ws.Endpoint;
-
 /**
  * The <code>CXFWSSX509CertificateTokenProfileEndpointConfigurator</code> class provides the
  * capability to configure a CXF web service endpoint to support authentication using the Web
@@ -41,8 +38,8 @@ import javax.xml.ws.Endpoint;
  *
  * @author Marcus Portmann
  */
-public class CXFWSSX509CertificateTokenProfileEndpointConfigurator
-{
+public class CXFWSSX509CertificateTokenProfileEndpointConfigurator {
+
   /**
    * Configure the CXF web service endpoint to support authentication using the the Web Services
    * Security X.509 Certificate Token profile.
@@ -58,10 +55,8 @@ public class CXFWSSX509CertificateTokenProfileEndpointConfigurator
    */
   public static void configureEndpoint(Endpoint endpoint, KeyStore keyStore,
       String keyStorePassword, String keyStoreAlias, KeyStore trustStore)
-    throws Exception
-  {
-    if (endpoint instanceof EndpointImpl)
-    {
+      throws Exception {
+    if (endpoint instanceof EndpointImpl) {
       EndpointImpl endpointImpl = (EndpointImpl) endpoint;
 
       Crypto crypto = new Crypto(keyStore, keyStorePassword, trustStore);
@@ -76,13 +71,11 @@ public class CXFWSSX509CertificateTokenProfileEndpointConfigurator
           keyStoreAlias, keyStorePassword));
       inProperties.put(WSHandlerConstants.SIG_PROP_FILE, "INTERNAL");
 
-      WSS4JInInterceptor wss4JInInterceptor = new WSS4JInInterceptor(inProperties)
-      {
+      WSS4JInInterceptor wss4JInInterceptor = new WSS4JInInterceptor(inProperties) {
         @Override
         protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
             String propFilename, RequestData reqData)
-          throws WSSecurityException
-        {
+            throws WSSecurityException {
           return crypto;
         }
       };
@@ -99,13 +92,11 @@ public class CXFWSSX509CertificateTokenProfileEndpointConfigurator
           keyStoreAlias, keyStorePassword));
       outProperties.put(WSHandlerConstants.SIG_PROP_FILE, "INTERNAL");
 
-      WSS4JOutInterceptor wss4JOutInterceptor = new WSS4JOutInterceptor(inProperties)
-      {
+      WSS4JOutInterceptor wss4JOutInterceptor = new WSS4JOutInterceptor(inProperties) {
         @Override
         protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
             String propFilename, RequestData reqData)
-          throws WSSecurityException
-        {
+            throws WSSecurityException {
           return crypto;
         }
       };

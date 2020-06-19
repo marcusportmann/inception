@@ -19,19 +19,17 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
-
 /**
- * A <code>GroupRoleNotFoundException</code> is thrown to indicate that a security operation
- * failed as a result of a group role that could not be found.
+ * A <code>GroupRoleNotFoundException</code> is thrown to indicate that a security operation failed
+ * as a result of a group role that could not be found.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -42,9 +40,9 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused" })
-public class GroupRoleNotFoundException extends ServiceException
-{
+@SuppressWarnings({"unused"})
+public class GroupRoleNotFoundException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -52,8 +50,7 @@ public class GroupRoleNotFoundException extends ServiceException
    *
    * @param roleCode the code used to uniquely identify the role
    */
-  public GroupRoleNotFoundException(String roleCode)
-  {
+  public GroupRoleNotFoundException(String roleCode) {
     super("GroupRoleNotFoundError", "The group role with code (" + roleCode
         + ") could not be found");
   }

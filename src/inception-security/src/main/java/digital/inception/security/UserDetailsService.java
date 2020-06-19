@@ -18,25 +18,24 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 /**
- * The <code>UserDetailsService</code> class provides the User Details Service implementation
- * that provides the details for users.
+ * The <code>UserDetailsService</code> class provides the User Details Service implementation that
+ * provides the details for users.
  *
  * @author Marcus Portmann
  */
 public class UserDetailsService
-  implements org.springframework.security.core.userdetails.UserDetailsService
-{
+    implements org.springframework.security.core.userdetails.UserDetailsService {
+
   /* Security Service */
   @Autowired
   private ISecurityService securityService;
@@ -53,20 +52,15 @@ public class UserDetailsService
    */
   @Override
   public UserDetails loadUserByUsername(String username)
-    throws UsernameNotFoundException
-  {
-    try
-    {
+      throws UsernameNotFoundException {
+    try {
       UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
 
-      if (userDirectoryId == null)
-      {
+      if (userDirectoryId == null) {
         throw new UsernameNotFoundException("Failed to retrieve the details for the user ("
             + username
             + "): The user is not associated with any of the configured user directories");
-      }
-      else
-      {
+      } else {
         // Retrieve the details for the user
         User user = securityService.getUser(userDirectoryId, username);
 
@@ -84,8 +78,7 @@ public class UserDetailsService
          */
         List<UUID> userDirectoryIdsForOrganizations = new ArrayList<>();
 
-        for (var organizationId : organizationIds)
-        {
+        for (var organizationId : organizationIds) {
           // Retrieve the list of user directories associated with the organization
           var userDirectoryIdsForOrganization = securityService.getUserDirectoryIdsForOrganization(
               organizationId);
@@ -99,18 +92,12 @@ public class UserDetailsService
         return new digital.inception.security.UserDetails(user, roleCodes, functionCodes,
             organizationIds, userDirectoryIdsForOrganizations);
       }
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw new UsernameNotFoundException("Failed to retrieve the details for the user ("
           + username + "): The user could not be found");
-    }
-    catch (UsernameNotFoundException e)
-    {
+    } catch (UsernameNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to retrieve the details for the user (" + username + ")",
           e);
     }

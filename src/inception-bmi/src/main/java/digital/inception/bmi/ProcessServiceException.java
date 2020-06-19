@@ -19,15 +19,13 @@ package digital.inception.bmi;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * The <code>ProcessServiceException</code> exception is thrown to indicate an error condition when
@@ -42,9 +40,9 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "ProcessServiceException", targetNamespace = "http://bmi.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused" })
-public class ProcessServiceException extends ServiceException
-{
+@SuppressWarnings({"unused"})
+public class ProcessServiceException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -52,8 +50,7 @@ public class ProcessServiceException extends ServiceException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public ProcessServiceException(String message)
-  {
+  public ProcessServiceException(String message) {
     super("ProcessServiceError", message);
   }
 
@@ -61,11 +58,10 @@ public class ProcessServiceException extends ServiceException
    * Constructs a new <code>ProcessServiceException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ProcessServiceException(String message, Throwable cause)
-  {
+  public ProcessServiceException(String message, Throwable cause) {
     super("ProcessServiceError", message, cause);
   }
 }

@@ -24,10 +24,18 @@ import digital.inception.core.util.ResourceUtil;
 import digital.inception.mail.IMailService;
 import digital.inception.mail.MailTemplate;
 import digital.inception.mail.MailTemplateContentType;
-
+import java.lang.reflect.Constructor;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
@@ -38,25 +46,16 @@ import org.springframework.web.util.UriUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.reflect.Constructor;
-
-import java.nio.charset.StandardCharsets;
-
-import java.security.SecureRandom;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * The <code>SecurityService</code> class provides the Security Service implementation.
  *
  * @author Marcus Portmann
  */
 @Service
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class SecurityService
-  implements ISecurityService, InitializingBean
-{
+    implements ISecurityService, InitializingBean {
+
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the Administration user
    * directory.
@@ -220,8 +219,7 @@ public class SecurityService
       PasswordResetRepository passwordResetRepository, RoleRepository roleRepository,
       UserDirectoryRepository userDirectoryRepository,
       UserDirectorySummaryRepository userDirectorySummaryRepository,
-      UserDirectoryTypeRepository userDirectoryTypeRepository, UserRepository userRepository)
-  {
+      UserDirectoryTypeRepository userDirectoryTypeRepository, UserRepository userRepository) {
     this.applicationContext = applicationContext;
     this.mailService = mailService;
     this.functionRepository = functionRepository;
@@ -248,13 +246,11 @@ public class SecurityService
   @Transactional
   public void addMemberToGroup(UUID userDirectoryId, String groupName, GroupMemberType memberType,
       String memberName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-        ExistingGroupMemberException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
+      ExistingGroupMemberException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -272,13 +268,11 @@ public class SecurityService
   @Override
   @Transactional
   public void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, RoleNotFoundException,
-        ExistingGroupRoleException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, RoleNotFoundException,
+      ExistingGroupRoleException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -296,36 +290,27 @@ public class SecurityService
   @Override
   @Transactional
   public void addUserDirectoryToOrganization(UUID organizationId, UUID userDirectoryId)
-    throws OrganizationNotFoundException, UserDirectoryNotFoundException,
-        ExistingOrganizationUserDirectoryException, SecurityServiceException
-  {
-    try
-    {
-      if (!organizationRepository.existsById(organizationId))
-      {
+      throws OrganizationNotFoundException, UserDirectoryNotFoundException,
+      ExistingOrganizationUserDirectoryException, SecurityServiceException {
+    try {
+      if (!organizationRepository.existsById(organizationId)) {
         throw new OrganizationNotFoundException(organizationId);
       }
 
-      if (!userDirectoryRepository.existsById(userDirectoryId))
-      {
+      if (!userDirectoryRepository.existsById(userDirectoryId)) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
       if (organizationRepository.countOrganizationUserDirectory(organizationId, userDirectoryId)
-          > 0)
-      {
+          > 0) {
         throw new ExistingOrganizationUserDirectoryException(organizationId, userDirectoryId);
       }
 
       organizationRepository.addUserDirectoryToOrganization(organizationId, userDirectoryId);
-    }
-    catch (OrganizationNotFoundException | UserDirectoryNotFoundException
-        | ExistingOrganizationUserDirectoryException e)
-    {
+    } catch (OrganizationNotFoundException | UserDirectoryNotFoundException
+        | ExistingOrganizationUserDirectoryException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to add the user directory (" + userDirectoryId
           + ") to the organization (" + organizationId + ")", e);
     }
@@ -342,13 +327,11 @@ public class SecurityService
   @Override
   @Transactional
   public void addUserToGroup(UUID userDirectoryId, String groupName, String username)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-        SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
+      SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -372,12 +355,10 @@ public class SecurityService
   public void adminChangePassword(UUID userDirectoryId, String username, String newPassword,
       boolean expirePassword, boolean lockUser, boolean resetPasswordHistory,
       PasswordChangeReason reason)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -389,13 +370,10 @@ public class SecurityService
    * Initialize the Security Service.
    */
   @Override
-  public void afterPropertiesSet()
-  {
-    try
-    {
+  public void afterPropertiesSet() {
+    try {
       // Load the default password reset mail template
-      if (!mailService.mailTemplateExists(PASSWORD_RESET_MAIL_TEMPLATE_ID))
-      {
+      if (!mailService.mailTemplateExists(PASSWORD_RESET_MAIL_TEMPLATE_ID)) {
         byte[] passwordResetMailTemplate = ResourceUtil.getClasspathResource(
             "digital/inception/security/PasswordReset.ftl");
 
@@ -407,9 +385,7 @@ public class SecurityService
 
       // Load the user directories
       reloadUserDirectories();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to initialize the Security Service", e);
     }
   }
@@ -425,46 +401,34 @@ public class SecurityService
   @Override
   @Transactional
   public UUID authenticate(String username, String password)
-    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-        UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
+      UserNotFoundException, SecurityServiceException {
+    try {
       // First check if this is an internal user and if so determine the user directory ID
       UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
-      if (internalUserDirectoryId != null)
-      {
+      if (internalUserDirectoryId != null) {
         IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
-        if (internalUserDirectory == null)
-        {
+        if (internalUserDirectory == null) {
           throw new SecurityServiceException("The user directory ID (" + internalUserDirectoryId
               + ") for the internal user (" + username + ") is invalid");
-        }
-        else
-        {
+        } else {
           internalUserDirectory.authenticate(username, password);
 
           return internalUserDirectoryId;
         }
-      }
-      else
-      {
+      } else {
         /*
          * Check all of the "external" user directories to see if one of them can authenticate this
          * user.
          */
-        for (UUID userDirectoryId : userDirectories.keySet())
-        {
+        for (UUID userDirectoryId : userDirectories.keySet()) {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-          if (userDirectory != null)
-          {
-            if (!(userDirectory instanceof InternalUserDirectory))
-            {
-              if (userDirectory.isExistingUser(username))
-              {
+          if (userDirectory != null) {
+            if (!(userDirectory instanceof InternalUserDirectory)) {
+              if (userDirectory.isExistingUser(username)) {
                 userDirectory.authenticate(username, password);
 
                 return userDirectoryId;
@@ -475,14 +439,10 @@ public class SecurityService
 
         throw new UserNotFoundException(username);
       }
-    }
-    catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
-        | ExpiredPasswordException e)
-    {
+    } catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
+        | ExpiredPasswordException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to authenticate the user (" + username + ")", e);
     }
   }
@@ -499,46 +459,34 @@ public class SecurityService
   @Override
   @Transactional
   public UUID changePassword(String username, String password, String newPassword)
-    throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-        ExistingPasswordException, SecurityServiceException
-  {
-    try
-    {
+      throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+      ExistingPasswordException, SecurityServiceException {
+    try {
       // First check if this is an internal user and if so determine the user directory ID
       UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
-      if (internalUserDirectoryId != null)
-      {
+      if (internalUserDirectoryId != null) {
         IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
-        if (internalUserDirectory == null)
-        {
+        if (internalUserDirectory == null) {
           throw new SecurityServiceException("The user directory ID (" + internalUserDirectoryId
               + ") for the internal user (" + username + ") is invalid");
-        }
-        else
-        {
+        } else {
           internalUserDirectory.changePassword(username, password, newPassword);
 
           return internalUserDirectoryId;
         }
-      }
-      else
-      {
+      } else {
         /*
          * Check all of the "external" user directories to see if one of them can change the
          * password for this user.
          */
-        for (UUID userDirectoryId : userDirectories.keySet())
-        {
+        for (UUID userDirectoryId : userDirectories.keySet()) {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-          if (userDirectory != null)
-          {
-            if (!(userDirectory instanceof InternalUserDirectory))
-            {
-              if (userDirectory.isExistingUser(username))
-              {
+          if (userDirectory != null) {
+            if (!(userDirectory instanceof InternalUserDirectory)) {
+              if (userDirectory.isExistingUser(username)) {
                 userDirectory.changePassword(username, password, newPassword);
 
                 return userDirectoryId;
@@ -549,14 +497,10 @@ public class SecurityService
 
         throw new UserNotFoundException(username);
       }
-    }
-    catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
-        | ExistingPasswordException e)
-    {
+    } catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
+        | ExistingPasswordException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to change the password for the user (" + username
           + ")", e);
     }
@@ -570,23 +514,16 @@ public class SecurityService
   @Override
   @Transactional
   public void createFunction(Function function)
-    throws DuplicateFunctionException, SecurityServiceException
-  {
-    try
-    {
-      if (functionRepository.existsById(function.getCode()))
-      {
+      throws DuplicateFunctionException, SecurityServiceException {
+    try {
+      if (functionRepository.existsById(function.getCode())) {
         throw new DuplicateFunctionException(function.getCode());
       }
 
       functionRepository.saveAndFlush(function);
-    }
-    catch (DuplicateFunctionException e)
-    {
+    } catch (DuplicateFunctionException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to create the function (" + function.getCode()
           + ")", e);
     }
@@ -602,12 +539,10 @@ public class SecurityService
   @Override
   @Transactional
   public void createGroup(UUID userDirectoryId, Group group)
-    throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -618,7 +553,8 @@ public class SecurityService
    * Create the new organization.
    *
    * @param organization        the organization
-   * @param createUserDirectory should a new internal user directory be created for the organization
+   * @param createUserDirectory should a new internal user directory be created for the
+   *                            organization
    *
    * @return the new internal user directory that was created for the organization or
    * <code>null</code> if no user directory was created
@@ -626,24 +562,20 @@ public class SecurityService
   @Override
   @Transactional
   public UserDirectory createOrganization(Organization organization, boolean createUserDirectory)
-    throws DuplicateOrganizationException, SecurityServiceException
-  {
+      throws DuplicateOrganizationException, SecurityServiceException {
     UserDirectory userDirectory = null;
 
-    try
-    {
-      if ((organization.getId() != null) && organizationRepository.existsById(organization.getId()))
-      {
+    try {
+      if ((organization.getId() != null) && organizationRepository
+          .existsById(organization.getId())) {
         throw new DuplicateOrganizationException(organization.getId());
       }
 
-      if (organizationRepository.existsByNameIgnoreCase(organization.getName()))
-      {
+      if (organizationRepository.existsByNameIgnoreCase(organization.getName())) {
         throw new DuplicateOrganizationException(organization.getName());
       }
 
-      if (createUserDirectory)
-      {
+      if (createUserDirectory) {
         userDirectory = newInternalUserDirectoryForOrganization(organization);
 
         organization.linkUserDirectory(userDirectory);
@@ -651,23 +583,16 @@ public class SecurityService
 
       organizationRepository.saveAndFlush(organization);
 
-      try
-      {
+      try {
         reloadUserDirectories();
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to reload the user directories", e);
       }
 
       return userDirectory;
-    }
-    catch (DuplicateOrganizationException e)
-    {
+    } catch (DuplicateOrganizationException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to create the organization ("
           + organization.getId() + ")", e);
     }
@@ -686,17 +611,14 @@ public class SecurityService
   @Transactional
   public void createUser(UUID userDirectoryId, User user, boolean expiredPassword,
       boolean userLocked)
-    throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    if (getUserDirectoryIdForUser(user.getUsername()) != null)
-    {
+    if (getUserDirectoryIdForUser(user.getUsername()) != null) {
       throw new DuplicateUserException(user.getUsername());
     }
 
@@ -711,38 +633,27 @@ public class SecurityService
   @Override
   @Transactional
   public void createUserDirectory(UserDirectory userDirectory)
-    throws DuplicateUserDirectoryException, SecurityServiceException
-  {
-    try
-    {
+      throws DuplicateUserDirectoryException, SecurityServiceException {
+    try {
       if ((userDirectory.getId() != null)
-          && userDirectoryRepository.existsById(userDirectory.getId()))
-      {
+          && userDirectoryRepository.existsById(userDirectory.getId())) {
         throw new DuplicateUserDirectoryException(userDirectory.getId());
       }
 
-      if (userDirectoryRepository.existsByNameIgnoreCase(userDirectory.getName()))
-      {
+      if (userDirectoryRepository.existsByNameIgnoreCase(userDirectory.getName())) {
         throw new DuplicateUserDirectoryException(userDirectory.getName());
       }
 
       userDirectoryRepository.saveAndFlush(userDirectory);
 
-      try
-      {
+      try {
         reloadUserDirectories();
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to reload the user directories", e);
       }
-    }
-    catch (DuplicateUserDirectoryException e)
-    {
+    } catch (DuplicateUserDirectoryException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to create the user directory ("
           + userDirectory.getName() + ")", e);
     }
@@ -756,23 +667,16 @@ public class SecurityService
   @Override
   @Transactional
   public void deleteFunction(String functionCode)
-    throws FunctionNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!functionRepository.existsById(functionCode))
-      {
+      throws FunctionNotFoundException, SecurityServiceException {
+    try {
+      if (!functionRepository.existsById(functionCode)) {
         throw new FunctionNotFoundException(functionCode);
       }
 
       functionRepository.deleteById(functionCode);
-    }
-    catch (FunctionNotFoundException e)
-    {
+    } catch (FunctionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to delete the function (" + functionCode + ")", e);
     }
   }
@@ -787,13 +691,11 @@ public class SecurityService
   @Override
   @Transactional
   public void deleteGroup(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
-        SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
+      SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -809,23 +711,16 @@ public class SecurityService
   @Override
   @Transactional
   public void deleteOrganization(UUID organizationId)
-    throws OrganizationNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!organizationRepository.existsById(organizationId))
-      {
+      throws OrganizationNotFoundException, SecurityServiceException {
+    try {
+      if (!organizationRepository.existsById(organizationId)) {
         throw new OrganizationNotFoundException(organizationId);
       }
 
       organizationRepository.deleteById(organizationId);
-    }
-    catch (OrganizationNotFoundException e)
-    {
+    } catch (OrganizationNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to delete the organization (" + organizationId
           + ")", e);
     }
@@ -841,12 +736,10 @@ public class SecurityService
   @Override
   @Transactional
   public void deleteUser(UUID userDirectoryId, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -862,32 +755,22 @@ public class SecurityService
   @Override
   @Transactional
   public void deleteUserDirectory(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!userDirectoryRepository.existsById(userDirectoryId))
-      {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
+    try {
+      if (!userDirectoryRepository.existsById(userDirectoryId)) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
       userDirectoryRepository.deleteById(userDirectoryId);
 
-      try
-      {
+      try {
         reloadUserDirectories();
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to reload the user directories", e);
       }
-    }
-    catch (UserDirectoryNotFoundException e)
-    {
+    } catch (UserDirectoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to delete the user directory (" + userDirectoryId
           + ")", e);
     }
@@ -904,12 +787,10 @@ public class SecurityService
    */
   @Override
   public List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
-    throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -925,27 +806,18 @@ public class SecurityService
    */
   @Override
   public Function getFunction(String functionCode)
-    throws FunctionNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws FunctionNotFoundException, SecurityServiceException {
+    try {
       Optional<Function> functionOptional = functionRepository.findById(functionCode);
 
-      if (functionOptional.isPresent())
-      {
+      if (functionOptional.isPresent()) {
         return functionOptional.get();
-      }
-      else
-      {
+      } else {
         throw new FunctionNotFoundException(functionCode);
       }
-    }
-    catch (FunctionNotFoundException e)
-    {
+    } catch (FunctionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the function (" + functionCode + ")",
           e);
     }
@@ -962,12 +834,10 @@ public class SecurityService
    */
   @Override
   public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -981,14 +851,10 @@ public class SecurityService
    */
   @Override
   public List<Function> getFunctions()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return functionRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the functions", e);
     }
   }
@@ -1004,12 +870,10 @@ public class SecurityService
    */
   @Override
   public Group getGroup(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1026,12 +890,10 @@ public class SecurityService
    */
   @Override
   public List<String> getGroupNames(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1049,12 +911,10 @@ public class SecurityService
    */
   @Override
   public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1071,12 +931,10 @@ public class SecurityService
    */
   @Override
   public List<Group> getGroups(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1098,12 +956,10 @@ public class SecurityService
   @Override
   public List<Group> getGroups(UUID userDirectoryId, String filter, SortDirection sortDirection,
       Integer pageIndex, Integer pageSize)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1121,12 +977,10 @@ public class SecurityService
    */
   @Override
   public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1144,12 +998,10 @@ public class SecurityService
    */
   @Override
   public List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1173,12 +1025,10 @@ public class SecurityService
   @Transactional
   public List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName,
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1195,12 +1045,10 @@ public class SecurityService
    */
   @Override
   public long getNumberOfGroups(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1218,12 +1066,10 @@ public class SecurityService
    */
   @Override
   public long getNumberOfGroups(UUID userDirectoryId, String filter)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1241,8 +1087,7 @@ public class SecurityService
    */
   @Override
   public long getNumberOfMembersForGroup(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
     return getNumberOfMembersForGroup(userDirectoryId, groupName, null);
   }
 
@@ -1258,12 +1103,10 @@ public class SecurityService
    */
   @Override
   public long getNumberOfMembersForGroup(UUID userDirectoryId, String groupName, String filter)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1277,8 +1120,7 @@ public class SecurityService
    */
   @Override
   public long getNumberOfOrganizations()
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     return getNumberOfOrganizations(null);
   }
 
@@ -1291,22 +1133,15 @@ public class SecurityService
    */
   @Override
   public long getNumberOfOrganizations(String filter)
-    throws SecurityServiceException
-  {
-    try
-    {
-      if (StringUtils.isEmpty(filter))
-      {
+      throws SecurityServiceException {
+    try {
+      if (StringUtils.isEmpty(filter)) {
         return organizationRepository.count();
-      }
-      else
-      {
+      } else {
         return organizationRepository.countByNameContainingIgnoreCase("%" + filter.toLowerCase()
             + "%");
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the number of organizations", e);
     }
   }
@@ -1318,8 +1153,7 @@ public class SecurityService
    */
   @Override
   public long getNumberOfUserDirectories()
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     return getNumberOfUserDirectories(null);
   }
 
@@ -1332,22 +1166,15 @@ public class SecurityService
    */
   @Override
   public long getNumberOfUserDirectories(String filter)
-    throws SecurityServiceException
-  {
-    try
-    {
-      if (StringUtils.isEmpty(filter))
-      {
+      throws SecurityServiceException {
+    try {
+      if (StringUtils.isEmpty(filter)) {
         return userDirectoryRepository.count();
-      }
-      else
-      {
+      } else {
         return userDirectoryRepository.countByNameContainingIgnoreCase("%" + filter.toLowerCase()
             + "%");
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the number of user directories", e);
     }
   }
@@ -1362,8 +1189,7 @@ public class SecurityService
    */
   @Override
   public long getNumberOfUsers(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     return getNumberOfUsers(userDirectoryId, null);
   }
 
@@ -1378,12 +1204,10 @@ public class SecurityService
    */
   @Override
   public long getNumberOfUsers(UUID userDirectoryId, String filter)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1400,27 +1224,18 @@ public class SecurityService
    */
   @Override
   public Organization getOrganization(UUID organizationId)
-    throws OrganizationNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws OrganizationNotFoundException, SecurityServiceException {
+    try {
       Optional<Organization> organizationOptional = organizationRepository.findById(organizationId);
 
-      if (organizationOptional.isPresent())
-      {
+      if (organizationOptional.isPresent()) {
         return organizationOptional.get();
-      }
-      else
-      {
+      } else {
         throw new OrganizationNotFoundException(organizationId);
       }
-    }
-    catch (OrganizationNotFoundException e)
-    {
+    } catch (OrganizationNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the organization (" + organizationId
           + ")", e);
     }
@@ -1434,30 +1249,23 @@ public class SecurityService
    *                        user directory
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the organizations
-   *         the user directory is associated with
+   * the user directory is associated with
    */
   @Override
   public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!userDirectoryRepository.existsById(userDirectoryId))
-      {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
+    try {
+      if (!userDirectoryRepository.existsById(userDirectoryId)) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
       return userDirectoryRepository.getOrganizationIdsById(userDirectoryId);
-    }
-    catch (UserDirectoryNotFoundException e)
-    {
+    } catch (UserDirectoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the IDs for the organizations for the user directory ("
-          + userDirectoryId + ")", e);
+              + userDirectoryId + ")", e);
     }
   }
 
@@ -1471,27 +1279,18 @@ public class SecurityService
    */
   @Override
   public String getOrganizationName(UUID organizationId)
-    throws OrganizationNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws OrganizationNotFoundException, SecurityServiceException {
+    try {
       Optional<String> nameOptional = organizationRepository.getNameById(organizationId);
 
-      if (nameOptional.isPresent())
-      {
+      if (nameOptional.isPresent()) {
         return nameOptional.get();
-      }
-      else
-      {
+      } else {
         throw new OrganizationNotFoundException(organizationId);
       }
-    }
-    catch (OrganizationNotFoundException e)
-    {
+    } catch (OrganizationNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the name of the organization ("
           + organizationId + ")", e);
     }
@@ -1504,14 +1303,10 @@ public class SecurityService
    */
   @Override
   public List<Organization> getOrganizations()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return organizationRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the organizations", e);
     }
   }
@@ -1529,57 +1324,39 @@ public class SecurityService
   @Override
   public List<Organization> getOrganizations(String filter, SortDirection sortDirection,
       Integer pageIndex, Integer pageSize)
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     PageRequest pageRequest;
 
-    if ((pageIndex != null) && (pageSize != null))
-    {
+    if ((pageIndex != null) && (pageSize != null)) {
       pageRequest = PageRequest.of(pageIndex, pageSize);
-    }
-    else
-    {
+    } else {
       pageRequest = PageRequest.of(0, MAX_FILTERED_ORGANISATIONS);
     }
 
-    try
-    {
-      if (StringUtils.isEmpty(filter))
-      {
-        if (sortDirection == SortDirection.ASCENDING)
-        {
+    try {
+      if (StringUtils.isEmpty(filter)) {
+        if (sortDirection == SortDirection.ASCENDING) {
           return organizationRepository.findAllByOrderByNameAsc(pageRequest);
-        }
-        else
-        {
+        } else {
           return organizationRepository.findAllByOrderByNameDesc(pageRequest);
         }
-      }
-      else
-      {
-        if (sortDirection == SortDirection.ASCENDING)
-        {
+      } else {
+        if (sortDirection == SortDirection.ASCENDING) {
           return organizationRepository.findByNameContainingIgnoreCaseOrderByNameAsc(filter,
               pageRequest);
-        }
-        else
-        {
+        } else {
           return organizationRepository.findByNameContainingIgnoreCaseOrderByNameDesc(filter,
               pageRequest);
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       String message = "Failed to retrieve the organizations";
 
-      if (!StringUtils.isEmpty(filter))
-      {
+      if (!StringUtils.isEmpty(filter)) {
         message += String.format(" matching the filter \"%s\"", filter);
       }
 
-      if ((pageIndex != null) && (pageSize != null))
-      {
+      if ((pageIndex != null) && (pageSize != null)) {
         message += " for the page " + pageIndex + " using the page size " + pageSize;
       }
 
@@ -1601,26 +1378,19 @@ public class SecurityService
    */
   @Override
   public List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!userDirectoryRepository.existsById(userDirectoryId))
-      {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
+    try {
+      if (!userDirectoryRepository.existsById(userDirectoryId)) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
       return organizationRepository.findAllByUserDirectoryId(userDirectoryId);
-    }
-    catch (UserDirectoryNotFoundException e)
-    {
+    } catch (UserDirectoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the organizations associated with the user directory ("
-          + userDirectoryId + ")", e);
+              + userDirectoryId + ")", e);
     }
   }
 
@@ -1635,12 +1405,10 @@ public class SecurityService
    */
   @Override
   public List<String> getRoleCodesForGroup(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1658,12 +1426,10 @@ public class SecurityService
    */
   @Override
   public List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1677,14 +1443,10 @@ public class SecurityService
    */
   @Override
   public List<Role> getRoles()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return roleRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the roles", e);
     }
   }
@@ -1700,12 +1462,10 @@ public class SecurityService
    */
   @Override
   public List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1723,12 +1483,10 @@ public class SecurityService
    */
   @Override
   public User getUser(UUID userDirectoryId, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1742,14 +1500,10 @@ public class SecurityService
    */
   @Override
   public List<UserDirectory> getUserDirectories()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return userDirectoryRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the user directories", e);
     }
   }
@@ -1767,48 +1521,32 @@ public class SecurityService
   @Override
   public List<UserDirectory> getUserDirectories(String filter, SortDirection sortDirection,
       Integer pageIndex, Integer pageSize)
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     PageRequest pageRequest;
 
-    if ((pageIndex != null) && (pageSize != null))
-    {
+    if ((pageIndex != null) && (pageSize != null)) {
       pageRequest = PageRequest.of(pageIndex, pageSize);
-    }
-    else
-    {
+    } else {
       pageRequest = PageRequest.of(0, MAX_FILTERED_USER_DIRECTORIES);
     }
 
-    try
-    {
-      if (StringUtils.isEmpty(filter))
-      {
-        if (sortDirection == SortDirection.ASCENDING)
-        {
+    try {
+      if (StringUtils.isEmpty(filter)) {
+        if (sortDirection == SortDirection.ASCENDING) {
           return userDirectoryRepository.findAllByOrderByNameAsc(pageRequest);
-        }
-        else
-        {
+        } else {
           return userDirectoryRepository.findAllByOrderByNameDesc(pageRequest);
         }
-      }
-      else
-      {
-        if (sortDirection == SortDirection.ASCENDING)
-        {
+      } else {
+        if (sortDirection == SortDirection.ASCENDING) {
           return userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(filter,
               pageRequest);
-        }
-        else
-        {
+        } else {
           return userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(filter,
               pageRequest);
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the filtered user directories", e);
     }
   }
@@ -1823,26 +1561,19 @@ public class SecurityService
    */
   @Override
   public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
-    throws OrganizationNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!organizationRepository.existsById(organizationId))
-      {
+      throws OrganizationNotFoundException, SecurityServiceException {
+    try {
+      if (!organizationRepository.existsById(organizationId)) {
         throw new OrganizationNotFoundException(organizationId);
       }
 
       return userDirectoryRepository.findAllByOrganizationId(organizationId);
-    }
-    catch (OrganizationNotFoundException e)
-    {
+    } catch (OrganizationNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the user directories associated with the organization ("
-          + organizationId + ")", e);
+              + organizationId + ")", e);
     }
   }
 
@@ -1856,28 +1587,19 @@ public class SecurityService
    */
   @Override
   public UserDirectory getUserDirectory(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
+    try {
       Optional<UserDirectory> userDirectoryOptional = userDirectoryRepository.findById(
           userDirectoryId);
 
-      if (userDirectoryOptional.isPresent())
-      {
+      if (userDirectoryOptional.isPresent()) {
         return userDirectoryOptional.get();
-      }
-      else
-      {
+      } else {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
-    }
-    catch (UserDirectoryNotFoundException e)
-    {
+    } catch (UserDirectoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the user directory ("
           + userDirectoryId + ")", e);
     }
@@ -1893,12 +1615,10 @@ public class SecurityService
    */
   @Override
   public UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -1912,38 +1632,29 @@ public class SecurityService
    * @param username the username identifying the user
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         that the user with the specified username is associated with or <code>null</code> if
-   *         the user cannot be found
+   * that the user with the specified username is associated with or <code>null</code> if the user
+   * cannot be found
    */
   @Override
   public UUID getUserDirectoryIdForUser(String username)
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       // First check if this is an internal user and if so determine the user directory ID
       UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
 
-      if (internalUserDirectoryId != null)
-      {
+      if (internalUserDirectoryId != null) {
         return internalUserDirectoryId;
-      }
-      else
-      {
+      } else {
         /*
          * Check all of the "external" user directories to see if the user is associated with one
          * of them.
          */
-        for (UUID userDirectoryId : userDirectories.keySet())
-        {
+        for (UUID userDirectoryId : userDirectories.keySet()) {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-          if (userDirectory != null)
-          {
-            if (!(userDirectory instanceof InternalUserDirectory))
-            {
-              if (userDirectory.isExistingUser(username))
-              {
+          if (userDirectory != null) {
+            if (!(userDirectory instanceof InternalUserDirectory)) {
+              if (userDirectory.isExistingUser(username)) {
                 return userDirectoryId;
               }
             }
@@ -1952,9 +1663,7 @@ public class SecurityService
 
         return null;
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the user directory ID for the user ("
           + username + ")", e);
     }
@@ -1968,30 +1677,23 @@ public class SecurityService
    *                       organization
    *
    * @return the Universally Unique Identifiers (UUIDs) used to uniquely identify the user
-   *         directories the organization is associated with
+   * directories the organization is associated with
    */
   @Override
   public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
-    throws OrganizationNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!organizationRepository.existsById(organizationId))
-      {
+      throws OrganizationNotFoundException, SecurityServiceException {
+    try {
+      if (!organizationRepository.existsById(organizationId)) {
         throw new OrganizationNotFoundException(organizationId);
       }
 
       return organizationRepository.getUserDirectoryIdsById(organizationId);
-    }
-    catch (OrganizationNotFoundException e)
-    {
+    } catch (OrganizationNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the IDs for the user directories associated with the organization ("
-          + organizationId + ")", e);
+              + organizationId + ")", e);
     }
   }
 
@@ -2005,27 +1707,18 @@ public class SecurityService
    */
   @Override
   public String getUserDirectoryName(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
+    try {
       Optional<String> nameOptional = userDirectoryRepository.getNameById(userDirectoryId);
 
-      if (nameOptional.isPresent())
-      {
+      if (nameOptional.isPresent()) {
         return nameOptional.get();
-      }
-      else
-      {
+      } else {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
-    }
-    catch (UserDirectoryNotFoundException e)
-    {
+    } catch (UserDirectoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the name of the user directory ("
           + userDirectoryId + ")", e);
     }
@@ -2044,48 +1737,32 @@ public class SecurityService
   @Override
   public List<UserDirectorySummary> getUserDirectorySummaries(String filter,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     PageRequest pageRequest;
 
-    if ((pageIndex != null) && (pageSize != null))
-    {
+    if ((pageIndex != null) && (pageSize != null)) {
       pageRequest = PageRequest.of(pageIndex, pageSize);
-    }
-    else
-    {
+    } else {
       pageRequest = PageRequest.of(0, MAX_FILTERED_USER_DIRECTORIES);
     }
 
-    try
-    {
-      if (StringUtils.isEmpty(filter))
-      {
-        if (sortDirection == SortDirection.ASCENDING)
-        {
+    try {
+      if (StringUtils.isEmpty(filter)) {
+        if (sortDirection == SortDirection.ASCENDING) {
           return userDirectorySummaryRepository.findAllByOrderByNameAsc(pageRequest);
-        }
-        else
-        {
+        } else {
           return userDirectorySummaryRepository.findAllByOrderByNameDesc(pageRequest);
         }
-      }
-      else
-      {
-        if (sortDirection == SortDirection.ASCENDING)
-        {
+      } else {
+        if (sortDirection == SortDirection.ASCENDING) {
           return userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
               filter, pageRequest);
-        }
-        else
-        {
+        } else {
           return userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
               filter, pageRequest);
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered summaries for the user directories", e);
     }
@@ -2101,23 +1778,16 @@ public class SecurityService
    */
   @Override
   public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
-    throws OrganizationNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!organizationRepository.existsById(organizationId))
-      {
+      throws OrganizationNotFoundException, SecurityServiceException {
+    try {
+      if (!organizationRepository.existsById(organizationId)) {
         throw new OrganizationNotFoundException(organizationId);
       }
 
       return userDirectorySummaryRepository.findAllByOrganizationId(organizationId);
-    }
-    catch (OrganizationNotFoundException e)
-    {
+    } catch (OrganizationNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the summaries for the user "
           + "directories associated with the organization (" + organizationId + ")", e);
     }
@@ -2133,40 +1803,30 @@ public class SecurityService
    */
   @Override
   public UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, UserDirectoryTypeNotFoundException,
-        SecurityServiceException
-  {
-    try
-    {
+      throws UserDirectoryNotFoundException, UserDirectoryTypeNotFoundException,
+      SecurityServiceException {
+    try {
       Optional<String> typeOptional = userDirectoryRepository.getTypeForUserDirectoryById(
           userDirectoryId);
 
-      if (typeOptional.isEmpty())
-      {
+      if (typeOptional.isEmpty()) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
       Optional<UserDirectoryType> userDirectoryTypeOptional = userDirectoryTypeRepository.findById(
           typeOptional.get());
 
-      if (userDirectoryTypeOptional.isPresent())
-      {
+      if (userDirectoryTypeOptional.isPresent()) {
         return userDirectoryTypeOptional.get();
-      }
-      else
-      {
+      } else {
         throw new UserDirectoryTypeNotFoundException(typeOptional.get());
       }
-    }
-    catch (UserDirectoryNotFoundException | UserDirectoryTypeNotFoundException e)
-    {
+    } catch (UserDirectoryNotFoundException | UserDirectoryTypeNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the user directory type for the user directory (" + userDirectoryId
-          + ")", e);
+              + ")", e);
     }
   }
 
@@ -2177,14 +1837,10 @@ public class SecurityService
    */
   @Override
   public List<UserDirectoryType> getUserDirectoryTypes()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return userDirectoryTypeRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the user directory types", e);
     }
   }
@@ -2200,12 +1856,10 @@ public class SecurityService
    */
   @Override
   public String getUserFullName(UUID userDirectoryId, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2222,12 +1876,10 @@ public class SecurityService
    */
   @Override
   public List<User> getUsers(UUID userDirectoryId)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2250,12 +1902,10 @@ public class SecurityService
   @Override
   public List<User> getUsers(UUID userDirectoryId, String filter, UserSortBy sortBy,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2272,8 +1922,7 @@ public class SecurityService
   @Override
   @Transactional
   public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
-    throws UserNotFoundException, SecurityServiceException
-  {
+      throws UserNotFoundException, SecurityServiceException {
     initiatePasswordReset(username, resetPasswordUrl, sendEmail, null);
   }
 
@@ -2289,14 +1938,11 @@ public class SecurityService
   @Transactional
   public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail,
       String securityCode)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       UUID userDirectoryId = getUserDirectoryIdForUser(username);
 
-      if (userDirectoryId == null)
-      {
+      if (userDirectoryId == null) {
         throw new UserNotFoundException(username);
       }
 
@@ -2304,10 +1950,8 @@ public class SecurityService
 
       User user = userDirectory.getUser(username);
 
-      if (!StringUtils.isEmpty(user.getEmail()))
-      {
-        if (StringUtils.isEmpty(securityCode))
-        {
+      if (!StringUtils.isEmpty(user.getEmail())) {
+        if (StringUtils.isEmpty(securityCode)) {
           securityCode = securityCodeGenerator.nextString();
         }
 
@@ -2315,25 +1959,18 @@ public class SecurityService
 
         PasswordReset passwordReset = new PasswordReset(username, securityCodeHash);
 
-        if (sendEmail)
-        {
+        if (sendEmail) {
           sendPasswordResetEmail(user, resetPasswordUrl, securityCode);
         }
 
         passwordResetRepository.saveAndFlush(passwordReset);
-      }
-      else
-      {
+      } else {
         logger.warn("Failed to send the password reset communication to the user (" + username
             + ") who does not have a valid e-mail address");
       }
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to initiate the password reset process for the user (" + username + ")", e);
     }
@@ -2347,16 +1984,14 @@ public class SecurityService
    * @param username        the username identifying the user
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
   public boolean isExistingUser(UUID userDirectoryId, String username)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2372,17 +2007,15 @@ public class SecurityService
    * @param username        the username identifying the user
    *
    * @return <code>true</code> if the user is a member of the group or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
   public boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
-    throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-        SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
+      SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2394,36 +2027,30 @@ public class SecurityService
    */
   @Override
   public void reloadUserDirectories()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       Map<UUID, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
 
       List<UserDirectoryType> userDirectoryTypes = getUserDirectoryTypes();
 
-      for (UserDirectory userDirectory : getUserDirectories())
-      {
+      for (UserDirectory userDirectory : getUserDirectories()) {
         UserDirectoryType userDirectoryType;
 
         userDirectoryType = userDirectoryTypes.stream().filter(
             possibleUserDirectoryType -> possibleUserDirectoryType.getCode().equals(
-            userDirectory.getType())).findFirst().orElse(null);
+                userDirectory.getType())).findFirst().orElse(null);
 
-        if (userDirectoryType == null)
-        {
+        if (userDirectoryType == null) {
           logger.error("Failed to load the user directory (" + userDirectory.getId()
               + "): The user directory type (" + userDirectory.getType() + ") was not loaded");
 
           continue;
         }
 
-        try
-        {
+        try {
           Class<?> clazz = userDirectoryType.getUserDirectoryClass();
 
-          if (!IUserDirectory.class.isAssignableFrom(clazz))
-          {
+          if (!IUserDirectory.class.isAssignableFrom(clazz)) {
             throw new SecurityServiceException("The user directory class ("
                 + userDirectoryType.getUserDirectoryClassName()
                 + ") does not implement the IUserDirectory interface");
@@ -2434,10 +2061,9 @@ public class SecurityService
 
           Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
               userDirectoryClass.getConstructor(UUID.class, List.class, GroupRepository.class,
-              UserRepository.class, RoleRepository.class);
+                  UserRepository.class, RoleRepository.class);
 
-          if (userDirectoryClassConstructor == null)
-          {
+          if (userDirectoryClassConstructor == null) {
             throw new SecurityServiceException("The user directory class ("
                 + userDirectoryType.getUserDirectoryClassName()
                 + ") does not provide a valid constructor (long, Map<String,String>)");
@@ -2450,18 +2076,14 @@ public class SecurityService
           applicationContext.getAutowireCapableBeanFactory().autowireBean(userDirectoryInstance);
 
           reloadedUserDirectories.put(userDirectory.getId(), userDirectoryInstance);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new SecurityServiceException("Failed to initialize the user directory ("
               + userDirectory.getId() + ")(" + userDirectory.getName() + ")", e);
         }
       }
 
       this.userDirectories = reloadedUserDirectories;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to reload the user directories", e);
     }
   }
@@ -2479,13 +2101,11 @@ public class SecurityService
   @Transactional
   public void removeMemberFromGroup(UUID userDirectoryId, String groupName,
       GroupMemberType memberType, String memberName)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, GroupMemberNotFoundException,
-        SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, GroupMemberNotFoundException,
+      SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2503,13 +2123,11 @@ public class SecurityService
   @Override
   @Transactional
   public void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, GroupRoleNotFoundException,
-        SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, GroupRoleNotFoundException,
+      SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2527,30 +2145,22 @@ public class SecurityService
   @Override
   @Transactional
   public void removeUserDirectoryFromOrganization(UUID organizationId, UUID userDirectoryId)
-    throws OrganizationNotFoundException, OrganizationUserDirectoryNotFoundException,
-        SecurityServiceException
-  {
-    try
-    {
-      if (!organizationRepository.existsById(organizationId))
-      {
+      throws OrganizationNotFoundException, OrganizationUserDirectoryNotFoundException,
+      SecurityServiceException {
+    try {
+      if (!organizationRepository.existsById(organizationId)) {
         throw new OrganizationNotFoundException(organizationId);
       }
 
       if (organizationRepository.countOrganizationUserDirectory(organizationId, userDirectoryId)
-          == 0)
-      {
+          == 0) {
         throw new OrganizationUserDirectoryNotFoundException(organizationId, userDirectoryId);
       }
 
       organizationRepository.removeUserDirectoryFromOrganization(organizationId, userDirectoryId);
-    }
-    catch (OrganizationNotFoundException | OrganizationUserDirectoryNotFoundException e)
-    {
+    } catch (OrganizationNotFoundException | OrganizationUserDirectoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to add the user directory (" + userDirectoryId
           + ") to the organization (" + organizationId + ")", e);
     }
@@ -2567,13 +2177,11 @@ public class SecurityService
   @Override
   @Transactional
   public void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-        SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
+      SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2590,15 +2198,12 @@ public class SecurityService
   @Override
   @Transactional
   public void resetPassword(String username, String newPassword, String securityCode)
-    throws UserNotFoundException, UserLockedException, InvalidSecurityCodeException,
-        ExistingPasswordException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, UserLockedException, InvalidSecurityCodeException,
+      ExistingPasswordException, SecurityServiceException {
+    try {
       UUID userDirectoryId = getUserDirectoryIdForUser(username);
 
-      if (userDirectoryId == null)
-      {
+      if (userDirectoryId == null) {
         throw new UserNotFoundException(username);
       }
 
@@ -2607,10 +2212,8 @@ public class SecurityService
 
       String securityCodeHash = PasswordUtil.createPasswordHash(securityCode);
 
-      for (PasswordReset passwordReset : passwordResets)
-      {
-        if (passwordReset.getSecurityCodeHash().equals(securityCodeHash))
-        {
+      for (PasswordReset passwordReset : passwordResets) {
+        if (passwordReset.getSecurityCodeHash().equals(securityCodeHash)) {
           IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
           userDirectory.resetPassword(username, newPassword);
@@ -2620,14 +2223,10 @@ public class SecurityService
       }
 
       throw new InvalidSecurityCodeException();
-    }
-    catch (UserNotFoundException | UserLockedException | InvalidSecurityCodeException
-        | ExistingPasswordException e)
-    {
+    } catch (UserNotFoundException | UserLockedException | InvalidSecurityCodeException
+        | ExistingPasswordException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to reset the password for the user (" + username
           + ")", e);
     }
@@ -2641,23 +2240,16 @@ public class SecurityService
   @Override
   @Transactional
   public void updateFunction(Function function)
-    throws FunctionNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!functionRepository.existsById(function.getCode()))
-      {
+      throws FunctionNotFoundException, SecurityServiceException {
+    try {
+      if (!functionRepository.existsById(function.getCode())) {
         throw new FunctionNotFoundException(function.getCode());
       }
 
       functionRepository.saveAndFlush(function);
-    }
-    catch (FunctionNotFoundException e)
-    {
+    } catch (FunctionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to update the function (" + function.getCode()
           + ")", e);
     }
@@ -2673,12 +2265,10 @@ public class SecurityService
   @Override
   @Transactional
   public void updateGroup(UUID userDirectoryId, Group group)
-    throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2693,23 +2283,16 @@ public class SecurityService
   @Override
   @Transactional
   public void updateOrganization(Organization organization)
-    throws OrganizationNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!organizationRepository.existsById(organization.getId()))
-      {
+      throws OrganizationNotFoundException, SecurityServiceException {
+    try {
+      if (!organizationRepository.existsById(organization.getId())) {
         throw new OrganizationNotFoundException(organization.getId());
       }
 
       organizationRepository.saveAndFlush(organization);
-    }
-    catch (OrganizationNotFoundException e)
-    {
+    } catch (OrganizationNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to update the organization ("
           + organization.getId() + ")", e);
     }
@@ -2727,12 +2310,10 @@ public class SecurityService
   @Override
   @Transactional
   public void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
-    throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException
-  {
+      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
@@ -2747,25 +2328,18 @@ public class SecurityService
   @Override
   @Transactional
   public void updateUserDirectory(UserDirectory userDirectory)
-    throws UserDirectoryNotFoundException, SecurityServiceException
-  {
-    try
-    {
-      if (!userDirectoryRepository.existsById(userDirectory.getId()))
-      {
+      throws UserDirectoryNotFoundException, SecurityServiceException {
+    try {
+      if (!userDirectoryRepository.existsById(userDirectory.getId())) {
         throw new UserDirectoryNotFoundException(userDirectory.getId());
       }
 
       userDirectoryRepository.saveAndFlush(userDirectory);
 
       reloadUserDirectories();
-    }
-    catch (UserDirectoryNotFoundException e)
-    {
+    } catch (UserDirectoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to update the user directory ("
           + userDirectory.getName() + ")", e);
     }
@@ -2778,24 +2352,20 @@ public class SecurityService
    * @param username the username uniquely identifying the internal user
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the internal user
-   *         directory the internal user with the specified username is associated with or
-   *         <code>null</code> if an internal user with the specified username could not be found
+   * directory the internal user with the specified username is associated with or
+   * <code>null</code> if an internal user with the specified username could not be found
    */
   private UUID getInternalUserDirectoryIdForUser(String username)
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       Optional<UUID> userDirectoryIdOptional =
           userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
 
       return userDirectoryIdOptional.orElse(null);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the ID for the internal user directory for the internal user ("
-          + username + ")", e);
+              + username + ")", e);
     }
   }
 
@@ -2806,15 +2376,12 @@ public class SecurityService
    *
    * @return true if the value is <code>null</code> or blank
    */
-  private boolean isNullOrEmpty(Object value)
-  {
-    if (value == null)
-    {
+  private boolean isNullOrEmpty(Object value) {
+    if (value == null) {
       return true;
     }
 
-    if (value instanceof String)
-    {
+    if (value instanceof String) {
       return ((String) value).length() == 0;
     }
 
@@ -2822,12 +2389,10 @@ public class SecurityService
   }
 
   private UserDirectory newInternalUserDirectoryForOrganization(Organization organization)
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     UserDirectory userDirectory = new UserDirectory();
 
-    if (organization.getId() != null)
-    {
+    if (organization.getId() != null) {
       userDirectory.setId(organization.getId());
     }
 
@@ -2848,12 +2413,9 @@ public class SecurityService
   }
 
   private void sendPasswordResetEmail(User user, String resetPasswordUrl, String securityCode)
-    throws SecurityServiceException
-  {
-    try
-    {
-      if (!StringUtils.isEmpty(user.getEmail()))
-      {
+      throws SecurityServiceException {
+    try {
+      if (!StringUtils.isEmpty(user.getEmail())) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("name", (user.getFirstName() + ((user.getFirstName().length() > 0)
             ? " "
@@ -2868,9 +2430,7 @@ public class SecurityService
         mailService.sendMail(Collections.singletonList(user.getEmail()), "Password Reset",
             "no-reply@inception.digital", "Inception", PASSWORD_RESET_MAIL_TEMPLATE_ID, parameters);
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to send the password reset e-mail", e);
     }
   }

@@ -21,11 +21,10 @@ package digital.inception.messaging;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageReceivedResponse</code> class represents the response to a request sent by a
@@ -33,9 +32,9 @@ import java.io.PrintWriter;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class MessageReceivedResponse
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class MessageReceivedResponse {
+
   /**
    * The error code returned to indicate an invalid request.
    */
@@ -53,8 +52,8 @@ public class MessageReceivedResponse
   public static final int SUCCESS = 0;
 
   /**
-   * The result code. A result code of 0 is used to indicate that the message received request
-   * was processed successfully.
+   * The result code. A result code of 0 is used to indicate that the message received request was
+   * processed successfully.
    */
   private long code;
 
@@ -77,15 +76,13 @@ public class MessageReceivedResponse
    *
    * @param document the WBXML document containing the message received response information
    */
-  public MessageReceivedResponse(Document document)
-  {
+  public MessageReceivedResponse(Document document) {
     Element rootElement = document.getRootElement();
 
     this.code = Long.parseLong(rootElement.getAttributeValue("code"));
     this.detail = rootElement.getAttributeValue("detail");
 
-    if (rootElement.hasChild("Exception"))
-    {
+    if (rootElement.hasChild("Exception")) {
       Element exceptionElement = rootElement.getChild("Exception");
 
       exception = exceptionElement.getText();
@@ -98,8 +95,7 @@ public class MessageReceivedResponse
    * @param code   the result code
    * @param detail the text description of the result of processing the message download request
    */
-  public MessageReceivedResponse(long code, String detail)
-  {
+  public MessageReceivedResponse(long code, String detail) {
     this.code = code;
     this.detail = detail;
   }
@@ -111,15 +107,12 @@ public class MessageReceivedResponse
    * @param detail the text description of the result of processing the message received request
    * @param cause  the exception that resulted from processing the message received request
    */
-  public MessageReceivedResponse(long code, String detail, Throwable cause)
-  {
+  public MessageReceivedResponse(long code, String detail, Throwable cause) {
     this.code = code;
     this.detail = detail;
 
-    if (cause != null)
-    {
-      try
-      {
+    if (cause != null) {
+      try {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baos);
 
@@ -127,9 +120,7 @@ public class MessageReceivedResponse
         pw.flush();
 
         exception = baos.toString();
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         exception = String.format("Unable to dump the stack for the exception (%s): %s", cause,
             e.getMessage());
       }
@@ -145,8 +136,7 @@ public class MessageReceivedResponse
    * @return <code>true</code> if the WBXML document contains valid message received response
    * information or <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessageReceivedResponse")
@@ -160,9 +150,17 @@ public class MessageReceivedResponse
    *
    * @return the result code
    */
-  public long getCode()
-  {
+  public long getCode() {
     return code;
+  }
+
+  /**
+   * Set the result code.
+   *
+   * @param code the result code
+   */
+  public void setCode(long code) {
+    this.code = code;
   }
 
   /**
@@ -172,31 +170,8 @@ public class MessageReceivedResponse
    * @return the user-friendly text description of the result of processing the message received
    * request
    */
-  public String getDetail()
-  {
+  public String getDetail() {
     return detail;
-  }
-
-  /**
-   * Return the flattened information for the exception that resulted from processing the message
-   * received request.
-   *
-   * @return the flattened information for the exception that resulted from processing the message
-   * received request
-   */
-  public String getException()
-  {
-    return exception;
-  }
-
-  /**
-   * Set the result code.
-   *
-   * @param code the result code
-   */
-  public void setCode(long code)
-  {
-    this.code = code;
   }
 
   /**
@@ -206,20 +181,29 @@ public class MessageReceivedResponse
    * @param detail the user-friendly text description of the result of processing the message
    *               download request
    */
-  public void setDetail(String detail)
-  {
+  public void setDetail(String detail) {
     this.detail = detail;
+  }
+
+  /**
+   * Return the flattened information for the exception that resulted from processing the message
+   * received request.
+   *
+   * @return the flattened information for the exception that resulted from processing the message
+   * received request
+   */
+  public String getException() {
+    return exception;
   }
 
   /**
    * Set the flattened information for the exception that resulted from processing the message
    * download request.
    *
-   * @param exception the flattened information for the exception that resulted from processing
-   *                  the message download request
+   * @param exception the flattened information for the exception that resulted from processing the
+   *                  message download request
    */
-  public void setException(String exception)
-  {
+  public void setException(String exception) {
     this.exception = exception;
   }
 
@@ -229,8 +213,7 @@ public class MessageReceivedResponse
    * @return the String representation of the message received response.
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return String.format("<MessageReceivedResponse code=\"%d\" detail=\"%s\"/>", code, detail);
   }
 
@@ -239,15 +222,13 @@ public class MessageReceivedResponse
    *
    * @return the WBXML representation of the message received response
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("MessageReceivedResponse");
 
     rootElement.setAttribute("code", Long.toString(code));
     rootElement.setAttribute("detail", detail);
 
-    if (exception != null)
-    {
+    if (exception != null) {
       Element exceptionElement = new Element("Exception");
 
       exceptionElement.addContent(exception);

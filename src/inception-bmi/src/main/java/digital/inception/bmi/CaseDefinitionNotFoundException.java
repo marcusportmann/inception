@@ -19,15 +19,13 @@ package digital.inception.bmi;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * The <code>CaseDefinitionNotFoundException</code> exception is thrown to indicate an error
@@ -39,22 +37,20 @@ import javax.xml.ws.WebFault;
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "The case definition could not be found")
 @WebFault(name = "CaseDefinitionNotFoundException",
-  targetNamespace = "http://bmi.inception.digital",
-  faultBean = "digital.inception.core.service.ServiceError")
+    targetNamespace = "http://bmi.inception.digital",
+    faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class CaseDefinitionNotFoundException extends ServiceException
-{
+public class CaseDefinitionNotFoundException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
-   * w
-   * Constructs a new <code>CaseDefinitionNotFoundException</code>.
+   * w Constructs a new <code>CaseDefinitionNotFoundException</code>.
    *
    * @param caseDefinitionId the ID used to uniquely identify the case definition
    */
-  public CaseDefinitionNotFoundException(String caseDefinitionId)
-  {
+  public CaseDefinitionNotFoundException(String caseDefinitionId) {
     super("CaseDefinitionNotFoundError", "The case definition with ID ("
-      + caseDefinitionId + ") could not be found");
+        + caseDefinitionId + ") could not be found");
   }
 }

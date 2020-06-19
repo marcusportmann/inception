@@ -20,15 +20,13 @@ package digital.inception.json.databind;
 
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
-
 import java.util.Date;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>DateTimeModule</code> implements the custom Jackson module that registers the
@@ -36,13 +34,12 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
-public class DateTimeModule extends SimpleModule
-{
+public class DateTimeModule extends SimpleModule {
+
   /**
    * Constructs a new <code>DateTimeModule</code>.
    */
-  public DateTimeModule()
-  {
+  public DateTimeModule() {
     super("DateTimeModule", new Version(1, 0, 0, null, null, null));
 
     addSerializer(Date.class, new DateSerializer());

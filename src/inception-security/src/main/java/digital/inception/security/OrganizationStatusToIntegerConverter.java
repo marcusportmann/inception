@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @WritingConverter
 public class OrganizationStatusToIntegerConverter
-  implements Converter<OrganizationStatus, Integer>
-{
+    implements Converter<OrganizationStatus, Integer> {
+
   /**
    * Constructs a new <code>OrganizationStatusToIntegerConverter</code>.
    */
-  public OrganizationStatusToIntegerConverter() {}
+  public OrganizationStatusToIntegerConverter() {
+  }
 
   @Override
-  public Integer convert(OrganizationStatus source)
-  {
-    if (source == null)
-    {
+  public Integer convert(OrganizationStatus source) {
+    if (source == null) {
       return null;
     }
 

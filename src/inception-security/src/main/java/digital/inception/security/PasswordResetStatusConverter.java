@@ -30,8 +30,8 @@ import javax.persistence.Converter;
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
 public class PasswordResetStatusConverter
-  implements AttributeConverter<PasswordResetStatus, Integer>
-{
+    implements AttributeConverter<PasswordResetStatus, Integer> {
+
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
@@ -41,8 +41,7 @@ public class PasswordResetStatusConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(PasswordResetStatus attribute)
-  {
+  public Integer convertToDatabaseColumn(PasswordResetStatus attribute) {
     return attribute.code();
   }
 
@@ -57,8 +56,7 @@ public class PasswordResetStatusConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public PasswordResetStatus convertToEntityAttribute(Integer dbData)
-  {
+  public PasswordResetStatus convertToEntityAttribute(Integer dbData) {
     return PasswordResetStatus.fromCode(dbData);
   }
 }

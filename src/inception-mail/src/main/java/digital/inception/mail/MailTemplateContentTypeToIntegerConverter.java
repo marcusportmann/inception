@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @WritingConverter
 public class MailTemplateContentTypeToIntegerConverter
-  implements Converter<MailTemplateContentType, Integer>
-{
+    implements Converter<MailTemplateContentType, Integer> {
+
   /**
    * Constructs a new <code>MailTemplateContentTypeToIntegerConverter</code>.
    */
-  public MailTemplateContentTypeToIntegerConverter() {}
+  public MailTemplateContentTypeToIntegerConverter() {
+  }
 
   @Override
-  public Integer convert(MailTemplateContentType source)
-  {
-    if (source == null)
-    {
+  public Integer convert(MailTemplateContentType source) {
+    if (source == null) {
       return null;
     }
 

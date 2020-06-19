@@ -20,7 +20,6 @@ package digital.inception.application;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 
 /**
@@ -29,9 +28,9 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class ApplicationException extends RuntimeException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class ApplicationException extends RuntimeException {
+
   private static final String NO_ERROR_CODE = "NONE";
   private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
   private static final long serialVersionUID = 1000000;
@@ -41,8 +40,7 @@ public class ApplicationException extends RuntimeException
   /**
    * Constructs a new <code>ApplicationException</code> with <code>null</code> as its message.
    */
-  public ApplicationException()
-  {
+  public ApplicationException() {
     super();
     this.when = new Date();
   }
@@ -52,8 +50,7 @@ public class ApplicationException extends RuntimeException
    *
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    */
-  public ApplicationException(String message)
-  {
+  public ApplicationException(String message) {
     super(message);
     this.when = new Date();
   }
@@ -63,11 +60,10 @@ public class ApplicationException extends RuntimeException
    * <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
    * message of cause).
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ApplicationException(Throwable cause)
-  {
+  public ApplicationException(Throwable cause) {
     super(cause);
     this.when = new Date();
   }
@@ -78,8 +74,7 @@ public class ApplicationException extends RuntimeException
    * @param code    the error code identifying the error
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    */
-  public ApplicationException(String code, String message)
-  {
+  public ApplicationException(String code, String message) {
     super(message);
     this.code = code;
     this.when = new Date();
@@ -89,26 +84,23 @@ public class ApplicationException extends RuntimeException
    * Constructs a new <code>ApplicationException</code> with the specified message and cause.
    *
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ApplicationException(String message, Throwable cause)
-  {
+  public ApplicationException(String message, Throwable cause) {
     super(message, cause);
     this.when = new Date();
   }
 
   /**
-   * Constructs a new <code>ApplicationException</code> with the specified code, message and
-   * cause.
+   * Constructs a new <code>ApplicationException</code> with the specified code, message and cause.
    *
    * @param code    the error code identifying the error
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ApplicationException(String code, String message, Throwable cause)
-  {
+  public ApplicationException(String code, String message, Throwable cause) {
     super(message, cause);
     this.code = code;
     this.when = new Date();
@@ -119,8 +111,7 @@ public class ApplicationException extends RuntimeException
    *
    * @return the error code identifying the error or NONE if no error code was specified
    */
-  public String getCode()
-  {
+  public String getCode() {
     return (code == null)
         ? NO_ERROR_CODE
         : code;
@@ -131,8 +122,7 @@ public class ApplicationException extends RuntimeException
    *
    * @return the date and time the exception occurred
    */
-  public Date getWhen()
-  {
+  public Date getWhen() {
     return when;
   }
 
@@ -142,8 +132,7 @@ public class ApplicationException extends RuntimeException
    * @return the date and time the exception occurred as a String
    */
   @SuppressWarnings("unused")
-  public String getWhenAsString()
-  {
+  public String getWhenAsString() {
     DateFormat dateFormat = new SimpleDateFormat(WHEN_FORMAT);
 
     return dateFormat.format(when);

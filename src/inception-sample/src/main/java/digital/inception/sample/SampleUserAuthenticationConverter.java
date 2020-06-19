@@ -19,7 +19,10 @@ package digital.inception.sample;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.security.ISecurityService;
-
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,30 +33,23 @@ import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 /**
  * The <code>SampleUserAuthenticationConverter</code> class.
  *
  * @author Marcus Portmann
  */
 public class SampleUserAuthenticationConverter
-  implements UserAuthenticationConverter
-{
+    implements UserAuthenticationConverter {
+
   @Autowired
   private ISecurityService securityService;
 
   @Override
-  public Map<String, ?> convertUserAuthentication(Authentication authentication)
-  {
+  public Map<String, ?> convertUserAuthentication(Authentication authentication) {
     Map<String, Object> response = new LinkedHashMap<>();
     response.put(USERNAME, authentication.getName());
 
-    if ((authentication.getAuthorities() != null) && !authentication.getAuthorities().isEmpty())
-    {
+    if ((authentication.getAuthorities() != null) && !authentication.getAuthorities().isEmpty()) {
       response.put(AUTHORITIES, AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
     }
 
@@ -61,10 +57,8 @@ public class SampleUserAuthenticationConverter
   }
 
   @Override
-  public Authentication extractAuthentication(Map<String, ?> map)
-  {
-    if (map.containsKey(USERNAME))
-    {
+  public Authentication extractAuthentication(Map<String, ?> map) {
+    if (map.containsKey(USERNAME)) {
       Object principal = map.get(USERNAME);
       Collection<? extends GrantedAuthority> authorities = getAuthorities(map);
 
@@ -79,21 +73,17 @@ public class SampleUserAuthenticationConverter
     return null;
   }
 
-  private Collection<? extends GrantedAuthority> getAuthorities(Map<String, ?> map)
-  {
-    if (!map.containsKey(AUTHORITIES))
-    {
+  private Collection<? extends GrantedAuthority> getAuthorities(Map<String, ?> map) {
+    if (!map.containsKey(AUTHORITIES)) {
       return new ArrayList<>();
     }
 
     Object authorities = map.get(AUTHORITIES);
-    if (authorities instanceof String)
-    {
+    if (authorities instanceof String) {
       return AuthorityUtils.commaSeparatedStringToAuthorityList((String) authorities);
     }
 
-    if (authorities instanceof Collection)
-    {
+    if (authorities instanceof Collection) {
       return AuthorityUtils.commaSeparatedStringToAuthorityList(
           StringUtils.collectionToCommaDelimitedString((Collection<?>) authorities));
     }

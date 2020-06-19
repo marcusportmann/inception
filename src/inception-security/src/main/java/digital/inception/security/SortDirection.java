@@ -20,14 +20,12 @@ package digital.inception.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SortDirection</code> enumeration defines the possible sort directions when retrieving
@@ -38,8 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "SortDirection")
 @XmlEnum
 @XmlType(name = "SortDirection", namespace = "http://security.inception.digital")
-public enum SortDirection
-{
+public enum SortDirection {
   /**
    * Sort ascending.
    */
@@ -55,8 +52,7 @@ public enum SortDirection
   private String code;
   private String name;
 
-  SortDirection(String code, String name)
-  {
+  SortDirection(String code, String name) {
     this.code = code;
     this.name = name;
   }
@@ -69,10 +65,8 @@ public enum SortDirection
    * @return the sort direction given by the specified code value
    */
   @JsonCreator
-  public static SortDirection fromCode(String code)
-  {
-    switch (code)
-    {
+  public static SortDirection fromCode(String code) {
+    switch (code) {
       case "desc":
         return SortDirection.DESCENDING;
 
@@ -87,8 +81,7 @@ public enum SortDirection
    * @return the code value identifying the sort direction
    */
   @JsonValue
-  public String getCode()
-  {
+  public String getCode() {
     return code;
   }
 
@@ -97,8 +90,7 @@ public enum SortDirection
    *
    * @return the name of the sort direction
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -107,8 +99,7 @@ public enum SortDirection
    *
    * @return the string representation of the sort direction enumeration value
    */
-  public String toString()
-  {
+  public String toString() {
     return name;
   }
 }

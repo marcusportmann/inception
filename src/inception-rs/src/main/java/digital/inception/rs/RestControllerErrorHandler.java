@@ -18,6 +18,7 @@ package digital.inception.rs;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,11 +29,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * The <code>RestControllerErrorHandler</code> class implements the error handler for RESTful web
@@ -42,40 +40,33 @@ import javax.servlet.http.HttpServletRequest;
  */
 @ControllerAdvice
 @SuppressWarnings("unused")
-public class RestControllerErrorHandler
-{
+public class RestControllerErrorHandler {
+
   @ExceptionHandler
   @ResponseBody
   protected ResponseEntity<RestControllerError> handle(HttpServletRequest request,
-      HttpMessageNotReadableException ex)
-  {
+      HttpMessageNotReadableException ex) {
     return new ResponseEntity<>(new RestControllerError(request, HttpStatus.BAD_REQUEST,
         ex.getMostSpecificCause()), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler
   @ResponseBody
-  protected ResponseEntity<RestControllerError> handle(HttpServletRequest request, Throwable cause)
-  {
+  protected ResponseEntity<RestControllerError> handle(HttpServletRequest request,
+      Throwable cause) {
     ResponseStatus annotation = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(),
         ResponseStatus.class);
 
-    if (annotation != null)
-    {
+    if (annotation != null) {
       HttpStatus responseStatus = annotation.value();
 
       return new ResponseEntity<>(new RestControllerError(request, responseStatus, cause),
           new HttpHeaders(), responseStatus);
-    }
-    else
-    {
-      if (cause instanceof AccessDeniedException)
-      {
+    } else {
+      if (cause instanceof AccessDeniedException) {
         return new ResponseEntity<>(new RestControllerError(request, HttpStatus.FORBIDDEN, cause),
             new HttpHeaders(), HttpStatus.FORBIDDEN);
-      }
-      else
-      {
+      } else {
         return new ResponseEntity<>(new RestControllerError(request, HttpStatus
             .INTERNAL_SERVER_ERROR, cause), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
       }

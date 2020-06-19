@@ -19,15 +19,13 @@ package digital.inception.configuration;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * The <code>ConfigurationNotFoundException</code> exception is thrown to indicate that the required
@@ -42,9 +40,9 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://configuration.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused" })
-public class ConfigurationNotFoundException extends ServiceException
-{
+@SuppressWarnings({"unused"})
+public class ConfigurationNotFoundException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -52,8 +50,7 @@ public class ConfigurationNotFoundException extends ServiceException
    *
    * @param key the key used to uniquely identify the configuration
    */
-  public ConfigurationNotFoundException(String key)
-  {
+  public ConfigurationNotFoundException(String key) {
     super("ConfigurationNotFoundError", "The configuration (" + key + ") could not be found");
   }
 }

@@ -19,25 +19,25 @@ package digital.inception.core.xml;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.slf4j.Logger;
-
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
 
 /**
- * The <code>XmlParserErrorHandler</code> class handles warnings and errors that arise while
- * parsing an XML document.
+ * The <code>XmlParserErrorHandler</code> class handles warnings and errors that arise while parsing
+ * an XML document.
  *
  * @author Marcus Portmann
  */
 public class XmlParserErrorHandler
-  implements ErrorHandler
-{
+    implements ErrorHandler {
+
   private Logger logger = null;
 
   /**
    * Constructs a new <code>XmlParserErrorHandler</code>.
    */
-  public XmlParserErrorHandler() {}
+  public XmlParserErrorHandler() {
+  }
 
   /**
    * Constructs a new <code>XmlParserErrorHandler</code> using the specified <code>Logger</code>.
@@ -45,8 +45,7 @@ public class XmlParserErrorHandler
    * @param logger the logger to use to log errors and warnings
    */
   @SuppressWarnings("unused")
-  public XmlParserErrorHandler(Logger logger)
-  {
+  public XmlParserErrorHandler(Logger logger) {
     this.logger = logger;
   }
 
@@ -55,10 +54,8 @@ public class XmlParserErrorHandler
    *
    * @param e the exception containing the error details
    */
-  public void error(SAXParseException e)
-  {
-    if (logger != null)
-    {
+  public void error(SAXParseException e) {
+    if (logger != null) {
       logger.error(buildLogMessage(e));
     }
 
@@ -70,10 +67,8 @@ public class XmlParserErrorHandler
    *
    * @param e the exception containing the fatal error details
    */
-  public void fatalError(SAXParseException e)
-  {
-    if (logger != null)
-    {
+  public void fatalError(SAXParseException e) {
+    if (logger != null) {
       logger.error(buildLogMessage(e));
     }
 
@@ -85,16 +80,13 @@ public class XmlParserErrorHandler
    *
    * @param e the exception containing the warning details
    */
-  public void warning(SAXParseException e)
-  {
-    if (logger != null)
-    {
+  public void warning(SAXParseException e) {
+    if (logger != null) {
       logger.warn(buildLogMessage(e));
     }
   }
 
-  private String buildLogMessage(SAXParseException e)
-  {
+  private String buildLogMessage(SAXParseException e) {
     StringBuilder buffer = new StringBuilder();
 
     buffer.append(e.getMessage());
@@ -104,22 +96,17 @@ public class XmlParserErrorHandler
     buffer.append(e.getColumnNumber());
     buffer.append(")\n");
 
-    if ((e.getSystemId() != null) && (e.getPublicId() != null))
-    {
+    if ((e.getSystemId() != null) && (e.getPublicId() != null)) {
       buffer.append("\twith SystemID (");
       buffer.append(e.getSystemId());
       buffer.append(") and PublicID (");
       buffer.append(e.getPublicId());
       buffer.append(")");
-    }
-    else if (e.getSystemId() != null)
-    {
+    } else if (e.getSystemId() != null) {
       buffer.append("\twith SystemID (");
       buffer.append(e.getSystemId());
       buffer.append(")");
-    }
-    else if (e.getPublicId() != null)
-    {
+    } else if (e.getPublicId() != null) {
       buffer.append("\twith PublicID (");
       buffer.append(e.getPublicId());
       buffer.append(")");

@@ -21,10 +21,8 @@ package digital.inception.messaging.test;
 import digital.inception.messaging.IMessagingService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
@@ -35,19 +33,19 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>MessagingService</code> class.
+ * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit tests for
+ * the <code>MessagingService</code> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
+@ContextConfiguration(classes = {TestConfiguration.class})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
-public class MessagingServiceTest
-{
+public class MessagingServiceTest {
+
   /**
    * The Messaging Service.
    */
@@ -59,8 +57,7 @@ public class MessagingServiceTest
    */
   @Test
   public void test()
-    throws Exception
-  {
+      throws Exception {
     messagingService.getMaximumProcessingAttempts();
   }
 }

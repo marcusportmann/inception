@@ -21,25 +21,27 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
-
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordReset</code> class holds the information for a password rest.
@@ -48,19 +50,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "PasswordReset")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "username", "requested", "completed", "expired", "status",
-    "securityCodeHash" })
+@JsonPropertyOrder({"username", "requested", "completed", "expired", "status",
+    "securityCodeHash"})
 @XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")
 @XmlType(name = "PasswordReset", namespace = "http://security.inception.digital",
-    propOrder = { "username", "requested", "completed", "expired", "status", "securityCodeHash" })
+    propOrder = {"username", "requested", "completed", "expired", "status", "securityCodeHash"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 @Entity
 @Table(schema = "security", name = "password_resets")
 @IdClass(PasswordResetId.class)
 public class PasswordReset
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -134,7 +136,8 @@ public class PasswordReset
   /**
    * Constructs a new <code>PasswordReset</code>.
    */
-  public PasswordReset() {}
+  public PasswordReset() {
+  }
 
   /**
    * Constructs a new <code>PasswordReset</code>.
@@ -142,8 +145,7 @@ public class PasswordReset
    * @param username         the username for the user associated with the password reset
    * @param securityCodeHash the security code hash
    */
-  public PasswordReset(String username, String securityCodeHash)
-  {
+  public PasswordReset(String username, String securityCodeHash) {
     this.username = username;
     this.securityCodeHash = securityCodeHash;
     this.requested = LocalDateTime.now();
@@ -155,59 +157,8 @@ public class PasswordReset
    *
    * @return the date and time the password reset was completed
    */
-  public LocalDateTime getCompleted()
-  {
+  public LocalDateTime getCompleted() {
     return completed;
-  }
-
-  /**
-   * Returns the date and time the password reset expired.
-   *
-   * @return the date and time the password reset expired
-   */
-  public LocalDateTime getExpired()
-  {
-    return expired;
-  }
-
-  /**
-   * Returns the date and time the password reset was requested.
-   *
-   * @return the date and time the password reset was requested
-   */
-  public LocalDateTime getRequested()
-  {
-    return requested;
-  }
-
-  /**
-   * Returns the security code hash.
-   *
-   * @return the security code hash
-   */
-  public String getSecurityCodeHash()
-  {
-    return securityCodeHash;
-  }
-
-  /**
-   * Returns the status of the password reset.
-   *
-   * @return the status of the password reset
-   */
-  public PasswordResetStatus getStatus()
-  {
-    return status;
-  }
-
-  /**
-   * Returns the username for the user associated with the password reset.
-   *
-   *  @return the username for the user associated with the password reset
-   */
-  public String getUsername()
-  {
-    return username;
   }
 
   /**
@@ -215,9 +166,17 @@ public class PasswordReset
    *
    * @param completed the date and time the password reset was completed
    */
-  public void setCompleted(LocalDateTime completed)
-  {
+  public void setCompleted(LocalDateTime completed) {
     this.completed = completed;
+  }
+
+  /**
+   * Returns the date and time the password reset expired.
+   *
+   * @return the date and time the password reset expired
+   */
+  public LocalDateTime getExpired() {
+    return expired;
   }
 
   /**
@@ -225,9 +184,17 @@ public class PasswordReset
    *
    * @param expired the date and time the password reset expired
    */
-  public void setExpired(LocalDateTime expired)
-  {
+  public void setExpired(LocalDateTime expired) {
     this.expired = expired;
+  }
+
+  /**
+   * Returns the date and time the password reset was requested.
+   *
+   * @return the date and time the password reset was requested
+   */
+  public LocalDateTime getRequested() {
+    return requested;
   }
 
   /**
@@ -235,9 +202,17 @@ public class PasswordReset
    *
    * @param requested the date and time the password reset was requested
    */
-  public void setRequested(LocalDateTime requested)
-  {
+  public void setRequested(LocalDateTime requested) {
     this.requested = requested;
+  }
+
+  /**
+   * Returns the security code hash.
+   *
+   * @return the security code hash
+   */
+  public String getSecurityCodeHash() {
+    return securityCodeHash;
   }
 
   /**
@@ -245,9 +220,17 @@ public class PasswordReset
    *
    * @param securityCodeHash the security code hash
    */
-  public void setSecurityCodeHash(String securityCodeHash)
-  {
+  public void setSecurityCodeHash(String securityCodeHash) {
     this.securityCodeHash = securityCodeHash;
+  }
+
+  /**
+   * Returns the status of the password reset.
+   *
+   * @return the status of the password reset
+   */
+  public PasswordResetStatus getStatus() {
+    return status;
   }
 
   /**
@@ -255,9 +238,17 @@ public class PasswordReset
    *
    * @param status the status of the password reset
    */
-  public void setStatus(PasswordResetStatus status)
-  {
+  public void setStatus(PasswordResetStatus status) {
     this.status = status;
+  }
+
+  /**
+   * Returns the username for the user associated with the password reset.
+   *
+   * @return the username for the user associated with the password reset
+   */
+  public String getUsername() {
+    return username;
   }
 
   /**
@@ -265,8 +256,7 @@ public class PasswordReset
    *
    * @param username the username for the user associated with the password reset
    */
-  public void setUsername(String username)
-  {
+  public void setUsername(String username) {
     this.username = username;
   }
 }

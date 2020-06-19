@@ -29,8 +29,8 @@ import java.io.Serializable;
  *
  * @author Marcus Portmann
  */
-public interface Identifiable<T extends Serializable>
-{
+public interface Identifiable<T extends Serializable> {
+
   /**
    * Returns the ID for the entity.
    *

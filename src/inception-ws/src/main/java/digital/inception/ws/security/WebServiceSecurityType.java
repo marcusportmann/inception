@@ -19,8 +19,7 @@ package digital.inception.ws.security;
 /**
  * The enumeration giving the supported types of web service security.
  */
-public enum WebServiceSecurityType
-{
+public enum WebServiceSecurityType {
   /**
    * The value indicating that the web service does not implement a security service.
    */
@@ -50,15 +49,15 @@ public enum WebServiceSecurityType
   HTTP_AUTHENTICATION(4, "HTTP Authentication"),
 
   /**
-   * The value indicating that the web service implements the digest authentication security service.
+   * The value indicating that the web service implements the digest authentication security
+   * service.
    */
   DIGEST_AUTHENTICATION(5, "Digest Authentication");
 
   private int code;
   private String description;
 
-  WebServiceSecurityType(int code, String description)
-  {
+  WebServiceSecurityType(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -70,10 +69,8 @@ public enum WebServiceSecurityType
    *
    * @return the web service security type given by the specified numeric code value
    */
-  public static WebServiceSecurityType fromCode(int code)
-  {
-    switch (code)
-    {
+  public static WebServiceSecurityType fromCode(int code) {
+    switch (code) {
       case 0:
         return WebServiceSecurityType.NONE;
 
@@ -99,8 +96,7 @@ public enum WebServiceSecurityType
    *
    * @return the numeric code value identifying the web service security type
    */
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -109,20 +105,16 @@ public enum WebServiceSecurityType
    *
    * @return the description for the web service security type
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 
   /**
-   * Return the string representation of the <code>WebServiceSecurityType</code>
-   * enumeration value.
+   * Return the string representation of the <code>WebServiceSecurityType</code> enumeration value.
    *
-   * @return the string representation of the <code>WebServiceSecurityType</code>
-   *         enumeration value
+   * @return the string representation of the <code>WebServiceSecurityType</code> enumeration value
    */
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
 }

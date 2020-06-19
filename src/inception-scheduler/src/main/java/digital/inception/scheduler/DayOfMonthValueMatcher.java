@@ -30,23 +30,22 @@ import java.util.List;
  * @author Paul Fernley
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class DayOfMonthValueMatcher extends IntArrayValueMatcher
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
+
   private static final int[] lastDays =
-  {
-    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-  };
+      {
+          31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+      };
 
   /**
    * Constructs a new <code>DayOfMonthValueMatcher</code>.
    *
-   * @param integers The Integer elements, one for every value accepted by the matcher.
-   *                 The match() method will return <code>true</code> only if its parameter will be
-   *                 one of this list or the last-day-of-month setting applies.
+   * @param integers The Integer elements, one for every value accepted by the matcher. The match()
+   *                 method will return <code>true</code> only if its parameter will be one of this
+   *                 list or the last-day-of-month setting applies.
    */
-  public DayOfMonthValueMatcher(List<Integer> integers)
-  {
+  public DayOfMonthValueMatcher(List<Integer> integers) {
     super(integers);
   }
 
@@ -59,22 +58,17 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher
    * @param isLeapYear <code>true</code> if this is a leap year <code>false</code> otherwise
    *
    * @return <code>true</code> if the given value matches the rules of the
-   *         <code>ValueMatcher</code>, <code>false</code> otherwise
+   * <code>ValueMatcher</code>, <code>false</code> otherwise
    */
-  public boolean match(int value, int month, boolean isLeapYear)
-  {
+  public boolean match(int value, int month, boolean isLeapYear) {
     return (super.match(value)
         || ((value > 27) && match(32) && isLastDayOfMonth(value, month, isLeapYear)));
   }
 
-  private boolean isLastDayOfMonth(int value, int month, boolean isLeapYear)
-  {
-    if (isLeapYear && (month == 2))
-    {
+  private boolean isLastDayOfMonth(int value, int month, boolean isLeapYear) {
+    if (isLeapYear && (month == 2)) {
       return value == 29;
-    }
-    else
-    {
+    } else {
       return value == lastDays[month - 1];
     }
   }

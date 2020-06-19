@@ -18,7 +18,12 @@ package digital.inception.scheduler;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.TimeZone;
 
 /**
  * The <code>SchedulingPattern</code> class supports a UNIX crontab-like pattern is a string split
@@ -143,9 +148,9 @@ import java.util.*;
  * @author Carlo Pelliccia
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class SchedulingPattern
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class SchedulingPattern {
+
   /**
    * The parser for the day of month values.
    */
@@ -212,75 +217,56 @@ public class SchedulingPattern
    * @param pattern the pattern as a crontab-like string
    */
   public SchedulingPattern(String pattern)
-    throws InvalidSchedulingPatternException
-  {
+      throws InvalidSchedulingPatternException {
     this.asString = pattern;
 
     StringTokenizer st1 = new StringTokenizer(pattern, "|");
 
-    if (st1.countTokens() < 1)
-    {
+    if (st1.countTokens() < 1) {
       throw new InvalidSchedulingPatternException(String.format("Invalid pattern: \"%s\"",
           pattern));
     }
 
-    while (st1.hasMoreTokens())
-    {
+    while (st1.hasMoreTokens()) {
       String localPattern = st1.nextToken();
       StringTokenizer st2 = new StringTokenizer(localPattern, " \t");
 
-      if (st2.countTokens() != 5)
-      {
+      if (st2.countTokens() != 5) {
         throw new InvalidSchedulingPatternException(String.format("Invalid pattern: \"%s\"",
             localPattern));
       }
 
-      try
-      {
+      try {
         minuteMatchers.add(buildValueMatcher(st2.nextToken(), MINUTE_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new InvalidSchedulingPatternException(String.format(
             "Invalid pattern \"%s\". Error parsing minutes field", localPattern), e);
       }
 
-      try
-      {
+      try {
         hourMatchers.add(buildValueMatcher(st2.nextToken(), HOUR_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new InvalidSchedulingPatternException(String.format(
             "Invalid pattern \"%s\". Error parsing hours field", localPattern), e);
       }
 
-      try
-      {
+      try {
         dayOfMonthMatchers.add(buildValueMatcher(st2.nextToken(), DAY_OF_MONTH_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new InvalidSchedulingPatternException(String.format(
             "Invalid pattern \"%s\". Error parsing days of month field", localPattern), e);
       }
 
-      try
-      {
+      try {
         monthMatchers.add(buildValueMatcher(st2.nextToken(), MONTH_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new InvalidSchedulingPatternException(String.format(
             "Invalid pattern \"%s\". Error parsing months field", localPattern), e);
       }
 
-      try
-      {
+      try {
         dayOfWeekMatchers.add(buildValueMatcher(st2.nextToken(), DAY_OF_WEEK_VALUE_PARSER));
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new InvalidSchedulingPatternException(String.format(
             "Invalid pattern \"%s\". Error parsing days of week field", localPattern), e);
       }
@@ -295,94 +281,17 @@ public class SchedulingPattern
    * @param schedulingPattern the pattern to validate
    *
    * @return <code>true</code> if the given string represents a valid scheduling pattern or
-   *          <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @SuppressWarnings("unused")
-  public static boolean validate(String schedulingPattern)
-  {
-    try
-    {
+  public static boolean validate(String schedulingPattern) {
+    try {
       new SchedulingPattern(schedulingPattern);
-    }
-    catch (InvalidSchedulingPatternException e)
-    {
+    } catch (InvalidSchedulingPatternException e) {
       return false;
     }
 
     return true;
-  }
-
-  /**
-   * Returns <code>true</code> if the given EPOCH timestamp in milliseconds matches the pattern,
-   * according to the system default time zone.
-   *
-   * @param timestamp the EPOCH timestamp in milliseconds
-   *
-   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
-   * otherwise
-   */
-  public boolean match(long timestamp)
-  {
-    return match(TimeZone.getDefault(), timestamp);
-  }
-
-  /**
-   * Returns <code>true</code> if the EPOCH timestamp in milliseconds matches the pattern,
-   * according to the given time zone.
-   *
-   * @param timezone  the time zone
-   * @param timestamp the EPOCH timestamp in milliseconds
-   *
-   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
-   * otherwise
-   */
-  public boolean match(TimeZone timezone, long timestamp)
-  {
-    GregorianCalendar gc = new GregorianCalendar();
-
-    gc.setTimeInMillis(timestamp);
-    gc.setTimeZone(timezone);
-
-    int minute = gc.get(Calendar.MINUTE);
-    int hour = gc.get(Calendar.HOUR_OF_DAY);
-    int dayOfMonth = gc.get(Calendar.DAY_OF_MONTH);
-    int month = gc.get(Calendar.MONTH) + 1;
-    int dayOfWeek = gc.get(Calendar.DAY_OF_WEEK) - 1;
-    int year = gc.get(Calendar.YEAR);
-
-    for (int i = 0; i < matcherSize; i++)
-    {
-      ValueMatcher minuteMatcher = minuteMatchers.get(i);
-      ValueMatcher hourMatcher = hourMatchers.get(i);
-      ValueMatcher dayOfMonthMatcher = dayOfMonthMatchers.get(i);
-      ValueMatcher monthMatcher = monthMatchers.get(i);
-      ValueMatcher dayOfWeekMatcher = dayOfWeekMatchers.get(i);
-      boolean eval = minuteMatcher.match(minute)
-          && hourMatcher.match(hour)
-          && ((dayOfMonthMatcher instanceof DayOfMonthValueMatcher)
-          ? ((DayOfMonthValueMatcher) dayOfMonthMatcher).match(dayOfMonth, month, gc.isLeapYear(
-              year))
-          : dayOfMonthMatcher.match(dayOfMonth))
-          && monthMatcher.match(month)
-          && dayOfWeekMatcher.match(dayOfWeek);
-
-      if (eval)
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /**
-   * Returns the pattern as a string.
-   *
-   * @return The pattern as a string.
-   */
-  public String toString()
-  {
-    return asString;
   }
 
   /**
@@ -395,17 +304,82 @@ public class SchedulingPattern
    * @return the parsed value
    */
   private static int parseAlias(String value, String[] aliases, int offset)
-    throws Exception
-  {
-    for (int i = 0; i < aliases.length; i++)
-    {
-      if (aliases[i].equalsIgnoreCase(value))
-      {
+      throws Exception {
+    for (int i = 0; i < aliases.length; i++) {
+      if (aliases[i].equalsIgnoreCase(value)) {
         return offset + i;
       }
     }
 
     throw new Exception(String.format("Invalid alias \"%s\"", value));
+  }
+
+  /**
+   * Returns <code>true</code> if the given EPOCH timestamp in milliseconds matches the pattern,
+   * according to the system default time zone.
+   *
+   * @param timestamp the EPOCH timestamp in milliseconds
+   *
+   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
+   * otherwise
+   */
+  public boolean match(long timestamp) {
+    return match(TimeZone.getDefault(), timestamp);
+  }
+
+  /**
+   * Returns <code>true</code> if the EPOCH timestamp in milliseconds matches the pattern, according
+   * to the given time zone.
+   *
+   * @param timezone  the time zone
+   * @param timestamp the EPOCH timestamp in milliseconds
+   *
+   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
+   * otherwise
+   */
+  public boolean match(TimeZone timezone, long timestamp) {
+    GregorianCalendar gc = new GregorianCalendar();
+
+    gc.setTimeInMillis(timestamp);
+    gc.setTimeZone(timezone);
+
+    int minute = gc.get(Calendar.MINUTE);
+    int hour = gc.get(Calendar.HOUR_OF_DAY);
+    int dayOfMonth = gc.get(Calendar.DAY_OF_MONTH);
+    int month = gc.get(Calendar.MONTH) + 1;
+    int dayOfWeek = gc.get(Calendar.DAY_OF_WEEK) - 1;
+    int year = gc.get(Calendar.YEAR);
+
+    for (int i = 0; i < matcherSize; i++) {
+      ValueMatcher minuteMatcher = minuteMatchers.get(i);
+      ValueMatcher hourMatcher = hourMatchers.get(i);
+      ValueMatcher dayOfMonthMatcher = dayOfMonthMatchers.get(i);
+      ValueMatcher monthMatcher = monthMatchers.get(i);
+      ValueMatcher dayOfWeekMatcher = dayOfWeekMatchers.get(i);
+      boolean eval = minuteMatcher.match(minute)
+          && hourMatcher.match(hour)
+          && ((dayOfMonthMatcher instanceof DayOfMonthValueMatcher)
+          ? ((DayOfMonthValueMatcher) dayOfMonthMatcher).match(dayOfMonth, month, gc.isLeapYear(
+          year))
+          : dayOfMonthMatcher.match(dayOfMonth))
+          && monthMatcher.match(month)
+          && dayOfWeekMatcher.match(dayOfWeek);
+
+      if (eval) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Returns the pattern as a string.
+   *
+   * @return The pattern as a string.
+   */
+  public String toString() {
+    return asString;
   }
 
   /**
@@ -417,51 +391,39 @@ public class SchedulingPattern
    * @return the requested <code>ValueMatcher</code>
    */
   private ValueMatcher buildValueMatcher(String str, ValueParser parser)
-    throws Exception
-  {
-    if ((str.length() == 1) && str.equals("*"))
-    {
+      throws Exception {
+    if ((str.length() == 1) && str.equals("*")) {
       return new AlwaysTrueValueMatcher();
     }
 
     List<Integer> values = new ArrayList<>();
     StringTokenizer st = new StringTokenizer(str, ",");
 
-    while (st.hasMoreTokens())
-    {
+    while (st.hasMoreTokens()) {
       String element = st.nextToken();
       List<Integer> local;
 
-      try
-      {
+      try {
         local = parseListElement(element, parser);
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new Exception(String.format("Invalid field \"%s\", invalid element \"%s\": %s", str,
             element, e.getMessage()));
       }
 
-      for (Integer value : local)
-      {
-        if (!values.contains(value))
-        {
+      for (Integer value : local) {
+        if (!values.contains(value)) {
           values.add(value);
         }
       }
     }
 
-    if (values.size() == 0)
-    {
+    if (values.size() == 0) {
       throw new Exception(String.format("Invalid field \"%s\"", str));
     }
 
-    if (parser == DAY_OF_MONTH_VALUE_PARSER)
-    {
+    if (parser == DAY_OF_MONTH_VALUE_PARSER) {
       return new DayOfMonthValueMatcher(values);
-    }
-    else
-    {
+    } else {
       return new IntArrayValueMatcher(values);
     }
   }
@@ -475,57 +437,44 @@ public class SchedulingPattern
    * @return the integers representing the allowed values
    */
   private List<Integer> parseListElement(String str, ValueParser parser)
-    throws Exception
-  {
+      throws Exception {
     StringTokenizer st = new StringTokenizer(str, "/");
     int size = st.countTokens();
 
-    if ((size < 1) || (size > 2))
-    {
+    if ((size < 1) || (size > 2)) {
       throw new Exception("Syntax error");
     }
 
     List<Integer> values;
 
-    try
-    {
+    try {
       values = parseRange(st.nextToken(), parser);
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       throw new Exception(String.format("Invalid range: %s", e.getMessage()));
     }
 
-    if (size == 2)
-    {
+    if (size == 2) {
       String dStr = st.nextToken();
       int div;
 
-      try
-      {
+      try {
         div = Integer.parseInt(dStr);
-      }
-      catch (NumberFormatException e)
-      {
+      } catch (NumberFormatException e) {
         throw new Exception("Invalid divisor \"" + dStr + "\"");
       }
 
-      if (div < 1)
-      {
+      if (div < 1) {
         throw new Exception("Non positive divisor \"" + div + "\"");
       }
 
       List<Integer> values2 = new ArrayList<>();
 
-      for (int i = 0; i < values.size(); i += div)
-      {
+      for (int i = 0; i < values.size(); i += div) {
         values2.add(values.get(i));
       }
 
       return values2;
-    }
-    else
-    {
+    } else {
       return values;
     }
   }
@@ -539,16 +488,13 @@ public class SchedulingPattern
    * @return the integers representing the allowed values
    */
   private List<Integer> parseRange(String str, ValueParser parser)
-    throws Exception
-  {
-    if (str.equals("*"))
-    {
+      throws Exception {
+    if (str.equals("*")) {
       int min = parser.getMinValue();
       int max = parser.getMaxValue();
       List<Integer> values = new ArrayList<>();
 
-      for (int i = min; i <= max; i++)
-      {
+      for (int i = min; i <= max; i++) {
         values.add(i);
       }
 
@@ -558,71 +504,53 @@ public class SchedulingPattern
     StringTokenizer st = new StringTokenizer(str, "-");
     int size = st.countTokens();
 
-    if ((size < 1) || (size > 2))
-    {
+    if ((size < 1) || (size > 2)) {
       throw new Exception("Syntax error");
     }
 
     String v1Str = st.nextToken();
     int v1;
 
-    try
-    {
+    try {
       v1 = parser.parse(v1Str);
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       throw new Exception(String.format("Invalid value \"%s\": %s", v1Str, e.getMessage()));
     }
 
-    if (size == 1)
-    {
+    if (size == 1) {
       List<Integer> values = new ArrayList<>();
 
       values.add(v1);
 
       return values;
-    }
-    else
-    {
+    } else {
       String v2Str = st.nextToken();
       int v2;
 
-      try
-      {
+      try {
         v2 = parser.parse(v2Str);
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new Exception(String.format("Invalid value \"%s\": %s", v2Str, e.getMessage()));
       }
 
       List<Integer> values = new ArrayList<>();
 
-      if (v1 < v2)
-      {
-        for (int i = v1; i <= v2; i++)
-        {
+      if (v1 < v2) {
+        for (int i = v1; i <= v2; i++) {
           values.add(i);
         }
-      }
-      else if (v1 > v2)
-      {
+      } else if (v1 > v2) {
         int min = parser.getMinValue();
         int max = parser.getMaxValue();
 
-        for (int i = v1; i <= max; i++)
-        {
+        for (int i = v1; i <= max; i++) {
           values.add(i);
         }
 
-        for (int i = min; i <= v2; i++)
-        {
+        for (int i = min; i <= v2; i++) {
           values.add(i);
         }
-      }
-      else
-      {
+      } else {
         // v1 == v2
         values.add(v1);
       }
@@ -634,8 +562,8 @@ public class SchedulingPattern
   /**
    * Definition for a value parser.
    */
-  private interface ValueParser
-  {
+  private interface ValueParser {
+
     /**
      * Returns the maximum value accepted by the parser.
      *
@@ -660,20 +588,19 @@ public class SchedulingPattern
      * @throws Exception If the value can't be parsed.
      */
     int parse(String value)
-      throws Exception;
+        throws Exception;
   }
 
 
   /**
    * The days of month value parser.
    */
-  private static class DayOfMonthValueParser extends SimpleValueParser
-  {
+  private static class DayOfMonthValueParser extends SimpleValueParser {
+
     /**
      * Builds the value parser.
      */
-    public DayOfMonthValueParser()
-    {
+    public DayOfMonthValueParser() {
       super(1, 31);
     }
 
@@ -685,14 +612,10 @@ public class SchedulingPattern
      * @return the integer day of the month or 32 for last day of the month
      */
     public int parse(String value)
-      throws Exception
-    {
-      if (value.equalsIgnoreCase("L"))
-      {
+        throws Exception {
+      if (value.equalsIgnoreCase("L")) {
         return 32;
-      }
-      else
-      {
+      } else {
         return super.parse(value);
       }
     }
@@ -702,21 +625,20 @@ public class SchedulingPattern
   /**
    * The value parser for the months field.
    */
-  private static class DayOfWeekValueParser extends SimpleValueParser
-  {
+  private static class DayOfWeekValueParser extends SimpleValueParser {
+
     /**
      * Days of week aliases.
      */
     private static String[] ALIASES =
-    {
-      "sun", "mon", "tue", "wed", "thu", "fri", "sat"
-    };
+        {
+            "sun", "mon", "tue", "wed", "thu", "fri", "sat"
+        };
 
     /**
      * Builds the months value parser.
      */
-    public DayOfWeekValueParser()
-    {
+    public DayOfWeekValueParser() {
       super(0, 7);
     }
 
@@ -728,15 +650,11 @@ public class SchedulingPattern
      * @return the parsed value
      */
     public int parse(String value)
-      throws Exception
-    {
-      try
-      {
+        throws Exception {
+      try {
         // try as a simple value
         return super.parse(value) % 7;
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         // try as an alias
         return parseAlias(value, ALIASES, 0);
       }
@@ -747,13 +665,12 @@ public class SchedulingPattern
   /**
    * The hours value parser.
    */
-  private static class HourValueParser extends SimpleValueParser
-  {
+  private static class HourValueParser extends SimpleValueParser {
+
     /**
      * Builds the value parser.
      */
-    public HourValueParser()
-    {
+    public HourValueParser() {
       super(0, 23);
     }
   }
@@ -762,13 +679,12 @@ public class SchedulingPattern
   /**
    * The minutes value parser.
    */
-  private static class MinuteValueParser extends SimpleValueParser
-  {
+  private static class MinuteValueParser extends SimpleValueParser {
+
     /**
      * Builds the value parser.
      */
-    public MinuteValueParser()
-    {
+    public MinuteValueParser() {
       super(0, 59);
     }
   }
@@ -777,21 +693,20 @@ public class SchedulingPattern
   /**
    * The value parser for the months field.
    */
-  private static class MonthValueParser extends SimpleValueParser
-  {
+  private static class MonthValueParser extends SimpleValueParser {
+
     /**
      * Months aliases.
      */
     private static String[] ALIASES =
-    {
-      "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
-    };
+        {
+            "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
+        };
 
     /**
      * Builds the months value parser.
      */
-    public MonthValueParser()
-    {
+    public MonthValueParser() {
       super(1, 12);
     }
 
@@ -803,15 +718,11 @@ public class SchedulingPattern
      * @return the parsed value
      */
     public int parse(String value)
-      throws Exception
-    {
-      try
-      {
+        throws Exception {
+      try {
         // try as a simple value
         return super.parse(value);
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         // try as an alias
         return parseAlias(value, ALIASES, 1);
       }
@@ -823,8 +734,8 @@ public class SchedulingPattern
    * A simple value parser.
    */
   private static class SimpleValueParser
-    implements ValueParser
-  {
+      implements ValueParser {
+
     /**
      * The maximum allowed value.
      */
@@ -841,8 +752,7 @@ public class SchedulingPattern
      * @param minValue the minimum allowed value
      * @param maxValue the maximum allowed value
      */
-    public SimpleValueParser(int minValue, int maxValue)
-    {
+    public SimpleValueParser(int minValue, int maxValue) {
       this.minValue = minValue;
       this.maxValue = maxValue;
     }
@@ -852,8 +762,7 @@ public class SchedulingPattern
      *
      * @return the maximum value
      */
-    public int getMaxValue()
-    {
+    public int getMaxValue() {
       return maxValue;
     }
 
@@ -862,8 +771,7 @@ public class SchedulingPattern
      *
      * @return the minimum value
      */
-    public int getMinValue()
-    {
+    public int getMinValue() {
       return minValue;
     }
 
@@ -875,21 +783,16 @@ public class SchedulingPattern
      * @return the parsed value
      */
     public int parse(String value)
-      throws Exception
-    {
+        throws Exception {
       int i;
 
-      try
-      {
+      try {
         i = Integer.parseInt(value);
-      }
-      catch (NumberFormatException e)
-      {
+      } catch (NumberFormatException e) {
         throw new Exception("invalid integer value");
       }
 
-      if ((i < minValue) || (i > maxValue))
-      {
+      if ((i < minValue) || (i > maxValue)) {
         throw new Exception("value out of range");
       }
 

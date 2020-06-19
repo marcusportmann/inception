@@ -19,6 +19,7 @@ package digital.inception.bmi.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ServiceUtil;
+import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
@@ -29,16 +30,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
-
 /**
  * The <code>ProcessServiceTestConfiguration/code> class.
  *
  * @author Marcus Portmann
  */
 @Configuration
-public class ProcessServiceTestConfiguration
-{
+public class ProcessServiceTestConfiguration {
+
   /**
    * The Spring application context.
    */
@@ -66,8 +65,8 @@ public class ProcessServiceTestConfiguration
    * @param transactionManager the Spring platform transaction manager
    */
   public ProcessServiceTestConfiguration(ApplicationContext applicationContext, @Qualifier(
-    "applicationDataSource") DataSource dataSource, PlatformTransactionManager transactionManager)
-  {
+      "applicationDataSource") DataSource dataSource,
+      PlatformTransactionManager transactionManager) {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
     this.transactionManager = transactionManager;
@@ -79,15 +78,14 @@ public class ProcessServiceTestConfiguration
    * @return the Camunda Process Engine
    */
   @Bean
-  public ProcessEngine processEngine()
-  {
-    try
-    {
+  public ProcessEngine processEngine() {
+    try {
       SpringProcessEngineConfiguration processEngineConfiguration =
-        new SpringProcessEngineConfiguration();
+          new SpringProcessEngineConfiguration();
       processEngineConfiguration.setApplicationContext(applicationContext);
       processEngineConfiguration.setDatabaseSchema("CAMUNDA");
-      processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+      processEngineConfiguration
+          .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
       processEngineConfiguration.setDatabaseTablePrefix("CAMUNDA.");
       processEngineConfiguration.setDataSource(dataSource);
       processEngineConfiguration.setTransactionManager(transactionManager);
@@ -102,9 +100,7 @@ public class ProcessServiceTestConfiguration
       processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_NONE);
 
       return processEngineConfiguration.buildProcessEngine();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialise the Flowable Process Engine", e);
     }
   }

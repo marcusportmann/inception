@@ -22,18 +22,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryType</code> class holds the information for a user directory type.
@@ -42,17 +47,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "UserDirectoryType")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "code", "name", "userDirectoryClassName" })
+@JsonPropertyOrder({"code", "name", "userDirectoryClassName"})
 @XmlRootElement(name = "UserDirectoryType", namespace = "http://security.inception.digital")
 @XmlType(name = "UserDirectoryType", namespace = "http://security.inception.digital",
-    propOrder = { "code", "name", "userDirectoryClassName" })
+    propOrder = {"code", "name", "userDirectoryClassName"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "user_directory_types")
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class UserDirectoryType
-  implements java.io.Serializable
-{
+    implements java.io.Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -103,18 +108,18 @@ public class UserDirectoryType
   /**
    * Constructs a new <code>UserDirectoryType</code>.
    */
-  public UserDirectoryType() {}
+  public UserDirectoryType() {
+  }
 
   /**
    * Constructs a new <code>UserDirectoryType</code>.
    *
-   * @param code                    the code used to uniquely identify the user directory type
-   * @param name                    the name of the user directory type
-   * @param userDirectoryClassName  the fully qualified name of the Java class that implements the
-   *                                user directory type
+   * @param code                   the code used to uniquely identify the user directory type
+   * @param name                   the name of the user directory type
+   * @param userDirectoryClassName the fully qualified name of the Java class that implements the
+   *                               user directory type
    */
-  UserDirectoryType(String code, String name, String userDirectoryClassName)
-  {
+  UserDirectoryType(String code, String name, String userDirectoryClassName) {
     this.code = code;
     this.name = name;
     this.userDirectoryClassName = userDirectoryClassName;
@@ -126,23 +131,19 @@ public class UserDirectoryType
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -156,8 +157,7 @@ public class UserDirectoryType
    *
    * @return the code used to uniquely identify the user directory type
    */
-  public String getCode()
-  {
+  public String getCode() {
     return code;
   }
 
@@ -166,8 +166,7 @@ public class UserDirectoryType
    *
    * @return the name of the user directory type
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -177,8 +176,7 @@ public class UserDirectoryType
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (code == null)
         ? 0
         : code.hashCode();
@@ -190,23 +188,17 @@ public class UserDirectoryType
    * @return the Java class that implements the user directory type
    */
   Class getUserDirectoryClass()
-    throws SecurityServiceException
-  {
-    if (userDirectoryClass == null)
-    {
-      try
-      {
+      throws SecurityServiceException {
+    if (userDirectoryClass == null) {
+      try {
         userDirectoryClass = Thread.currentThread().getContextClassLoader().loadClass(
             userDirectoryClassName);
 
-        if (!IUserDirectory.class.isAssignableFrom(userDirectoryClass))
-        {
+        if (!IUserDirectory.class.isAssignableFrom(userDirectoryClass)) {
           throw new SecurityServiceException(
               "The user directory class does not implement the IUserDirectory interface");
         }
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         throw new SecurityServiceException(String.format(
             "Failed to load the user directory class (%s) for the user directory (%s)",
             userDirectoryClassName, name), e);
@@ -221,8 +213,7 @@ public class UserDirectoryType
    *
    * @return the fully qualified name of the Java class that implements the user directory type
    */
-  String getUserDirectoryClassName()
-  {
+  String getUserDirectoryClassName() {
     return userDirectoryClassName;
   }
 }

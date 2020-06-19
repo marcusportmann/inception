@@ -22,26 +22,25 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToUserSortByConverter</code> class implements the Spring converter that
- * converts an <code>String</code> type into a <code>UserSortBy</code> type.
+ * The <code>StringToUserSortByConverter</code> class implements the Spring converter that converts
+ * an <code>String</code> type into a <code>UserSortBy</code> type.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 @Component
 public class StringToUserSortByConverter
-  implements Converter<String, UserSortBy>
-{
+    implements Converter<String, UserSortBy> {
+
   /**
    * Constructs a new <code>StringToUserSortByConverter</code>.
    */
-  public StringToUserSortByConverter() {}
+  public StringToUserSortByConverter() {
+  }
 
   @Override
-  public UserSortBy convert(String source)
-  {
-    if (source == null)
-    {
+  public UserSortBy convert(String source) {
+    if (source == null) {
       return null;
     }
 

@@ -19,15 +19,13 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * A <code>DuplicateGroupException</code> is thrown to indicate that a security operation failed as
@@ -40,9 +38,9 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "DuplicateGroupException", targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class DuplicateGroupException extends ServiceException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class DuplicateGroupException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -50,8 +48,7 @@ public class DuplicateGroupException extends ServiceException
    *
    * @param groupName the name identifying the group
    */
-  public DuplicateGroupException(String groupName)
-  {
+  public DuplicateGroupException(String groupName) {
     super("DuplicateGroupError", "A group with the name (" + groupName + ") already exists");
   }
 }

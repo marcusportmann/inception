@@ -19,22 +19,18 @@ package digital.inception.mail;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
-
 /**
  * The <code>DuplicateMailTemplateException</code> exception is thrown to indicate an error
- * condition as a result of an attempt to create a duplicate mail template i.e a mail template
- * with the specified ID already exists.
+ * condition as a result of an attempt to create a duplicate mail template i.e a mail template with
+ * the specified ID already exists.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -46,8 +42,8 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://mail.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class DuplicateMailTemplateException extends ServiceException
-{
+public class DuplicateMailTemplateException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -55,8 +51,7 @@ public class DuplicateMailTemplateException extends ServiceException
    *
    * @param mailTemplateId the ID used to uniquely identify the mail template
    */
-  public DuplicateMailTemplateException(String mailTemplateId)
-  {
+  public DuplicateMailTemplateException(String mailTemplateId) {
     super("DuplicateMailTemplateError", "The mail template with ID (" + mailTemplateId
         + ") already exists");
   }

@@ -23,8 +23,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToUserStatusConverter</code> class implements the Spring converter that
- * converts an <code>Integer</code> type into a <code>UserStatus</code> type.
+ * The <code>IntegerToUserStatusConverter</code> class implements the Spring converter that converts
+ * an <code>Integer</code> type into a <code>UserStatus</code> type.
  *
  * @author Marcus Portmann
  */
@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @ReadingConverter
 public class IntegerToUserStatusConverter
-  implements Converter<Integer, UserStatus>
-{
+    implements Converter<Integer, UserStatus> {
+
   /**
    * Constructs a new <code>IntegerToUserStatusConverter</code>.
    */
-  public IntegerToUserStatusConverter() {}
+  public IntegerToUserStatusConverter() {
+  }
 
   @Override
-  public UserStatus convert(Integer source)
-  {
-    if (source == null)
-    {
+  public UserStatus convert(Integer source) {
+    if (source == null) {
       return null;
     }
 

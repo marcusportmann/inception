@@ -18,6 +18,9 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -26,18 +29,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 /**
  * The <code>UserDirectoryRepository</code> interface declares the repository for the
  * <code>UserDirectory</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UUID>
-{
+public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UUID> {
+
   long countByNameContainingIgnoreCase(String name);
 
   @Modifying

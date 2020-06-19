@@ -21,11 +21,10 @@ package digital.inception.messaging;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <b>MessagePartResult</b> class stores the results of a message part being uploaded by a
@@ -33,9 +32,9 @@ import java.io.PrintWriter;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class MessagePartResult
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class MessagePartResult {
+
   /**
    * The message part result code returned to indicate an invalid request.
    */
@@ -78,20 +77,18 @@ public class MessagePartResult
   private String exception;
 
   /**
-   * Constructs a new <code>MessagePartResult</code> and populates it from the information
-   * stored in the specified WBXML document.
+   * Constructs a new <code>MessagePartResult</code> and populates it from the information stored in
+   * the specified WBXML document.
    *
    * @param document the WBXML document containing the message part result information
    */
-  public MessagePartResult(Document document)
-  {
+  public MessagePartResult(Document document) {
     Element rootElement = document.getRootElement();
 
     this.code = Long.parseLong(rootElement.getAttributeValue("code"));
     this.detail = rootElement.getAttributeValue("detail");
 
-    if (rootElement.hasChild("Exception"))
-    {
+    if (rootElement.hasChild("Exception")) {
       Element exceptionElement = rootElement.getChild("Exception");
 
       exception = exceptionElement.getText();
@@ -104,8 +101,7 @@ public class MessagePartResult
    * @param code   the result code
    * @param detail the text description of the result of uploading the message part
    */
-  public MessagePartResult(long code, String detail)
-  {
+  public MessagePartResult(long code, String detail) {
     this.code = code;
     this.detail = detail;
   }
@@ -117,15 +113,12 @@ public class MessagePartResult
    * @param detail the text description of the result of uploading the message part
    * @param cause  the exception that resulted from uploading the message part
    */
-  public MessagePartResult(long code, String detail, Throwable cause)
-  {
+  public MessagePartResult(long code, String detail, Throwable cause) {
     this.code = code;
     this.detail = detail;
 
-    if (cause != null)
-    {
-      try
-      {
+    if (cause != null) {
+      try {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baos);
 
@@ -133,9 +126,7 @@ public class MessagePartResult
         pw.flush();
 
         exception = baos.toString();
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         exception = String.format("Unable to dump the stack for the exception (%s): %s", cause,
             e.getMessage());
       }
@@ -151,8 +142,7 @@ public class MessagePartResult
    * @return <code>true</code> if the WBXML document contains valid message received response
    * information or <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartResult")
@@ -168,9 +158,17 @@ public class MessagePartResult
    *
    * @return the result code
    */
-  public long getCode()
-  {
+  public long getCode() {
     return code;
+  }
+
+  /**
+   * Set the result code;
+   *
+   * @param code the result code
+   */
+  public void setCode(long code) {
+    this.code = code;
   }
 
   /**
@@ -178,9 +176,17 @@ public class MessagePartResult
    *
    * @return the user-friendly text description of the result of uploading the message part
    */
-  public String getDetail()
-  {
+  public String getDetail() {
     return detail;
+  }
+
+  /**
+   * Set the user-friendly text description of the result of uploading the message part.
+   *
+   * @param detail the user-friendly text description of the result of uploading the message part
+   */
+  public void setDetail(String detail) {
+    this.detail = detail;
   }
 
   /**
@@ -190,29 +196,8 @@ public class MessagePartResult
    * @return the flattened information for the exception that resulted from uploading the message
    * part
    */
-  public String getException()
-  {
+  public String getException() {
     return exception;
-  }
-
-  /**
-   * Set the result code;
-   *
-   * @param code the result code
-   */
-  public void setCode(long code)
-  {
-    this.code = code;
-  }
-
-  /**
-   * Set the user-friendly text description of the result of uploading the message part.
-   *
-   * @param detail the user-friendly text description of the result of uploading the message part
-   */
-  public void setDetail(String detail)
-  {
-    this.detail = detail;
   }
 
   /**
@@ -221,8 +206,7 @@ public class MessagePartResult
    * @param exception the flattened information for the exception that resulted from uploading the
    *                  message part
    */
-  public void setException(String exception)
-  {
+  public void setException(String exception) {
     this.exception = exception;
   }
 
@@ -232,8 +216,7 @@ public class MessagePartResult
    * @return the String representation of the message part result.
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return String.format("<MessagePartResult code=\"%d\" detail=\"%s\"/>", code, detail);
   }
 
@@ -242,15 +225,13 @@ public class MessagePartResult
    *
    * @return the WBXML representation of the message received response
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("MessagePartResult");
 
     rootElement.setAttribute("code", Long.toString(code));
     rootElement.setAttribute("detail", detail);
 
-    if (exception != null)
-    {
+    if (exception != null) {
       Element exceptionElement = new Element("Exception");
 
       exceptionElement.addContent(exception);

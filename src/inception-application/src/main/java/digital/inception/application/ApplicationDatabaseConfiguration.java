@@ -19,16 +19,23 @@ package digital.inception.application;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.JDBCUtil;
-
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import io.agroal.narayana.NarayanaTransactionIntegration;
-
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.List;
+import java.util.Properties;
+import javax.sql.DataSource;
+import javax.transaction.TransactionManager;
+import javax.transaction.TransactionSynchronizationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -41,21 +48,6 @@ import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import java.util.List;
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
-import javax.transaction.TransactionManager;
-import javax.transaction.TransactionSynchronizationRegistry;
-
 /**
  * The <code>ApplicationDatabaseConfiguration</code> class provides access to the application
  * database configuration and initialises the application data source and the application entity
@@ -66,8 +58,8 @@ import javax.transaction.TransactionSynchronizationRegistry;
 @Configuration
 @ConditionalOnProperty(value = "application.database.dataSource")
 @SuppressWarnings("unused")
-public class ApplicationDatabaseConfiguration
-{
+public class ApplicationDatabaseConfiguration {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(
       ApplicationDatabaseConfiguration.class);
@@ -83,8 +75,7 @@ public class ApplicationDatabaseConfiguration
   private DataSource dataSource;
 
   /**
-   * The fully qualified name of the data source class used to connect to the application
-   * database.
+   * The fully qualified name of the data source class used to connect to the application database.
    */
   @Value("${application.database.dataSource:#{null}}")
   private String dataSourceClass;
@@ -174,8 +165,7 @@ public class ApplicationDatabaseConfiguration
    *
    * @param applicationContext the Spring application context
    */
-  public ApplicationDatabaseConfiguration(ApplicationContext applicationContext)
-  {
+  public ApplicationDatabaseConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
 
@@ -185,13 +175,10 @@ public class ApplicationDatabaseConfiguration
    * @return the data source that can be used to interact with the in-memory database
    */
   @Bean(name = "applicationDataSource")
-  @DependsOn({ "transactionManager" })
-  public DataSource dataSource()
-  {
-    try
-    {
-      if ((dataSourceClass == null) || (url == null))
-      {
+  @DependsOn({"transactionManager"})
+  public DataSource dataSource() {
+    try {
+      if ((dataSourceClass == null) || (url == null)) {
         throw new ApplicationException("Failed to retrieve the application database configuration");
       }
 
@@ -203,25 +190,20 @@ public class ApplicationDatabaseConfiguration
       Properties agroalProperties = new Properties();
       agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, url);
 
-      if (!StringUtils.isEmpty(username))
-      {
+      if (!StringUtils.isEmpty(username)) {
         agroalProperties.setProperty(AgroalPropertiesReader.PRINCIPAL, username);
       }
 
-      if (!StringUtils.isEmpty(password))
-      {
+      if (!StringUtils.isEmpty(password)) {
         agroalProperties.setProperty(AgroalPropertiesReader.CREDENTIAL, password);
       }
 
-      if (recoveryEnabled)
-      {
-        if (!StringUtils.isEmpty(recoveryUsername))
-        {
+      if (recoveryEnabled) {
+        if (!StringUtils.isEmpty(recoveryUsername)) {
           agroalProperties.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL, recoveryUsername);
         }
 
-        if (!StringUtils.isEmpty(recoveryPassword))
-        {
+        if (!StringUtils.isEmpty(recoveryPassword)) {
           agroalProperties.setProperty(AgroalPropertiesReader.RECOVERY_CREDENTIAL,
               recoveryPassword);
         }
@@ -231,12 +213,12 @@ public class ApplicationDatabaseConfiguration
 
       agroalProperties.setProperty(AgroalPropertiesReader.MIN_SIZE,
           (minPoolSize > 0)
-          ? Integer.toString(minPoolSize)
-          : "1");
+              ? Integer.toString(minPoolSize)
+              : "1");
       agroalProperties.setProperty(AgroalPropertiesReader.MAX_SIZE,
           (maxPoolSize > 0)
-          ? Integer.toString(maxPoolSize)
-          : "5");
+              ? Integer.toString(maxPoolSize)
+              : "5");
 
       AgroalPropertiesReader agroalReaderProperties2 = new AgroalPropertiesReader().readProperties(
           agroalProperties);
@@ -275,15 +257,13 @@ public class ApplicationDatabaseConfiguration
 
       boolean isInMemoryH2Database = false;
 
-      try (Connection connection = dataSource.getConnection())
-      {
+      try (Connection connection = dataSource.getConnection()) {
         DatabaseMetaData metaData = connection.getMetaData();
 
         logger.info("Connected to the " + metaData.getDatabaseProductName()
             + " application database with version " + metaData.getDatabaseProductVersion());
 
-        switch (metaData.getDatabaseProductName())
-        {
+        switch (metaData.getDatabaseProductName()) {
           case "H2":
 
             isInMemoryH2Database = true;
@@ -299,19 +279,16 @@ public class ApplicationDatabaseConfiguration
         }
       }
 
-      if (isInMemoryH2Database)
-      {
+      if (isInMemoryH2Database) {
         logger.info("Initializing the in-memory H2 database");
 
         /*
          * Initialize the in-memory database using the SQL statements contained in the resources
          * for the Inception framework.
          */
-        for (Resource databaseInitResource : databaseInitResources)
-        {
+        for (Resource databaseInitResource : databaseInitResources) {
           if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
-              && databaseInitResource.getFilename().contains("inception-"))
-          {
+              && databaseInitResource.getFilename().contains("inception-")) {
             loadSQL(dataSource, databaseInitResource);
           }
         }
@@ -320,52 +297,41 @@ public class ApplicationDatabaseConfiguration
          * Initialize the in-memory database using the SQL statements contained in any other
          * resources for the application.
          */
-        for (Resource databaseInitResource : databaseInitResources)
-        {
+        for (Resource databaseInitResource : databaseInitResources) {
           if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
-              && (!databaseInitResource.getFilename().contains("inception-")))
-          {
+              && (!databaseInitResource.getFilename().contains("inception-"))) {
             loadSQL(dataSource, databaseInitResource);
           }
         }
       }
 
       return dataSource;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the application data source", e);
     }
   }
 
   private void loadSQL(DataSource dataSource, Resource databaseInitResource)
-    throws IOException, SQLException
-  {
+      throws IOException, SQLException {
     logger.info("Executing the SQL statements in the file '" + databaseInitResource.getFilename()
         + "'");
 
-    try
-    {
+    try {
       // Load the SQL statements used to initialize the database tables
       List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResource.getURL());
 
       // Get a connection to the in-memory database
-      try (Connection connection = dataSource.getConnection())
-      {
-        for (String sqlStatement : sqlStatements)
-        {
+      try (Connection connection = dataSource.getConnection()) {
+        for (String sqlStatement : sqlStatements) {
           LoggerFactory.getLogger(Application.class).debug("Executing SQL statement: "
               + sqlStatement);
 
-          try (Statement statement = connection.createStatement())
-          {
+          try (Statement statement = connection.createStatement()) {
             statement.execute(sqlStatement);
           }
         }
       }
-    }
-    catch (SQLException e)
-    {
+    } catch (SQLException e) {
       throw e;
     }
   }

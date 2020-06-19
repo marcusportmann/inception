@@ -19,24 +19,30 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.PasswordUtil;
-
-import org.springframework.data.domain.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-import java.util.*;
-
 /**
- * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
+ * The <code>InternalUserDirectory</code> class provides the internal user directory
+ * implementation.
  *
  * @author Marcus Portmann
  */
-public class InternalUserDirectory extends UserDirectoryBase
-{
+public class InternalUserDirectory extends UserDirectoryBase {
+
   /**
    * The default maximum number of filtered groups.
    */
@@ -115,72 +121,50 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   public InternalUserDirectory(UUID userDirectoryId, List<UserDirectoryParameter> parameters,
       GroupRepository groupRepository, UserRepository userRepository, RoleRepository roleRepository)
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     super(userDirectoryId, parameters, groupRepository, userRepository, roleRepository);
 
-    try
-    {
-      if (UserDirectoryParameter.contains(parameters, "MaxPasswordAttempts"))
-      {
+    try {
+      if (UserDirectoryParameter.contains(parameters, "MaxPasswordAttempts")) {
         maxPasswordAttempts = UserDirectoryParameter.getIntegerValue(parameters,
             "MaxPasswordAttempts");
-      }
-      else
-      {
+      } else {
         maxPasswordAttempts = DEFAULT_MAX_PASSWORD_ATTEMPTS;
       }
 
-      if (UserDirectoryParameter.contains(parameters, "PasswordExpiryMonths"))
-      {
+      if (UserDirectoryParameter.contains(parameters, "PasswordExpiryMonths")) {
         passwordExpiryMonths = UserDirectoryParameter.getIntegerValue(parameters,
             "PasswordExpiryMonths");
-      }
-      else
-      {
+      } else {
         passwordExpiryMonths = DEFAULT_PASSWORD_EXPIRY_MONTHS;
       }
 
-      if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMonths"))
-      {
+      if (UserDirectoryParameter.contains(parameters, "PasswordHistoryMonths")) {
         passwordHistoryMonths = UserDirectoryParameter.getIntegerValue(parameters,
             "PasswordHistoryMonths");
-      }
-      else
-      {
+      } else {
         passwordHistoryMonths = DEFAULT_PASSWORD_HISTORY_MONTHS;
       }
 
-      if (UserDirectoryParameter.contains(parameters, "MaxFilteredUsers"))
-      {
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredUsers")) {
         maxFilteredUsers = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredUsers");
-      }
-      else
-      {
+      } else {
         maxFilteredUsers = DEFAULT_MAX_FILTERED_USERS;
       }
 
-      if (UserDirectoryParameter.contains(parameters, "MaxFilteredGroups"))
-      {
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredGroups")) {
         maxFilteredGroups = UserDirectoryParameter.getIntegerValue(parameters, "MaxFilteredGroups");
-      }
-      else
-      {
+      } else {
         maxFilteredGroups = DEFAULT_MAX_FILTERED_GROUPS;
       }
 
-      if (UserDirectoryParameter.contains(parameters, "MaxFilteredGroupMembers"))
-      {
+      if (UserDirectoryParameter.contains(parameters, "MaxFilteredGroupMembers")) {
         maxFilteredGroupMembers = UserDirectoryParameter.getIntegerValue(parameters,
             "MaxFilteredGroupMembers");
-      }
-      else
-      {
+      } else {
         maxFilteredGroupMembers = DEFAULT_MAX_FILTERED_GROUP_MEMBERS;
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to initialize the user directory ("
           + userDirectoryId + ")", e);
     }
@@ -195,17 +179,14 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void addMemberToGroup(String groupName, GroupMemberType memberType, String memberName)
-    throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
-        SecurityServiceException
-  {
-    if (memberType != GroupMemberType.USER)
-    {
+      throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
+      SecurityServiceException {
+    if (memberType != GroupMemberType.USER) {
       throw new SecurityServiceException("Unsupported group member type ("
           + memberType.description() + ")");
     }
 
-    if (isUserInGroup(groupName, memberName))
-    {
+    if (isUserInGroup(groupName, memberName)) {
       throw new ExistingGroupMemberException(memberType, memberName);
     }
 
@@ -220,37 +201,28 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void addRoleToGroup(String groupName, String roleCode)
-    throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
-        SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
+      SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
-      if (!getRoleRepository().existsById(roleCode))
-      {
+      if (!getRoleRepository().existsById(roleCode)) {
         throw new RoleNotFoundException(roleCode);
       }
 
-      if (getGroupRepository().countGroupRole(groupIdOptional.get(), roleCode) > 0)
-      {
+      if (getGroupRepository().countGroupRole(groupIdOptional.get(), roleCode) > 0) {
         throw new ExistingGroupRoleException(roleCode);
       }
 
       getGroupRepository().addRoleToGroup(groupIdOptional.get(), roleCode);
-    }
-    catch (GroupNotFoundException | RoleNotFoundException | ExistingGroupRoleException e)
-    {
+    } catch (GroupNotFoundException | RoleNotFoundException | ExistingGroupRoleException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to add the role (" + roleCode + ") to the group ("
           + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -264,35 +236,27 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void addUserToGroup(String groupName, String username)
-    throws GroupNotFoundException, UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, UserNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       getGroupRepository().addUserToGroup(groupIdOptional.get(), userIdOptional.get());
-    }
-    catch (GroupNotFoundException | UserNotFoundException e)
-    {
+    } catch (GroupNotFoundException | UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to add the user (" + username + ") to the group ("
           + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -311,16 +275,13 @@ public class InternalUserDirectory extends UserDirectoryBase
   @Override
   public void adminChangePassword(String username, String newPassword, boolean expirePassword,
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
@@ -328,19 +289,15 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       int passwordAttempts = 0;
 
-      if (lockUser)
-      {
+      if (lockUser) {
         passwordAttempts = maxPasswordAttempts;
       }
 
       LocalDateTime passwordExpiry;
 
-      if (expirePassword)
-      {
+      if (expirePassword) {
         passwordExpiry = LocalDateTime.now();
-      }
-      else
-      {
+      } else {
         passwordExpiry = LocalDateTime.now();
         passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
       }
@@ -348,19 +305,14 @@ public class InternalUserDirectory extends UserDirectoryBase
       getUserRepository().changePassword(userIdOptional.get(), newPasswordHash, passwordAttempts,
           Optional.of(passwordExpiry));
 
-      if (resetPasswordHistory)
-      {
+      if (resetPasswordHistory) {
         getUserRepository().resetPasswordHistory(userIdOptional.get());
       }
 
       getUserRepository().savePasswordInPasswordHistory(userIdOptional.get(), newPasswordHash);
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to change the password for the user (" + username
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -374,33 +326,27 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void authenticate(String username, String password)
-    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-        UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
+      UserNotFoundException, SecurityServiceException {
+    try {
       Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
           getUserDirectoryId(), username);
 
-      if (userOptional.isEmpty())
-      {
+      if (userOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       User user = userOptional.get();
 
       if ((user.getPasswordAttempts() != null)
-          && (user.getPasswordAttempts() >= maxPasswordAttempts))
-      {
+          && (user.getPasswordAttempts() >= maxPasswordAttempts)) {
         throw new UserLockedException(username);
       }
 
       String passwordHash = PasswordUtil.createPasswordHash(password);
 
-      if (!user.getPassword().equals(passwordHash))
-      {
-        if ((user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1))
-        {
+      if (!user.getPassword().equals(passwordHash)) {
+        if ((user.getPasswordAttempts() != null) && (user.getPasswordAttempts() != -1)) {
           getUserRepository().incrementPasswordAttempts(user.getId());
         }
 
@@ -408,18 +354,13 @@ public class InternalUserDirectory extends UserDirectoryBase
             + ")");
       }
 
-      if (user.hasPasswordExpired())
-      {
+      if (user.hasPasswordExpired()) {
         throw new ExpiredPasswordException(username);
       }
-    }
-    catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
-        | ExpiredPasswordException e)
-    {
+    } catch (AuthenticationFailedException | UserNotFoundException | UserLockedException
+        | ExpiredPasswordException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to authenticate the user (" + username
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -434,39 +375,33 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void changePassword(String username, String password, String newPassword)
-    throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-        ExistingPasswordException, SecurityServiceException
-  {
-    try
-    {
+      throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+      ExistingPasswordException, SecurityServiceException {
+    try {
       Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
           getUserDirectoryId(), username);
 
-      if (userOptional.isEmpty())
-      {
+      if (userOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       User user = userOptional.get();
 
       if ((user.getPasswordAttempts() != null)
-          && (user.getPasswordAttempts() > maxPasswordAttempts))
-      {
+          && (user.getPasswordAttempts() > maxPasswordAttempts)) {
         throw new UserLockedException(username);
       }
 
       String passwordHash = PasswordUtil.createPasswordHash(password);
       String newPasswordHash = PasswordUtil.createPasswordHash(newPassword);
 
-      if (!user.getPassword().equals(passwordHash))
-      {
+      if (!user.getPassword().equals(passwordHash)) {
         throw new AuthenticationFailedException(
             "Authentication failed while attempting to change the password for the user ("
-            + username + ")");
+                + username + ")");
       }
 
-      if (isPasswordInHistory(user.getId(), newPasswordHash))
-      {
+      if (isPasswordInHistory(user.getId(), newPasswordHash)) {
         throw new ExistingPasswordException(username);
       }
 
@@ -477,14 +412,10 @@ public class InternalUserDirectory extends UserDirectoryBase
           passwordExpiry));
 
       getUserRepository().savePasswordInPasswordHistory(user.getId(), newPasswordHash);
-    }
-    catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
-        | UserLockedException e)
-    {
+    } catch (AuthenticationFailedException | ExistingPasswordException | UserNotFoundException
+        | UserLockedException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to change the password for the user (" + username
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -497,26 +428,19 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void createGroup(Group group)
-    throws DuplicateGroupException, SecurityServiceException
-  {
-    try
-    {
+      throws DuplicateGroupException, SecurityServiceException {
+    try {
       if (getGroupRepository().existsByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(),
-          group.getName()))
-      {
+          group.getName())) {
         throw new DuplicateGroupException(group.getName());
       }
 
       group.setId(UUID.randomUUID());
 
       getGroupRepository().saveAndFlush(group);
-    }
-    catch (DuplicateGroupException e)
-    {
+    } catch (DuplicateGroupException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to create the group (" + group.getName()
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -531,42 +455,30 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
-    throws DuplicateUserException, SecurityServiceException
-  {
-    try
-    {
+      throws DuplicateUserException, SecurityServiceException {
+    try {
       if (getUserRepository().existsByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          user.getUsername()))
-      {
+          user.getUsername())) {
         throw new DuplicateUserException(user.getUsername());
       }
 
       user.setId(UUID.randomUUID());
 
-      if (!isNullOrEmpty(user.getPassword()))
-      {
+      if (!isNullOrEmpty(user.getPassword())) {
         user.setPassword(PasswordUtil.createPasswordHash(user.getPassword()));
-      }
-      else
-      {
+      } else {
         user.setPassword(PasswordUtil.createPasswordHash(PasswordUtil.generateRandomPassword()));
       }
 
-      if (userLocked)
-      {
+      if (userLocked) {
         user.setPasswordAttempts(maxPasswordAttempts);
-      }
-      else
-      {
+      } else {
         user.setPasswordAttempts(0);
       }
 
-      if (expiredPassword)
-      {
+      if (expiredPassword) {
         user.setPasswordExpiry(LocalDateTime.now());
-      }
-      else
-      {
+      } else {
         LocalDateTime passwordExpiry = LocalDateTime.now();
 
         passwordExpiry = passwordExpiry.plus(passwordExpiryMonths, ChronoUnit.MONTHS);
@@ -577,13 +489,9 @@ public class InternalUserDirectory extends UserDirectoryBase
       getUserRepository().saveAndFlush(user);
 
       getUserRepository().savePasswordInPasswordHistory(user.getId(), user.getPassword());
-    }
-    catch (DuplicateUserException e)
-    {
+    } catch (DuplicateUserException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to create the user (" + user.getUsername()
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -596,31 +504,23 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void deleteGroup(String groupName)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
-      if (getGroupRepository().countUsersById(groupIdOptional.get()) > 0)
-      {
+      if (getGroupRepository().countUsersById(groupIdOptional.get()) > 0) {
         throw new ExistingGroupMembersException(groupName);
       }
 
       getGroupRepository().deleteById(groupIdOptional.get());
-    }
-    catch (GroupNotFoundException | ExistingGroupMembersException e)
-    {
+    } catch (GroupNotFoundException | ExistingGroupMembersException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to delete the group (" + groupName
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -633,27 +533,20 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void deleteUser(String username)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       getUserRepository().deleteById(userIdOptional.get());
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to delete the user (" + username
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -668,46 +561,28 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<User> findUsers(List<Attribute> attributes)
-    throws InvalidAttributeException, SecurityServiceException
-  {
-    try
-    {
+      throws InvalidAttributeException, SecurityServiceException {
+    try {
       User userCriteria = new User();
 
       userCriteria.setUserDirectoryId(getUserDirectoryId());
 
-      for (Attribute attribute : attributes)
-      {
-        if (attribute.getName().equalsIgnoreCase("status"))
-        {
+      for (Attribute attribute : attributes) {
+        if (attribute.getName().equalsIgnoreCase("status")) {
           userCriteria.setStatus(UserStatus.fromCode(attribute.getIntegerValue()));
-        }
-        else if (attribute.getName().equalsIgnoreCase("email"))
-        {
+        } else if (attribute.getName().equalsIgnoreCase("email")) {
           userCriteria.setEmail(attribute.getValue());
-        }
-        else if (attribute.getName().equalsIgnoreCase("firstName"))
-        {
+        } else if (attribute.getName().equalsIgnoreCase("firstName")) {
           userCriteria.setFirstName(attribute.getValue());
-        }
-        else if (attribute.getName().equalsIgnoreCase("lastName"))
-        {
+        } else if (attribute.getName().equalsIgnoreCase("lastName")) {
           userCriteria.setLastName(attribute.getValue());
-        }
-        else if (attribute.getName().equalsIgnoreCase("phoneNumber"))
-        {
+        } else if (attribute.getName().equalsIgnoreCase("phoneNumber")) {
           userCriteria.setPhoneNumber(attribute.getValue());
-        }
-        else if (attribute.getName().equalsIgnoreCase("mobileNumber"))
-        {
+        } else if (attribute.getName().equalsIgnoreCase("mobileNumber")) {
           userCriteria.setMobileNumber(attribute.getValue());
-        }
-        else if (attribute.getName().equalsIgnoreCase("username"))
-        {
+        } else if (attribute.getName().equalsIgnoreCase("username")) {
           userCriteria.setUsername(attribute.getValue());
-        }
-        else
-        {
+        } else {
           throw new InvalidAttributeException(attribute.getName());
         }
       }
@@ -716,13 +591,9 @@ public class InternalUserDirectory extends UserDirectoryBase
           .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
       return getUserRepository().findAll(Example.of(userCriteria, matcher));
-    }
-    catch (InvalidAttributeException e)
-    {
+    } catch (InvalidAttributeException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to find the users for the user directory ("
           + getUserDirectoryId() + ")", e);
     }
@@ -734,8 +605,7 @@ public class InternalUserDirectory extends UserDirectoryBase
    * @return the capabilities the user directory supports
    */
   @Override
-  public UserDirectoryCapabilities getCapabilities()
-  {
+  public UserDirectoryCapabilities getCapabilities() {
     return INTERNAL_USER_DIRECTORY_CAPABILITIES;
   }
 
@@ -748,27 +618,20 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<String> getFunctionCodesForUser(String username)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       return getUserRepository().getFunctionCodesByUserId(userIdOptional.get());
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the function codes for the user ("
           + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -783,28 +646,19 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public Group getGroup(String groupName)
-    throws GroupNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, SecurityServiceException {
+    try {
       Optional<Group> groupOptional = getGroupRepository().findByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupOptional.isPresent())
-      {
+      if (groupOptional.isPresent()) {
         return groupOptional.get();
-      }
-      else
-      {
+      } else {
         throw new GroupNotFoundException(groupName);
       }
-    }
-    catch (GroupNotFoundException e)
-    {
+    } catch (GroupNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the group (" + groupName
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -817,17 +671,13 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<String> getGroupNames()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return getGroupRepository().getNamesByUserDirectoryId(getUserDirectoryId());
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the group names for the user directory (" + getUserDirectoryId()
-          + ")", e);
+              + ")", e);
     }
   }
 
@@ -840,30 +690,23 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<String> getGroupNamesForUser(String username)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       return getUserRepository().getGroupNamesByUserId(userIdOptional.get());
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the names identifying the groups the user (" + username
-          + ") is a member of for the user directory (" + getUserDirectoryId() + ")", e);
+              + ") is a member of for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -874,14 +717,10 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<Group> getGroups()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return getGroupRepository().findByUserDirectoryId(getUserDirectoryId());
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the groups for the user directory ("
           + getUserDirectoryId() + ")", e);
     }
@@ -900,44 +739,35 @@ public class InternalUserDirectory extends UserDirectoryBase
   @Override
   public List<Group> getGroups(String filter, SortDirection sortDirection, Integer pageIndex,
       Integer pageSize)
-    throws SecurityServiceException
-  {
-    try
-    {
-      if (pageIndex == null)
-      {
+      throws SecurityServiceException {
+    try {
+      if (pageIndex == null) {
         pageIndex = 0;
       }
 
-      if (pageSize == null)
-      {
+      if (pageSize == null) {
         pageSize = maxFilteredGroups;
       }
 
       Pageable pageable = PageRequest.of(pageIndex,
           (pageSize > maxFilteredGroups)
-          ? maxFilteredGroups
-          : pageSize,
+              ? maxFilteredGroups
+              : pageSize,
           (sortDirection == SortDirection.ASCENDING)
-          ? Sort.Direction.ASC
-          : Sort.Direction.DESC, "name");
+              ? Sort.Direction.ASC
+              : Sort.Direction.DESC, "name");
 
-      if (StringUtils.isEmpty(filter))
-      {
+      if (StringUtils.isEmpty(filter)) {
         return getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
-      }
-      else
-      {
+      } else {
         return getGroupRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%",
             pageable);
       }
 
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered groups for the user directory (" + getUserDirectoryId()
-          + ")", e);
+              + ")", e);
     }
   }
 
@@ -950,27 +780,20 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<Group> getGroupsForUser(String username)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       return getUserRepository().getGroupsByUserId(userIdOptional.get());
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the groups the user is a member of ("
           + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -985,15 +808,12 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<GroupMember> getMembersForGroup(String groupName)
-    throws GroupNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
@@ -1002,20 +822,15 @@ public class InternalUserDirectory extends UserDirectoryBase
 
       List<GroupMember> groupMembers = new ArrayList<>();
 
-      for (String username : usernames)
-      {
+      for (String username : usernames) {
         groupMembers.add(new GroupMember(getUserDirectoryId(), groupName, GroupMemberType.USER,
             username));
       }
 
       return groupMembers;
-    }
-    catch (GroupNotFoundException e)
-    {
+    } catch (GroupNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the group members for the group ("
           + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1035,71 +850,55 @@ public class InternalUserDirectory extends UserDirectoryBase
   @Override
   public List<GroupMember> getMembersForGroup(String groupName, String filter,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-    throws GroupNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
-      if (pageIndex == null)
-      {
+      if (pageIndex == null) {
         pageIndex = 0;
       }
 
-      if (pageSize == null)
-      {
+      if (pageSize == null) {
         pageSize = maxFilteredGroups;
       }
 
       Pageable pageable = PageRequest.of(pageIndex,
           (pageSize > maxFilteredGroupMembers)
-          ? maxFilteredGroupMembers
-          : pageSize);
+              ? maxFilteredGroupMembers
+              : pageSize);
 
       List<String> usernames;
 
-      if (StringUtils.isEmpty(filter))
-      {
+      if (StringUtils.isEmpty(filter)) {
         usernames = getGroupRepository().getUsernamesForGroup(getUserDirectoryId(),
             groupIdOptional.get(), pageable);
-      }
-      else
-      {
+      } else {
         usernames = getGroupRepository().getFilteredUsernamesForGroup(getUserDirectoryId(),
             groupIdOptional.get(), "%" + filter + "%", pageable);
       }
 
       List<GroupMember> groupMembers = new ArrayList<>();
 
-      for (String username : usernames)
-      {
+      for (String username : usernames) {
         groupMembers.add(new GroupMember(getUserDirectoryId(), groupName, GroupMemberType.USER,
             username));
       }
 
-      if ((sortDirection == null) || (sortDirection == SortDirection.ASCENDING))
-      {
+      if ((sortDirection == null) || (sortDirection == SortDirection.ASCENDING)) {
         groupMembers.sort(Comparator.comparing(GroupMember::getMemberName));
-      }
-      else
-      {
+      } else {
         groupMembers.sort(Comparator.comparing(GroupMember::getMemberName).reversed());
       }
 
       return groupMembers;
-    }
-    catch (GroupNotFoundException e)
-    {
+    } catch (GroupNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the group members for the group ("
           + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1114,24 +913,17 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public long getNumberOfGroups(String filter)
-    throws SecurityServiceException
-  {
-    try
-    {
-      if (StringUtils.isEmpty(filter))
-      {
+      throws SecurityServiceException {
+    try {
+      if (StringUtils.isEmpty(filter)) {
         return getGroupRepository().countByUserDirectoryId(getUserDirectoryId());
-      }
-      else
-      {
+      } else {
         return getGroupRepository().countFiltered(getUserDirectoryId(), "%" + filter + "%");
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the number of groups for the user directory (" + getUserDirectoryId()
-          + ")", e);
+              + ")", e);
     }
   }
 
@@ -1145,38 +937,28 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public long getNumberOfMembersForGroup(String groupName, String filter)
-    throws GroupNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
-      if (StringUtils.isEmpty(filter))
-      {
+      if (StringUtils.isEmpty(filter)) {
         return getGroupRepository().countUsernamesForGroup(getUserDirectoryId(),
             groupIdOptional.get());
-      }
-      else
-      {
+      } else {
         return getGroupRepository().countFilteredUsernamesForGroup(getUserDirectoryId(),
             groupIdOptional.get(), filter);
       }
-    }
-    catch (GroupNotFoundException e)
-    {
+    } catch (GroupNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the number of group members for the group (" + groupName
-          + ") for the user directory (" + getUserDirectoryId() + ")", e);
+              + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
@@ -1189,24 +971,17 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public long getNumberOfUsers(String filter)
-    throws SecurityServiceException
-  {
-    try
-    {
-      if (StringUtils.isEmpty(filter))
-      {
+      throws SecurityServiceException {
+    try {
+      if (StringUtils.isEmpty(filter)) {
         return getUserRepository().countByUserDirectoryId(getUserDirectoryId());
-      }
-      else
-      {
+      } else {
         return getUserRepository().countFiltered(getUserDirectoryId(), "%" + filter + "%");
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the number of users for the user directory (" + getUserDirectoryId()
-          + ")", e);
+              + ")", e);
     }
   }
 
@@ -1219,26 +994,19 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<String> getRoleCodesForGroup(String groupName)
-    throws GroupNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
       return getGroupRepository().getRoleCodesByGroupId(groupIdOptional.get());
-    }
-    catch (GroupNotFoundException e)
-    {
+    } catch (GroupNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the role codes for the group ("
           + groupName + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1253,27 +1021,20 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<String> getRoleCodesForUser(String username)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       return getUserRepository().getRoleCodesByUserId(userIdOptional.get());
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the role codes for the user ("
           + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1288,33 +1049,25 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<GroupRole> getRolesForGroup(String groupName)
-    throws GroupNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
       List<GroupRole> groupRoles = new ArrayList<>();
 
-      for (String roleCode : getGroupRepository().getRoleCodesByGroupId(groupIdOptional.get()))
-      {
+      for (String roleCode : getGroupRepository().getRoleCodesByGroupId(groupIdOptional.get())) {
         groupRoles.add(new GroupRole(getUserDirectoryId(), groupName, roleCode));
       }
 
       return groupRoles;
-    }
-    catch (GroupNotFoundException e)
-    {
+    } catch (GroupNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the roles for the group (" + groupName
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1329,28 +1082,19 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public User getUser(String username)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
           getUserDirectoryId(), username);
 
-      if (userOptional.isPresent())
-      {
+      if (userOptional.isPresent()) {
         return userOptional.get();
-      }
-      else
-      {
+      } else {
         throw new UserNotFoundException(username);
       }
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the user (" + username
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1365,22 +1109,17 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public String getUserFullName(String username)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<FirstNameAndLastName> firstNameAndLastNameOptional =
           getUserRepository().getFirstNameAndLastNameByUserDirectoryIdAndUsernameIgnoreCase(
-          getUserDirectoryId(), username);
+              getUserDirectoryId(), username);
 
-      if (firstNameAndLastNameOptional.isPresent())
-      {
+      if (firstNameAndLastNameOptional.isPresent()) {
         StringBuilder buffer = new StringBuilder(firstNameAndLastNameOptional.get().getFirstName());
 
-        if (!StringUtils.isEmpty(firstNameAndLastNameOptional.get().getLastName()))
-        {
-          if (buffer.length() > 0)
-          {
+        if (!StringUtils.isEmpty(firstNameAndLastNameOptional.get().getLastName())) {
+          if (buffer.length() > 0) {
             buffer.append(" ");
           }
 
@@ -1388,18 +1127,12 @@ public class InternalUserDirectory extends UserDirectoryBase
         }
 
         return buffer.toString();
-      }
-      else
-      {
+      } else {
         throw new UserNotFoundException(username);
       }
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the full name for the user ("
           + username + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1412,14 +1145,10 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public List<User> getUsers()
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return getUserRepository().findByUserDirectoryId(getUserDirectoryId());
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the users for the user directory ("
           + getUserDirectoryId() + ")", e);
     }
@@ -1439,40 +1168,31 @@ public class InternalUserDirectory extends UserDirectoryBase
   @Override
   public List<User> getUsers(String filter, UserSortBy sortBy, SortDirection sortDirection,
       Integer pageIndex, Integer pageSize)
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       Pageable pageable = null;
 
-      if (pageIndex == null)
-      {
+      if (pageIndex == null) {
         pageIndex = 0;
       }
 
-      if (pageSize == null)
-      {
+      if (pageSize == null) {
         pageSize = maxFilteredUsers;
       }
 
-      if (sortBy == UserSortBy.USERNAME)
-      {
+      if (sortBy == UserSortBy.USERNAME) {
         pageable = PageRequest.of(pageIndex, (pageSize > maxFilteredUsers)
             ? maxFilteredUsers
             : pageSize, (sortDirection == SortDirection.ASCENDING)
             ? Sort.Direction.ASC
             : Sort.Direction.DESC, "username");
-      }
-      else if (sortBy == UserSortBy.FIRST_NAME)
-      {
+      } else if (sortBy == UserSortBy.FIRST_NAME) {
         pageable = PageRequest.of(pageIndex, (pageSize > maxFilteredUsers)
             ? maxFilteredUsers
             : pageSize, (sortDirection == SortDirection.ASCENDING)
             ? Sort.Direction.ASC
             : Sort.Direction.DESC, "firstName");
-      }
-      else if (sortBy == UserSortBy.LAST_NAME)
-      {
+      } else if (sortBy == UserSortBy.LAST_NAME) {
         pageable = PageRequest.of(pageIndex, (pageSize > maxFilteredUsers)
             ? maxFilteredUsers
             : pageSize, (sortDirection == SortDirection.ASCENDING)
@@ -1480,21 +1200,16 @@ public class InternalUserDirectory extends UserDirectoryBase
             : Sort.Direction.DESC, "lastName");
       }
 
-      if (StringUtils.isEmpty(filter))
-      {
+      if (StringUtils.isEmpty(filter)) {
         return getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
-      }
-      else
-      {
+      } else {
         return getUserRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageable);
       }
 
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered users for the user directory (" + getUserDirectoryId()
-          + ")", e);
+              + ")", e);
     }
   }
 
@@ -1508,15 +1223,11 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public boolean isExistingUser(String username)
-    throws SecurityServiceException
-  {
-    try
-    {
+      throws SecurityServiceException {
+    try {
       return getUserRepository().existsByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
           username);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to check whether the user (" + username
           + ") is an existing user for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1533,35 +1244,27 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public boolean isUserInGroup(String groupName, String username)
-    throws UserNotFoundException, GroupNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, GroupNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
       return getUserRepository().isUserInGroup(userIdOptional.get(), groupIdOptional.get());
-    }
-    catch (UserNotFoundException | GroupNotFoundException e)
-    {
+    } catch (UserNotFoundException | GroupNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to check if the user (" + username
           + ") is in the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
           + ")", e);
@@ -1577,20 +1280,15 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void removeMemberFromGroup(String groupName, GroupMemberType memberType, String memberName)
-    throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException
-  {
-    if (memberType != GroupMemberType.USER)
-    {
+      throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException {
+    if (memberType != GroupMemberType.USER) {
       throw new SecurityServiceException("Unsupported group member type ("
           + memberType.description() + ")");
     }
 
-    try
-    {
+    try {
       removeUserFromGroup(groupName, memberName);
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw new GroupMemberNotFoundException(memberType, memberName);
     }
   }
@@ -1603,29 +1301,21 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void removeRoleFromGroup(String groupName, String roleCode)
-    throws GroupNotFoundException, GroupRoleNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, GroupRoleNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
-      if (getGroupRepository().removeRoleFromGroup(groupIdOptional.get(), roleCode) == 0)
-      {
+      if (getGroupRepository().removeRoleFromGroup(groupIdOptional.get(), roleCode) == 0) {
         throw new GroupRoleNotFoundException(roleCode);
       }
-    }
-    catch (GroupNotFoundException | GroupRoleNotFoundException e)
-    {
+    } catch (GroupNotFoundException | GroupRoleNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to remove the role (" + roleCode
           + ") from the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
           + ")", e);
@@ -1640,35 +1330,27 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void removeUserFromGroup(String groupName, String username)
-    throws GroupNotFoundException, UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, UserNotFoundException, SecurityServiceException {
+    try {
       Optional<UUID> groupIdOptional = getGroupRepository().getIdByUserDirectoryIdAndNameIgnoreCase(
           getUserDirectoryId(), groupName);
 
-      if (groupIdOptional.isEmpty())
-      {
+      if (groupIdOptional.isEmpty()) {
         throw new GroupNotFoundException(groupName);
       }
 
       Optional<UUID> userIdOptional =
           getUserRepository().getIdByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(),
-          username);
+              username);
 
-      if (userIdOptional.isEmpty())
-      {
+      if (userIdOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       getGroupRepository().removeUserFromGroup(groupIdOptional.get(), userIdOptional.get());
-    }
-    catch (GroupNotFoundException | UserNotFoundException e)
-    {
+    } catch (GroupNotFoundException | UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to remove the user (" + username
           + ") from the group (" + groupName + ") for the user directory (" + getUserDirectoryId()
           + ")", e);
@@ -1683,31 +1365,26 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void resetPassword(String username, String newPassword)
-    throws UserNotFoundException, UserLockedException, ExistingPasswordException,
-        SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, UserLockedException, ExistingPasswordException,
+      SecurityServiceException {
+    try {
       Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
           getUserDirectoryId(), username);
 
-      if (userOptional.isEmpty())
-      {
+      if (userOptional.isEmpty()) {
         throw new UserNotFoundException(username);
       }
 
       User user = userOptional.get();
 
       if ((user.getPasswordAttempts() != null)
-          && (user.getPasswordAttempts() > maxPasswordAttempts))
-      {
+          && (user.getPasswordAttempts() > maxPasswordAttempts)) {
         throw new UserLockedException(username);
       }
 
       String newPasswordHash = PasswordUtil.createPasswordHash(newPassword);
 
-      if (isPasswordInHistory(user.getId(), newPasswordHash))
-      {
+      if (isPasswordInHistory(user.getId(), newPasswordHash)) {
         throw new ExistingPasswordException(username);
       }
 
@@ -1717,13 +1394,9 @@ public class InternalUserDirectory extends UserDirectoryBase
       getUserRepository().resetPassword(user.getId(), newPasswordHash, passwordExpiry);
 
       getUserRepository().savePasswordInPasswordHistory(user.getId(), newPasswordHash);
-    }
-    catch (UserNotFoundException | UserLockedException | ExistingPasswordException e)
-    {
+    } catch (UserNotFoundException | UserLockedException | ExistingPasswordException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to reset the password for the user (" + username
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1736,15 +1409,12 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void updateGroup(Group group)
-    throws GroupNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws GroupNotFoundException, SecurityServiceException {
+    try {
       Optional<Group> groupOptional = getGroupRepository().findByUserDirectoryIdAndNameIgnoreCase(
           group.getUserDirectoryId(), group.getName());
 
-      if (groupOptional.isEmpty())
-      {
+      if (groupOptional.isEmpty()) {
         throw new GroupNotFoundException(group.getName());
       }
 
@@ -1753,13 +1423,9 @@ public class InternalUserDirectory extends UserDirectoryBase
       existingGroup.setDescription(group.getDescription());
 
       getGroupRepository().saveAndFlush(existingGroup);
-    }
-    catch (GroupNotFoundException e)
-    {
+    } catch (GroupNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to update the group (" + group.getName()
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
@@ -1774,93 +1440,74 @@ public class InternalUserDirectory extends UserDirectoryBase
    */
   @Override
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
-    throws UserNotFoundException, SecurityServiceException
-  {
-    try
-    {
+      throws UserNotFoundException, SecurityServiceException {
+    try {
       Optional<User> userOptional = getUserRepository().findByUserDirectoryIdAndUsernameIgnoreCase(
           user.getUserDirectoryId(), user.getUsername());
 
-      if (userOptional.isEmpty())
-      {
+      if (userOptional.isEmpty()) {
         throw new UserNotFoundException(user.getUsername());
       }
 
       User existingUser = userOptional.get();
 
-      if (user.getFirstName() != null)
-      {
+      if (user.getFirstName() != null) {
         existingUser.setFirstName(user.getFirstName());
       }
 
-      if (user.getLastName() != null)
-      {
+      if (user.getLastName() != null) {
         existingUser.setLastName(user.getLastName());
       }
 
-      if (user.getEmail() != null)
-      {
+      if (user.getEmail() != null) {
         existingUser.setEmail(user.getEmail());
       }
 
-      if (user.getPhoneNumber() != null)
-      {
+      if (user.getPhoneNumber() != null) {
         existingUser.setPhoneNumber(user.getPhoneNumber());
       }
 
-      if (user.getMobileNumber() != null)
-      {
+      if (user.getMobileNumber() != null) {
         existingUser.setMobileNumber(user.getMobileNumber());
       }
 
-      if (!StringUtils.isEmpty(user.getPassword()))
-      {
+      if (!StringUtils.isEmpty(user.getPassword())) {
         existingUser.setPassword(PasswordUtil.createPasswordHash(user.getPassword()));
       }
 
-      if (lockUser)
-      {
+      if (lockUser) {
         existingUser.setPasswordAttempts(maxPasswordAttempts);
-      }
-      else if (user.getPasswordAttempts() != null)
-      {
+      } else if (user.getPasswordAttempts() != null) {
         existingUser.setPasswordAttempts(user.getPasswordAttempts());
       }
 
-      if (expirePassword)
-      {
+      if (expirePassword) {
         existingUser.setPasswordExpiry(LocalDateTime.now());
-      }
-      else if (user.getPasswordExpiry() != null)
-      {
+      } else if (user.getPasswordExpiry() != null) {
         existingUser.setPasswordExpiry(user.getPasswordExpiry());
       }
 
       getUserRepository().saveAndFlush(existingUser);
-    }
-    catch (UserNotFoundException e)
-    {
+    } catch (UserNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SecurityServiceException("Failed to update the user (" + user.getUsername()
           + ") for the user directory (" + getUserDirectoryId() + ")", e);
     }
   }
 
   /**
-   * Is the password, given by the specified password hash, a historical password that cannot
-   * be reused for a period of time i.e. was the password used previously in the last X months.
+   * Is the password, given by the specified password hash, a historical password that cannot be
+   * reused for a period of time i.e. was the password used previously in the last X months.
    *
-   * @param userId       the Universally Unique Identifier (UUID) used to uniquely identify the user
+   * @param userId       the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                     user
    * @param passwordHash the password hash
    *
    * @return <code>true</code> if the password was previously used and cannot be reused for a
-   *         period of time or <code>false</code> otherwise
+   * period of time or <code>false</code> otherwise
    */
-  private boolean isPasswordInHistory(UUID userId, String passwordHash)
-  {
+  private boolean isPasswordInHistory(UUID userId, String passwordHash) {
     LocalDateTime after = LocalDateTime.now();
     after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);
 

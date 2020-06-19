@@ -21,25 +21,22 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.BinaryBuffer;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.math.BigDecimal;
-
 import java.util.List;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Attribute</code> class stores an attribute for a security entity as a name-value pair.
@@ -48,15 +45,15 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "Attribute")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "name", "value" })
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "Attribute", namespace = "http://security.inception.digital")
 @XmlType(name = "Attribute", namespace = "http://security.inception.digital",
-    propOrder = { "name", "value" })
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Attribute
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -82,7 +79,8 @@ public class Attribute
   /**
    * Constructs a new <code>Attribute</code>.
    */
-  public Attribute() {}
+  public Attribute() {
+  }
 
   /**
    * Constructs a new <code>Attribute</code>.
@@ -90,8 +88,7 @@ public class Attribute
    * @param name  the name for the attribute
    * @param value the <code>BigDecimal</code> value for the attribute
    */
-  public Attribute(String name, BigDecimal value)
-  {
+  public Attribute(String name, BigDecimal value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -102,8 +99,7 @@ public class Attribute
    * @param name  the name for the attribute
    * @param value the binary value for the attribute
    */
-  public Attribute(String name, BinaryBuffer value)
-  {
+  public Attribute(String name, BinaryBuffer value) {
     this.name = name;
     this.value = Base64Util.encodeBytes(value.getData());
   }
@@ -114,8 +110,7 @@ public class Attribute
    * @param name  the name for the attribute
    * @param value the binary value for the attribute
    */
-  public Attribute(String name, byte[] value)
-  {
+  public Attribute(String name, byte[] value) {
     this.name = name;
     this.value = Base64Util.encodeBytes(value);
   }
@@ -126,8 +121,7 @@ public class Attribute
    * @param name  the name for the attribute
    * @param value the <code>double</code> value for the attribute
    */
-  public Attribute(String name, double value)
-  {
+  public Attribute(String name, double value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -138,8 +132,7 @@ public class Attribute
    * @param name  the name for the attribute
    * @param value the <code>long</code> value for the attribute
    */
-  public Attribute(String name, long value)
-  {
+  public Attribute(String name, long value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -150,8 +143,7 @@ public class Attribute
    * @param name  the name for the attribute
    * @param value the <code>String</code> value for the attribute
    */
-  public Attribute(String name, String value)
-  {
+  public Attribute(String name, String value) {
     this.name = name;
     this.value = value;
   }
@@ -165,14 +157,11 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return <code>true</code> if the list of <code>Attribute</code> instances contains an instance
-   *         whose name matches the specified name or <code>false</code> otherwise
+   * whose name matches the specified name or <code>false</code> otherwise
    */
-  public static boolean contains(List<Attribute> list, String name)
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
+  public static boolean contains(List<Attribute> list, String name) {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
         return true;
       }
     }
@@ -189,21 +178,15 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the binary value for the <code>Attribute</code> instance with the specified name in the
-   *         specified list
+   * specified list
    */
   public static byte[] getBinaryValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
+        try {
           return Base64Util.decode(attribute.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new AttributeException(String.format(
               "Failed to retrieve the binary value for the attribute (%s)", attribute.name));
         }
@@ -212,7 +195,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to retrieve the binary value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -224,21 +207,15 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
-   *         specified name in the specified list
+   * specified name in the specified list
    */
   public static BigDecimal getDecimalValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
+        try {
           return new BigDecimal(attribute.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new AttributeException(String.format(
               "Failed to retrieve the decimal value for the attribute (%s)", attribute.name));
         }
@@ -247,7 +224,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to retrieve the decimal value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -259,21 +236,15 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>double</code> value for the <code>Attribute</code> instance with the
-   *         specified name in the specified list
+   * specified name in the specified list
    */
   public static double getDoubleValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
+        try {
           return Double.parseDouble(attribute.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new AttributeException(String.format(
               "Failed to retrieve the double value for the attribute (%s)", attribute.name));
         }
@@ -282,7 +253,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to retrieve the double value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -294,21 +265,15 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>int</code> value for the <code>Attribute</code> instance with the specified
-   *         name in the specified list
+   * name in the specified list
    */
   public static int getIntegerValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
+        try {
           return Integer.parseInt(attribute.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new AttributeException(String.format(
               "Failed to retrieve the integer value for the attribute (%s)", attribute.name));
         }
@@ -317,7 +282,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to retrieve the integer value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -329,21 +294,15 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>long</code> value for the <code>Attribute</code> instance with the specified
-   *         name in the specified list
+   * name in the specified list
    */
   public static long getLongValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
+        try {
           return Long.parseLong(attribute.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new AttributeException(String.format(
               "Failed to retrieve the long value for the attribute (%s)", attribute.name));
         }
@@ -352,7 +311,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to retrieve the long value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -364,22 +323,19 @@ public class Attribute
    * @param name the name for the attribute
    *
    * @return the <code>String</code> value for the <code>Attribute</code> instance with the
-   *         specified name in the specified list
+   * specified name in the specified list
    */
   public static String getStringValue(List<Attribute> list, String name)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
         return attribute.value;
       }
     }
 
     throw new AttributeException(String.format(
         "Failed to retrieve the string value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -392,8 +348,7 @@ public class Attribute
    * @param value the binary value for the attribute
    */
   public static void setBinaryValue(List<Attribute> list, String name, BinaryBuffer value)
-    throws AttributeException
-  {
+      throws AttributeException {
     setBinaryValue(list, name, value.getData());
   }
 
@@ -407,12 +362,9 @@ public class Attribute
    * @param value the binary value for the attribute
    */
   public static void setBinaryValue(List<Attribute> list, String name, byte[] value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
         attribute.setBinaryValue(value);
 
         return;
@@ -421,7 +373,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to set the binary value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -434,12 +386,9 @@ public class Attribute
    * @param value the <code>BigDecimal</code> value for the attribute
    */
   public static void setDecimalValue(List<Attribute> list, String name, BigDecimal value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
         attribute.setDecimalValue(value);
 
         return;
@@ -448,7 +397,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to set the decimal value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -461,12 +410,9 @@ public class Attribute
    * @param value the <code>double</code> value for the attribute
    */
   public static void setDoubleValue(List<Attribute> list, String name, double value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
         attribute.setDoubleValue(value);
 
         return;
@@ -475,7 +421,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to set the double value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -488,12 +434,9 @@ public class Attribute
    * @param value the <code>int</code> value for the attribute
    */
   public static void setIntegerValue(List<Attribute> list, String name, int value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
         attribute.setIntegerValue(value);
 
         return;
@@ -502,7 +445,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to set the integer value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -515,12 +458,9 @@ public class Attribute
    * @param value the <code>long</code> value for the attribute
    */
   public static void setLongValue(List<Attribute> list, String name, long value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
         attribute.setLongValue(value);
 
         return;
@@ -529,7 +469,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to set the long value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -542,12 +482,9 @@ public class Attribute
    * @param value the <code>String</code> value for the attribute
    */
   public static void setStringValue(List<Attribute> list, String name, String value)
-    throws AttributeException
-  {
-    for (Attribute attribute : list)
-    {
-      if (attribute.name.equalsIgnoreCase(name))
-      {
+      throws AttributeException {
+    for (Attribute attribute : list) {
+      if (attribute.name.equalsIgnoreCase(name)) {
         attribute.setStringValue(value);
 
         return;
@@ -556,7 +493,7 @@ public class Attribute
 
     throw new AttributeException(String.format(
         "Failed to set the string value for the attribute (%s): "
-        + "The attribute could not be found", name));
+            + "The attribute could not be found", name));
   }
 
   /**
@@ -565,123 +502,13 @@ public class Attribute
    * @return the binary value for the <code>Attribute</code> instance
    */
   public byte[] getBinaryValue()
-    throws AttributeException
-  {
-    try
-    {
+      throws AttributeException {
+    try {
       return Base64Util.decode(value);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new AttributeException(String.format(
           "Failed to retrieve the binary value for the attribute (%s)", name));
     }
-  }
-
-  /**
-   * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance
-   */
-  public BigDecimal getDecimalValue()
-    throws AttributeException
-  {
-    try
-    {
-      return new BigDecimal(value);
-    }
-    catch (Throwable e)
-    {
-      throw new AttributeException(String.format(
-          "Failed to retrieve the decimal value for the attribute (%s)", name));
-    }
-  }
-
-  /**
-   * Returns the <code>double</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>double</code> value for the <code>Attribute</code> instance
-   */
-  public double getDoubleValue()
-    throws AttributeException
-  {
-    try
-    {
-      return Double.parseDouble(value);
-    }
-    catch (Throwable e)
-    {
-      throw new AttributeException(String.format(
-          "Failed to retrieve the double value for the attribute (%s)", name));
-    }
-  }
-
-  /**
-   * Returns the <code>int</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>int</code> value for the <code>Attribute</code> instance
-   */
-  public int getIntegerValue()
-    throws AttributeException
-  {
-    try
-    {
-      return Integer.parseInt(value);
-    }
-    catch (Throwable e)
-    {
-      throw new AttributeException(String.format(
-          "Failed to retrieve the integer value for the attribute (%s)", name));
-    }
-  }
-
-  /**
-   * Returns the <code>long</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>long</code> value for the <code>Attribute</code> instance
-   */
-  public long getLongValue()
-    throws AttributeException
-  {
-    try
-    {
-      return Long.parseLong(value);
-    }
-    catch (Throwable e)
-    {
-      throw new AttributeException(String.format(
-          "Failed to retrieve the long value for the attribute (%s)", name));
-    }
-  }
-
-  /**
-   * Returns the name for the <code>Attribute</code> instance.
-   *
-   * @return the name for the <code>Attribute</code> instance
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the <code>String</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>String</code> value for the <code>Attribute</code> instance
-   */
-  public String getStringValue()
-  {
-    return value;
-  }
-
-  /**
-   * Returns the <code>String</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>String</code> value for the <code>Attribute</code> instance
-   */
-  public String getValue()
-  {
-    return value;
   }
 
   /**
@@ -689,8 +516,7 @@ public class Attribute
    *
    * @param value the binary value for the attribute
    */
-  public void setBinaryValue(BinaryBuffer value)
-  {
+  public void setBinaryValue(BinaryBuffer value) {
     this.value = Base64Util.encodeBytes(value.getData());
   }
 
@@ -699,9 +525,23 @@ public class Attribute
    *
    * @param value the binary value for the attribute
    */
-  public void setBinaryValue(byte[] value)
-  {
+  public void setBinaryValue(byte[] value) {
     this.value = Base64Util.encodeBytes(value);
+  }
+
+  /**
+   * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance
+   */
+  public BigDecimal getDecimalValue()
+      throws AttributeException {
+    try {
+      return new BigDecimal(value);
+    } catch (Throwable e) {
+      throw new AttributeException(String.format(
+          "Failed to retrieve the decimal value for the attribute (%s)", name));
+    }
   }
 
   /**
@@ -709,9 +549,23 @@ public class Attribute
    *
    * @param value the <code>BigDecimal</code> value for the attribute
    */
-  public void setDecimalValue(BigDecimal value)
-  {
+  public void setDecimalValue(BigDecimal value) {
     this.value = String.valueOf(value);
+  }
+
+  /**
+   * Returns the <code>double</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>double</code> value for the <code>Attribute</code> instance
+   */
+  public double getDoubleValue()
+      throws AttributeException {
+    try {
+      return Double.parseDouble(value);
+    } catch (Throwable e) {
+      throw new AttributeException(String.format(
+          "Failed to retrieve the double value for the attribute (%s)", name));
+    }
   }
 
   /**
@@ -719,9 +573,23 @@ public class Attribute
    *
    * @param value the <code>double</code> value for the attribute
    */
-  public void setDoubleValue(double value)
-  {
+  public void setDoubleValue(double value) {
     this.value = String.valueOf(value);
+  }
+
+  /**
+   * Returns the <code>int</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>int</code> value for the <code>Attribute</code> instance
+   */
+  public int getIntegerValue()
+      throws AttributeException {
+    try {
+      return Integer.parseInt(value);
+    } catch (Throwable e) {
+      throw new AttributeException(String.format(
+          "Failed to retrieve the integer value for the attribute (%s)", name));
+    }
   }
 
   /**
@@ -729,9 +597,23 @@ public class Attribute
    *
    * @param value the <code>int</code> value for the attribute
    */
-  public void setIntegerValue(int value)
-  {
+  public void setIntegerValue(int value) {
     this.value = String.valueOf(value);
+  }
+
+  /**
+   * Returns the <code>long</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>long</code> value for the <code>Attribute</code> instance
+   */
+  public long getLongValue()
+      throws AttributeException {
+    try {
+      return Long.parseLong(value);
+    } catch (Throwable e) {
+      throw new AttributeException(String.format(
+          "Failed to retrieve the long value for the attribute (%s)", name));
+    }
   }
 
   /**
@@ -739,9 +621,17 @@ public class Attribute
    *
    * @param value the <code>long</code> value for the attribute
    */
-  public void setLongValue(long value)
-  {
+  public void setLongValue(long value) {
     this.value = String.valueOf(value);
+  }
+
+  /**
+   * Returns the name for the <code>Attribute</code> instance.
+   *
+   * @return the name for the <code>Attribute</code> instance
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -749,9 +639,17 @@ public class Attribute
    *
    * @param name the name for the attribute
    */
-  public void setName(String name)
-  {
+  public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>String</code> value for the <code>Attribute</code> instance
+   */
+  public String getStringValue() {
+    return value;
   }
 
   /**
@@ -759,8 +657,16 @@ public class Attribute
    *
    * @param value the <code>String</code> value for the attribute
    */
-  public void setStringValue(String value)
-  {
+  public void setStringValue(String value) {
     this.value = value;
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>String</code> value for the <code>Attribute</code> instance
+   */
+  public String getValue() {
+    return value;
   }
 }

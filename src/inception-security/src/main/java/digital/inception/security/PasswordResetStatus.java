@@ -20,14 +20,12 @@ package digital.inception.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordResetStatus</code> enumeration defines the possible statuses for a password
@@ -38,8 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "PasswordResetStatus")
 @XmlEnum
 @XmlType(name = "PasswordResetStatus", namespace = "http://security.inception.digital")
-public enum PasswordResetStatus
-{
+public enum PasswordResetStatus {
   @XmlEnumValue("Unknown")
   UNKNOWN(0, "Unknown"),
   @XmlEnumValue("Requested")
@@ -52,8 +49,7 @@ public enum PasswordResetStatus
   private int code;
   private String description;
 
-  PasswordResetStatus(int code, String description)
-  {
+  PasswordResetStatus(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -66,10 +62,8 @@ public enum PasswordResetStatus
    * @return the password reset status given by the specified numeric code value
    */
   @JsonCreator
-  public static PasswordResetStatus fromCode(int code)
-  {
-    switch (code)
-    {
+  public static PasswordResetStatus fromCode(int code) {
+    switch (code) {
       case 0:
         return PasswordResetStatus.UNKNOWN;
 
@@ -93,8 +87,7 @@ public enum PasswordResetStatus
    * @return the numeric code value for the password reset status
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -103,8 +96,7 @@ public enum PasswordResetStatus
    *
    * @return the description for the password reset status
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 }

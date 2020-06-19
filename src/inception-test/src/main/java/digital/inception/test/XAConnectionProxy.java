@@ -20,11 +20,9 @@ package digital.inception.test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
 import javax.sql.ConnectionEventListener;
 import javax.sql.StatementEventListener;
 import javax.sql.XAConnection;
-
 import javax.transaction.xa.XAResource;
 
 /**
@@ -33,31 +31,27 @@ import javax.transaction.xa.XAResource;
  * @author Marcus Portmann
  */
 public class XAConnectionProxy
-  implements XAConnection
-{
+    implements XAConnection {
+
   private XAConnection xaConnection;
 
-  XAConnectionProxy(XAConnection xaConnection)
-  {
+  XAConnectionProxy(XAConnection xaConnection) {
     this.xaConnection = xaConnection;
   }
 
   @Override
-  public void addConnectionEventListener(ConnectionEventListener listener)
-  {
+  public void addConnectionEventListener(ConnectionEventListener listener) {
     xaConnection.addConnectionEventListener(listener);
   }
 
   @Override
-  public void addStatementEventListener(StatementEventListener listener)
-  {
+  public void addStatementEventListener(StatementEventListener listener) {
     xaConnection.addStatementEventListener(listener);
   }
 
   @Override
   public void close()
-    throws SQLException
-  {
+      throws SQLException {
     XADataSourceProxy.getActiveXADatabaseConnections().remove(this);
 
     xaConnection.close();
@@ -65,8 +59,7 @@ public class XAConnectionProxy
 
   @Override
   public Connection getConnection()
-    throws SQLException
-  {
+      throws SQLException {
     Connection connection = new ConnectionProxy(xaConnection.getConnection());
 
     DataSourceProxy.addActiveDatabaseConnection(connection);
@@ -76,20 +69,17 @@ public class XAConnectionProxy
 
   @Override
   public XAResource getXAResource()
-    throws SQLException
-  {
+      throws SQLException {
     return xaConnection.getXAResource();
   }
 
   @Override
-  public void removeConnectionEventListener(ConnectionEventListener listener)
-  {
+  public void removeConnectionEventListener(ConnectionEventListener listener) {
     xaConnection.removeConnectionEventListener(listener);
   }
 
   @Override
-  public void removeStatementEventListener(StatementEventListener listener)
-  {
+  public void removeStatementEventListener(StatementEventListener listener) {
     xaConnection.removeStatementEventListener(listener);
   }
 }

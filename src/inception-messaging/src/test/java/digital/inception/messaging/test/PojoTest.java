@@ -18,29 +18,30 @@ package digital.inception.messaging.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.Base64Util;
-import digital.inception.core.util.CryptoUtil;
-
-import digital.inception.messaging.*;
-import org.junit.Test;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import digital.inception.core.util.Base64Util;
+import digital.inception.core.util.CryptoUtil;
+import digital.inception.messaging.Message;
+import digital.inception.messaging.MessagePart;
+import digital.inception.messaging.MessagePartStatus;
+import digital.inception.messaging.MessagePriority;
+import digital.inception.messaging.MessageStatus;
+import java.time.LocalDateTime;
+import java.util.UUID;
+import org.junit.Test;
+
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.UUID;
-
 /**
- * The <code>PojoTest</code> class contains the implementation of the JUnit
- * tests for the POJOs that form part of the messaging infrastructure.
+ * The <code>PojoTest</code> class contains the implementation of the JUnit tests for the POJOs that
+ * form part of the messaging infrastructure.
  *
  * @author Marcus Portmann
  */
-public class PojoTest
-{
+public class PojoTest {
+
   private static final Integer DOWNLOAD_ATTEMPTS = 3;
   private static final String LOCK_NAME = "Lock Name";
   private static final String MESSAGE_CHECKSUM = "MessageChecksum";
@@ -73,8 +74,7 @@ public class PojoTest
    * Test the <code>MessagePart</code> POJO.
    */
   @Test
-  public void messagePartTest()
-  {
+  public void messagePartTest() {
     MessagePart messagePart = new MessagePart(MESSAGE_PART_ID, PART_NO, TOTAL_PARTS, SEND_ATTEMPTS,
         DOWNLOAD_ATTEMPTS, MESSAGE_PART_STATUS, MESSAGE_ID, USERNAME, DEVICE_ID, MESSAGE_TYPE_ID,
         MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_CREATED, MESSAGE_DATA_HASH,
@@ -146,8 +146,7 @@ public class PojoTest
    * Test the <code>Message</code> POJO.
    */
   @Test
-  public void messageTest()
-  {
+  public void messageTest() {
     Message message = new Message(MESSAGE_ID, USERNAME, DEVICE_ID, MESSAGE_TYPE_ID,
         MESSAGE_CORRELATION_ID, MESSAGE_PRIORITY, MESSAGE_CREATED, MESSAGE_DATA, MESSAGE_DATA_HASH,
         MESSAGE_ENCRYPTION_IV);

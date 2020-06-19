@@ -21,7 +21,7 @@ package digital.inception.sample;
  *
  * @author Marcus Portmann
  */
-public final class Version
-{
+public final class Version {
+
   public static final String PROJECT_VERSION = "${project.version}";
 }

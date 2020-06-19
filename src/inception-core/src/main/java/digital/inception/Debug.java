@@ -22,49 +22,43 @@ package digital.inception;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class Debug
-{
+public class Debug {
+
   /**
    * Returns the root directory for the JEE application server the application is running under or
    * <code>null</code> if the root directory cannot be determined.
    *
    * @return the root directory for the JEE application server the application is running under or
-   *         <code>null</code> if the root directory cannot be determined
+   * <code>null</code> if the root directory cannot be determined
    */
-  public static String getApplicationServerRootDirectory()
-  {
+  public static String getApplicationServerRootDirectory() {
     String wasInstallRoot = System.getProperty("was.install.root");
 
-    if (wasInstallRoot != null)
-    {
+    if (wasInstallRoot != null) {
       return wasInstallRoot;
     }
 
     String jbossServerBaseDir = System.getProperty("jboss.home.dir");
 
-    if (jbossServerBaseDir != null)
-    {
+    if (jbossServerBaseDir != null) {
       return jbossServerBaseDir;
     }
 
     String catalinaHome = System.getProperty("catalina.home");
 
-    if (catalinaHome != null)
-    {
+    if (catalinaHome != null) {
       return catalinaHome;
     }
 
     String geronimoServerDir = System.getProperty("org.apache.geronimo.server.dir");
 
-    if (geronimoServerDir != null)
-    {
+    if (geronimoServerDir != null) {
       return geronimoServerDir;
     }
 
     String wlpUserDir = System.getProperty("wlp.user.dir");
 
-    if (wlpUserDir != null)
-    {
+    if (wlpUserDir != null) {
       return wlpUserDir;
     }
 
@@ -76,17 +70,14 @@ public class Debug
    * <code>false</code> otherwise.
    *
    * @return <code>true</code> if the application infrastructure is running in debug mode or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  public static boolean inDebugMode()
-  {
-    if (System.getProperty("digital.inception.debugMode") != null)
-    {
-      try
-      {
+  public static boolean inDebugMode() {
+    if (System.getProperty("digital.inception.debugMode") != null) {
+      try {
         return Boolean.parseBoolean(System.getProperty("digital.inception.debugMode"));
+      } catch (Throwable ignored) {
       }
-      catch (Throwable ignored) {}
     }
 
     return false;

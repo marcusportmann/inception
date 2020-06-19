@@ -18,6 +18,12 @@ package digital.inception.ws.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.Conduit;
@@ -25,24 +31,15 @@ import org.apache.cxf.transport.http.HTTPConduit;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 /**
- * The <code>CXFNoTrustSecurityProxyConfigurator</code> class provides the capability to configure
- * a CXF web service proxy to disable verification of the remote server's certificate when using a
+ * The <code>CXFNoTrustSecurityProxyConfigurator</code> class provides the capability to configure a
+ * CXF web service proxy to disable verification of the remote server's certificate when using a
  * HTTPS connection.
  *
  * @author Marcus Portmann
  */
-public class CXFNoTrustSecurityProxyConfigurator
-{
+public class CXFNoTrustSecurityProxyConfigurator {
+
   /**
    * Configure the CXF web service proxy to disable verification of the remote server's certificate
    * when using a HTTPS connection.
@@ -50,42 +47,35 @@ public class CXFNoTrustSecurityProxyConfigurator
    * @param proxy the web service proxy to configure
    */
   public static void configureProxy(Object proxy)
-    throws Exception
-  {
+      throws Exception {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
-    if (invocationHandler instanceof ClientProxy)
-    {
+    if (invocationHandler instanceof ClientProxy) {
       ClientProxy clientProxy = (ClientProxy) invocationHandler;
 
       Conduit conduit = clientProxy.getClient().getConduit();
 
-      if (conduit instanceof HTTPConduit)
-      {
+      if (conduit instanceof HTTPConduit) {
         HTTPConduit httpConduit = (HTTPConduit) conduit;
 
         TLSClientParameters tlsClientParameters = new TLSClientParameters();
 
         // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
-        {
+        TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
           public void checkClientTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException
-          {
+              throws CertificateException {
             // Skip client verification
           }
 
           public void checkServerTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException
-          {
+              throws CertificateException {
             // Skip server verification
           }
 
-          public X509Certificate[] getAcceptedIssuers()
-          {
+          public X509Certificate[] getAcceptedIssuers() {
             return new X509Certificate[0];
           }
-        } };
+        }};
 
         tlsClientParameters.setTrustManagers(trustAllCerts);
 

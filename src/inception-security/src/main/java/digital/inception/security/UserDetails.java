@@ -18,15 +18,14 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDetails</code> class stores the details for a user.
@@ -34,8 +33,8 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 public class UserDetails
-  implements org.springframework.security.core.userdetails.UserDetails
-{
+    implements org.springframework.security.core.userdetails.UserDetails {
+
   /**
    * The authorities granted to the user.
    */
@@ -59,8 +58,7 @@ public class UserDetails
    *                         of being associated with one or more organizations
    */
   UserDetails(User user, List<String> roleCodes, List<String> functionCodes,
-      List<UUID> organizationIds, List<UUID> userDirectoryIds)
-  {
+      List<UUID> organizationIds, List<UUID> userDirectoryIds) {
     this.user = user;
 
     // Build the list of granted authorities
@@ -85,8 +83,7 @@ public class UserDetails
    * @return the authorities
    */
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities()
-  {
+  public Collection<? extends GrantedAuthority> getAuthorities() {
     return authorities;
   }
 
@@ -96,8 +93,7 @@ public class UserDetails
    * @return the password hash for the user
    */
   @Override
-  public String getPassword()
-  {
+  public String getPassword() {
     return user.getPassword();
   }
 
@@ -106,8 +102,7 @@ public class UserDetails
    *
    * @return the user
    */
-  public User getUser()
-  {
+  public User getUser() {
     return user;
   }
 
@@ -117,8 +112,7 @@ public class UserDetails
    * @return the username
    */
   @Override
-  public String getUsername()
-  {
+  public String getUsername() {
     return user.getUsername();
   }
 
@@ -129,8 +123,7 @@ public class UserDetails
    * otherwise
    */
   @Override
-  public boolean isAccountNonExpired()
-  {
+  public boolean isAccountNonExpired() {
     return (!user.isExpired());
   }
 
@@ -140,8 +133,7 @@ public class UserDetails
    * @return <code>true</code> if the user's account is NOT locked or <code>false</code> otherwise
    */
   @Override
-  public boolean isAccountNonLocked()
-  {
+  public boolean isAccountNonLocked() {
     return (!user.isLocked());
   }
 
@@ -152,8 +144,7 @@ public class UserDetails
    * otherwise
    */
   @Override
-  public boolean isCredentialsNonExpired()
-  {
+  public boolean isCredentialsNonExpired() {
     return (!user.hasPasswordExpired());
   }
 
@@ -163,8 +154,7 @@ public class UserDetails
    * @return <code>true</code> if the user's account is enabled or <code>false</code> otherwise
    */
   @Override
-  public boolean isEnabled()
-  {
+  public boolean isEnabled() {
     return user.isActive();
   }
 }

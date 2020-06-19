@@ -21,10 +21,9 @@ package digital.inception.messaging;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
+import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
 
 /**
  * The <code>MessagePartDownloadRequest</code> class represents a request sent a mobile device to
@@ -32,9 +31,9 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "WeakerAccess" })
-public class MessagePartDownloadRequest
-{
+@SuppressWarnings({"WeakerAccess"})
+public class MessagePartDownloadRequest {
+
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the device the message part
    * download request originated from.
@@ -52,8 +51,7 @@ public class MessagePartDownloadRequest
    *
    * @param document the WBXML document containing the message part download information
    */
-  public MessagePartDownloadRequest(Document document)
-  {
+  public MessagePartDownloadRequest(Document document) {
     Element rootElement = document.getRootElement();
 
     this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
@@ -67,8 +65,7 @@ public class MessagePartDownloadRequest
    *                 the message part download request originated from
    * @param username the username identifying the user whose message parts should be downloaded
    */
-  public MessagePartDownloadRequest(UUID deviceId, String username)
-  {
+  public MessagePartDownloadRequest(UUID deviceId, String username) {
     this.deviceId = deviceId;
     this.username = username;
   }
@@ -82,14 +79,13 @@ public class MessagePartDownloadRequest
    * @return <code>true</code> if the WBXML document contains valid message part download request
    * information or <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartDownloadRequest")
-      && (rootElement.getAttributes().size() == 2)
-      && rootElement.hasAttribute("deviceId")
-      && rootElement.hasAttribute("username");
+        && (rootElement.getAttributes().size() == 2)
+        && rootElement.hasAttribute("deviceId")
+        && rootElement.hasAttribute("username");
   }
 
   /**
@@ -99,19 +95,8 @@ public class MessagePartDownloadRequest
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
    * message part download request originated from
    */
-  public UUID getDeviceId()
-  {
+  public UUID getDeviceId() {
     return deviceId;
-  }
-
-  /**
-   * Returns the username identifying the user whose message parts should be downloaded.
-   *
-   * @return the username identifying the user whose message parts should be downloaded
-   */
-  public String getUsername()
-  {
-    return username;
   }
 
   /**
@@ -121,9 +106,17 @@ public class MessagePartDownloadRequest
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *                 the message part download request originated from
    */
-  public void setDeviceId(UUID deviceId)
-  {
+  public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
+  }
+
+  /**
+   * Returns the username identifying the user whose message parts should be downloaded.
+   *
+   * @return the username identifying the user whose message parts should be downloaded
+   */
+  public String getUsername() {
+    return username;
   }
 
   /**
@@ -131,8 +124,7 @@ public class MessagePartDownloadRequest
    *
    * @param username the username identifying the user whose message parts should be downloaded
    */
-  public void setUsername(String username)
-  {
+  public void setUsername(String username) {
     this.username = username;
   }
 
@@ -142,10 +134,9 @@ public class MessagePartDownloadRequest
    * @return the String representation of the message part download request.
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return String.format("<MessagePartDownloadRequest deviceId=\"%s\" username=\"%s\"/>", deviceId,
-      username);
+        username);
   }
 
   /**
@@ -153,8 +144,7 @@ public class MessagePartDownloadRequest
    *
    * @return the WBXML representation of the message part download request
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("MessagePartDownloadRequest");
 
     rootElement.setAttribute("deviceId", deviceId.toString());

@@ -18,16 +18,20 @@ package digital.inception.configuration.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+
 import digital.inception.configuration.Configuration;
 import digital.inception.configuration.ConfigurationNotFoundException;
 import digital.inception.configuration.ConfigurationServiceException;
 import digital.inception.configuration.IConfigurationService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -35,24 +39,20 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import static org.junit.Assert.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
-
 /**
- * The <code>ConfigurationServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>ConfigurationService</code> class.
+ * The <code>ConfigurationServiceTest</code> class contains the implementation of the JUnit tests
+ * for the <code>ConfigurationService</code> class.
  *
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-public class ConfigurationServiceTest
-{
+@ContextConfiguration(classes = {TestConfiguration.class})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+public class ConfigurationServiceTest {
+
   private static final String TEST_BINARY_KEY = "TestBinaryKey";
   private static final String TEST_BOOLEAN_KEY = "TestBooleanKey";
   private static final String TEST_CONFIGURATION_KEY = "TestConfigurationKey";
@@ -82,17 +82,14 @@ public class ConfigurationServiceTest
    */
   @Test
   public void binaryConfigurationTest()
-    throws ConfigurationServiceException, ConfigurationNotFoundException
-  {
-    if (configurationService.keyExists(TEST_BINARY_KEY))
-    {
+      throws ConfigurationServiceException, ConfigurationNotFoundException {
+    if (configurationService.keyExists(TEST_BINARY_KEY)) {
       fail("Found the Binary configuration key (" + TEST_BINARY_KEY + ") that should not exist");
     }
 
     configurationService.setConfiguration(TEST_BINARY_KEY, TEST_BINARY_VALUE, TEST_DESCRIPTION);
 
-    if (!configurationService.keyExists(TEST_BINARY_KEY))
-    {
+    if (!configurationService.keyExists(TEST_BINARY_KEY)) {
       fail("Failed to confirm that the Binary configuration key (" + TEST_BINARY_KEY + ") exists");
     }
 
@@ -104,8 +101,7 @@ public class ConfigurationServiceTest
     configurationService.setConfiguration(TEST_BINARY_KEY, TEST_BINARY_UPDATED_VALUE,
         TEST_DESCRIPTION + " Updated");
 
-    if (!configurationService.keyExists(TEST_BINARY_KEY))
-    {
+    if (!configurationService.keyExists(TEST_BINARY_KEY)) {
       fail("Failed to confirm that the Binary configuration key (" + TEST_BINARY_KEY + ") exists");
     }
 
@@ -113,13 +109,13 @@ public class ConfigurationServiceTest
 
     assertArrayEquals(
         "The required updated Binary value was not retrieved for the configuration key ("
-        + TEST_BINARY_KEY + ")", TEST_BINARY_UPDATED_VALUE, value);
+            + TEST_BINARY_KEY + ")", TEST_BINARY_UPDATED_VALUE, value);
 
     value = configurationService.getBinary(TEST_BINARY_KEY, new byte[0]);
 
     assertArrayEquals(
         "The required updated Binary value was not retrieved for the configuration key ("
-        + TEST_BINARY_KEY + ")", TEST_BINARY_UPDATED_VALUE, value);
+            + TEST_BINARY_KEY + ")", TEST_BINARY_UPDATED_VALUE, value);
 
   }
 
@@ -128,17 +124,14 @@ public class ConfigurationServiceTest
    */
   @Test
   public void booleanConfigurationTest()
-    throws ConfigurationServiceException, ConfigurationNotFoundException
-  {
-    if (configurationService.keyExists(TEST_BOOLEAN_KEY))
-    {
+      throws ConfigurationServiceException, ConfigurationNotFoundException {
+    if (configurationService.keyExists(TEST_BOOLEAN_KEY)) {
       fail("Found the Boolean configuration key (" + TEST_BOOLEAN_KEY + ") that should not exist");
     }
 
     configurationService.setConfiguration(TEST_BOOLEAN_KEY, TEST_BOOLEAN_VALUE, TEST_DESCRIPTION);
 
-    if (!configurationService.keyExists(TEST_BOOLEAN_KEY))
-    {
+    if (!configurationService.keyExists(TEST_BOOLEAN_KEY)) {
       fail("Failed to confirm that the Boolean configuration key (" + TEST_BOOLEAN_KEY
           + ") exists");
     }
@@ -155,8 +148,7 @@ public class ConfigurationServiceTest
 
     configurationService.setConfiguration(TEST_BOOLEAN_KEY, false, TEST_DESCRIPTION + " Updated");
 
-    if (!configurationService.keyExists(TEST_BOOLEAN_KEY))
-    {
+    if (!configurationService.keyExists(TEST_BOOLEAN_KEY)) {
       fail("Failed to confirm that the Boolean configuration key (" + TEST_BOOLEAN_KEY
           + ") exists");
     }
@@ -172,10 +164,8 @@ public class ConfigurationServiceTest
    */
   @Test
   public void configurationConfigurationTest()
-    throws ConfigurationServiceException, ConfigurationNotFoundException
-  {
-    if (configurationService.keyExists(TEST_CONFIGURATION_KEY))
-    {
+      throws ConfigurationServiceException, ConfigurationNotFoundException {
+    if (configurationService.keyExists(TEST_CONFIGURATION_KEY)) {
       fail("Found the configuration key (" + TEST_BINARY_KEY + ") that should not exist");
     }
 
@@ -199,8 +189,7 @@ public class ConfigurationServiceTest
    */
   @Test
   public void configurationsTest()
-    throws ConfigurationServiceException
-  {
+      throws ConfigurationServiceException {
     List<Configuration> configurations = configurationService.getConfigurations();
   }
 
@@ -209,17 +198,14 @@ public class ConfigurationServiceTest
    */
   @Test
   public void doubleConfigurationTest()
-    throws ConfigurationServiceException, ConfigurationNotFoundException
-  {
-    if (configurationService.keyExists(TEST_DOUBLE_KEY))
-    {
+      throws ConfigurationServiceException, ConfigurationNotFoundException {
+    if (configurationService.keyExists(TEST_DOUBLE_KEY)) {
       fail("Found the Double configuration key (" + TEST_DOUBLE_KEY + ") that should not exist");
     }
 
     configurationService.setConfiguration(TEST_DOUBLE_KEY, TEST_DOUBLE_VALUE, TEST_DESCRIPTION);
 
-    if (!configurationService.keyExists(TEST_DOUBLE_KEY))
-    {
+    if (!configurationService.keyExists(TEST_DOUBLE_KEY)) {
       fail("Failed to confirm that the Double configuration key (" + TEST_DOUBLE_KEY + ") exists");
     }
 
@@ -236,8 +222,7 @@ public class ConfigurationServiceTest
     configurationService.setConfiguration(TEST_DOUBLE_KEY, TEST_DOUBLE_VALUE + 1.1,
         TEST_DESCRIPTION + " Updated");
 
-    if (!configurationService.keyExists(TEST_DOUBLE_KEY))
-    {
+    if (!configurationService.keyExists(TEST_DOUBLE_KEY)) {
       fail("Failed to confirm that the Double configuration key (" + TEST_DOUBLE_KEY + ") exists");
     }
 
@@ -252,12 +237,10 @@ public class ConfigurationServiceTest
    */
   @Test
   public void filteredConfigurationsTest()
-    throws ConfigurationServiceException
-  {
+      throws ConfigurationServiceException {
     configurationService.setConfiguration(TEST_FILTERED_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
 
-    if (!configurationService.keyExists(TEST_FILTERED_KEY))
-    {
+    if (!configurationService.keyExists(TEST_FILTERED_KEY)) {
       fail("Failed to confirm that the configuration key (" + TEST_FILTERED_KEY + ") exists");
     }
 
@@ -276,17 +259,14 @@ public class ConfigurationServiceTest
    */
   @Test
   public void integerConfigurationTest()
-    throws ConfigurationServiceException, ConfigurationNotFoundException
-  {
-    if (configurationService.keyExists(TEST_INTEGER_KEY))
-    {
+      throws ConfigurationServiceException, ConfigurationNotFoundException {
+    if (configurationService.keyExists(TEST_INTEGER_KEY)) {
       fail("Found the Integer configuration key (" + TEST_INTEGER_KEY + ") that should not exist");
     }
 
     configurationService.setConfiguration(TEST_INTEGER_KEY, TEST_INTEGER_VALUE, TEST_DESCRIPTION);
 
-    if (!configurationService.keyExists(TEST_INTEGER_KEY))
-    {
+    if (!configurationService.keyExists(TEST_INTEGER_KEY)) {
       fail("Failed to confirm that the Integer configuration key (" + TEST_INTEGER_KEY
           + ") exists");
     }
@@ -304,8 +284,7 @@ public class ConfigurationServiceTest
     configurationService.setConfiguration(TEST_INTEGER_KEY, TEST_INTEGER_VALUE + 1,
         TEST_DESCRIPTION + " Updated");
 
-    if (!configurationService.keyExists(TEST_INTEGER_KEY))
-    {
+    if (!configurationService.keyExists(TEST_INTEGER_KEY)) {
       fail("Failed to confirm that the Integer configuration key (" + TEST_INTEGER_KEY
           + ") exists");
     }
@@ -321,17 +300,14 @@ public class ConfigurationServiceTest
    */
   @Test
   public void longConfigurationTest()
-    throws ConfigurationServiceException, ConfigurationNotFoundException
-  {
-    if (configurationService.keyExists(TEST_LONG_KEY))
-    {
+      throws ConfigurationServiceException, ConfigurationNotFoundException {
+    if (configurationService.keyExists(TEST_LONG_KEY)) {
       fail("Found the Long configuration key (" + TEST_LONG_KEY + ") that should not exist");
     }
 
     configurationService.setConfiguration(TEST_LONG_KEY, TEST_LONG_VALUE, TEST_DESCRIPTION);
 
-    if (!configurationService.keyExists(TEST_LONG_KEY))
-    {
+    if (!configurationService.keyExists(TEST_LONG_KEY)) {
       fail("Failed to confirm that the Long configuration key (" + TEST_LONG_KEY + ") exists");
     }
 
@@ -348,8 +324,7 @@ public class ConfigurationServiceTest
     configurationService.setConfiguration(TEST_LONG_KEY, TEST_LONG_VALUE + 1, TEST_DESCRIPTION
         + " Updated");
 
-    if (!configurationService.keyExists(TEST_LONG_KEY))
-    {
+    if (!configurationService.keyExists(TEST_LONG_KEY)) {
       fail("Failed to confirm that the Long configuration key (" + TEST_LONG_KEY + ") exists");
     }
 
@@ -364,17 +339,14 @@ public class ConfigurationServiceTest
    */
   @Test
   public void stringConfigurationTest()
-    throws ConfigurationServiceException, ConfigurationNotFoundException
-  {
-    if (configurationService.keyExists(TEST_STRING_KEY))
-    {
+      throws ConfigurationServiceException, ConfigurationNotFoundException {
+    if (configurationService.keyExists(TEST_STRING_KEY)) {
       fail("Found the String configuration key (" + TEST_STRING_KEY + ") that should not exist");
     }
 
     configurationService.setConfiguration(TEST_STRING_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
 
-    if (!configurationService.keyExists(TEST_STRING_KEY))
-    {
+    if (!configurationService.keyExists(TEST_STRING_KEY)) {
       fail("Failed to confirm that the String configuration key (" + TEST_STRING_KEY + ") exists");
     }
 
@@ -386,8 +358,7 @@ public class ConfigurationServiceTest
     configurationService.setConfiguration(TEST_STRING_KEY, TEST_STRING_VALUE + "Updated",
         TEST_DESCRIPTION + " Updated");
 
-    if (!configurationService.keyExists(TEST_STRING_KEY))
-    {
+    if (!configurationService.keyExists(TEST_STRING_KEY)) {
       fail("Failed to confirm that the String configuration key (" + TEST_STRING_KEY + ") exists");
     }
 
@@ -398,23 +369,20 @@ public class ConfigurationServiceTest
 
     configurationService.deleteConfiguration(TEST_STRING_KEY);
 
-    if (configurationService.keyExists(TEST_STRING_KEY))
-    {
+    if (configurationService.keyExists(TEST_STRING_KEY)) {
       fail("Failed to confirm that the String configuration key (" + TEST_STRING_KEY
           + ") does not exist");
     }
 
     value = configurationService.getString(TEST_STRING_KEY, "DEFAULT VALUE");
 
-    if (!value.equals("DEFAULT VALUE"))
-    {
+    if (!value.equals("DEFAULT VALUE")) {
       fail("Failed to retrieve the default value for the String configuration key ("
           + TEST_STRING_KEY + ")");
     }
   }
 
-  private void compareConfiguration(Configuration configuration1, Configuration configuration2)
-  {
+  private void compareConfiguration(Configuration configuration1, Configuration configuration2) {
     assertEquals("The key values for the two codes do not match", configuration1.getKey(),
         configuration2.getKey());
     assertEquals("The value values for the two codes do not match", configuration1.getValue(),

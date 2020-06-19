@@ -18,14 +18,12 @@ package digital.inception.core.xml;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.xml.sax.SAXParseException;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
 
 /**
  * The <code>XmlParserException</code> exception is thrown to indicate an error condition when
@@ -34,8 +32,8 @@ import java.util.Date;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class XmlParserException extends RuntimeException
-{
+public class XmlParserException extends RuntimeException {
+
   private static final String NO_ERROR_CODE = "NONE";
   private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
   private static final long serialVersionUID = 1000000;
@@ -45,8 +43,7 @@ public class XmlParserException extends RuntimeException
   /**
    * Constructs a new <code>XmlParserException</code> with <code>null</code> as its message.
    */
-  public XmlParserException()
-  {
+  public XmlParserException() {
     super();
     this.when = new Date();
   }
@@ -57,8 +54,7 @@ public class XmlParserException extends RuntimeException
    *
    * @param cause the <code>SAXParseException</code> giving the cause of the exception
    */
-  public XmlParserException(SAXParseException cause)
-  {
+  public XmlParserException(SAXParseException cause) {
     super(cause.getMessage() + " at line (" + cause.getLineNumber() + ") and column ("
         + (cause.getColumnNumber() + ") with SystemID (" + ((cause.getSystemId() != null)
         ? cause.getSystemId()
@@ -73,22 +69,20 @@ public class XmlParserException extends RuntimeException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public XmlParserException(String message)
-  {
+  public XmlParserException(String message) {
     super(message);
     this.when = new Date();
   }
 
   /**
-   * Constructs a new <code>XmlParserException</code> with the specified cause and a message
-   * of <code>(cause==null ? null : cause.toString())</code> (which typically contains the class
-   * and message of cause).
+   * Constructs a new <code>XmlParserException</code> with the specified cause and a message of
+   * <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
+   * message of cause).
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public XmlParserException(Throwable cause)
-  {
+  public XmlParserException(Throwable cause) {
     super(cause);
     this.when = new Date();
   }
@@ -99,8 +93,7 @@ public class XmlParserException extends RuntimeException
    * @param code    the error code identifying the error
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public XmlParserException(String code, String message)
-  {
+  public XmlParserException(String code, String message) {
     super(message);
     this.code = code;
     this.when = new Date();
@@ -110,11 +103,10 @@ public class XmlParserException extends RuntimeException
    * Constructs a new <code>XmlParserException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public XmlParserException(String message, Throwable cause)
-  {
+  public XmlParserException(String message, Throwable cause) {
     super(message, cause);
     this.when = new Date();
   }
@@ -124,11 +116,10 @@ public class XmlParserException extends RuntimeException
    *
    * @param code    the error code identifying the error
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public XmlParserException(String code, String message, Throwable cause)
-  {
+  public XmlParserException(String code, String message, Throwable cause) {
     super(message, cause);
     this.code = code;
     this.when = new Date();
@@ -139,8 +130,7 @@ public class XmlParserException extends RuntimeException
    *
    * @return the error code identifying the error or NONE if no error code was specified
    */
-  public String getCode()
-  {
+  public String getCode() {
     return (code == null)
         ? NO_ERROR_CODE
         : code;
@@ -151,8 +141,7 @@ public class XmlParserException extends RuntimeException
    *
    * @return the date and time the exception occurred
    */
-  public Date getWhen()
-  {
+  public Date getWhen() {
     return when;
   }
 
@@ -161,8 +150,7 @@ public class XmlParserException extends RuntimeException
    *
    * @return the date and time the exception occurred as a String
    */
-  public String getWhenAsString()
-  {
+  public String getWhenAsString() {
     DateFormat dateFormat = new SimpleDateFormat(WHEN_FORMAT);
 
     return dateFormat.format(when);

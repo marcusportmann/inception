@@ -18,31 +18,28 @@ package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.io.ByteArrayInputStream;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import javax.sql.DataSource;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.query.JRXPathQueryExecuterFactory;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import org.w3c.dom.Document;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayInputStream;
-
-import java.sql.Connection;
-
-import java.util.*;
-
-import javax.sql.DataSource;
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.
@@ -52,8 +49,8 @@ import javax.sql.DataSource;
 @Service
 @SuppressWarnings("unused")
 public class ReportingService
-  implements IReportingService
-{
+    implements IReportingService {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
 
@@ -85,8 +82,7 @@ public class ReportingService
    */
   public ReportingService(@Qualifier("applicationDataSource") DataSource dataSource,
       ReportDefinitionRepository reportDefinitionRepository,
-      ReportDefinitionSummaryRepository reportDefinitionSummaryRepository)
-  {
+      ReportDefinitionSummaryRepository reportDefinitionSummaryRepository) {
     this.dataSource = dataSource;
     this.reportDefinitionRepository = reportDefinitionRepository;
     this.reportDefinitionSummaryRepository = reportDefinitionSummaryRepository;
@@ -101,23 +97,16 @@ public class ReportingService
   @Override
   @Transactional
   public void createReportDefinition(ReportDefinition reportDefinition)
-    throws DuplicateReportDefinitionException, ReportingServiceException
-  {
-    try
-    {
-      if (reportDefinitionRepository.existsById(reportDefinition.getId()))
-      {
+      throws DuplicateReportDefinitionException, ReportingServiceException {
+    try {
+      if (reportDefinitionRepository.existsById(reportDefinition.getId())) {
         throw new DuplicateReportDefinitionException(reportDefinition.getId());
       }
 
       reportDefinitionRepository.saveAndFlush(reportDefinition);
-    }
-    catch (DuplicateReportDefinitionException e)
-    {
+    } catch (DuplicateReportDefinitionException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to create the report definition ("
           + reportDefinition.getId() + ")", e);
     }
@@ -133,21 +122,15 @@ public class ReportingService
    */
   @Override
   public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
-    throws ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    try (Connection connection = dataSource.getConnection())
-    {
+      throws ReportDefinitionNotFoundException, ReportingServiceException {
+    try (Connection connection = dataSource.getConnection()) {
       return createReportPDF(reportDefinitionId, parameters, connection);
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to create the PDF for the report using the report definition ("
-          + reportDefinitionId + ")", e);
+              + reportDefinitionId + ")", e);
     }
   }
 
@@ -163,27 +146,22 @@ public class ReportingService
   @Override
   public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
       Connection connection)
-    throws ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    try
-    {
+      throws ReportDefinitionNotFoundException, ReportingServiceException {
+    try {
       Optional<ReportDefinition> reportDefinitionOptional = reportDefinitionRepository.findById(
           reportDefinitionId);
 
-      if (reportDefinitionOptional.isEmpty())
-      {
+      if (reportDefinitionOptional.isEmpty()) {
         throw new ReportDefinitionNotFoundException(reportDefinitionId);
       }
 
       Map<String, Object> localParameters = new HashMap<>();
 
-      if (StringUtils.isEmpty(getLocalReportFolderPath()))
-      {
+      if (StringUtils.isEmpty(getLocalReportFolderPath())) {
         localParameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
       }
 
-      for (String name : parameters.keySet())
-      {
+      for (String name : parameters.keySet()) {
         localParameters.put(name, parameters.get(name));
       }
 
@@ -191,16 +169,12 @@ public class ReportingService
           reportDefinitionOptional.get().getTemplate()), localParameters, connection);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to create the PDF for the report using the report definition ("
-          + reportDefinitionId + ")", e);
+              + reportDefinitionId + ")", e);
     }
   }
 
@@ -216,10 +190,8 @@ public class ReportingService
   @Override
   public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
       Document document)
-    throws ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    try
-    {
+      throws ReportDefinitionNotFoundException, ReportingServiceException {
+    try {
       ReportDefinition reportDefinition = getReportDefinition(reportDefinitionId);
 
       Map<String, Object> localParameters = new HashMap<>();
@@ -230,13 +202,11 @@ public class ReportingService
       localParameters.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
       localParameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 
-      if (StringUtils.isEmpty(getLocalReportFolderPath()))
-      {
+      if (StringUtils.isEmpty(getLocalReportFolderPath())) {
         localParameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
       }
 
-      for (String name : parameters.keySet())
-      {
+      for (String name : parameters.keySet()) {
         localParameters.put(name, parameters.get(name));
       }
 
@@ -244,16 +214,12 @@ public class ReportingService
           reportDefinition.getTemplate()), localParameters);
 
       return JasperExportManager.exportReportToPdf(jasperPrint);
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to create the PDF for the report using the report definintion ("
-          + reportDefinitionId + ")", e);
+              + reportDefinitionId + ")", e);
     }
   }
 
@@ -265,23 +231,16 @@ public class ReportingService
   @Override
   @Transactional
   public void deleteReportDefinition(String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    try
-    {
-      if (!reportDefinitionRepository.existsById(reportDefinitionId))
-      {
+      throws ReportDefinitionNotFoundException, ReportingServiceException {
+    try {
+      if (!reportDefinitionRepository.existsById(reportDefinitionId)) {
         throw new ReportDefinitionNotFoundException(reportDefinitionId);
       }
 
       reportDefinitionRepository.deleteById(reportDefinitionId);
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to delete the report definition ("
           + reportDefinitionId + ")", e);
     }
@@ -292,9 +251,18 @@ public class ReportingService
    *
    * @return the real path to the folder where the local Jasper reports are stored
    */
-  public String getLocalReportFolderPath()
-  {
+  public String getLocalReportFolderPath() {
     return localReportFolderPath;
+  }
+
+  /**
+   * Set the real path to the folder where the local Jasper reports are stored.
+   *
+   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
+   *                              stored
+   */
+  public void setLocalReportFolderPath(String localReportFolderPath) {
+    this.localReportFolderPath = localReportFolderPath;
   }
 
   /**
@@ -304,14 +272,10 @@ public class ReportingService
    */
   @Override
   public long getNumberOfReportDefinitions()
-    throws ReportingServiceException
-  {
-    try
-    {
+      throws ReportingServiceException {
+    try {
       return reportDefinitionRepository.count();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to retrieve the number of report definitions", e);
     }
   }
@@ -325,28 +289,19 @@ public class ReportingService
    */
   @Override
   public ReportDefinition getReportDefinition(String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    try
-    {
+      throws ReportDefinitionNotFoundException, ReportingServiceException {
+    try {
       Optional<ReportDefinition> reportDefinitionOptional = reportDefinitionRepository.findById(
           reportDefinitionId);
 
-      if (reportDefinitionOptional.isPresent())
-      {
+      if (reportDefinitionOptional.isPresent()) {
         return reportDefinitionOptional.get();
-      }
-      else
-      {
+      } else {
         throw new ReportDefinitionNotFoundException(reportDefinitionId);
       }
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to retrieve the report definition ("
           + reportDefinitionId + ")", e);
     }
@@ -361,25 +316,18 @@ public class ReportingService
    */
   @Override
   public String getReportDefinitionName(String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    try
-    {
+      throws ReportDefinitionNotFoundException, ReportingServiceException {
+    try {
       Optional<String> nameOptional = reportDefinitionRepository.getNameById(reportDefinitionId);
 
-      if (nameOptional.isPresent())
-      {
+      if (nameOptional.isPresent()) {
         return nameOptional.get();
       }
 
       throw new ReportDefinitionNotFoundException(reportDefinitionId);
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to retrieve the name for the report definition ("
           + reportDefinitionId + ")", e);
     }
@@ -393,14 +341,10 @@ public class ReportingService
    */
   @Override
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
-    throws ReportingServiceException
-  {
-    try
-    {
+      throws ReportingServiceException {
+    try {
       return reportDefinitionSummaryRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to retrieve the summaries for the report definitions", e);
     }
@@ -415,28 +359,19 @@ public class ReportingService
    */
   @Override
   public ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    try
-    {
+      throws ReportDefinitionNotFoundException, ReportingServiceException {
+    try {
       Optional<ReportDefinitionSummary> reportDefinitionSummaryOptional =
           reportDefinitionSummaryRepository.findById(reportDefinitionId);
 
-      if (reportDefinitionSummaryOptional.isPresent())
-      {
+      if (reportDefinitionSummaryOptional.isPresent()) {
         return reportDefinitionSummaryOptional.get();
-      }
-      else
-      {
+      } else {
         throw new ReportDefinitionNotFoundException(reportDefinitionId);
       }
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to retrieve the summary for the report definition (" + reportDefinitionId + ")",
           e);
@@ -450,14 +385,10 @@ public class ReportingService
    */
   @Override
   public List<ReportDefinition> getReportDefinitions()
-    throws ReportingServiceException
-  {
-    try
-    {
+      throws ReportingServiceException {
+    try {
       return reportDefinitionRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to retrieve the report definitions", e);
     }
   }
@@ -471,28 +402,13 @@ public class ReportingService
    */
   @Override
   public boolean reportDefinitionExists(String reportDefinitionId)
-    throws ReportingServiceException
-  {
-    try
-    {
+      throws ReportingServiceException {
+    try {
       return reportDefinitionRepository.existsById(reportDefinitionId);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to check whether the report definition ("
           + reportDefinitionId + ") exists", e);
     }
-  }
-
-  /**
-   * Set the real path to the folder where the local Jasper reports are stored.
-   *
-   * @param localReportFolderPath the real path to the folder where the local Jasper reports are
-   *                              stored
-   */
-  public void setLocalReportFolderPath(String localReportFolderPath)
-  {
-    this.localReportFolderPath = localReportFolderPath;
   }
 
   /**
@@ -504,23 +420,16 @@ public class ReportingService
   @Override
   @Transactional
   public void updateReportDefinition(ReportDefinition reportDefinition)
-    throws ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    try
-    {
-      if (!reportDefinitionRepository.existsById(reportDefinition.getId()))
-      {
+      throws ReportDefinitionNotFoundException, ReportingServiceException {
+    try {
+      if (!reportDefinitionRepository.existsById(reportDefinition.getId())) {
         throw new ReportDefinitionNotFoundException(reportDefinition.getId());
       }
 
       reportDefinitionRepository.saveAndFlush(reportDefinition);
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to update the report definition ("
           + reportDefinition.getId() + ")", e);
     }

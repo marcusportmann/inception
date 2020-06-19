@@ -20,14 +20,12 @@ package digital.inception.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GroupMemberType</code> enumeration defines the possible group member types.
@@ -37,8 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "GroupMemberType")
 @XmlEnum
 @XmlType(name = "GroupMemberType", namespace = "http://security.inception.digital")
-public enum GroupMemberType
-{
+public enum GroupMemberType {
   @XmlEnumValue("User")
   USER(0, "User"),
   @XmlEnumValue("Group")
@@ -47,8 +44,7 @@ public enum GroupMemberType
   private int code;
   private String description;
 
-  GroupMemberType(int code, String description)
-  {
+  GroupMemberType(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -61,10 +57,8 @@ public enum GroupMemberType
    * @return the group member type given by the specified code value
    */
   @JsonCreator
-  public static GroupMemberType fromCode(int code)
-  {
-    switch (code)
-    {
+  public static GroupMemberType fromCode(int code) {
+    switch (code) {
       case 0:
         return GroupMemberType.USER;
 
@@ -82,8 +76,7 @@ public enum GroupMemberType
    * @return the numeric code value identifying for the group member type
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -92,8 +85,7 @@ public enum GroupMemberType
    *
    * @return the description for the group member type
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 }

@@ -26,10 +26,10 @@ import java.io.Serializable;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class JobParameterId
-  implements Serializable
-{
+    implements Serializable {
+
   /**
    * The job the job parameter is associated with.
    */
@@ -43,7 +43,8 @@ public class JobParameterId
   /**
    * Constructs a new <code>JobParameterId</code>.
    */
-  public JobParameterId() {}
+  public JobParameterId() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -51,23 +52,19 @@ public class JobParameterId
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -87,8 +84,7 @@ public class JobParameterId
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (((job == null) || (job.getId() == null))
         ? 0
         : job.getId().hashCode()) + ((name == null)

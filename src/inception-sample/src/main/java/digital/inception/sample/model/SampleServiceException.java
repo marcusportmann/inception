@@ -19,15 +19,13 @@ package digital.inception.sample.model;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * The <code>SampleServiceException</code> exception is thrown to indicate an error condition when
@@ -42,9 +40,9 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "SampleServiceException", targetNamespace = "http://sample.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class SampleServiceException extends ServiceException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class SampleServiceException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -52,8 +50,7 @@ public class SampleServiceException extends ServiceException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public SampleServiceException(String message)
-  {
+  public SampleServiceException(String message) {
     super("SampleServiceError", message);
   }
 
@@ -61,11 +58,10 @@ public class SampleServiceException extends ServiceException
    * Constructs a new <code>SampleServiceException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public SampleServiceException(String message, Throwable cause)
-  {
+  public SampleServiceException(String message, Throwable cause) {
     super("SampleServiceError", message, cause);
   }
 }

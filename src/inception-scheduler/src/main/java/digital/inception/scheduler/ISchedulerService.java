@@ -27,15 +27,15 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface ISchedulerService
-{
+public interface ISchedulerService {
+
   /**
    * Create the job.
    *
    * @param job the <code>Job</code> instance containing the information for the job
    */
   void createJob(Job job)
-    throws DuplicateJobException, SchedulerServiceException;
+      throws DuplicateJobException, SchedulerServiceException;
 
   /**
    * Delete the job
@@ -43,7 +43,7 @@ public interface ISchedulerService
    * @param jobId the ID used to uniquely identify the job
    */
   void deleteJob(String jobId)
-    throws JobNotFoundException, SchedulerServiceException;
+      throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Execute the job.
@@ -51,7 +51,7 @@ public interface ISchedulerService
    * @param job the job
    */
   void executeJob(Job job)
-    throws SchedulerServiceException;
+      throws SchedulerServiceException;
 
   /**
    * Retrieve the filtered jobs.
@@ -61,7 +61,7 @@ public interface ISchedulerService
    * @return the jobs
    */
   List<Job> getFilteredJobs(String filter)
-    throws SchedulerServiceException;
+      throws SchedulerServiceException;
 
   /**
    * Retrieve the job.
@@ -71,7 +71,7 @@ public interface ISchedulerService
    * @return the job
    */
   Job getJob(String jobId)
-    throws JobNotFoundException, SchedulerServiceException;
+      throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Retrieve the name of the job.
@@ -81,7 +81,7 @@ public interface ISchedulerService
    * @return the name of the job
    */
   String getJobName(String jobId)
-    throws JobNotFoundException, SchedulerServiceException;
+      throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Retrieve the jobs.
@@ -89,7 +89,7 @@ public interface ISchedulerService
    * @return the jobs
    */
   List<Job> getJobs()
-    throws SchedulerServiceException;
+      throws SchedulerServiceException;
 
   /**
    * Returns the maximum number of times execution will be attempted for a job.
@@ -104,10 +104,10 @@ public interface ISchedulerService
    * The job will be locked to prevent duplicate processing.
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
-   *         currently scheduled for execution
+   * currently scheduled for execution
    */
   Job getNextJobScheduledForExecution()
-    throws SchedulerServiceException;
+      throws SchedulerServiceException;
 
   /**
    * Retrieve the number of jobs.
@@ -115,7 +115,7 @@ public interface ISchedulerService
    * @return the number of jobs
    */
   long getNumberOfJobs()
-    throws SchedulerServiceException;
+      throws SchedulerServiceException;
 
   /**
    * Retrieve the unscheduled jobs.
@@ -123,7 +123,7 @@ public interface ISchedulerService
    * @return the unscheduled jobs
    */
   List<Job> getUnscheduledJobs()
-    throws SchedulerServiceException;
+      throws SchedulerServiceException;
 
   /**
    * Reschedule the job for execution.
@@ -133,7 +133,7 @@ public interface ISchedulerService
    *                          next execution time
    */
   void rescheduleJob(String jobId, String schedulingPattern)
-    throws JobNotFoundException, SchedulerServiceException;
+      throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Reset the job locks.
@@ -142,16 +142,16 @@ public interface ISchedulerService
    * @param newStatus the new status for the jobs that have been unlocked
    */
   void resetJobLocks(JobStatus status, JobStatus newStatus)
-    throws SchedulerServiceException;
+      throws SchedulerServiceException;
 
   /**
    * Schedule the next unscheduled job for execution.
    *
    * @return <code>true</code> if a job was successfully scheduled for execution or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   boolean scheduleNextUnscheduledJobForExecution()
-    throws SchedulerServiceException;
+      throws SchedulerServiceException;
 
   /**
    * Set the status for the job.
@@ -160,7 +160,7 @@ public interface ISchedulerService
    * @param status the new status for the job
    */
   void setJobStatus(String jobId, JobStatus status)
-    throws JobNotFoundException, SchedulerServiceException;
+      throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Unlock a locked job.
@@ -169,7 +169,7 @@ public interface ISchedulerService
    * @param status the new status for the unlocked job
    */
   void unlockJob(String jobId, JobStatus status)
-    throws JobNotFoundException, SchedulerServiceException;
+      throws JobNotFoundException, SchedulerServiceException;
 
   /**
    * Update the job.
@@ -177,5 +177,5 @@ public interface ISchedulerService
    * @param job the <code>Job</code> instance containing the updated information for the job
    */
   void updateJob(Job job)
-    throws JobNotFoundException, SchedulerServiceException;
+      throws JobNotFoundException, SchedulerServiceException;
 }

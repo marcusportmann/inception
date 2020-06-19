@@ -25,8 +25,8 @@ package digital.inception.messaging.handler;
  * @author Marcus Portmann
  */
 @SuppressWarnings("WeakerAccess")
-public class MessageHandlerException extends Exception
-{
+public class MessageHandlerException extends Exception {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -35,8 +35,7 @@ public class MessageHandlerException extends Exception
    * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet
    *                ()</code> method.
    */
-  public MessageHandlerException(String message)
-  {
+  public MessageHandlerException(String message) {
     super(message);
   }
 
@@ -45,11 +44,10 @@ public class MessageHandlerException extends Exception
    *
    * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet
    *                ()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public MessageHandlerException(String message, Throwable cause)
-  {
+  public MessageHandlerException(String message, Throwable cause) {
     super(message, cause);
   }
 }

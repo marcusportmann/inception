@@ -20,7 +20,6 @@ package digital.inception.core.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -29,24 +28,21 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Marcus Portmann
  */
-public final class ResourceUtil
-{
+public final class ResourceUtil {
+
   /**
-   * Retrieves the resource with the specified path on the classpath using the context class loader.
+   * Retrieves the resource with the specified path on the classpath using the context class
+   * loader.
    *
    * @param path the path to the resource on the classpath
    *
    * @return the resource with the specified path on the classpath using the context class loader
    */
-  public static byte[] getClasspathResource(String path)
-  {
-    try
-    {
+  public static byte[] getClasspathResource(String path) {
+    try {
       try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(
-          path))
-      {
-        if (is == null)
-        {
+          path)) {
+        if (is == null) {
           throw new ResourceException("Failed to read the classpath resource (" + path
               + "): The resource could not be found");
         }
@@ -56,33 +52,28 @@ public final class ResourceUtil
         byte[] buffer = new byte[4096];
         int numberOfBytesRead;
 
-        while ((numberOfBytesRead = is.read(buffer)) != -1)
-        {
+        while ((numberOfBytesRead = is.read(buffer)) != -1) {
           baos.write(buffer, 0, numberOfBytesRead);
         }
 
         return baos.toByteArray();
       }
-    }
-    catch (ResourceException e)
-    {
+    } catch (ResourceException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ResourceException("Failed to read the classpath resource (" + path + ")", e);
     }
   }
 
   /**
-   * Retrieves the resource with the specified path on the classpath using the context class loader.
+   * Retrieves the resource with the specified path on the classpath using the context class
+   * loader.
    *
    * @param path the path to the resource on the classpath
    *
    * @return the resource with the specified path on the classpath using the context class loader
    */
-  public static String getStringClasspathResource(String path)
-  {
+  public static String getStringClasspathResource(String path) {
     byte[] data = getClasspathResource(path);
 
     return new String(data, StandardCharsets.UTF_8);

@@ -19,7 +19,6 @@ package digital.inception.security;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
 
 /**
@@ -30,8 +29,8 @@ import java.time.LocalDateTime;
  */
 @SuppressWarnings("unused")
 public class PasswordResetId
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -47,7 +46,8 @@ public class PasswordResetId
   /**
    * Constructs a new <code>PasswordResetId</code>.
    */
-  public PasswordResetId() {}
+  public PasswordResetId() {
+  }
 
   /**
    * Constructs a new <code>CodeId</code>.
@@ -55,8 +55,7 @@ public class PasswordResetId
    * @param username  the username for the user associated with the password reset
    * @param requested the date and time the password reset was requested
    */
-  public PasswordResetId(String username, LocalDateTime requested)
-  {
+  public PasswordResetId(String username, LocalDateTime requested) {
     this.username = username;
     this.requested = requested;
   }
@@ -67,23 +66,19 @@ public class PasswordResetId
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -97,9 +92,17 @@ public class PasswordResetId
    *
    * @return the date and time the password reset was requested
    */
-  public LocalDateTime getRequested()
-  {
+  public LocalDateTime getRequested() {
     return requested;
+  }
+
+  /**
+   * Set the date and time the password reset was requested.
+   *
+   * @param requested the date and time the password reset was requested
+   */
+  public void setRequested(LocalDateTime requested) {
+    this.requested = requested;
   }
 
   /**
@@ -107,9 +110,17 @@ public class PasswordResetId
    *
    * @return the username for the user associated with the password reset
    */
-  public String getUsername()
-  {
+  public String getUsername() {
     return username;
+  }
+
+  /**
+   * Set the username for the user associated with the password reset.
+   *
+   * @param username the username for the user associated with the password reset
+   */
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   /**
@@ -118,32 +129,11 @@ public class PasswordResetId
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return ((username == null)
         ? 0
         : username.hashCode()) + ((requested == null)
         ? 0
         : requested.hashCode());
-  }
-
-  /**
-   * Set the date and time the password reset was requested.
-   *
-   * @param requested the date and time the password reset was requested
-   */
-  public void setRequested(LocalDateTime requested)
-  {
-    this.requested = requested;
-  }
-
-  /**
-   * Set the username for the user associated with the password reset.
-   *
-   * @param username the username for the user associated with the password reset
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
   }
 }

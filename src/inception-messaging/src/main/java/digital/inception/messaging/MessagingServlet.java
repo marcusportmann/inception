@@ -21,20 +21,10 @@ package digital.inception.messaging;
 import digital.inception.Debug;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
@@ -42,6 +32,11 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageServlet</code> servlet.
@@ -49,8 +44,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author Marcus Portmann
  */
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
-public class MessagingServlet extends HttpServlet
-{
+public class MessagingServlet extends HttpServlet {
+
   /**
    * The HTTP content-type used when receiving and sending WBXML.
    */
@@ -72,7 +67,8 @@ public class MessagingServlet extends HttpServlet
   /**
    * Constructs a new <code>MessagingServlet</code>.
    */
-  public MessagingServlet() {}
+  public MessagingServlet() {
+  }
 
   /**
    * Initialize the servlet.
@@ -81,8 +77,7 @@ public class MessagingServlet extends HttpServlet
    */
   @Override
   public void init(ServletConfig config)
-    throws ServletException
-  {
+      throws ServletException {
     super.init(config);
 
     initMessagingServlet();
@@ -90,48 +85,39 @@ public class MessagingServlet extends HttpServlet
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException
-  {
+      throws IOException {
     doPost(request, response);
   }
 
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException
-  {
-    if (!isInitialized)
-    {
+      throws IOException {
+    if (!isInitialized) {
       initMessagingServlet();
     }
 
     // Check the format of the request data
     if ((request.getContentType() == null)
-        || (!request.getContentType().equals(WBXML_CONTENT_TYPE)))
-    {
+        || (!request.getContentType().equals(WBXML_CONTENT_TYPE))) {
       response.sendError(500, String.format("Invalid content type (%s) expecting (%s)",
           request.getContentType(), WBXML_CONTENT_TYPE));
 
       return;
     }
 
-    try
-    {
+    try {
       // Retrieve the WBXML document from the HTTP servlet request
       Document document = readRequestDocument(request);
 
-      if (document == null)
-      {
+      if (document == null) {
         return;
       }
 
-      switch (document.getRootElement().getName())
-      {
+      switch (document.getRootElement().getName()) {
         // We are processing a Message...
         case "Message":
-          if (!processMessage(document, response))
-          {
-            if (Debug.inDebugMode())
-            {
+          if (!processMessage(document, response)) {
+            if (Debug.inDebugMode()) {
               logger.debug("Failed to process the message: " + document.toString());
             }
           }
@@ -140,10 +126,8 @@ public class MessagingServlet extends HttpServlet
 
         // We are processing a MessagePart...
         case "MessagePart":
-          if (!processMessagePart(document, response))
-          {
-            if (Debug.inDebugMode())
-            {
+          if (!processMessagePart(document, response)) {
+            if (Debug.inDebugMode()) {
               logger.debug("Failed to process the message part: " + document.toString());
             }
           }
@@ -152,10 +136,8 @@ public class MessagingServlet extends HttpServlet
 
         // We are processing a request to download messages queued for a device
         case "MessageDownloadRequest":
-          if (!processMessageDownloadRequest(document, response))
-          {
-            if (Debug.inDebugMode())
-            {
+          if (!processMessageDownloadRequest(document, response)) {
+            if (Debug.inDebugMode()) {
               logger.debug("Failed to process the message download request: "
                   + document.toString());
             }
@@ -165,10 +147,8 @@ public class MessagingServlet extends HttpServlet
 
         // We are processing an acknowledgement that a message has been downloaded successfully
         case "MessageReceivedRequest":
-          if (!processMessageReceivedRequest(document, response))
-          {
-            if (Debug.inDebugMode())
-            {
+          if (!processMessageReceivedRequest(document, response)) {
+            if (Debug.inDebugMode()) {
               logger.debug("Failed to process the message received request: "
                   + document.toString());
             }
@@ -178,10 +158,8 @@ public class MessagingServlet extends HttpServlet
 
         // We are processing a request to download message parts queued for a device
         case "MessagePartDownloadRequest":
-          if (!processMessagePartDownloadRequest(document, response))
-          {
-            if (Debug.inDebugMode())
-            {
+          if (!processMessagePartDownloadRequest(document, response)) {
+            if (Debug.inDebugMode()) {
               logger.debug("Failed to process the message part download request: "
                   + document.toString());
             }
@@ -191,10 +169,8 @@ public class MessagingServlet extends HttpServlet
 
         // We are processing an acknowledgement that a message part has been downloaded successfully
         case "MessagePartReceivedRequest":
-          if (!processMessagePartReceivedRequest(document, response))
-          {
-            if (Debug.inDebugMode())
-            {
+          if (!processMessagePartReceivedRequest(document, response)) {
+            if (Debug.inDebugMode()) {
               logger.debug("Failed to process the message part received request: "
                   + document.toString());
             }
@@ -205,27 +181,22 @@ public class MessagingServlet extends HttpServlet
         default:
           throw new ServletException(String.format(
               "Failed to process the unrecognised WBXML document with the root element (%s) read "
-              + "from the HTTP servlet request", document.getRootElement().getName()));
+                  + "from the HTTP servlet request", document.getRootElement().getName()));
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error("Failed to process the HTTP request", e);
 
       writeErrorResponse(e.getMessage(), e, response);
     }
   }
 
-  private synchronized void initMessagingServlet()
-  {
-    if (!isInitialized)
-    {
+  private synchronized void initMessagingServlet() {
+    if (!isInitialized) {
       /*
        * If the Messaging Service has not been injected e.g. because we are invoking the Messaging
        * Servlet as part of a unit test then stop here.
        */
-      if (messagingService == null)
-      {
+      if (messagingService == null) {
         return;
       }
 
@@ -233,15 +204,12 @@ public class MessagingServlet extends HttpServlet
        * Reset the locks for any messages that were locked for downloading by a remote user-device
        * combination but which were not successfully downloaded.
        */
-      try
-      {
+      try {
         logger.info("Resetting the message locks for the messages being downloaded");
 
         messagingService.resetMessageLocks(MessageStatus.DOWNLOADING, MessageStatus
             .QUEUED_FOR_DOWNLOAD);
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to reset the message locks for the messages being downloaded", e);
       }
 
@@ -249,15 +217,12 @@ public class MessagingServlet extends HttpServlet
        * Reset the locks for the message parts that were locked for assembly but which were not
        * successfully assembled.
        */
-      try
-      {
+      try {
         logger.info("Resetting the message part locks for the message parts being assembled");
 
         messagingService.resetMessagePartLocks(MessagePartStatus.ASSEMBLING, MessagePartStatus
             .QUEUED_FOR_ASSEMBLY);
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         logger.error(
             "Failed to reset the message part locks for the message parts being assembled", e);
       }
@@ -267,11 +232,9 @@ public class MessagingServlet extends HttpServlet
   }
 
   private boolean processMessage(Document document, HttpServletResponse response)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     // Is the WBXML document valid
-    if (!Message.isValidWBXML(document))
-    {
+    if (!Message.isValidWBXML(document)) {
       logger.warn("Failed to process the invalid message WBXML document: " + document.toString());
 
       MessageResult result = new MessageResult(MessageResult.ERROR_INVALID_REQUEST,
@@ -286,23 +249,21 @@ public class MessagingServlet extends HttpServlet
     Message requestMessage = new Message(document);
 
     // Check whether we can process the message
-    if (!messagingService.canProcessMessage(requestMessage))
-    {
+    if (!messagingService.canProcessMessage(requestMessage)) {
       logger.warn(String.format(
           "Failed to process the unrecognised message (%s) from the user (%s) and the device (%s)",
           requestMessage.getId(), requestMessage.getUsername(), requestMessage.getDeviceId()));
 
       MessageResult messageResult = new MessageResult(MessageResult.ERROR_UNRECOGNISED_TYPE,
           String.format("Failed to process the message (%s) with the unrecognised type (%s)",
-          requestMessage.getId(), requestMessage.getTypeId()));
+              requestMessage.getId(), requestMessage.getTypeId()));
 
       writeResponseDocument(messageResult.toWBXML(), response);
 
       return false;
     }
 
-    if (logger.isDebugEnabled())
-    {
+    if (logger.isDebugEnabled()) {
       logger.debug(String.format(
           "Processing the message (%s) with type (%s) from the user (%s) and the device (%s)",
           requestMessage.getId(), requestMessage.getTypeId(), requestMessage.getUsername(),
@@ -315,40 +276,34 @@ public class MessagingServlet extends HttpServlet
      * Process the message synchronously if required, otherwise queue it for asynchronous
      * processing.
      */
-    if (messagingService.isSynchronousMessage(requestMessage))
-    {
+    if (messagingService.isSynchronousMessage(requestMessage)) {
       // Decrypt the message data if required
       boolean isRequestMessageEncrypted = requestMessage.isEncrypted();
 
-      if (requestMessage.isEncrypted())
-      {
-        if (!messagingService.decryptMessage(requestMessage))
-        {
+      if (requestMessage.isEncrypted()) {
+        if (!messagingService.decryptMessage(requestMessage)) {
           logger.warn(String.format(
               "Failed to decrypt the message (%s) from the user (%s) and device (%s)",
               requestMessage.getId(), requestMessage.getUsername(), requestMessage.getDeviceId()));
 
           MessageResult messageResult = new MessageResult(MessageResult.ERROR_DECRYPTION_FAILED,
               String.format("Failed to decrypt and process the message (%s)",
-              requestMessage.getId()));
+                  requestMessage.getId()));
 
           writeResponseDocument(messageResult.toWBXML(), response);
 
           return false;
         }
-      }
-      else
-      {
-        if (messagingService.isSecureMessage(requestMessage))
-        {
+      } else {
+        if (messagingService.isSecureMessage(requestMessage)) {
           logger.warn(String.format(
               "Failed to process the message (%s) from the user (%s) and device (%s) that should "
-              + "be processed securely but is not encrypted", requestMessage.getId(),
+                  + "be processed securely but is not encrypted", requestMessage.getId(),
               requestMessage.getUsername(), requestMessage.getDeviceId()));
 
           MessageResult messageResult = new MessageResult(MessageResult.ERROR_DECRYPTION_FAILED,
-            "Failed to process the message (" + requestMessage.getId() +
-              ") that should be processed securely and is not encrypted");
+              "Failed to process the message (" + requestMessage.getId() +
+                  ") that should be processed securely and is not encrypted");
 
           writeResponseDocument(messageResult.toWBXML(), response);
 
@@ -356,8 +311,7 @@ public class MessagingServlet extends HttpServlet
         }
       }
 
-      try
-      {
+      try {
         // Attempt to archive the synchronous request message
         messagingService.archiveMessage(requestMessage);
 
@@ -369,18 +323,14 @@ public class MessagingServlet extends HttpServlet
 
         MessageResult messageResult;
 
-        if (responseMessage != null)
-        {
-          if ((isRequestMessageEncrypted) && (!responseMessage.isEncrypted()))
-          {
+        if (responseMessage != null) {
+          if ((isRequestMessageEncrypted) && (!responseMessage.isEncrypted())) {
             messagingService.encryptMessage(responseMessage);
           }
 
           messageResult = new MessageResult(0, String.format(
               "Successfully processed the message (%s)", requestMessage.getId()), responseMessage);
-        }
-        else
-        {
+        } else {
           messageResult = new MessageResult(0, String.format(
               "Successfully processed the message (%s)", requestMessage.getId()));
         }
@@ -388,9 +338,7 @@ public class MessagingServlet extends HttpServlet
         writeResponseDocument(messageResult.toWBXML(), response);
 
         return true;
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error(String.format(
             "Failed to process the message (%s) from the user (%s) and device (%s)",
             requestMessage.getId(), requestMessage.getUsername(), requestMessage.getDeviceId()), e);
@@ -402,16 +350,12 @@ public class MessagingServlet extends HttpServlet
 
         return false;
       }
-    }
-    else if (messagingService.isAsynchronousMessage(requestMessage))
-    {
+    } else if (messagingService.isAsynchronousMessage(requestMessage)) {
       return queueMessageForAsynchronousProcessing(requestMessage, response);
-    }
-    else
-    {
+    } else {
       MessageResult result = new MessageResult(MessageResult.ERROR_PROCESSING_FAILED, String.format(
           "Synchronous and asynchronous processing are not supported for the message (%s) with "
-          + "type (%s)", requestMessage.getId(), requestMessage.getTypeId()));
+              + "type (%s)", requestMessage.getId(), requestMessage.getTypeId()));
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -419,18 +363,16 @@ public class MessagingServlet extends HttpServlet
     }
   }
 
-  private boolean processMessageDownloadRequest(Document document, HttpServletResponse response)
-  {
+  private boolean processMessageDownloadRequest(Document document, HttpServletResponse response) {
     // Is the WBXML document valid
-    if (!MessageDownloadRequest.isValidWBXML(document))
-    {
+    if (!MessageDownloadRequest.isValidWBXML(document)) {
       logger.warn("Failed to process the invalid message download request WBXML document: "
           + document.toString());
 
       MessageDownloadResponse result = new MessageDownloadResponse(MessageDownloadResponse
           .ERROR_INVALID_REQUEST,
           "Failed to process the invalid WBXML document containing the message download request "
-          + "information");
+              + "information");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -439,13 +381,11 @@ public class MessagingServlet extends HttpServlet
 
     MessageDownloadRequest downloadRequest = new MessageDownloadRequest(document);
 
-    try
-    {
+    try {
       List<Message> messages = messagingService.getMessagesQueuedForDownload(
           downloadRequest.getUsername(), downloadRequest.getDeviceId());
 
-      if (logger.isDebugEnabled())
-      {
+      if (logger.isDebugEnabled()) {
         logger.debug(String.format(
             "Found %d messages queued for download for the user (%s) and the device (%s)",
             messages.size(), downloadRequest.getUsername(), downloadRequest.getDeviceId()));
@@ -466,18 +406,18 @@ public class MessagingServlet extends HttpServlet
        */
 
       return true;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error(String.format(
           "Failed to retrieve the messages that have been queued for download for the user (%s) "
-          + "and the device (%s)", downloadRequest.getUsername(), downloadRequest.getDeviceId()),
+              + "and the device (%s)", downloadRequest.getUsername(),
+          downloadRequest.getDeviceId()),
           e);
 
       MessageDownloadResponse downloadResponse = new MessageDownloadResponse(MessageDownloadResponse
           .ERROR_UNKNOWN, String.format(
           "Failed to retrieve the messages that have been queued for download for the user (%s) "
-          + "and the device (%s)", downloadRequest.getUsername(), downloadRequest.getDeviceId()),
+              + "and the device (%s)", downloadRequest.getUsername(),
+          downloadRequest.getDeviceId()),
           e);
 
       writeResponseDocument(downloadResponse.toWBXML(), response);
@@ -486,11 +426,9 @@ public class MessagingServlet extends HttpServlet
     }
   }
 
-  private boolean processMessagePart(Document document, HttpServletResponse response)
-  {
+  private boolean processMessagePart(Document document, HttpServletResponse response) {
     // Is the WBXML document valid
-    if (!MessagePart.isValidWBXML(document))
-    {
+    if (!MessagePart.isValidWBXML(document)) {
       logger.warn("Failed to process the invalid message part WBXML document: "
           + document.toString());
 
@@ -509,18 +447,19 @@ public class MessagingServlet extends HttpServlet
     MessagePart messagePart = new MessagePart(document);
 
     // Check whether we can process the message part
-    if (!messagingService.canQueueMessagePartForAssembly(messagePart))
-    {
+    if (!messagingService.canQueueMessagePartForAssembly(messagePart)) {
       logger.warn(String.format(
           "Failed to queue the unrecognised message part (%s) from the user (%s) and the device "
-          + "(%s) with message type (%s)", messagePart.getId(), messagePart.getMessageUsername(),
+              + "(%s) with message type (%s)", messagePart.getId(),
+          messagePart.getMessageUsername(),
           messagePart.getMessageDeviceId(), messagePart.getMessageTypeId()));
 
       MessagePartResult result = new MessagePartResult(MessagePartResult.ERROR_UNRECOGNISED_TYPE,
           String.format(
-          "Failed to queue the unrecognised message part (%s) from the user (%s) and the device "
-          + "(%s) with message type (%s)", messagePart.getId(), messagePart.getMessageUsername(),
-          messagePart.getMessageDeviceId(), messagePart.getMessageTypeId()));
+              "Failed to queue the unrecognised message part (%s) from the user (%s) and the device "
+                  + "(%s) with message type (%s)", messagePart.getId(),
+              messagePart.getMessageUsername(),
+              messagePart.getMessageDeviceId(), messagePart.getMessageTypeId()));
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -529,15 +468,14 @@ public class MessagingServlet extends HttpServlet
 
     logger.debug(String.format(
         "Queuing the message part (%d/%d) for the message (%s) from the user (%s) and the device "
-        + "(%s) with message type (%s)", messagePart.getPartNo(), messagePart.getTotalParts(),
+            + "(%s) with message type (%s)", messagePart.getPartNo(), messagePart.getTotalParts(),
         messagePart.getMessageId(), messagePart.getMessageUsername(),
         messagePart.getMessageDeviceId(), messagePart.getMessageTypeId()));
 
     logger.debug(messagePart.toString());
 
     // Queue the message part for assembly
-    try
-    {
+    try {
       messagingService.queueMessagePartForAssemblyAndAssembleAndProcessMessage(messagePart);
 
       MessagePartResult result = new MessagePartResult(MessagePartResult.SUCCESS, String.format(
@@ -546,12 +484,10 @@ public class MessagingServlet extends HttpServlet
       writeResponseDocument(result.toWBXML(), response);
 
       return true;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       logger.error(String.format(
           "Failed to queue the message part (%s) from the user (%s) and the device (%s) with "
-          + "message type (%s)", messagePart.getId(), messagePart.getMessageUsername(),
+              + "message type (%s)", messagePart.getId(), messagePart.getMessageUsername(),
           messagePart.getMessageDeviceId(), messagePart.getMessageTypeId()), e);
 
       MessagePartResult result = new MessagePartResult(MessagePartResult.ERROR_QUEUEING_FAILED,
@@ -563,18 +499,17 @@ public class MessagingServlet extends HttpServlet
     }
   }
 
-  private boolean processMessagePartDownloadRequest(Document document, HttpServletResponse response)
-  {
+  private boolean processMessagePartDownloadRequest(Document document,
+      HttpServletResponse response) {
     // Is the WBXML document valid
-    if (!MessagePartDownloadRequest.isValidWBXML(document))
-    {
+    if (!MessagePartDownloadRequest.isValidWBXML(document)) {
       logger.warn("Failed to process the invalid message part download request WBXML document: "
           + document.toString());
 
       MessagePartDownloadResponse result = new MessagePartDownloadResponse(
           MessagePartDownloadResponse.ERROR_INVALID_REQUEST,
           "Failed to process the invalid WBXML document containing the message part download "
-          + "request information");
+              + "request information");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -583,13 +518,11 @@ public class MessagingServlet extends HttpServlet
 
     MessagePartDownloadRequest downloadRequest = new MessagePartDownloadRequest(document);
 
-    try
-    {
+    try {
       List<MessagePart> messageParts = messagingService.getMessagePartsQueuedForDownload(
           downloadRequest.getUsername(), downloadRequest.getDeviceId());
 
-      if (logger.isDebugEnabled())
-      {
+      if (logger.isDebugEnabled()) {
         logger.debug(String.format(
             "Found %d message partsc queued for download for the user (%s) and the device (%s)",
             messageParts.size(), downloadRequest.getUsername(), downloadRequest.getDeviceId()));
@@ -616,18 +549,16 @@ public class MessagingServlet extends HttpServlet
        */
 
       return true;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error(String.format(
           "Failed to retrieve the message parts that have been queued for download for the user "
-          + "(%s) and the device (%s)", downloadRequest.getUsername(),
+              + "(%s) and the device (%s)", downloadRequest.getUsername(),
           downloadRequest.getDeviceId()), e);
 
       MessagePartDownloadResponse downloadResponse = new MessagePartDownloadResponse(
           MessagePartDownloadResponse.ERROR_UNKNOWN, String.format(
           "Failed to retrieve the message parts that have been queued for download for the user "
-          + "(%s) and the device (%s)", downloadRequest.getUsername(),
+              + "(%s) and the device (%s)", downloadRequest.getUsername(),
           downloadRequest.getDeviceId()), e);
 
       writeResponseDocument(downloadResponse.toWBXML(), response);
@@ -636,17 +567,16 @@ public class MessagingServlet extends HttpServlet
     }
   }
 
-  private boolean processMessagePartReceivedRequest(Document document, HttpServletResponse response)
-  {
-    if (!MessagePartReceivedRequest.isValidWBXML(document))
-    {
+  private boolean processMessagePartReceivedRequest(Document document,
+      HttpServletResponse response) {
+    if (!MessagePartReceivedRequest.isValidWBXML(document)) {
       logger.warn("Failed to process the invalid message part received request WBXML document: "
           + document.toString());
 
       MessagePartReceivedResponse result = new MessagePartReceivedResponse(
           MessagePartReceivedResponse.ERROR_INVALID_REQUEST,
           "Failed to process the invalid WBXML document containing the message part received "
-          + "request information");
+              + "request information");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -655,8 +585,7 @@ public class MessagingServlet extends HttpServlet
 
     MessagePartReceivedRequest receivedRequest = new MessagePartReceivedRequest(document);
 
-    try
-    {
+    try {
       messagingService.deleteMessagePart(receivedRequest.getMessagePartId());
 
       MessagePartReceivedResponse result = new MessagePartReceivedResponse(
@@ -667,17 +596,17 @@ public class MessagingServlet extends HttpServlet
       writeResponseDocument(result.toWBXML(), response);
 
       return true;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       logger.error(String.format(
           "Failed to process the message part received request for the message part (%s) from the "
-          + "device (%s)", receivedRequest.getMessagePartId(), receivedRequest.getDeviceId()), e);
+              + "device (%s)", receivedRequest.getMessagePartId(), receivedRequest.getDeviceId()),
+          e);
 
       MessagePartReceivedResponse result = new MessagePartReceivedResponse(
           MessagePartReceivedResponse.ERROR_UNKNOWN, String.format(
           "Failed to process the message part received request for the message part (%s) from the "
-          + "device (%s)", receivedRequest.getMessagePartId(), receivedRequest.getDeviceId()), e);
+              + "device (%s)", receivedRequest.getMessagePartId(), receivedRequest.getDeviceId()),
+          e);
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -685,17 +614,15 @@ public class MessagingServlet extends HttpServlet
     }
   }
 
-  private boolean processMessageReceivedRequest(Document document, HttpServletResponse response)
-  {
-    if (!MessageReceivedRequest.isValidWBXML(document))
-    {
+  private boolean processMessageReceivedRequest(Document document, HttpServletResponse response) {
+    if (!MessageReceivedRequest.isValidWBXML(document)) {
       logger.warn("Failed to process the invalid message received request WBXML document: "
           + document.toString());
 
       MessageReceivedResponse result = new MessageReceivedResponse(MessageReceivedResponse
           .ERROR_INVALID_REQUEST,
           "Failed to process the invalid WBXML document containing the message received request "
-          + "information");
+              + "information");
 
       writeResponseDocument(result.toWBXML(), response);
 
@@ -704,20 +631,17 @@ public class MessagingServlet extends HttpServlet
 
     MessageReceivedRequest receivedRequest = new MessageReceivedRequest(document);
 
-    try
-    {
+    try {
       messagingService.deleteMessage(receivedRequest.getMessageId());
 
       MessageReceivedResponse result = new MessageReceivedResponse(MessageReceivedResponse.SUCCESS,
           String.format("Successfully acknowledged receipt of the message (%s)",
-          receivedRequest.getMessageId()));
+              receivedRequest.getMessageId()));
 
       writeResponseDocument(result.toWBXML(), response);
 
       return true;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       logger.error(String.format(
           "Failed to process the message received request for the message (%s) from the device (%s)",
           receivedRequest.getMessageId(), receivedRequest.getDeviceId()), e);
@@ -734,17 +658,14 @@ public class MessagingServlet extends HttpServlet
   }
 
   private boolean queueMessageForAsynchronousProcessing(Message message,
-      HttpServletResponse response)
-  {
-    try
-    {
+      HttpServletResponse response) {
+    try {
       /*
        * Check whether the message has already been queued for processing by examining the
        * archive log. This will prevent duplicate message submissions from the device due
        * to communication errors.
        */
-      if (messagingService.isMessageArchived(message.getId()))
-      {
+      if (messagingService.isMessageArchived(message.getId())) {
         logger.debug(String.format(
             "The message (%s) has already been queued for processing and will be ignored",
             message.getId()));
@@ -760,9 +681,7 @@ public class MessagingServlet extends HttpServlet
       writeResponseDocument(result.toWBXML(), response);
 
       return true;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       logger.error(String.format(
           "Failed to queue the message (%s) from the user (%s) and device (%s) for processing",
           message.getId(), message.getUsername(), message.getDeviceId()), e);
@@ -784,36 +703,28 @@ public class MessagingServlet extends HttpServlet
    * @return the WBXML request document
    */
   private Document readRequestDocument(HttpServletRequest request)
-    throws ServletException
-  {
+      throws ServletException {
     // Read the request data
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-    try (ServletInputStream in = request.getInputStream())
-    {
+    try (ServletInputStream in = request.getInputStream()) {
       byte[] readBuffer = new byte[2048];
 
       int numberOfBytesRead;
 
-      while ((numberOfBytesRead = in.read(readBuffer)) != -1)
-      {
+      while ((numberOfBytesRead = in.read(readBuffer)) != -1) {
         baos.write(readBuffer, 0, numberOfBytesRead);
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       // A network error means that the document could not be read so stop here
       return null;
     }
 
-    try
-    {
+    try {
       Parser parser = new Parser();
 
       return parser.parse(baos.toByteArray());
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ServletException(
           "Failed to parse the WBXML request document from the HTTP servlet request", e);
     }
@@ -826,10 +737,9 @@ public class MessagingServlet extends HttpServlet
    * @param exception the exception containing the error information which may be <code>null</code>
    * @param response  the HTTP servlet response to write the error information to
    */
-  private void writeErrorResponse(String message, Throwable exception, HttpServletResponse response)
-  {
-    try
-    {
+  private void writeErrorResponse(String message, Throwable exception,
+      HttpServletResponse response) {
+    try {
       response.sendError(500, message);
 
       PrintWriter pw = response.getWriter();
@@ -853,8 +763,8 @@ public class MessagingServlet extends HttpServlet
 
       pw.println("</body>");
       pw.println("</html>");
+    } catch (IOException ignored) {
     }
-    catch (IOException ignored) {}
   }
 
   /**
@@ -864,10 +774,8 @@ public class MessagingServlet extends HttpServlet
    * @param response the HTTP servlet response to write the binary data for the WBXML response
    *                 document to
    */
-  private void writeResponseDocument(byte[] data, HttpServletResponse response)
-  {
-    try
-    {
+  private void writeResponseDocument(byte[] data, HttpServletResponse response) {
+    try {
       ServletOutputStream out = response.getOutputStream();
 
       response.setContentType(WBXML_CONTENT_TYPE);
@@ -875,12 +783,10 @@ public class MessagingServlet extends HttpServlet
       out.write(data);
 
       out.flush();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error(
           "Failed to write the binary data for the WBXML response document to the HTTP servlet "
-          + "response", e);
+              + "response", e);
     }
   }
 }

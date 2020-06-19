@@ -19,18 +19,21 @@ package digital.inception.core.util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.IOException;
-
 import java.net.InetAddress;
 import java.net.Socket;
-
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
-import javax.net.ssl.*;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 /**
  * The <code>MutualSSLSocketFactory</code> class implements the custom SSL socket factory that
@@ -38,9 +41,9 @@ import javax.net.ssl.*;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class MutualSSLSocketFactory extends SSLSocketFactory
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class MutualSSLSocketFactory extends SSLSocketFactory {
+
   private SSLSocketFactory socketFactory;
 
   /**
@@ -53,30 +56,24 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    * @param disableServerTrustChecking disable server trust checking
    */
   public MutualSSLSocketFactory(KeyStore keyStore, String keyStorePassword, KeyStore trustStore,
-      boolean disableServerTrustChecking)
-  {
-    try
-    {
+      boolean disableServerTrustChecking) {
+    try {
       // Create a trust manager that does not validate certificate chains
-      TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
-      {
+      TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
         public void checkClientTrusted(X509Certificate[] chain, String authType)
-          throws CertificateException
-        {
+            throws CertificateException {
           // Skip client verification step
         }
 
         public void checkServerTrusted(X509Certificate[] chain, String authType)
-          throws CertificateException
-        {
+            throws CertificateException {
           // Skip server verification step
         }
 
-        public X509Certificate[] getAcceptedIssuers()
-        {
+        public X509Certificate[] getAcceptedIssuers() {
           return new X509Certificate[0];
         }
-      } };
+      }};
 
       // Setup the key manager for the mutual SSL socket factory
       KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(
@@ -93,12 +90,9 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
       // Setup the SSL contxt
       SSLContext sslContext = SSLContext.getInstance("TLS");
 
-      if (disableServerTrustChecking)
-      {
+      if (disableServerTrustChecking) {
         sslContext.init(keyManagerFactory.getKeyManagers(), trustAllCerts, new SecureRandom());
-      }
-      else
-      {
+      } else {
         sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(),
             new SecureRandom());
       }
@@ -110,9 +104,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
        * connections.
        */
       socketFactory = sslContext.getSocketFactory();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MutualSSLSocketFactoryException(
           "Failed to initialize the Mutual SSL socket factory", e);
     }
@@ -123,12 +115,9 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    *
    * @return <code>true</code> if we are running under the IBM JDK or <code>false</code> otherwise
    */
-  public static boolean isIBMJDK()
-  {
-    for (Provider provider : Security.getProviders())
-    {
-      if (provider.getName().startsWith("IBMJSSE"))
-      {
+  public static boolean isIBMJDK() {
+    for (Provider provider : Security.getProviders()) {
+      if (provider.getName().startsWith("IBMJSSE")) {
         return true;
       }
     }
@@ -140,8 +129,8 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    * Creates a socket and connects it to the specified port number at the specified address.
    * <p/>
    * This socket is configured using the socket options established for this factory. If there is a
-   * security manager, its <code>checkConnect</code> method is called with the host address and
-   * port as its arguments. This could result in a <code>SecurityException</code>.
+   * security manager, its <code>checkConnect</code> method is called with the host address and port
+   * as its arguments. This could result in a <code>SecurityException</code>.
    *
    * @param host the address of the server host
    * @param port the server port
@@ -150,8 +139,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    */
   @Override
   public Socket createSocket(InetAddress host, int port)
-    throws IOException
-  {
+      throws IOException {
     return socketFactory.createSocket(host, port);
   }
 
@@ -159,8 +147,8 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    * Creates a socket and connects it to the specified remote host at the specified remote port.
    * <p/>
    * This socket is configured using the socket options established for this factory. If there is a
-   * security manager, its <code>checkConnect</code> method is called with the host address and
-   * port as its arguments. This could result in a <code>SecurityException</code>.
+   * security manager, its <code>checkConnect</code> method is called with the host address and port
+   * as its arguments. This could result in a <code>SecurityException</code>.
    *
    * @param host the server host
    * @param port the server port
@@ -169,18 +157,17 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    */
   @Override
   public Socket createSocket(String host, int port)
-    throws IOException
-  {
+      throws IOException {
     return socketFactory.createSocket(host, port);
   }
 
   /**
-   * Creates a socket and connects it to the specified port number at the specified address.
-   * The socket will also be bound to the local address and port supplied.
+   * Creates a socket and connects it to the specified port number at the specified address. The
+   * socket will also be bound to the local address and port supplied.
    * <p/>
    * This socket is configured using the socket options established for this factory. If there is a
-   * security manager, its <code>checkConnect</code> method is called with the host address and
-   * port as its arguments. This could result in a <code>SecurityException</code>.
+   * security manager, its <code>checkConnect</code> method is called with the host address and port
+   * as its arguments. This could result in a <code>SecurityException</code>.
    *
    * @param host      the address of the server host
    * @param port      the server port
@@ -191,8 +178,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    */
   @Override
   public Socket createSocket(InetAddress host, int port, InetAddress localHost, int localPort)
-    throws IOException
-  {
+      throws IOException {
     return socketFactory.createSocket(host, port, localHost, localPort);
   }
 
@@ -213,18 +199,17 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    */
   @Override
   public Socket createSocket(Socket s, String host, int port, boolean autoClose)
-    throws IOException
-  {
+      throws IOException {
     return socketFactory.createSocket(s, host, port, autoClose);
   }
 
   /**
-   * Creates a socket and connects it to the specified remote host at the specified remote port.
-   * The socket will also be bound to the local address and port supplied.
+   * Creates a socket and connects it to the specified remote host at the specified remote port. The
+   * socket will also be bound to the local address and port supplied.
    * <p/>
    * This socket is configured using the socket options established for this factory. If there is a
-   * security manager, its <code>checkConnect</code> method is called with the host address and
-   * port as its arguments. This could result in a <code>SecurityException</code>.
+   * security manager, its <code>checkConnect</code> method is called with the host address and port
+   * as its arguments. This could result in a <code>SecurityException</code>.
    *
    * @param host      the server host
    * @param port      the server port
@@ -235,8 +220,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    */
   @Override
   public Socket createSocket(String host, int port, InetAddress localHost, int localPort)
-    throws IOException
-  {
+      throws IOException {
     return socketFactory.createSocket(host, port, localHost, localPort);
   }
 
@@ -250,8 +234,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    * @return the cipher suites which are enabled by default
    */
   @Override
-  public String[] getDefaultCipherSuites()
-  {
+  public String[] getDefaultCipherSuites() {
     return socketFactory.getDefaultCipherSuites();
   }
 
@@ -265,8 +248,7 @@ public class MutualSSLSocketFactory extends SSLSocketFactory
    * @return the names of the cipher suites which could be enabled for use on an SSL connection
    */
   @Override
-  public String[] getSupportedCipherSuites()
-  {
+  public String[] getSupportedCipherSuites() {
     return socketFactory.getSupportedCipherSuites();
   }
 }

@@ -20,18 +20,16 @@ package digital.inception.mail;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
- * The <code>MailTemplateContentType</code> enumeration defines the possible content types for
- * mail templates.
+ * The <code>MailTemplateContentType</code> enumeration defines the possible content types for mail
+ * templates.
  *
  * @author Marcus Portmann
  */
@@ -39,8 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "MailTemplateContentType", namespace = "http://mail.inception.digital")
 @SuppressWarnings("unused")
-public enum MailTemplateContentType
-{
+public enum MailTemplateContentType {
   @XmlEnumValue("Unknown")
   UNKNOWN(0, "Unknown"),
   @XmlEnumValue("Text")
@@ -51,8 +48,7 @@ public enum MailTemplateContentType
   private int code;
   private String description;
 
-  MailTemplateContentType(int code, String description)
-  {
+  MailTemplateContentType(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -65,10 +61,8 @@ public enum MailTemplateContentType
    * @return the mail template content type given by the specified numeric code value
    */
   @JsonCreator
-  public static MailTemplateContentType fromCode(int code)
-  {
-    switch (code)
-    {
+  public static MailTemplateContentType fromCode(int code) {
+    switch (code) {
       case 0:
         return MailTemplateContentType.UNKNOWN;
 
@@ -81,7 +75,7 @@ public enum MailTemplateContentType
       default:
         throw new RuntimeException(
             "Failed to determine the mail template content type with the invalid code (" + code
-            + ")");
+                + ")");
     }
   }
 
@@ -91,8 +85,7 @@ public enum MailTemplateContentType
    * @return the numeric code for the mail template content type
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -101,8 +94,7 @@ public enum MailTemplateContentType
    *
    * @return the description for the mail template content type
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 
@@ -111,10 +103,9 @@ public enum MailTemplateContentType
    * content type.
    *
    * @return the <code>String</code> representation of the numeric code for the mail template
-   *         content type
+   * content type
    */
-  public String getCodeAsString()
-  {
+  public String getCodeAsString() {
     return String.valueOf(code);
   }
 }

@@ -20,18 +20,17 @@ package digital.inception.application.test;
 
 import digital.inception.core.persistence.IDGenerator;
 import digital.inception.test.DataSourceProxy;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Set;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -45,8 +44,8 @@ import java.util.Set;
 @Transactional
 @SuppressWarnings("unused")
 public class TestTransactionalService
-  implements ITestTransactionalService
-{
+    implements ITestTransactionalService {
+
   /**
    * The data source used to provide connections to the application database.
    */
@@ -64,8 +63,7 @@ public class TestTransactionalService
    * @param idGenerator the ID generator
    */
   public TestTransactionalService(@Qualifier("applicationDataSource") DataSource dataSource,
-      IDGenerator idGenerator)
-  {
+      IDGenerator idGenerator) {
     this.dataSource = dataSource;
     this.idGenerator = idGenerator;
   }
@@ -76,13 +74,11 @@ public class TestTransactionalService
    * @param testData the test data
    */
   public void createTestData(TestData testData)
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     String createTestDataSQL = "INSERT INTO TEST.TEST_DATA  (ID, NAME, VALUE) VALUES (?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
-    {
+        PreparedStatement statement = connection.prepareStatement(createTestDataSQL)) {
       statement.setString(1, testData.getId());
       statement.setString(2, testData.getName());
       statement.setString(3, testData.getValue());
@@ -90,17 +86,14 @@ public class TestTransactionalService
       Set<Connection> connections = DataSourceProxy.getActiveDatabaseConnections().keySet();
 
       Map<Connection, StackTraceElement[]> connectionMap =
-        DataSourceProxy.getActiveDatabaseConnections();
+          DataSourceProxy.getActiveDatabaseConnections();
 
-      if (statement.executeUpdate() != 1)
-      {
+      if (statement.executeUpdate() != 1) {
         throw new RuntimeException(
             "No rows were affected as a result of executing the SQL statement ("
-            + createTestDataSQL + ")");
+                + createTestDataSQL + ")");
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new TestTransactionalServiceException("Failed to create the test data", e);
     }
   }
@@ -112,26 +105,21 @@ public class TestTransactionalService
    */
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createTestDataInNewTransaction(TestData testData)
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     String createTestDataSQL = "INSERT INTO TEST.TEST_DATA  (ID, NAME, VALUE) VALUES (?, ?, ?)";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(createTestDataSQL))
-    {
+        PreparedStatement statement = connection.prepareStatement(createTestDataSQL)) {
       statement.setString(1, testData.getId());
       statement.setString(2, testData.getName());
       statement.setString(3, testData.getValue());
 
-      if (statement.executeUpdate() != 1)
-      {
+      if (statement.executeUpdate() != 1) {
         throw new RuntimeException(
             "No rows were affected as a result of executing the SQL statement ("
-            + createTestDataSQL + ")");
+                + createTestDataSQL + ")");
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new TestTransactionalServiceException(
           "Failed to create the test data in a new transaction", e);
     }
@@ -144,8 +132,7 @@ public class TestTransactionalService
    */
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createTestDataInNewTransactionWithCheckedException(TestData testData)
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     createTestData(testData);
 
     throw new TestTransactionalServiceException(
@@ -159,8 +146,7 @@ public class TestTransactionalService
    */
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void createTestDataInNewTransactionWithRuntimeException(TestData testData)
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     createTestData(testData);
 
     throw new RuntimeException("Failed with a runtime exception in a new transaction");
@@ -172,8 +158,7 @@ public class TestTransactionalService
    * @param testData the test data
    */
   public void createTestDataWithCheckedException(TestData testData)
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     createTestData(testData);
 
     throw new TestTransactionalServiceException(
@@ -186,8 +171,7 @@ public class TestTransactionalService
    * @param testData the test data
    */
   public void createTestDataWithRuntimeException(TestData testData)
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     createTestData(testData);
 
     throw new RuntimeException("Failed with a runtime exception in an existing transaction");
@@ -199,8 +183,7 @@ public class TestTransactionalService
    * @return the next ID
    */
   public long getNextIDWithException()
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     idGenerator.next("Application.TestId");
 
     throw new TestTransactionalServiceException("Testing 1.. 2.. 3..");
@@ -212,8 +195,7 @@ public class TestTransactionalService
    * @return the next ID
    */
   public long getNextIDWithoutException()
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     return idGenerator.next("Application.TestId");
   }
 
@@ -225,37 +207,28 @@ public class TestTransactionalService
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   public TestData getTestData(String id)
-    throws TestTransactionalServiceException
-  {
+      throws TestTransactionalServiceException {
     String getTestDataSQL = "SELECT ID, NAME, VALUE FROM TEST.TEST_DATA WHERE ID=?";
 
     try (Connection connection = dataSource.getConnection();
-      PreparedStatement statement = connection.prepareStatement(getTestDataSQL))
-    {
+        PreparedStatement statement = connection.prepareStatement(getTestDataSQL)) {
       statement.setString(1, id);
 
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
+      try (ResultSet rs = statement.executeQuery()) {
+        if (rs.next()) {
           return buildTestDataFromResultSet(rs);
-        }
-        else
-        {
+        } else {
           return null;
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new TestTransactionalServiceException(
           "Failed to create the test data in a new transaction", e);
     }
   }
 
   private TestData buildTestDataFromResultSet(ResultSet rs)
-    throws SQLException
-  {
+      throws SQLException {
     return new TestData(rs.getString(1), rs.getString(2), rs.getString(3));
   }
 }

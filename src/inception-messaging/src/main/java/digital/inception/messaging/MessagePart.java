@@ -21,32 +21,30 @@ package digital.inception.messaging;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.time.LocalDateTime;
-
 import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessagePart</code> class holds the information for a message part.
@@ -55,22 +53,22 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "MessagePart")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
+@JsonPropertyOrder({"id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
     "messageId", "messageUsername", "messageDeviceId", "messageTypeId", "messageCorrelationId",
     "messagePriority", "messageCreated", "messageDataHash", "messageEncryptionIV",
-    "messageChecksum", "lockName", "data" })
+    "messageChecksum", "lockName", "data"})
 @XmlRootElement(name = "MessagePart", namespace = "http://messaging.inception.digital")
 @XmlType(name = "MessagePart", namespace = "http://messaging.inception.digital",
-    propOrder = { "id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
+    propOrder = {"id", "partNo", "totalParts", "status", "sendAttempts", "downloadAttempts",
         "messageId", "messageUsername", "messageDeviceId", "messageTypeId", "messageCorrelationId",
         "messagePriority", "messageCreated", "messageDataHash", "messageEncryptionIV",
-        "messageChecksum", "lockName", "data" })
+        "messageChecksum", "lockName", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "messaging", name = "message_parts")
-@SuppressWarnings({ "WeakerAccess" })
-public class MessagePart
-{
+@SuppressWarnings({"WeakerAccess"})
+public class MessagePart {
+
   /**
    * The maximum size of a message part in bytes.
    */
@@ -283,7 +281,8 @@ public class MessagePart
   /**
    * Constructs a new <code>MessagePart</code>.
    */
-  public MessagePart() {}
+  public MessagePart() {
+  }
 
   /**
    * Constructs a new <code>MessagePart</code> and populates it from the message information stored
@@ -291,21 +290,18 @@ public class MessagePart
    *
    * @param document the WBXML document containing the message information
    */
-  public MessagePart(Document document)
-  {
+  public MessagePart(Document document) {
     Element rootElement = document.getRootElement();
 
     this.id = UUID.fromString(rootElement.getAttributeValue("id"));
     this.partNo = Integer.parseInt(rootElement.getAttributeValue("partNo"));
     this.totalParts = Integer.parseInt(rootElement.getAttributeValue("totalParts"));
 
-    if (rootElement.hasAttribute("sendAttempts"))
-    {
+    if (rootElement.hasAttribute("sendAttempts")) {
       this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
     }
 
-    if (rootElement.hasAttribute("downloadAttempts"))
-    {
+    if (rootElement.hasAttribute("downloadAttempts")) {
       this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
     }
 
@@ -316,8 +312,7 @@ public class MessagePart
     this.messageDeviceId = UUID.fromString(rootElement.getAttributeValue("messageDeviceId"));
     this.messageTypeId = UUID.fromString(rootElement.getAttributeValue("messageTypeId"));
 
-    if (rootElement.hasAttribute("messageCorrelationId"))
-    {
+    if (rootElement.hasAttribute("messageCorrelationId")) {
       this.messageCorrelationId = UUID.fromString(rootElement.getAttributeValue(
           "messageCorrelationId"));
     }
@@ -327,24 +322,19 @@ public class MessagePart
 
     String messageCreatedAttributeValue = rootElement.getAttributeValue("messageCreated");
 
-    try
-    {
+    try {
       this.messageCreated = ISO8601Util.toLocalDateTime(messageCreatedAttributeValue);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException(String.format(
           "Failed to parse the messageCreated ISO8601 timestamp (%s) for the message part (%s)",
           messageCreatedAttributeValue, id), e);
     }
 
-    if (rootElement.hasAttribute("messageDataHash"))
-    {
+    if (rootElement.hasAttribute("messageDataHash")) {
       this.messageDataHash = rootElement.getAttributeValue("messageDataHash");
     }
 
-    if (rootElement.hasAttribute("messageEncryptionIV"))
-    {
+    if (rootElement.hasAttribute("messageEncryptionIV")) {
       this.messageEncryptionIV = rootElement.getAttributeValue("messageEncryptionIV");
     }
 
@@ -356,33 +346,32 @@ public class MessagePart
   /**
    * Constructs a new <code>MessagePart</code>.
    *
-   * @param partNo               the number of the message part in the set of message parts for
-   *                             the original message
+   * @param partNo               the number of the message part in the set of message parts for the
+   *                             original message
    * @param totalParts           the total number of parts in the set of message parts for the
    *                             original message
-   * @param messageId            the Universally Unique Identifier (UUID) used to uniquely
-   *                             identify the original message
+   * @param messageId            the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the original message
    * @param messageUsername      the username identifying the user associated with the original
    *                             message
-   * @param messageDeviceId      the Universally Unique Identifier (UUID) used to uniquely
-   *                             identify the device the original message originated from
-   * @param messageTypeId        the Universally Unique Identifier (UUID) used to uniquely
-   *                             identify the type of the original message
+   * @param messageDeviceId      the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the device the original message originated from
+   * @param messageTypeId        the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the type of the original message
    * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
    *                             original message
    * @param messagePriority      the priority for the original message
    * @param messageCreated       the date and time the original message was created
    * @param messageDataHash      the hash of the unencrypted data for the original message
-   * @param messageEncryptionIV  the base-64 encoded initialization vector for the encryption
-   *                             scheme for the original message
+   * @param messageEncryptionIV  the base-64 encoded initialization vector for the encryption scheme
+   *                             for the original message
    * @param messageChecksum      the checksum for the original message
    * @param data                 the binary data for the message part
    */
   public MessagePart(int partNo, int totalParts, UUID messageId, String messageUsername,
       UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
       MessagePriority messagePriority, LocalDateTime messageCreated, String messageDataHash,
-      String messageEncryptionIV, String messageChecksum, byte[] data)
-  {
+      String messageEncryptionIV, String messageChecksum, byte[] data) {
     this.id = UUID.randomUUID();
     this.partNo = partNo;
     this.totalParts = totalParts;
@@ -403,32 +392,32 @@ public class MessagePart
   /**
    * Constructs a new <code>MessagePart</code>.
    *
-   * @param id                   the Universally Unique Identifier (UUID) used to uniquely
-   *                             identify the message part
-   * @param partNo               the number of the message part in the set of message parts for
-   *                             the original message
-   * @param totalParts           total number of parts in the set of message parts for the
+   * @param id                   the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the message part
+   * @param partNo               the number of the message part in the set of message parts for the
    *                             original message
+   * @param totalParts           total number of parts in the set of message parts for the original
+   *                             message
    * @param sendAttempts         the number of times that the sending of the message part was
    *                             attempted
    * @param downloadAttempts     the number of times that downloading of the message part was
    *                             attempted
    * @param status               the message part status e.g. Initialized, Sending, etc
-   * @param messageId            the Universally Unique Identifier (UUID) used to uniquely
-   *                             identify the original message
+   * @param messageId            the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the original message
    * @param messageUsername      the username identifying the user associated with the original
    *                             message
-   * @param messageDeviceId      the Universally Unique Identifier (UUID) used to uniquely
-   *                             identify the device the original message originated from
-   * @param messageTypeId        the Universally Unique Identifier (UUID) used to uniquely
-   *                             identify the type of the original message
+   * @param messageDeviceId      the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the device the original message originated from
+   * @param messageTypeId        the Universally Unique Identifier (UUID) used to uniquely identify
+   *                             the type of the original message
    * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
    *                             original message
    * @param messagePriority      the priority for the original message
    * @param messageCreated       the date and time the original message was created
    * @param messageDataHash      the hash of the unencrypted data for the original message
-   * @param messageEncryptionIV  the base-64 encoded initialization vector for the encryption
-   *                             scheme for the original message
+   * @param messageEncryptionIV  the base-64 encoded initialization vector for the encryption scheme
+   *                             for the original message
    * @param messageChecksum      the checksum for the original message
    * @param lockName             the name of the entity that has locked the message part for
    *                             processing
@@ -438,8 +427,7 @@ public class MessagePart
       Integer downloadAttempts, MessagePartStatus status, UUID messageId, String messageUsername,
       UUID messageDeviceId, UUID messageTypeId, UUID messageCorrelationId,
       MessagePriority messagePriority, LocalDateTime messageCreated, String messageDataHash,
-      String messageEncryptionIV, String messageChecksum, String lockName, byte[] data)
-  {
+      String messageEncryptionIV, String messageChecksum, String lockName, byte[] data) {
     this.id = id;
     this.partNo = partNo;
     this.totalParts = totalParts;
@@ -467,20 +455,19 @@ public class MessagePart
    * @param document the WBXML document to validate
    *
    * @return <code>true</code> if the WBXML document contains valid message part information or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePart")
         && !((!rootElement.hasAttribute("id")) || (!rootElement.hasAttribute("partNo"))
-            || (!rootElement.hasAttribute("totalParts")) || (!rootElement.hasAttribute(
-            "messageId")) || (!rootElement.hasAttribute("messageUsername"))
-            || (!rootElement.hasAttribute("messageDeviceId")) || (!rootElement.hasAttribute(
-            "messageTypeId")) || (!rootElement.hasAttribute("messagePriority"))
-            || (!rootElement.hasAttribute("messageCreated")) || (!rootElement.hasAttribute(
-            "messageChecksum")));
+        || (!rootElement.hasAttribute("totalParts")) || (!rootElement.hasAttribute(
+        "messageId")) || (!rootElement.hasAttribute("messageUsername"))
+        || (!rootElement.hasAttribute("messageDeviceId")) || (!rootElement.hasAttribute(
+        "messageTypeId")) || (!rootElement.hasAttribute("messagePriority"))
+        || (!rootElement.hasAttribute("messageCreated")) || (!rootElement.hasAttribute(
+        "messageChecksum")));
   }
 
   /**
@@ -489,23 +476,19 @@ public class MessagePart
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -519,9 +502,17 @@ public class MessagePart
    *
    * @return the binary data for the message part
    */
-  public byte[] getData()
-  {
+  public byte[] getData() {
     return data;
+  }
+
+  /**
+   * Set the binary data for the message part.
+   *
+   * @param data the binary data for the message part
+   */
+  public void setData(byte[] data) {
+    this.data = data;
   }
 
   /**
@@ -529,9 +520,17 @@ public class MessagePart
    *
    * @return the number of times that downloading of the message part was attempted
    */
-  public Integer getDownloadAttempts()
-  {
+  public Integer getDownloadAttempts() {
     return downloadAttempts;
+  }
+
+  /**
+   * Set the number of times that downloading of the message part was attempted.
+   *
+   * @param downloadAttempts the number of times that downloading of the message part was attempted
+   */
+  public void setDownloadAttempts(Integer downloadAttempts) {
+    this.downloadAttempts = downloadAttempts;
   }
 
   /**
@@ -539,9 +538,17 @@ public class MessagePart
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the message part
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message part.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -549,9 +556,17 @@ public class MessagePart
    *
    * @return the name of the entity that has locked the message part for processing
    */
-  public String getLockName()
-  {
+  public String getLockName() {
     return lockName;
+  }
+
+  /**
+   * Set the name of the entity that has locked the message part for processing.
+   *
+   * @param lockName the name of the entity that has locked the message part for processing
+   */
+  public void setLockName(String lockName) {
+    this.lockName = lockName;
   }
 
   /**
@@ -559,9 +574,17 @@ public class MessagePart
    *
    * @return the checksum for the original message
    */
-  public String getMessageChecksum()
-  {
+  public String getMessageChecksum() {
     return messageChecksum;
+  }
+
+  /**
+   * Set the checksum for the original message.
+   *
+   * @param messageChecksum the checksum for the original message
+   */
+  public void setMessageChecksum(String messageChecksum) {
+    this.messageChecksum = messageChecksum;
   }
 
   /**
@@ -569,9 +592,18 @@ public class MessagePart
    *
    * @return the Universally Unique Identifier (UUID) used to correlate the original message
    */
-  public UUID getMessageCorrelationId()
-  {
+  public UUID getMessageCorrelationId() {
     return messageCorrelationId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to correlate the original message.
+   *
+   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
+   *                             original message
+   */
+  public void setMessageCorrelationId(UUID messageCorrelationId) {
+    this.messageCorrelationId = messageCorrelationId;
   }
 
   /**
@@ -579,19 +611,37 @@ public class MessagePart
    *
    * @return the date and time the original message was created
    */
-  public LocalDateTime getMessageCreated()
-  {
+  public LocalDateTime getMessageCreated() {
     return messageCreated;
   }
 
   /**
-   * Returns the hash of the unencrypted data for the original message if the message was encrypted.
+   * Set the date and time the original message was created.
+   *
+   * @param messageCreated the date and time the original message was created
+   */
+  public void setMessageCreated(LocalDateTime messageCreated) {
+    this.messageCreated = messageCreated;
+  }
+
+  /**
+   * Returns the hash of the unencrypted data for the original message if the message was
+   * encrypted.
    *
    * @return the hash of the unencrypted data for the original message if the message was encrypted
    */
-  public String getMessageDataHash()
-  {
+  public String getMessageDataHash() {
     return messageDataHash;
+  }
+
+  /**
+   * Set the hash of the unencrypted data for the original message if the message was encrypted.
+   *
+   * @param messageDataHash the hash of the unencrypted data for the original message if the message
+   *                        was encrypted
+   */
+  public void setMessageDataHash(String messageDataHash) {
+    this.messageDataHash = messageDataHash;
   }
 
   /**
@@ -601,226 +651,8 @@ public class MessagePart
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
    * original message originated from
    */
-  public UUID getMessageDeviceId()
-  {
+  public UUID getMessageDeviceId() {
     return messageDeviceId;
-  }
-
-  /**
-   * Returns the base-64 encoded initialization vector for the encryption scheme for the original
-   * message.
-   *
-   * @return the base-64 encoded initialization vector for the encryption scheme for the original
-   * message
-   */
-  public String getMessageEncryptionIV()
-  {
-    return messageEncryptionIV;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the original
-   * message.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the original message
-   */
-  public UUID getMessageId()
-  {
-    return messageId;
-  }
-
-  /**
-   * Returns the priority for the original message.
-   *
-   * @return the priority for the original message
-   */
-  public MessagePriority getMessagePriority()
-  {
-    return messagePriority;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of the
-   * original message.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of the
-   * original message
-   */
-  public UUID getMessageTypeId()
-  {
-    return messageTypeId;
-  }
-
-  /**
-   * Returns the username identifying the user associated with the original message.
-   *
-   * @return the username identifying the user associated with the original message
-   */
-  public String getMessageUsername()
-  {
-    return messageUsername;
-  }
-
-  /**
-   * Returns the number of the message part in the set of message parts for the original message.
-   *
-   * @return the number of the message part in the set of message parts for the original message
-   */
-  public int getPartNo()
-  {
-    return partNo;
-  }
-
-  /**
-   * Returns the number of times that the sending of the message part was attempted.
-   *
-   * @return the number of times that the sending of the message part was attempted
-   */
-  public Integer getSendAttempts()
-  {
-    return sendAttempts;
-  }
-
-  /**
-   * Returns the message part status e.g. Initialized, Sending, etc.
-   *
-   * @return the message part status e.g. Initialized, Sending, etc
-   */
-  public MessagePartStatus getStatus()
-  {
-    return status;
-  }
-
-  /**
-   * Returns the total number of parts in the set of message parts for the original message.
-   *
-   * @return the total number of parts in the set of message parts for the original message
-   */
-  public int getTotalParts()
-  {
-    return totalParts;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return (id == null)
-        ? 0
-        : id.hashCode();
-  }
-
-  /**
-   * Increment the download attempts.
-   */
-  public void incrementDownloadAttempts()
-  {
-    if (downloadAttempts == null)
-    {
-      downloadAttempts = 1;
-    }
-    else
-    {
-      downloadAttempts++;
-    }
-  }
-
-  /**
-   * Returns <code>true</code> if the data for the original message is encrypted or
-   * <code>false</code> otherwise.
-   *
-   * @return <code>true</code> if the data for the original message is encrypted or
-   *         <code>false</code> otherwise
-   */
-  public boolean messageIsEncrypted()
-  {
-    return ((messageDataHash != null) && (messageDataHash.length() > 0));
-  }
-
-  /**
-   * Set the binary data for the message part.
-   *
-   * @param data the binary data for the message part
-   */
-  public void setData(byte[] data)
-  {
-    this.data = data;
-  }
-
-  /**
-   * Set the number of times that downloading of the message part was attempted.
-   *
-   * @param downloadAttempts the number of times that downloading of the message part was attempted
-   */
-  public void setDownloadAttempts(Integer downloadAttempts)
-  {
-    this.downloadAttempts = downloadAttempts;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message part.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message part
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the entity that has locked the message part for processing.
-   *
-   * @param lockName the name of the entity that has locked the message part for processing
-   */
-  public void setLockName(String lockName)
-  {
-    this.lockName = lockName;
-  }
-
-  /**
-   * Set the checksum for the original message.
-   *
-   * @param messageChecksum the checksum for the original message
-   */
-  public void setMessageChecksum(String messageChecksum)
-  {
-    this.messageChecksum = messageChecksum;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the original message.
-   *
-   * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
-   *                             original message
-   */
-  public void setMessageCorrelationId(UUID messageCorrelationId)
-  {
-    this.messageCorrelationId = messageCorrelationId;
-  }
-
-  /**
-   * Set the date and time the original message was created.
-   *
-   * @param messageCreated the date and time the original message was created
-   */
-  public void setMessageCreated(LocalDateTime messageCreated)
-  {
-    this.messageCreated = messageCreated;
-  }
-
-  /**
-   * Set the hash of the unencrypted data for the original message if the message was encrypted.
-   *
-   * @param messageDataHash the hash of the unencrypted data for the original message if the message
-   *                        was encrypted
-   */
-  public void setMessageDataHash(String messageDataHash)
-  {
-    this.messageDataHash = messageDataHash;
   }
 
   /**
@@ -830,9 +662,19 @@ public class MessagePart
    * @param messageDeviceId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        device the original message originated from
    */
-  public void setMessageDeviceId(UUID messageDeviceId)
-  {
+  public void setMessageDeviceId(UUID messageDeviceId) {
     this.messageDeviceId = messageDeviceId;
+  }
+
+  /**
+   * Returns the base-64 encoded initialization vector for the encryption scheme for the original
+   * message.
+   *
+   * @return the base-64 encoded initialization vector for the encryption scheme for the original
+   * message
+   */
+  public String getMessageEncryptionIV() {
+    return messageEncryptionIV;
   }
 
   /**
@@ -842,9 +684,18 @@ public class MessagePart
    * @param messageEncryptionIV the base-64 encoded initialization vector for the encryption scheme
    *                            for the original message
    */
-  public void setMessageEncryptionIV(String messageEncryptionIV)
-  {
+  public void setMessageEncryptionIV(String messageEncryptionIV) {
     this.messageEncryptionIV = messageEncryptionIV;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the original
+   * message.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the original message
+   */
+  public UUID getMessageId() {
+    return messageId;
   }
 
   /**
@@ -853,9 +704,17 @@ public class MessagePart
    * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                  original message
    */
-  public void setMessageId(UUID messageId)
-  {
+  public void setMessageId(UUID messageId) {
     this.messageId = messageId;
+  }
+
+  /**
+   * Returns the priority for the original message.
+   *
+   * @return the priority for the original message
+   */
+  public MessagePriority getMessagePriority() {
+    return messagePriority;
   }
 
   /**
@@ -863,9 +722,19 @@ public class MessagePart
    *
    * @param messagePriority the priority for the original message
    */
-  public void setMessagePriority(MessagePriority messagePriority)
-  {
+  public void setMessagePriority(MessagePriority messagePriority) {
     this.messagePriority = messagePriority;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of the
+   * original message.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of the
+   * original message
+   */
+  public UUID getMessageTypeId() {
+    return messageTypeId;
   }
 
   /**
@@ -875,9 +744,17 @@ public class MessagePart
    * @param messageTypeId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                      type of the original message
    */
-  public void setMessageTypeId(UUID messageTypeId)
-  {
+  public void setMessageTypeId(UUID messageTypeId) {
     this.messageTypeId = messageTypeId;
+  }
+
+  /**
+   * Returns the username identifying the user associated with the original message.
+   *
+   * @return the username identifying the user associated with the original message
+   */
+  public String getMessageUsername() {
+    return messageUsername;
   }
 
   /**
@@ -885,9 +762,17 @@ public class MessagePart
    *
    * @param messageUsername the username identifying the user associated with the original message
    */
-  public void setMessageUsername(String messageUsername)
-  {
+  public void setMessageUsername(String messageUsername) {
     this.messageUsername = messageUsername;
+  }
+
+  /**
+   * Returns the number of the message part in the set of message parts for the original message.
+   *
+   * @return the number of the message part in the set of message parts for the original message
+   */
+  public int getPartNo() {
+    return partNo;
   }
 
   /**
@@ -896,9 +781,17 @@ public class MessagePart
    * @param partNo the number of the message part in the set of message parts for the original
    *               message
    */
-  public void setPartNo(int partNo)
-  {
+  public void setPartNo(int partNo) {
     this.partNo = partNo;
+  }
+
+  /**
+   * Returns the number of times that the sending of the message part was attempted.
+   *
+   * @return the number of times that the sending of the message part was attempted
+   */
+  public Integer getSendAttempts() {
+    return sendAttempts;
   }
 
   /**
@@ -906,9 +799,17 @@ public class MessagePart
    *
    * @param sendAttempts the number of times that the sending of the message part was attempted
    */
-  public void setSendAttempts(Integer sendAttempts)
-  {
+  public void setSendAttempts(Integer sendAttempts) {
     this.sendAttempts = sendAttempts;
+  }
+
+  /**
+   * Returns the message part status e.g. Initialized, Sending, etc.
+   *
+   * @return the message part status e.g. Initialized, Sending, etc
+   */
+  public MessagePartStatus getStatus() {
+    return status;
   }
 
   /**
@@ -916,9 +817,17 @@ public class MessagePart
    *
    * @param status the message part status e.g. Initialized, Sending, etc
    */
-  public void setStatus(MessagePartStatus status)
-  {
+  public void setStatus(MessagePartStatus status) {
     this.status = status;
+  }
+
+  /**
+   * Returns the total number of parts in the set of message parts for the original message.
+   *
+   * @return the total number of parts in the set of message parts for the original message
+   */
+  public int getTotalParts() {
+    return totalParts;
   }
 
   /**
@@ -927,9 +836,42 @@ public class MessagePart
    * @param totalParts the total number of parts in the set of message parts for the original
    *                   message
    */
-  public void setTotalParts(int totalParts)
-  {
+  public void setTotalParts(int totalParts) {
     this.totalParts = totalParts;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (id == null)
+        ? 0
+        : id.hashCode();
+  }
+
+  /**
+   * Increment the download attempts.
+   */
+  public void incrementDownloadAttempts() {
+    if (downloadAttempts == null) {
+      downloadAttempts = 1;
+    } else {
+      downloadAttempts++;
+    }
+  }
+
+  /**
+   * Returns <code>true</code> if the data for the original message is encrypted or
+   * <code>false</code> otherwise.
+   *
+   * @return <code>true</code> if the data for the original message is encrypted or
+   * <code>false</code> otherwise
+   */
+  public boolean messageIsEncrypted() {
+    return ((messageDataHash != null) && (messageDataHash.length() > 0));
   }
 
   /**
@@ -938,21 +880,18 @@ public class MessagePart
    * @return the String representation of the message part
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     StringBuilder buffer = new StringBuilder("<MessagePart");
 
     buffer.append(" id=\"").append(id).append("\"");
     buffer.append(" partNo=\"").append(partNo).append("\"");
     buffer.append(" totalParts=\"").append(totalParts).append("\"");
 
-    if (sendAttempts != null)
-    {
+    if (sendAttempts != null) {
       buffer.append(" sendAttempts=\"").append(sendAttempts).append("\"");
     }
 
-    if (downloadAttempts != null)
-    {
+    if (downloadAttempts != null) {
       buffer.append(" downloadAttempts=\"").append(downloadAttempts).append("\"");
     }
 
@@ -962,8 +901,7 @@ public class MessagePart
     buffer.append(" messageDeviceId=\"").append(messageDeviceId).append("\"");
     buffer.append(" messageTypeId=\"").append(messageTypeId).append("\"");
 
-    if (messageCorrelationId != null)
-    {
+    if (messageCorrelationId != null) {
       buffer.append(" messageCorrelationId=\"").append(messageCorrelationId).append("\"");
     }
 
@@ -984,21 +922,18 @@ public class MessagePart
    *
    * @return the WBXML representation of the message part
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("MessagePart");
 
     rootElement.setAttribute("id", id.toString());
     rootElement.setAttribute("partNo", Integer.toString(partNo));
     rootElement.setAttribute("totalParts", Integer.toString(totalParts));
 
-    if (sendAttempts != null)
-    {
+    if (sendAttempts != null) {
       rootElement.setAttribute("sendAttempts", Integer.toString(sendAttempts));
     }
 
-    if (downloadAttempts != null)
-    {
+    if (downloadAttempts != null) {
       rootElement.setAttribute("downloadAttempts", Integer.toString(downloadAttempts));
     }
 
@@ -1007,21 +942,18 @@ public class MessagePart
     rootElement.setAttribute("messageDeviceId", messageDeviceId.toString());
     rootElement.setAttribute("messageTypeId", messageTypeId.toString());
 
-    if (messageCorrelationId != null)
-    {
+    if (messageCorrelationId != null) {
       rootElement.setAttribute("messageCorrelationId", messageCorrelationId.toString());
     }
 
     rootElement.setAttribute("messagePriority", Integer.toString(messagePriority.code()));
     rootElement.setAttribute("messageCreated", ISO8601Util.fromLocalDateTime(messageCreated));
 
-    if (messageDataHash != null)
-    {
+    if (messageDataHash != null) {
       rootElement.setAttribute("messageDataHash", messageDataHash);
     }
 
-    if (messageEncryptionIV != null)
-    {
+    if (messageEncryptionIV != null) {
       rootElement.setAttribute("messageEncryptionIV", messageEncryptionIV);
     }
 

@@ -18,8 +18,15 @@ package digital.inception.core.xml;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+import javax.xml.XMLConstants;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.namespace.QName;
 import org.springframework.util.StringUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,38 +34,24 @@ import org.w3c.dom.NodeList;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.xml.XMLConstants;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.namespace.QName;
-
 /**
  * The <code>XmlUtil</code> class provides utility methods for working with XML documents.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class XmlUtil
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class XmlUtil {
+
   /**
-   * The <code>DatatypeFactory</code> instance used to convert java.xml.datatype object that map
-   * XML to/from Java objects.
+   * The <code>DatatypeFactory</code> instance used to convert java.xml.datatype object that map XML
+   * to/from Java objects.
    */
   private static DatatypeFactory datatypeFactory;
 
-  static
-  {
-    try
-    {
+  static {
+    try {
       datatypeFactory = DatatypeFactory.newInstance();
-    }
-    catch (DatatypeConfigurationException e)
-    {
+    } catch (DatatypeConfigurationException e) {
       throw new IllegalStateException("Failed to create a new DatatypeFactory instance", e);
     }
   }
@@ -71,14 +64,10 @@ public class XmlUtil
    *
    * @return the converted <code>java.util.Date</code> instance
    */
-  public static java.util.Date asDate(XMLGregorianCalendar calendar)
-  {
-    if (calendar == null)
-    {
+  public static java.util.Date asDate(XMLGregorianCalendar calendar) {
+    if (calendar == null) {
       return null;
-    }
-    else
-    {
+    } else {
       return calendar.toGregorianCalendar().getTime();
     }
   }
@@ -91,14 +80,10 @@ public class XmlUtil
    *
    * @return the converted <code>javax.xml.datatype.XMLGregorianCalendar</code> instance
    */
-  public static XMLGregorianCalendar asXMLGregorianCalendar(java.util.Date date)
-  {
-    if (date == null)
-    {
+  public static XMLGregorianCalendar asXMLGregorianCalendar(java.util.Date date) {
+    if (date == null) {
       return null;
-    }
-    else
-    {
+    } else {
       GregorianCalendar calendar = new GregorianCalendar();
 
       calendar.setTimeInMillis(date.getTime());
@@ -113,23 +98,19 @@ public class XmlUtil
    * @param element the parent element
    * @param name    the name of the child element to return
    *
-   * @return the child element or <code>null</code> if a child element with the specified name
-   *         could not be found
+   * @return the child element or <code>null</code> if a child element with the specified name could
+   * not be found
    */
-  public static Element getChildElement(Element element, String name)
-  {
+  public static Element getChildElement(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
 
-    for (int i = 0; i < nodeList.getLength(); i++)
-    {
+    for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
 
-      if (node instanceof Element)
-      {
+      if (node instanceof Element) {
         Element childElement = (Element) node;
 
-        if (childElement.getNodeName().equals(name))
-        {
+        if (childElement.getNodeName().equals(name)) {
           return childElement;
         }
       }
@@ -139,35 +120,28 @@ public class XmlUtil
   }
 
   /**
-   * Returns the boolean value of the text content for the child element with the specified name
-   * for the specified element.
+   * Returns the boolean value of the text content for the child element with the specified name for
+   * the specified element.
    *
    * @param element the parent element
    * @param name    the name of the child element to return
    *
    * @return the boolean value of the text content for the child element or <code>null</code> if a
-   *         child element with the specified name could not be found
+   * child element with the specified name could not be found
    */
-  public static Boolean getChildElementBoolean(Element element, String name)
-  {
+  public static Boolean getChildElementBoolean(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
 
-    for (int i = 0; i < nodeList.getLength(); i++)
-    {
+    for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
 
-      if (node instanceof Element)
-      {
+      if (node instanceof Element) {
         Element childElement = (Element) node;
 
-        if (childElement.getNodeName().equals(name))
-        {
-          try
-          {
+        if (childElement.getNodeName().equals(name)) {
+          try {
             return Boolean.parseBoolean(childElement.getTextContent());
-          }
-          catch (Throwable e)
-          {
+          } catch (Throwable e) {
             throw new RuntimeException("Failed to parse the invalid boolean value ("
                 + childElement.getTextContent() + ")");
           }
@@ -185,23 +159,19 @@ public class XmlUtil
    * @param element the parent element
    * @param name    the name of the child element to return
    *
-   * @return the text content for the child element or <code>null</code> if a child element with
-   *         the specified name could not be found
+   * @return the text content for the child element or <code>null</code> if a child element with the
+   * specified name could not be found
    */
-  public static String getChildElementText(Element element, String name)
-  {
+  public static String getChildElementText(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
 
-    for (int i = 0; i < nodeList.getLength(); i++)
-    {
+    for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
 
-      if (node instanceof Element)
-      {
+      if (node instanceof Element) {
         Element childElement = (Element) node;
 
-        if (childElement.getNodeName().equals(name))
-        {
+        if (childElement.getNodeName().equals(name)) {
           return childElement.getTextContent();
         }
       }
@@ -218,22 +188,18 @@ public class XmlUtil
    *
    * @return the child elements with the specified name for the specified element
    */
-  public static List<Element> getChildElements(Element element, String name)
-  {
+  public static List<Element> getChildElements(Element element, String name) {
     List<Element> childElements = new ArrayList<>();
 
     NodeList nodeList = element.getChildNodes();
 
-    for (int i = 0; i < nodeList.getLength(); i++)
-    {
+    for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
 
-      if (node instanceof Element)
-      {
+      if (node instanceof Element) {
         Element childElement = (Element) node;
 
-        if (childElement.getNodeName().equals(name))
-        {
+        if (childElement.getNodeName().equals(name)) {
           childElements.add(childElement);
         }
       }
@@ -252,35 +218,26 @@ public class XmlUtil
    *
    * @return the <code>javax.xml.namespace.QName</code> instance for the specified QName
    */
-  public static QName getQName(Document document, String qname)
-  {
+  public static QName getQName(Document document, String qname) {
     qname = StringUtils.isEmpty(qname)
         ? ""
         : qname.trim();
 
     String[] nameParts = qname.split(":");
 
-    if (nameParts.length == 1)
-    {
-      if (!StringUtils.isEmpty(document.getNamespaceURI()))
-      {
+    if (nameParts.length == 1) {
+      if (!StringUtils.isEmpty(document.getNamespaceURI())) {
         return new QName(document.getNamespaceURI(), nameParts[0]);
-      }
-      else
-      {
+      } else {
         return new QName(XMLConstants.NULL_NS_URI, nameParts[0], XMLConstants.DEFAULT_NS_PREFIX);
       }
-    }
-    else if (nameParts.length == 2)
-    {
+    } else if (nameParts.length == 2) {
       String namespaceURI = nameParts[0].equals(XMLConstants.DEFAULT_NS_PREFIX)
           ? document.lookupNamespaceURI(null)
           : document.lookupNamespaceURI(nameParts[0]);
 
       return new QName(namespaceURI, nameParts[1], nameParts[0]);
-    }
-    else
-    {
+    } else {
       throw new RuntimeException("Failed to parse the QName (" + qname + ")");
     }
   }
@@ -295,8 +252,7 @@ public class XmlUtil
    *
    * @return the <code>javax.xml.namespace.QName</code> instance for the specified QName
    */
-  public static QName getQName(Element element, String qname)
-  {
+  public static QName getQName(Element element, String qname) {
     return getQName(element.getOwnerDocument(), qname);
   }
 
@@ -308,22 +264,18 @@ public class XmlUtil
    * @param name    the name of the child element
    *
    * @return <code>true</code> if the specified element has a child with the specified name or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  public static boolean hasChildElement(Element element, String name)
-  {
+  public static boolean hasChildElement(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
 
-    for (int i = 0; i < nodeList.getLength(); i++)
-    {
+    for (int i = 0; i < nodeList.getLength(); i++) {
       Node node = nodeList.item(i);
 
-      if (node instanceof Element)
-      {
+      if (node instanceof Element) {
         Element childElement = (Element) node;
 
-        if (childElement.getNodeName().equals(name))
-        {
+        if (childElement.getNodeName().equals(name)) {
           return true;
         }
       }

@@ -19,13 +19,11 @@ package digital.inception.core.converters;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
-
+import java.time.ZonedDateTime;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.time.ZonedDateTime;
 
 /**
  * The <code>ZonedDateTimeToStringConverter</code> class implements the Spring converter that
@@ -36,16 +34,16 @@ import java.time.ZonedDateTime;
 @SuppressWarnings("unused")
 @Component
 public final class ZonedDateTimeToStringConverter
-  implements Converter<ZonedDateTime, String>
-{
+    implements Converter<ZonedDateTime, String> {
+
   /**
    * Constructs a new <code>ZonedDateTimeToStringConverter</code>.
    */
-  public ZonedDateTimeToStringConverter() {}
+  public ZonedDateTimeToStringConverter() {
+  }
 
   @Override
-  public String convert(ZonedDateTime source)
-  {
+  public String convert(ZonedDateTime source) {
     return ISO8601Util.fromZonedDateTime(source);
   }
 }

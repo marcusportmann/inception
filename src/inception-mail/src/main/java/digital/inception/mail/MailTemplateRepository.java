@@ -18,6 +18,8 @@ package digital.inception.mail;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,19 +27,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.Optional;
-import java.util.UUID;
-
 /**
  * The <code>MailTemplateRepository</code> interface declares the repository for the
  * <code>MailTemplate</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface MailTemplateRepository extends JpaRepository<MailTemplate, String>
-{
+public interface MailTemplateRepository extends JpaRepository<MailTemplate, String> {
+
   @Modifying
   @Query("delete from MailTemplate mt where mt.id = :mailTemplateId")
   void deleteById(@Param("mailTemplateId") String mailTemplateId);

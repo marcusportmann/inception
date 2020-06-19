@@ -22,12 +22,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>ReportingConfiguration</code> class provides the Spring configuration
- * for the Reporting module.
+ * The <code>ReportingConfiguration</code> class provides the Spring configuration for the Reporting
+ * module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-    basePackages = { "digital.inception.reporting" })
-public class ReportingConfiguration {}
+    basePackages = {"digital.inception.reporting"})
+public class ReportingConfiguration {
+
+}

@@ -20,14 +20,12 @@ package digital.inception.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserSortBy</code> enumeration defines the possible methods used to sort a list of
@@ -38,8 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "UserSortBy")
 @XmlEnum
 @XmlType(name = "UserSortBy", namespace = "http://security.inception.digital")
-public enum UserSortBy
-{
+public enum UserSortBy {
   /**
    * Sort by first name.
    */
@@ -61,8 +58,7 @@ public enum UserSortBy
   private int code;
   private String description;
 
-  UserSortBy(int code, String description)
-  {
+  UserSortBy(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -75,10 +71,8 @@ public enum UserSortBy
    * @return the method used to sort a list of users given by the specified code value
    */
   @JsonCreator
-  public static UserSortBy fromCode(int code)
-  {
-    switch (code)
-    {
+  public static UserSortBy fromCode(int code) {
+    switch (code) {
       case 0:
         return UserSortBy.FIRST_NAME;
 
@@ -97,8 +91,7 @@ public enum UserSortBy
    *
    * @return the method used to sort a list of users given by the specified code value
    */
-  public static UserSortBy fromCode(String code)
-  {
+  public static UserSortBy fromCode(String code) {
     return fromCode(Integer.parseInt(code));
   }
 
@@ -108,8 +101,7 @@ public enum UserSortBy
    * @return the code value identifying the method used to sort a list of users
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -118,8 +110,7 @@ public enum UserSortBy
    *
    * @return the description for the method used to sort a list of users
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 
@@ -128,8 +119,7 @@ public enum UserSortBy
    *
    * @return the string representation of the method used to sort a list of users enumeration value
    */
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
 }

@@ -23,9 +23,17 @@ import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-
-import io.swagger.annotations.*;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +42,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.*;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 /**
  * The <code>SecurityRestController</code> class.
@@ -51,9 +60,9 @@ import javax.validation.Validator;
 @Api(tags = "Security API")
 @RestController
 @RequestMapping(value = "/api/security")
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class SecurityRestController extends SecureRestController
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class SecurityRestController extends SecureRestController {
+
   /**
    * The Security Service.
    */
@@ -70,8 +79,7 @@ public class SecurityRestController extends SecureRestController
    * @param securityService the Security Service
    * @param validator       the JSR-303 validator
    */
-  public SecurityRestController(ISecurityService securityService, Validator validator)
-  {
+  public SecurityRestController(ISecurityService securityService, Validator validator) {
     this.securityService = securityService;
     this.validator = validator;
   }
@@ -86,16 +94,16 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Add the group member to the group",
       notes = "Add the group member to the group")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The group member was successfully added to the group") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The group member was successfully added to the group"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or group or user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 409, message = "The group member already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
       method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -109,36 +117,30 @@ public class SecurityRestController extends SecureRestController
   @PathVariable String groupName, @ApiParam(name = "groupMember", value = "The group member",
       required = true)
   @RequestBody GroupMember groupMember)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        UserNotFoundException, ExistingGroupMemberException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      UserNotFoundException, ExistingGroupMemberException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (groupMember == null)
-    {
+    if (groupMember == null) {
       throw new InvalidArgumentException("groupMember");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
     Set<ConstraintViolation<GroupMember>> constraintViolations = validator.validate(groupMember);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("groupMember", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -156,16 +158,16 @@ public class SecurityRestController extends SecureRestController
    * @param groupRole       the group role
    */
   @ApiOperation(value = "Add the role to the group", notes = "Add the role to the group")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The role was successfully added to the group") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The role was successfully added to the group"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or group or role could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 409, message = "The group role already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
       method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -179,43 +181,36 @@ public class SecurityRestController extends SecureRestController
   @PathVariable String groupName, @ApiParam(name = "groupRole", value = "The group role",
       required = true)
   @RequestBody GroupRole groupRole)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (groupRole == null)
-    {
+    if (groupRole == null) {
       throw new InvalidArgumentException("groupRole");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
     Set<ConstraintViolation<GroupRole>> constraintViolations = validator.validate(groupRole);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("groupRole", ValidationError.toValidationErrors(
           constraintViolations));
     }
 
     if (groupRole.getRoleCode().equalsIgnoreCase(SecurityService.ADMINISTRATOR_ROLE_CODE)
-        && (!hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE)))
-    {
+        && (!hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE))) {
       throw new AccessDeniedException("Insufficient authority to add the " + SecurityService
           .ADMINISTRATOR_ROLE_CODE + " role to the group (" + groupName
           + ") for the user directory (" + userDirectoryId + ")");
@@ -227,22 +222,22 @@ public class SecurityRestController extends SecureRestController
   /**
    * Add the user directory to the organization.
    *
-   * @param organizationId             the Universally Unique Identifier (UUID) used to uniquely
-   *                                   identify the organization
+   * @param organizationId            the Universally Unique Identifier (UUID) used to uniquely
+   *                                  identify the organization
    * @param organizationUserDirectory the organization user directory
    */
   @ApiOperation(value = "Add the user directory to the organization",
       notes = "Add the user directory to the organization")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The user directory was successfully added to the organization") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The user directory was successfully added to the organization"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The organization or user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 409, message = "The organization user directory already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations/{organizationId}/user-directories",
       method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -254,32 +249,27 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID organizationId, @ApiParam(name = "organizationUserDirectory",
       value = "The organization user directory", required = true)
   @RequestBody OrganizationUserDirectory organizationUserDirectory)
-    throws InvalidArgumentException, OrganizationNotFoundException, UserDirectoryNotFoundException,
-        ExistingOrganizationUserDirectoryException, SecurityServiceException
-  {
+      throws InvalidArgumentException, OrganizationNotFoundException, UserDirectoryNotFoundException,
+      ExistingOrganizationUserDirectoryException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null)
-    {
+    if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
-    if (organizationUserDirectory == null)
-    {
+    if (organizationUserDirectory == null) {
       throw new InvalidArgumentException("organizationUserDirectory");
     }
 
     Set<ConstraintViolation<OrganizationUserDirectory>> constraintViolations = validator.validate(
         organizationUserDirectory);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("organizationUserDirectory",
           ValidationError.toValidationErrors(constraintViolations));
     }
 
-    if (!organizationUserDirectory.getOrganizationId().equals(organizationId))
-    {
+    if (!organizationUserDirectory.getOrganizationId().equals(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -297,14 +287,14 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Administratively change the password for the user",
       notes = "Administratively change the password for the user")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The password for the user was changed successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The password for the user was changed successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}/password",
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -318,33 +308,27 @@ public class SecurityRestController extends SecureRestController
   @PathVariable String username, @ApiParam(name = "passwordChange", value = "The password change",
       required = true)
   @RequestBody PasswordChange passwordChange)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username))
-    {
+    if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (passwordChange == null)
-    {
+    if (passwordChange == null) {
       throw new InvalidArgumentException("passwordChange");
     }
 
-    if (StringUtils.isEmpty(passwordChange.getNewPassword()))
-    {
+    if (StringUtils.isEmpty(passwordChange.getNewPassword())) {
       throw new InvalidArgumentException("passwordChange");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -352,48 +336,47 @@ public class SecurityRestController extends SecureRestController
     Set<ConstraintViolation<PasswordChange>> constraintViolations = validator.validate(
         passwordChange);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("passwordChange", ValidationError.toValidationErrors(
           constraintViolations));
     }
 
     securityService.adminChangePassword(userDirectoryId, username, passwordChange.getNewPassword(),
         (passwordChange.getExpirePassword() == null)
-        ? false
-        : passwordChange.getExpirePassword(),
+            ? false
+            : passwordChange.getExpirePassword(),
         (passwordChange.getLockUser() == null)
-        ? false
-        : passwordChange.getLockUser(),
+            ? false
+            : passwordChange.getLockUser(),
         (passwordChange.getResetPasswordHistory() == null)
-        ? false
-        : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
+            ? false
+            : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
   }
 
   /**
    * Change the password for the user.
    *
-   * @param username        the username identifying the user
-   * @param passwordChange  the password change
+   * @param username       the username identifying the user
+   * @param passwordChange the password change
    */
   @ApiOperation(value = "Change the password for the user",
       notes = "Change the password for the user")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The password for the user was changed successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The password for the user was changed successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 401, message = "Authentication failed or invalid security code",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 403,
           message = "The user has exceeded the maximum number of failed password attempts and has been locked",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 409,
           message = "The new password for the user has been used recently and is not valid",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/users/{username}/password", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -402,42 +385,35 @@ public class SecurityRestController extends SecureRestController
   @PathVariable String username, @ApiParam(name = "passwordChange", value = "The password change",
       required = true)
   @RequestBody PasswordChange passwordChange)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        AuthenticationFailedException, InvalidSecurityCodeException, ExistingPasswordException,
-        UserLockedException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+      AuthenticationFailedException, InvalidSecurityCodeException, ExistingPasswordException,
+      UserLockedException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(username))
-    {
+    if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (passwordChange == null)
-    {
+    if (passwordChange == null) {
       throw new InvalidArgumentException("passwordChange");
     }
 
     UUID userDirectoryId = securityService.getUserDirectoryIdForUser(username);
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new UserNotFoundException(username);
     }
 
     Set<ConstraintViolation<PasswordChange>> constraintViolations = validator.validate(
         passwordChange);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("passwordChange", ValidationError.toValidationErrors(
           constraintViolations));
     }
 
-    if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE)
-    {
-      if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-      {
+    if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE) {
+      if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
         throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
             + ")");
       }
@@ -445,40 +421,31 @@ public class SecurityRestController extends SecureRestController
       if (hasRole(authentication, "Administrator")
           || hasAccessToFunction(authentication, "Security.OrganizationAdministration")
           || hasAccessToFunction(authentication, "Security.UserAdministration")
-          || hasAccessToFunction(authentication, "Security.ResetUserPassword"))
-      {
+          || hasAccessToFunction(authentication, "Security.ResetUserPassword")) {
         securityService.adminChangePassword(userDirectoryId, username,
             passwordChange.getNewPassword(),
             (passwordChange.getExpirePassword() == null)
-            ? false
-            : passwordChange.getExpirePassword(),
+                ? false
+                : passwordChange.getExpirePassword(),
             (passwordChange.getLockUser() == null)
-            ? false
-            : passwordChange.getLockUser(),
+                ? false
+                : passwordChange.getLockUser(),
             (passwordChange.getResetPasswordHistory() == null)
-            ? false
-            : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
-      }
-      else
-      {
+                ? false
+                : passwordChange.getResetPasswordHistory(), passwordChange.getReason());
+      } else {
         throw new AccessDeniedException("Insufficient access to change the password for the user ("
             + username + ")");
       }
-    }
-    else if (passwordChange.getReason() == PasswordChangeReason.USER)
-    {
-      if (StringUtils.isEmpty(passwordChange.getPassword()))
-      {
+    } else if (passwordChange.getReason() == PasswordChangeReason.USER) {
+      if (StringUtils.isEmpty(passwordChange.getPassword())) {
         throw new InvalidArgumentException("passwordChange");
       }
 
       securityService.changePassword(username, passwordChange.getPassword(),
           passwordChange.getNewPassword());
-    }
-    else if (passwordChange.getReason() == PasswordChangeReason.RESET)
-    {
-      if (StringUtils.isEmpty(passwordChange.getSecurityCode()))
-      {
+    } else if (passwordChange.getReason() == PasswordChangeReason.RESET) {
+      if (StringUtils.isEmpty(passwordChange.getSecurityCode())) {
         throw new InvalidArgumentException("passwordChange");
       }
 
@@ -495,15 +462,15 @@ public class SecurityRestController extends SecureRestController
    * @param group           the group
    */
   @ApiOperation(value = "Create the group", notes = "Create the group")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The group was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The group was created successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 409, message = "A group with the specified name already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -515,36 +482,30 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "group", value = "The group",
       required = true)
   @RequestBody Group group)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
-        SecurityServiceException
-  {
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
+      SecurityServiceException {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (group == null)
-    {
+    if (group == null) {
       throw new InvalidArgumentException("group");
     }
 
     if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId))
-    {
+        userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
     Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("group", ValidationError.toValidationErrors(
           constraintViolations));
     }
 
-    if (!group.getUserDirectoryId().equals(userDirectoryId))
-    {
+    if (!group.getUserDirectoryId().equals(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -555,18 +516,19 @@ public class SecurityRestController extends SecureRestController
    * Create the new organization.
    *
    * @param organization        the organization
-   * @param createUserDirectory should a new internal user directory be created for the organization
+   * @param createUserDirectory should a new internal user directory be created for the
+   *                            organization
    */
   @ApiOperation(value = "Create the organization", notes = "Create the organization")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The organization was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The organization was created successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 409,
           message = "An organization with the specified ID or name already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -577,17 +539,14 @@ public class SecurityRestController extends SecureRestController
   @RequestBody Organization organization, @ApiParam(name = "createUserDirectory",
       value = "Should a new internal user directory be created for the organization")
   @RequestParam(value = "createUserDirectory", required = false) Boolean createUserDirectory)
-    throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException
-  {
-    if (organization == null)
-    {
+      throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException {
+    if (organization == null) {
       throw new InvalidArgumentException("organization");
     }
 
     Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("organization", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -606,15 +565,15 @@ public class SecurityRestController extends SecureRestController
    * @param userLocked      create the user locked
    */
   @ApiOperation(value = "Create the user", notes = "Create the user")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The user was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The user was created successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 409, message = "A user with the specified username already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -630,30 +589,25 @@ public class SecurityRestController extends SecureRestController
       name = "userLocked",
       value = "Create the user locked")
   @RequestParam(value = "userLocked", required = false) Boolean userLocked)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
-        SecurityServiceException
-  {
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
+      SecurityServiceException {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (user == null)
-    {
+    if (user == null) {
       throw new InvalidArgumentException("user");
     }
 
     if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId))
-    {
+        userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
     Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("user", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -668,15 +622,15 @@ public class SecurityRestController extends SecureRestController
    * @param userDirectory the user directory
    */
   @ApiOperation(value = "Create the user directory", notes = "Create the user directory")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The user directory was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The user directory was created successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 409,
           message = "A user directory with the specified ID or name already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -685,18 +639,15 @@ public class SecurityRestController extends SecureRestController
   public void createUserDirectory(@ApiParam(name = "userDirectory", value = "The user directory",
       required = true)
   @RequestBody UserDirectory userDirectory)
-    throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException
-  {
-    if (userDirectory == null)
-    {
+      throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException {
+    if (userDirectory == null) {
       throw new InvalidArgumentException("userDirectory");
     }
 
     Set<ConstraintViolation<UserDirectory>> constraintViolations = validator.validate(
         userDirectory);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("userDirectory", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -712,16 +663,16 @@ public class SecurityRestController extends SecureRestController
    * @param groupName       the name identifying the group
    */
   @ApiOperation(value = "Delete the group", notes = "Delete the group")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The group was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The group was deleted successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 409,
           message = "The group could not be deleted since it is still associated with 1 or more user(s)",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -733,22 +684,18 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
       value = "The name identifying the group", required = true)
   @PathVariable String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        ExistingGroupMembersException, SecurityServiceException
-  {
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      ExistingGroupMembersException, SecurityServiceException {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
     if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId))
-    {
+        userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -763,14 +710,14 @@ public class SecurityRestController extends SecureRestController
    *                       organization
    */
   @ApiOperation(value = "Delete the organization", notes = "Delete the organization")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The organization was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The organization was deleted successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -780,10 +727,8 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
       required = true)
   @PathVariable UUID organizationId)
-    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
-  {
-    if (StringUtils.isEmpty(organizationId))
-    {
+      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
+    if (StringUtils.isEmpty(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -798,13 +743,13 @@ public class SecurityRestController extends SecureRestController
    * @param username        the username identifying the user
    */
   @ApiOperation(value = "Delete the user", notes = "Delete the user")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The user was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The user was deleted successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -816,22 +761,18 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
-  {
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+      SecurityServiceException {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username))
-    {
+    if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
     }
 
     if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId))
-    {
+        userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -846,14 +787,14 @@ public class SecurityRestController extends SecureRestController
    *                        user directory
    */
   @ApiOperation(value = "Delete the user directory", notes = "Delete the user directory")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The user directory was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The user directory was deleted successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -863,10 +804,8 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
   @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -883,13 +822,13 @@ public class SecurityRestController extends SecureRestController
    * @return the group
    */
   @ApiOperation(value = "Retrieve the group", notes = "Retrieve the group")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -901,23 +840,19 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
       value = "The name identifying the group", required = true)
   @PathVariable String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -934,13 +869,13 @@ public class SecurityRestController extends SecureRestController
    * @return the group names
    */
   @ApiOperation(value = "Retrieve the group names", notes = "Retrieve the group names")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/group-names",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -950,24 +885,20 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
   @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
     if (!hasAccessToUserDirectory(SecurityContextHolder.getContext().getAuthentication(),
-        userDirectoryId))
-    {
+        userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -986,13 +917,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the names identifying the groups the user is a member of",
       notes = "Retrieve the names identifying the groups the user is a member of")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}/group-names",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1004,23 +935,19 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username))
-    {
+    if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1041,13 +968,13 @@ public class SecurityRestController extends SecureRestController
    * @return the groups
    */
   @ApiOperation(value = "Retrieve the groups", notes = "Retrieve the groups")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1067,17 +994,14 @@ public class SecurityRestController extends SecureRestController
       name = "pageSize",
       value = "The optional page size", example = "0")
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId))
-    {
+    if (StringUtils.isEmpty(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1105,13 +1029,13 @@ public class SecurityRestController extends SecureRestController
    * @param pageSize        the optional page size
    */
   @ApiOperation(value = "Retrieve the group members", notes = "Retrieve the group members")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/members",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1133,23 +1057,19 @@ public class SecurityRestController extends SecureRestController
       name = "pageSize",
       value = "The optional page size", example = "0")
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1175,13 +1095,13 @@ public class SecurityRestController extends SecureRestController
    * @return the organization
    */
   @ApiOperation(value = "Retrieve the organization", notes = "Retrieve the organization")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1191,12 +1111,10 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
       required = true)
   @PathVariable UUID organizationId)
-    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId))
-    {
+    if (StringUtils.isEmpty(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -1213,13 +1131,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the name of organization",
       notes = "Retrieve the name of the organization")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations/{organizationId}/name", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1229,12 +1147,10 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
       required = true)
   @PathVariable UUID organizationId)
-    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId))
-    {
+    if (StringUtils.isEmpty(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -1252,10 +1168,10 @@ public class SecurityRestController extends SecureRestController
    * @return the organizations
    */
   @ApiOperation(value = "Retrieve the organizations", notes = "Retrieve the organizations")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1272,8 +1188,7 @@ public class SecurityRestController extends SecureRestController
       name = "pageSize",
       value = "The optional page size", example = "0")
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfOrganizations(
         filter)));
@@ -1292,13 +1207,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the organizations the user directory is associated with",
       notes = "Retrieve the organizations the user directory is associated with")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/organizations",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1307,23 +1222,19 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
   @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (!authentication.isAuthenticated())
-    {
+    if (!authentication.isAuthenticated()) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1345,13 +1256,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the codes for the roles that have been assigned to the group",
       notes = "Retrieve the codes for the roles that have been assigned to the group")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/role-codes",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1363,23 +1274,19 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
       value = "The name identifying the group", required = true)
   @PathVariable String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1393,17 +1300,16 @@ public class SecurityRestController extends SecureRestController
    * @return the roles
    */
   @ApiOperation(value = "Retrieve all the roles", notes = "Retrieve all the roles")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public List<Role> getRoles()
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     return securityService.getRoles();
   }
 
@@ -1418,13 +1324,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the roles that have been assigned to the group",
       notes = "Retrieve the roles that have been assigned to the group")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1436,23 +1342,19 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "groupName",
       value = "The name identifying the group", required = true)
   @PathVariable String groupName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1470,13 +1372,13 @@ public class SecurityRestController extends SecureRestController
    * @return the user
    */
   @ApiOperation(value = "Retrieve the user", notes = "Retrieve the user")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1488,23 +1390,19 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username))
-    {
+    if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1530,10 +1428,10 @@ public class SecurityRestController extends SecureRestController
    * @return the user directories
    */
   @ApiOperation(value = "Retrieve the user directories", notes = "Retrieve the user directories")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1550,8 +1448,7 @@ public class SecurityRestController extends SecureRestController
       name = "pageSize",
       value = "The optional page size", example = "0")
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(
         filter)));
@@ -1570,13 +1467,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the user directories the organization is associated with",
       notes = "Retrieve the user directories the organization is associated with")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations/{organizationId}/user-directories",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1587,12 +1484,10 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
       required = true)
   @PathVariable UUID organizationId)
-    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId))
-    {
+    if (StringUtils.isEmpty(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -1600,18 +1495,13 @@ public class SecurityRestController extends SecureRestController
         organizationId);
 
     if (hasRole(authentication, "Administrator")
-        || hasAccessToFunction(authentication, "Security.OrganizationAdministration"))
-    {
+        || hasAccessToFunction(authentication, "Security.OrganizationAdministration")) {
       return new ResponseEntity<>(userDirectories, HttpStatus.OK);
-    }
-    else
-    {
+    } else {
       List<UserDirectory> filteredUserDirectories = new ArrayList<>();
 
-      for (UserDirectory userDirectory : userDirectories)
-      {
-        if (hasAccessToUserDirectory(authentication, userDirectory.getId()))
-        {
+      for (UserDirectory userDirectory : userDirectories) {
+        if (hasAccessToUserDirectory(authentication, userDirectory.getId())) {
           filteredUserDirectories.add(userDirectory);
         }
       }
@@ -1629,13 +1519,13 @@ public class SecurityRestController extends SecureRestController
    * @return the user directory
    */
   @ApiOperation(value = "Retrieve the user directory", notes = "Retrieve the user directory")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1645,12 +1535,10 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
   @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1667,13 +1555,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the capabilities the user directory supports",
       notes = "Retrieve the capabilities the user directory supports")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/capabilities",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1683,17 +1571,14 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
   @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1711,13 +1596,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the name of the user directory",
       notes = "Retrieve the name of the user directory")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/name", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1727,12 +1612,10 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
   @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1751,10 +1634,10 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the summaries for the user directories",
       notes = "Retrieve the summaries for the user directories")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directory-summaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1772,8 +1655,7 @@ public class SecurityRestController extends SecureRestController
       name = "pageSize",
       value = "The optional page size", example = "0")
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     var httpHeaders = new HttpHeaders();
     httpHeaders.add("x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(
         filter)));
@@ -1793,13 +1675,13 @@ public class SecurityRestController extends SecureRestController
   @ApiOperation(
       value = "Retrieve the summaries for the user directories the organization is associated with",
       notes = "Retrieve the summaries for the user directories the organization is associated with")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations/{organizationId}/user-directory-summaries",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1809,13 +1691,11 @@ public class SecurityRestController extends SecureRestController
       @ApiParam(name = "organizationId",
           value = "The Universally Unique Identifier (UUID) used to uniquely identify the organization",
           required = true)
-  @PathVariable UUID organizationId)
-    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
-  {
+      @PathVariable UUID organizationId)
+      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId))
-    {
+    if (StringUtils.isEmpty(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -1823,18 +1703,13 @@ public class SecurityRestController extends SecureRestController
         securityService.getUserDirectorySummariesForOrganization(organizationId);
 
     if (hasRole(authentication, "Administrator")
-        || hasAccessToFunction(authentication, "Security.OrganizationAdministration"))
-    {
+        || hasAccessToFunction(authentication, "Security.OrganizationAdministration")) {
       return new ResponseEntity<>(userDirectorySummaries, HttpStatus.OK);
-    }
-    else
-    {
+    } else {
       List<UserDirectorySummary> filteredUserDirectorySummaries = new ArrayList<>();
 
-      for (UserDirectorySummary userDirectorySummary : userDirectorySummaries)
-      {
-        if (hasAccessToUserDirectory(authentication, userDirectorySummary.getId()))
-        {
+      for (UserDirectorySummary userDirectorySummary : userDirectorySummaries) {
+        if (hasAccessToUserDirectory(authentication, userDirectorySummary.getId())) {
           filteredUserDirectorySummaries.add(userDirectorySummary);
         }
       }
@@ -1854,14 +1729,14 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the user directory type for the user directory",
       notes = "Retrieve the user directory type for the user directory")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404,
           message = "The user directory or user directory type could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/user-directory-type",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1871,18 +1746,15 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
   @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, UserDirectoryNotFoundException,
-        UserDirectoryTypeNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException,
+      UserDirectoryTypeNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1897,18 +1769,17 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the user directory types",
       notes = "Retrieve the user directory types")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directory-types", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public List<UserDirectoryType> getUserDirectoryTypes()
-    throws SecurityServiceException
-  {
+      throws SecurityServiceException {
     return securityService.getUserDirectoryTypes();
   }
 
@@ -1923,13 +1794,13 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the full name for the user",
       notes = "Retrieve the full name for the user")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}/full-name",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -1941,23 +1812,19 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username))
-    {
+    if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -1979,13 +1846,13 @@ public class SecurityRestController extends SecureRestController
    * @return the users
    */
   @ApiOperation(value = "Retrieve the users", notes = "Retrieve the users")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -2008,17 +1875,14 @@ public class SecurityRestController extends SecureRestController
       name = "pageSize",
       value = "The optional page size", example = "0")
   @RequestParam(value = "pageSize", required = false) Integer pageSize)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -2045,15 +1909,15 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Remove the group member from the group",
       notes = "Remove the group member from the group")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The group member was successfully removed from the group") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The group member was successfully removed from the group"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404,
           message = "The user directory or group or group member could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(
       value = "/user-directories/{userDirectoryId}/groups/{groupName}/members/{memberType}/{memberName}",
       method = RequestMethod.DELETE, produces = "application/json")
@@ -2070,33 +1934,27 @@ public class SecurityRestController extends SecureRestController
   @PathVariable GroupMemberType memberType, @ApiParam(name = "memberName",
       value = "The name identifying the group member", required = true)
   @PathVariable String memberName)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        GroupMemberNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      GroupMemberNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (memberType == null)
-    {
+    if (memberType == null) {
       throw new InvalidArgumentException("memberType");
     }
 
-    if (StringUtils.isEmpty(memberName))
-    {
+    if (StringUtils.isEmpty(memberName)) {
       throw new InvalidArgumentException("memberName");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
@@ -2113,15 +1971,15 @@ public class SecurityRestController extends SecureRestController
    * @param roleCode        the code used to uniquely identify the role
    */
   @ApiOperation(value = "Remove the role from the group", notes = "Remove the role from the group")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The role was successfully removed from the group") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The role was successfully removed from the group"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404,
           message = "The user directory or group or group role could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}/roles/{roleCode}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -2135,35 +1993,29 @@ public class SecurityRestController extends SecureRestController
   @PathVariable String groupName, @ApiParam(name = "roleCode",
       value = "The code used to uniquely identify the role", required = true)
   @PathVariable String roleCode)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        GroupRoleNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      GroupRoleNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (StringUtils.isEmpty(roleCode))
-    {
+    if (StringUtils.isEmpty(roleCode)) {
       throw new InvalidArgumentException("roleCode");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
     if (roleCode.equalsIgnoreCase(SecurityService.ADMINISTRATOR_ROLE_CODE)
-        && (!hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE)))
-    {
+        && (!hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE))) {
       throw new AccessDeniedException("Insufficient authority to remove the " + SecurityService
           .ADMINISTRATOR_ROLE_CODE + " role from the group (" + groupName
           + ") for the user directory (" + userDirectoryId + ")");
@@ -2182,15 +2034,15 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Remove the user directory from the organization",
       notes = "Remove the user directory from the organization")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The user directory was successfully removed from the organization") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The user directory was successfully removed from the organization"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404,
           message = "The organization or organization user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations/{organizationId}/user-directories/{userDirectoryId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -2203,18 +2055,15 @@ public class SecurityRestController extends SecureRestController
       value = "The Universally Unique Identifier (UUID) used to uniquely identify the user directory",
       required = true)
   @PathVariable UUID userDirectoryId)
-    throws InvalidArgumentException, OrganizationNotFoundException,
-        OrganizationUserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, OrganizationNotFoundException,
+      OrganizationUserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null)
-    {
+    if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -2228,27 +2077,25 @@ public class SecurityRestController extends SecureRestController
    */
   @ApiOperation(value = "Initiate the password reset process for the user",
       notes = "Initiate the password reset process for the user")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The password reset process was initiated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The password reset process was initiated successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/users/{username}/reset-password", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void resetPassword(@ApiParam(name = "username",
       value = "The username identifying the user", required = true)
   @PathVariable String username, @ApiParam(
-    name = "resetPasswordUrl",
-    value = "The reset password URL")
+      name = "resetPasswordUrl",
+      value = "The reset password URL")
   @RequestParam(value = "resetPasswordUrl") String resetPasswordUrl)
-    throws InvalidArgumentException, UserNotFoundException, SecurityServiceException
-  {
-    if (StringUtils.isEmpty(username))
-    {
+      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
+    if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -2263,13 +2110,13 @@ public class SecurityRestController extends SecureRestController
    * @param groupName       the name identifying the group
    */
   @ApiOperation(value = "Update the group", notes = "Update the group")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The group was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The group was updated successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or group could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/groups/{groupName}",
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -2282,41 +2129,34 @@ public class SecurityRestController extends SecureRestController
       value = "The name identifying the group", required = true)
   @PathVariable String groupName, @ApiParam(name = "group", value = "The group", required = true)
   @RequestBody Group group)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName))
-    {
+    if (StringUtils.isEmpty(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (group == null)
-    {
+    if (group == null) {
       throw new InvalidArgumentException("group");
     }
 
-    if (!group.getName().equals(groupName))
-    {
+    if (!group.getName().equals(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
     Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("group", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -2332,14 +2172,14 @@ public class SecurityRestController extends SecureRestController
    * @param organization   the organization
    */
   @ApiOperation(value = "Update the organization", notes = "Update the organization")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The organization was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The organization was updated successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The organization could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/organizations/{organizationId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -2351,29 +2191,24 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID organizationId, @ApiParam(name = "organization", value = "The organization",
       required = true)
   @RequestBody Organization organization)
-    throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId))
-    {
+    if (StringUtils.isEmpty(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
-    if (organization == null)
-    {
+    if (organization == null) {
       throw new InvalidArgumentException("organization");
     }
 
-    if (!organization.getId().equals(organizationId))
-    {
+    if (!organization.getId().equals(organizationId)) {
       throw new InvalidArgumentException("organizationId");
     }
 
     Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("organization", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -2392,13 +2227,13 @@ public class SecurityRestController extends SecureRestController
    * @param lockUser        lock the user
    */
   @ApiOperation(value = "Update the user", notes = "Update the user")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The user was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The user was updated successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory or user could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}/users/{username}",
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -2415,41 +2250,34 @@ public class SecurityRestController extends SecureRestController
       name = "lockUser",
       value = "Lock the user")
   @RequestParam(value = "lockUser", required = false) Boolean lockUser)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-        SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+      SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username))
-    {
+    if (StringUtils.isEmpty(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (user == null)
-    {
+    if (user == null) {
       throw new InvalidArgumentException("user");
     }
 
-    if (!user.getUsername().equals(username))
-    {
+    if (!user.getUsername().equals(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId))
-    {
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException("Access denied to the user directory (" + userDirectoryId
           + ")");
     }
 
     Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("user", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -2466,14 +2294,14 @@ public class SecurityRestController extends SecureRestController
    * @param userDirectory   the user directory
    */
   @ApiOperation(value = "Update the user directory", notes = "Update the user directory")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The user directory was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The user directory was updated successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The user directory could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/user-directories/{userDirectoryId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -2485,30 +2313,25 @@ public class SecurityRestController extends SecureRestController
   @PathVariable UUID userDirectoryId, @ApiParam(name = "userDirectory",
       value = "The user directory", required = true)
   @RequestBody UserDirectory userDirectory)
-    throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException
-  {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (userDirectoryId == null)
-    {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (userDirectory == null)
-    {
+    if (userDirectory == null) {
       throw new InvalidArgumentException("userDirectory");
     }
 
-    if (!userDirectory.getId().equals(userDirectoryId))
-    {
+    if (!userDirectory.getId().equals(userDirectoryId)) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
     Set<ConstraintViolation<UserDirectory>> constraintViolations = validator.validate(
         userDirectory);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("userDirectory", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -2525,20 +2348,17 @@ public class SecurityRestController extends SecureRestController
    *                        user directory
    *
    * @return <code>true</code> if the user associated with the authenticated request has access to
-   *         the user directory or <code>false</code> otherwise
+   * the user directory or <code>false</code> otherwise
    */
   protected boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId)
-    throws AccessDeniedException
-  {
+      throws AccessDeniedException {
     // If the user is not authenticated then they cannot have access
-    if (!authentication.isAuthenticated())
-    {
+    if (!authentication.isAuthenticated()) {
       return false;
     }
 
     // If the user has the "Administrator" role they always have access
-    if (hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE))
-    {
+    if (hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE)) {
       return true;
     }
 

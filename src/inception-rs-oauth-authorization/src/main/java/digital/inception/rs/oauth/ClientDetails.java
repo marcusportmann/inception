@@ -18,12 +18,15 @@ package digital.inception.rs.oauth;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.*;
 
 /**
  * The <code>ClientDetails</code> class holds the information for an OAuth2 client.
@@ -31,8 +34,8 @@ import java.util.*;
  * @author Marcus Portmann
  */
 public class ClientDetails
-  implements org.springframework.security.oauth2.provider.ClientDetails
-{
+    implements org.springframework.security.oauth2.provider.ClientDetails {
+
   /**
    * The ID used to uniquely identify the client.
    */
@@ -43,8 +46,7 @@ public class ClientDetails
    *
    * @param clientId the ID used to uniquely identify the client
    */
-  public ClientDetails(String clientId)
-  {
+  public ClientDetails(String clientId) {
     this.clientId = clientId;
   }
 
@@ -54,21 +56,19 @@ public class ClientDetails
    * @return the access token validity period for this client
    */
   @Override
-  public Integer getAccessTokenValiditySeconds()
-  {
+  public Integer getAccessTokenValiditySeconds() {
     return AuthorizationServerConfiguration.ACCESS_TOKEN_VALIDITY;
   }
 
   /**
-   * Returns the information for this client, not needed by the vanilla OAuth protocol but might
-   * be useful, for example, for storing descriptive information.
+   * Returns the information for this client, not needed by the vanilla OAuth protocol but might be
+   * useful, for example, for storing descriptive information.
    *
    * @return the information for this client, not needed by the vanilla OAuth protocol but might be
-   *         useful, for example, for storing descriptive information
+   * useful, for example, for storing descriptive information
    */
   @Override
-  public Map<String, Object> getAdditionalInformation()
-  {
+  public Map<String, Object> getAdditionalInformation() {
     return null;
   }
 
@@ -78,8 +78,7 @@ public class ClientDetails
    * @return the authorities that are granted to the OAuth client
    */
   @Override
-  public Collection<GrantedAuthority> getAuthorities()
-  {
+  public Collection<GrantedAuthority> getAuthorities() {
     List<GrantedAuthority> authorities = new ArrayList<>();
 
     // authorities.add(new SimpleGrantedAuthority("read:codeCategories"));
@@ -93,8 +92,7 @@ public class ClientDetails
    * @return the grant types for which this client is authorized
    */
   @Override
-  public Set<String> getAuthorizedGrantTypes()
-  {
+  public Set<String> getAuthorizedGrantTypes() {
     Set<String> grantTypes = new HashSet<>();
 
     grantTypes.add("password");
@@ -109,8 +107,7 @@ public class ClientDetails
    * @return the ID used to uniquely identify the client
    */
   @Override
-  public String getClientId()
-  {
+  public String getClientId() {
     return clientId;
   }
 
@@ -120,8 +117,7 @@ public class ClientDetails
    * @return the client secret
    */
   @Override
-  public String getClientSecret()
-  {
+  public String getClientSecret() {
     return "";
   }
 
@@ -131,8 +127,7 @@ public class ClientDetails
    * @return the refresh token validity period for this client
    */
   @Override
-  public Integer getRefreshTokenValiditySeconds()
-  {
+  public Integer getRefreshTokenValiditySeconds() {
     return AuthorizationServerConfiguration.REFRESH_TOKEN_VALIDITY;
   }
 
@@ -141,11 +136,10 @@ public class ClientDetails
    * access grant.
    *
    * @return the pre-defined redirect URI for this client to use during the "authorization_code"
-   *         access grant
+   * access grant
    */
   @Override
-  public Set<String> getRegisteredRedirectUri()
-  {
+  public Set<String> getRegisteredRedirectUri() {
     return new HashSet<>();
   }
 
@@ -155,8 +149,7 @@ public class ClientDetails
    * @return the resources that this client can access
    */
   @Override
-  public Set<String> getResourceIds()
-  {
+  public Set<String> getResourceIds() {
     return new HashSet<>();
   }
 
@@ -166,8 +159,7 @@ public class ClientDetails
    * @return the scope of this client
    */
   @Override
-  public Set<String> getScope()
-  {
+  public Set<String> getScope() {
     return new HashSet<>();
   }
 
@@ -177,11 +169,10 @@ public class ClientDetails
    * @param scope the scope
    *
    * @return <code>true</code> if the client does not need user approval for a particular scope or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
-  public boolean isAutoApprove(String scope)
-  {
+  public boolean isAutoApprove(String scope) {
     return false;
   }
 
@@ -189,11 +180,10 @@ public class ClientDetails
    * Returns whether this client is limited to a specific scope.
    *
    * @return <code>true</code> if this client is limited to a specific scope or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
-  public boolean isScoped()
-  {
+  public boolean isScoped() {
     return false;
   }
 
@@ -201,11 +191,10 @@ public class ClientDetails
    * Returns whether a secret is required to authenticate this client.
    *
    * @return <code>true</code> if a secret is required to authenticate this client or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
-  public boolean isSecretRequired()
-  {
+  public boolean isSecretRequired() {
     return false;
   }
 }

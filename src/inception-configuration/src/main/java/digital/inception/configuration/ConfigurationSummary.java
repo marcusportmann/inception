@@ -21,23 +21,22 @@ package digital.inception.configuration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Configuration</code> class stores the summary for a configuration.
@@ -46,16 +45,16 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "ConfigurationSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "key", "description" })
+@JsonPropertyOrder({"key", "description"})
 @XmlRootElement(name = "ConfigurationSummary", namespace = "http://configuration.inception.digital")
 @XmlType(name = "ConfigurationSummary", namespace = "http://configuration.inception.digital",
-    propOrder = { "key", "description" })
+    propOrder = {"key", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "configuration", name = "configuration")
 public class ConfigurationSummary
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -84,7 +83,8 @@ public class ConfigurationSummary
   /**
    * Constructs a new <code>ConfigurationSummary</code>.
    */
-  public ConfigurationSummary() {}
+  public ConfigurationSummary() {
+  }
 
   /**
    * Constructs a new <code>ConfigurationSummary</code>.
@@ -92,8 +92,7 @@ public class ConfigurationSummary
    * @param key         the key used to uniquely identify the configuration
    * @param description the description for the configuration
    */
-  ConfigurationSummary(String key, String description)
-  {
+  ConfigurationSummary(String key, String description) {
     this.key = key;
     this.description = description;
   }
@@ -104,23 +103,19 @@ public class ConfigurationSummary
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -134,9 +129,17 @@ public class ConfigurationSummary
    *
    * @return the description for the configuration
    */
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
+  }
+
+  /**
+   * Set the description for the configuration.
+   *
+   * @param description the description for the configuration
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**
@@ -144,9 +147,17 @@ public class ConfigurationSummary
    *
    * @return the key used to uniquely identify the configuration
    */
-  public String getKey()
-  {
+  public String getKey() {
     return key;
+  }
+
+  /**
+   * Set the key used to uniquely identify the configuration.
+   *
+   * @param key the key used to uniquely identify the configuration
+   */
+  public void setKey(String key) {
+    this.key = key;
   }
 
   /**
@@ -155,30 +166,9 @@ public class ConfigurationSummary
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (key == null)
         ? 0
         : key.hashCode();
-  }
-
-  /**
-   * Set the description for the configuration.
-   *
-   * @param description the description for the configuration
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
-   * Set the key used to uniquely identify the configuration.
-   *
-   * @param key the key used to uniquely identify the configuration
-   */
-  public void setKey(String key)
-  {
-    this.key = key;
   }
 }

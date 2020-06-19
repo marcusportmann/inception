@@ -20,7 +20,6 @@ package digital.inception.sms;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
 import javax.validation.Validator;
 
 /**
@@ -31,9 +30,9 @@ import javax.validation.Validator;
 @WebService(serviceName = "SMSService", name = "ISMSService",
     targetNamespace = "http://sms.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused", "ValidExternallyBoundObject" })
-public class SMSWebService
-{
+@SuppressWarnings({"unused", "ValidExternallyBoundObject"})
+public class SMSWebService {
+
   /**
    * The SMS Service.
    */
@@ -50,8 +49,7 @@ public class SMSWebService
    * @param smsService the SMS Service
    * @param validator  the JSR-303 validator
    */
-  public SMSWebService(ISMSService smsService, Validator validator)
-  {
+  public SMSWebService(ISMSService smsService, Validator validator) {
     this.smsService = smsService;
     this.validator = validator;
   }

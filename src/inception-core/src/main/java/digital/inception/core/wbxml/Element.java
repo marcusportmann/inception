@@ -22,7 +22,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,8 +35,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 public class Element
-  implements Serializable, Content
-{
+    implements Serializable, Content {
+
   private static final long serialVersionUID = 1000000;
   private List<Attribute> attributes = new ArrayList<>();
   private List<Content> content = new ArrayList<>();
@@ -46,15 +45,15 @@ public class Element
   /**
    * Hidden default constructor.
    */
-  protected Element() {}
+  protected Element() {
+  }
 
   /**
    * Constructs an <code>Element</code> with the specified name.
    *
    * @param name the name of the element
    */
-  public Element(String name)
-  {
+  public Element(String name) {
     this.name = name;
   }
 
@@ -64,8 +63,7 @@ public class Element
    * @param name    the name of the element
    * @param content the content for the element
    */
-  public Element(String name, byte[] content)
-  {
+  public Element(String name, byte[] content) {
     this(name);  // invoke above constructor
     this.addContent(content);
   }
@@ -76,8 +74,7 @@ public class Element
    * @param name    the name of the element
    * @param content the content for the element
    */
-  public Element(String name, String content)
-  {
+  public Element(String name, String content) {
     this(name);  // invoke above constructor
     this.addContent(content);
   }
@@ -87,8 +84,7 @@ public class Element
    *
    * @param data the binary content to add to the element
    */
-  public void addContent(byte[] data)
-  {
+  public void addContent(byte[] data) {
     content.add(new Opaque(data));
   }
 
@@ -97,8 +93,7 @@ public class Element
    *
    * @param element the child element
    */
-  public void addContent(Element element)
-  {
+  public void addContent(Element element) {
     content.add(element);
   }
 
@@ -107,8 +102,7 @@ public class Element
    *
    * @param text the text content
    */
-  public void addContent(String text)
-  {
+  public void addContent(String text) {
     content.add(new CDATA(text));
   }
 
@@ -118,14 +112,11 @@ public class Element
    * @param name the name of the attribute
    *
    * @return the attribute with the specified name or <code>null</code> if no matching attribute
-   *         could be found
+   * could be found
    */
-  public Attribute getAttribute(String name)
-  {
-    for (Attribute attribute : attributes)
-    {
-      if (attribute.getName().equals(name))
-      {
+  public Attribute getAttribute(String name) {
+    for (Attribute attribute : attributes) {
+      if (attribute.getName().equals(name)) {
         return attribute;
       }
     }
@@ -138,15 +129,12 @@ public class Element
    *
    * @param name the name of the attribute
    *
-   * @return the value for the attribute with the specified name or <code>null</code> if no
-   *         matching attribute could be found
+   * @return the value for the attribute with the specified name or <code>null</code> if no matching
+   * attribute could be found
    */
-  public String getAttributeValue(String name)
-  {
-    for (Attribute attribute : attributes)
-    {
-      if (attribute.getName().equals(name))
-      {
+  public String getAttributeValue(String name) {
+    for (Attribute attribute : attributes) {
+      if (attribute.getName().equals(name)) {
         return attribute.getValue();
       }
     }
@@ -159,8 +147,7 @@ public class Element
    *
    * @return the attributes for this element
    */
-  public List<Attribute> getAttributes()
-  {
+  public List<Attribute> getAttributes() {
     return attributes;
   }
 
@@ -169,19 +156,15 @@ public class Element
    *
    * @param name the name of the child element
    *
-   * @return the child element or <code>null</code> if an element with the specified name could
-   *         not be found
+   * @return the child element or <code>null</code> if an element with the specified name could not
+   * be found
    */
-  public Element getChild(String name)
-  {
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof Element)
-      {
+  public Element getChild(String name) {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof Element) {
         Element element = (Element) tmpContent;
 
-        if (element.getName().equals(name))
-        {
+        if (element.getName().equals(name)) {
           return element;
         }
       }
@@ -196,18 +179,14 @@ public class Element
    * @param name the name of the child element
    *
    * @return the binary data content for the child element or <code>null</code> if an element with
-   *         the specified name could not be found
+   * the specified name could not be found
    */
-  public byte[] getChildOpaque(String name)
-  {
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof Element)
-      {
+  public byte[] getChildOpaque(String name) {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof Element) {
         Element element = (Element) tmpContent;
 
-        if (element.getName().equals(name))
-        {
+        if (element.getName().equals(name)) {
           return element.getOpaque();
         }
       }
@@ -222,18 +201,14 @@ public class Element
    * @param name the name of the child element
    *
    * @return the text content for the child element or <code>null</code> if an element with the
-   *         specified name could not be found
+   * specified name could not be found
    */
-  public String getChildText(String name)
-  {
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof Element)
-      {
+  public String getChildText(String name) {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof Element) {
         Element element = (Element) tmpContent;
 
-        if (element.getName().equals(name))
-        {
+        if (element.getName().equals(name)) {
           return element.getText();
         }
       }
@@ -247,14 +222,11 @@ public class Element
    *
    * @return the child elements for this element
    */
-  public List<Element> getChildren()
-  {
+  public List<Element> getChildren() {
     List<Element> list = new ArrayList<>();
 
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof Element)
-      {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof Element) {
         list.add((Element) tmpContent);
       }
     }
@@ -269,18 +241,14 @@ public class Element
    *
    * @return the child elements with the specified name
    */
-  public List<Element> getChildren(String name)
-  {
+  public List<Element> getChildren(String name) {
     List<Element> list = new ArrayList<>();
 
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof Element)
-      {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof Element) {
         Element e = (Element) tmpContent;
 
-        if (e.getName().equals(name))
-        {
+        if (e.getName().equals(name)) {
           list.add(e);
         }
       }
@@ -294,8 +262,7 @@ public class Element
    *
    * @return the content items for this element
    */
-  public List<Content> getContent()
-  {
+  public List<Content> getContent() {
     return content;
   }
 
@@ -304,9 +271,12 @@ public class Element
    *
    * @return the name of the element
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  protected void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -314,14 +284,11 @@ public class Element
    *
    * @return the binary data content for the element
    */
-  public byte[] getOpaque()
-  {
+  public byte[] getOpaque() {
     BinaryBuffer buffer = new BinaryBuffer();
 
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof Opaque)
-      {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof Opaque) {
         Opaque opaque = (Opaque) tmpContent;
 
         buffer.append(opaque.getData());
@@ -332,18 +299,39 @@ public class Element
   }
 
   /**
+   * Set the binary data content for the element.
+   *
+   * @param data the binary data content for the element
+   */
+  public void setOpaque(byte[] data) {
+    boolean hasRemoved = true;
+
+    while (hasRemoved) {
+      hasRemoved = false;
+
+      for (int i = 0; i < content.size(); i++) {
+        if (this.content.get(i) instanceof Opaque) {
+          hasRemoved = true;
+          this.content.remove(i);
+
+          break;
+        }
+      }
+    }
+
+    content.add(new Opaque(data));
+  }
+
+  /**
    * Returns the text content for the element.
    *
    * @return the text content for the element
    */
-  public String getText()
-  {
+  public String getText() {
     StringBuilder buffer = new StringBuilder();
 
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof CDATA)
-      {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof CDATA) {
         CDATA cdata = (CDATA) tmpContent;
 
         buffer.append(cdata.getText());
@@ -354,20 +342,41 @@ public class Element
   }
 
   /**
+   * Set the text content for the element.
+   *
+   * @param text the text content for the element
+   */
+  public void setText(String text) {
+    boolean hasRemoved = true;
+
+    while (hasRemoved) {
+      hasRemoved = false;
+
+      for (int i = 0; i < content.size(); i++) {
+        if (this.content.get(i) instanceof CDATA) {
+          hasRemoved = true;
+          this.content.remove(i);
+
+          break;
+        }
+      }
+    }
+
+    content.add(new CDATA(text));
+  }
+
+  /**
    * Returns <code>true</code> if the element has an attribute with the specified name or
    * <code>false</code> otherwise.
    *
    * @param name the name of the attribute
    *
    * @return <code>true</code> if the element has an attribute with the specified name or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  public boolean hasAttribute(String name)
-  {
-    for (Attribute attribute : attributes)
-    {
-      if (attribute.getName().equals(name))
-      {
+  public boolean hasAttribute(String name) {
+    for (Attribute attribute : attributes) {
+      if (attribute.getName().equals(name)) {
         return true;
       }
     }
@@ -380,8 +389,7 @@ public class Element
    *
    * @return true if the element has attributes or false otherwise
    */
-  public boolean hasAttributes()
-  {
+  public boolean hasAttributes() {
     return (attributes.size() > 0);
   }
 
@@ -392,16 +400,12 @@ public class Element
    * @param name the name of the child element
    *
    * @return <code>true</code> if the element has a child element with the specified name or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  public boolean hasChild(String name)
-  {
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof Element)
-      {
-        if (((Element) tmpContent).getName().equals(name))
-        {
+  public boolean hasChild(String name) {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof Element) {
+        if (((Element) tmpContent).getName().equals(name)) {
           return true;
         }
       }
@@ -415,12 +419,9 @@ public class Element
    *
    * @return true if the element has child elements or false otherwise
    */
-  public boolean hasChildren()
-  {
-    for (Content tmpContent : content)
-    {
-      if (tmpContent instanceof Element)
-      {
+  public boolean hasChildren() {
+    for (Content tmpContent : content) {
+      if (tmpContent instanceof Element) {
         return true;
       }
     }
@@ -433,8 +434,7 @@ public class Element
    *
    * @return true if the element has content or false otherwise
    */
-  public boolean hasContent()
-  {
+  public boolean hasContent() {
     return (content.size() > 0);
   }
 
@@ -443,8 +443,7 @@ public class Element
    *
    * @param indent the indent level
    */
-  public void print(int indent)
-  {
+  public void print(int indent) {
     print(System.out, indent);
   }
 
@@ -454,33 +453,26 @@ public class Element
    * @param out    the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
-  public void print(OutputStream out, int indent)
-  {
+  public void print(OutputStream out, int indent) {
     PrintStream pout = new PrintStream(out);
 
     pout.print("<" + name);
 
-    if (hasAttributes())
-    {
-      for (Attribute attribute : attributes)
-      {
+    if (hasAttributes()) {
+      for (Attribute attribute : attributes) {
         pout.print(" " + attribute.getName() + "=\"" + attribute.getValue() + "\"");
       }
     }
 
-    if (hasContent())
-    {
+    if (hasContent()) {
       pout.println(">");
 
-      for (Content tmpContent : content)
-      {
+      for (Content tmpContent : content) {
         tmpContent.print(pout, indent + 1);
       }
 
       pout.print("</" + name + ">");
-    }
-    else
-    {
+    } else {
       pout.print("/>");
     }
 
@@ -493,12 +485,9 @@ public class Element
    *
    * @param name the name of the attribute to remove
    */
-  public void removeAttribute(String name)
-  {
-    for (int i = 0; i < attributes.size(); i++)
-    {
-      if (attributes.get(i).getName().equals(name))
-      {
+  public void removeAttribute(String name) {
+    for (int i = 0; i < attributes.size(); i++) {
+      if (attributes.get(i).getName().equals(name)) {
         attributes.remove(i);
 
         return;
@@ -512,12 +501,9 @@ public class Element
    * @param name  the name of the attribute
    * @param value the value for the attribute
    */
-  public void setAttribute(String name, String value)
-  {
-    for (Attribute attribute : attributes)
-    {
-      if (attribute.getName().equals(name))
-      {
+  public void setAttribute(String name, String value) {
+    for (Attribute attribute : attributes) {
+      if (attribute.getName().equals(name)) {
         attribute.setValue(value);
 
         return;
@@ -528,71 +514,13 @@ public class Element
   }
 
   /**
-   * Set the binary data content for the element.
-   *
-   * @param data the binary data content for the element
-   */
-  public void setOpaque(byte[] data)
-  {
-    boolean hasRemoved = true;
-
-    while (hasRemoved)
-    {
-      hasRemoved = false;
-
-      for (int i = 0; i < content.size(); i++)
-      {
-        if (this.content.get(i) instanceof Opaque)
-        {
-          hasRemoved = true;
-          this.content.remove(i);
-
-          break;
-        }
-      }
-    }
-
-    content.add(new Opaque(data));
-  }
-
-  /**
-   * Set the text content for the element.
-   *
-   * @param text the text content for the element
-   */
-  public void setText(String text)
-  {
-    boolean hasRemoved = true;
-
-    while (hasRemoved)
-    {
-      hasRemoved = false;
-
-      for (int i = 0; i < content.size(); i++)
-      {
-        if (this.content.get(i) instanceof CDATA)
-        {
-          hasRemoved = true;
-          this.content.remove(i);
-
-          break;
-        }
-      }
-    }
-
-    content.add(new CDATA(text));
-  }
-
-  /**
    * Return the string representation of the element.
    *
    * @return the string representation of the element
    */
   @Override
-  public String toString()
-  {
-    try
-    {
+  public String toString() {
+    try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
       print(baos, 0);
@@ -602,15 +530,8 @@ public class Element
       baos.close();
 
       return result;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       return super.toString();
     }
-  }
-
-  protected void setName(String name)
-  {
-    this.name = name;
   }
 }

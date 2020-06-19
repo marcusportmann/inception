@@ -5,22 +5,20 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Id;
-
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>OrganizationUserDirectory</code> class holds the information for an organization user
@@ -30,15 +28,15 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "OrganizationUserDirectory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "organizationId", "userDirectoryId" })
+@JsonPropertyOrder({"organizationId", "userDirectoryId"})
 @XmlRootElement(name = "OrganizationUserDirectory", namespace = "http://security.inception.digital")
 @XmlType(name = "OrganizationUserDirectory", namespace = "http://security.inception.digital",
-    propOrder = { "organizationId", "userDirectoryId" })
+    propOrder = {"organizationId", "userDirectoryId"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class OrganizationUserDirectory
-  implements Serializable
-{
+    implements Serializable {
+
   /**
    * The Universally Unique Identifier (UUID) used to uniquely identify the organization.
    */
@@ -68,7 +66,8 @@ public class OrganizationUserDirectory
   /**
    * Constructs a new <code>OrganizationUserDirectory</code>.
    */
-  public OrganizationUserDirectory() {}
+  public OrganizationUserDirectory() {
+  }
 
   /**
    * Constructs a new <code>OrganizationUserDirectory</code>.
@@ -78,8 +77,7 @@ public class OrganizationUserDirectory
    * @param userDirectoryId the  Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    */
-  public OrganizationUserDirectory(UUID organizationId, UUID userDirectoryId)
-  {
+  public OrganizationUserDirectory(UUID organizationId, UUID userDirectoryId) {
     this.organizationId = organizationId;
     this.userDirectoryId = userDirectoryId;
   }
@@ -89,19 +87,8 @@ public class OrganizationUserDirectory
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the organization
    */
-  public UUID getOrganizationId()
-  {
+  public UUID getOrganizationId() {
     return organizationId;
-  }
-
-  /**
-   * Returns the  Universally Unique Identifier (UUID) used to uniquely identify the user directory.
-   *
-   * @return the  Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   */
-  public UUID getUserDirectoryId()
-  {
-    return userDirectoryId;
   }
 
   /**
@@ -110,9 +97,18 @@ public class OrganizationUserDirectory
    * @param organizationId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                       organization
    */
-  public void setOrganizationId(UUID organizationId)
-  {
+  public void setOrganizationId(UUID organizationId) {
     this.organizationId = organizationId;
+  }
+
+  /**
+   * Returns the  Universally Unique Identifier (UUID) used to uniquely identify the user
+   * directory.
+   *
+   * @return the  Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   */
+  public UUID getUserDirectoryId() {
+    return userDirectoryId;
   }
 
   /**
@@ -121,8 +117,7 @@ public class OrganizationUserDirectory
    * @param userDirectoryId the  Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    */
-  public void setUserDirectoryId(UUID userDirectoryId)
-  {
+  public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;
   }
 }

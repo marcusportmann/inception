@@ -26,10 +26,30 @@ import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 import digital.inception.messaging.handler.IMessageHandler;
 import digital.inception.messaging.handler.MessageHandlerConfig;
-
+import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
+import javax.annotation.Resource;
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -38,54 +58,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.ByteArrayOutputStream;
-
-import java.lang.reflect.Constructor;
-
-import java.net.URL;
-
-import java.security.MessageDigest;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-
-import java.util.*;
-
-import javax.annotation.Resource;
-
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 /**
- * The <code>MessagingService</code> class provides the implementation of the Messaging Service
- * for the messaging infrastructure.
+ * The <code>MessagingService</code> class provides the implementation of the Messaging Service for
+ * the messaging infrastructure.
  *
  * @author Marcus Portmann
  */
 @Service
 @SuppressWarnings("unused")
 public class MessagingService
-  implements IMessagingService, InitializingBean
-{
+    implements IMessagingService, InitializingBean {
+
   /**
-   * The path to the messaging configuration files (META-INF/MessagingConfig.xml) on the
-   * classpath.
+   * The path to the messaging configuration files (META-INF/MessagingConfig.xml) on the classpath.
    */
   private static final String MESSAGING_CONFIGURATION_PATH = "META-INF/MessagingConfig.xml";
 
@@ -143,7 +134,7 @@ public class MessagingService
   private int maximumProcessingAttempts;
 
   /**
-   *  The message handlers.
+   * The message handlers.
    */
   private Map<UUID, IMessageHandler> messageHandlers;
 
@@ -185,8 +176,7 @@ public class MessagingService
    */
   public MessagingService(ApplicationContext applicationContext,
       MessageRepository messageRepository, MessagePartRepository messagePartRepository,
-      ArchivedMessageRepository archivedMessageRepository)
-  {
+      ArchivedMessageRepository archivedMessageRepository) {
     this.applicationContext = applicationContext;
     this.messageRepository = messageRepository;
     this.messagePartRepository = messagePartRepository;
@@ -197,14 +187,12 @@ public class MessagingService
    * Initialize the Messaging Service.
    */
   @Override
-  public void afterPropertiesSet()
-  {
+  public void afterPropertiesSet() {
     logger.info("Initializing the Messaging Service (" + instanceName + ")");
 
     messageHandlers = new HashMap<>();
 
-    try
-    {
+    try {
       // Initialize the configuration for the Messaging Service
       initConfiguration();
 
@@ -213,9 +201,7 @@ public class MessagingService
 
       // Initialize the message handlers
       initMessageHandlers();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to initialize the Messaging Service", e);
     }
   }
@@ -228,22 +214,18 @@ public class MessagingService
    * @param totalParts the total number of parts for the message
    *
    * @return <code>true</code> if all the parts for the message have been queued for assembly or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean allMessagePartsForMessageQueuedForAssembly(UUID messageId, int totalParts)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       return messagePartRepository.countMessagePartsQueuedForAssemblyByMessageId(messageId)
           == totalParts;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException(
           "Failed to check whether all the message parts for the message (" + messageId
-          + ") have been queued for assembly", e);
+              + ") have been queued for assembly", e);
     }
   }
 
@@ -255,18 +237,13 @@ public class MessagingService
   @Override
   @Transactional
   public void archiveMessage(Message message)
-    throws MessagingServiceException
-  {
-    if (isArchivableMessage(message))
-    {
-      try
-      {
+      throws MessagingServiceException {
+    if (isArchivableMessage(message)) {
+      try {
         ArchivedMessage archivedMessage = new ArchivedMessage(message);
 
         archivedMessageRepository.saveAndFlush(archivedMessage);
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         throw new MessagingServiceException("Failed to archive the message (" + message.getId()
             + ")", e);
       }
@@ -276,19 +253,17 @@ public class MessagingService
   /**
    * Assemble the message from the message parts that have been queued for assembly.
    *
-   * @param messageId  sthe Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId  sthe Universally Unique Identifier (UUID) used to uniquely identify the
+   *                   message
    * @param totalParts the total number of parts for the message
    */
   @Override
   @Transactional
   public void assembleMessage(UUID messageId, int totalParts)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       // Check whether all the message parts for the message have been queued for assembly
-      if (allMessagePartsForMessageQueuedForAssembly(messageId, totalParts))
-      {
+      if (allMessagePartsForMessageQueuedForAssembly(messageId, totalParts)) {
         // Retrieve the message parts queued for assembly
         List<MessagePart> messageParts = getMessagePartsQueuedForAssembly(messageId, instanceName);
 
@@ -296,10 +271,8 @@ public class MessagingService
          * If there are no message parts that are queued for assembly then this is not necessarily
          * an error because another Background Message Assembler could have assembled the message.
          */
-        if (messageParts.size() == 0)
-        {
-          if (logger.isDebugEnabled())
-          {
+        if (messageParts.size() == 0) {
+          if (logger.isDebugEnabled()) {
             logger.debug("No message parts found for message (" + messageId
                 + ") that are queued for assembly");
           }
@@ -313,8 +286,7 @@ public class MessagingService
         // Assemble the message from its constituent parts
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        for (MessagePart tmpMessagePart : messageParts)
-        {
+        for (MessagePart tmpMessagePart : messageParts) {
           baos.write(tmpMessagePart.getData());
         }
 
@@ -327,8 +299,7 @@ public class MessagingService
 
         String messageChecksum = Base64Util.encodeBytes(messageDigest.digest());
 
-        if (!messageChecksum.equals(firstMessagePart.getMessageChecksum()))
-        {
+        if (!messageChecksum.equals(firstMessagePart.getMessageChecksum())) {
           // Delete the message parts
           deleteMessagePartsForMessage(messageId);
 
@@ -357,9 +328,7 @@ public class MessagingService
         // Delete the message parts
         deleteMessagePartsForMessage(messageId);
       }
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       throw new MessagingServiceException("Failed to assemble the message parts for the message ("
           + messageId + ")", e);
     }
@@ -372,26 +341,24 @@ public class MessagingService
    * @param message the message to process
    *
    * @return <code>true</code> if the Messaging Service is capable of processing the specified
-   *         message or <code>false</code> otherwise
+   * message or <code>false</code> otherwise
    */
   @Override
-  public boolean canProcessMessage(Message message)
-  {
+  public boolean canProcessMessage(Message message) {
     return messageHandlers.containsKey(message.getTypeId());
   }
 
   /**
-   * Returns <code>true</code> if the Messaging Service is capable of queueing the specified
-   * message part for assembly or <code>false</code> otherwise.
+   * Returns <code>true</code> if the Messaging Service is capable of queueing the specified message
+   * part for assembly or <code>false</code> otherwise.
    *
    * @param messagePart the message part to queue for assembly
    *
    * @return <code>true</code> if the Messaging Service is capable of queueing the specified
-   *         message part for assembly or <code>false</code> otherwise
+   * message part for assembly or <code>false</code> otherwise
    */
   @Override
-  public boolean canQueueMessagePartForAssembly(MessagePart messagePart)
-  {
+  public boolean canQueueMessagePartForAssembly(MessagePart messagePart) {
     return messageHandlers.containsKey(messagePart.getMessageTypeId());
   }
 
@@ -403,14 +370,10 @@ public class MessagingService
   @Override
   @Transactional
   public void createMessage(Message message)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messageRepository.saveAndFlush(message);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to create the message (" + message.getId() + ")",
           e);
 
@@ -426,14 +389,10 @@ public class MessagingService
   @Override
   @Transactional
   public void createMessagePart(MessagePart messagePart)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messagePartRepository.saveAndFlush(messagePart);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to add the message part (" + messagePart.getId()
           + ") to the database", e);
     }
@@ -445,15 +404,13 @@ public class MessagingService
    * @param message the message to decrypt
    *
    * @return <code>true</code> if the message data was decrypted successfully or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
   public boolean decryptMessage(Message message)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     // If the message is already decrypted then stop here
-    if (!message.isEncrypted())
-    {
+    if (!message.isEncrypted()) {
       return true;
     }
 
@@ -470,13 +427,12 @@ public class MessagingService
      */
 
     // Decrypt the message
-    try
-    {
+    try {
       // Decrypt the message data
       byte[] decryptedData = MessageTranslator.decryptMessageData(userEncryptionKey,
           StringUtils.isEmpty(message.getEncryptionIV())
-          ? new byte[0]
-          : Base64Util.decode(message.getEncryptionIV()), message.getData());
+              ? new byte[0]
+              : Base64Util.decode(message.getEncryptionIV()), message.getData());
 
       // Verify the data hash for the unencrypted data
       MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
@@ -485,8 +441,7 @@ public class MessagingService
 
       String messageChecksum = Base64Util.encodeBytes(messageDigest.digest());
 
-      if (!messageChecksum.equals(message.getDataHash()))
-      {
+      if (!messageChecksum.equals(message.getDataHash())) {
         logger.warn("Data hash verification failed for the message (" + message.getId()
             + ") from the user (" + message.getUsername() + ") and device ("
             + message.getDeviceId() + "). " + message.getData().length + " (" + decryptedData
@@ -495,18 +450,14 @@ public class MessagingService
             + ") but got (" + messageChecksum + ")");
 
         return false;
-      }
-      else
-      {
+      } else {
         message.setData(decryptedData);
         message.setDataHash(null);
         message.setEncryptionIV(null);
 
         return true;
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to decrypt the data for the message ("
           + message.getId() + ") from the user (" + message.getUsername() + ") and device ("
           + message.getDeviceId() + ")", e);
@@ -521,36 +472,29 @@ public class MessagingService
   @Override
   @Transactional
   public void deleteMessage(Message message)
-    throws MessageNotFoundException, MessagingServiceException
-  {
+      throws MessageNotFoundException, MessagingServiceException {
     deleteMessage(message.getId());
   }
 
   /**
    * Delete the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                  message
    */
   @Override
   @Transactional
   public void deleteMessage(UUID messageId)
-    throws MessageNotFoundException, MessagingServiceException
-  {
-    try
-    {
-      if (!messageRepository.existsById(messageId))
-      {
+      throws MessageNotFoundException, MessagingServiceException {
+    try {
+      if (!messageRepository.existsById(messageId)) {
         throw new MessageNotFoundException(messageId);
       }
 
       messageRepository.deleteById(messageId);
-    }
-    catch (MessageNotFoundException e)
-    {
+    } catch (MessageNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to delete the message (" + messageId + ")", e);
     }
   }
@@ -564,23 +508,16 @@ public class MessagingService
   @Override
   @Transactional
   public void deleteMessagePart(UUID messagePartId)
-    throws MessagePartNotFoundException, MessagingServiceException
-  {
-    try
-    {
-      if (!messagePartRepository.existsById(messagePartId))
-      {
+      throws MessagePartNotFoundException, MessagingServiceException {
+    try {
+      if (!messagePartRepository.existsById(messagePartId)) {
         throw new MessagePartNotFoundException(messagePartId);
       }
 
       messagePartRepository.deleteById(messagePartId);
-    }
-    catch (MessagePartNotFoundException e)
-    {
+    } catch (MessagePartNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to delete the message part (" + messagePartId
           + ")", e);
     }
@@ -589,19 +526,16 @@ public class MessagingService
   /**
    * Delete the message parts for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                  message
    */
   @Override
   @Transactional
   public void deleteMessagePartsForMessage(UUID messageId)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messagePartRepository.deleteMessagePartsByMessageId(messageId);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to delete the message parts for the message ("
           + messageId + ")", e);
     }
@@ -617,10 +551,8 @@ public class MessagingService
    */
   @Override
   public byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       String password = deviceId.toString() + username.toLowerCase();
 
       byte[] key = CryptoUtil.passwordToAESKey(password);
@@ -633,9 +565,7 @@ public class MessagingService
       cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
 
       return cipher.doFinal(key);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to derive the encryption key for the user ("
           + username + ") and device (" + deviceId + ")", e);
     }
@@ -647,15 +577,13 @@ public class MessagingService
    * @param message the message to encrypt
    *
    * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
   public boolean encryptMessage(Message message)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     // If the message is already encrypted then stop here
-    if (message.isEncrypted())
-    {
+    if (message.isEncrypted()) {
       return true;
     }
 
@@ -672,8 +600,7 @@ public class MessagingService
      */
 
     // Encrypt the message
-    try
-    {
+    try {
       byte[] encryptionIV = CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE);
 
       // Encrypt the message data
@@ -694,9 +621,7 @@ public class MessagingService
           : Base64Util.encodeBytes(encryptionIV));
 
       return true;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to encrypt the data for the message ("
           + message.getId() + ") from the user (" + message.getUsername() + ") and device ("
           + message.getDeviceId() + ")", e);
@@ -708,41 +633,32 @@ public class MessagingService
    *
    * @return the maximum number of times processing will be attempted for a message
    */
-  public int getMaximumProcessingAttempts()
-  {
+  public int getMaximumProcessingAttempts() {
     return maximumProcessingAttempts;
   }
 
   /**
    * Retrieve the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                  message
    *
    * @return the message
    */
   @Override
   public Message getMessage(UUID messageId)
-    throws MessageNotFoundException, MessagingServiceException
-  {
-    try
-    {
+      throws MessageNotFoundException, MessagingServiceException {
+    try {
       Optional<Message> messageOptional = messageRepository.findById(messageId);
 
-      if (messageOptional.isPresent())
-      {
+      if (messageOptional.isPresent()) {
         return messageOptional.get();
-      }
-      else
-      {
+      } else {
         throw new MessageNotFoundException(messageId);
       }
-    }
-    catch (MessageNotFoundException e)
-    {
+    } catch (MessageNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to retrieve the message (" + messageId + ")", e);
     }
   }
@@ -750,7 +666,8 @@ public class MessagingService
   /**
    * Retrieve the message parts queued for assembly for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                  message
    * @param lockName  the name of the lock that should be applied to the message parts queued for
    *                  assembly when they are retrieved
    *
@@ -759,16 +676,13 @@ public class MessagingService
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       List<MessagePart> messageParts =
           messagePartRepository.findMessagePartsByMessageIdAndStatusForWrite(messageId,
-          MessagePartStatus.QUEUED_FOR_ASSEMBLY);
+              MessagePartStatus.QUEUED_FOR_ASSEMBLY);
 
-      for (MessagePart messagePart : messageParts)
-      {
+      for (MessagePart messagePart : messageParts) {
         messagePartRepository.lockMessagePartForAssembly(messagePart.getId(), instanceName);
 
         entityManager.detach(messagePart);
@@ -778,12 +692,10 @@ public class MessagingService
       }
 
       return messageParts;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException(
           "Failed to retrieve the message parts that have been queued for assembly for the message "
-          + "(" + messageId + ")", e);
+              + "(" + messageId + ")", e);
     }
   }
 
@@ -800,10 +712,8 @@ public class MessagingService
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @SuppressWarnings("resource")
   public List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       PageRequest pageRequest = PageRequest.of(0, NUMBER_OF_MESSAGE_PARTS_TO_DOWNLOAD);
 
       /*
@@ -814,16 +724,14 @@ public class MessagingService
        */
       List<MessagePart> messageParts =
           messagePartRepository.findMessagePartsByUsernameAndDeviceIdAndStatusForWrite(username,
-          deviceId, MessagePartStatus.DOWNLOADING, pageRequest);
+              deviceId, MessagePartStatus.DOWNLOADING, pageRequest);
 
-      if (messageParts.size() == 0)
-      {
+      if (messageParts.size() == 0) {
         messageParts = messagePartRepository.findMessagePartsByUsernameAndDeviceIdAndStatusForWrite(
             username, deviceId, MessagePartStatus.QUEUED_FOR_DOWNLOAD, pageRequest);
       }
 
-      for (MessagePart messagePart : messageParts)
-      {
+      for (MessagePart messagePart : messageParts) {
         messagePartRepository.lockMessagePartForDownload(messagePart.getId(), instanceName);
 
         entityManager.detach(messagePart);
@@ -834,9 +742,7 @@ public class MessagingService
       }
 
       return messageParts;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to retrieve the message parts for the user ("
           + username + ") that have been queued for download by the device (" + deviceId + ")", e);
     }
@@ -849,16 +755,14 @@ public class MessagingService
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *
    * @return the messages for a user that have been queued for download by a particular remote
-   *         device
+   * device
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @SuppressWarnings("resource")
   public List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       PageRequest pageRequest = PageRequest.of(0, NUMBER_OF_MESSAGES_TO_DOWNLOAD);
 
       /*
@@ -870,8 +774,7 @@ public class MessagingService
       List<Message> messages = messageRepository.findMessagesWithStatusForUserAndDeviceForWrite(
           MessageStatus.DOWNLOADING, username, deviceId, pageRequest);
 
-      if (messages.size() == 0)
-      {
+      if (messages.size() == 0) {
         /*
          * If we did not find messages already locked for downloading then retrieve the messages
          * that are "QueuedForDownload" for the user-device combination.
@@ -884,14 +787,10 @@ public class MessagingService
        * Ensure each message is locked correctly with the status "Downloading" and increment the
        * download attempts.
        */
-      for (Message message : messages)
-      {
-        if (!StringUtils.isEmpty(message.getLockName()))
-        {
-          if (!message.getLockName().equals(instanceName))
-          {
-            if (logger.isDebugEnabled())
-            {
+      for (Message message : messages) {
+        if (!StringUtils.isEmpty(message.getLockName())) {
+          if (!message.getLockName().equals(instanceName)) {
+            if (logger.isDebugEnabled()) {
               logger.debug("The message (" + message.getId()
                   + ") that was originally locked for download using the lock name ("
                   + message.getLockName()
@@ -910,9 +809,7 @@ public class MessagingService
       }
 
       return messages;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to retrieve the messages for the user ("
           + username + ") that have been queued for download by the device (" + deviceId + ")", e);
     }
@@ -924,15 +821,13 @@ public class MessagingService
    * The message will be locked to prevent duplicate processing.
    *
    * @return the next message that has been queued for processing or <code>null</code> if no
-   *         messages are currently queued for processing
+   * messages are currently queued for processing
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public Message getNextMessageQueuedForProcessing()
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       LocalDateTime processedBefore = LocalDateTime.now();
 
       processedBefore = processedBefore.minus(processingRetryDelay, ChronoUnit.MILLIS);
@@ -942,8 +837,7 @@ public class MessagingService
       List<Message> messages = messageRepository.findMessagesQueuedForProcessingForWrite(
           processedBefore, pageRequest);
 
-      if (messages.size() > 0)
-      {
+      if (messages.size() > 0) {
         Message message = messages.get(0);
 
         LocalDateTime when = LocalDateTime.now();
@@ -958,14 +852,10 @@ public class MessagingService
         message.setLastProcessed(when);
 
         return message;
-      }
-      else
-      {
+      } else {
         return null;
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException(
           "Failed to retrieve the next message that has been queued for processing", e);
     }
@@ -979,8 +869,7 @@ public class MessagingService
    * @return <code>true</code> if the message should be archived or <code>false</code> otherwise
    */
   @Override
-  public boolean isArchivableMessage(Message message)
-  {
+  public boolean isArchivableMessage(Message message) {
     return isArchivableMessage(message.getTypeId());
   }
 
@@ -990,32 +879,28 @@ public class MessagingService
    * @param message the message
    *
    * @return <code>true</code> if the message can be processed asynchronously or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
-  public boolean isAsynchronousMessage(Message message)
-  {
+  public boolean isAsynchronousMessage(Message message) {
     return isAsynchronousMessage(message.getTypeId());
   }
 
   /**
    * Has the message already been archived?
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                  message
    *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
   public boolean isMessageArchived(UUID messageId)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       return archivedMessageRepository.existsById(messageId);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to check whether the message (" + messageId
           + ") is archived", e);
     }
@@ -1028,19 +913,15 @@ public class MessagingService
    *                      message part
    *
    * @return <code>true</code> if the message part has already been queued for assembly or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean isMessagePartQueuedForAssembly(UUID messagePartId)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       return messagePartRepository.existsByIdAndStatus(messagePartId, MessagePartStatus
           .QUEUED_FOR_ASSEMBLY);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to check whether the message part ("
           + messagePartId + ") is queued for assembly", e);
     }
@@ -1054,8 +935,7 @@ public class MessagingService
    * @return <code>true</code> if the message is secure or <code>false</code> otherwise
    */
   @Override
-  public boolean isSecureMessage(Message message)
-  {
+  public boolean isSecureMessage(Message message) {
     return isSecureMessage(message.getTypeId());
   }
 
@@ -1065,10 +945,9 @@ public class MessagingService
    * @param message the message
    *
    * @return <code>true</code> if the message should be processed synchronously or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  public boolean isSynchronousMessage(Message message)
-  {
+  public boolean isSynchronousMessage(Message message) {
     return isSynchronousMessage(message.getTypeId());
   }
 
@@ -1081,29 +960,23 @@ public class MessagingService
    */
   @Override
   public Message processMessage(Message message)
-    throws MessagingServiceException
-  {
-    if (logger.isDebugEnabled())
-    {
+      throws MessagingServiceException {
+    if (logger.isDebugEnabled()) {
       logger.debug("Processing message (" + message.getId() + ") with type (" + message.getTypeId()
           + ")");
     }
 
-    if (!messageHandlers.containsKey(message.getTypeId()))
-    {
+    if (!messageHandlers.containsKey(message.getTypeId())) {
       throw new MessagingServiceException(
           "No message handler registered to process messages with type (" + message.getTypeId()
-          + ")");
+              + ")");
     }
 
     IMessageHandler messageHandler = messageHandlers.get(message.getTypeId());
 
-    try
-    {
+    try {
       return messageHandler.processMessage(message);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to process the message (" + message.getId()
           + ") with type (" + message.getTypeId() + ")", e);
     }
@@ -1117,19 +990,14 @@ public class MessagingService
   @Override
   @Transactional
   public void queueMessageForDownload(Message message)
-    throws MessagingServiceException
-  {
-    try
-    {
-      if (message.getData().length <= Message.MAX_ASYNC_MESSAGE_SIZE)
-      {
+      throws MessagingServiceException {
+    try {
+      if (message.getData().length <= Message.MAX_ASYNC_MESSAGE_SIZE) {
         // Update the status of the message to indicate that it is queued for sending
         message.setStatus(MessageStatus.QUEUED_FOR_DOWNLOAD);
 
         createMessage(message);
-      }
-      else
-      {
+      } else {
         // Calculate the hash for the message data to use as the message checksum
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
@@ -1140,18 +1008,15 @@ public class MessagingService
         // Split the message up into a number of message parts and persist each message part
         int numberOfParts = message.getData().length / MessagePart.MAX_MESSAGE_PART_SIZE;
 
-        if ((message.getData().length % MessagePart.MAX_MESSAGE_PART_SIZE) > 0)
-        {
+        if ((message.getData().length % MessagePart.MAX_MESSAGE_PART_SIZE) > 0) {
           numberOfParts++;
         }
 
-        for (int i = 0; i < numberOfParts; i++)
-        {
+        for (int i = 0; i < numberOfParts; i++) {
           byte[] messagePartData;
 
           // If this is not the last message part
-          if (i < (numberOfParts - 1))
-          {
+          if (i < (numberOfParts - 1)) {
             messagePartData = new byte[MessagePart.MAX_MESSAGE_PART_SIZE];
 
             System.arraycopy(message.getData(), (i * MessagePart.MAX_MESSAGE_PART_SIZE),
@@ -1159,8 +1024,7 @@ public class MessagingService
           }
 
           // If this is the last message part
-          else
-          {
+          else {
             int sizeOfPart = message.getData().length - (i * MessagePart.MAX_MESSAGE_PART_SIZE);
 
             messagePartData = new byte[sizeOfPart];
@@ -1183,9 +1047,7 @@ public class MessagingService
         logger.debug("Queued " + numberOfParts + " message parts for download for the message ("
             + message.getId() + ")");
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to queue the message (" + message.getId()
           + ") for download", e);
     }
@@ -1202,27 +1064,22 @@ public class MessagingService
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void queueMessageForProcessing(Message message)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     // Update the status of the message to indicate that it is queued for processing
     message.setStatus(MessageStatus.QUEUED_FOR_PROCESSING);
 
-    try
-    {
+    try {
       // Create the message
       createMessage(message);
 
       // Archive the message
       archiveMessage(message);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to queue the message (" + message.getId()
           + ") for processing", e);
     }
 
-    if (logger.isDebugEnabled())
-    {
+    if (logger.isDebugEnabled()) {
       logger.debug("Queued message (" + message.getId() + ") with type (" + message.getTypeId()
           + ") for processing");
 
@@ -1231,16 +1088,15 @@ public class MessagingService
   }
 
   /**
-   * Queue the specified message for processing and process the message using the Background
-   * Message Processor.
+   * Queue the specified message for processing and process the message using the Background Message
+   * Processor.
    *
    * @param message the message to queue
    */
   @Override
   @Transactional
   public void queueMessageForProcessingAndProcessMessage(Message message)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     /*
      * Queue the message for processing in a new transaction so it is available to the
      * Background Message Processor, which will be triggered asynchronously in a different thread.
@@ -1248,12 +1104,9 @@ public class MessagingService
     self.queueMessageForProcessing(message);
 
     // Trigger the Background Message Processor to process the message that was queued
-    try
-    {
+    try {
       applicationContext.getBean(BackgroundMessageProcessor.class).processMessages();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error("Failed to trigger the Background Message Processor", e);
     }
   }
@@ -1266,13 +1119,10 @@ public class MessagingService
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void queueMessagePartForAssembly(MessagePart messagePart)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       // Verify that the message has not already been queued for processing
-      if (isMessageArchived(messagePart.getMessageId()))
-      {
+      if (isMessageArchived(messagePart.getMessageId())) {
         logger.debug("The message (" + messagePart.getMessageId()
             + ") has already been queued for processing so the message part ("
             + messagePart.getId() + ") will be ignored");
@@ -1281,16 +1131,13 @@ public class MessagingService
       }
 
       // Check that we have not already received and queued this message part for assembly
-      if (!isMessagePartQueuedForAssembly(messagePart.getId()))
-      {
+      if (!isMessagePartQueuedForAssembly(messagePart.getId())) {
         // Update the status of the message part to indicate that it is queued for assembly
         messagePart.setStatus(MessagePartStatus.QUEUED_FOR_ASSEMBLY);
 
         createMessagePart(messagePart);
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to queue the message part ("
           + messagePart.getId() + ") for assembly", e);
     }
@@ -1298,16 +1145,15 @@ public class MessagingService
 
   /**
    * Queue the specified message part for assembly and if all the parts of the message have been
-   * queued for assembly then assemble the message using the Background Message Part Assembler
-   * and process the message using the Background Message Processor.
+   * queued for assembly then assemble the message using the Background Message Part Assembler and
+   * process the message using the Background Message Processor.
    *
    * @param messagePart the message part to queue
    */
   @Override
   @Transactional
   public void queueMessagePartForAssemblyAndAssembleAndProcessMessage(MessagePart messagePart)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     /*
      * Queue the message part for assembly in a new transaction so it is available to the
      * Background Message Assembler, which will be triggered asynchronously in a different thread.
@@ -1318,13 +1164,10 @@ public class MessagingService
      * If all the message parts for the message have been queued for assembly then trigger the
      * Background Message Assembler to assemble the message.
      */
-    try
-    {
+    try {
       applicationContext.getBean(BackgroundMessageAssembler.class).assembleMessage(
           messagePart.getMessageId(), messagePart.getTotalParts());
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error("Failed to trigger the Background Message Assembler", e);
     }
   }
@@ -1338,18 +1181,14 @@ public class MessagingService
   @Override
   @Transactional
   public void resetMessageLocks(MessageStatus status, MessageStatus newStatus)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messageRepository.resetStatusAndLocksForMessagesWithStatusAndLock(status, newStatus,
           instanceName);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException(
           "Failed to reset the locks for the messages with the status (" + status
-          + ") that have been locked using the lock name (" + instanceName + ")", e);
+              + ") that have been locked using the lock name (" + instanceName + ")", e);
     }
   }
 
@@ -1362,18 +1201,14 @@ public class MessagingService
   @Override
   @Transactional
   public void resetMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messagePartRepository.resetStatusAndLocksForMessagePartsWithStatusAndLock(status, newStatus,
           instanceName);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException(
           "Failed to reset the locks for the message parts with the status (" + status
-          + ") that have been locked using the lock name (" + instanceName + ")", e);
+              + ") that have been locked using the lock name (" + instanceName + ")", e);
     }
   }
 
@@ -1387,14 +1222,10 @@ public class MessagingService
   @Override
   @Transactional
   public void setMessagePartStatus(UUID messagePartId, MessagePartStatus status)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messagePartRepository.setStatusById(messagePartId, status);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to set the status for the message part ("
           + messagePartId + ") to (" + status.toString() + ")", e);
     }
@@ -1403,20 +1234,17 @@ public class MessagingService
   /**
    * Set the status for a message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the message
+   * @param messageId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                  message
    * @param status    the new status
    */
   @Override
   @Transactional
   public void setMessageStatus(UUID messageId, MessageStatus status)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messageRepository.setMessageStatus(messageId, status);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to set the status for the message (" + messageId
           + ") to (" + status.toString() + ")", e);
     }
@@ -1431,17 +1259,13 @@ public class MessagingService
   @Override
   @Transactional
   public void unlockMessage(Message message, MessageStatus status)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messageRepository.unlockMessage(message.getId(), status);
 
       message.setStatus(status);
       message.setLockName(null);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to unlock and set the status for the message ("
           + message.getId() + ") to (" + status.toString() + ")", e);
     }
@@ -1457,17 +1281,13 @@ public class MessagingService
   @Override
   @Transactional
   public void unlockMessagePart(UUID messagePartId, MessagePartStatus status)
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messagePartRepository.unlockMessagePart(messagePartId, status);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException(
           "Failed to unlock and set the status for the message part (" + messagePartId + ") to ("
-          + status.toString() + ")", e);
+              + status.toString() + ")", e);
     }
   }
 
@@ -1475,22 +1295,15 @@ public class MessagingService
    * Initialize the configuration for the Messaging Service.
    */
   private void initConfiguration()
-    throws MessagingServiceException
-  {
-    try
-    {
-      if (StringUtils.isEmpty(encryptionKeyBase64))
-      {
+      throws MessagingServiceException {
+    try {
+      if (StringUtils.isEmpty(encryptionKeyBase64)) {
         throw new MessagingServiceException(
             "No application.messaging.encryptionKey configuration value found");
-      }
-      else
-      {
+      } else {
         encryptionMasterKey = Base64Util.decode(encryptionKeyBase64);
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException(
           "Failed to initialize the configuration for the Messaging Service", e);
     }
@@ -1499,13 +1312,10 @@ public class MessagingService
   /**
    * Initialize the message handlers.
    */
-  private void initMessageHandlers()
-  {
+  private void initMessageHandlers() {
     // Initialize each message handler
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
-    {
-      try
-      {
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      try {
         logger.info("Initializing the message handler (" + messageHandlerConfig.getName()
             + ") with class (" + messageHandlerConfig.getClassName() + ")");
 
@@ -1514,8 +1324,7 @@ public class MessagingService
 
         Constructor<?> constructor = clazz.getConstructor(MessageHandlerConfig.class);
 
-        if (constructor != null)
-        {
+        if (constructor != null) {
           // Create an instance of the message handler
           IMessageHandler messageHandler = (IMessageHandler) constructor.newInstance(
               messageHandlerConfig);
@@ -1526,10 +1335,8 @@ public class MessagingService
           List<MessageHandlerConfig.MessageConfig> messagesConfig =
               messageHandlerConfig.getMessagesConfig();
 
-          for (MessageHandlerConfig.MessageConfig messageConfig : messagesConfig)
-          {
-            if (messageHandlers.containsKey(messageConfig.getMessageTypeId()))
-            {
+          for (MessageHandlerConfig.MessageConfig messageConfig : messagesConfig) {
+            if (messageHandlers.containsKey(messageConfig.getMessageTypeId())) {
               IMessageHandler existingMessageHandler = messageHandlers.get(
                   messageConfig.getMessageTypeId());
 
@@ -1537,23 +1344,17 @@ public class MessagingService
                   .getName() + ") for the message type (" + messageConfig.getMessageTypeId()
                   + ") since another message handler (" + existingMessageHandler.getClass()
                   .getName() + ") has already been registered to process messages of this type");
-            }
-            else
-            {
+            } else {
               messageHandlers.put(messageConfig.getMessageTypeId(), messageHandler);
             }
           }
-        }
-        else
-        {
+        } else {
           logger.error("Failed to register the message handler ("
               + messageHandlerConfig.getClassName()
               + ") since the message handler class does not provide a constructor with the required"
               + " signature");
         }
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to initialize the message handler (" + messageHandlerConfig.getName()
             + ") with class (" + messageHandlerConfig.getClassName() + ")", e);
       }
@@ -1567,17 +1368,14 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type should be archived or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  private boolean isArchivableMessage(UUID typeId)
-  {
+  private boolean isArchivableMessage(UUID typeId) {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers supports archiving of the message
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
-    {
-      if (messageHandlerConfig.isArchivable(typeId))
-      {
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      if (messageHandlerConfig.isArchivable(typeId)) {
         return true;
       }
     }
@@ -1592,17 +1390,14 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type can be processed asynchronously
-   *         or <code>false</code> otherwise
+   * or <code>false</code> otherwise
    */
-  private boolean isAsynchronousMessage(UUID typeId)
-  {
+  private boolean isAsynchronousMessage(UUID typeId) {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers support the synchronous processing of this message
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
-    {
-      if (messageHandlerConfig.supportsAsynchronousProcessing(typeId))
-      {
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      if (messageHandlerConfig.supportsAsynchronousProcessing(typeId)) {
         return true;
       }
     }
@@ -1617,17 +1412,14 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type should be processed securely or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  private boolean isSecureMessage(UUID typeId)
-  {
+  private boolean isSecureMessage(UUID typeId) {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers required secure processing of the message type
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
-    {
-      if (messageHandlerConfig.isSecure(typeId))
-      {
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      if (messageHandlerConfig.isSecure(typeId)) {
         return true;
       }
     }
@@ -1642,17 +1434,14 @@ public class MessagingService
    *               type
    *
    * @return <code>true</code> if a message with the specified type can be processed synchronously
-   *         or <code>false</code> otherwise
+   * or <code>false</code> otherwise
    */
-  private boolean isSynchronousMessage(UUID typeId)
-  {
+  private boolean isSynchronousMessage(UUID typeId) {
     // TODO: Add caching of this check
 
     // Check if any of the configured handlers support the synchronous processing of this message
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig)
-    {
-      if (messageHandlerConfig.supportsSynchronousProcessing(typeId))
-      {
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      if (messageHandlerConfig.supportsSynchronousProcessing(typeId)) {
         return true;
       }
     }
@@ -1661,14 +1450,12 @@ public class MessagingService
   }
 
   /**
-   * Read the messaging configuration from all the <i>META-INF/MessagingConfig.xml</i>
-   * configuration files that can be found on the classpath.
+   * Read the messaging configuration from all the <i>META-INF/MessagingConfig.xml</i> configuration
+   * files that can be found on the classpath.
    */
   private void readMessagingConfig()
-    throws MessagingServiceException
-  {
-    try
-    {
+      throws MessagingServiceException {
+    try {
       messageHandlersConfig = new ArrayList<>();
 
       ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -1676,12 +1463,10 @@ public class MessagingService
       // Load the messaging configuration files from the classpath
       Enumeration<URL> configurationFiles = classLoader.getResources(MESSAGING_CONFIGURATION_PATH);
 
-      while (configurationFiles.hasMoreElements())
-      {
+      while (configurationFiles.hasMoreElements()) {
         URL configurationFile = configurationFiles.nextElement();
 
-        if (logger.isDebugEnabled())
-        {
+        if (logger.isDebugEnabled()) {
           logger.debug("Reading the messaging configuration file (" + configurationFile.toURI()
               .toString() + ")");
         }
@@ -1706,8 +1491,7 @@ public class MessagingService
         List<Element> messageHandlerElements = XmlUtil.getChildElements(rootElement,
             "messageHandler");
 
-        for (Element messageHandlerElement : messageHandlerElements)
-        {
+        for (Element messageHandlerElement : messageHandlerElements) {
           // Read the handler configuration
           String name = XmlUtil.getChildElementText(messageHandlerElement, "name");
           String className = XmlUtil.getChildElementText(messageHandlerElement, "class");
@@ -1718,12 +1502,10 @@ public class MessagingService
           Element messagesElement = XmlUtil.getChildElement(messageHandlerElement, "messages");
 
           // Read the message configuration for the handler
-          if (messagesElement != null)
-          {
+          if (messagesElement != null) {
             List<Element> messageElements = XmlUtil.getChildElements(messagesElement, "message");
 
-            for (Element messageElement : messageElements)
-            {
+            for (Element messageElement : messageElements) {
               UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
               boolean isSynchronous = messageElement.getAttribute("isSynchronous").equalsIgnoreCase(
                   "Y");
@@ -1741,9 +1523,7 @@ public class MessagingService
           messageHandlersConfig.add(messageHandlerConfig);
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException("Failed to read the messaging configuration", e);
     }
   }

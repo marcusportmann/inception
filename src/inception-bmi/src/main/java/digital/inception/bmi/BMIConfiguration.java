@@ -19,11 +19,10 @@ package digital.inception.bmi;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ServiceUtil;
-
+import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
-
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
@@ -32,22 +31,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
 
-
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.sql.DataSource;
-
 /**
- * The <code>BMIConfiguration</code> class provides the Spring configuration
- * for the Business Modeling and Integration (BMI) module.
+ * The <code>BMIConfiguration</code> class provides the Spring configuration for the Business
+ * Modeling and Integration (BMI) module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.bmi"})
-public class BMIConfiguration
-{
+public class BMIConfiguration {
+
   /**
    * The Spring application context.
    */
@@ -75,8 +71,8 @@ public class BMIConfiguration
    * @param transactionManager the Spring platform transaction manager
    */
   public BMIConfiguration(ApplicationContext applicationContext, @Qualifier(
-      "applicationDataSource") DataSource dataSource, PlatformTransactionManager transactionManager)
-  {
+      "applicationDataSource") DataSource dataSource,
+      PlatformTransactionManager transactionManager) {
     this.applicationContext = applicationContext;
     this.dataSource = dataSource;
     this.transactionManager = transactionManager;
@@ -88,21 +84,19 @@ public class BMIConfiguration
    * @return the Camunda Process Engine
    */
   @Bean
-  public ProcessEngine processEngine()
-  {
-    try
-    {
+  public ProcessEngine processEngine() {
+    try {
       SpringProcessEngineConfiguration processEngineConfiguration =
           new SpringProcessEngineConfiguration();
       processEngineConfiguration.setApplicationContext(applicationContext);
       processEngineConfiguration.setCmmnEnabled(true);
       processEngineConfiguration.setDatabaseSchema("CAMUNDA");
-      processEngineConfiguration.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
+      processEngineConfiguration
+          .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE);
       processEngineConfiguration.setDatabaseTablePrefix("CAMUNDA.");
       processEngineConfiguration.setDataSource(dataSource);
       processEngineConfiguration.setJobExecutorActivate(true);
       processEngineConfiguration.setTransactionManager(transactionManager);
-
 
       // Disable specific capabilities
       processEngineConfiguration.setAuthorizationEnabled(false);
@@ -112,9 +106,7 @@ public class BMIConfiguration
       processEngineConfiguration.setHistory(ProcessEngineConfiguration.HISTORY_NONE);
 
       return processEngineConfiguration.buildProcessEngine();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialise the Flowable Process Engine", e);
     }
   }

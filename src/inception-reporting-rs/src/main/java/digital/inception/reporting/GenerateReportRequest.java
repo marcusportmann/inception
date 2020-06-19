@@ -21,15 +21,12 @@ package digital.inception.reporting;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
+import java.util.List;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
-import java.util.List;
 
 /**
  * The <code>GenerateReportRequest</code> class holds the information for a request to generate a
@@ -39,11 +36,11 @@ import java.util.List;
  */
 @ApiModel(value = "GenerateReportRequest")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "reportDefinitionId", "reportParameters" })
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@JsonPropertyOrder({"reportDefinitionId", "reportParameters"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class GenerateReportRequest
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -64,7 +61,8 @@ public class GenerateReportRequest
   /**
    * Constructs a new <code>GenerateReportRequest</code>.
    */
-  public GenerateReportRequest() {}
+  public GenerateReportRequest() {
+  }
 
   /**
    * Constructs a new <code>GenerateReportRequest</code>.
@@ -72,8 +70,7 @@ public class GenerateReportRequest
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    * @param reportParameters   the report parameters
    */
-  public GenerateReportRequest(String reportDefinitionId, List<ReportParameter> reportParameters)
-  {
+  public GenerateReportRequest(String reportDefinitionId, List<ReportParameter> reportParameters) {
     this.reportDefinitionId = reportDefinitionId;
     this.reportParameters = reportParameters;
   }
@@ -83,19 +80,8 @@ public class GenerateReportRequest
    *
    * @return the ID used to uniquely identify the report definition
    */
-  public String getReportDefinitionId()
-  {
+  public String getReportDefinitionId() {
     return reportDefinitionId;
-  }
-
-  /**
-   * Returns the report parameters.
-   *
-   * @return the report parameters
-   */
-  public List<ReportParameter> getReportParameters()
-  {
-    return reportParameters;
   }
 
   /**
@@ -103,9 +89,17 @@ public class GenerateReportRequest
    *
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
-  public void setReportDefinitionId(String reportDefinitionId)
-  {
+  public void setReportDefinitionId(String reportDefinitionId) {
     this.reportDefinitionId = reportDefinitionId;
+  }
+
+  /**
+   * Returns the report parameters.
+   *
+   * @return the report parameters
+   */
+  public List<ReportParameter> getReportParameters() {
+    return reportParameters;
   }
 
   /**
@@ -113,8 +107,7 @@ public class GenerateReportRequest
    *
    * @param reportParameters the report parameters
    */
-  public void setReportParameters(List<ReportParameter> reportParameters)
-  {
+  public void setReportParameters(List<ReportParameter> reportParameters) {
     this.reportParameters = reportParameters;
   }
 }

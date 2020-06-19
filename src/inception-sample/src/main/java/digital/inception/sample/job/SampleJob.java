@@ -21,7 +21,6 @@ package digital.inception.sample.job;
 import digital.inception.scheduler.IJob;
 import digital.inception.scheduler.JobExecutionContext;
 import digital.inception.scheduler.JobExecutionFailedException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,23 +30,20 @@ import org.slf4j.LoggerFactory;
  * @author Marcus Portmann
  */
 public class SampleJob
-  implements IJob
-{
+    implements IJob {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleJob.class);
 
   @Override
   public void execute(JobExecutionContext context)
-    throws JobExecutionFailedException
-  {
+      throws JobExecutionFailedException {
     logger.info("Sample job execution started");
 
-    try
-    {
+    try {
       Thread.sleep(20000L);
+    } catch (Throwable e) {
     }
-    catch(Throwable e)
-    {}
 
     logger.info("Sample job execution finished");
   }

@@ -21,18 +21,18 @@ package digital.inception.bmi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ProcessDefinitionSummary</code> class holds the summary information for a process
@@ -42,15 +42,15 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "ProcessDefinitionSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "version" })
+@JsonPropertyOrder({"id", "name", "version"})
 @XmlRootElement(name = "ProcessDefinitionSummary", namespace = "http://bmi.inception.digital")
 @XmlType(name = "ProcessDefinitionSummary", namespace = "http://bmi.inception.digital",
-    propOrder = { "id", "name", "version" })
+    propOrder = {"id", "name", "version"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ProcessDefinitionSummary
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -87,7 +87,8 @@ public class ProcessDefinitionSummary
   /**
    * Constructs a new <code>ProcessDefinitionSummary</code>.
    */
-  public ProcessDefinitionSummary() {}
+  public ProcessDefinitionSummary() {
+  }
 
   /**
    * Constructs a new <code>ProcessDefinitionSummary</code>.
@@ -96,8 +97,7 @@ public class ProcessDefinitionSummary
    * @param name    the name of the process definition
    * @param version the version of the process definition
    */
-  public ProcessDefinitionSummary(String id, String name, String version)
-  {
+  public ProcessDefinitionSummary(String id, String name, String version) {
     this.id = id;
     this.name = name;
     this.version = version;
@@ -109,23 +109,19 @@ public class ProcessDefinitionSummary
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -139,8 +135,7 @@ public class ProcessDefinitionSummary
    *
    * @return the ID used to uniquely identify the process definition
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
   }
 
@@ -149,8 +144,7 @@ public class ProcessDefinitionSummary
    *
    * @return the name of the process definition
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -159,8 +153,7 @@ public class ProcessDefinitionSummary
    *
    * @return the version of the process definition given by the custom Camunda versionTag
    */
-  public String getVersion()
-  {
+  public String getVersion() {
     return version;
   }
 
@@ -170,8 +163,7 @@ public class ProcessDefinitionSummary
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -183,8 +175,7 @@ public class ProcessDefinitionSummary
    * @return a string representation of the object
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "ProcessDefinitionSummary {id=\"" + getId() + "\", name=\"" + getName()
         + "\", version=\"" + getVersion() + "\"}";
   }

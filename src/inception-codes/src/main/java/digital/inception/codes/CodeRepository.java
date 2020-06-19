@@ -18,6 +18,8 @@ package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,21 +27,19 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
-import java.util.Optional;
-
 /**
  * The <code>CodeRepository</code> interface declares the repository for the
  * <code>Code</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface CodeRepository extends JpaRepository<Code, CodeId>
-{
+public interface CodeRepository extends JpaRepository<Code, CodeId> {
+
   long countByCodeCategoryId(String codeCategoryId);
 
   @Query("select c.name from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
-  Optional<String> getNameById(@Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
+  Optional<String> getNameById(@Param("codeCategoryId") String codeCategoryId,
+      @Param("codeId") String codeId);
 
   @Modifying
   @Query("delete from Code c where c.codeCategoryId = :#{#id.codeCategoryId} and c.id = :#{#id.id}")

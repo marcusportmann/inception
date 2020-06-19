@@ -22,20 +22,16 @@ import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Element;
-
-import org.springframework.util.StringUtils;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.util.StringUtils;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategoryData</code> class holds the information for a code category.
@@ -44,8 +40,8 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("WeakerAccess")
 public class CodeCategoryData
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -78,44 +74,33 @@ public class CodeCategoryData
    *
    * @param element the WBXML element containing the code category data
    */
-  CodeCategoryData(Element element)
-  {
+  CodeCategoryData(Element element) {
     this.id = element.getChildText("Id");
     this.name = element.getChildText("Name");
 
     String lastUpdatedValue = element.getChildText("LastUpdated");
 
-    if (lastUpdatedValue.contains("T"))
-    {
-      try
-      {
+    if (lastUpdatedValue.contains("T")) {
+      try {
         this.lastUpdated = ISO8601Util.toLocalDateTime(lastUpdatedValue);
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         throw new RuntimeException("Failed to parse the LastUpdated ISO8601 timestamp ("
             + lastUpdatedValue + ") for the code category data", e);
       }
-    }
-    else
-    {
+    } else {
       this.lastUpdated = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(
           lastUpdatedValue)), ZoneId.systemDefault());
     }
 
-    if (element.hasChild("CodeData"))
-    {
+    if (element.hasChild("CodeData")) {
       this.codeData = element.getChildText("CodeData");
-    }
-    else
-    {
+    } else {
       this.codeData = "";
     }
 
     this.codes = new ArrayList<>();
 
-    if (element.hasChild("Codes"))
-    {
+    if (element.hasChild("Codes")) {
       List<Element> codeElements = element.getChild("Codes").getChildren("Code");
 
       this.codes.addAll(codeElements.stream().map(CodeData::new).collect(Collectors.toList()));
@@ -129,8 +114,7 @@ public class CodeCategoryData
    * @param codeData     the XML or JSON data for the code category
    * @param codes        the codes for the code category
    */
-  public CodeCategoryData(CodeCategory codeCategory, String codeData, List<Code> codes)
-  {
+  public CodeCategoryData(CodeCategory codeCategory, String codeData, List<Code> codes) {
     this.id = codeCategory.getId();
     this.name = codeCategory.getName();
     this.lastUpdated = codeCategory.getUpdated();
@@ -139,8 +123,7 @@ public class CodeCategoryData
         : codeData;
     this.codes = new ArrayList<>();
 
-    if (codes != null)
-    {
+    if (codes != null) {
       this.codes.addAll(codes.stream().map(CodeData::new).collect(Collectors.toList()));
     }
   }
@@ -150,8 +133,7 @@ public class CodeCategoryData
    *
    * @return the XML or JSON data for the code category
    */
-  public String getCodeData()
-  {
+  public String getCodeData() {
     return codeData;
   }
 
@@ -160,8 +142,7 @@ public class CodeCategoryData
    *
    * @return the codes for the code category
    */
-  public List<CodeData> getCodes()
-  {
+  public List<CodeData> getCodes() {
     return codes;
   }
 
@@ -170,8 +151,7 @@ public class CodeCategoryData
    *
    * @return the ID used to uniquely identify the code category
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
   }
 
@@ -180,8 +160,7 @@ public class CodeCategoryData
    *
    * @return the date and time the code category was last updated
    */
-  public LocalDateTime getLastUpdated()
-  {
+  public LocalDateTime getLastUpdated() {
     return lastUpdated;
   }
 
@@ -190,8 +169,7 @@ public class CodeCategoryData
    *
    * @return the name of the code category
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -201,8 +179,7 @@ public class CodeCategoryData
    * @return a string representation of the object
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     StringBuilder buffer = new StringBuilder();
 
     buffer.append("CodeCategory {");
@@ -214,20 +191,15 @@ public class CodeCategoryData
         ? getCodeData().length()
         : 0).append(" characters of XML or JSON code data\"");
 
-    if ((getCodes() != null) && (getCodes().size() > 0))
-    {
+    if ((getCodes() != null) && (getCodes().size() > 0)) {
       buffer.append(", codes = {");
 
       int count = 0;
 
-      for (CodeData code : getCodes())
-      {
-        if (count > 0)
-        {
+      for (CodeData code : getCodes()) {
+        if (count > 0) {
           buffer.append(", Code {");
-        }
-        else
-        {
+        } else {
           buffer.append("Code {");
         }
 
@@ -254,31 +226,27 @@ public class CodeCategoryData
    *
    * @return the WBXML element containing the code category data
    */
-  Element toElement()
-  {
+  Element toElement() {
     Element codeCategoryElement = new Element("CodeCategory");
 
     codeCategoryElement.addContent(new Element("Id", id));
     codeCategoryElement.addContent(new Element("Name",
         StringUtils.isEmpty(name)
-        ? ""
-        : name));
+            ? ""
+            : name));
     codeCategoryElement.addContent(new Element("LastUpdated",
         (lastUpdated == null)
-        ? ISO8601Util.now()
-        : ISO8601Util.fromLocalDateTime(lastUpdated)));
+            ? ISO8601Util.now()
+            : ISO8601Util.fromLocalDateTime(lastUpdated)));
 
-    if (codeData != null)
-    {
+    if (codeData != null) {
       codeCategoryElement.addContent(new Element("CodeData", codeData));
     }
 
     Element codesElement = new Element("Codes");
 
-    if (codes != null)
-    {
-      for (CodeData code : codes)
-      {
+    if (codes != null) {
+      for (CodeData code : codes) {
         codesElement.addContent(code.toElement());
       }
     }

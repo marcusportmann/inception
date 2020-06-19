@@ -20,7 +20,6 @@ package digital.inception.scheduler;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
 import javax.validation.Validator;
 
 /**
@@ -31,9 +30,9 @@ import javax.validation.Validator;
 @WebService(serviceName = "SchedulerService", name = "ISchedulerService",
     targetNamespace = "http://scheduler.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused", "WeakerAccess", "ValidExternallyBoundObject" })
-public class SchedulerWebService
-{
+@SuppressWarnings({"unused", "WeakerAccess", "ValidExternallyBoundObject"})
+public class SchedulerWebService {
+
   /**
    * The Scheduler Service.
    */
@@ -50,8 +49,7 @@ public class SchedulerWebService
    * @param schedulerService the Scheduler Service
    * @param validator        the JSR-303 validator
    */
-  public SchedulerWebService(ISchedulerService schedulerService, Validator validator)
-  {
+  public SchedulerWebService(ISchedulerService schedulerService, Validator validator) {
     this.schedulerService = schedulerService;
     this.validator = validator;
   }

@@ -21,27 +21,20 @@ package digital.inception.rs;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.service.ServiceException;
-
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.io.Serializable;
-
-import java.lang.reflect.Method;
-
-import java.time.LocalDateTime;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * The <code>RestControllerError</code> class holds the information for an error returned by a
@@ -50,12 +43,12 @@ import javax.servlet.http.HttpServletRequest;
  * @author Marcus Portmann
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "uri", "timestamp", "status", "statusText", "code", "message", "detail",
-    "exception", "stackTrace", "name", "validationErrors" })
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@JsonPropertyOrder({"uri", "timestamp", "status", "statusText", "code", "message", "detail",
+    "exception", "stackTrace", "name", "validationErrors"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class RestControllerError
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -131,8 +124,7 @@ public class RestControllerError
    * @param request        the HTTP servlet request
    * @param responseStatus the HTTP response status
    */
-  public RestControllerError(HttpServletRequest request, HttpStatus responseStatus)
-  {
+  public RestControllerError(HttpServletRequest request, HttpStatus responseStatus) {
     this(request, responseStatus, null);
   }
 
@@ -144,50 +136,38 @@ public class RestControllerError
    * @param cause          the exception
    */
   @SuppressWarnings("unchecked")
-  public RestControllerError(HttpServletRequest request, HttpStatus responseStatus, Throwable cause)
-  {
+  public RestControllerError(HttpServletRequest request, HttpStatus responseStatus,
+      Throwable cause) {
     this.timestamp = LocalDateTime.now();
 
-    if (cause != null)
-    {
-      if (cause instanceof ServiceException)
-      {
+    if (cause != null) {
+      if (cause instanceof ServiceException) {
         this.code = ((ServiceException) cause).getServiceError().getCode();
       }
 
       ResponseStatus annotation = AnnotatedElementUtils.findMergedAnnotation(cause.getClass(),
           ResponseStatus.class);
 
-      if (annotation != null)
-      {
+      if (annotation != null) {
         // Use the HTTP response status specified through the @ResponseStatus annotation
         responseStatus = annotation.value();
 
-        if (!StringUtils.isEmpty(annotation.reason()))
-        {
+        if (!StringUtils.isEmpty(annotation.reason())) {
           this.message = annotation.reason();
           this.detail = cause.getMessage();
-        }
-        else
-        {
+        } else {
           this.message = cause.getMessage();
         }
-      }
-      else
-      {
+      } else {
         this.message = cause.getMessage();
       }
 
-      if (cause instanceof org.springframework.security.access.AccessDeniedException)
-      {
+      if (cause instanceof org.springframework.security.access.AccessDeniedException) {
         responseStatus = HttpStatus.FORBIDDEN;
-      }
-      else if ((annotation == null) || (annotation.value().is5xxServerError()))
-      {
+      } else if ((annotation == null) || (annotation.value().is5xxServerError())) {
         this.exception = cause.getClass().getName();
 
-        try
-        {
+        try {
           ByteArrayOutputStream baos = new ByteArrayOutputStream();
           PrintWriter pw = new PrintWriter(baos);
 
@@ -199,31 +179,27 @@ public class RestControllerError
           pw.flush();
 
           this.stackTrace = baos.toString();
+        } catch (Throwable ignored) {
         }
-        catch (Throwable ignored) {}
       }
 
-      try
-      {
+      try {
         if (cause.getClass().getName().equals(
-            "digital.inception.validation.InvalidArgumentException"))
-        {
+            "digital.inception.validation.InvalidArgumentException")) {
           Method getNameMethod = cause.getClass().getMethod("getName");
 
-          if (getNameMethod != null)
-          {
+          if (getNameMethod != null) {
             this.name = (String) getNameMethod.invoke(cause);
           }
 
           Method getValidationErrorsMethod = cause.getClass().getMethod("getValidationErrors");
 
-          if (getValidationErrorsMethod != null)
-          {
+          if (getValidationErrorsMethod != null) {
             validationErrors = (List<Object>) getValidationErrorsMethod.invoke(cause);
           }
         }
+      } catch (Throwable ignored) {
       }
-      catch (Throwable ignored) {}
     }
 
     this.uri = request.getRequestURI();
@@ -238,8 +214,7 @@ public class RestControllerError
    *
    * @return the optional code identifying the error
    */
-  public String getCode()
-  {
+  public String getCode() {
     return code;
   }
 
@@ -248,8 +223,7 @@ public class RestControllerError
    *
    * @return the optional detail
    */
-  public String getDetail()
-  {
+  public String getDetail() {
     return detail;
   }
 
@@ -258,8 +232,7 @@ public class RestControllerError
    *
    * @return the optional fully qualified name of the exception associated with the error
    */
-  public String getException()
-  {
+  public String getException() {
     return exception;
   }
 
@@ -268,8 +241,7 @@ public class RestControllerError
    *
    * @return the message
    */
-  public String getMessage()
-  {
+  public String getMessage() {
     return message;
   }
 
@@ -279,8 +251,7 @@ public class RestControllerError
    *
    * @return the optional name of the entity associated with the error
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -289,8 +260,7 @@ public class RestControllerError
    *
    * @return the optional stack trace associated with the error
    */
-  public String getStackTrace()
-  {
+  public String getStackTrace() {
     return stackTrace;
   }
 
@@ -299,8 +269,7 @@ public class RestControllerError
    *
    * @return the HTTP status-code for the error
    */
-  public int getStatus()
-  {
+  public int getStatus() {
     return status;
   }
 
@@ -309,8 +278,7 @@ public class RestControllerError
    *
    * @return the HTTP reason-phrase for the HTTP status-code for the error
    */
-  public String getStatusText()
-  {
+  public String getStatusText() {
     return statusText;
   }
 
@@ -319,8 +287,7 @@ public class RestControllerError
    *
    * @return the date and time the error occurred
    */
-  public LocalDateTime getTimestamp()
-  {
+  public LocalDateTime getTimestamp() {
     return timestamp;
   }
 
@@ -329,8 +296,7 @@ public class RestControllerError
    *
    * @return the URI for the HTTP request that resulted in the error
    */
-  public String getURI()
-  {
+  public String getURI() {
     return uri;
   }
 
@@ -339,8 +305,7 @@ public class RestControllerError
    *
    * @return the optional validation errors associated with the error
    */
-  public List<Object> getValidationErrors()
-  {
+  public List<Object> getValidationErrors() {
     return validationErrors;
   }
 }

@@ -24,28 +24,26 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
- * The <code>AnotherTestRequestData</code> class manages the data for a
- * "Another Test Request" message.
+ * The <code>AnotherTestRequestData</code> class manages the data for a "Another Test Request"
+ * message.
  * <p/>
  * This is an asynchronous message.
  *
  * @author Marcus Portmann
  */
-public class AnotherTestRequestData extends WbxmlMessageData
-{
+public class AnotherTestRequestData extends WbxmlMessageData {
+
   /**
    * The UUID for the "Another Test Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "e9918051-8ebc-48f1-bad7-13c59b550e1a");
+      "e9918051-8ebc-48f1-bad7-13c59b550e1a");
 
   /**
    * The test data.
@@ -60,8 +58,7 @@ public class AnotherTestRequestData extends WbxmlMessageData
   /**
    * Constructs a new <code>AnotherTestRequestData</code>.
    */
-  public AnotherTestRequestData()
-  {
+  public AnotherTestRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
@@ -71,8 +68,7 @@ public class AnotherTestRequestData extends WbxmlMessageData
    * @param testValue the test value
    * @param testData  the test data
    */
-  public AnotherTestRequestData(String testValue, byte[] testData)
-  {
+  public AnotherTestRequestData(String testValue, byte[] testData) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.testValue = testValue;
@@ -85,23 +81,20 @@ public class AnotherTestRequestData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
 
-    if (!rootElement.getName().equals("AnotherTestRequest"))
-    {
+    if (!rootElement.getName().equals("AnotherTestRequest")) {
       return false;
     }
 
-    if ((!rootElement.hasChild("TestValue")) || (!rootElement.hasChild("TestData")))
-    {
+    if ((!rootElement.hasChild("TestValue")) || (!rootElement.hasChild("TestData"))) {
       return false;
     }
 
@@ -116,8 +109,7 @@ public class AnotherTestRequestData extends WbxmlMessageData
    *
    * @return the test data
    */
-  public byte[] getTestData()
-  {
+  public byte[] getTestData() {
     return testData;
   }
 
@@ -126,8 +118,7 @@ public class AnotherTestRequestData extends WbxmlMessageData
    *
    * @return the test value
    */
-  public String getTestValue()
-  {
+  public String getTestValue() {
     return testValue;
   }
 
@@ -136,16 +127,15 @@ public class AnotherTestRequestData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    */
   @Override
-  public byte[] toMessageData()
-  {
+  public byte[] toMessageData() {
     Element rootElement = new Element("AnotherTestRequest");
 
     rootElement.addContent(new Element("TestValue", StringUtils.isEmpty(testValue)
-      ? ""
-      : testValue));
+        ? ""
+        : testValue));
     rootElement.addContent(new Element("TestData", testData));
 
     Document document = new Document(rootElement);

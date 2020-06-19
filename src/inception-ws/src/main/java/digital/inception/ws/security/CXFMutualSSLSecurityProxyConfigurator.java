@@ -18,6 +18,15 @@ package digital.inception.ws.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import java.security.KeyStore;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.Conduit;
@@ -25,26 +34,14 @@ import org.apache.cxf.transport.http.HTTPConduit;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
-import java.security.KeyStore;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
-
 /**
  * The <code>CXFMutualSSLSecurityProxyConfigurator</code> class provides the capability to configure
  * a CXF web service proxy for mutual SSL authentication.
  *
  * @author Marcus Portmann
  */
-public class CXFMutualSSLSecurityProxyConfigurator
-{
+public class CXFMutualSSLSecurityProxyConfigurator {
+
   /**
    * Configure the CXF web service proxy to support mutual SSL authentication.
    *
@@ -61,18 +58,15 @@ public class CXFMutualSSLSecurityProxyConfigurator
    */
   public static void configureProxy(Object proxy, KeyStore keyStore, String keyStorePassword,
       KeyStore trustStore, boolean disableServerTrustChecking)
-    throws Exception
-  {
+      throws Exception {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
-    if (invocationHandler instanceof ClientProxy)
-    {
+    if (invocationHandler instanceof ClientProxy) {
       ClientProxy clientProxy = (ClientProxy) invocationHandler;
 
       Conduit conduit = clientProxy.getClient().getConduit();
 
-      if (conduit instanceof HTTPConduit)
-      {
+      if (conduit instanceof HTTPConduit) {
         HTTPConduit httpConduit = (HTTPConduit) conduit;
 
         TLSClientParameters tlsClientParameters = new TLSClientParameters();
@@ -85,33 +79,26 @@ public class CXFMutualSSLSecurityProxyConfigurator
 
         tlsClientParameters.setKeyManagers(keyManagerFactory.getKeyManagers());
 
-        if (disableServerTrustChecking)
-        {
+        if (disableServerTrustChecking) {
           // Create a trust manager that does not validate certificate chains
-          TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager()
-          {
+          TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
             public void checkClientTrusted(X509Certificate[] chain, String authType)
-              throws CertificateException
-            {
+                throws CertificateException {
               // Skip client verification
             }
 
             public void checkServerTrusted(X509Certificate[] chain, String authType)
-              throws CertificateException
-            {
+                throws CertificateException {
               // Skip server verification
             }
 
-            public X509Certificate[] getAcceptedIssuers()
-            {
+            public X509Certificate[] getAcceptedIssuers() {
               return new X509Certificate[0];
             }
-          } };
+          }};
 
           tlsClientParameters.setTrustManagers(trustAllCerts);
-        }
-        else
-        {
+        } else {
           TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
               TrustManagerFactory.getDefaultAlgorithm());
 

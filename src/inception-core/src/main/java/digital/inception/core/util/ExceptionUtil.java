@@ -22,8 +22,8 @@ package digital.inception.core.util;
  *
  * @author Marcus Portmann
  */
-public final class ExceptionUtil
-{
+public final class ExceptionUtil {
+
   /**
    * Returns the nested messages for an exception.
    *
@@ -31,16 +31,13 @@ public final class ExceptionUtil
    *
    * @return the nested messages for the exception
    */
-  public static String getNestedMessages(Throwable e)
-  {
+  public static String getNestedMessages(Throwable e) {
     StringBuilder buffer = new StringBuilder();
 
     Throwable current = e;
 
-    do
-    {
-      if (buffer.length() > 0)
-      {
+    do {
+      if (buffer.length() > 0) {
         buffer.append(": ");
       }
 

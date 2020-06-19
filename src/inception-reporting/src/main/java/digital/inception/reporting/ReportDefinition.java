@@ -21,23 +21,22 @@ package digital.inception.reporting;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinition</code> class holds the information for a report definition.
@@ -46,17 +45,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "ReportDefinition")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "template" })
+@JsonPropertyOrder({"id", "name", "template"})
 @XmlRootElement(name = "ReportDefinition", namespace = "http://reporting.inception.digital")
 @XmlType(name = "ReportDefinition", namespace = "http://reporting.inception.digital",
-    propOrder = { "id", "name", "template" })
+    propOrder = {"id", "name", "template"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reporting", name = "report_definitions")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ReportDefinition
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -97,7 +96,8 @@ public class ReportDefinition
   /**
    * Constructs a new <code>ReportDefinition</code>.
    */
-  public ReportDefinition() {}
+  public ReportDefinition() {
+  }
 
   /**
    * Constructs a new <code>ReportDefinition</code>.
@@ -106,8 +106,7 @@ public class ReportDefinition
    * @param name     the name of the report definition
    * @param template the JasperReports template for the report definition
    */
-  public ReportDefinition(String id, String name, byte[] template)
-  {
+  public ReportDefinition(String id, String name, byte[] template) {
     this.id = id;
     this.name = name;
     this.template = template;
@@ -119,23 +118,19 @@ public class ReportDefinition
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -149,9 +144,17 @@ public class ReportDefinition
    *
    * @return the ID used to uniquely identify the report definition
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the report definition.
+   *
+   * @param id the ID used to uniquely identify the report definition
+   */
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**
@@ -159,9 +162,17 @@ public class ReportDefinition
    *
    * @return the name of the report definition
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the report definition.
+   *
+   * @param name the name of the report definition
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -169,9 +180,17 @@ public class ReportDefinition
    *
    * @return the JasperReports template for the report definition
    */
-  public byte[] getTemplate()
-  {
+  public byte[] getTemplate() {
     return template;
+  }
+
+  /**
+   * Set the JasperReports template for the report definition.
+   *
+   * @param template the JasperReports template for the report definition
+   */
+  public void setTemplate(byte[] template) {
+    this.template = template;
   }
 
   /**
@@ -180,41 +199,10 @@ public class ReportDefinition
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
-  }
-
-  /**
-   * Set the ID used to uniquely identify the report definition.
-   *
-   * @param id the ID used to uniquely identify the report definition
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the report definition.
-   *
-   * @param name the name of the report definition
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the JasperReports template for the report definition.
-   *
-   * @param template the JasperReports template for the report definition
-   */
-  public void setTemplate(byte[] template)
-  {
-    this.template = template;
   }
 
   /**
@@ -223,8 +211,7 @@ public class ReportDefinition
    * @return a string representation of the object
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "ReportDefinition {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
   }
 }

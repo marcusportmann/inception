@@ -19,15 +19,13 @@ package digital.inception.reporting;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * The <code>ReportingServiceException</code> exception is thrown to indicate an error condition
@@ -43,9 +41,9 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://reporting.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class ReportingServiceException extends ServiceException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class ReportingServiceException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -53,8 +51,7 @@ public class ReportingServiceException extends ServiceException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  ReportingServiceException(String message)
-  {
+  ReportingServiceException(String message) {
     super("ReportingServiceError", message);
   }
 
@@ -62,11 +59,10 @@ public class ReportingServiceException extends ServiceException
    * Constructs a new <code>ReportingServiceException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  ReportingServiceException(String message, Throwable cause)
-  {
+  ReportingServiceException(String message, Throwable cause) {
     super("ReportingServiceError", message, cause);
   }
 }

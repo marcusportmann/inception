@@ -26,8 +26,8 @@ import digital.inception.messaging.Message;
  *
  * @author Marcus Portmann
  */
-public interface IMessageHandler
-{
+public interface IMessageHandler {
+
   /**
    * Returns the name of the message handler.
    *
@@ -43,5 +43,5 @@ public interface IMessageHandler
    * @return the response message or <code>null</code> if no response message exists
    */
   Message processMessage(Message message)
-    throws MessageHandlerException;
+      throws MessageHandlerException;
 }

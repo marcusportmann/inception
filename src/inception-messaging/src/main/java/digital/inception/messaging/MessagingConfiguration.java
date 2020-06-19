@@ -23,13 +23,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The <code>MessagingConfiguration</code> class provides the Spring configuration
- * for the Messaging module.
+ * The <code>MessagingConfiguration</code> class provides the Spring configuration for the Messaging
+ * module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-    basePackages = { "digital.inception.messaging" })
+    basePackages = {"digital.inception.messaging"})
 @EnableScheduling
-public class MessagingConfiguration {}
+public class MessagingConfiguration {
+
+}

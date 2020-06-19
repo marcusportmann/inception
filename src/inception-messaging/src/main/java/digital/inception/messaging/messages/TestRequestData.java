@@ -24,28 +24,25 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
- * The <code>TestRequestData</code> class manages the data for a
- * "Test Request" message.
+ * The <code>TestRequestData</code> class manages the data for a "Test Request" message.
  * <p/>
  * This is a synchronous message.
  *
  * @author Marcus Portmann
  */
-public class TestRequestData extends WbxmlMessageData
-{
+public class TestRequestData extends WbxmlMessageData {
+
   /**
    * The UUID for the "Test Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "a589dc87-2328-4a9b-bdb6-970e55ca2323");
+      "a589dc87-2328-4a9b-bdb6-970e55ca2323");
 
   /**
    * The test value.
@@ -55,8 +52,7 @@ public class TestRequestData extends WbxmlMessageData
   /**
    * Constructs a new <code>TestRequestData</code>.
    */
-  public TestRequestData()
-  {
+  public TestRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
@@ -65,8 +61,7 @@ public class TestRequestData extends WbxmlMessageData
    *
    * @param testValue the test value
    */
-  public TestRequestData(String testValue)
-  {
+  public TestRequestData(String testValue) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.testValue = testValue;
@@ -82,19 +77,16 @@ public class TestRequestData extends WbxmlMessageData
    */
   @Override
   public boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
 
-    if (!rootElement.getName().equals("TestRequest"))
-    {
+    if (!rootElement.getName().equals("TestRequest")) {
       return false;
     }
 
-    if (!rootElement.hasChild("TestValue"))
-    {
+    if (!rootElement.hasChild("TestValue")) {
       return false;
     }
 
@@ -108,8 +100,7 @@ public class TestRequestData extends WbxmlMessageData
    *
    * @return the test value
    */
-  public String getTestValue()
-  {
+  public String getTestValue() {
     return testValue;
   }
 
@@ -121,13 +112,12 @@ public class TestRequestData extends WbxmlMessageData
    * message
    */
   @Override
-  public byte[] toMessageData()
-  {
+  public byte[] toMessageData() {
     Element rootElement = new Element("TestRequest");
 
     rootElement.addContent(new Element("TestValue", StringUtils.isEmpty(testValue)
-      ? ""
-      : testValue));
+        ? ""
+        : testValue));
 
     Document document = new Document(rootElement);
 

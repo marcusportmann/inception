@@ -18,6 +18,10 @@ package digital.inception.ws.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
@@ -26,12 +30,6 @@ import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * The <code>CXFWSSUsernameTokenProfileProxyConfigurator</code> class provides the capability to
  * configure a CXF web service proxy to support authentication using the Web Services Security
@@ -39,8 +37,8 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
-public class CXFWSSUsernameTokenProfileProxyConfigurator
-{
+public class CXFWSSUsernameTokenProfileProxyConfigurator {
+
   /**
    * Configure the CXF web service proxy to support authentication using the the Web Services
    * Security Username Token profile.
@@ -52,12 +50,10 @@ public class CXFWSSUsernameTokenProfileProxyConfigurator
    */
   public static void configureProxy(Object proxy, String username, String password,
       boolean usePlainTextPassword)
-    throws Exception
-  {
+      throws Exception {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
-    if (invocationHandler instanceof ClientProxy)
-    {
+    if (invocationHandler instanceof ClientProxy) {
       ClientProxy clientProxy = (ClientProxy) invocationHandler;
 
       Client client = clientProxy.getClient();
@@ -66,12 +62,9 @@ public class CXFWSSUsernameTokenProfileProxyConfigurator
       outProperties.put(WSHandlerConstants.ACTION, WSHandlerConstants.TIMESTAMP + " "
           + WSHandlerConstants.USERNAME_TOKEN);
 
-      if (usePlainTextPassword)
-      {
+      if (usePlainTextPassword) {
         outProperties.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
-      }
-      else
-      {
+      } else {
         outProperties.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_DIGEST);
       }
 

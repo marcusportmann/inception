@@ -17,18 +17,17 @@
 package digital.inception.validation;
 
 /**
- * The <code>TestJPAServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>TestJPAService</code> class.
+ * The <code>TestJPAServiceTest</code> class contains the implementation of the JUnit tests for the
+ * <code>TestJPAService</code> class.
  *
  * @author Marcus Portmann
  */
-public class InvalidArgumentErrorTest
-{
+public class InvalidArgumentErrorTest {
+
   /**
    * Test the <code>InvalidArgumentError</code>< class.
    */
-  public void invalidArgumentErrorTest()
-  {
+  public void invalidArgumentErrorTest() {
 
   }
 

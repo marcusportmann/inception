@@ -29,8 +29,8 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface RoleRepository extends JpaRepository<Role, String>
-{
+public interface RoleRepository extends JpaRepository<Role, String> {
+
   @Modifying
   @Query("delete from Role r where r.code = :roleCode")
   void deleteById(@Param("roleCode") String roleCode);

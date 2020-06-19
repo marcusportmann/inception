@@ -23,21 +23,26 @@ import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-
-import io.swagger.annotations.*;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import java.util.List;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 /**
  * The <code>ConfigurationRestController</code> class.
@@ -47,9 +52,9 @@ import javax.validation.Validator;
 @Api(tags = "Configuration API")
 @RestController
 @RequestMapping(value = "/api/configuration")
-@SuppressWarnings({ "unused" })
-public class ConfigurationRestController extends SecureRestController
-{
+@SuppressWarnings({"unused"})
+public class ConfigurationRestController extends SecureRestController {
+
   /**
    * The Configuration Service.
    */
@@ -67,8 +72,7 @@ public class ConfigurationRestController extends SecureRestController
    * @param validator            the JSR-303 validator
    */
   public ConfigurationRestController(IConfigurationService configurationService,
-      Validator validator)
-  {
+      Validator validator) {
     this.configurationService = configurationService;
     this.validator = validator;
   }
@@ -79,14 +83,14 @@ public class ConfigurationRestController extends SecureRestController
    * @param key the key used to uniquely identify the configuration
    */
   @ApiOperation(value = "Delete the configuration", notes = "Delete the configuration")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The configuration was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The configuration was deleted successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The configuration could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/configurations/{key}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -95,10 +99,8 @@ public class ConfigurationRestController extends SecureRestController
   public void deleteConfiguration(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
-    throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
-  {
-    if (StringUtils.isEmpty(key))
-    {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException {
+    if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
 
@@ -113,13 +115,13 @@ public class ConfigurationRestController extends SecureRestController
    * @return the configuration
    */
   @ApiOperation(value = "Retrieve the configuration", notes = "Retrieve the configuration")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The configuration could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/configurations/{key}", method = RequestMethod.GET,
       produces = "application/json")
   @PreAuthorize(
@@ -127,10 +129,8 @@ public class ConfigurationRestController extends SecureRestController
   public Configuration getConfiguration(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
-    throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
-  {
-    if (StringUtils.isEmpty(key))
-    {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException {
+    if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
 
@@ -146,13 +146,13 @@ public class ConfigurationRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the configuration value",
       notes = "Retrieve the configuration value")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The configuration could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/configurations/{key}/value", method = RequestMethod.GET,
       produces = "application/json")
   @PreAuthorize(
@@ -160,10 +160,8 @@ public class ConfigurationRestController extends SecureRestController
   public String getConfigurationValue(@ApiParam(name = "key",
       value = "The key used to uniquely identify the configuration", required = true)
   @PathVariable String key)
-    throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException
-  {
-    if (StringUtils.isEmpty(key))
-    {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ConfigurationServiceException {
+    if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
 
@@ -177,17 +175,16 @@ public class ConfigurationRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve all the configurations",
       notes = "Retrieve all the configurations")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/configurations", method = RequestMethod.GET,
       produces = "application/json")
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
   public List<Configuration> getConfigurations()
-    throws ConfigurationServiceException
-  {
+      throws ConfigurationServiceException {
     return configurationService.getConfigurations();
   }
 
@@ -197,12 +194,12 @@ public class ConfigurationRestController extends SecureRestController
    * @param configuration the configuration
    */
   @ApiOperation(value = "Set the configuration", notes = "Set the configuration")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The configuration was set successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The configuration was set successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/configurations", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -211,13 +208,11 @@ public class ConfigurationRestController extends SecureRestController
   public void setConfiguration(@ApiParam(name = "configuration", value = "The configuration",
       required = true)
   @RequestBody Configuration configuration)
-    throws InvalidArgumentException, ConfigurationServiceException
-  {
+      throws InvalidArgumentException, ConfigurationServiceException {
     Set<ConstraintViolation<Configuration>> constraintViolations = validator.validate(
         configuration);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("configuration", ValidationError.toValidationErrors(
           constraintViolations));
     }

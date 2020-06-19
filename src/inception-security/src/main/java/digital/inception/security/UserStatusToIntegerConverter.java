@@ -23,8 +23,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>UserStatusToIntegerConverter</code> class implements the Spring converter that
- * converts a <code>UserStatus</code> type into an <code>Integer</code> type.
+ * The <code>UserStatusToIntegerConverter</code> class implements the Spring converter that converts
+ * a <code>UserStatus</code> type into an <code>Integer</code> type.
  *
  * @author Marcus Portmann
  */
@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @WritingConverter
 public class UserStatusToIntegerConverter
-  implements Converter<UserStatus, Integer>
-{
+    implements Converter<UserStatus, Integer> {
+
   /**
    * Constructs a new <code>UserStatusToIntegerConverter</code>.
    */
-  public UserStatusToIntegerConverter() {}
+  public UserStatusToIntegerConverter() {
+  }
 
   @Override
-  public Integer convert(UserStatus source)
-  {
-    if (source == null)
-    {
+  public Integer convert(UserStatus source) {
+    if (source == null) {
       return null;
     }
 

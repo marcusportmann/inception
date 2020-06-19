@@ -21,33 +21,28 @@ package digital.inception.codes;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
-
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.xml.sax.InputSource;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.lang.reflect.Constructor;
-
-import java.net.URL;
-
-import java.time.LocalDateTime;
-
-import java.util.*;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * The <code>CodesService</code> class provides the Codes Service implementation.
@@ -57,8 +52,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 @Service
 @SuppressWarnings("unused")
 public class CodesService
-  implements ICodesService, InitializingBean
-{
+    implements ICodesService, InitializingBean {
+
   /**
    * The path to the code provider configuration files (META-INF/code-providers.xml) on the
    * classpath.
@@ -107,8 +102,7 @@ public class CodesService
    */
   public CodesService(ApplicationContext applicationContext,
       CodeCategoryRepository codeCategoryRepository,
-      CodeCategorySummaryRepository codeCategorySummaryRepository, CodeRepository codeRepository)
-  {
+      CodeCategorySummaryRepository codeCategorySummaryRepository, CodeRepository codeRepository) {
     this.applicationContext = applicationContext;
     this.codeCategoryRepository = codeCategoryRepository;
     this.codeCategorySummaryRepository = codeCategorySummaryRepository;
@@ -119,22 +113,18 @@ public class CodesService
    * Initialize the Codes Service.
    */
   @Override
-  public void afterPropertiesSet()
-  {
+  public void afterPropertiesSet() {
     logger.info("Initializing the Codes Service");
 
     codeProviders = new ArrayList<>();
 
-    try
-    {
+    try {
       // Read the codes configuration
       readCodeProviderConfigurations();
 
       // Initialize the code providers
       initCodeProviders();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to initialize the Codes Service", e);
     }
   }
@@ -148,14 +138,10 @@ public class CodesService
    */
   @Override
   public boolean codeCategoryExists(String codeCategoryId)
-    throws CodesServiceException
-  {
-    try
-    {
+      throws CodesServiceException {
+    try {
       return codeCategoryRepository.existsById(codeCategoryId);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to check whether the code category ("
           + codeCategoryId + ") exists", e);
     }
@@ -172,14 +158,10 @@ public class CodesService
    */
   @Override
   public boolean codeExists(String codeCategoryId, String codeId)
-    throws CodesServiceException
-  {
-    try
-    {
+      throws CodesServiceException {
+    try {
       return codeRepository.existsById(new CodeId(codeCategoryId, codeId));
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to check whether the code (" + codeId
           + ") exists for the code category (" + codeCategoryId + ")", e);
     }
@@ -193,28 +175,20 @@ public class CodesService
   @Override
   @Transactional
   public void createCode(Code code)
-    throws DuplicateCodeException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
-      if (codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId())))
-      {
+      throws DuplicateCodeException, CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId()))) {
         throw new DuplicateCodeException(code.getCodeCategoryId(), code.getId());
       }
 
-      if (!codeCategoryRepository.existsById(code.getCodeCategoryId()))
-      {
+      if (!codeCategoryRepository.existsById(code.getCodeCategoryId())) {
         throw new CodeCategoryNotFoundException(code.getCodeCategoryId());
       }
 
       codeRepository.saveAndFlush(code);
-    }
-    catch (DuplicateCodeException | CodeCategoryNotFoundException e)
-    {
+    } catch (DuplicateCodeException | CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to create the code (" + code.getName()
           + ") for the code category (" + code.getCodeCategoryId() + ")", e);
     }
@@ -229,28 +203,20 @@ public class CodesService
   @Override
   @Transactional
   public void createCodeCategory(CodeCategory codeCategory)
-    throws DuplicateCodeCategoryException, CodesServiceException
-  {
-    try
-    {
-      if (codeCategoryRepository.existsById(codeCategory.getId()))
-      {
+      throws DuplicateCodeCategoryException, CodesServiceException {
+    try {
+      if (codeCategoryRepository.existsById(codeCategory.getId())) {
         throw new DuplicateCodeCategoryException(codeCategory.getId());
       }
 
-      if (codeCategory.getUpdated() == null)
-      {
+      if (codeCategory.getUpdated() == null) {
         codeCategory.setUpdated(LocalDateTime.now());
       }
 
       codeCategoryRepository.saveAndFlush(codeCategory);
-    }
-    catch (DuplicateCodeCategoryException e)
-    {
+    } catch (DuplicateCodeCategoryException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to create the code category (" + codeCategory.getId()
           + ")", e);
     }
@@ -266,25 +232,18 @@ public class CodesService
   @Override
   @Transactional
   public void deleteCode(String codeCategoryId, String codeId)
-    throws CodeNotFoundException, CodesServiceException
-  {
-    try
-    {
+      throws CodeNotFoundException, CodesServiceException {
+    try {
       CodeId id = new CodeId(codeCategoryId, codeId);
 
-      if (!codeRepository.existsById(id))
-      {
+      if (!codeRepository.existsById(id)) {
         throw new CodeNotFoundException(codeCategoryId, codeId);
       }
 
       codeRepository.deleteById(codeCategoryId, codeId);
-    }
-    catch (CodeNotFoundException e)
-    {
+    } catch (CodeNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to delete the code (" + codeId
           + ") for the code category (" + codeCategoryId + ")", e);
     }
@@ -298,23 +257,16 @@ public class CodesService
   @Override
   @Transactional
   public void deleteCodeCategory(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
-      if (!codeCategoryRepository.existsById(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (!codeCategoryRepository.existsById(codeCategoryId)) {
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
 
       codeCategoryRepository.deleteById(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to delete the code category (" + codeCategoryId
           + ")", e);
     }
@@ -331,36 +283,25 @@ public class CodesService
    */
   @Override
   public Code getCode(String codeCategoryId, String codeId)
-    throws CodeNotFoundException, CodesServiceException
-  {
-    try
-    {
+      throws CodeNotFoundException, CodesServiceException {
+    try {
       Optional<Code> codeOptional = codeRepository.findById(new CodeId(codeCategoryId, codeId));
 
-      if (codeOptional.isPresent())
-      {
+      if (codeOptional.isPresent()) {
         return codeOptional.get();
-      }
-      else
-      {
+      } else {
         // Check if one of the registered code providers supports the code category
-        for (ICodeProvider codeProvider : codeProviders)
-        {
-          if (codeProvider.codeCategoryExists(codeCategoryId))
-          {
+        for (ICodeProvider codeProvider : codeProviders) {
+          if (codeProvider.codeCategoryExists(codeCategoryId)) {
             return codeProvider.getCode(codeCategoryId, codeId);
           }
         }
       }
 
       throw new CodeNotFoundException(codeCategoryId, codeId);
-    }
-    catch (CodeNotFoundException e)
-    {
+    } catch (CodeNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the code (" + codeId
           + ") for the code category (" + codeCategoryId + ")", e);
     }
@@ -373,14 +314,10 @@ public class CodesService
    */
   @Override
   public List<CodeCategory> getCodeCategories()
-    throws CodesServiceException
-  {
-    try
-    {
+      throws CodesServiceException {
+    try {
       return codeCategoryRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the code categories", e);
     }
   }
@@ -394,34 +331,25 @@ public class CodesService
    */
   @Override
   public CodeCategory getCodeCategory(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
       Optional<CodeCategory> codeCategoryOptional = codeCategoryRepository.findById(codeCategoryId);
 
-      if (codeCategoryOptional.isPresent())
-      {
+      if (codeCategoryOptional.isPresent()) {
         return codeCategoryOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
+      for (ICodeProvider codeProvider : codeProviders) {
+        if (codeProvider.codeCategoryExists(codeCategoryId)) {
           return codeProvider.getCodeCategory(codeCategoryId);
         }
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the code category (" + codeCategoryId
           + ")", e);
     }
@@ -440,22 +368,17 @@ public class CodesService
    */
   @Override
   public String getCodeCategoryData(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
       Optional<String> dataOptional = codeCategoryRepository.getDataById(codeCategoryId);
 
-      if (dataOptional.isPresent())
-      {
+      if (dataOptional.isPresent()) {
         return dataOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
+      for (ICodeProvider codeProvider : codeProviders) {
+        if (codeProvider.codeCategoryExists(codeCategoryId)) {
           String codeProviderData = codeProvider.getDataForCodeCategory(codeCategoryId);
 
           return StringUtils.isEmpty(codeProviderData)
@@ -465,13 +388,9 @@ public class CodesService
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the data for the code category ("
           + codeCategoryId + ")", e);
     }
@@ -492,22 +411,17 @@ public class CodesService
   @Override
   public String getCodeCategoryDataWithParameters(String codeCategoryId, Map<String,
       String> parameters)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
       Optional<String> dataOptional = codeCategoryRepository.getDataById(codeCategoryId);
 
-      if (dataOptional.isPresent())
-      {
+      if (dataOptional.isPresent()) {
         return dataOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
+      for (ICodeProvider codeProvider : codeProviders) {
+        if (codeProvider.codeCategoryExists(codeCategoryId)) {
           String codeProviderData = codeProvider.getDataForCodeCategoryWithParameters(
               codeCategoryId, parameters);
 
@@ -518,13 +432,9 @@ public class CodesService
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the data for the code category ("
           + codeCategoryId + ")", e);
     }
@@ -539,34 +449,25 @@ public class CodesService
    */
   @Override
   public String getCodeCategoryName(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
       Optional<String> nameOptional = codeCategoryRepository.getNameById(codeCategoryId);
 
-      if (nameOptional.isPresent())
-      {
+      if (nameOptional.isPresent()) {
         return nameOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
+      for (ICodeProvider codeProvider : codeProviders) {
+        if (codeProvider.codeCategoryExists(codeCategoryId)) {
           return codeProvider.getCodeCategoryName(codeCategoryId);
         }
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the name for the code category ("
           + codeCategoryId + ")", e);
     }
@@ -579,14 +480,10 @@ public class CodesService
    */
   @Override
   public List<CodeCategorySummary> getCodeCategorySummaries()
-    throws CodesServiceException
-  {
-    try
-    {
+      throws CodesServiceException {
+    try {
       return codeCategorySummaryRepository.findAll();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the summaries for the code categories",
           e);
     }
@@ -601,35 +498,26 @@ public class CodesService
    */
   @Override
   public LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
       Optional<LocalDateTime> updatedOptional = codeCategoryRepository.getUpdatedById(
           codeCategoryId);
 
-      if (updatedOptional.isPresent())
-      {
+      if (updatedOptional.isPresent()) {
         return updatedOptional.get();
       }
 
       // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
+      for (ICodeProvider codeProvider : codeProviders) {
+        if (codeProvider.codeCategoryExists(codeCategoryId)) {
           return codeProvider.getCodeCategoryLastUpdated(codeCategoryId);
         }
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the date and time the code category ("
           + codeCategoryId + ") was last updated", e);
     }
@@ -646,36 +534,25 @@ public class CodesService
    */
   @Override
   public String getCodeName(String codeCategoryId, String codeId)
-    throws CodeNotFoundException, CodesServiceException
-  {
-    try
-    {
+      throws CodeNotFoundException, CodesServiceException {
+    try {
       Optional<String> nameOptional = codeRepository.getNameById(codeCategoryId, codeId);
 
-      if (nameOptional.isPresent())
-      {
+      if (nameOptional.isPresent()) {
         return nameOptional.get();
-      }
-      else
-      {
+      } else {
         // Check if one of the registered code providers supports the code category
-        for (ICodeProvider codeProvider : codeProviders)
-        {
-          if (codeProvider.codeCategoryExists(codeCategoryId))
-          {
+        for (ICodeProvider codeProvider : codeProviders) {
+          if (codeProvider.codeCategoryExists(codeCategoryId)) {
             return codeProvider.getCodeName(codeCategoryId, codeId);
           }
         }
       }
 
       throw new CodeNotFoundException(codeCategoryId, codeId);
-    }
-    catch (CodeNotFoundException e)
-    {
+    } catch (CodeNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the name of the code (" + codeId
           + ") for the code category (" + codeCategoryId + ")", e);
     }
@@ -694,32 +571,23 @@ public class CodesService
    */
   @Override
   public List<Code> getCodes(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
-      if (codeCategoryRepository.existsById(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (codeCategoryRepository.existsById(codeCategoryId)) {
         return codeRepository.findByCodeCategoryId(codeCategoryId);
       }
 
       // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
+      for (ICodeProvider codeProvider : codeProviders) {
+        if (codeProvider.codeCategoryExists(codeCategoryId)) {
           return codeProvider.getCodesForCodeCategory(codeCategoryId);
         }
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the codes for the code category ("
           + codeCategoryId + ")", e);
     }
@@ -739,32 +607,23 @@ public class CodesService
    */
   @Override
   public List<Code> getCodesWithParameters(String codeCategoryId, Map<String, String> parameters)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
-      if (codeCategoryRepository.existsById(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (codeCategoryRepository.existsById(codeCategoryId)) {
         return codeRepository.findByCodeCategoryId(codeCategoryId);
       }
 
       // Check if one of the registered code providers supports the code category
-      for (ICodeProvider codeProvider : codeProviders)
-      {
-        if (codeProvider.codeCategoryExists(codeCategoryId))
-        {
+      for (ICodeProvider codeProvider : codeProviders) {
+        if (codeProvider.codeCategoryExists(codeCategoryId)) {
           return codeProvider.getCodesForCodeCategoryWithParameters(codeCategoryId, parameters);
         }
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the codes for the code category ("
           + codeCategoryId + ")", e);
     }
@@ -777,14 +636,10 @@ public class CodesService
    */
   @Override
   public long getNumberOfCodeCategories()
-    throws CodesServiceException
-  {
-    try
-    {
+      throws CodesServiceException {
+    try {
       return codeCategoryRepository.count();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to retrieve the number of code categories", e);
     }
   }
@@ -798,23 +653,16 @@ public class CodesService
    */
   @Override
   public long getNumberOfCodes(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
-      if (!codeCategoryRepository.existsById(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (!codeCategoryRepository.existsById(codeCategoryId)) {
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
 
       return codeRepository.countByCodeCategoryId(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException(
           "Failed to retrieve the number of codes for the code category (" + codeCategoryId + ")",
           e);
@@ -829,23 +677,16 @@ public class CodesService
    */
   @Override
   public void updateCode(Code code)
-    throws CodeNotFoundException, CodesServiceException
-  {
-    try
-    {
-      if (!codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId())))
-      {
+      throws CodeNotFoundException, CodesServiceException {
+    try {
+      if (!codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId()))) {
         throw new CodeNotFoundException(code.getCodeCategoryId(), code.getId());
       }
 
       codeRepository.saveAndFlush(code);
-    }
-    catch (CodeNotFoundException e)
-    {
+    } catch (CodeNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to update the code (" + code.getId() + ")", e);
     }
 
@@ -859,25 +700,18 @@ public class CodesService
    */
   @Override
   public void updateCodeCategory(CodeCategory codeCategory)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
-      if (!codeCategoryRepository.existsById(codeCategory.getId()))
-      {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (!codeCategoryRepository.existsById(codeCategory.getId())) {
         throw new CodeCategoryNotFoundException(codeCategory.getId());
       }
 
       codeCategory.setUpdated(LocalDateTime.now());
 
       codeCategoryRepository.saveAndFlush(codeCategory);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to update the code category (" + codeCategory.getId()
           + ")", e);
     }
@@ -892,23 +726,16 @@ public class CodesService
   @Override
   @Transactional
   public void updateCodeCategoryData(String codeCategoryId, String data)
-    throws CodeCategoryNotFoundException, CodesServiceException
-  {
-    try
-    {
-      if (!codeCategoryRepository.existsById(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (!codeCategoryRepository.existsById(codeCategoryId)) {
         throw new CodeCategoryNotFoundException(codeCategoryId);
       }
 
       codeCategoryRepository.setDataAndUpdatedById(codeCategoryId, data, LocalDateTime.now());
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to update the data for the code category ("
           + codeCategoryId + ")", e);
     }
@@ -917,13 +744,10 @@ public class CodesService
   /**
    * Initialize the code providers.
    */
-  private void initCodeProviders()
-  {
+  private void initCodeProviders() {
     // Initialize each code provider
-    for (CodeProviderConfig codeProviderConfig : codeProviderConfigs)
-    {
-      try
-      {
+    for (CodeProviderConfig codeProviderConfig : codeProviderConfigs) {
+      try {
         logger.info("Initializing the code provider (" + codeProviderConfig.getName()
             + ") with class (" + codeProviderConfig.getClassName() + ")");
 
@@ -932,8 +756,7 @@ public class CodesService
 
         Constructor<?> constructor = clazz.getConstructor(CodeProviderConfig.class);
 
-        if (constructor != null)
-        {
+        if (constructor != null) {
           // Create an instance of the code provider
           ICodeProvider codeProvider = (ICodeProvider) constructor.newInstance(codeProviderConfig);
 
@@ -941,16 +764,12 @@ public class CodesService
           applicationContext.getAutowireCapableBeanFactory().autowireBean(codeProvider);
 
           codeProviders.add(codeProvider);
-        }
-        else
-        {
+        } else {
           logger.error("Failed to register the code provider (" + codeProviderConfig.getClassName()
               + "): The code provider class does not provide a constructor with the required "
               + "signature");
         }
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to initialize the code provider (" + codeProviderConfig.getName()
             + ") with class (" + codeProviderConfig.getClassName() + ")", e);
       }
@@ -962,10 +781,8 @@ public class CodesService
    * configuration files that can be found on the classpath.
    */
   private void readCodeProviderConfigurations()
-    throws CodesServiceException
-  {
-    try
-    {
+      throws CodesServiceException {
+    try {
       codeProviderConfigs = new ArrayList<>();
 
       ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -974,12 +791,10 @@ public class CodesService
       Enumeration<URL> codeProviderConfigurationFiles = classLoader.getResources(
           CODE_PROVIDERS_CONFIGURATION_PATH);
 
-      while (codeProviderConfigurationFiles.hasMoreElements())
-      {
+      while (codeProviderConfigurationFiles.hasMoreElements()) {
         URL codeProviderConfigurationFile = codeProviderConfigurationFiles.nextElement();
 
-        if (logger.isDebugEnabled())
-        {
+        if (logger.isDebugEnabled()) {
           logger.debug("Reading the code provider configuration file ("
               + codeProviderConfigurationFile.toURI().toString() + ")");
         }
@@ -1003,8 +818,7 @@ public class CodesService
 
         List<Element> codeProviderElements = XmlUtil.getChildElements(rootElement, "codeProvider");
 
-        for (Element codeProviderElement : codeProviderElements)
-        {
+        for (Element codeProviderElement : codeProviderElements) {
           // Read the handler configuration
           String name = XmlUtil.getChildElementText(codeProviderElement, "name");
           String className = XmlUtil.getChildElementText(codeProviderElement, "class");
@@ -1014,9 +828,7 @@ public class CodesService
           codeProviderConfigs.add(codeProviderConfig);
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodesServiceException("Failed to read the code provider configuration files", e);
     }
   }

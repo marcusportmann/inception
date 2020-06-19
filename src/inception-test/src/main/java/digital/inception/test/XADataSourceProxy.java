@@ -19,15 +19,12 @@ package digital.inception.test;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.PrintWriter;
-
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.ShardingKeyBuilder;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
-
 import javax.sql.XAConnection;
 import javax.sql.XAConnectionBuilder;
 import javax.sql.XADataSource;
@@ -40,8 +37,8 @@ import javax.sql.XADataSource;
  * @author Marcus Portmann
  */
 public class XADataSourceProxy
-  implements XADataSource
-{
+    implements XADataSource {
+
   /**
    * The active XA database connections associated with the current thread.
    */
@@ -58,8 +55,7 @@ public class XADataSourceProxy
    *
    * @param xaDataSource the XA data source
    */
-  public XADataSourceProxy(XADataSource xaDataSource)
-  {
+  public XADataSourceProxy(XADataSource xaDataSource) {
     this.xaDataSource = xaDataSource;
   }
 
@@ -69,8 +65,7 @@ public class XADataSourceProxy
    *
    * @param connection the connection
    */
-  public static void addActiveXADatabaseConnection(XAConnection connection)
-  {
+  public static void addActiveXADatabaseConnection(XAConnection connection) {
     getActiveXADatabaseConnections().put(connection, Thread.currentThread().getStackTrace());
   }
 
@@ -79,50 +74,55 @@ public class XADataSourceProxy
    *
    * @return the active XA database connections for all Data Sources associated with the tracker
    */
-  public static Map<XAConnection, StackTraceElement[]> getActiveXADatabaseConnections()
-  {
+  public static Map<XAConnection, StackTraceElement[]> getActiveXADatabaseConnections() {
     return activeXADatabaseConnections.get();
   }
 
   @Override
   public ShardingKeyBuilder createShardingKeyBuilder()
-    throws SQLException
-  {
+      throws SQLException {
     return xaDataSource.createShardingKeyBuilder();
   }
 
   @Override
   public XAConnectionBuilder createXAConnectionBuilder()
-    throws SQLException
-  {
+      throws SQLException {
     return xaDataSource.createXAConnectionBuilder();
   }
 
   @Override
   public PrintWriter getLogWriter()
-    throws SQLException
-  {
+      throws SQLException {
     return xaDataSource.getLogWriter();
   }
 
   @Override
+  public void setLogWriter(PrintWriter out)
+      throws SQLException {
+    xaDataSource.setLogWriter(out);
+  }
+
+  @Override
   public int getLoginTimeout()
-    throws SQLException
-  {
+      throws SQLException {
     return xaDataSource.getLoginTimeout();
   }
 
   @Override
+  public void setLoginTimeout(int seconds)
+      throws SQLException {
+    xaDataSource.setLoginTimeout(seconds);
+  }
+
+  @Override
   public Logger getParentLogger()
-    throws SQLFeatureNotSupportedException
-  {
+      throws SQLFeatureNotSupportedException {
     return xaDataSource.getParentLogger();
   }
 
   @Override
   public XAConnection getXAConnection()
-    throws SQLException
-  {
+      throws SQLException {
     XAConnection xaConnection = new XAConnectionProxy(xaDataSource.getXAConnection());
 
     addActiveXADatabaseConnection(xaConnection);
@@ -132,26 +132,11 @@ public class XADataSourceProxy
 
   @Override
   public XAConnection getXAConnection(String user, String password)
-    throws SQLException
-  {
+      throws SQLException {
     XAConnection xaConnection = new XAConnectionProxy(xaDataSource.getXAConnection(user, password));
 
     addActiveXADatabaseConnection(xaConnection);
 
     return xaConnection;
-  }
-
-  @Override
-  public void setLogWriter(PrintWriter out)
-    throws SQLException
-  {
-    xaDataSource.setLogWriter(out);
-  }
-
-  @Override
-  public void setLoginTimeout(int seconds)
-    throws SQLException
-  {
-    xaDataSource.setLoginTimeout(seconds);
   }
 }

@@ -17,20 +17,20 @@
 package digital.inception.application.test;
 
 /**
- * The <code>ITestJPAService</code> interface defines the functionality provided by a
- * Test JPA Service implementation.
+ * The <code>ITestJPAService</code> interface defines the functionality provided by a Test JPA
+ * Service implementation.
  *
  * @author Marcus Portmann
  */
-public interface ITestJPAService
-{
+public interface ITestJPAService {
+
   /**
    * Create the test data.
    *
    * @param testData the test data
    */
   void createTestData(TestData testData)
-    throws TestJPAServiceException;
+      throws TestJPAServiceException;
 
   /**
    * Create the test data in a new transaction.
@@ -38,7 +38,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataInNewTransaction(TestData testData)
-    throws TestJPAServiceException;
+      throws TestJPAServiceException;
 
   /**
    * Create the test data in a new transaction with a checked exception.
@@ -46,7 +46,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataInNewTransactionWithCheckedException(TestData testData)
-    throws TestJPAServiceException;
+      throws TestJPAServiceException;
 
   /**
    * Create the test data in a new transaction with a runtime exception.
@@ -54,7 +54,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataInNewTransactionWithRuntimeException(TestData testData)
-    throws TestJPAServiceException;
+      throws TestJPAServiceException;
 
   /**
    * Create the test data with a checked exception.
@@ -62,7 +62,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataWithCheckedException(TestData testData)
-    throws TestJPAServiceException;
+      throws TestJPAServiceException;
 
   /**
    * Create the test data with a runtime exception.
@@ -70,7 +70,7 @@ public interface ITestJPAService
    * @param testData the test data
    */
   void createTestDataWithRuntimeException(TestData testData)
-    throws TestJPAServiceException;
+      throws TestJPAServiceException;
 
   /**
    * Retrieve the test data.
@@ -80,7 +80,7 @@ public interface ITestJPAService
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   TestData getTestData(String id)
-    throws TestJPAServiceException;
+      throws TestJPAServiceException;
 
   /**
    * Retrieve the test data without a transaction.
@@ -90,5 +90,5 @@ public interface ITestJPAService
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   TestData getTestDataWithoutTransaction(String id)
-    throws TestJPAServiceException;
+      throws TestJPAServiceException;
 }

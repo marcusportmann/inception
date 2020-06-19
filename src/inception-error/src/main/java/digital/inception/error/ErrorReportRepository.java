@@ -18,6 +18,7 @@ package digital.inception.error;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,16 +26,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
  * The <code>ErrorRepository</code> interface declares the repository for the
  * <code>ErrorReport</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ErrorReportRepository extends JpaRepository<ErrorReport, UUID>
-{
+public interface ErrorReportRepository extends JpaRepository<ErrorReport, UUID> {
+
   @Modifying
   @Query("delete from ErrorReport er where er.id = :errorReportId")
   void deleteById(@Param("errorReportId") UUID errorReportId);

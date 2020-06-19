@@ -27,13 +27,12 @@ import org.springframework.security.oauth2.provider.ClientRegistrationException;
  * @author Marcus Portmann
  */
 public class ClientDetailsService
-  implements org.springframework.security.oauth2.provider.ClientDetailsService
-{
+    implements org.springframework.security.oauth2.provider.ClientDetailsService {
+
   @Override
   public org.springframework.security.oauth2.provider.ClientDetails loadClientByClientId(
       String clientId)
-    throws ClientRegistrationException
-  {
+      throws ClientRegistrationException {
     ClientDetails clientDetails = new ClientDetails(clientId);
 
     return clientDetails;

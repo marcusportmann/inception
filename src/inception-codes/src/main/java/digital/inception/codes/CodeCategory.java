@@ -21,28 +21,26 @@ package digital.inception.codes;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategory</code> class holds the information for a code category.
@@ -51,16 +49,16 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "CodeCategory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "data", "updated" })
+@JsonPropertyOrder({"id", "name", "data", "updated"})
 @XmlRootElement(name = "CodeCategory", namespace = "http://codes.inception.digital")
 @XmlType(name = "CodeCategory", namespace = "http://codes.inception.digital",
-    propOrder = { "id", "name", "data", "updated" })
+    propOrder = {"id", "name", "data", "updated"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "code_categories")
 public class CodeCategory
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -109,7 +107,8 @@ public class CodeCategory
   /**
    * Constructs a new <code>CodeCategory</code>.
    */
-  public CodeCategory() {}
+  public CodeCategory() {
+  }
 
   /**
    * Constructs a new <code>CodeCategory</code>.
@@ -117,8 +116,7 @@ public class CodeCategory
    * @param id   the ID used to uniquely identify the code category
    * @param name the name of the code category
    */
-  public CodeCategory(String id, String name)
-  {
+  public CodeCategory(String id, String name) {
     this.id = id;
     this.name = name;
   }
@@ -130,8 +128,7 @@ public class CodeCategory
    * @param name the name of the code category
    * @param data the optional code data for the code category
    */
-  public CodeCategory(String id, String name, String data)
-  {
+  public CodeCategory(String id, String name, String data) {
     this.id = id;
     this.name = name;
     this.data = data;
@@ -145,8 +142,7 @@ public class CodeCategory
    * @param data    the optional code data for the code category
    * @param updated the date and time the code category was last updated
    */
-  public CodeCategory(String id, String name, String data, LocalDateTime updated)
-  {
+  public CodeCategory(String id, String name, String data, LocalDateTime updated) {
     this.id = id;
     this.name = name;
     this.data = data;
@@ -159,23 +155,19 @@ public class CodeCategory
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -189,9 +181,17 @@ public class CodeCategory
    *
    * @return the optional code data for the code category
    */
-  public String getData()
-  {
+  public String getData() {
     return data;
+  }
+
+  /**
+   * Set the optional code data for the code category.
+   *
+   * @param data the optional code data for the code category
+   */
+  public void setData(String data) {
+    this.data = data;
   }
 
   /**
@@ -199,9 +199,17 @@ public class CodeCategory
    *
    * @return the ID used to uniquely identify the code category
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the code category.
+   *
+   * @param id the ID used to uniquely identify the code category
+   */
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**
@@ -209,9 +217,17 @@ public class CodeCategory
    *
    * @return the name of the code category
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the code category.
+   *
+   * @param name the name of the code category
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -219,9 +235,17 @@ public class CodeCategory
    *
    * @return the date and time the code category was last updated
    */
-  public LocalDateTime getUpdated()
-  {
+  public LocalDateTime getUpdated() {
     return updated;
+  }
+
+  /**
+   * Set the date and time the code category was last updated.
+   *
+   * @param updated the date and time the code category was last updated
+   */
+  public void setUpdated(LocalDateTime updated) {
+    this.updated = updated;
   }
 
   /**
@@ -230,50 +254,9 @@ public class CodeCategory
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
-  }
-
-  /**
-   * Set the optional code data for the code category.
-   *
-   * @param data the optional code data for the code category
-   */
-  public void setData(String data)
-  {
-    this.data = data;
-  }
-
-  /**
-   * Set the ID used to uniquely identify the code category.
-   *
-   * @param id the ID used to uniquely identify the code category
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the code category.
-   *
-   * @param name the name of the code category
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the date and time the code category was last updated.
-   *
-   * @param updated the date and time the code category was last updated
-   */
-  public void setUpdated(LocalDateTime updated)
-  {
-    this.updated = updated;
   }
 }

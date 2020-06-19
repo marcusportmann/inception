@@ -20,7 +20,6 @@ package digital.inception.ws;
 
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.transport.servlet.CXFServlet;
-
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -33,20 +32,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Marcus Portmann
  */
 @Configuration
-public class InceptionWSConfiguration
-{
-  /**
-   * Returns the Apache CXF servlet registration bean.
-   *
-   * @return the Apache CXF servlet registration bean
-   */
-  @Bean
-  public ServletRegistrationBean<CXFServlet> cxfServletRegistrationBean()
-  {
-    CXFServlet cxfServlet = new CXFServlet();
-
-    return new ServletRegistrationBean<>(cxfServlet, "/service/*");
-  }
+public class InceptionWSConfiguration {
 
   /**
    * Returns the web services bean factory post processor.
@@ -54,9 +40,20 @@ public class InceptionWSConfiguration
    * @return web services bean factory post processor
    */
   @Bean
-  protected static BeanFactoryPostProcessor webServicesBeanFactoryPostProcessor()
-  {
+  protected static BeanFactoryPostProcessor webServicesBeanFactoryPostProcessor() {
     return beanFactory -> beanFactory.registerSingleton("cxf", new SpringBus())
-    ;
+        ;
+  }
+
+  /**
+   * Returns the Apache CXF servlet registration bean.
+   *
+   * @return the Apache CXF servlet registration bean
+   */
+  @Bean
+  public ServletRegistrationBean<CXFServlet> cxfServletRegistrationBean() {
+    CXFServlet cxfServlet = new CXFServlet();
+
+    return new ServletRegistrationBean<>(cxfServlet, "/service/*");
   }
 }

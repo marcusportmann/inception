@@ -20,30 +20,23 @@ package digital.inception.reporting;
 
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-
-import org.springframework.beans.factory.annotation.Qualifier;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.sql.Connection;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-
 import javax.sql.DataSource;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
-
 import javax.xml.bind.annotation.XmlElement;
+import org.springframework.beans.factory.annotation.Qualifier;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportingWebService</code> class.
@@ -53,9 +46,9 @@ import javax.xml.bind.annotation.XmlElement;
 @WebService(serviceName = "ReportingService", name = "IReportingService",
     targetNamespace = "http://reporting.inception.digital")
 @SOAPBinding
-@SuppressWarnings({ "unused", "ValidExternallyBoundObject" })
-public class ReportingWebService
-{
+@SuppressWarnings({"unused", "ValidExternallyBoundObject"})
+public class ReportingWebService {
+
   /**
    * The data source used to provide connections to the application database.
    */
@@ -74,13 +67,13 @@ public class ReportingWebService
   /**
    * Constructs a new <code>ReportingWebService</code>.
    *
-   * @param dataSource       the data source used to provide connections to the application database
+   * @param dataSource       the data source used to provide connections to the application
+   *                         database
    * @param reportingService the Reporting Service
    * @param validator        the JSR-303 validator
    */
   public ReportingWebService(@Qualifier("applicationDataSource") DataSource dataSource,
-      IReportingService reportingService, Validator validator)
-  {
+      IReportingService reportingService, Validator validator) {
     this.dataSource = dataSource;
     this.reportingService = reportingService;
     this.validator = validator;
@@ -94,18 +87,15 @@ public class ReportingWebService
   @WebMethod(operationName = "CreateReportDefinition")
   public void createReportDefinition(@WebParam(name = "ReportDefinition")
   @XmlElement(required = true) ReportDefinition reportDefinition)
-    throws InvalidArgumentException, DuplicateReportDefinitionException, ReportingServiceException
-  {
-    if (reportDefinition == null)
-    {
+      throws InvalidArgumentException, DuplicateReportDefinitionException, ReportingServiceException {
+    if (reportDefinition == null) {
       throw new InvalidArgumentException("reportDefinition");
     }
 
     Set<ConstraintViolation<ReportDefinition>> constraintViolations = validator.validate(
         reportDefinition);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("reportDefinition", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -121,10 +111,8 @@ public class ReportingWebService
   @WebMethod(operationName = "DeleteReportDefinition")
   public void deleteReportDefinition(@WebParam(name = "ReportDefinitionId")
   @XmlElement(required = true) String reportDefinitionId)
-    throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    if (reportDefinitionId == null)
-    {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException {
+    if (reportDefinitionId == null) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
 
@@ -144,30 +132,22 @@ public class ReportingWebService
   public byte[] generateReport(@WebParam(name = "ReportDefinitionId")
   @XmlElement(required = true) String reportDefinitionId, @WebParam(name = "ReportParameters")
   @XmlElement(required = true) List<ReportParameter> reportParameters)
-    throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    if (reportDefinitionId == null)
-    {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException {
+    if (reportDefinitionId == null) {
       throw new InvalidArgumentException("reportDefinition");
     }
 
     Map<String, Object> parameters = new HashMap<>();
 
-    for (ReportParameter reportParameter : reportParameters)
-    {
+    for (ReportParameter reportParameter : reportParameters) {
       parameters.put(reportParameter.getName(), reportParameter.getValue());
     }
 
-    try (Connection connection = dataSource.getConnection())
-    {
+    try (Connection connection = dataSource.getConnection()) {
       return reportingService.createReportPDF(reportDefinitionId, parameters, connection);
-    }
-    catch (ReportDefinitionNotFoundException e)
-    {
+    } catch (ReportDefinitionNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ReportingServiceException("Failed to generate the PDF report", e);
     }
   }
@@ -180,8 +160,7 @@ public class ReportingWebService
   @WebMethod(operationName = "GetReportDefinitionSummaries")
   @WebResult(name = "ReportDefinitionSummary")
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
-    throws ReportingServiceException
-  {
+      throws ReportingServiceException {
     return reportingService.getReportDefinitionSummaries();
   }
 
@@ -193,8 +172,7 @@ public class ReportingWebService
   @WebMethod(operationName = "GetReportDefinitions")
   @WebResult(name = "ReportDefinition")
   public List<ReportDefinition> getReportDefinitions()
-    throws ReportingServiceException
-  {
+      throws ReportingServiceException {
     return reportingService.getReportDefinitions();
   }
 
@@ -206,18 +184,15 @@ public class ReportingWebService
   @WebMethod(operationName = "UpdateReportDefinition")
   public void updateReportDefinition(@WebParam(name = "ReportDefinition")
   @XmlElement(required = true) ReportDefinition reportDefinition)
-    throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException
-  {
-    if (reportDefinition == null)
-    {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException {
+    if (reportDefinition == null) {
       throw new InvalidArgumentException("reportDefinition");
     }
 
     Set<ConstraintViolation<ReportDefinition>> constraintViolations = validator.validate(
         reportDefinition);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("reportDefinition", ValidationError.toValidationErrors(
           constraintViolations));
     }

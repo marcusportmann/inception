@@ -23,8 +23,8 @@ package digital.inception.core.service;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public abstract class ServiceException extends Exception
-{
+public abstract class ServiceException extends Exception {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -38,8 +38,7 @@ public abstract class ServiceException extends Exception
    * @param code    The code identifying the error.
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public ServiceException(String code, String message)
-  {
+  public ServiceException(String code, String message) {
     super(message);
 
     this.serviceError = new ServiceError(code, this);
@@ -51,11 +50,10 @@ public abstract class ServiceException extends Exception
    * message of cause).
    *
    * @param code  The code identifying the service error.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ServiceException(String code, Throwable cause)
-  {
+  public ServiceException(String code, Throwable cause) {
     super(cause);
 
     this.serviceError = new ServiceError(code, this);
@@ -66,11 +64,10 @@ public abstract class ServiceException extends Exception
    *
    * @param code    The code identifying the service error.
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public ServiceException(String code, String message, Throwable cause)
-  {
+  public ServiceException(String code, String message, Throwable cause) {
     super(message, cause);
 
     this.serviceError = new ServiceError(code, this);
@@ -81,8 +78,7 @@ public abstract class ServiceException extends Exception
    *
    * @return the fault info
    */
-  public ServiceError getFaultInfo()
-  {
+  public ServiceError getFaultInfo() {
     return serviceError;
   }
 
@@ -91,8 +87,7 @@ public abstract class ServiceException extends Exception
    *
    * @return the service error info
    */
-  public ServiceError getServiceError()
-  {
+  public ServiceError getServiceError() {
     return serviceError;
   }
 }

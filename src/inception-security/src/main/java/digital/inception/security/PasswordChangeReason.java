@@ -20,14 +20,12 @@ package digital.inception.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordChangeReason</code> enumeration defines the possible reasons for why a user's
@@ -38,8 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "PasswordChangeReason")
 @XmlEnum
 @XmlType(name = "PasswordChangeReason", namespace = "http://security.inception.digital")
-public enum PasswordChangeReason
-{
+public enum PasswordChangeReason {
   @XmlEnumValue("User")
   USER(0, "User"),
   @XmlEnumValue("Administrative")
@@ -50,8 +47,7 @@ public enum PasswordChangeReason
   private int code;
   private String description;
 
-  PasswordChangeReason(int code, String description)
-  {
+  PasswordChangeReason(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -64,10 +60,8 @@ public enum PasswordChangeReason
    * @return the password change reason given by the specified code value
    */
   @JsonCreator
-  public static PasswordChangeReason fromCode(int code)
-  {
-    switch (code)
-    {
+  public static PasswordChangeReason fromCode(int code) {
+    switch (code) {
       case 0:
         return PasswordChangeReason.USER;
 
@@ -85,8 +79,7 @@ public enum PasswordChangeReason
    * @return the numeric code value identifying for the password change reason
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -95,8 +88,7 @@ public enum PasswordChangeReason
    *
    * @return the description for the password change reason
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 }

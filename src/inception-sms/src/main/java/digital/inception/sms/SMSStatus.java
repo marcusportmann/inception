@@ -20,14 +20,12 @@ package digital.inception.sms;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSStatus</code> enumeration defines the possible statuses for a SMS.
@@ -37,8 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "SMSStatus")
 @XmlEnum
 @XmlType(name = "SMSStatus", namespace = "http://sms.inception.digital")
-public enum SMSStatus
-{
+public enum SMSStatus {
   @XmlEnumValue("Unknown")
   UNKNOWN(0, "Unknown"),
   @XmlEnumValue("QueuedForSending")
@@ -55,8 +52,7 @@ public enum SMSStatus
   private int code;
   private String description;
 
-  SMSStatus(int code, String description)
-  {
+  SMSStatus(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -69,10 +65,8 @@ public enum SMSStatus
    * @return the SMS status given by the specified numeric code value
    */
   @JsonCreator
-  public static SMSStatus fromCode(int code)
-  {
-    switch (code)
-    {
+  public static SMSStatus fromCode(int code) {
+    switch (code) {
       case 1:
         return SMSStatus.QUEUED_FOR_SENDING;
 
@@ -99,8 +93,7 @@ public enum SMSStatus
    * @return the numeric code value identifying the SMS status
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -109,8 +102,7 @@ public enum SMSStatus
    *
    * @return the <code>String</code> value of the numeric code value identifying the SMS status
    */
-  public String codeAsString()
-  {
+  public String codeAsString() {
     return String.valueOf(code);
   }
 
@@ -119,8 +111,7 @@ public enum SMSStatus
    *
    * @return the description for the SMS status
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 
@@ -129,8 +120,7 @@ public enum SMSStatus
    *
    * @return the string representation of the SMS status enumeration value
    */
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
 }

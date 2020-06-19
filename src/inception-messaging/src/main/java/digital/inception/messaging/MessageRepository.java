@@ -18,6 +18,10 @@ package digital.inception.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import javax.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -27,21 +31,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.LockModeType;
-
 /**
  * The <code>MessageRepository</code> interface declares the repository for the
  * <code>Message</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface MessageRepository extends JpaRepository<Message, UUID>
-{
+public interface MessageRepository extends JpaRepository<Message, UUID> {
+
   @Modifying
   @Query("delete from Message m where m.id = :messageId")
   void deleteById(@Param("messageId") UUID messageId);

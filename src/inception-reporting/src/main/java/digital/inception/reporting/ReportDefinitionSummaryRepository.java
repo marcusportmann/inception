@@ -27,4 +27,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author Marcus Portmann
  */
 public interface ReportDefinitionSummaryRepository extends JpaRepository<ReportDefinitionSummary,
-    String> {}
+    String> {
+
+}

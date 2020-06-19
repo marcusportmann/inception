@@ -22,29 +22,34 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
-
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Job</code> class holds the information for a job.
@@ -53,19 +58,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "Job")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "schedulingPattern", "jobClass", "enabled", "status",
-    "executionAttempts", "lockName", "lastExecuted", "nextExecution" })
+@JsonPropertyOrder({"id", "name", "schedulingPattern", "jobClass", "enabled", "status",
+    "executionAttempts", "lockName", "lastExecuted", "nextExecution"})
 @XmlRootElement(name = "Job", namespace = "http://scheduler.inception.digital")
 @XmlType(name = "Job", namespace = "http://scheduler.inception.digital",
-    propOrder = { "id", "name", "schedulingPattern", "jobClass", "enabled", "status",
-        "executionAttempts", "lockName", "lastExecuted", "nextExecution" })
+    propOrder = {"id", "name", "schedulingPattern", "jobClass", "enabled", "status",
+        "executionAttempts", "lockName", "lastExecuted", "nextExecution"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "scheduler", name = "jobs")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Job
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -192,7 +197,8 @@ public class Job
   /**
    * Constructs a new <code>Job</code>.
    */
-  public Job() {}
+  public Job() {
+  }
 
   /**
    * Constructs a new <code>Job</code>.
@@ -203,16 +209,15 @@ public class Job
    * @param jobClass          the fully qualified name of the Java class that implements the job
    * @param enabled           is the job enabled for execution
    * @param status            the status of the job
-   * @param executionAttempts the number of times the current execution of the job has
-   *                          been attempted
+   * @param executionAttempts the number of times the current execution of the job has been
+   *                          attempted
    * @param lockName          the name of the entity that has locked the job for execution
    * @param lastExecuted      the date and time the job was last executed
    * @param nextExecution     the date and time when the job will next be executed
    */
   public Job(String id, String name, String schedulingPattern, String jobClass, boolean enabled,
       JobStatus status, int executionAttempts, String lockName, LocalDateTime lastExecuted,
-      LocalDateTime nextExecution)
-  {
+      LocalDateTime nextExecution) {
     this.id = id;
     this.name = name;
     this.schedulingPattern = schedulingPattern;
@@ -230,8 +235,7 @@ public class Job
    *
    * @param parameter the parameter
    */
-  public void addParameter(JobParameter parameter)
-  {
+  public void addParameter(JobParameter parameter) {
     parameter.setJob(this);
 
     this.parameters.add(parameter);
@@ -243,23 +247,19 @@ public class Job
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -273,9 +273,18 @@ public class Job
    *
    * @return the number of times the current execution of the job has been attempted
    */
-  public Integer getExecutionAttempts()
-  {
+  public Integer getExecutionAttempts() {
     return executionAttempts;
+  }
+
+  /**
+   * Set the number of times the current execution of the job has been attempted.
+   *
+   * @param executionAttempts the number of times the current execution of the job has been
+   *                          attempted
+   */
+  public void setExecutionAttempts(Integer executionAttempts) {
+    this.executionAttempts = executionAttempts;
   }
 
   /**
@@ -283,9 +292,17 @@ public class Job
    *
    * @return the ID used to uniquely identify the job
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the job.
+   *
+   * @param id the ID used to uniquely identify the scheduled job
+   */
+  public void setId(String id) {
+    this.id = id;
   }
 
   /**
@@ -293,9 +310,17 @@ public class Job
    *
    * @return the fully qualified name of the Java class that implements the job
    */
-  public String getJobClass()
-  {
+  public String getJobClass() {
     return jobClass;
+  }
+
+  /**
+   * Set the fully qualified name of the Java class that implements the job.
+   *
+   * @param jobClass the fully qualified name of the Java class that implements the job
+   */
+  public void setJobClass(String jobClass) {
+    this.jobClass = jobClass;
   }
 
   /**
@@ -303,9 +328,17 @@ public class Job
    *
    * @return the date and time the job was last executed
    */
-  public LocalDateTime getLastExecuted()
-  {
+  public LocalDateTime getLastExecuted() {
     return lastExecuted;
+  }
+
+  /**
+   * Set the date and time the job was last executed.
+   *
+   * @param lastExecuted the date and time the job was last executed
+   */
+  public void setLastExecuted(LocalDateTime lastExecuted) {
+    this.lastExecuted = lastExecuted;
   }
 
   /**
@@ -313,9 +346,17 @@ public class Job
    *
    * @return the name of the entity that has locked the job for execution
    */
-  public String getLockName()
-  {
+  public String getLockName() {
     return lockName;
+  }
+
+  /**
+   * Set the name of the entity that has locked the job for execution.
+   *
+   * @param lockName the name of the entity that has locked the job for execution
+   */
+  public void setLockName(String lockName) {
+    this.lockName = lockName;
   }
 
   /**
@@ -323,9 +364,17 @@ public class Job
    *
    * @return the name of the job
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the job.
+   *
+   * @param name the name of the job
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -333,9 +382,17 @@ public class Job
    *
    * @return the date and time when the job will next be executed
    */
-  public LocalDateTime getNextExecution()
-  {
+  public LocalDateTime getNextExecution() {
     return nextExecution;
+  }
+
+  /**
+   * Set the date and time when the job will next be executed.
+   *
+   * @param nextExecution the date and time when the job will next be executed
+   */
+  public void setNextExecution(LocalDateTime nextExecution) {
+    this.nextExecution = nextExecution;
   }
 
   /**
@@ -343,9 +400,18 @@ public class Job
    *
    * @return the parameters for the job
    */
-  public Set<JobParameter> getParameters()
-  {
+  public Set<JobParameter> getParameters() {
     return parameters;
+  }
+
+  /**
+   * Set the parameters for the job.
+   *
+   * @param parameters the parameters for the job
+   */
+  public void setParameters(Set<JobParameter> parameters) {
+    this.parameters.clear();
+    this.parameters.addAll(parameters);
   }
 
   /**
@@ -353,9 +419,17 @@ public class Job
    *
    * @return the cron-style scheduling pattern for the job
    */
-  public String getSchedulingPattern()
-  {
+  public String getSchedulingPattern() {
     return schedulingPattern;
+  }
+
+  /**
+   * Set the cron-style scheduling pattern for the job.
+   *
+   * @param schedulingPattern the cron-style scheduling pattern for the job
+   */
+  public void setSchedulingPattern(String schedulingPattern) {
+    this.schedulingPattern = schedulingPattern;
   }
 
   /**
@@ -363,9 +437,17 @@ public class Job
    *
    * @return the status of the job
    */
-  public JobStatus getStatus()
-  {
+  public JobStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Set the status of the job.
+   *
+   * @param status the status of the job
+   */
+  public void setStatus(JobStatus status) {
+    this.status = status;
   }
 
   /**
@@ -374,8 +456,7 @@ public class Job
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -384,14 +465,10 @@ public class Job
   /**
    * Increment the number of execution attempts for the job.
    */
-  public void incrementExecutionAttempts()
-  {
-    if (executionAttempts == null)
-    {
+  public void incrementExecutionAttempts() {
+    if (executionAttempts == null) {
       executionAttempts = 1;
-    }
-    else
-    {
+    } else {
       executionAttempts++;
     }
   }
@@ -401,9 +478,18 @@ public class Job
    *
    * @return <code>true</code> if the job is enabled for execution or <code>false</code> otherwise
    */
-  public boolean isEnabled()
-  {
+  public boolean isEnabled() {
     return enabled;
+  }
+
+  /**
+   * Set whether the job is enabled for execution.
+   *
+   * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>
+   *                otherwise
+   */
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
   /**
@@ -411,129 +497,13 @@ public class Job
    *
    * @param parameterName the name of the parameter
    */
-  public void removeParameter(String parameterName)
-  {
-    for (JobParameter parameter : parameters)
-    {
-      if (parameterName.equalsIgnoreCase(parameter.getName()))
-      {
+  public void removeParameter(String parameterName) {
+    for (JobParameter parameter : parameters) {
+      if (parameterName.equalsIgnoreCase(parameter.getName())) {
         this.parameters.remove(parameter);
 
         return;
       }
     }
-  }
-
-  /**
-   * Set whether the job is enabled for execution.
-   *
-   * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>
-   *                  otherwise
-   */
-  public void setEnabled(boolean enabled)
-  {
-    this.enabled = enabled;
-  }
-
-  /**
-   * Set the number of times the current execution of the job has been attempted.
-   *
-   * @param executionAttempts the number of times the current execution of the job has
-   *                          been attempted
-   */
-  public void setExecutionAttempts(Integer executionAttempts)
-  {
-    this.executionAttempts = executionAttempts;
-  }
-
-  /**
-   * Set the ID used to uniquely identify the job.
-   *
-   * @param id the ID used to uniquely identify the scheduled job
-   */
-  public void setId(String id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the fully qualified name of the Java class that implements the job.
-   *
-   * @param jobClass the fully qualified name of the Java class that implements the job
-   */
-  public void setJobClass(String jobClass)
-  {
-    this.jobClass = jobClass;
-  }
-
-  /**
-   * Set the date and time the job was last executed.
-   *
-   * @param lastExecuted the date and time the job was last executed
-   */
-  public void setLastExecuted(LocalDateTime lastExecuted)
-  {
-    this.lastExecuted = lastExecuted;
-  }
-
-  /**
-   * Set the name of the entity that has locked the job for execution.
-   *
-   * @param lockName the name of the entity that has locked the job for execution
-   */
-  public void setLockName(String lockName)
-  {
-    this.lockName = lockName;
-  }
-
-  /**
-   * Set the name of the job.
-   *
-   * @param name the name of the job
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the date and time when the job will next be executed.
-   *
-   * @param nextExecution the date and time when the job will next be executed
-   */
-  public void setNextExecution(LocalDateTime nextExecution)
-  {
-    this.nextExecution = nextExecution;
-  }
-
-  /**
-   * Set the parameters for the job.
-   *
-   * @param parameters the parameters for the job
-   */
-  public void setParameters(Set<JobParameter> parameters)
-  {
-    this.parameters.clear();
-    this.parameters.addAll(parameters);
-  }
-
-  /**
-   * Set the cron-style scheduling pattern for the job.
-   *
-   * @param schedulingPattern the cron-style scheduling pattern for the job
-   */
-  public void setSchedulingPattern(String schedulingPattern)
-  {
-    this.schedulingPattern = schedulingPattern;
-  }
-
-  /**
-   * Set the status of the job.
-   *
-   * @param status the status of the job
-   */
-  public void setStatus(JobStatus status)
-  {
-    this.status = status;
   }
 }

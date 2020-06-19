@@ -20,7 +20,6 @@ package digital.inception.messaging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,8 +33,8 @@ import org.springframework.stereotype.Service;
 @Service
 @SuppressWarnings("unused")
 public class BackgroundMessageProcessor
-  implements InitializingBean
-{
+    implements InitializingBean {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundMessageProcessor.class);
 
@@ -49,8 +48,7 @@ public class BackgroundMessageProcessor
    *
    * @param messagingService the Messaging Service
    */
-  public BackgroundMessageProcessor(IMessagingService messagingService)
-  {
+  public BackgroundMessageProcessor(IMessagingService messagingService) {
     this.messagingService = messagingService;
   }
 
@@ -58,30 +56,23 @@ public class BackgroundMessageProcessor
    * Initialize the Background Message Processor.
    */
   @Override
-  public void afterPropertiesSet()
-  {
+  public void afterPropertiesSet() {
     logger.info("Initializing the Background Message Processor");
 
-    if (messagingService != null)
-    {
+    if (messagingService != null) {
       /*
        * Reset any locks for messages that were previously being processed by the Background
        * Message Processor.
        */
-      try
-      {
+      try {
         logger.info("Resetting the message locks for the messages being processed");
 
         messagingService.resetMessageLocks(MessageStatus.PROCESSING, MessageStatus
             .QUEUED_FOR_PROCESSING);
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to reset the message locks for the messages being processed", e);
       }
-    }
-    else
-    {
+    } else {
       logger.error("Failed to initialize the Background Message Processor: "
           + "The Messaging Service was NOT injected");
     }
@@ -92,39 +83,30 @@ public class BackgroundMessageProcessor
    */
   @Scheduled(cron = "0 * * * * *")
   @Async
-  public void processMessages()
-  {
+  public void processMessages() {
     Message requestMessage;
 
-    while (true)
-    {
+    while (true) {
       // Retrieve the next message queued for processing
-      try
-      {
+      try {
         requestMessage = messagingService.getNextMessageQueuedForProcessing();
 
-        if (requestMessage == null)
-        {
-          if (logger.isDebugEnabled())
-          {
+        if (requestMessage == null) {
+          if (logger.isDebugEnabled()) {
             logger.debug("No messages queued for processing");
           }
 
           return;
         }
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error("Failed to retrieve the next message queued for processing", e);
 
         return;
       }
 
       // Process the asynchronous message
-      try
-      {
-        if (logger.isDebugEnabled())
-        {
+      try {
+        if (logger.isDebugEnabled()) {
           logger.debug(String.format("Processing the queued message (%s)%s  %s",
               requestMessage.getId(), System.getProperty("line.separator"),
               requestMessage.toString()));
@@ -133,23 +115,18 @@ public class BackgroundMessageProcessor
         // Decrypt the message data if required
         boolean isRequestMessageEncrypted = requestMessage.isEncrypted();
 
-        if (requestMessage.isEncrypted())
-        {
-          if (!messagingService.decryptMessage(requestMessage))
-          {
+        if (requestMessage.isEncrypted()) {
+          if (!messagingService.decryptMessage(requestMessage)) {
             throw new MessagingServiceException(String.format(
                 "Failed to decrypt the message (%s) from the user (%s) and device (%s)",
                 requestMessage.getId(), requestMessage.getUsername(),
                 requestMessage.getDeviceId()));
           }
-        }
-        else
-        {
-          if (messagingService.isSecureMessage(requestMessage))
-          {
+        } else {
+          if (messagingService.isSecureMessage(requestMessage)) {
             logger.warn(String.format(
                 "Failed to process the message (%s) from the user (%s) and device (%s) that should "
-                + "be processed securely but is not encrypted", requestMessage.getId(),
+                    + "be processed securely but is not encrypted", requestMessage.getId(),
                 requestMessage.getUsername(), requestMessage.getDeviceId()));
 
             // Remove the message from the queue
@@ -161,10 +138,8 @@ public class BackgroundMessageProcessor
 
         Message responseMessage = messagingService.processMessage(requestMessage);
 
-        if (responseMessage != null)
-        {
-          if ((isRequestMessageEncrypted) && (!responseMessage.isEncrypted()))
-          {
+        if (responseMessage != null) {
+          if ((isRequestMessageEncrypted) && (!responseMessage.isEncrypted())) {
             messagingService.encryptMessage(responseMessage);
           }
 
@@ -173,35 +148,27 @@ public class BackgroundMessageProcessor
 
         // Remove the processed message from the queue
         messagingService.deleteMessage(requestMessage);
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         logger.error(String.format("Failed to process the queued message (%s)",
             requestMessage.getId()), e);
 
-        try
-        {
+        try {
           /*
            * If the message has exceeded the maximum number of processing attempts then unlock it
            * and set its status to "Failed" otherwise unlock it and set its status to
            * "QueuedForProcessing".
            */
           if (requestMessage.getProcessAttempts()
-              >= messagingService.getMaximumProcessingAttempts())
-          {
+              >= messagingService.getMaximumProcessingAttempts()) {
             logger.warn(String.format(
                 "The queued message (%s) has exceeded the maximum number of processing attempts "
-                + "and will be marked as \"Failed\"", requestMessage.getId()));
+                    + "and will be marked as \"Failed\"", requestMessage.getId()));
 
             messagingService.unlockMessage(requestMessage, MessageStatus.FAILED);
-          }
-          else
-          {
+          } else {
             messagingService.unlockMessage(requestMessage, MessageStatus.QUEUED_FOR_PROCESSING);
           }
-        }
-        catch (Throwable f)
-        {
+        } catch (Throwable f) {
           logger.error(String.format(
               "Failed to unlock and set the status for the queued message (%s)",
               requestMessage.getId()), f);

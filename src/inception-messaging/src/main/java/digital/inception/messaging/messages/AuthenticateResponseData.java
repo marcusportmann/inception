@@ -25,45 +25,43 @@ import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
 import digital.inception.security.Organization;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.*;
-import java.util.stream.Collectors;
-
 /**
- * The <code>AuthenticateResponseData</code> class manages the data for a
- * "Authenticate Response" message.
+ * The <code>AuthenticateResponseData</code> class manages the data for a "Authenticate Response"
+ * message.
  * <p/>
  * This is a synchronous message.
  *
  * @author Marcus Portmann
  */
-public class AuthenticateResponseData extends WbxmlMessageData
-{
+public class AuthenticateResponseData extends WbxmlMessageData {
+
   /**
    * The error code returned when an unknown error occurs during authentication.
    */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
-
-  /**
-   * The error code returned when authentication is successful.
-   */
-  private static final int ERROR_CODE_SUCCESS = 0;
-
-  /**
-   * The message returned when authentication was successful.
-   */
-  private static final String ERROR_MESSAGE_SUCCESS = "Success";
-
   /**
    * The UUID for the "Authenticate Response" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "82223035-1726-407f-8703-3977708e792c");
-
+      "82223035-1726-407f-8703-3977708e792c");
+  /**
+   * The error code returned when authentication is successful.
+   */
+  private static final int ERROR_CODE_SUCCESS = 0;
+  /**
+   * The message returned when authentication was successful.
+   */
+  private static final String ERROR_MESSAGE_SUCCESS = "Success";
   /**
    * The error code indicating the result of processing the authentication where a code of '0'
    * indicates success and a non-zero code indicates an error condition.
@@ -94,8 +92,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    */
-  public AuthenticateResponseData()
-  {
+  public AuthenticateResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
@@ -105,8 +102,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * @param errorCode    the error code
    * @param errorMessage the error message
    */
-  public AuthenticateResponseData(int errorCode, String errorMessage)
-  {
+  public AuthenticateResponseData(int errorCode, String errorMessage) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.errorCode = errorCode;
@@ -125,8 +121,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * @param userProperties    the properties returned for the authenticated user
    */
   public AuthenticateResponseData(List<Organization> organizations, byte[] userEncryptionKey,
-    Map<String, Object> userProperties)
-  {
+      Map<String, Object> userProperties) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.errorCode = ERROR_CODE_SUCCESS;
@@ -137,7 +132,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
     this.organizations = new ArrayList<>();
 
     this.organizations.addAll(organizations.stream().map(OrganizationData::new).collect(
-      Collectors.toList()));
+        Collectors.toList()));
   }
 
   /**
@@ -146,34 +141,28 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
 
-    if (!rootElement.getName().equals("AuthenticateResponse"))
-    {
+    if (!rootElement.getName().equals("AuthenticateResponse")) {
       return false;
     }
 
     if ((!rootElement.hasChild("UserEncryptionKey"))
-      || (!rootElement.hasChild("ErrorCode"))
-      || (!rootElement.hasChild("ErrorMessage")))
-    {
+        || (!rootElement.hasChild("ErrorCode"))
+        || (!rootElement.hasChild("ErrorMessage"))) {
       return false;
     }
 
-    try
-    {
+    try {
       this.errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       return false;
     }
 
@@ -181,48 +170,39 @@ public class AuthenticateResponseData extends WbxmlMessageData
 
     this.organizations = new ArrayList<>();
 
-    if (rootElement.hasChild("Organizations"))
-    {
+    if (rootElement.hasChild("Organizations")) {
       Element organizationsElement = rootElement.getChild("Organizations");
 
       List<Element> organizationElements = organizationsElement.getChildren("Organization");
 
       this.organizations.addAll(organizationElements.stream().map(OrganizationData::new).collect(
-        Collectors.toList()));
+          Collectors.toList()));
     }
 
     this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");
 
     this.userProperties = new HashMap<>();
 
-    if (rootElement.hasChild("UserProperties"))
-    {
+    if (rootElement.hasChild("UserProperties")) {
       Element userPropertiesElement = rootElement.getChild("UserProperties");
 
       List<Element> userPropertyElements = userPropertiesElement.getChildren("UserProperty");
 
-      for (Element userPropertyElement : userPropertyElements)
-      {
-        try
-        {
+      for (Element userPropertyElement : userPropertyElements) {
+        try {
           String userPropertyName = userPropertyElement.getAttributeValue("name");
           int userPropertyType = Integer.parseInt(userPropertyElement.getAttributeValue("type"));
 
-          if (userPropertyType == 0)
-          {
+          if (userPropertyType == 0) {
             this.userProperties.put(userPropertyName, userPropertyElement.getText());
-          }
-          else
-          {
+          } else {
             throw new MessagingServiceException("Failed to read the user property ("
-              + userPropertyName + ") with unknown type (" + userPropertyType
-              + ") from the message data");
+                + userPropertyName + ") with unknown type (" + userPropertyType
+                + ") from the message data");
           }
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new MessagingServiceException(
-            "Failed to read the user property from the message data", e);
+              "Failed to read the user property from the message data", e);
         }
       }
     }
@@ -231,14 +211,13 @@ public class AuthenticateResponseData extends WbxmlMessageData
   }
 
   /**
-   * Returns the error code indicating the result of processing the registration where a code of
-   * '0' indicates success and a non-zero code indicates an error condition.
+   * Returns the error code indicating the result of processing the registration where a code of '0'
+   * indicates success and a non-zero code indicates an error condition.
    *
-   * @return the error code indicating the result of processing the registration where a code of
-   *         '0' indicates success and a non-zero code indicates an error condition
+   * @return the error code indicating the result of processing the registration where a code of '0'
+   * indicates success and a non-zero code indicates an error condition
    */
-  public int getErrorCode()
-  {
+  public int getErrorCode() {
     return errorCode;
   }
 
@@ -247,8 +226,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    *
    * @return the error message describing the result of processing the registration
    */
-  public String getErrorMessage()
-  {
+  public String getErrorMessage() {
     return errorMessage;
   }
 
@@ -257,20 +235,18 @@ public class AuthenticateResponseData extends WbxmlMessageData
    *
    * @return the organizations the authenticated user is associated with
    */
-  public List<OrganizationData> getOrganizations()
-  {
+  public List<OrganizationData> getOrganizations() {
     return organizations;
   }
 
   /**
-   * Returns the encryption key used to encrypt data on the user's device and any data passed
-   * as part of a message.
+   * Returns the encryption key used to encrypt data on the user's device and any data passed as
+   * part of a message.
    *
-   * @return the encryption key used to encrypt data on the user's device and data passed as
-   *         part of a message
+   * @return the encryption key used to encrypt data on the user's device and data passed as part of
+   * a message
    */
-  public byte[] getUserEncryptionKey()
-  {
+  public byte[] getUserEncryptionKey() {
     return userEncryptionKey;
   }
 
@@ -279,8 +255,7 @@ public class AuthenticateResponseData extends WbxmlMessageData
    *
    * @return the properties returned for the authenticated user
    */
-  public Map<String, Object> getUserProperties()
-  {
+  public Map<String, Object> getUserProperties() {
     return userProperties;
   }
 
@@ -289,42 +264,36 @@ public class AuthenticateResponseData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    */
   @Override
-  public byte[] toMessageData()
-  {
+  public byte[] toMessageData() {
     Element rootElement = new Element("AuthenticateResponse");
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(new Element("ErrorMessage",
-      StringUtils.isEmpty(errorMessage)
-        ? ""
-        : errorMessage));
+        StringUtils.isEmpty(errorMessage)
+            ? ""
+            : errorMessage));
     rootElement.addContent(new Element("UserEncryptionKey", userEncryptionKey));
 
-    if ((organizations != null) && (organizations.size() > 0))
-    {
+    if ((organizations != null) && (organizations.size() > 0)) {
       Element organizationsElement = new Element("Organizations");
 
-      for (OrganizationData organization : organizations)
-      {
+      for (OrganizationData organization : organizations) {
         organizationsElement.addContent(organization.toElement());
       }
 
       rootElement.addContent(organizationsElement);
     }
 
-    if ((userProperties != null) && (userProperties.size() > 0))
-    {
+    if ((userProperties != null) && (userProperties.size() > 0)) {
       Element userPropertiesElement = new Element("UserProperties");
 
-      for (String userPropertyName : userProperties.keySet())
-      {
+      for (String userPropertyName : userProperties.keySet()) {
         Object userPropertyValue = userProperties.get(userPropertyName);
 
-        if (userPropertyValue instanceof String)
-        {
+        if (userPropertyValue instanceof String) {
           Element userPropertyElement = new Element("UserProperty");
 
           userPropertyElement.setAttribute("name", userPropertyName);

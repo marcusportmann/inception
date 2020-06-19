@@ -20,14 +20,12 @@ package digital.inception.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserStatus</code> enumeration defines the possible statuses for a user.
@@ -37,8 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "UserStatus")
 @XmlEnum
 @XmlType(name = "UserStatus", namespace = "http://security.inception.digital")
-public enum UserStatus
-{
+public enum UserStatus {
   @XmlEnumValue("Inactive")
   INACTIVE(0, "Inactive"),
   @XmlEnumValue("Active")
@@ -51,8 +48,7 @@ public enum UserStatus
   private int code;
   private String description;
 
-  UserStatus(int code, String description)
-  {
+  UserStatus(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -65,10 +61,8 @@ public enum UserStatus
    * @return the user status given by the specified numeric code value
    */
   @JsonCreator
-  public static UserStatus fromCode(int code)
-  {
-    switch (code)
-    {
+  public static UserStatus fromCode(int code) {
+    switch (code) {
       case 0:
         return UserStatus.INACTIVE;
 
@@ -92,8 +86,7 @@ public enum UserStatus
    * @return the numeric code value for the user status
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -102,8 +95,7 @@ public enum UserStatus
    *
    * @return the description for the user status
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 }

@@ -21,30 +21,27 @@ package digital.inception.error;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
-
 import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorReport</code> class holds the information for an error report.
@@ -53,26 +50,24 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "ErrorReport")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "applicationId", "applicationVersion", "description", "detail",
-    "created", "who", "deviceId", "feedback", "data" })
+@JsonPropertyOrder({"id", "applicationId", "applicationVersion", "description", "detail",
+    "created", "who", "deviceId", "feedback", "data"})
 @XmlRootElement(name = "ErrorReport", namespace = "http://error.inception.digital")
 @XmlType(name = "ErrorReport", namespace = "http://error.inception.digital",
-    propOrder = { "id", "applicationId", "applicationVersion", "description", "detail", "created",
-        "who", "deviceId", "feedback", "data" })
+    propOrder = {"id", "applicationId", "applicationVersion", "description", "detail", "created",
+        "who", "deviceId", "feedback", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "error", name = "error_reports")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ErrorReport
-  implements Serializable
-{
-  private static final long serialVersionUID = 1000000;
+    implements Serializable {
 
   /**
    * The maximum size of the error report detail.
    */
   public static final int MAX_DETAIL_SIZE = 102400;
-
+  private static final long serialVersionUID = 1000000;
   /**
    * The ID used to uniquely identify the application that generated the error report.
    */
@@ -188,7 +183,8 @@ public class ErrorReport
   /**
    * Constructs a new <code>ErrorReport</code>.
    */
-  public ErrorReport() {}
+  public ErrorReport() {
+  }
 
   /**
    * Constructs a new <code>ErrorReport</code>.
@@ -203,8 +199,7 @@ public class ErrorReport
    * @param created            the date and time the error report was created
    */
   public ErrorReport(UUID id, String applicationId, String applicationVersion, String description,
-      String detail, LocalDateTime created)
-  {
+      String detail, LocalDateTime created) {
     this.id = id;
     this.applicationId = applicationId;
     this.applicationVersion = applicationVersion;
@@ -232,8 +227,8 @@ public class ErrorReport
    * @param data               the optional base-64 encoded data associated with the error report
    */
   public ErrorReport(UUID id, String applicationId, String applicationVersion, String description,
-      String detail, LocalDateTime created, String who, UUID deviceId, String feedback, String data)
-  {
+      String detail, LocalDateTime created, String who, UUID deviceId, String feedback,
+      String data) {
     this.id = id;
     this.applicationId = applicationId;
     this.applicationVersion = applicationVersion;
@@ -252,23 +247,19 @@ public class ErrorReport
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -282,114 +273,8 @@ public class ErrorReport
    *
    * @return the ID used to uniquely identify the application that generated the error report
    */
-  public String getApplicationId()
-  {
+  public String getApplicationId() {
     return applicationId;
-  }
-
-  /**
-   * Returns the version of the application that generated the error report.
-   *
-   * @return the version of the application that generated the error report
-   */
-  public String getApplicationVersion()
-  {
-    return applicationVersion;
-  }
-
-  /**
-   * Returns the date and time the error report was created.
-   *
-   * @return the date and time the error report was created
-   */
-  public LocalDateTime getCreated()
-  {
-    return created;
-  }
-
-  /**
-   * Returns the optional base-64 encoded data associated with the error report.
-   *
-   * @return the optional base-64 encoded data associated with the error report
-   */
-  public String getData()
-  {
-    return data;
-  }
-
-  /**
-   * Returns the description of the error.
-   *
-   * @return the description of the error
-   */
-  public String getDescription()
-  {
-    return description;
-  }
-
-  /**
-   * Returns the error detail.
-   *
-   * @return the error detail
-   */
-  public String getDetail()
-  {
-    return detail;
-  }
-
-  /**
-   * Returns the optional Universally Unique Identifier (UUID) used to uniquely identify the device
-   * the error report originated from.
-   *
-   * @return the optional Universally Unique Identifier (UUID) used to uniquely identify the device
-   *         the error report originated from
-   */
-  public UUID getDeviceId()
-  {
-    return deviceId;
-  }
-
-  /**
-   * Returns the optional feedback provided by the user for the error.
-   *
-   * @return the optional feedback provided by the user for the error
-   */
-  public String getFeedback()
-  {
-    return feedback;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the username identifying the user associated with the error report.
-   *
-   * @return the username identifying the user associated with the error report
-   */
-  public String getWho()
-  {
-    return who;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return (id == null)
-        ? 0
-        : id.hashCode();
   }
 
   /**
@@ -398,9 +283,17 @@ public class ErrorReport
    * @param applicationId the ID used to uniquely identify the application that generated the error
    *                      report
    */
-  public void setApplicationId(String applicationId)
-  {
+  public void setApplicationId(String applicationId) {
     this.applicationId = applicationId;
+  }
+
+  /**
+   * Returns the version of the application that generated the error report.
+   *
+   * @return the version of the application that generated the error report
+   */
+  public String getApplicationVersion() {
+    return applicationVersion;
   }
 
   /**
@@ -408,9 +301,17 @@ public class ErrorReport
    *
    * @param applicationVersion the version of the application that generated the error report
    */
-  public void setApplicationVersion(String applicationVersion)
-  {
+  public void setApplicationVersion(String applicationVersion) {
     this.applicationVersion = applicationVersion;
+  }
+
+  /**
+   * Returns the date and time the error report was created.
+   *
+   * @return the date and time the error report was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
   }
 
   /**
@@ -418,9 +319,17 @@ public class ErrorReport
    *
    * @param created the date and time the error report was created
    */
-  public void setCreated(LocalDateTime created)
-  {
+  public void setCreated(LocalDateTime created) {
     this.created = created;
+  }
+
+  /**
+   * Returns the optional base-64 encoded data associated with the error report.
+   *
+   * @return the optional base-64 encoded data associated with the error report
+   */
+  public String getData() {
+    return data;
   }
 
   /**
@@ -428,9 +337,17 @@ public class ErrorReport
    *
    * @param data the optional base-64 encoded data associated with the error report
    */
-  public void setData(String data)
-  {
+  public void setData(String data) {
     this.data = data;
+  }
+
+  /**
+   * Returns the description of the error.
+   *
+   * @return the description of the error
+   */
+  public String getDescription() {
+    return description;
   }
 
   /**
@@ -438,9 +355,17 @@ public class ErrorReport
    *
    * @param description the description of the error
    */
-  public void setDescription(String description)
-  {
+  public void setDescription(String description) {
     this.description = description;
+  }
+
+  /**
+   * Returns the error detail.
+   *
+   * @return the error detail
+   */
+  public String getDetail() {
+    return detail;
   }
 
   /**
@@ -448,21 +373,39 @@ public class ErrorReport
    *
    * @param detail the error detail
    */
-  public void setDetail(String detail)
-  {
+  public void setDetail(String detail) {
     this.detail = detail;
+  }
+
+  /**
+   * Returns the optional Universally Unique Identifier (UUID) used to uniquely identify the device
+   * the error report originated from.
+   *
+   * @return the optional Universally Unique Identifier (UUID) used to uniquely identify the device
+   * the error report originated from
+   */
+  public UUID getDeviceId() {
+    return deviceId;
   }
 
   /**
    * Set the optional Universally Unique Identifier (UUID) used to uniquely identify the device the
    * error report originated from.
    *
-   * @param deviceId the optional Universally Unique Identifier (UUID) used to uniquely identify
-   *                 the device the error report originated from
+   * @param deviceId the optional Universally Unique Identifier (UUID) used to uniquely identify the
+   *                 device the error report originated from
    */
-  public void setDeviceId(UUID deviceId)
-  {
+  public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
+  }
+
+  /**
+   * Returns the optional feedback provided by the user for the error.
+   *
+   * @return the optional feedback provided by the user for the error
+   */
+  public String getFeedback() {
+    return feedback;
   }
 
   /**
@@ -470,9 +413,17 @@ public class ErrorReport
    *
    * @param feedback the optional feedback provided by the user for the error
    */
-  public void setFeedback(String feedback)
-  {
+  public void setFeedback(String feedback) {
     this.feedback = feedback;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the error report.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
@@ -480,9 +431,17 @@ public class ErrorReport
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the error report
    */
-  public void setId(UUID id)
-  {
+  public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Returns the username identifying the user associated with the error report.
+   *
+   * @return the username identifying the user associated with the error report
+   */
+  public String getWho() {
+    return who;
   }
 
   /**
@@ -490,8 +449,19 @@ public class ErrorReport
    *
    * @param who the optional username identifying the user associated with the error report
    */
-  public void setWho(String who)
-  {
+  public void setWho(String who) {
     this.who = who;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 }

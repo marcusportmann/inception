@@ -19,17 +19,13 @@ package digital.inception.scheduler;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * A <code>DuplicateJobException</code> is thrown to indicate that a security operation failed as a
@@ -43,9 +39,9 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "DuplicateJobException", targetNamespace = "http://scheduler.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class DuplicateJobException extends ServiceException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class DuplicateJobException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -53,8 +49,7 @@ public class DuplicateJobException extends ServiceException
    *
    * @param jobId the ID used to uniquely identify the job
    */
-  public DuplicateJobException(String jobId)
-  {
+  public DuplicateJobException(String jobId) {
     super("DuplicateJobError", "A job with the ID (" + jobId + ") already exists");
   }
 }

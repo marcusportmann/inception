@@ -21,7 +21,6 @@ package digital.inception.scheduler;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -31,9 +30,9 @@ import java.util.TimeZone;
  * The <code>Predictor</code> class provides the capability to predict when a scheduling pattern
  * will be matched.
  * <p/>
- * Suppose you want to know when the scheduler will execute a job scheduled
- * with the pattern <em>0 3 * jan-jun,sep-dec mon-fri</em>. You can predict the
- * next <em>n</em> execution of the job using a Predictor instance:
+ * Suppose you want to know when the scheduler will execute a job scheduled with the pattern <em>0 3
+ * * jan-jun,sep-dec mon-fri</em>. You can predict the next <em>n</em> execution of the job using a
+ * Predictor instance:
  * <p/>
  * <p/>
  * <pre>
@@ -47,9 +46,9 @@ import java.util.TimeZone;
  * @author Carlo Pelliccia
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class Predictor
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class Predictor {
+
   /**
    * The scheduling pattern on which the predictor works.
    */
@@ -70,8 +69,7 @@ public class Predictor
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    */
-  public Predictor(SchedulingPattern schedulingPattern)
-  {
+  public Predictor(SchedulingPattern schedulingPattern) {
     this(schedulingPattern, System.currentTimeMillis());
   }
 
@@ -81,8 +79,7 @@ public class Predictor
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    */
   public Predictor(String schedulingPattern)
-    throws InvalidSchedulingPatternException
-  {
+      throws InvalidSchedulingPatternException {
     this(schedulingPattern, System.currentTimeMillis());
   }
 
@@ -92,8 +89,7 @@ public class Predictor
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    * @param start             the start time of the prediction
    */
-  public Predictor(SchedulingPattern schedulingPattern, Date start)
-  {
+  public Predictor(SchedulingPattern schedulingPattern, Date start) {
     this(schedulingPattern, start.getTime());
   }
 
@@ -103,8 +99,7 @@ public class Predictor
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    * @param start             the start time of the prediction as a milliseconds value
    */
-  public Predictor(SchedulingPattern schedulingPattern, long start)
-  {
+  public Predictor(SchedulingPattern schedulingPattern, long start) {
     this.schedulingPattern = schedulingPattern;
     this.time = (start / (1000 * 60)) * 1000 * 60;
   }
@@ -116,8 +111,7 @@ public class Predictor
    * @param start             the start time of the prediction
    */
   public Predictor(String schedulingPattern, Date start)
-    throws InvalidSchedulingPatternException
-  {
+      throws InvalidSchedulingPatternException {
     this(schedulingPattern, start.getTime());
   }
 
@@ -128,8 +122,7 @@ public class Predictor
    * @param start             the start time of the prediction
    */
   public Predictor(String schedulingPattern, long start)
-    throws InvalidSchedulingPatternException
-  {
+      throws InvalidSchedulingPatternException {
     this.schedulingPattern = new SchedulingPattern(schedulingPattern);
     this.time = (start / (1000 * 60)) * 1000 * 60;
   }
@@ -139,8 +132,7 @@ public class Predictor
    *
    * @return the next matching moment as a {@link Date} object
    */
-  public synchronized Date nextMatchingDate()
-  {
+  public synchronized Date nextMatchingDate() {
     return new Date(nextMatchingTime());
   }
 
@@ -149,8 +141,7 @@ public class Predictor
    *
    * @return the next matching moment as a {@link LocalDateTime} object
    */
-  public synchronized LocalDateTime nextMatchingLocalDateTime()
-  {
+  public synchronized LocalDateTime nextMatchingLocalDateTime() {
     return LocalDateTime.ofInstant(Instant.ofEpochMilli(nextMatchingTime()),
         ZoneId.systemDefault());
   }
@@ -160,14 +151,12 @@ public class Predictor
    *
    * @return the next matching moment as a milliseconds value
    */
-  public synchronized long nextMatchingTime()
-  {
+  public synchronized long nextMatchingTime() {
     // Go a minute ahead.
     time += 60000;
 
     // Is it matching?
-    if (schedulingPattern.match(time))
-    {
+    if (schedulingPattern.match(time)) {
       return time;
     }
 
@@ -175,8 +164,7 @@ public class Predictor
     int size = schedulingPattern.matcherSize;
     long[] times = new long[size];
 
-    for (int k = 0; k < size; k++)
-    {
+    for (int k = 0; k < size; k++) {
       // Ok, split the time!
       GregorianCalendar c = new GregorianCalendar();
 
@@ -196,94 +184,68 @@ public class Predictor
       ValueMatcher dayOfWeekMatcher = schedulingPattern.dayOfWeekMatchers.get(k);
       ValueMatcher monthMatcher = schedulingPattern.monthMatchers.get(k);
 
-      for (;;)
-      {          // day of week
-        for (;;)
-        {        // month
-          for (;;)
-          {      // day of month
-            for (;;)
-            {    // hour
-              for (;;)
-              {  // minutes
-                if (minuteMatcher.match(minute))
-                {
+      for (; ; ) {          // day of week
+        for (; ; ) {        // month
+          for (; ; ) {      // day of month
+            for (; ; ) {    // hour
+              for (; ; ) {  // minutes
+                if (minuteMatcher.match(minute)) {
                   break;
-                }
-                else
-                {
+                } else {
                   minute++;
 
-                  if (minute > 59)
-                  {
+                  if (minute > 59) {
                     minute = 0;
                     hour++;
                   }
                 }
               }
 
-              if (hour > 23)
-              {
+              if (hour > 23) {
                 hour = 0;
                 dayOfMonth++;
               }
 
-              if (hourMatcher.match(hour))
-              {
+              if (hourMatcher.match(hour)) {
                 break;
-              }
-              else
-              {
+              } else {
                 hour++;
                 minute = 0;
               }
             }
 
-            if (dayOfMonth > 31)
-            {
+            if (dayOfMonth > 31) {
               dayOfMonth = 1;
               month++;
             }
 
-            if (month > Calendar.DECEMBER)
-            {
+            if (month > Calendar.DECEMBER) {
               month = Calendar.JANUARY;
               year++;
             }
 
-            if (dayOfMonthMatcher instanceof DayOfMonthValueMatcher)
-            {
+            if (dayOfMonthMatcher instanceof DayOfMonthValueMatcher) {
               DayOfMonthValueMatcher aux = (DayOfMonthValueMatcher) dayOfMonthMatcher;
 
-              if (aux.match(dayOfMonth, month + 1, c.isLeapYear(year)))
-              {
+              if (aux.match(dayOfMonth, month + 1, c.isLeapYear(year))) {
                 break;
-              }
-              else
-              {
+              } else {
                 dayOfMonth++;
                 hour = 0;
                 minute = 0;
               }
-            }
-            else if (dayOfMonthMatcher.match(dayOfMonth))
-            {
+            } else if (dayOfMonthMatcher.match(dayOfMonth)) {
               break;
-            }
-            else
-            {
+            } else {
               dayOfMonth++;
               hour = 0;
               minute = 0;
             }
           }
 
-          if (monthMatcher.match(month + 1))
-          {
+          if (monthMatcher.match(month + 1)) {
             break;
-          }
-          else
-          {
+          } else {
             month++;
             dayOfMonth = 1;
             hour = 0;
@@ -309,8 +271,7 @@ public class Predictor
         month = c.get(Calendar.MONTH);
         year = c.get(Calendar.YEAR);
 
-        if ((month != oldMonth) || (dayOfMonth != oldDayOfMonth) || (year != oldYear))
-        {
+        if ((month != oldMonth) || (dayOfMonth != oldDayOfMonth) || (year != oldYear)) {
           // Take another spin!
           continue;
         }
@@ -318,23 +279,18 @@ public class Predictor
         // Day of week.
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 
-        if (dayOfWeekMatcher.match(dayOfWeek - 1))
-        {
+        if (dayOfWeekMatcher.match(dayOfWeek - 1)) {
           break;
-        }
-        else
-        {
+        } else {
           dayOfMonth++;
           hour = 0;
           minute = 0;
 
-          if (dayOfMonth > 31)
-          {
+          if (dayOfMonth > 31) {
             dayOfMonth = 1;
             month++;
 
-            if (month > Calendar.DECEMBER)
-            {
+            if (month > Calendar.DECEMBER) {
               month = Calendar.JANUARY;
               year++;
             }
@@ -349,10 +305,8 @@ public class Predictor
     // Which one?
     long min = Long.MAX_VALUE;
 
-    for (int k = 0; k < size; k++)
-    {
-      if (times[k] < min)
-      {
+    for (int k = 0; k < size; k++) {
+      if (times[k] < min) {
         min = times[k];
       }
     }
@@ -369,8 +323,7 @@ public class Predictor
    *
    * @param timeZone the time zone to user for predictions
    */
-  public void setTimeZone(TimeZone timeZone)
-  {
+  public void setTimeZone(TimeZone timeZone) {
     this.timeZone = timeZone;
   }
 }

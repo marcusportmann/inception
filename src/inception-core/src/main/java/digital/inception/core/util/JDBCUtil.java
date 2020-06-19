@@ -18,50 +18,49 @@ package digital.inception.core.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.util.StringUtils;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.io.*;
-
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
-
-import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
 import javax.sql.DataSource;
+import org.springframework.util.StringUtils;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JDBCUtil</code> class provides JDBCUtil utility functions.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class JDBCUtil
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class JDBCUtil {
+
   /**
    * Private default constructor to enforce utility pattern.
    */
-  private JDBCUtil() {}
+  private JDBCUtil() {
+  }
 
   /**
    * Close the connection.
    *
    * @param connection the connection to close
    */
-  public static void close(Connection connection)
-  {
-    if (connection != null)
-    {
-      try
-      {
+  public static void close(Connection connection) {
+    if (connection != null) {
+      try {
         connection.close();
-      }
-      catch (SQLException e)
-      {
+      } catch (SQLException e) {
         // Do nothing
       }
     }
@@ -72,16 +71,11 @@ public class JDBCUtil
    *
    * @param rs the result set to close
    */
-  public static void close(ResultSet rs)
-  {
-    if (rs != null)
-    {
-      try
-      {
+  public static void close(ResultSet rs) {
+    if (rs != null) {
+      try {
         rs.close();
-      }
-      catch (SQLException e)
-      {
+      } catch (SQLException e) {
         // Do nothing
       }
     }
@@ -92,16 +86,11 @@ public class JDBCUtil
    *
    * @param statement the statement to close
    */
-  public static void close(Statement statement)
-  {
-    if (statement != null)
-    {
-      try
-      {
+  public static void close(Statement statement) {
+    if (statement != null) {
+      try {
         statement.close();
-      }
-      catch (SQLException e)
-      {
+      } catch (SQLException e) {
         // Do nothing
       }
     }
@@ -116,14 +105,10 @@ public class JDBCUtil
    * @return the row count
    */
   public static int executeStatement(Connection connection, String sql)
-    throws SQLException
-  {
-    try (Statement statement = connection.createStatement())
-    {
+      throws SQLException {
+    try (Statement statement = connection.createStatement()) {
       return statement.executeUpdate(sql);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SQLException("Failed to execute the SQL statement: " + sql, e);
     }
   }
@@ -138,17 +123,14 @@ public class JDBCUtil
    * @return the number of SQL statements successfully executed
    */
   public static int executeStatements(Connection connection, String resourcePath)
-    throws SQLException
-  {
+      throws SQLException {
     int numberOfStatementsExecuted = 0;
 
-    try
-    {
+    try {
       List<String> sqlStatements = loadSQL(Thread.currentThread().getContextClassLoader()
           .getResource(resourcePath));
 
-      for (String sqlStatement : sqlStatements)
-      {
+      for (String sqlStatement : sqlStatements) {
         System.out.println("EXECUTING: " + sqlStatement);
 
         executeStatement(connection, sqlStatement);
@@ -156,9 +138,7 @@ public class JDBCUtil
       }
 
       return numberOfStatementsExecuted;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SQLException("Failed to execute the SQL statements in the resource file ("
           + resourcePath + ")", e);
     }
@@ -172,17 +152,14 @@ public class JDBCUtil
    * @return the schema separator for the database associated with the specified data source
    */
   public static String getSchemaSeparator(DataSource dataSource)
-    throws SQLException
-  {
-    try (Connection connection = dataSource.getConnection())
-    {
+      throws SQLException {
+    try (Connection connection = dataSource.getConnection()) {
       DatabaseMetaData metaData = connection.getMetaData();
 
       // Retrieve the schema separator for the database
       String schemaSeparator = metaData.getCatalogSeparator();
 
-      if ((schemaSeparator == null) || (schemaSeparator.length() == 0))
-      {
+      if ((schemaSeparator == null) || (schemaSeparator.length() == 0)) {
         schemaSeparator = ".";
       }
 
@@ -196,17 +173,14 @@ public class JDBCUtil
    * @param dataSource the data source
    *
    * @return <code>true</code> if the database associated with the specified data source is an
-   *         in-memory H2 database or <code>false</code> otherwise
+   * in-memory H2 database or <code>false</code> otherwise
    */
   public static boolean isInMemoryH2Database(DataSource dataSource)
-    throws SQLException
-  {
-    try (Connection connection = dataSource.getConnection())
-    {
+      throws SQLException {
+    try (Connection connection = dataSource.getConnection()) {
       DatabaseMetaData metaData = connection.getMetaData();
 
-      switch (metaData.getDatabaseProductName())
-      {
+      switch (metaData.getDatabaseProductName()) {
         case "H2":
 
           return true;
@@ -226,34 +200,28 @@ public class JDBCUtil
    * @return the SQL statements loaded from the specified URL
    */
   public static List<String> loadSQL(URL url)
-    throws IOException
-  {
+      throws IOException {
     List<String> sqlStatements = new ArrayList<>();
 
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream())))
-    {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
       StringBuilder multiLineBuffer = null;
       String line;
 
-      while ((line = reader.readLine()) != null)
-      {
+      while ((line = reader.readLine()) != null) {
         /*
          * Remove any whitespace at the beginning or end of the line, any newline characters and
          * any multiple spaces.
          */
         line = cleanSQL(line);
 
-        if (line.length() == 0)
-        {
+        if (line.length() == 0) {
           continue;
         }
 
         // Only process the line if it is not a SQL comment
-        if (!line.startsWith("--"))
-        {
+        if (!line.startsWith("--")) {
           // If the line contains a SQL comment then only process the portion before the comment
-          if (line.contains("--"))
-          {
+          if (line.contains("--")) {
             line = line.substring(0, line.indexOf("--"));
           }
 
@@ -261,8 +229,7 @@ public class JDBCUtil
            * If we have already built up part of the multi-line SQL statement then add spacing
            * between this and the next part of the SQL statement on the current line.
            */
-          if (multiLineBuffer != null)
-          {
+          if (multiLineBuffer != null) {
             multiLineBuffer.append(" ");
           }
 
@@ -272,35 +239,24 @@ public class JDBCUtil
            * - The line contains the end of a multi-line SQL statement
            * - The line contains both of the above
            */
-          if (line.contains(";"))
-          {
+          if (line.contains(";")) {
             StringTokenizer tokens = new StringTokenizer(line, ";");
 
-            while (tokens.hasMoreTokens())
-            {
+            while (tokens.hasMoreTokens()) {
               String token = tokens.nextToken().trim();
 
               // If we are currently processing a multi-line buffer
-              if (multiLineBuffer != null)
-              {
+              if (multiLineBuffer != null) {
                 multiLineBuffer.append(token);
                 sqlStatements.add(multiLineBuffer.toString());
                 multiLineBuffer = null;
-              }
-              else
-              {
-                if (tokens.hasMoreTokens())
-                {
+              } else {
+                if (tokens.hasMoreTokens()) {
                   sqlStatements.add(token);
-                }
-                else
-                {
-                  if (line.endsWith(";"))
-                  {
+                } else {
+                  if (line.endsWith(";")) {
                     sqlStatements.add(token);
-                  }
-                  else
-                  {
+                  } else {
                     multiLineBuffer = new StringBuilder();
                     multiLineBuffer.append(token);
                   }
@@ -314,15 +270,13 @@ public class JDBCUtil
            * the start of a new multi-line SQL statement or the continuation of an existing
            * multi-line SQL statement.
            */
-          else
-          {
+          else {
             /*
              * If this is a new multi-line SQL statement then initialize the buffer
              * that will be used to concatenate the individual lines of the statement into
              * a single-line SQL statement.
              */
-            if (multiLineBuffer == null)
-            {
+            if (multiLineBuffer == null) {
               multiLineBuffer = new StringBuilder();
             }
 
@@ -331,8 +285,7 @@ public class JDBCUtil
         }
       }
 
-      if ((multiLineBuffer != null) && (!StringUtils.isEmpty(multiLineBuffer.toString())))
-      {
+      if ((multiLineBuffer != null) && (!StringUtils.isEmpty(multiLineBuffer.toString()))) {
         throw new IOException("Failed to process the last SQL statement from the file ("
             + url.getPath() + ") since it was not terminated by a ';'");
       }
@@ -342,8 +295,8 @@ public class JDBCUtil
   }
 
   /**
-   * Read the blob associated with the column with the specified index from the
-   * specified result set.
+   * Read the blob associated with the column with the specified index from the specified result
+   * set.
    *
    * @param rs    the result set
    * @param index the index of the column containing the blob
@@ -351,23 +304,18 @@ public class JDBCUtil
    * @return the binary data for the BLOB
    */
   public static byte[] readBlob(ResultSet rs, int index)
-    throws SQLException
-  {
+      throws SQLException {
     try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-      BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream(index)))
-    {
+        BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream(index))) {
       int noBytes;
       byte[] tmpBuffer = new byte[1024];
 
-      while ((noBytes = in.read(tmpBuffer)) != -1)
-      {
+      while ((noBytes = in.read(tmpBuffer)) != -1) {
         bos.write(tmpBuffer, 0, noBytes);
       }
 
       return bos.toByteArray();
-    }
-    catch (IOException e)
-    {
+    } catch (IOException e) {
       throw new SQLException("An IO error occurred while reading the BLOB from the database: "
           + e.getMessage());
     }
@@ -378,24 +326,19 @@ public class JDBCUtil
    *
    * @param connection the connection to rollback the transaction on
    */
-  public static void rollback(Connection connection)
-  {
-    if (connection != null)
-    {
-      try
-      {
+  public static void rollback(Connection connection) {
+    if (connection != null) {
+      try {
         connection.rollback();
-      }
-      catch (SQLException e)
-      {
+      } catch (SQLException e) {
         // Do nothing
       }
     }
   }
 
   /**
-   * Checks whether the schema with the specified name exists for the database referenced
-   * by the connection.
+   * Checks whether the schema with the specified name exists for the database referenced by the
+   * connection.
    *
    * @param connection the database connection to use
    * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
@@ -405,19 +348,15 @@ public class JDBCUtil
    */
   @SuppressWarnings("resource")
   public static boolean schemaExists(Connection connection, String catalog, String schema)
-    throws SQLException
-  {
-    if (schema == null)
-    {
+      throws SQLException {
+    if (schema == null) {
       throw new SQLException("Failed to check whether the schema (null) exists");
     }
 
     DatabaseMetaData metaData = connection.getMetaData();
 
-    try (ResultSet rs = metaData.getSchemas())
-    {
-      while (rs.next())
-      {
+    try (ResultSet rs = metaData.getSchemas()) {
+      while (rs.next()) {
         String tmpCatalog = StringUtils.isEmpty(rs.getString("TABLE_CATALOG"))
             ? ""
             : rs.getString("TABLE_CATALOG");
@@ -425,10 +364,8 @@ public class JDBCUtil
             ? ""
             : rs.getString("TABLE_SCHEM");
 
-        if ((catalog == null) || catalog.equalsIgnoreCase(tmpCatalog))
-        {
-          if (tmpSchema.equalsIgnoreCase(schema))
-          {
+        if ((catalog == null) || catalog.equalsIgnoreCase(tmpCatalog)) {
+          if (tmpSchema.equalsIgnoreCase(schema)) {
             return true;
           }
         }
@@ -440,8 +377,8 @@ public class JDBCUtil
   }
 
   /**
-   * Checks whether the schema with the specified name exists for the database referenced
-   * by the data source.
+   * Checks whether the schema with the specified name exists for the database referenced by the
+   * data source.
    *
    * @param dataSource the data source to use
    * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
@@ -451,15 +388,12 @@ public class JDBCUtil
    */
   @SuppressWarnings("resource")
   public static boolean schemaExists(DataSource dataSource, String catalog, String schema)
-    throws SQLException
-  {
-    if (schema == null)
-    {
+      throws SQLException {
+    if (schema == null) {
       throw new SQLException("Failed to check whether the schema (null) exists");
     }
 
-    try (Connection connection = dataSource.getConnection())
-    {
+    try (Connection connection = dataSource.getConnection()) {
       return schemaExists(connection, catalog, schema);
     }
   }
@@ -473,10 +407,8 @@ public class JDBCUtil
    * @param connection the HSQLDB database connection
    */
   public static void shutdownHsqlDatabase(Connection connection)
-    throws SQLException
-  {
-    try (Statement statement = connection.createStatement())
-    {
+      throws SQLException {
+    try (Statement statement = connection.createStatement()) {
       // language=H2
       statement.executeUpdate("SHUTDOWN");
     }
@@ -496,31 +428,25 @@ public class JDBCUtil
   @SuppressWarnings("resource")
   public static boolean tableExists(Connection connection, String catalog, String schema,
       String table)
-    throws SQLException
-  {
-    if (table == null)
-    {
+      throws SQLException {
+    if (table == null) {
       throw new SQLException("Failed to check whether the table (null) exists");
     }
 
     // First check if the schema exists
-    if ((schema != null) && (!schemaExists(connection, catalog, schema)))
-    {
+    if ((schema != null) && (!schemaExists(connection, catalog, schema))) {
       return false;
     }
 
     DatabaseMetaData metaData = connection.getMetaData();
 
-    try (ResultSet rs = metaData.getTables(catalog, schema, table, new String[] { "TABLE" }))
-    {
-      while (rs.next())
-      {
+    try (ResultSet rs = metaData.getTables(catalog, schema, table, new String[]{"TABLE"})) {
+      while (rs.next()) {
         String tmpTable = StringUtils.isEmpty(rs.getString("TABLE_NAME"))
             ? ""
             : rs.getString("TABLE_NAME");
 
-        if (table.equals(tmpTable))
-        {
+        if (table.equals(tmpTable)) {
           return true;
         }
       }
@@ -543,23 +469,18 @@ public class JDBCUtil
   @SuppressWarnings("resource")
   public static boolean tableExists(DataSource dataSource, String catalog, String schema,
       String table)
-    throws SQLException
-  {
-    if (table == null)
-    {
+      throws SQLException {
+    if (table == null) {
       throw new SQLException("Failed to check whether the table (null) exists");
     }
 
-    try (Connection connection = dataSource.getConnection())
-    {
+    try (Connection connection = dataSource.getConnection()) {
       return tableExists(connection, catalog, schema, table);
     }
   }
 
-  private static String cleanSQL(String text)
-  {
-    if (text == null)
-    {
+  private static String cleanSQL(String text) {
+    if (text == null) {
       throw new NullPointerException("Failed to clean the null SQL string");
     }
 
@@ -567,29 +488,25 @@ public class JDBCUtil
     text = text.trim();
 
     // If this is an empty string then stop here
-    if (text.length() == 0)
-    {
+    if (text.length() == 0) {
       return text;
     }
 
     // First remove the new line characters
     int index = text.length() - 1;
 
-    while ((index >= 0) && ((text.charAt(index) == '\r') || (text.charAt(index) == '\n')))
-    {
+    while ((index >= 0) && ((text.charAt(index) == '\r') || (text.charAt(index) == '\n'))) {
       index--;
     }
 
-    if (index < 0)
-    {
+    if (index < 0) {
       return "";
     }
 
     text = text.substring(0, index + 1);
 
     // Replace multiple spaces with a single space
-    while (text.contains("  "))
-    {
+    while (text.contains("  ")) {
       text = text.replaceAll(" {2}", " ");
     }
 

@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @WritingConverter
 public class PasswordChangeReasonToIntegerConverter
-  implements Converter<PasswordChangeReason, Integer>
-{
+    implements Converter<PasswordChangeReason, Integer> {
+
   /**
    * Constructs a new <code>PasswordChangeReasonToIntegerConverter</code>.
    */
-  public PasswordChangeReasonToIntegerConverter() {}
+  public PasswordChangeReasonToIntegerConverter() {
+  }
 
   @Override
-  public Integer convert(PasswordChangeReason source)
-  {
-    if (source == null)
-    {
+  public Integer convert(PasswordChangeReason source) {
+    if (source == null) {
       return null;
     }
 

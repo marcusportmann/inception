@@ -19,14 +19,15 @@ package digital.inception.validation;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
+import java.io.Serializable;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
-
-import javax.xml.bind.annotation.*;
 
 /**
  * The <code>ValidationErrorAttribute</code> attribute represents an attribute associated with the
@@ -35,16 +36,16 @@ import javax.xml.bind.annotation.*;
  * @author Marcus Portmann
  */
 @ApiModel(value = "ValidationErrorAttribute")
-@JsonPropertyOrder({ "name", "value" })
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "ValidationErrorAttribute",
     namespace = "http://validation.inception.digital")
 @XmlType(name = "ValidationErrorAttribute", namespace = "http://validation.inception.digital",
-    propOrder = { "name", "value" })
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ValidationErrorAttribute
-  implements Serializable, Cloneable
-{
+    implements Serializable, Cloneable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -62,16 +63,16 @@ public class ValidationErrorAttribute
   /**
    * Constructs a new <code>ValidationErrorAttribute</code>.
    */
-  public ValidationErrorAttribute() {}
+  public ValidationErrorAttribute() {
+  }
 
   /**
    * Constructs a new <code>ValidationErrorAttribute</code>.
    *
-   * @param name   the name for the validation error attribute
+   * @param name  the name for the validation error attribute
    * @param value the value for the validation error attribute
    */
-  public ValidationErrorAttribute(String name, String value)
-  {
+  public ValidationErrorAttribute(String name, String value) {
     this.name = name;
     this.value = value;
   }
@@ -81,19 +82,8 @@ public class ValidationErrorAttribute
    *
    * @return the name for the validation error attribute
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
-  }
-
-  /**
-   * Returns the value for the validation error attribute.
-   *
-   * @return the value for the validation error attribute
-   */
-  public String getValue()
-  {
-    return value;
   }
 
   /**
@@ -101,9 +91,17 @@ public class ValidationErrorAttribute
    *
    * @param name the name for the validation error attribute
    */
-  public void setName(String name)
-  {
+  public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Returns the value for the validation error attribute.
+   *
+   * @return the value for the validation error attribute
+   */
+  public String getValue() {
+    return value;
   }
 
   /**
@@ -111,15 +109,13 @@ public class ValidationErrorAttribute
    *
    * @param value the value for the validation error attribute
    */
-  public void setValue(String value)
-  {
+  public void setValue(String value) {
     this.value = value;
   }
 
   @Override
   protected Object clone()
-    throws CloneNotSupportedException
-  {
+      throws CloneNotSupportedException {
     return new ValidationErrorAttribute(name, value);
   }
 }

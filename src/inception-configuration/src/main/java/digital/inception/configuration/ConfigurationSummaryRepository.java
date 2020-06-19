@@ -18,12 +18,10 @@ package digital.inception.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
 
 /**
  * The <code>ConfigurationSummaryRepository</code> interface declares the repository for the
@@ -31,8 +29,9 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-public interface ConfigurationSummaryRepository extends JpaRepository<ConfigurationSummary, String>
-{
+public interface ConfigurationSummaryRepository extends
+    JpaRepository<ConfigurationSummary, String> {
+
   List<ConfigurationSummary> findAllByOrderByKeyDesc();
 
   List<ConfigurationSummary> findByKeyIgnoreCaseContaining(String filter);

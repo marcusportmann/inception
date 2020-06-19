@@ -26,31 +26,28 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
  *
  * @author Marcus Portmann
  */
-public class TokenEnhancerException extends OAuth2Exception
-{
+public class TokenEnhancerException extends OAuth2Exception {
+
   private static final long serialVersionUID = 1000000;
 
   /**
    * Constructs a new <code>TokenEnhancerException</code> with the specified message and cause.
    *
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public TokenEnhancerException(String message, Throwable cause)
-  {
+  public TokenEnhancerException(String message, Throwable cause) {
     super(message, cause);
   }
 
   @Override
-  public int getHttpErrorCode()
-  {
+  public int getHttpErrorCode() {
     return 500;
   }
 
   @Override
-  public String getOAuth2ErrorCode()
-  {
+  public String getOAuth2ErrorCode() {
     return "server_error";
   }
 }

@@ -18,18 +18,14 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
-import java.util.List;
 
 /**
  * The <code>BackgroundPasswordResetExpiry</code> class implements the background password reset
@@ -38,8 +34,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @Service
-public class BackgroundPasswordResetExpiry
-{
+public class BackgroundPasswordResetExpiry {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundPasswordResetExpiry.class);
 
@@ -59,8 +55,7 @@ public class BackgroundPasswordResetExpiry
    *
    * @param passwordResetRepository the Password Reset Repository
    */
-  public BackgroundPasswordResetExpiry(PasswordResetRepository passwordResetRepository)
-  {
+  public BackgroundPasswordResetExpiry(PasswordResetRepository passwordResetRepository) {
     this.passwordResetRepository = passwordResetRepository;
   }
 
@@ -69,17 +64,13 @@ public class BackgroundPasswordResetExpiry
    */
   @Scheduled(cron = "0 * * * * *")
   @Transactional
-  public void expirePasswordResets()
-  {
-    try
-    {
+  public void expirePasswordResets() {
+    try {
       LocalDateTime requestedBefore = LocalDateTime.now();
       requestedBefore = requestedBefore.minus(passwordResetExpiry, ChronoUnit.SECONDS);
 
       passwordResetRepository.expirePasswordResets(requestedBefore);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       logger.error("Failed to expire the password resets", e);
     }
   }

@@ -22,29 +22,27 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateAdapter;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Data</code> class.
@@ -53,17 +51,17 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "Data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
+@JsonPropertyOrder({"id", "name", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlRootElement(name = "Data", namespace = "http://sample.inception.digital")
 @XmlType(name = "Data", namespace = "http://sample.inception.digital",
-    propOrder = { "id", "name", "stringValue", "integerValue", "dateValue", "timestampValue" })
+    propOrder = {"id", "name", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "sample", name = "data")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Data
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -131,7 +129,8 @@ public class Data
   /**
    * Constructs a new <code>Data</code>.
    */
-  public Data() {}
+  public Data() {
+  }
 
   /**
    * Constructs a new <code>Data</code>.
@@ -144,8 +143,7 @@ public class Data
    * @param timestampValue the timestamp value for the data
    */
   public Data(long id, String name, Integer integerValue, String stringValue, LocalDate dateValue,
-      LocalDateTime timestampValue)
-  {
+      LocalDateTime timestampValue) {
     this.id = id;
     this.name = name;
     this.integerValue = integerValue;
@@ -160,23 +158,19 @@ public class Data
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -190,9 +184,17 @@ public class Data
    *
    * @return the date value for the data
    */
-  public LocalDate getDateValue()
-  {
+  public LocalDate getDateValue() {
     return dateValue;
+  }
+
+  /**
+   * Set the date value for the data.
+   *
+   * @param dateValue the date value for the data
+   */
+  public void setDateValue(LocalDate dateValue) {
+    this.dateValue = dateValue;
   }
 
   /**
@@ -200,9 +202,17 @@ public class Data
    *
    * @return the ID used to uniquely identify the data
    */
-  public long getId()
-  {
+  public long getId() {
     return id;
+  }
+
+  /**
+   * Set the ID used to uniquely identify the data.
+   *
+   * @param id the ID used to uniquely identify the data
+   */
+  public void setId(long id) {
+    this.id = id;
   }
 
   /**
@@ -210,9 +220,17 @@ public class Data
    *
    * @return the integer value for the data
    */
-  public Integer getIntegerValue()
-  {
+  public Integer getIntegerValue() {
     return integerValue;
+  }
+
+  /**
+   * Set the integer value for the data.
+   *
+   * @param integerValue the integer value for the data
+   */
+  public void setIntegerValue(Integer integerValue) {
+    this.integerValue = integerValue;
   }
 
   /**
@@ -220,9 +238,17 @@ public class Data
    *
    * @return the name for the data
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name for the data.
+   *
+   * @param name the name for the data
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -230,9 +256,17 @@ public class Data
    *
    * @return the string value for the data
    */
-  public String getStringValue()
-  {
+  public String getStringValue() {
     return stringValue;
+  }
+
+  /**
+   * Set the string value for the data.
+   *
+   * @param stringValue the string value for the data
+   */
+  public void setStringValue(String stringValue) {
+    this.stringValue = stringValue;
   }
 
   /**
@@ -240,9 +274,17 @@ public class Data
    *
    * @return the timestamp value for the data
    */
-  public LocalDateTime getTimestampValue()
-  {
+  public LocalDateTime getTimestampValue() {
     return timestampValue;
+  }
+
+  /**
+   * Set the timestamp value for the data.
+   *
+   * @param timestampValue the timestamp value for the data
+   */
+  public void setTimestampValue(LocalDateTime timestampValue) {
+    this.timestampValue = timestampValue;
   }
 
   /**
@@ -251,69 +293,8 @@ public class Data
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (int) (id ^ (id >>> 32));
-  }
-
-  /**
-   * Set the date value for the data.
-   *
-   * @param dateValue the date value for the data
-   */
-  public void setDateValue(LocalDate dateValue)
-  {
-    this.dateValue = dateValue;
-  }
-
-  /**
-   * Set the ID used to uniquely identify the data.
-   *
-   * @param id the ID used to uniquely identify the data
-   */
-  public void setId(long id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the integer value for the data.
-   *
-   * @param integerValue the integer value for the data
-   */
-  public void setIntegerValue(Integer integerValue)
-  {
-    this.integerValue = integerValue;
-  }
-
-  /**
-   * Set the name for the data.
-   *
-   * @param name the name for the data
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the string value for the data.
-   *
-   * @param stringValue the string value for the data
-   */
-  public void setStringValue(String stringValue)
-  {
-    this.stringValue = stringValue;
-  }
-
-  /**
-   * Set the timestamp value for the data.
-   *
-   * @param timestampValue the timestamp value for the data
-   */
-  public void setTimestampValue(LocalDateTime timestampValue)
-  {
-    this.timestampValue = timestampValue;
   }
 
   /**
@@ -322,8 +303,7 @@ public class Data
    * @return a string representation of the data
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "Data {id=\"" + id + "\", name=\"" + name + "\", integerValue=\"" + integerValue
         + "\", stringValue=\"" + stringValue + "\", dateValue=\"" + dateValue
         + "\", timestampValue=\"" + timestampValue + "\"}";

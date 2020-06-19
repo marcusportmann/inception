@@ -28,8 +28,8 @@ import javax.persistence.Converter;
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
 public class MessageStatusConverter
-  implements AttributeConverter<MessageStatus, Integer>
-{
+    implements AttributeConverter<MessageStatus, Integer> {
+
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
@@ -39,8 +39,7 @@ public class MessageStatusConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(MessageStatus attribute)
-  {
+  public Integer convertToDatabaseColumn(MessageStatus attribute) {
     return attribute.code();
   }
 
@@ -55,8 +54,7 @@ public class MessageStatusConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public MessageStatus convertToEntityAttribute(Integer dbData)
-  {
+  public MessageStatus convertToEntityAttribute(Integer dbData) {
     return MessageStatus.fromCode(dbData);
   }
 }

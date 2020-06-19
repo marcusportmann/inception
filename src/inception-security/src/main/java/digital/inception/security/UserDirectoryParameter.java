@@ -22,25 +22,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.BinaryBuffer;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.math.BigDecimal;
-
 import java.util.List;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryParameter</code> class stores a parameter for a user directory as a
@@ -50,15 +47,15 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "UserDirectoryParameter")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "name", "value" })
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "UserDirectoryParameter", namespace = "http://security.inception.digital")
 @XmlType(name = "UserDirectoryParameter", namespace = "http://security.inception.digital",
-    propOrder = { "name", "value" })
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class UserDirectoryParameter
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -84,7 +81,8 @@ public class UserDirectoryParameter
   /**
    * Constructs a new <code>UserDirectoryParameter</code>.
    */
-  public UserDirectoryParameter() {}
+  public UserDirectoryParameter() {
+  }
 
   /**
    * Constructs a new <code>UserDirectoryParameter</code>.
@@ -92,8 +90,7 @@ public class UserDirectoryParameter
    * @param name  the name for the user directory parameter
    * @param value the <code>BigDecimal</code> value for the user directory parameter
    */
-  public UserDirectoryParameter(String name, BigDecimal value)
-  {
+  public UserDirectoryParameter(String name, BigDecimal value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -104,8 +101,7 @@ public class UserDirectoryParameter
    * @param name  the name for the user directory parameter
    * @param value the binary value for the user directory parameter
    */
-  public UserDirectoryParameter(String name, BinaryBuffer value)
-  {
+  public UserDirectoryParameter(String name, BinaryBuffer value) {
     this.name = name;
     this.value = Base64Util.encodeBytes(value.getData());
   }
@@ -116,8 +112,7 @@ public class UserDirectoryParameter
    * @param name  the name for the user directory parameter
    * @param value the binary value for the user directory parameter
    */
-  public UserDirectoryParameter(String name, byte[] value)
-  {
+  public UserDirectoryParameter(String name, byte[] value) {
     this.name = name;
     this.value = Base64Util.encodeBytes(value);
   }
@@ -128,8 +123,7 @@ public class UserDirectoryParameter
    * @param name  the name for the user directory parameter
    * @param value the <code>double</code> value for the user directory parameter
    */
-  public UserDirectoryParameter(String name, double value)
-  {
+  public UserDirectoryParameter(String name, double value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -140,8 +134,7 @@ public class UserDirectoryParameter
    * @param name  the name for the user directory parameter
    * @param value the <code>long</code> value for the user directory parameter
    */
-  public UserDirectoryParameter(String name, long value)
-  {
+  public UserDirectoryParameter(String name, long value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -152,8 +145,7 @@ public class UserDirectoryParameter
    * @param name  the name for the user directory parameter
    * @param value the <code>String</code> value for the user directory parameter
    */
-  public UserDirectoryParameter(String name, String value)
-  {
+  public UserDirectoryParameter(String name, String value) {
     this.name = name;
     this.value = value;
   }
@@ -169,12 +161,9 @@ public class UserDirectoryParameter
    * @return <code>true</code> if the list of <code>UserDirectoryParameter</code> instances contains
    * an instance whose name matches the specified name or <code>false</code> otherwise
    */
-  public static boolean contains(List<UserDirectoryParameter> parameters, String name)
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
+  public static boolean contains(List<UserDirectoryParameter> parameters, String name) {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
         return true;
       }
     }
@@ -191,31 +180,25 @@ public class UserDirectoryParameter
    * @param name       the name for the user directory parameter
    *
    * @return the binary value for the <code>UserDirectoryParameter</code> instance with the
-   *         specified name in the specified list
+   * specified name in the specified list
    */
   public static byte[] getBinaryValue(List<UserDirectoryParameter> parameters, String name)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
+        try {
           return Base64Util.decode(parameter.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new UserDirectoryParameterException(String.format(
               "Failed to retrieve the binary value for the user directory parameter (%s)", parameter
-              .name));
+                  .name));
         }
       }
     }
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to retrieve the binary value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -227,21 +210,15 @@ public class UserDirectoryParameter
    * @param name       the name for the user directory parameter
    *
    * @return the <code>boolean</code> value for the <code>UserDirectoryParameter</code> instance
-   *         with the specified name in the specified list
+   * with the specified name in the specified list
    */
   public static boolean getBooleanValue(List<UserDirectoryParameter> parameters, String name)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
+        try {
           return Boolean.parseBoolean(parameter.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new UserDirectoryParameterException(String.format(
               "Failed to retrieve the boolean value for the user directory parameter (%s)",
               parameter.name));
@@ -251,7 +228,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to retrieve the boolean value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -263,21 +240,15 @@ public class UserDirectoryParameter
    * @param name       the name for the user directory parameter
    *
    * @return the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code> instance
-   *         with the specified name in the specified list
+   * with the specified name in the specified list
    */
   public static BigDecimal getDecimalValue(List<UserDirectoryParameter> parameters, String name)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
+        try {
           return new BigDecimal(parameter.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new UserDirectoryParameterException(String.format(
               "Failed to retrieve the decimal value for the user directory parameter (%s)",
               parameter.name));
@@ -287,7 +258,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to retrieve the decimal value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -299,31 +270,25 @@ public class UserDirectoryParameter
    * @param name       the name for the user directory parameter
    *
    * @return the <code>double</code> value for the <code>UserDirectoryParameter</code> instance with
-   *         the specified name in the specified list
+   * the specified name in the specified list
    */
   public static double getDoubleValue(List<UserDirectoryParameter> parameters, String name)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
+        try {
           return Double.parseDouble(parameter.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new UserDirectoryParameterException(String.format(
               "Failed to retrieve the double value for the user directory parameter (%s)", parameter
-              .name));
+                  .name));
         }
       }
     }
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to retrieve the double value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -335,21 +300,15 @@ public class UserDirectoryParameter
    * @param name       the name for the user directory parameter
    *
    * @return the <code>int</code> value for the <code>UserDirectoryParameter</code> instance with
-   *         the specified name in the specified list
+   * the specified name in the specified list
    */
   public static int getIntegerValue(List<UserDirectoryParameter> parameters, String name)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
+        try {
           return Integer.parseInt(parameter.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new UserDirectoryParameterException(String.format(
               "Failed to retrieve the integer value for the user directory parameter (%s)",
               parameter.name));
@@ -359,7 +318,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to retrieve the integer value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -371,31 +330,25 @@ public class UserDirectoryParameter
    * @param name       the name for the user directory parameter
    *
    * @return the <code>long</code> value for the <code>UserDirectoryParameter</code> instance with
-   *         the specified name in the specified list
+   * the specified name in the specified list
    */
   public static long getLongValue(List<UserDirectoryParameter> parameters, String name)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
-        try
-        {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
+        try {
           return Long.parseLong(parameter.value);
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new UserDirectoryParameterException(String.format(
               "Failed to retrieve the long value for the user directory parameter (%s)", parameter
-              .name));
+                  .name));
         }
       }
     }
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to retrieve the long value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -407,22 +360,19 @@ public class UserDirectoryParameter
    * @param name       the name for the user directory parameter
    *
    * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance with
-   *         the specified name in the specified list
+   * the specified name in the specified list
    */
   public static String getStringValue(List<UserDirectoryParameter> parameters, String name)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
         return parameter.value;
       }
     }
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to retrieve the string value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -436,8 +386,7 @@ public class UserDirectoryParameter
    */
   public static void setBinaryValue(List<UserDirectoryParameter> parameters, String name,
       BinaryBuffer value)
-    throws UserDirectoryParameterException
-  {
+      throws UserDirectoryParameterException {
     setBinaryValue(parameters, name, value.getData());
   }
 
@@ -452,12 +401,9 @@ public class UserDirectoryParameter
    */
   public static void setBinaryValue(List<UserDirectoryParameter> parameters, String name,
       byte[] value)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
         parameter.setBinaryValue(value);
 
         return;
@@ -466,7 +412,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to set the binary value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -480,12 +426,9 @@ public class UserDirectoryParameter
    */
   public static void setDecimalValue(List<UserDirectoryParameter> parameters, String name,
       BigDecimal value)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
         parameter.setDecimalValue(value);
 
         return;
@@ -494,7 +437,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to set the decimal value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -508,12 +451,9 @@ public class UserDirectoryParameter
    */
   public static void setDoubleValue(List<UserDirectoryParameter> parameters, String name,
       double value)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
         parameter.setDoubleValue(value);
 
         return;
@@ -522,7 +462,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to set the double value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -536,12 +476,9 @@ public class UserDirectoryParameter
    */
   public static void setIntegerValue(List<UserDirectoryParameter> parameters, String name,
       int value)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
         parameter.setIntegerValue(value);
 
         return;
@@ -550,7 +487,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to set the long value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -563,12 +500,9 @@ public class UserDirectoryParameter
    * @param value      the <code>long</code> value for the user directory parameter
    */
   public static void setLongValue(List<UserDirectoryParameter> parameters, String name, long value)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
         parameter.setLongValue(value);
 
         return;
@@ -577,7 +511,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to set the long value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -591,12 +525,9 @@ public class UserDirectoryParameter
    */
   public static void setStringValue(List<UserDirectoryParameter> parameters, String name,
       String value)
-    throws UserDirectoryParameterException
-  {
-    for (UserDirectoryParameter parameter : parameters)
-    {
-      if (parameter.name.equalsIgnoreCase(name))
-      {
+      throws UserDirectoryParameterException {
+    for (UserDirectoryParameter parameter : parameters) {
+      if (parameter.name.equalsIgnoreCase(name)) {
         parameter.setStringValue(value);
 
         return;
@@ -605,7 +536,7 @@ public class UserDirectoryParameter
 
     throw new UserDirectoryParameterException(String.format(
         "Failed to set the string value for the user directory parameter (%s): "
-        + "The user directory parameter could not be found", name));
+            + "The user directory parameter could not be found", name));
   }
 
   /**
@@ -615,128 +546,13 @@ public class UserDirectoryParameter
    */
   @JsonIgnore
   public byte[] getBinaryValue()
-    throws UserDirectoryParameterException
-  {
-    try
-    {
+      throws UserDirectoryParameterException {
+    try {
       return Base64Util.decode(value);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new UserDirectoryParameterException(String.format(
           "Failed to retrieve the binary value for the user directory parameter (%s)", name));
     }
-  }
-
-  /**
-   * Returns the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public BigDecimal getDecimalValue()
-    throws UserDirectoryParameterException
-  {
-    try
-    {
-      return new BigDecimal(value);
-    }
-    catch (Throwable e)
-    {
-      throw new UserDirectoryParameterException(String.format(
-          "Failed to retrieve the decimal value for the user directory parameter (%s)", name));
-    }
-  }
-
-  /**
-   * Returns the <code>double</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>double</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public double getDoubleValue()
-    throws UserDirectoryParameterException
-  {
-    try
-    {
-      return Double.parseDouble(value);
-    }
-    catch (Throwable e)
-    {
-      throw new UserDirectoryParameterException(String.format(
-          "Failed to retrieve the double value for the user directory parameter (%s)", name));
-    }
-  }
-
-  /**
-   * Returns the <code>int</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>int</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public int getIntegerValue()
-    throws UserDirectoryParameterException
-  {
-    try
-    {
-      return Integer.parseInt(value);
-    }
-    catch (Throwable e)
-    {
-      throw new UserDirectoryParameterException(String.format(
-          "Failed to retrieve the integer value for the user directory parameter (%s)", name));
-    }
-  }
-
-  /**
-   * Returns the <code>long</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>long</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public long getLongValue()
-    throws UserDirectoryParameterException
-  {
-    try
-    {
-      return Long.parseLong(value);
-    }
-    catch (Throwable e)
-    {
-      throw new UserDirectoryParameterException(String.format(
-          "Failed to retrieve the long value for the user directory parameter (%s)", name));
-    }
-  }
-
-  /**
-   * Returns the name for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the name for the <code>UserDirectoryParameter</code> instance
-   */
-  public String getName()
-  {
-    return name;
-  }
-
-  /**
-   * Returns the <code>String</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public String getStringValue()
-  {
-    return value;
-  }
-
-  /**
-   * Returns the <code>String</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  public String getValue()
-  {
-    return value;
   }
 
   /**
@@ -745,8 +561,7 @@ public class UserDirectoryParameter
    * @param value the binary value for the user directory parameter
    */
   @JsonIgnore
-  public void setBinaryValue(BinaryBuffer value)
-  {
+  public void setBinaryValue(BinaryBuffer value) {
     this.value = Base64Util.encodeBytes(value.getData());
   }
 
@@ -756,20 +571,25 @@ public class UserDirectoryParameter
    * @param value the binary value for the user directory parameter
    */
   @JsonIgnore
-  public void setBinaryValue(byte[] value)
-  {
+  public void setBinaryValue(byte[] value) {
     this.value = Base64Util.encodeBytes(value);
   }
 
   /**
-   * Set the <code>boolean</code> value for the user directory parameter.
+   * Returns the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code>
+   * instance.
    *
-   * @param value the <code>boolean</code> value for the user directory parameter
+   * @return the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code> instance
    */
   @JsonIgnore
-  public void setBooleanValue(boolean value)
-  {
-    this.value = String.valueOf(value);
+  public BigDecimal getDecimalValue()
+      throws UserDirectoryParameterException {
+    try {
+      return new BigDecimal(value);
+    } catch (Throwable e) {
+      throw new UserDirectoryParameterException(String.format(
+          "Failed to retrieve the decimal value for the user directory parameter (%s)", name));
+    }
   }
 
   /**
@@ -778,9 +598,24 @@ public class UserDirectoryParameter
    * @param value the <code>BigDecimal</code> value for the user directory parameter
    */
   @JsonIgnore
-  public void setDecimalValue(BigDecimal value)
-  {
+  public void setDecimalValue(BigDecimal value) {
     this.value = String.valueOf(value);
+  }
+
+  /**
+   * Returns the <code>double</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>double</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public double getDoubleValue()
+      throws UserDirectoryParameterException {
+    try {
+      return Double.parseDouble(value);
+    } catch (Throwable e) {
+      throw new UserDirectoryParameterException(String.format(
+          "Failed to retrieve the double value for the user directory parameter (%s)", name));
+    }
   }
 
   /**
@@ -789,9 +624,24 @@ public class UserDirectoryParameter
    * @param value the <code>double</code> value for the user directory parameter
    */
   @JsonIgnore
-  public void setDoubleValue(double value)
-  {
+  public void setDoubleValue(double value) {
     this.value = String.valueOf(value);
+  }
+
+  /**
+   * Returns the <code>int</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>int</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public int getIntegerValue()
+      throws UserDirectoryParameterException {
+    try {
+      return Integer.parseInt(value);
+    } catch (Throwable e) {
+      throw new UserDirectoryParameterException(String.format(
+          "Failed to retrieve the integer value for the user directory parameter (%s)", name));
+    }
   }
 
   /**
@@ -800,9 +650,24 @@ public class UserDirectoryParameter
    * @param value the <code>int</code> value for the user directory parameter
    */
   @JsonIgnore
-  public void setIntegerValue(int value)
-  {
+  public void setIntegerValue(int value) {
     this.value = String.valueOf(value);
+  }
+
+  /**
+   * Returns the <code>long</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>long</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public long getLongValue()
+      throws UserDirectoryParameterException {
+    try {
+      return Long.parseLong(value);
+    } catch (Throwable e) {
+      throw new UserDirectoryParameterException(String.format(
+          "Failed to retrieve the long value for the user directory parameter (%s)", name));
+    }
   }
 
   /**
@@ -811,9 +676,17 @@ public class UserDirectoryParameter
    * @param value the <code>long</code> value for the user directory parameter
    */
   @JsonIgnore
-  public void setLongValue(long value)
-  {
+  public void setLongValue(long value) {
     this.value = String.valueOf(value);
+  }
+
+  /**
+   * Returns the name for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the name for the <code>UserDirectoryParameter</code> instance
+   */
+  public String getName() {
+    return name;
   }
 
   /**
@@ -821,9 +694,18 @@ public class UserDirectoryParameter
    *
    * @param name the name for the user directory parameter
    */
-  public void setName(String name)
-  {
+  public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public String getStringValue() {
+    return value;
   }
 
   /**
@@ -832,9 +714,17 @@ public class UserDirectoryParameter
    * @param value the <code>String</code> value for the user directory parameter
    */
   @JsonIgnore
-  public void setStringValue(String value)
-  {
+  public void setStringValue(String value) {
     this.value = value;
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  public String getValue() {
+    return value;
   }
 
   /**
@@ -842,8 +732,17 @@ public class UserDirectoryParameter
    *
    * @param value the <code>String</code> value for the user directory parameter
    */
-  public void setValue(String value)
-  {
+  public void setValue(String value) {
     this.value = value;
+  }
+
+  /**
+   * Set the <code>boolean</code> value for the user directory parameter.
+   *
+   * @param value the <code>boolean</code> value for the user directory parameter
+   */
+  @JsonIgnore
+  public void setBooleanValue(boolean value) {
+    this.value = String.valueOf(value);
   }
 }

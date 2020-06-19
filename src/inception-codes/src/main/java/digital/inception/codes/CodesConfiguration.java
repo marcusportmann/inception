@@ -22,12 +22,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>CodesConfiguration</code> class provides the Spring configuration
- * for the Codes module.
+ * The <code>CodesConfiguration</code> class provides the Spring configuration for the Codes
+ * module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-  basePackages = { "digital.inception.codes" })
-public class CodesConfiguration {}
+    basePackages = {"digital.inception.codes"})
+public class CodesConfiguration {
+
+}

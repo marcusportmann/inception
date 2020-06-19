@@ -19,15 +19,13 @@ package digital.inception.bmi;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * The <code>DuplicateProcessDefinitionException</code> exception is thrown to indicate an error
@@ -44,8 +42,8 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://bmi.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class DuplicateProcessDefinitionException extends ServiceException
-{
+public class DuplicateProcessDefinitionException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -53,8 +51,7 @@ public class DuplicateProcessDefinitionException extends ServiceException
    *
    * @param processDefinitionId the ID used to uniquely identify the process definition
    */
-  public DuplicateProcessDefinitionException(String processDefinitionId)
-  {
+  public DuplicateProcessDefinitionException(String processDefinitionId) {
     super("DuplicateProcessDefinitionError", "The process definition with ID ("
         + processDefinitionId + ") already exists");
   }

@@ -18,6 +18,13 @@ package digital.inception.core.persistence;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.UUID;
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -27,12 +34,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.sql.*;
-
-import java.util.UUID;
-
-import javax.sql.DataSource;
 
 /**
  * The <code>IDGenerator</code> class provides unique IDs for the entity types in the database.
@@ -44,8 +45,8 @@ import javax.sql.DataSource;
  * @author Marcus Portmann
  */
 @Repository
-public class IDGenerator
-{
+public class IDGenerator {
+
   /**
    * The data source used to provide connections to the application database.
    */
@@ -64,8 +65,7 @@ public class IDGenerator
    * @param platformTransactionManager the Spring platform transaction manager
    */
   public IDGenerator(@Qualifier("applicationDataSource") DataSource dataSource,
-      PlatformTransactionManager platformTransactionManager)
-  {
+      PlatformTransactionManager platformTransactionManager) {
     this.dataSource = dataSource;
     this.platformTransactionManager = platformTransactionManager;
   }
@@ -77,22 +77,18 @@ public class IDGenerator
    *
    * @return the next unique <code>long</code> ID for the entity with the specified type
    */
-  public long next(String type)
-  {
+  public long next(String type) {
     TransactionTemplate transactionTemplate = new TransactionTemplate(platformTransactionManager,
         new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
 
-    try
-    {
+    try {
       return transactionTemplate.execute(
           status ->
           {
-            try (Connection connection = dataSource.getConnection())
-            {
+            try (Connection connection = dataSource.getConnection()) {
               Long id = getCurrentId(connection, type);
 
-              if (id == null)
-              {
+              if (id == null) {
                 id = 1L;
                 insertId(connection, type, id);
 
@@ -109,25 +105,19 @@ public class IDGenerator
                  *       way to prevent this from happening is to pre-populate the idgenerator
                  *       table with initial IDs.
                  */
-              }
-              else
-              {
+              } else {
                 id = id + 1L;
                 updateId(connection, type, id);
               }
 
               return id;
-            }
-            catch (Throwable e)
-            {
+            } catch (Throwable e) {
               throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the "
                   + "entity of type (%s) from the idgenerator table", type), e);
             }
           }
-          );
-    }
-    catch (TransactionException e)
-    {
+      );
+    } catch (TransactionException e) {
       throw new IDGeneratorException(String.format("Failed to retrieve the new ID for the entity "
           + "of type (%s) from the idgenerator table", type), e);
     }
@@ -138,25 +128,20 @@ public class IDGenerator
    *
    * @return the next <code>UUID</code>
    */
-  public UUID nextUUID()
-  {
+  public UUID nextUUID() {
     // TODO: Save the results of checking if we are using a PostgreSQL database
 
     /*
      * First check whether this is a PostgreSQL database and we should be using a stored procedure
      * to retrieve the next UUID.
      */
-    try (Connection connection = dataSource.getConnection())
-    {
+    try (Connection connection = dataSource.getConnection()) {
       DatabaseMetaData metaData = connection.getMetaData();
 
-      if (metaData.getDatabaseProductName().equals("PostgreSQL"))
-      {
+      if (metaData.getDatabaseProductName().equals("PostgreSQL")) {
         // TODO: Retrieve the next UUID using a PostgreSQL stored procedure
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new IDGeneratorException("Failed to retrieve the next UUID", e);
     }
 
@@ -164,21 +149,15 @@ public class IDGenerator
   }
 
   private Long getCurrentId(Connection connection, String type)
-    throws SQLException
-  {
+      throws SQLException {
     try (PreparedStatement statement = connection.prepareStatement(
-        "SELECT current FROM idgenerator.idgenerator WHERE name=? FOR UPDATE"))
-    {
+        "SELECT current FROM idgenerator.idgenerator WHERE name=? FOR UPDATE")) {
       statement.setString(1, type);
 
-      try (ResultSet rs = statement.executeQuery())
-      {
-        if (rs.next())
-        {
+      try (ResultSet rs = statement.executeQuery()) {
+        if (rs.next()) {
           return rs.getLong(1);
-        }
-        else
-        {
+        } else {
           return null;
         }
       }
@@ -186,16 +165,13 @@ public class IDGenerator
   }
 
   private void insertId(Connection connection, String type, long id)
-    throws SQLException
-  {
+      throws SQLException {
     try (PreparedStatement statement = connection.prepareStatement(
-        "INSERT INTO idgenerator.idgenerator (current, name) VALUES (?, ?)"))
-    {
+        "INSERT INTO idgenerator.idgenerator (current, name) VALUES (?, ?)")) {
       statement.setLong(1, id);
       statement.setString(2, type);
 
-      if (statement.executeUpdate() == 0)
-      {
+      if (statement.executeUpdate() == 0) {
         throw new SQLException("No rows were affected while inserting the idgenerator.idgenerator "
             + "table row for the type (" + type + ")");
       }
@@ -203,16 +179,13 @@ public class IDGenerator
   }
 
   private void updateId(Connection connection, String type, long id)
-    throws SQLException
-  {
+      throws SQLException {
     try (PreparedStatement statement = connection.prepareStatement(
-        "UPDATE idgenerator.idgenerator SET current=? WHERE name=?"))
-    {
+        "UPDATE idgenerator.idgenerator SET current=? WHERE name=?")) {
       statement.setLong(1, id);
       statement.setString(2, type);
 
-      if (statement.executeUpdate() == 0)
-      {
+      if (statement.executeUpdate() == 0) {
         throw new SQLException("No rows were affected while updating the idgenerator.idgenerator "
             + "table row for the type (" + type + ")");
       }

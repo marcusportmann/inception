@@ -21,18 +21,18 @@ package digital.inception.reporting;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportParameter</code> class holds the information for a report parameter.
@@ -41,15 +41,15 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "ReportParameter")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "name", "value" })
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "ReportParameter", namespace = "http://reporting.inception.digital")
 @XmlType(name = "ReportParameter", namespace = "http://reporting.inception.digital",
-    propOrder = { "name", "value" })
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ReportParameter
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -74,7 +74,8 @@ public class ReportParameter
   /**
    * Constructs a new <code>ReportParameter</code>.
    */
-  public ReportParameter() {}
+  public ReportParameter() {
+  }
 
   /**
    * Constructs a new <code>ReportParameter</code>.
@@ -82,8 +83,7 @@ public class ReportParameter
    * @param name  the name of the report parameter
    * @param value the value for the report parameter
    */
-  public ReportParameter(String name, String value)
-  {
+  public ReportParameter(String name, String value) {
     this.name = name;
     this.value = value;
   }
@@ -93,19 +93,8 @@ public class ReportParameter
    *
    * @return the name of the report parameter
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
-  }
-
-  /**
-   * Returns the value for the report parameter.
-   *
-   * @return the value for the report parameter
-   */
-  public String getValue()
-  {
-    return value;
   }
 
   /**
@@ -113,9 +102,17 @@ public class ReportParameter
    *
    * @param name the name of the report parameter
    */
-  public void setName(String name)
-  {
+  public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Returns the value for the report parameter.
+   *
+   * @return the value for the report parameter
+   */
+  public String getValue() {
+    return value;
   }
 
   /**
@@ -123,8 +120,7 @@ public class ReportParameter
    *
    * @param value the value for the report parameter
    */
-  public void setValue(String value)
-  {
+  public void setValue(String value) {
     this.value = value;
   }
 }

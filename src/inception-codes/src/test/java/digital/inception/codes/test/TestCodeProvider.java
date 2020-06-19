@@ -18,10 +18,14 @@ package digital.inception.codes.test;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import digital.inception.codes.*;
-
+import digital.inception.codes.Code;
+import digital.inception.codes.CodeCategory;
+import digital.inception.codes.CodeCategoryNotFoundException;
+import digital.inception.codes.CodeNotFoundException;
+import digital.inception.codes.CodeProviderConfig;
+import digital.inception.codes.CodeProviderException;
+import digital.inception.codes.ICodeProvider;
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +37,8 @@ import java.util.Map;
  */
 @SuppressWarnings("unused")
 public class TestCodeProvider
-  implements ICodeProvider
-{
+    implements ICodeProvider {
+
   private CodeCategory codeCategory;
   private List<Code> codes;
 
@@ -43,8 +47,7 @@ public class TestCodeProvider
    *
    * @param codeProviderConfig the configuration for the code provider
    */
-  public TestCodeProvider(CodeProviderConfig codeProviderConfig)
-  {
+  public TestCodeProvider(CodeProviderConfig codeProviderConfig) {
     codeCategory = new CodeCategory("TestCodeCategory", "Test Code Category Name",
         "Test Code Category Data", LocalDateTime.now());
 
@@ -61,18 +64,14 @@ public class TestCodeProvider
    * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return <code>true</code> if the code provider supports the code category or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   @Override
   public boolean codeCategoryExists(String codeCategoryId)
-    throws CodeProviderException
-  {
-    try
-    {
+      throws CodeProviderException {
+    try {
       return codeCategory.getId().equals(codeCategoryId);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format(
           "Failed to check whether the code provider supports the code category (%s)",
           codeCategoryId), e);
@@ -89,25 +88,18 @@ public class TestCodeProvider
    */
   @Override
   public boolean codeExists(String codeCategoryId, String codeId)
-    throws CodeProviderException
-  {
-    try
-    {
-      if (codeCategory.getId().equals(codeCategoryId))
-      {
-        for (Code code : codes)
-        {
-          if (code.getId().equals(codeId))
-          {
+      throws CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
+        for (Code code : codes) {
+          if (code.getId().equals(codeId)) {
             return true;
           }
         }
       }
 
       return false;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format(
           "Failed to check whether the code (%s) exists for the code category (%s)", codeId,
           codeCategoryId), e);
@@ -125,23 +117,16 @@ public class TestCodeProvider
    */
   @Override
   public Code getCode(String codeCategoryId, String codeId)
-    throws CodeNotFoundException, CodeProviderException
-  {
-    try
-    {
-      if (codeCategory.getId().equals(codeCategoryId))
-      {
-        for (Code code : codes)
-        {
-          if (code.getId().equals(codeId))
-          {
+      throws CodeNotFoundException, CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
+        for (Code code : codes) {
+          if (code.getId().equals(codeId)) {
             return code;
           }
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format(
           "Failed to retrieve the code (%s) for the code category (%s)", codeId, codeCategoryId),
           e);
@@ -157,18 +142,14 @@ public class TestCodeProvider
    */
   @Override
   public List<CodeCategory> getCodeCategories()
-    throws CodeProviderException
-  {
-    try
-    {
+      throws CodeProviderException {
+    try {
       List<CodeCategory> codeCategories = new ArrayList<>();
 
       codeCategories.add(codeCategory);
 
       return codeCategories;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException("Failed to retrieve code categories", e);
     }
 
@@ -183,23 +164,16 @@ public class TestCodeProvider
    */
   @Override
   public CodeCategory getCodeCategory(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException
-  {
-    try
-    {
-      if (codeCategory.getId().equals(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
         return codeCategory;
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format("Failed to retrieve the code category (%s)",
           codeCategoryId), e);
     }
@@ -214,23 +188,16 @@ public class TestCodeProvider
    */
   @Override
   public LocalDateTime getCodeCategoryLastUpdated(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException
-  {
-    try
-    {
-      if (codeCategory.getId().equals(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
         return codeCategory.getUpdated();
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format(
           "Failed to retrieve the date and time the code category (%s) was last updated",
           codeCategoryId), e);
@@ -246,23 +213,16 @@ public class TestCodeProvider
    */
   @Override
   public String getCodeCategoryName(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException
-  {
-    try
-    {
-      if (codeCategory.getId().equals(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
         return codeCategory.getName();
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format(
           "Failed to retrieve the code category name (%s)", codeCategoryId), e);
     }
@@ -278,23 +238,16 @@ public class TestCodeProvider
    */
   @Override
   public String getCodeName(String codeCategoryId, String codeId)
-    throws CodeNotFoundException, CodeProviderException
-  {
-    try
-    {
-      if (codeCategory.getId().equals(codeCategoryId))
-      {
-        for (Code code : codes)
-        {
-          if (code.getId().equals(codeId))
-          {
+      throws CodeNotFoundException, CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
+        for (Code code : codes) {
+          if (code.getId().equals(codeId)) {
             return code.getName();
           }
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format(
           "Failed to retrieve the code (%s) for the code category (%s)", codeId, codeCategoryId),
           e);
@@ -316,23 +269,16 @@ public class TestCodeProvider
    */
   @Override
   public List<Code> getCodesForCodeCategory(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException
-  {
-    try
-    {
-      if (codeCategory.getId().equals(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
         return codes;
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format(
           "Failed to retrieve the codes for the code category (%s)", codeCategoryId), e);
     }
@@ -353,8 +299,7 @@ public class TestCodeProvider
   @Override
   public List<Code> getCodesForCodeCategoryWithParameters(String codeCategoryId, Map<String,
       String> parameters)
-    throws CodeCategoryNotFoundException, CodeProviderException
-  {
+      throws CodeCategoryNotFoundException, CodeProviderException {
     return getCodesForCodeCategory(codeCategoryId);
   }
 
@@ -371,23 +316,16 @@ public class TestCodeProvider
    */
   @Override
   public String getDataForCodeCategory(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException
-  {
-    try
-    {
-      if (codeCategory.getId().equals(codeCategoryId))
-      {
+      throws CodeCategoryNotFoundException, CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
         return "<codes><code name=\"name1\" value=\"value1\"/></codes>";
       }
 
       throw new CodeCategoryNotFoundException(codeCategoryId);
-    }
-    catch (CodeCategoryNotFoundException e)
-    {
+    } catch (CodeCategoryNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CodeProviderException(String.format(
           "Failed to retrieve the data for the code category (%s)", codeCategoryId), e);
     }
@@ -408,8 +346,7 @@ public class TestCodeProvider
   @Override
   public String getDataForCodeCategoryWithParameters(String codeCategoryId, Map<String,
       String> parameters)
-    throws CodeCategoryNotFoundException, CodeProviderException
-  {
+      throws CodeCategoryNotFoundException, CodeProviderException {
     return getDataForCodeCategory(codeCategoryId);
   }
 }

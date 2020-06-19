@@ -16,10 +16,10 @@
 
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://codes.inception.digital",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
-    xmlns = { @javax.xml.bind.annotation.XmlNs(prefix = "core",
-        namespaceURI = "http://core.inception.digital") ,
+    xmlns = {@javax.xml.bind.annotation.XmlNs(prefix = "core",
+        namespaceURI = "http://core.inception.digital"),
         @javax.xml.bind.annotation.XmlNs(prefix = "validation",
-            namespaceURI = "http://validation.inception.digital") ,
+            namespaceURI = "http://validation.inception.digital"),
         @javax.xml.bind.annotation.XmlNs(prefix = "codes",
-            namespaceURI = "http://codes.inception.digital") , })
+            namespaceURI = "http://codes.inception.digital"),})
 package digital.inception.codes;

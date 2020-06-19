@@ -24,8 +24,8 @@ package digital.inception.application.test;
  *
  * @author Marcus Portmann
  */
-public class TestTransactionalServiceException extends Exception
-{
+public class TestTransactionalServiceException extends Exception {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -33,8 +33,7 @@ public class TestTransactionalServiceException extends Exception
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public TestTransactionalServiceException(String message)
-  {
+  public TestTransactionalServiceException(String message) {
     super(message);
   }
 
@@ -43,11 +42,10 @@ public class TestTransactionalServiceException extends Exception
    * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public TestTransactionalServiceException(String message, Throwable cause)
-  {
+  public TestTransactionalServiceException(String message, Throwable cause) {
     super(message, cause);
   }
 }

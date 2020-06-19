@@ -18,6 +18,7 @@ package digital.inception.rs;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -28,9 +29,6 @@ import org.springframework.web.filter.CorsFilter;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.Arrays;
-import java.util.Collections;
-
 /**
  * The <code>InceptionRSConfiguration</code> class provides the configuration for the
  * <b>inception-rs</b> library.
@@ -38,8 +36,8 @@ import java.util.Collections;
  * @author Marcus Portmann
  */
 @Configuration
-public class InceptionRSConfiguration
-{
+public class InceptionRSConfiguration {
+
   /**
    * Instruct browsers to expose the response to frontend JavaScript code when the request's
    * credentials mode (Request.credentials) is "include".
@@ -90,12 +88,10 @@ public class InceptionRSConfiguration
    * @return the cross-origin resource sharing (CORS) filter registration bean
    */
   @Bean
-  protected FilterRegistrationBean<CorsFilter> corsFilterRegistrationBean()
-  {
+  protected FilterRegistrationBean<CorsFilter> corsFilterRegistrationBean() {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-    if (corsEnabled)
-    {
+    if (corsEnabled) {
       CorsConfiguration config = new CorsConfiguration();
       config.applyPermitDefaultValues();
       config.setAllowCredentials(corsAllowCredentials);

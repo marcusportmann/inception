@@ -18,6 +18,11 @@ package digital.inception.ws.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import java.security.KeyStore;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
@@ -28,14 +33,6 @@ import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
-import java.security.KeyStore;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * The <code>CXFWSSX509CertificateTokenProfileProxyConfigurator</code> class provides the capability
  * to configure a CXF web service proxy to support authentication using the Web Services Security
@@ -43,8 +40,8 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
-public class CXFWSSX509CertificateTokenProfileProxyConfigurator
-{
+public class CXFWSSX509CertificateTokenProfileProxyConfigurator {
+
   /**
    * Configure the CXF web service proxy to support authentication using the the Web Services
    * Security X.509 Certificate Token profile.
@@ -60,12 +57,10 @@ public class CXFWSSX509CertificateTokenProfileProxyConfigurator
    */
   public static void configureProxy(Object proxy, KeyStore keyStore, String keyStorePassword,
       String keyStoreAlias, KeyStore trustStore)
-    throws Exception
-  {
+      throws Exception {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
-    if (invocationHandler instanceof ClientProxy)
-    {
+    if (invocationHandler instanceof ClientProxy) {
       ClientProxy clientProxy = (ClientProxy) invocationHandler;
 
       Client client = clientProxy.getClient();
@@ -82,13 +77,11 @@ public class CXFWSSX509CertificateTokenProfileProxyConfigurator
           keyStoreAlias, keyStorePassword));
       inProperties.put(WSHandlerConstants.SIG_PROP_FILE, "INTERNAL");
 
-      WSS4JInInterceptor wss4JInInterceptor = new WSS4JInInterceptor(inProperties)
-      {
+      WSS4JInInterceptor wss4JInInterceptor = new WSS4JInInterceptor(inProperties) {
         @Override
         protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
             String propFilename, RequestData reqData)
-          throws WSSecurityException
-        {
+            throws WSSecurityException {
           return crypto;
         }
       };
@@ -105,13 +98,11 @@ public class CXFWSSX509CertificateTokenProfileProxyConfigurator
           keyStoreAlias, keyStorePassword));
       outProperties.put(WSHandlerConstants.SIG_PROP_FILE, "INTERNAL");
 
-      WSS4JOutInterceptor wss4JOutInterceptor = new WSS4JOutInterceptor(outProperties)
-      {
+      WSS4JOutInterceptor wss4JOutInterceptor = new WSS4JOutInterceptor(outProperties) {
         @Override
         protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
             String propFilename, RequestData reqData)
-          throws WSSecurityException
-        {
+            throws WSSecurityException {
           return crypto;
         }
       };

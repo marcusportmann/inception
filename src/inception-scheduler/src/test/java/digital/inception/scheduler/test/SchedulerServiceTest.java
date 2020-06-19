@@ -18,13 +18,19 @@ package digital.inception.scheduler.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.scheduler.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import digital.inception.scheduler.ISchedulerService;
+import digital.inception.scheduler.Job;
+import digital.inception.scheduler.JobNotFoundException;
+import digital.inception.scheduler.JobParameter;
+import digital.inception.scheduler.JobStatus;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -32,12 +38,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
 
 /**
  * The <code>SchedulerServiceTest</code> class contains the implementation of the JUnit tests for
@@ -46,11 +47,11 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-public class SchedulerServiceTest
-{
+@ContextConfiguration(classes = {TestConfiguration.class})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+public class SchedulerServiceTest {
+
   private static int jobCount;
 
   /**
@@ -59,13 +60,33 @@ public class SchedulerServiceTest
   @Autowired
   private ISchedulerService schedulerService;
 
+  private static synchronized Job getTestJobDetails() {
+    jobCount++;
+
+    Job job = new Job();
+    job.setId("TestJob" + jobCount);
+    job.setName("Test Job Name " + jobCount);
+    job.setSchedulingPattern("5 * * * *");
+    job.setJobClass("digital.inception.scheduler.TestJob");
+    job.setEnabled(true);
+    job.setStatus(JobStatus.UNSCHEDULED);
+
+    for (int i = 1; i <= 10; i++) {
+      JobParameter parameter = new JobParameter("Job Parameter Name " + i, "Job Parameter Value "
+          + i);
+
+      job.addParameter(parameter);
+    }
+
+    return job;
+  }
+
   /**
    * Test the execute job functionality.
    */
   @Test
   public void executeJobTest()
-    throws Exception
-  {
+      throws Exception {
     Job job = getTestJobDetails();
 
     schedulerService.executeJob(job);
@@ -76,13 +97,11 @@ public class SchedulerServiceTest
    */
   @Test
   public void jobParametersTest()
-    throws Exception
-  {
+      throws Exception {
     Job job = getTestJobDetails();
     job.setEnabled(false);
 
-    for (int i = 0; i < 10; i++)
-    {
+    for (int i = 0; i < 10; i++) {
       job.addParameter(new JobParameter(job.getName() + " Parameter " + i, job.getName()
           + " Value " + i));
     }
@@ -99,8 +118,7 @@ public class SchedulerServiceTest
    */
   @Test
   public void jobTest()
-    throws Exception
-  {
+      throws Exception {
     Job disabledJob = getTestJobDetails();
     disabledJob.setEnabled(false);
 
@@ -108,10 +126,8 @@ public class SchedulerServiceTest
 
     List<Job> unscheduledJobs = schedulerService.getUnscheduledJobs();
 
-    for (Job unscheduledJob : unscheduledJobs)
-    {
-      if (unscheduledJob.getId().equals(disabledJob.getId()))
-      {
+    for (Job unscheduledJob : unscheduledJobs) {
+      if (unscheduledJob.getId().equals(disabledJob.getId())) {
         fail(String.format("The disabled job (%s) was retrieved incorrectly as an unscheduled job",
             disabledJob.getId()));
       }
@@ -143,10 +159,8 @@ public class SchedulerServiceTest
 
     boolean foundJob = false;
 
-    for (Job afterRetrievedJob : afterRetrievedJobs)
-    {
-      if (afterRetrievedJob.getId().equals(job.getId()))
-      {
+    for (Job afterRetrievedJob : afterRetrievedJobs) {
+      if (afterRetrievedJob.getId().equals(job.getId())) {
         compareJobs(job, afterRetrievedJob);
 
         foundJob = true;
@@ -155,8 +169,7 @@ public class SchedulerServiceTest
       }
     }
 
-    if (!foundJob)
-    {
+    if (!foundJob) {
       fail(String.format("Failed to find the job (%s) in the list of jobs", job.getId()));
     }
 
@@ -164,31 +177,27 @@ public class SchedulerServiceTest
 
     unscheduledJobs = schedulerService.getUnscheduledJobs();
 
-    for (Job unscheduledJob : unscheduledJobs)
-    {
-      if (unscheduledJob.getId().equals(job.getId()))
-      {
+    for (Job unscheduledJob : unscheduledJobs) {
+      if (unscheduledJob.getId().equals(job.getId())) {
         foundUnscheduledJob = true;
 
         break;
       }
     }
 
-    if (!foundUnscheduledJob)
-    {
+    if (!foundUnscheduledJob) {
       fail(String.format("Failed to find the job (%s) in the list of unscheduled jobs",
           job.getId()));
     }
 
     // noinspection StatementWithEmptyBody
-    while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
+    while (schedulerService.scheduleNextUnscheduledJobForExecution()) {
+    }
 
     unscheduledJobs = schedulerService.getUnscheduledJobs();
 
-    for (Job unscheduledJob : unscheduledJobs)
-    {
-      if (unscheduledJob.getId().equals(job.getId()))
-      {
+    for (Job unscheduledJob : unscheduledJobs) {
+      if (unscheduledJob.getId().equals(job.getId())) {
         fail(String.format("The job (%s) was retrieved incorrectly as an unscheduled job",
             job.getId()));
 
@@ -211,40 +220,15 @@ public class SchedulerServiceTest
 
     schedulerService.deleteJob(job.getId());
 
-    try
-    {
+    try {
       schedulerService.getJob(job.getId());
 
       fail("Retrieved the job (" + job.getId() + ") that should have been deleted");
+    } catch (JobNotFoundException ignore) {
     }
-    catch (JobNotFoundException ignore) {}
   }
 
-  private static synchronized Job getTestJobDetails()
-  {
-    jobCount++;
-
-    Job job = new Job();
-    job.setId("TestJob" + jobCount);
-    job.setName("Test Job Name " + jobCount);
-    job.setSchedulingPattern("5 * * * *");
-    job.setJobClass("digital.inception.scheduler.TestJob");
-    job.setEnabled(true);
-    job.setStatus(JobStatus.UNSCHEDULED);
-
-    for (int i = 1; i <= 10; i++)
-    {
-      JobParameter parameter = new JobParameter("Job Parameter Name " + i, "Job Parameter Value "
-          + i);
-
-      job.addParameter(parameter);
-    }
-
-    return job;
-  }
-
-  private void compareJobs(Job job1, Job job2)
-  {
+  private void compareJobs(Job job1, Job job2) {
     assertEquals("The ID values for the two jobs do not match", job1.getId(), job2.getId());
     assertEquals("The name values for the two jobs do not match", job1.getName(), job2.getName());
     assertEquals("The scheduling pattern values for the two jobs do not match",
@@ -264,14 +248,11 @@ public class SchedulerServiceTest
     assertEquals("The number of parameters for the two jobs do not match", job1.getParameters()
         .size(), job2.getParameters().size());
 
-    for (JobParameter job1Parameter : job1.getParameters())
-    {
+    for (JobParameter job1Parameter : job1.getParameters()) {
       boolean foundParameter = false;
 
-      for (JobParameter job2Parameter : job2.getParameters())
-      {
-        if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName()))
-        {
+      for (JobParameter job2Parameter : job2.getParameters()) {
+        if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName())) {
           assertEquals("The values for the two job parameters (" + job1Parameter.getName()
               + ") do not match", job1Parameter.getValue(), job2Parameter.getValue());
 
@@ -279,8 +260,7 @@ public class SchedulerServiceTest
         }
       }
 
-      if (!foundParameter)
-      {
+      if (!foundParameter) {
         fail("Failed to find the job parameter (" + job1Parameter.getName() + ")");
       }
     }

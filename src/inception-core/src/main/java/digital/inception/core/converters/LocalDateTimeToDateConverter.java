@@ -18,35 +18,33 @@ package digital.inception.core.converters;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
-import java.util.Date;
-
 /**
- * The <code>LocalDateTimeToDateConverter</code> class implements the Spring converter that
- * converts a <code>LocalDateTime</code> type into a <code>Date</code> type.
+ * The <code>LocalDateTimeToDateConverter</code> class implements the Spring converter that converts
+ * a <code>LocalDateTime</code> type into a <code>Date</code> type.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 @Component
 public final class LocalDateTimeToDateConverter
-  implements Converter<LocalDateTime, Date>
-{
+    implements Converter<LocalDateTime, Date> {
+
   /**
    * Constructs a new <code>LocalDateTimeToDateConverter</code>.
    */
-  public LocalDateTimeToDateConverter() {}
+  public LocalDateTimeToDateConverter() {
+  }
 
   @Override
-  public Date convert(LocalDateTime source)
-  {
+  public Date convert(LocalDateTime source) {
     return Date.from(source.toInstant(ZoneOffset.UTC));
   }
 }

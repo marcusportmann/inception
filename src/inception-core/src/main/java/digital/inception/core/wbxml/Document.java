@@ -27,8 +27,8 @@ import java.io.Serializable;
  * @author Marcus Portmann
  */
 public class Document
-  implements Serializable
-{
+    implements Serializable {
+
   /**
    * The Public ID for an Unknown WBXML document type.
    */
@@ -42,8 +42,7 @@ public class Document
    *
    * @param element the root element for the document
    */
-  public Document(Element element)
-  {
+  public Document(Element element) {
     rootElement = element;
   }
 
@@ -53,8 +52,7 @@ public class Document
    * @param element  the root element for the document
    * @param publicId the public ID for the document
    */
-  public Document(Element element, int publicId)
-  {
+  public Document(Element element, int publicId) {
     rootElement = element;
     this.publicId = publicId;
   }
@@ -64,8 +62,7 @@ public class Document
    *
    * @return the public ID for the document
    */
-  public int getPublicId()
-  {
+  public int getPublicId() {
     return publicId;
   }
 
@@ -74,16 +71,14 @@ public class Document
    *
    * @return the root element for the document
    */
-  public Element getRootElement()
-  {
+  public Element getRootElement() {
     return rootElement;
   }
 
   /**
    * Print the document.
    */
-  public void print()
-  {
+  public void print() {
     rootElement.print(System.out, 0);
   }
 
@@ -92,8 +87,7 @@ public class Document
    *
    * @param out the <code>OuputStream</code> to output the document to
    */
-  public void print(OutputStream out)
-  {
+  public void print(OutputStream out) {
     rootElement.print(out, 0);
   }
 
@@ -103,8 +97,7 @@ public class Document
    * @return the string representation of the document
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return rootElement.toString();
   }
 }

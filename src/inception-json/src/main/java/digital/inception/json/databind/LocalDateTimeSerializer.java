@@ -21,14 +21,11 @@ package digital.inception.json.databind;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-
 import digital.inception.core.util.ISO8601Util;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-
-import java.time.LocalDateTime;
 
 /**
  * The <code>LocalDateTimeDeserializer</code> class implements the Jackson serializer for the
@@ -36,13 +33,12 @@ import java.time.LocalDateTime;
  *
  * @author Marcus Portmann
  */
-public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime>
-{
+public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
+
   @Override
   public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator,
       SerializerProvider serializers)
-    throws IOException
-  {
+      throws IOException {
     jsonGenerator.writeString(ISO8601Util.fromLocalDateTime(localDateTime));
   }
 }

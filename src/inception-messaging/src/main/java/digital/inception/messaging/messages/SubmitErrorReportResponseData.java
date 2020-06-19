@@ -24,23 +24,21 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
- * The <code>SubmitErrorReportResponseData</code> class manages the data for a
- * "Submit Error Report Response" message.
+ * The <code>SubmitErrorReportResponseData</code> class manages the data for a "Submit Error Report
+ * Response" message.
  * <p/>
  * This is an asynchronous message.
  *
  * @author Marcus Portmann
  */
-public class SubmitErrorReportResponseData extends WbxmlMessageData
-{
+public class SubmitErrorReportResponseData extends WbxmlMessageData {
+
   /**
    * The message returned when a submitted error report is successfully processed.
    */
@@ -50,11 +48,11 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * The UUID for the "Submit Error Report Response" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
+      "8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
 
   /**
-   * The error code indicating the result of processing the submitted error report where a code
-   * of '0' indicates success and a non-zero code indicates an error condition.
+   * The error code indicating the result of processing the submitted error report where a code of
+   * '0' indicates success and a non-zero code indicates an error condition.
    */
   private int errorCode;
 
@@ -72,8 +70,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
   /**
    * Constructs a new <code>SubmitErrorReportResponseData</code>.
    */
-  public SubmitErrorReportResponseData()
-  {
+  public SubmitErrorReportResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
@@ -87,8 +84,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @param errorReportId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                      error report that was submitted for processing
    */
-  public SubmitErrorReportResponseData(int errorCode, String errorMessage, UUID errorReportId)
-  {
+  public SubmitErrorReportResponseData(int errorCode, String errorMessage, UUID errorReportId) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.errorCode = errorCode;
@@ -106,21 +102,18 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    */
   @Override
   public boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
 
-    if (!rootElement.getName().equals("SubmitErrorReportResponse"))
-    {
+    if (!rootElement.getName().equals("SubmitErrorReportResponse")) {
       return false;
     }
 
     if ((!rootElement.hasChild("ErrorCode"))
-      || (!rootElement.hasChild("ErrorMessage"))
-      || (!rootElement.hasChild("ErrorReportId")))
-    {
+        || (!rootElement.hasChild("ErrorMessage"))
+        || (!rootElement.hasChild("ErrorReportId"))) {
       return false;
     }
 
@@ -138,8 +131,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @return the error code indicating the result of processing the submitted error report where a
    * code of '0' indicates success and a non-zero code indicates an error condition
    */
-  public int getErrorCode()
-  {
+  public int getErrorCode() {
     return errorCode;
   }
 
@@ -148,8 +140,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    *
    * @return the error message describing the result of processing the submitted error report
    */
-  public String getErrorMessage()
-  {
+  public String getErrorMessage() {
     return errorMessage;
   }
 
@@ -160,8 +151,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
    * that was submitted for processing
    */
-  public UUID getErrorReportId()
-  {
+  public UUID getErrorReportId() {
     return errorReportId;
   }
 
@@ -173,14 +163,13 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * message
    */
   @Override
-  public byte[] toMessageData()
-  {
+  public byte[] toMessageData() {
     Element rootElement = new Element("SubmitErrorReportResponse");
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(new Element("ErrorMessage", StringUtils.isEmpty(errorMessage)
-      ? ""
-      : errorMessage));
+        ? ""
+        : errorMessage));
     rootElement.addContent(new Element("ErrorReportId", errorReportId.toString()));
 
     Document document = new Document(rootElement);
@@ -196,11 +185,10 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData
    * @return a string representation of the object
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "SubmitErrorReportResponseData {errorReportId=\"" + errorReportId + "\", "
-      + "errorCode=\"" + errorCode + "\", errorMessage=\"" + (StringUtils.isEmpty(errorMessage)
-      ? ""
-      : errorMessage) + "\"}";
+        + "errorCode=\"" + errorCode + "\", errorMessage=\"" + (StringUtils.isEmpty(errorMessage)
+        ? ""
+        : errorMessage) + "\"}";
   }
 }

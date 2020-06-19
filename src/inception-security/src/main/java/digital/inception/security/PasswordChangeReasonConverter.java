@@ -30,8 +30,8 @@ import javax.persistence.Converter;
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
 public class PasswordChangeReasonConverter
-  implements AttributeConverter<PasswordChangeReason, Integer>
-{
+    implements AttributeConverter<PasswordChangeReason, Integer> {
+
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
@@ -41,8 +41,7 @@ public class PasswordChangeReasonConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(PasswordChangeReason attribute)
-  {
+  public Integer convertToDatabaseColumn(PasswordChangeReason attribute) {
     return attribute.code();
   }
 
@@ -57,8 +56,7 @@ public class PasswordChangeReasonConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public PasswordChangeReason convertToEntityAttribute(Integer dbData)
-  {
+  public PasswordChangeReason convertToEntityAttribute(Integer dbData) {
     return PasswordChangeReason.fromCode(dbData);
   }
 }

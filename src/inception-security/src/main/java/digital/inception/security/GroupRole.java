@@ -21,20 +21,19 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.UUID;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>GroupRole</code> class holds the information for a group role.
@@ -43,15 +42,15 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "GroupRole")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "userDirectoryId", "groupName", "roleCode" })
+@JsonPropertyOrder({"userDirectoryId", "groupName", "roleCode"})
 @XmlRootElement(name = "GroupRole", namespace = "http://security.inception.digital")
 @XmlType(name = "GroupRole", namespace = "http://security.inception.digital",
-    propOrder = { "userDirectoryId", "groupName", "roleCode" })
+    propOrder = {"userDirectoryId", "groupName", "roleCode"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class GroupRole
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -89,7 +88,8 @@ public class GroupRole
   /**
    * Constructs a new <code>GroupRole</code>.
    */
-  public GroupRole() {}
+  public GroupRole() {
+  }
 
   /**
    * Constructs a new <code>GroupRole</code>.
@@ -99,8 +99,7 @@ public class GroupRole
    * @param groupName       the name identifying the group
    * @param roleCode        the code used to uniquely identify the role
    */
-  public GroupRole(UUID userDirectoryId, String groupName, String roleCode)
-  {
+  public GroupRole(UUID userDirectoryId, String groupName, String roleCode) {
     this.userDirectoryId = userDirectoryId;
     this.groupName = groupName;
     this.roleCode = roleCode;
@@ -111,31 +110,8 @@ public class GroupRole
    *
    * @return the name identifying the group
    */
-  public String getGroupName()
-  {
+  public String getGroupName() {
     return groupName;
-  }
-
-  /**
-   * Returns the code used to uniquely identify the role.
-   *
-   * @return the code used to uniquely identify the role
-   */
-  public String getRoleCode()
-  {
-    return roleCode;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   * the group is associated with.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the group is associated with
-   */
-  public UUID getUserDirectoryId()
-  {
-    return userDirectoryId;
   }
 
   /**
@@ -143,9 +119,17 @@ public class GroupRole
    *
    * @param groupName the name identifying the group
    */
-  public void setGroupName(String groupName)
-  {
+  public void setGroupName(String groupName) {
     this.groupName = groupName;
+  }
+
+  /**
+   * Returns the code used to uniquely identify the role.
+   *
+   * @return the code used to uniquely identify the role
+   */
+  public String getRoleCode() {
+    return roleCode;
   }
 
   /**
@@ -153,9 +137,19 @@ public class GroupRole
    *
    * @param roleCode the code used to uniquely identify the role
    */
-  public void setRoleCode(String roleCode)
-  {
+  public void setRoleCode(String roleCode) {
     this.roleCode = roleCode;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
+   * the group is associated with
+   */
+  public UUID getUserDirectoryId() {
+    return userDirectoryId;
   }
 
   /**
@@ -165,8 +159,7 @@ public class GroupRole
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory the group is associated with
    */
-  public void setUserDirectoryId(UUID userDirectoryId)
-  {
+  public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;
   }
 }

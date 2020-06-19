@@ -22,20 +22,19 @@ import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.core.wbxml.Parser;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MessageResult</code> class stores the results of processing a message.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class MessageResult
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class MessageResult {
+
   /**
    * The message result code returned to indicate that an error occurred while decrypting a
    * message.
@@ -48,7 +47,8 @@ public class MessageResult
   public static final int ERROR_INVALID_REQUEST = -1;
 
   /**
-   * The message result code returned to indicate that an error occurred while processing a message.
+   * The message result code returned to indicate that an error occurred while processing a
+   * message.
    */
   public static final int ERROR_PROCESSING_FAILED = -4;
 
@@ -58,8 +58,8 @@ public class MessageResult
   public static final int ERROR_QUEUEING_FAILED = -5;
 
   /**
-   * The message result code returned to indicate an error processing a message with an
-   * unrecognised type.
+   * The message result code returned to indicate an error processing a message with an unrecognised
+   * type.
    */
   public static final int ERROR_UNRECOGNISED_TYPE = -2;
 
@@ -96,34 +96,28 @@ public class MessageResult
    * @param document the WBXML document containing the message result information
    */
   public MessageResult(Document document)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Element rootElement = document.getRootElement();
 
     this.code = Long.parseLong(rootElement.getAttributeValue("code"));
     this.detail = rootElement.getAttributeValue("detail");
 
-    if (rootElement.hasChild("Exception"))
-    {
+    if (rootElement.hasChild("Exception")) {
       Element exceptionElement = rootElement.getChild("Exception");
 
       exception = exceptionElement.getText();
     }
 
-    if (rootElement.hasChild("Message"))
-    {
+    if (rootElement.hasChild("Message")) {
       Element messageElement = rootElement.getChild("Message");
 
-      try
-      {
+      try {
         Parser parser = new Parser();
 
         Document messageDocument = parser.parse(messageElement.getOpaque());
 
         message = new Message(messageDocument);
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         throw new MessagingServiceException(
             "Failed to parse the WBXML for the message associated with the message result", e);
       }
@@ -136,8 +130,7 @@ public class MessageResult
    * @param code   the result code
    * @param detail the text description of the result of processing the message
    */
-  public MessageResult(long code, String detail)
-  {
+  public MessageResult(long code, String detail) {
     this.code = code;
     this.detail = detail;
   }
@@ -149,8 +142,7 @@ public class MessageResult
    * @param detail  the text description of the result of processing the message
    * @param message the message associated with the <code>MessageResult</code>
    */
-  public MessageResult(long code, String detail, Message message)
-  {
+  public MessageResult(long code, String detail, Message message) {
     this.code = code;
     this.detail = detail;
     this.message = message;
@@ -163,15 +155,12 @@ public class MessageResult
    * @param detail the text description of the result of processing the message
    * @param cause  the exception that resulted from processing the message
    */
-  public MessageResult(long code, String detail, Throwable cause)
-  {
+  public MessageResult(long code, String detail, Throwable cause) {
     this.code = code;
     this.detail = detail;
 
-    if (cause != null)
-    {
-      try
-      {
+    if (cause != null) {
+      try {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baos);
 
@@ -179,9 +168,7 @@ public class MessageResult
         pw.flush();
 
         exception = baos.toString();
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         exception = "Unable to dump the stack for the exception (" + cause + "): " + e.getMessage();
       }
     }
@@ -196,14 +183,13 @@ public class MessageResult
    * @return <code>true</code> if the WBXML document contains valid message result information or
    * <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element messageResultElement = document.getRootElement();
 
     return messageResultElement.getName().equals("MessageResult")
         && (messageResultElement.getAttributes().size() == 2)
         && !((!messageResultElement.hasAttribute("code")) || (!messageResultElement.hasAttribute(
-            "detail")));
+        "detail")));
   }
 
   /**
@@ -211,39 +197,8 @@ public class MessageResult
    *
    * @return the result code
    */
-  public long getCode()
-  {
+  public long getCode() {
     return code;
-  }
-
-  /**
-   * Returns the user-friendly text description of the result of processing the message.
-   *
-   * @return the user-friendly text description of the result of processing the message
-   */
-  public String getDetail()
-  {
-    return detail;
-  }
-
-  /**
-   * Returns the flattened information for the exception that resulted from processing the message.
-   *
-   * @return the flattened information for the exception that resulted from processing the message
-   */
-  public String getException()
-  {
-    return exception;
-  }
-
-  /**
-   * Returns the message associated with the message result e.g. a response message.
-   *
-   * @return the message associated with the message result e.g. a response message.
-   */
-  public Message getMessage()
-  {
-    return message;
   }
 
   /**
@@ -251,9 +206,17 @@ public class MessageResult
    *
    * @param code the result code
    */
-  public void setCode(long code)
-  {
+  public void setCode(long code) {
     this.code = code;
+  }
+
+  /**
+   * Returns the user-friendly text description of the result of processing the message.
+   *
+   * @return the user-friendly text description of the result of processing the message
+   */
+  public String getDetail() {
+    return detail;
   }
 
   /**
@@ -261,9 +224,17 @@ public class MessageResult
    *
    * @param detail the user-friendly text description of the result of processing the message
    */
-  public void setDetail(String detail)
-  {
+  public void setDetail(String detail) {
     this.detail = detail;
+  }
+
+  /**
+   * Returns the flattened information for the exception that resulted from processing the message.
+   *
+   * @return the flattened information for the exception that resulted from processing the message
+   */
+  public String getException() {
+    return exception;
   }
 
   /**
@@ -272,9 +243,17 @@ public class MessageResult
    * @param exception the flattened information for the exception that resulted from processing the
    *                  message
    */
-  public void setException(String exception)
-  {
+  public void setException(String exception) {
     this.exception = exception;
+  }
+
+  /**
+   * Returns the message associated with the message result e.g. a response message.
+   *
+   * @return the message associated with the message result e.g. a response message.
+   */
+  public Message getMessage() {
+    return message;
   }
 
   /**
@@ -282,8 +261,7 @@ public class MessageResult
    *
    * @param message the message associated with the message result e.g. a response message
    */
-  public void setMessage(Message message)
-  {
+  public void setMessage(Message message) {
     this.message = message;
   }
 
@@ -292,23 +270,20 @@ public class MessageResult
    *
    * @return the WBXML representation of the message result
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("MessageResult");
 
     rootElement.setAttribute("code", Long.toString(code));
     rootElement.setAttribute("detail", detail);
 
-    if (exception != null)
-    {
+    if (exception != null) {
       Element exceptionElement = new Element("Exception");
 
       exceptionElement.addContent(exception);
       rootElement.addContent(exceptionElement);
     }
 
-    if (message != null)
-    {
+    if (message != null) {
       Element messageElement = new Element("Message");
 
       messageElement.addContent(message.toWBXML());

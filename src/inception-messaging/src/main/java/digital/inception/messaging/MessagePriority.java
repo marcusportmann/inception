@@ -20,14 +20,12 @@ package digital.inception.messaging;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The enumeration giving the possible priorities for a message.
@@ -35,8 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "MessagePriority")
 @XmlEnum
 @XmlType(name = "MessagePriority", namespace = "http://messaging.inception.digital")
-public enum MessagePriority
-{
+public enum MessagePriority {
   @XmlEnumValue("Low")
   LOW(1, "Low"),
   @XmlEnumValue("Medium")
@@ -54,8 +51,7 @@ public enum MessagePriority
    */
   private String description;
 
-  MessagePriority(int code, String description)
-  {
+  MessagePriority(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -68,10 +64,8 @@ public enum MessagePriority
    * @return the message priority given by the specified numeric code value
    */
   @JsonCreator
-  public static MessagePriority fromCode(int code)
-  {
-    switch (code)
-    {
+  public static MessagePriority fromCode(int code) {
+    switch (code) {
       case 1:
         return MessagePriority.LOW;
 
@@ -92,8 +86,7 @@ public enum MessagePriority
    * @return the code identifying the message priority
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -102,8 +95,7 @@ public enum MessagePriority
    *
    * @return the description for the message priority
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 
@@ -112,8 +104,7 @@ public enum MessagePriority
    *
    * @return the string representation of the message priority enumeration value
    */
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
 }

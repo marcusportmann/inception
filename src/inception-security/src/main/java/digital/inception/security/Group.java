@@ -22,24 +22,30 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
-
-import javax.persistence.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Group</code> class holds the information for a group.
@@ -48,17 +54,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "Group")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "userDirectoryId", "name", "description" })
+@JsonPropertyOrder({"userDirectoryId", "name", "description"})
 @XmlRootElement(name = "Group", namespace = "http://security.inception.digital")
 @XmlType(name = "Group", namespace = "http://security.inception.digital",
-    propOrder = { "userDirectoryId", "name", "description" })
+    propOrder = {"userDirectoryId", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "groups")
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class Group
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -96,9 +102,9 @@ public class Group
    */
   @JsonIgnore
   @XmlTransient
-  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(schema = "security", name = "role_to_group_map",
-      joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id") ,
+      joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"))
   private Set<Role> roles = new HashSet<>();
 
@@ -120,24 +126,24 @@ public class Group
    */
   @JsonIgnore
   @XmlTransient
-  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(schema = "security", name = "user_to_group_map",
-      joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id") ,
+      joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private Set<User> users = new HashSet<>();
 
   /**
    * Constructs a new <code>Group</code>.
    */
-  public Group() {}
+  public Group() {
+  }
 
   /**
    * Constructs a new <code>Group</code>.
    *
    * @param name the name identifying the group
    */
-  public Group(String name)
-  {
+  public Group(String name) {
     this.name = name;
   }
 
@@ -149,8 +155,7 @@ public class Group
    * @param name            the name identifying the group
    * @param description     the description for the group
    */
-  public Group(UUID userDirectoryId, String name, String description)
-  {
+  public Group(UUID userDirectoryId, String name, String description) {
     this.userDirectoryId = userDirectoryId;
     this.name = name;
     this.description = description;
@@ -161,8 +166,7 @@ public class Group
    *
    * @param role the role
    */
-  public void addRole(Role role)
-  {
+  public void addRole(Role role) {
     roles.add(role);
     role.getGroups().add(this);
   }
@@ -172,8 +176,7 @@ public class Group
    *
    * @param user the user
    */
-  public void addUser(User user)
-  {
+  public void addUser(User user) {
     users.add(user);
     user.getGroups().add(this);
   }
@@ -184,23 +187,19 @@ public class Group
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -214,9 +213,17 @@ public class Group
    *
    * @return the description for the group
    */
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
+  }
+
+  /**
+   * Set the description for the group.
+   *
+   * @param description the description for the group
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**
@@ -224,9 +231,17 @@ public class Group
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the group
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -234,9 +249,17 @@ public class Group
    *
    * @return the name identifying the group
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name identifying the group.
+   *
+   * @param name the name identifying the group
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -244,9 +267,17 @@ public class Group
    *
    * @return the roles associated with the group
    */
-  public Set<Role> getRoles()
-  {
+  public Set<Role> getRoles() {
     return roles;
+  }
+
+  /**
+   * Set the roles associated with the group.
+   *
+   * @param roles the roles associated with the group
+   */
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
   }
 
   /**
@@ -254,11 +285,21 @@ public class Group
    * the group is associated with.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
-   *         the group is associated with
+   * the group is associated with
    */
-  public UUID getUserDirectoryId()
-  {
+  public UUID getUserDirectoryId() {
     return userDirectoryId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
+   * group is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                        user directory the group is associated with
+   */
+  public void setUserDirectoryId(UUID userDirectoryId) {
+    this.userDirectoryId = userDirectoryId;
   }
 
   /**
@@ -266,9 +307,17 @@ public class Group
    *
    * @return the users associated with the group
    */
-  public Set<User> getUsers()
-  {
+  public Set<User> getUsers() {
     return users;
+  }
+
+  /**
+   * Set the users associated with the group.
+   *
+   * @param users the users associated with the group
+   */
+  public void setUsers(Set<User> users) {
+    this.users = users;
   }
 
   /**
@@ -277,8 +326,7 @@ public class Group
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -289,8 +337,7 @@ public class Group
    *
    * @param role the role
    */
-  public void removeRole(Role role)
-  {
+  public void removeRole(Role role) {
     roles.remove(role);
     role.getGroups().remove(this);
   }
@@ -300,71 +347,8 @@ public class Group
    *
    * @param user the user
    */
-  public void removeUser(User user)
-  {
+  public void removeUser(User user) {
     users.remove(user);
     user.getGroups().remove(this);
-  }
-
-  /**
-   * Set the description for the group.
-   *
-   * @param description the description for the group
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the group.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the group
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the name identifying the group.
-   *
-   * @param name the name identifying the group
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the roles associated with the group.
-   *
-   * @param roles the roles associated with the group
-   */
-  public void setRoles(Set<Role> roles)
-  {
-    this.roles = roles;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the user directory the
-   * group is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                        user directory the group is associated with
-   */
-  public void setUserDirectoryId(UUID userDirectoryId)
-  {
-    this.userDirectoryId = userDirectoryId;
-  }
-
-  /**
-   * Set the users associated with the group.
-   *
-   * @param users the users associated with the group
-   */
-  public void setUsers(Set<User> users)
-  {
-    this.users = users;
   }
 }

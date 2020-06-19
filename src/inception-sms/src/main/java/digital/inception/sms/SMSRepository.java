@@ -18,6 +18,10 @@ package digital.inception.sms;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+import javax.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -27,21 +31,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.LockModeType;
-
 /**
  * The <code>SMSRepository</code> interface declares the repository for the
  * <code>SMS</code> domain type.`
  *
  * @author Marcus Portmann
  */
-public interface SMSRepository extends JpaRepository<SMS, UUID>
-{
+public interface SMSRepository extends JpaRepository<SMS, UUID> {
+
   @Modifying
   @Query("delete from SMS s where s.id = :smsId")
   void deleteById(@Param("smsId") UUID smsId);

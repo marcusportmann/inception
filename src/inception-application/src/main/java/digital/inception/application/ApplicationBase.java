@@ -19,14 +19,18 @@ package digital.inception.application;
 //~--- non-JDK imports --------------------------------------------------------
 
 import com.codahale.metrics.MetricRegistry;
-
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
-import digital.inception.core.util.NetworkUtil;
 import digital.inception.json.databind.DateTimeModule;
-
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+import javax.servlet.ServletContext;
+import javax.xml.ws.Endpoint;
 import org.apache.http.client.HttpClient;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -35,10 +39,8 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -56,27 +58,10 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-
 import org.xnio.Options;
 import org.xnio.SslClientAuthMode;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-
-import java.security.KeyStore;
-import java.security.SecureRandom;
-
-import java.text.SimpleDateFormat;
-
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-
-import javax.servlet.ServletContext;
-
-import javax.xml.ws.Endpoint;
 
 /**
  * The <code>ApplicationBase</code> class provides the base class that application classes can be
@@ -85,11 +70,11 @@ import javax.xml.ws.Endpoint;
  * @author Marcus Portmann
  */
 @Component
-@ComponentScan(basePackages = { "digital.inception" }, lazyInit = true)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@ComponentScan(basePackages = {"digital.inception"}, lazyInit = true)
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class ApplicationBase
-  implements WebApplicationInitializer
-{
+    implements WebApplicationInitializer {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ApplicationBase.class);
 
@@ -217,8 +202,7 @@ public abstract class ApplicationBase
    *
    * @param applicationContext the Spring application context
    */
-  public ApplicationBase(ApplicationContext applicationContext)
-  {
+  public ApplicationBase(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
 
@@ -227,14 +211,12 @@ public abstract class ApplicationBase
    *
    * @return the Spring application context
    */
-  public ApplicationContext getApplicationContext()
-  {
+  public ApplicationContext getApplicationContext() {
     return applicationContext;
   }
 
   @Override
-  public void onStartup(ServletContext container)
-  {
+  public void onStartup(ServletContext container) {
     // Create the 'root' Spring application context
     AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
 
@@ -254,10 +236,8 @@ public abstract class ApplicationBase
    *
    * @return the web service endpoint
    */
-  protected Endpoint createWebServiceEndpoint(String name, Object implementation)
-  {
-    try
-    {
+  protected Endpoint createWebServiceEndpoint(String name, Object implementation) {
+    try {
       Class<? extends Endpoint> endpointImplClass = Thread.currentThread().getContextClassLoader()
           .loadClass("org.apache.cxf.jaxws.EndpointImpl").asSubclass(Endpoint.class);
 
@@ -280,45 +260,36 @@ public abstract class ApplicationBase
 
       applicationContext.getAutowireCapableBeanFactory().autowireBean(implementation);
 
-      if (isWSSX509CertificateTokenProfileEnabled)
-      {
-        try
-        {
-          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStoreType))
-          {
+      if (isWSSX509CertificateTokenProfileEnabled) {
+        try {
+          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStoreType)) {
             throw new ConfigurationException(
                 "The type was not specified for the server SSL key store");
           }
 
-          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStorePath))
-          {
+          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStorePath)) {
             throw new ConfigurationException(
                 "The path was not specified for the server SSL key store");
           }
 
-          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStorePassword))
-          {
+          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStorePassword)) {
             throw new ConfigurationException(
                 "The password was not specified for the server SSL key store");
           }
 
-          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStoreAlias))
-          {
+          if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStoreAlias)) {
             throw new ConfigurationException(
                 "The alias was not specified for the server SSL key store");
           }
 
           KeyStore keyStore;
 
-          try
-          {
+          try {
             keyStore = CryptoUtil.loadKeyStore(wssX509CertificateTokenProfileKeyStoreType,
                 wssX509CertificateTokenProfileKeyStorePath,
                 wssX509CertificateTokenProfileKeyStorePassword,
                 wssX509CertificateTokenProfileKeyStoreAlias);
-          }
-          catch (Throwable e)
-          {
+          } catch (Throwable e) {
             throw new ApplicationException(
                 "Failed to initialize the Web Services Security X.509 Certificate Token Profile key store",
                 e);
@@ -328,34 +299,27 @@ public abstract class ApplicationBase
 
           if ((!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStoreType))
               || (!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePath))
-              || (!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePassword)))
-          {
-            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStoreType))
-            {
+              || (!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePassword))) {
+            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStoreType)) {
               throw new ConfigurationException(
                   "The type was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
             }
 
-            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePath))
-            {
+            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePath)) {
               throw new ConfigurationException(
                   "The path was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
             }
 
-            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePassword))
-            {
+            if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePassword)) {
               throw new ConfigurationException(
                   "The password was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
             }
 
-            try
-            {
+            try {
               trustStore = CryptoUtil.loadTrustStore(wssX509CertificateTokenProfileTrustStoreType,
                   wssX509CertificateTokenProfileTrustStorePath,
                   wssX509CertificateTokenProfileTrustStorePassword);
-            }
-            catch (Throwable e)
-            {
+            } catch (Throwable e) {
               throw new ApplicationException(
                   "Failed to initialize the Web Services Security X.509 Certificate Token Profile key store",
                   e);
@@ -364,39 +328,31 @@ public abstract class ApplicationBase
 
           Class<?> cxfWSSX509CertificateTokenProfileEndpointConfigurator = Thread.currentThread()
               .getContextClassLoader().loadClass(
-              "digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointConfigurator");
+                  "digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointConfigurator");
 
           Method configureEndpointMethod =
               cxfWSSX509CertificateTokenProfileEndpointConfigurator.getMethod("configureEndpoint",
-              Endpoint.class, KeyStore.class, String.class, String.class, KeyStore.class);
+                  Endpoint.class, KeyStore.class, String.class, String.class, KeyStore.class);
 
           configureEndpointMethod.invoke(null, endpoint, keyStore,
               wssX509CertificateTokenProfileKeyStorePassword,
               wssX509CertificateTokenProfileKeyStoreAlias, trustStore);
-        }
-        catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
           throw new ApplicationException(
               "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
-              + name + "): The inception-ws library could not be found", e);
-        }
-        catch (Throwable e)
-        {
+                  + name + "): The inception-ws library could not be found", e);
+        } catch (Throwable e) {
           throw new ApplicationException(
               "Failed to configure the Web Services Security X.509 Certificate Token Profile for the service ("
-              + name + ")", e);
+                  + name + ")", e);
         }
       }
 
       return endpoint;
-    }
-    catch (ClassNotFoundException e)
-    {
+    } catch (ClassNotFoundException e) {
       throw new ApplicationException("Failed to create the endpoint for the service (" + name
           + "): The Apache CXF framework has not been initialized", e);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ApplicationException("Failed to create the endpoint for the service (" + name
           + ")", e);
     }
@@ -409,15 +365,13 @@ public abstract class ApplicationBase
    */
   @Bean
   @ConditionalOnMissingBean(ApplicationSecurityConfiguration.class)
-  protected HttpClient insecureHttpClient()
-  {
-    try
-    {
+  protected HttpClient insecureHttpClient() {
+    try {
       HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
       Registry<ConnectionSocketFactory> socketFactoryRegistry =
           RegistryBuilder.<ConnectionSocketFactory>create().register("http",
-          new PlainConnectionSocketFactory()).build();
+              new PlainConnectionSocketFactory()).build();
 
       PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
           socketFactoryRegistry);
@@ -431,9 +385,7 @@ public abstract class ApplicationBase
       httpClientBuilder.setConnectionManager(connectionManager);
 
       return httpClientBuilder.build();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the insecure HTTP client", e);
     }
   }
@@ -445,19 +397,15 @@ public abstract class ApplicationBase
    */
   @Bean
   @ConditionalOnMissingBean(ApplicationSecurityConfiguration.class)
-  protected RestTemplate insecureRestTemplate()
-  {
-    try
-    {
+  protected RestTemplate insecureRestTemplate() {
+    try {
       HttpComponentsClientHttpRequestFactory requestFactory =
           new HttpComponentsClientHttpRequestFactory();
 
       requestFactory.setHttpClient(insecureHttpClient());
 
       return new RestTemplate(requestFactory);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the REST template", e);
     }
   }
@@ -467,11 +415,10 @@ public abstract class ApplicationBase
    * processor package.
    *
    * @return the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
-   *         processor package
+   * processor package
    */
   @Bean
-  protected Jackson2ObjectMapperBuilder jacksonBuilder()
-  {
+  protected Jackson2ObjectMapperBuilder jacksonBuilder() {
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
     jackson2ObjectMapperBuilder.indentOutput(true);
 
@@ -491,8 +438,7 @@ public abstract class ApplicationBase
    * @return the metric registry
    */
   @Bean
-  protected MetricRegistry metricRegistry()
-  {
+  protected MetricRegistry metricRegistry() {
     return new MetricRegistry();
   }
 
@@ -503,10 +449,8 @@ public abstract class ApplicationBase
    */
   @Bean
   @ConditionalOnBean(ApplicationSecurityConfiguration.class)
-  protected HttpClient secureHttpClient()
-  {
-    try
-    {
+  protected HttpClient secureHttpClient() {
+    try {
       HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
       ApplicationSecurityConfiguration applicationSecurityConfiguration =
@@ -534,7 +478,8 @@ public abstract class ApplicationBase
 
       Registry<ConnectionSocketFactory> socketFactoryRegistry =
           RegistryBuilder.<ConnectionSocketFactory>create().register("https",
-          sslConnectionSocketFactory).register("http", new PlainConnectionSocketFactory()).build();
+              sslConnectionSocketFactory).register("http", new PlainConnectionSocketFactory())
+              .build();
 
       PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
           socketFactoryRegistry);
@@ -548,9 +493,7 @@ public abstract class ApplicationBase
       httpClientBuilder.setConnectionManager(connectionManager);
 
       return httpClientBuilder.build();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the secure HTTP client", e);
     }
   }
@@ -562,19 +505,15 @@ public abstract class ApplicationBase
    */
   @Bean
   @ConditionalOnBean(ApplicationSecurityConfiguration.class)
-  protected RestTemplate secureRestTemplate()
-  {
-    try
-    {
+  protected RestTemplate secureRestTemplate() {
+    try {
       HttpComponentsClientHttpRequestFactory requestFactory =
           new HttpComponentsClientHttpRequestFactory();
 
       requestFactory.setHttpClient(secureHttpClient());
 
       return new RestTemplate(requestFactory);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the REST template", e);
     }
   }
@@ -584,61 +523,51 @@ public abstract class ApplicationBase
    * container.
    *
    * @return the embedded servlet container factory used to configure the embedded Undertow servlet
-   *         container
+   * container
    */
   @Bean
-  protected UndertowServletWebServerFactory undertowServletWebServerFactory()
-  {
+  protected UndertowServletWebServerFactory undertowServletWebServerFactory() {
     UndertowServletWebServerFactory factory = new UndertowServletWebServerFactory();
 
-    if (isServerSecurityEnabled)
-    {
+    if (isServerSecurityEnabled) {
       factory.addBuilderCustomizers((UndertowBuilderCustomizer) builder ->
           {
             int serverSSLHttpListenerPort = (serverSecurityPort != null)
-            ? serverSecurityPort
-            : (serverPort != null)
-            ? (serverPort >= 15000) && (serverPort < 16000)
-            ? serverPort + 1000
-            : 8443
-            : 8443;
+                ? serverSecurityPort
+                : (serverPort != null)
+                    ? (serverPort >= 15000) && (serverPort < 16000)
+                    ? serverPort + 1000
+                    : 8443
+                    : 8443;
 
-            try
-            {
-              if (StringUtils.isEmpty(serverSecurityKeyStoreType))
-              {
+            try {
+              if (StringUtils.isEmpty(serverSecurityKeyStoreType)) {
                 throw new ConfigurationException(
                     "The type was not specified for the server security key store");
               }
 
-              if (StringUtils.isEmpty(serverSecurityKeyStorePath))
-              {
+              if (StringUtils.isEmpty(serverSecurityKeyStorePath)) {
                 throw new ConfigurationException(
                     "The path was not specified for the server security key store");
               }
 
-              if (StringUtils.isEmpty(serverSecurityKeyStorePassword))
-              {
+              if (StringUtils.isEmpty(serverSecurityKeyStorePassword)) {
                 throw new ConfigurationException(
                     "The password was not specified for the server security key store");
               }
 
-              if (StringUtils.isEmpty(serverSecurityKeyStoreAlias))
-              {
+              if (StringUtils.isEmpty(serverSecurityKeyStoreAlias)) {
                 throw new ConfigurationException(
                     "The alias was not specified for the server security key store");
               }
 
               KeyStore keyStore;
 
-              try
-              {
+              try {
                 keyStore = CryptoUtil.loadKeyStore(serverSecurityKeyStoreType,
                     serverSecurityKeyStorePath, serverSecurityKeyStorePassword,
                     serverSecurityKeyStoreAlias);
-              }
-              catch (Throwable e)
-              {
+              } catch (Throwable e) {
                 throw new ApplicationException("Failed to initialize the server SSL key store", e);
               }
 
@@ -646,33 +575,26 @@ public abstract class ApplicationBase
 
               if ((!StringUtils.isEmpty(serverSecurityTrustStoreType))
                   || (!StringUtils.isEmpty(serverSecurityTrustStorePath))
-                  || (!StringUtils.isEmpty(serverSecurityTrustStorePassword)))
-              {
-                if (StringUtils.isEmpty(serverSecurityTrustStoreType))
-                {
+                  || (!StringUtils.isEmpty(serverSecurityTrustStorePassword))) {
+                if (StringUtils.isEmpty(serverSecurityTrustStoreType)) {
                   throw new ConfigurationException(
                       "The type was not specified for the server security trust store");
                 }
 
-                if (StringUtils.isEmpty(serverSecurityTrustStorePath))
-                {
+                if (StringUtils.isEmpty(serverSecurityTrustStorePath)) {
                   throw new ConfigurationException(
                       "The path was not specified for the server security trust store");
                 }
 
-                if (StringUtils.isEmpty(serverSecurityTrustStorePassword))
-                {
+                if (StringUtils.isEmpty(serverSecurityTrustStorePassword)) {
                   throw new ConfigurationException(
                       "The password was not specified for the server security trust store");
                 }
 
-                try
-                {
+                try {
                   trustStore = CryptoUtil.loadTrustStore(serverSecurityTrustStoreType,
                       serverSecurityTrustStorePath, serverSecurityTrustStorePassword);
-                }
-                catch (Throwable e)
-                {
+                } catch (Throwable e) {
                   throw new ApplicationException("Failed to initialize the server SSL key store",
                       e);
                 }
@@ -696,36 +618,26 @@ public abstract class ApplicationBase
 
               builder.addHttpsListener(serverSSLHttpListenerPort, "0.0.0.0", sslContext);
 
-              if (!StringUtils.isEmpty(serverSecurityClientAuthMode))
-              {
-                if (serverSecurityClientAuthMode.equalsIgnoreCase("required"))
-                {
+              if (!StringUtils.isEmpty(serverSecurityClientAuthMode)) {
+                if (serverSecurityClientAuthMode.equalsIgnoreCase("required")) {
                   builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode.REQUIRED);
-                }
-                else if (serverSecurityClientAuthMode.equalsIgnoreCase("requested"))
-                {
+                } else if (serverSecurityClientAuthMode.equalsIgnoreCase("requested")) {
                   builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
                       .REQUESTED);
-                }
-                else
-                {
+                } else {
                   builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
                       .NOT_REQUESTED);
                 }
-              }
-              else
-              {
+              } else {
                 builder.setSocketOption(Options.SSL_CLIENT_AUTH_MODE, SslClientAuthMode
                     .NOT_REQUESTED);
               }
-            }
-            catch (Throwable e)
-            {
+            } catch (Throwable e) {
               logger.error("Failed to initialize the server SSL HTTP listener on port "
                   + serverSSLHttpListenerPort, e);
             }
           }
-          );
+      );
     }
 
     factory.addInitializers();

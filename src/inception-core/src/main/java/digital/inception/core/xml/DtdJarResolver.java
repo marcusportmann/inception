@@ -26,10 +26,10 @@ import org.xml.sax.InputSource;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class DtdJarResolver
-  implements EntityResolver
-{
+    implements EntityResolver {
+
   private String dtdPath;
   private String publicId;
   private String systemId;
@@ -40,8 +40,7 @@ public class DtdJarResolver
    * @param systemId the system ID for the DTD
    * @param dtdPath  the path on the classpath to the DTD
    */
-  public DtdJarResolver(String systemId, String dtdPath)
-  {
+  public DtdJarResolver(String systemId, String dtdPath) {
     this.systemId = systemId;
     this.dtdPath = dtdPath;
   }
@@ -53,8 +52,7 @@ public class DtdJarResolver
    * @param systemId the system ID for the DTD
    * @param dtdPath  the path on the classpath to the DTD
    */
-  public DtdJarResolver(String publicId, String systemId, String dtdPath)
-  {
+  public DtdJarResolver(String publicId, String systemId, String dtdPath) {
     this.publicId = publicId;
     this.systemId = systemId;
     this.dtdPath = dtdPath;
@@ -65,8 +63,7 @@ public class DtdJarResolver
    *
    * @return the public ID for the DTD
    */
-  public String getPublicId()
-  {
+  public String getPublicId() {
     return publicId;
   }
 
@@ -75,8 +72,7 @@ public class DtdJarResolver
    *
    * @return the system ID for the DTD
    */
-  public String getSystemId()
-  {
+  public String getSystemId() {
     return systemId;
   }
 
@@ -89,8 +85,7 @@ public class DtdJarResolver
    *
    * @return an InputSource that can be used to read the data for the DTD
    */
-  public InputSource resolveEntity(String publicId, String systemId)
-  {
+  public InputSource resolveEntity(String publicId, String systemId) {
     return new InputSource(Thread.currentThread().getContextClassLoader().getResourceAsStream(
         dtdPath));
   }

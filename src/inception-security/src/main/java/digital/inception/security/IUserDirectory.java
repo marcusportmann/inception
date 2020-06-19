@@ -26,8 +26,8 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-interface IUserDirectory
-{
+interface IUserDirectory {
+
   /**
    * Add the group member to the group.
    *
@@ -36,8 +36,8 @@ interface IUserDirectory
    * @param memberName the group member name
    */
   void addMemberToGroup(String groupName, GroupMemberType memberType, String memberName)
-    throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
-        SecurityServiceException;
+      throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
+      SecurityServiceException;
 
   /**
    * Add the role to the group.
@@ -46,8 +46,8 @@ interface IUserDirectory
    * @param roleCode  the code used to uniquely identify the role
    */
   void addRoleToGroup(String groupName, String roleCode)
-    throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
-        SecurityServiceException;
+      throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
+      SecurityServiceException;
 
   /**
    * Add the user to the group.
@@ -56,7 +56,7 @@ interface IUserDirectory
    * @param username  the username identifying the user
    */
   void addUserToGroup(String groupName, String username)
-    throws GroupNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Administratively change the password for the user.
@@ -70,7 +70,7 @@ interface IUserDirectory
    */
   void adminChangePassword(String username, String newPassword, boolean expirePassword,
       boolean lockUser, boolean resetPasswordHistory, PasswordChangeReason reason)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Authenticate the user.
@@ -79,8 +79,8 @@ interface IUserDirectory
    * @param password the password being used to authenticate
    */
   void authenticate(String username, String password)
-    throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-        UserNotFoundException, SecurityServiceException;
+      throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
+      UserNotFoundException, SecurityServiceException;
 
   /**
    * Change the password for the user.
@@ -90,8 +90,8 @@ interface IUserDirectory
    * @param newPassword the new password
    */
   void changePassword(String username, String password, String newPassword)
-    throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-        ExistingPasswordException, SecurityServiceException;
+      throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
+      ExistingPasswordException, SecurityServiceException;
 
   /**
    * Create the new group.
@@ -99,7 +99,7 @@ interface IUserDirectory
    * @param group the group
    */
   void createGroup(Group group)
-    throws DuplicateGroupException, SecurityServiceException;
+      throws DuplicateGroupException, SecurityServiceException;
 
   /**
    * Create the new user.
@@ -109,7 +109,7 @@ interface IUserDirectory
    * @param userLocked      create the user locked
    */
   void createUser(User user, boolean expiredPassword, boolean userLocked)
-    throws DuplicateUserException, SecurityServiceException;
+      throws DuplicateUserException, SecurityServiceException;
 
   /**
    * Delete the group.
@@ -117,7 +117,7 @@ interface IUserDirectory
    * @param groupName the name identifying the group
    */
   void deleteGroup(String groupName)
-    throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException;
+      throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException;
 
   /**
    * Delete the user.
@@ -125,7 +125,7 @@ interface IUserDirectory
    * @param username the username identifying the user
    */
   void deleteUser(String username)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the users matching the attribute criteria.
@@ -135,7 +135,7 @@ interface IUserDirectory
    * @return the users whose attributes match the attribute criteria
    */
   List<User> findUsers(List<Attribute> attributes)
-    throws InvalidAttributeException, SecurityServiceException;
+      throws InvalidAttributeException, SecurityServiceException;
 
   /**
    * Retrieve the capabilities the user directory supports.
@@ -143,7 +143,7 @@ interface IUserDirectory
    * @return the capabilities the user directory supports
    */
   UserDirectoryCapabilities getCapabilities()
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Retrieve the authorised function codes for the user.
@@ -153,7 +153,7 @@ interface IUserDirectory
    * @return the authorised function codes for the user
    */
   List<String> getFunctionCodesForUser(String username)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the group.
@@ -163,7 +163,7 @@ interface IUserDirectory
    * @return the group
    */
   Group getGroup(String groupName)
-    throws GroupNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve all the group names.
@@ -171,7 +171,7 @@ interface IUserDirectory
    * @return the group names
    */
   List<String> getGroupNames()
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Retrieve the names identifying the groups the user is a member of.
@@ -181,7 +181,7 @@ interface IUserDirectory
    * @return the names identifying the groups the user is a member of
    */
   List<String> getGroupNamesForUser(String username)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve all the groups.
@@ -189,7 +189,7 @@ interface IUserDirectory
    * @return the groups
    */
   List<Group> getGroups()
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Retrieve the groups.
@@ -203,7 +203,7 @@ interface IUserDirectory
    */
   List<Group> getGroups(String filter, SortDirection sortDirection, Integer pageIndex,
       Integer pageSize)
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Retrieve the groups the user is a member of.
@@ -213,7 +213,7 @@ interface IUserDirectory
    * @return the groups the user is a member of
    */
   List<Group> getGroupsForUser(String username)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the group members for the group.
@@ -223,7 +223,7 @@ interface IUserDirectory
    * @return the group members for the group
    */
   List<GroupMember> getMembersForGroup(String groupName)
-    throws GroupNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the group members for the group.
@@ -238,7 +238,7 @@ interface IUserDirectory
    */
   List<GroupMember> getMembersForGroup(String groupName, String filter,
       SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-    throws GroupNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the number of groups
@@ -248,7 +248,7 @@ interface IUserDirectory
    * @return the number of groups
    */
   long getNumberOfGroups(String filter)
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Retrieve the number of group members for the group.
@@ -259,7 +259,7 @@ interface IUserDirectory
    * @return the number of group members for the group
    */
   long getNumberOfMembersForGroup(String groupName, String filter)
-    throws GroupNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the number of users.
@@ -269,7 +269,7 @@ interface IUserDirectory
    * @return the number of users
    */
   long getNumberOfUsers(String filter)
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
@@ -279,7 +279,7 @@ interface IUserDirectory
    * @return the codes for the roles that have been assigned to the group
    */
   List<String> getRoleCodesForGroup(String groupName)
-    throws GroupNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the codes for the roles that the user has been assigned.
@@ -289,7 +289,7 @@ interface IUserDirectory
    * @return the codes for the roles that the user has been assigned
    */
   List<String> getRoleCodesForUser(String username)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the roles that have been assigned to the group.
@@ -299,7 +299,7 @@ interface IUserDirectory
    * @return the roles that have been assigned to the group
    */
   List<GroupRole> getRolesForGroup(String groupName)
-    throws GroupNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user.
@@ -309,7 +309,7 @@ interface IUserDirectory
    * @return the user
    */
   User getUser(String username)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the full name for the user.
@@ -319,7 +319,7 @@ interface IUserDirectory
    * @return the full name for the user
    */
   String getUserFullName(String username)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve all the users.
@@ -327,7 +327,7 @@ interface IUserDirectory
    * @return the users
    */
   List<User> getUsers()
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Retrieve the users.
@@ -342,7 +342,7 @@ interface IUserDirectory
    */
   List<User> getUsers(String filter, UserSortBy sortBy, SortDirection sortDirection,
       Integer pageIndex, Integer pageSize)
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Does the user with the specified username exist?
@@ -350,10 +350,10 @@ interface IUserDirectory
    * @param username the username identifying the user
    *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   boolean isExistingUser(String username)
-    throws SecurityServiceException;
+      throws SecurityServiceException;
 
   /**
    * Is the user in the group?
@@ -362,10 +362,10 @@ interface IUserDirectory
    * @param username  the username identifying the user
    *
    * @return <code>true</code> if the user is a member of the group or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   boolean isUserInGroup(String groupName, String username)
-    throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
    * Remove the group member from the group.
@@ -375,7 +375,7 @@ interface IUserDirectory
    * @param memberName the group member name
    */
   void removeMemberFromGroup(String groupName, GroupMemberType memberType, String memberName)
-    throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException;
 
   /**
    * Remove the role from the group.
@@ -384,7 +384,7 @@ interface IUserDirectory
    * @param roleCode  the code used to uniquely identify the role
    */
   void removeRoleFromGroup(String groupName, String roleCode)
-    throws GroupNotFoundException, GroupRoleNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, GroupRoleNotFoundException, SecurityServiceException;
 
   /**
    * Remove the user from the group.
@@ -393,7 +393,7 @@ interface IUserDirectory
    * @param username  the username identifying the user
    */
   void removeUserFromGroup(String groupName, String username)
-    throws GroupNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Reset the password for the user.
@@ -402,8 +402,8 @@ interface IUserDirectory
    * @param newPassword the new password
    */
   void resetPassword(String username, String newPassword)
-    throws UserNotFoundException, UserLockedException, ExistingPasswordException,
-        SecurityServiceException;
+      throws UserNotFoundException, UserLockedException, ExistingPasswordException,
+      SecurityServiceException;
 
   /**
    * Update the group.
@@ -411,7 +411,7 @@ interface IUserDirectory
    * @param group the group
    */
   void updateGroup(Group group)
-    throws GroupNotFoundException, SecurityServiceException;
+      throws GroupNotFoundException, SecurityServiceException;
 
   /**
    * Update the user.
@@ -421,5 +421,5 @@ interface IUserDirectory
    * @param lockUser       lock the user as part of the update
    */
   void updateUser(User user, boolean expirePassword, boolean lockUser)
-    throws UserNotFoundException, SecurityServiceException;
+      throws UserNotFoundException, SecurityServiceException;
 }

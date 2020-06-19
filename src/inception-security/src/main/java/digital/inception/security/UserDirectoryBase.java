@@ -18,16 +18,10 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.util.Base64Util;
-
-//~--- JDK imports ------------------------------------------------------------
-
-import java.nio.charset.StandardCharsets;
-
-import java.security.MessageDigest;
-
 import java.util.List;
 import java.util.UUID;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory
@@ -35,10 +29,10 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class UserDirectoryBase
-  implements IUserDirectory
-{
+    implements IUserDirectory {
+
   /**
    * The Group Repository.
    */
@@ -75,8 +69,8 @@ public abstract class UserDirectoryBase
    * @param roleRepository  the Role Repository
    */
   public UserDirectoryBase(UUID userDirectoryId, List<UserDirectoryParameter> parameters,
-      GroupRepository groupRepository, UserRepository userRepository, RoleRepository roleRepository)
-  {
+      GroupRepository groupRepository, UserRepository userRepository,
+      RoleRepository roleRepository) {
     this.userDirectoryId = userDirectoryId;
     this.parameters = parameters;
     this.groupRepository = groupRepository;
@@ -89,8 +83,7 @@ public abstract class UserDirectoryBase
    *
    * @return the Group Repository
    */
-  public GroupRepository getGroupRepository()
-  {
+  public GroupRepository getGroupRepository() {
     return groupRepository;
   }
 
@@ -99,8 +92,7 @@ public abstract class UserDirectoryBase
    *
    * @return the parameters for the user directory
    */
-  public List<UserDirectoryParameter> getParameters()
-  {
+  public List<UserDirectoryParameter> getParameters() {
     return parameters;
   }
 
@@ -109,8 +101,7 @@ public abstract class UserDirectoryBase
    *
    * @return the Role Repository
    */
-  public RoleRepository getRoleRepository()
-  {
+  public RoleRepository getRoleRepository() {
     return roleRepository;
   }
 
@@ -119,8 +110,7 @@ public abstract class UserDirectoryBase
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the user directory
    */
-  public UUID getUserDirectoryId()
-  {
+  public UUID getUserDirectoryId() {
     return userDirectoryId;
   }
 
@@ -129,11 +119,9 @@ public abstract class UserDirectoryBase
    *
    * @return the User Repository
    */
-  public UserRepository getUserRepository()
-  {
+  public UserRepository getUserRepository() {
     return userRepository;
   }
-
 
 
   /**
@@ -143,15 +131,12 @@ public abstract class UserDirectoryBase
    *
    * @return true if the value is <code>null</code> or blank
    */
-  protected boolean isNullOrEmpty(Object value)
-  {
-    if (value == null)
-    {
+  protected boolean isNullOrEmpty(Object value) {
+    if (value == null) {
       return true;
     }
 
-    if (value instanceof String)
-    {
+    if (value instanceof String) {
       return ((String) value).length() == 0;
     }
 

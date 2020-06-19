@@ -23,8 +23,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToPasswordChangeReasonConverter</code> class implements the Spring converter that
- * converts an <code>Integer</code> type into a <code>PasswordChangeReason</code> type.
+ * The <code>IntegerToPasswordChangeReasonConverter</code> class implements the Spring converter
+ * that converts an <code>Integer</code> type into a <code>PasswordChangeReason</code> type.
  *
  * @author Marcus Portmann
  */
@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @ReadingConverter
 public class IntegerToPasswordChangeReasonConverter
-  implements Converter<Integer, PasswordChangeReason>
-{
+    implements Converter<Integer, PasswordChangeReason> {
+
   /**
    * Constructs a new <code>IntegerToPasswordChangeReasonConverter</code>.
    */
-  public IntegerToPasswordChangeReasonConverter() {}
+  public IntegerToPasswordChangeReasonConverter() {
+  }
 
   @Override
-  public PasswordChangeReason convert(Integer source)
-  {
-    if (source == null)
-    {
+  public PasswordChangeReason convert(Integer source) {
+    if (source == null) {
       return null;
     }
 

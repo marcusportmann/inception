@@ -21,31 +21,31 @@ package digital.inception.messaging;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
+import java.time.LocalDateTime;
+import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.time.LocalDateTime;
-
-import java.util.UUID;
-
-import javax.persistence.*;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>Message</code> class holds the information for a message.
@@ -56,20 +56,20 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "Message")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "username", "deviceId", "typeId", "correlationId", "priority", "status",
+@JsonPropertyOrder({"id", "username", "deviceId", "typeId", "correlationId", "priority", "status",
     "created", "sendAttempts", "processAttempts", "downloadAttempts", "lastProcessed", "lockName",
-    "encryptionIV", "dataHash" })
+    "encryptionIV", "dataHash"})
 @XmlRootElement(name = "Message", namespace = "http://messaging.inception.digital")
 @XmlType(name = "Message", namespace = "http://messaging.inception.digital",
-    propOrder = { "id", "username", "deviceId", "typeId", "correlationId", "priority", "status",
+    propOrder = {"id", "username", "deviceId", "typeId", "correlationId", "priority", "status",
         "created", "sendAttempts", "processAttempts", "downloadAttempts", "lastProcessed",
-        "lockName", "encryptionIV", "dataHash" })
+        "lockName", "encryptionIV", "dataHash"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "messaging", name = "messages")
-@SuppressWarnings({ "WeakerAccess" })
-public class Message
-{
+@SuppressWarnings({"WeakerAccess"})
+public class Message {
+
   /**
    * The maximum size of an asynchronous message in bytes. Messages larger than this size will be
    * split into a number of message parts.
@@ -191,8 +191,9 @@ public class Message
 
   /**
    * The message priority.
-   *
-   * Messages with a higher priority value are processed before messages with a lower priority value.
+   * <p>
+   * Messages with a higher priority value are processed before messages with a lower priority
+   * value.
    */
   @ApiModelProperty(value = "The message priority", required = true)
   @JsonProperty(required = true)
@@ -256,17 +257,17 @@ public class Message
   /**
    * Constructs a new <code>Message</code>.
    */
-  public Message() {}
+  public Message() {
+  }
 
   /**
-   * Constructs a new <code>Message</code> and populates it from the message information stored
-   * in the specified WBXML document.
+   * Constructs a new <code>Message</code> and populates it from the message information stored in
+   * the specified WBXML document.
    *
    * @param document the WBXML document containing the message information
    */
   public Message(Document document)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Element rootElement = document.getRootElement();
 
     this.id = UUID.fromString(rootElement.getAttributeValue("id"));
@@ -274,8 +275,7 @@ public class Message
     this.deviceId = UUID.fromString(rootElement.getAttributeValue("deviceId"));
     this.typeId = UUID.fromString(rootElement.getAttributeValue("typeId"));
 
-    if (rootElement.hasAttribute("correlationId"))
-    {
+    if (rootElement.hasAttribute("correlationId")) {
       this.correlationId = UUID.fromString(rootElement.getAttributeValue("correlationId"));
     }
 
@@ -283,41 +283,33 @@ public class Message
         "priority")));
     this.data = rootElement.getOpaque();
 
-    if (rootElement.hasAttribute("dataHash"))
-    {
+    if (rootElement.hasAttribute("dataHash")) {
       this.dataHash = rootElement.getAttributeValue("dataHash");
     }
 
-    if (rootElement.hasAttribute("encryptionIV"))
-    {
+    if (rootElement.hasAttribute("encryptionIV")) {
       this.encryptionIV = rootElement.getAttributeValue("encryptionIV");
     }
 
     String createdAttributeValue = rootElement.getAttributeValue("created");
 
-    try
-    {
+    try {
       this.created = ISO8601Util.toLocalDateTime(createdAttributeValue);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new MessagingServiceException(String.format(
           "Failed to parse the created ISO8601 timestamp (%s) for the message (%s)",
           createdAttributeValue, id), e);
     }
 
-    if (rootElement.hasAttribute("sendAttempts"))
-    {
+    if (rootElement.hasAttribute("sendAttempts")) {
       this.sendAttempts = Integer.parseInt(rootElement.getAttributeValue("sendAttempts"));
     }
 
-    if (rootElement.hasAttribute("processAttempts"))
-    {
+    if (rootElement.hasAttribute("processAttempts")) {
       this.processAttempts = Integer.parseInt(rootElement.getAttributeValue("processAttempts"));
     }
 
-    if (rootElement.hasAttribute("downloadAttempts"))
-    {
+    if (rootElement.hasAttribute("downloadAttempts")) {
       this.downloadAttempts = Integer.parseInt(rootElement.getAttributeValue("downloadAttempts"));
     }
 
@@ -327,69 +319,67 @@ public class Message
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username      the username identifying the user associated with the message
-   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      device the message originated from
-   * @param typeId        the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      type of message
-   * @param priority      the message priority
-   * @param data          the data for the message which is NOT encrypted
-   */
-  public Message(String username, UUID deviceId, UUID typeId, MessagePriority priority, byte[] data)
-  {
-    this.id = UUID.randomUUID();
-    this.username = username;
-    this.deviceId = deviceId;
-    this.typeId = typeId;
-    this.priority = priority;
-    this.data = data;
-    this.created = LocalDateTime.now();
-    this.status = MessageStatus.INITIALIZED;
-  }
-
-  /**
-   * Constructs a new <code>Message</code>.
-   *
-   * @param username      the username identifying the user associated with the message
-   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      device the message originated from
-   * @param typeId        the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      type of message
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   * @param priority      the message priority
-   * @param data          the data for the message which is NOT encrypted
-   */
-  public Message(String username, UUID deviceId, UUID typeId, UUID correlationId,
-      MessagePriority priority, byte[] data)
-  {
-    this.id = UUID.randomUUID();
-    this.username = username;
-    this.deviceId = deviceId;
-    this.typeId = typeId;
-    this.correlationId = correlationId;
-    this.priority = priority;
-    this.data = data;
-    this.created = LocalDateTime.now();
-    this.status = MessageStatus.INITIALIZED;
-  }
-
-  /**
-   * Constructs a new <code>Message</code>.
-   *
-   * @param username      the username identifying the user associated with the message
-   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      device the message originated from
-   * @param typeId        the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                      type of message
-   * @param priority      the message priority
-   * @param data          the data for the message which may be encrypted
-   * @param dataHash      the hash of the unencrypted data for the message if the message is
-   *                      encrypted
-   * @param encryptionIV  the base-64 encoded initialization vector for the encryption scheme
+   * @param username the username identifying the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message originated from
+   * @param typeId   the Universally Unique Identifier (UUID) used to uniquely identify the type of
+   *                 message
+   * @param priority the message priority
+   * @param data     the data for the message which is NOT encrypted
    */
   public Message(String username, UUID deviceId, UUID typeId, MessagePriority priority,
-      byte[] data, String dataHash, String encryptionIV)
-  {
+      byte[] data) {
+    this.id = UUID.randomUUID();
+    this.username = username;
+    this.deviceId = deviceId;
+    this.typeId = typeId;
+    this.priority = priority;
+    this.data = data;
+    this.created = LocalDateTime.now();
+    this.status = MessageStatus.INITIALIZED;
+  }
+
+  /**
+   * Constructs a new <code>Message</code>.
+   *
+   * @param username      the username identifying the user associated with the message
+   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      device the message originated from
+   * @param typeId        the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      type of message
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param priority      the message priority
+   * @param data          the data for the message which is NOT encrypted
+   */
+  public Message(String username, UUID deviceId, UUID typeId, UUID correlationId,
+      MessagePriority priority, byte[] data) {
+    this.id = UUID.randomUUID();
+    this.username = username;
+    this.deviceId = deviceId;
+    this.typeId = typeId;
+    this.correlationId = correlationId;
+    this.priority = priority;
+    this.data = data;
+    this.created = LocalDateTime.now();
+    this.status = MessageStatus.INITIALIZED;
+  }
+
+  /**
+   * Constructs a new <code>Message</code>.
+   *
+   * @param username     the username identifying the user associated with the message
+   * @param deviceId     the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                     device the message originated from
+   * @param typeId       the Universally Unique Identifier (UUID) used to uniquely identify the type
+   *                     of message
+   * @param priority     the message priority
+   * @param data         the data for the message which may be encrypted
+   * @param dataHash     the hash of the unencrypted data for the message if the message is
+   *                     encrypted
+   * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme
+   */
+  public Message(String username, UUID deviceId, UUID typeId, MessagePriority priority,
+      byte[] data, String dataHash, String encryptionIV) {
     this.id = UUID.randomUUID();
     this.username = username;
     this.deviceId = deviceId;
@@ -398,8 +388,7 @@ public class Message
     this.data = data;
     this.dataHash = dataHash;
 
-    if (StringUtils.isEmpty(dataHash.length()))
-    {
+    if (StringUtils.isEmpty(dataHash.length())) {
       throw new RuntimeException(
           "Unable to initialize a message with encrypted data using a blank data hash");
     }
@@ -425,8 +414,7 @@ public class Message
    * @param encryptionIV  the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(String username, UUID deviceId, UUID typeId, UUID correlationId,
-      MessagePriority priority, byte[] data, String dataHash, String encryptionIV)
-  {
+      MessagePriority priority, byte[] data, String dataHash, String encryptionIV) {
     this.id = UUID.randomUUID();
     this.username = username;
     this.deviceId = deviceId;
@@ -436,8 +424,7 @@ public class Message
     this.data = data;
     this.dataHash = dataHash;
 
-    if (StringUtils.isEmpty(dataHash.length()))
-    {
+    if (StringUtils.isEmpty(dataHash.length())) {
       throw new RuntimeException(
           "Unable to initialize a message with encrypted data using a blank data hash");
     }
@@ -450,25 +437,24 @@ public class Message
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param id               the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         message
-   * @param username         the username identifying the user associated with the message
-   * @param deviceId         the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         device the message originated from
-   * @param typeId           the Universally Unique Identifier (UUID) used to uniquely identify the
-   *                         type of message
-   * @param correlationId    the Universally Unique Identifier (UUID) used to correlate the message
-   * @param priority         the message priority
-   * @param created          the date and time the message was created
-   * @param data             the data for the message which may be encrypted
-   * @param dataHash         the hash of the unencrypted data for the message if the message is
-   *                         encrypted
-   * @param encryptionIV     the base-64 encoded initialization vector for the encryption scheme
+   * @param id            the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      message
+   * @param username      the username identifying the user associated with the message
+   * @param deviceId      the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      device the message originated from
+   * @param typeId        the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      type of message
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   * @param priority      the message priority
+   * @param created       the date and time the message was created
+   * @param data          the data for the message which may be encrypted
+   * @param dataHash      the hash of the unencrypted data for the message if the message is
+   *                      encrypted
+   * @param encryptionIV  the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(UUID id, String username, UUID deviceId, UUID typeId, UUID correlationId,
       MessagePriority priority, LocalDateTime created, byte[] data, String dataHash,
-      String encryptionIV)
-  {
+      String encryptionIV) {
     this.id = id;
     this.username = username;
     this.deviceId = deviceId;
@@ -489,16 +475,15 @@ public class Message
    * @param document the WBXML document to validate
    *
    * @return <code>true</code> if the WBXML document contains valid message information or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("Message")
         && !((!rootElement.hasAttribute("id")) || (!rootElement.hasAttribute("username"))
-            || (!rootElement.hasAttribute("deviceId")) || (!rootElement.hasAttribute("priority"))
-            || (!rootElement.hasAttribute("typeId")) || (!rootElement.hasAttribute("created")));
+        || (!rootElement.hasAttribute("deviceId")) || (!rootElement.hasAttribute("priority"))
+        || (!rootElement.hasAttribute("typeId")) || (!rootElement.hasAttribute("created")));
   }
 
   /**
@@ -507,23 +492,19 @@ public class Message
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -537,9 +518,17 @@ public class Message
    *
    * @return the Universally Unique Identifier (UUID) used to correlate the message
    */
-  public UUID getCorrelationId()
-  {
+  public UUID getCorrelationId() {
     return correlationId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to correlate the message.
+   *
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   */
+  public void setCorrelationId(UUID correlationId) {
+    this.correlationId = correlationId;
   }
 
   /**
@@ -547,9 +536,17 @@ public class Message
    *
    * @return the date and time the message was created
    */
-  public LocalDateTime getCreated()
-  {
+  public LocalDateTime getCreated() {
     return created;
+  }
+
+  /**
+   * Set the date and time the message was created.
+   *
+   * @param created the date and time the message was created
+   */
+  public void setCreated(LocalDateTime created) {
+    this.created = created;
   }
 
   /**
@@ -557,9 +554,17 @@ public class Message
    *
    * @return the data for the message which may be encrypted
    */
-  public byte[] getData()
-  {
+  public byte[] getData() {
     return data;
+  }
+
+  /**
+   * Set the data for the message which may be encrypted.
+   *
+   * @param data the data for the message which may be encrypted
+   */
+  public void setData(byte[] data) {
+    this.data = data;
   }
 
   /**
@@ -567,9 +572,17 @@ public class Message
    *
    * @return the hash of the unencrypted data for the message if the message is encrypted
    */
-  public String getDataHash()
-  {
+  public String getDataHash() {
     return dataHash;
+  }
+
+  /**
+   * Set the hash of the unencrypted data for the message if the message is encrypted.
+   *
+   * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
+   */
+  public void setDataHash(String dataHash) {
+    this.dataHash = dataHash;
   }
 
   /**
@@ -577,11 +590,21 @@ public class Message
    * originated from.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         message originated from
+   * message originated from
    */
-  public UUID getDeviceId()
-  {
+  public UUID getDeviceId() {
     return deviceId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * originated from.
+   *
+   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
+   *                 the message originated from
+   */
+  public void setDeviceId(UUID deviceId) {
+    this.deviceId = deviceId;
   }
 
   /**
@@ -589,9 +612,17 @@ public class Message
    *
    * @return the number of times that downloading of the message was attempted
    */
-  public Integer getDownloadAttempts()
-  {
+  public Integer getDownloadAttempts() {
     return downloadAttempts;
+  }
+
+  /**
+   * Set the number of times that downloading of the message was attempted.
+   *
+   * @param downloadAttempts the number of times that downloading of the message was attempted
+   */
+  public void setDownloadAttempts(Integer downloadAttempts) {
+    this.downloadAttempts = downloadAttempts;
   }
 
   /**
@@ -599,9 +630,18 @@ public class Message
    *
    * @return the base-64 encoded initialization vector for the encryption scheme for the message
    */
-  public String getEncryptionIV()
-  {
+  public String getEncryptionIV() {
     return encryptionIV;
+  }
+
+  /**
+   * Set the base-64 encoded initialization vector for the encryption scheme for the message.
+   *
+   * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme for the
+   *                     message
+   */
+  public void setEncryptionIV(String encryptionIV) {
+    this.encryptionIV = encryptionIV;
   }
 
   /**
@@ -609,9 +649,17 @@ public class Message
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the message
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -619,9 +667,17 @@ public class Message
    *
    * @return the date and time the last attempt was made to process the message
    */
-  public LocalDateTime getLastProcessed()
-  {
+  public LocalDateTime getLastProcessed() {
     return lastProcessed;
+  }
+
+  /**
+   * Set the date and time the last attempt was made to process the message.
+   *
+   * @param lastProcessed the date and time the last attempt was made to process the message
+   */
+  public void setLastProcessed(LocalDateTime lastProcessed) {
+    this.lastProcessed = lastProcessed;
   }
 
   /**
@@ -629,11 +685,21 @@ public class Message
    * <code>null</code> if the message is not being processed.
    *
    * @return the name of the entity that has locked this message for processing or
-   *         <code>null</code> if the message is not being processed
+   * <code>null</code> if the message is not being processed
    */
-  public String getLockName()
-  {
+  public String getLockName() {
     return lockName;
+  }
+
+  /**
+   * Set the name of the entity that has locked this message for processing or <code>null</code> if
+   * the message is not being processed.
+   *
+   * @param lockName the name of the entity that has locked this message for processing or
+   *                 <code>null</code> if the message is not being processed
+   */
+  public void setLockName(String lockName) {
+    this.lockName = lockName;
   }
 
   /**
@@ -644,9 +710,19 @@ public class Message
    *
    * @return the message priority
    */
-  public MessagePriority getPriority()
-  {
+  public MessagePriority getPriority() {
     return priority;
+  }
+
+  /**
+   * Set the message priority. Messages with a higher priority value are processed before messages
+   * with a lower priority value.
+   *
+   * @param priority the message priority. Messages with a higher priority value are processed
+   *                 before messages with a lower priority value
+   */
+  public void setPriority(MessagePriority priority) {
+    this.priority = priority;
   }
 
   /**
@@ -654,9 +730,17 @@ public class Message
    *
    * @return the number of times that the processing of the message was attempted
    */
-  public Integer getProcessAttempts()
-  {
+  public Integer getProcessAttempts() {
     return processAttempts;
+  }
+
+  /**
+   * Set the number of times that the processing of the message was attempted.
+   *
+   * @param processAttempts the number of times that the processing of the message was attempted
+   */
+  public void setProcessAttempts(Integer processAttempts) {
+    this.processAttempts = processAttempts;
   }
 
   /**
@@ -664,9 +748,17 @@ public class Message
    *
    * @return the number of times that the sending of the message was attempted
    */
-  public Integer getSendAttempts()
-  {
+  public Integer getSendAttempts() {
     return sendAttempts;
+  }
+
+  /**
+   * Set the number of times that the sending of the message was attempted.
+   *
+   * @param sendAttempts the number of times that the sending of the message was attempted
+   */
+  public void setSendAttempts(Integer sendAttempts) {
+    this.sendAttempts = sendAttempts;
   }
 
   /**
@@ -674,19 +766,37 @@ public class Message
    *
    * @return the message status e.g. Initialized, Sending, etc
    */
-  public MessageStatus getStatus()
-  {
+  public MessageStatus getStatus() {
     return status;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of message.
+   * Set the message status e.g. Initialized, Sending, etc.
+   *
+   * @param status the message status e.g. Initialized, Sending, etc
+   */
+  public void setStatus(MessageStatus status) {
+    this.status = status;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of
+   * message.
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of message
    */
-  public UUID getTypeId()
-  {
+  public UUID getTypeId() {
     return typeId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the type of message.
+   *
+   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the type of
+   *               message
+   */
+  public void setTypeId(UUID typeId) {
+    this.typeId = typeId;
   }
 
   /**
@@ -694,9 +804,17 @@ public class Message
    *
    * @return the username identifying the user associated with the message
    */
-  public String getUsername()
-  {
+  public String getUsername() {
     return username;
+  }
+
+  /**
+   * Set the username identifying the user associated with the message.
+   *
+   * @param username the username identifying the user associated with the message
+   */
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   /**
@@ -705,8 +823,7 @@ public class Message
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -715,14 +832,10 @@ public class Message
   /**
    * Increment the download attempts.
    */
-  public void incrementDownloadAttempts()
-  {
-    if (downloadAttempts == null)
-    {
+  public void incrementDownloadAttempts() {
+    if (downloadAttempts == null) {
       downloadAttempts = 1;
-    }
-    else
-    {
+    } else {
       downloadAttempts++;
     }
   }
@@ -730,14 +843,10 @@ public class Message
   /**
    * Increment the processing attempts.
    */
-  public void incrementProcessAttempts()
-  {
-    if (processAttempts == null)
-    {
+  public void incrementProcessAttempts() {
+    if (processAttempts == null) {
       processAttempts = 1;
-    }
-    else
-    {
+    } else {
       processAttempts++;
     }
   }
@@ -749,177 +858,8 @@ public class Message
    * @return <code>true</code> if the data for the message is encrypted or <code>false</code>
    * otherwise
    */
-  public boolean isEncrypted()
-  {
+  public boolean isEncrypted() {
     return (!StringUtils.isEmpty(dataHash));
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the message.
-   *
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   */
-  public void setCorrelationId(UUID correlationId)
-  {
-    this.correlationId = correlationId;
-  }
-
-  /**
-   * Set the date and time the message was created.
-   *
-   * @param created the date and time the message was created
-   */
-  public void setCreated(LocalDateTime created)
-  {
-    this.created = created;
-  }
-
-  /**
-   * Set the data for the message which may be encrypted.
-   *
-   * @param data the data for the message which may be encrypted
-   */
-  public void setData(byte[] data)
-  {
-    this.data = data;
-  }
-
-  /**
-   * Set the hash of the unencrypted data for the message if the message is encrypted.
-   *
-   * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
-   */
-  public void setDataHash(String dataHash)
-  {
-    this.dataHash = dataHash;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * originated from.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
-   *                 the message originated from
-   */
-  public void setDeviceId(UUID deviceId)
-  {
-    this.deviceId = deviceId;
-  }
-
-  /**
-   * Set the number of times that downloading of the message was attempted.
-   *
-   * @param downloadAttempts the number of times that downloading of the message was attempted
-   */
-  public void setDownloadAttempts(Integer downloadAttempts)
-  {
-    this.downloadAttempts = downloadAttempts;
-  }
-
-  /**
-   * Set the base-64 encoded initialization vector for the encryption scheme for the message.
-   *
-   * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme for
-   *                     the message
-   */
-  public void setEncryptionIV(String encryptionIV)
-  {
-    this.encryptionIV = encryptionIV;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the message.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the date and time the last attempt was made to process the message.
-   *
-   * @param lastProcessed the date and time the last attempt was made to process the message
-   */
-  public void setLastProcessed(LocalDateTime lastProcessed)
-  {
-    this.lastProcessed = lastProcessed;
-  }
-
-  /**
-   * Set the name of the entity that has locked this message for processing or <code>null</code>
-   * if the message is not being processed.
-   *
-   * @param lockName the name of the entity that has locked this message for processing or
-   *                 <code>null</code> if the message is not being processed
-   */
-  public void setLockName(String lockName)
-  {
-    this.lockName = lockName;
-  }
-
-  /**
-   * Set the message priority. Messages with a higher priority value are processed before messages
-   * with a lower priority value.
-   *
-   * @param priority the message priority. Messages with a higher priority value are processed
-   *                 before messages with a lower priority value
-   */
-  public void setPriority(MessagePriority priority)
-  {
-    this.priority = priority;
-  }
-
-  /**
-   * Set the number of times that the processing of the message was attempted.
-   *
-   * @param processAttempts the number of times that the processing of the message was attempted
-   */
-  public void setProcessAttempts(Integer processAttempts)
-  {
-    this.processAttempts = processAttempts;
-  }
-
-  /**
-   * Set the number of times that the sending of the message was attempted.
-   *
-   * @param sendAttempts the number of times that the sending of the message was attempted
-   */
-  public void setSendAttempts(Integer sendAttempts)
-  {
-    this.sendAttempts = sendAttempts;
-  }
-
-  /**
-   * Set the message status e.g. Initialized, Sending, etc.
-   *
-   * @param status the message status e.g. Initialized, Sending, etc
-   */
-  public void setStatus(MessageStatus status)
-  {
-    this.status = status;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the type of message.
-   *
-   * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the type of
-   *               message
-   */
-  public void setTypeId(UUID typeId)
-  {
-    this.typeId = typeId;
-  }
-
-  /**
-   * Set the username identifying the user associated with the message.
-   *
-   * @param username the username identifying the user associated with the message
-   */
-  public void setUsername(String username)
-  {
-    this.username = username;
   }
 
   /**
@@ -928,8 +868,7 @@ public class Message
    * @return the String representation of the message
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     StringBuilder buffer = new StringBuilder("<Message");
 
     buffer.append(" id=\"").append(id).append("\"");
@@ -944,37 +883,28 @@ public class Message
     buffer.append(" status=\"").append(status).append("\"");
     buffer.append(" created=\"").append(ISO8601Util.fromLocalDateTime(created)).append("\"");
 
-    if (sendAttempts != null)
-    {
+    if (sendAttempts != null) {
       buffer.append(" sendAttempts=\"").append(sendAttempts).append("\"");
     }
 
-    if (processAttempts != null)
-    {
+    if (processAttempts != null) {
       buffer.append(" processAttempts=\"").append(processAttempts).append("\"");
     }
 
-    if (downloadAttempts != null)
-    {
+    if (downloadAttempts != null) {
       buffer.append(" downloadAttempts=\"").append(downloadAttempts).append("\"");
     }
 
-    if (lockName != null)
-    {
+    if (lockName != null) {
       buffer.append(" lockName=\"").append(lockName).append("\"");
-    }
-    else
-    {
+    } else {
       buffer.append(" lockName=\"None\"");
     }
 
-    if (lastProcessed != null)
-    {
+    if (lastProcessed != null) {
       buffer.append(" lastProcessed=\"").append(ISO8601Util.fromLocalDateTime(lastProcessed))
           .append("\"");
-    }
-    else
-    {
+    } else {
       buffer.append(" lastProcessed=\"Never\"");
     }
 
@@ -985,12 +915,9 @@ public class Message
         ? encryptionIV
         : "").append("\"");
 
-    if (isEncrypted())
-    {
+    if (isEncrypted()) {
       buffer.append(">").append(data.length).append(" bytes of opaque encrypted data</Message>");
-    }
-    else
-    {
+    } else {
       buffer.append(">").append(data.length).append(" bytes of opaque data</Message>");
     }
 
@@ -1002,8 +929,7 @@ public class Message
    *
    * @return the WBXML representation of the message
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("Message");
 
     rootElement.setAttribute("id", id.toString());
@@ -1011,40 +937,32 @@ public class Message
     rootElement.setAttribute("deviceId", deviceId.toString());
     rootElement.setAttribute("typeId", typeId.toString());
 
-    if (correlationId != null)
-    {
+    if (correlationId != null) {
       rootElement.setAttribute("correlationId", correlationId.toString());
     }
 
     rootElement.setAttribute("priority", Integer.toString(priority.code()));
     rootElement.setAttribute("created", ISO8601Util.fromLocalDateTime(created));
 
-    if (sendAttempts != null)
-    {
+    if (sendAttempts != null) {
       rootElement.setAttribute("sendAttempts", Integer.toString(sendAttempts));
     }
 
-    if (processAttempts != null)
-    {
+    if (processAttempts != null) {
       rootElement.setAttribute("processAttempts", Integer.toString(processAttempts));
     }
 
-    if (downloadAttempts != null)
-    {
+    if (downloadAttempts != null) {
       rootElement.setAttribute("downloadAttempts", Integer.toString(downloadAttempts));
     }
 
-    if (!StringUtils.isEmpty(dataHash))
-    {
+    if (!StringUtils.isEmpty(dataHash)) {
       rootElement.setAttribute("dataHash", dataHash);
-    }
-    else
-    {
+    } else {
       rootElement.setAttribute("dataHash", "");
     }
 
-    if (encryptionIV != null)
-    {
+    if (encryptionIV != null) {
       rootElement.setAttribute("encryptionIV", encryptionIV);
     }
 

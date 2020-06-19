@@ -18,6 +18,8 @@ package digital.inception.ws.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import org.apache.cxf.configuration.security.AuthorizationPolicy;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.Conduit;
@@ -26,17 +28,14 @@ import org.apache.cxf.transport.http.auth.DigestAuthSupplier;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
 /**
- * The <code>CXFDigestSecurityProxyConfigurator</code> class provides the capability to configure
- * a CXF web service proxy for digest authentication.
+ * The <code>CXFDigestSecurityProxyConfigurator</code> class provides the capability to configure a
+ * CXF web service proxy for digest authentication.
  *
  * @author Marcus Portmann
  */
-public class CXFDigestSecurityProxyConfigurator
-{
+public class CXFDigestSecurityProxyConfigurator {
+
   /**
    * Configure the CXF web service proxy to support digest authentication.
    *
@@ -45,18 +44,15 @@ public class CXFDigestSecurityProxyConfigurator
    * @param password the password to use when authenticating using digest authentication
    */
   public static void configureProxy(Object proxy, String username, String password)
-    throws Exception
-  {
+      throws Exception {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
-    if (invocationHandler instanceof ClientProxy)
-    {
+    if (invocationHandler instanceof ClientProxy) {
       ClientProxy clientProxy = (ClientProxy) invocationHandler;
 
       Conduit conduit = clientProxy.getClient().getConduit();
 
-      if (conduit instanceof HTTPConduit)
-      {
+      if (conduit instanceof HTTPConduit) {
         HTTPConduit httpConduit = (HTTPConduit) conduit;
 
         AuthorizationPolicy authorizationPolicy = httpConduit.getAuthorization();

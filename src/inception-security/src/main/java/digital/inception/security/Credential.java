@@ -24,22 +24,22 @@ package digital.inception.security;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface Credential
-{
+public interface Credential {
+
   /**
    * The equals method checks if the specified object is the same credential as this object.
    *
    * @param another the credential to compare with
    *
    * @return true if the object passed in matches the credential represented by the implementation
-   *         of this interface
+   * of this interface
    */
   @Override
   boolean equals(Object another);
 
   /**
-   * The hashCode method returns an integer hash code to represent this credential.
-   * It can be used to test for non-equality, or as an index key in a hash table.
+   * The hashCode method returns an integer hash code to represent this credential. It can be used
+   * to test for non-equality, or as an index key in a hash table.
    *
    * @return an integer hash code representing the credential
    */

@@ -18,15 +18,20 @@ package digital.inception.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.InvalidTransactionException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.transaction.*;
 
 /**
  * The <code>TransactionManagerProxy</code> class provides a proxy that tracks the Java Transaction
@@ -35,10 +40,10 @@ import javax.transaction.*;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class TransactionManagerProxy
-  implements TransactionManager
-{
+    implements TransactionManager {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TransactionManagerProxy.class);
 
@@ -58,25 +63,28 @@ public class TransactionManagerProxy
    *
    * @param transactionManager the JTA transaction manager
    */
-  public TransactionManagerProxy(TransactionManager transactionManager)
-  {
+  public TransactionManagerProxy(TransactionManager transactionManager) {
     this.transactionManager = transactionManager;
+  }
+
+  /**
+   * Returns the active transaction stack traces for the current thread.
+   *
+   * @return the active transaction stack traces for the current thread
+   */
+  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces() {
+    return activeTransactionStackTraces.get();
   }
 
   @Override
   public void begin()
-    throws NotSupportedException, SystemException
-  {
-    try
-    {
+      throws NotSupportedException, SystemException {
+    try {
       transactionManager.begin();
-    }
-    finally
-    {
+    } finally {
       Transaction afterTransaction = getTransaction();
 
-      if (afterTransaction != null)
-      {
+      if (afterTransaction != null) {
         getActiveTransactionStackTraces().put(afterTransaction, Thread.currentThread()
             .getStackTrace());
       }
@@ -85,21 +93,16 @@ public class TransactionManagerProxy
 
   @Override
   public void commit()
-    throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-        SecurityException, IllegalStateException, SystemException
-  {
+      throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
+      SecurityException, IllegalStateException, SystemException {
     Transaction beforeTransaction = getTransaction();
 
-    try
-    {
+    try {
       transactionManager.commit();
-    }
-    finally
-    {
+    } finally {
       Transaction afterTransaction = getTransaction();
 
-      if ((beforeTransaction != null) && (afterTransaction == null))
-      {
+      if ((beforeTransaction != null) && (afterTransaction == null)) {
         getActiveTransactionStackTraces().remove(beforeTransaction);
       }
     }
@@ -107,41 +110,33 @@ public class TransactionManagerProxy
 
   @Override
   public int getStatus()
-    throws SystemException
-  {
+      throws SystemException {
     return transactionManager.getStatus();
   }
 
   @Override
   public Transaction getTransaction()
-    throws SystemException
-  {
+      throws SystemException {
     return transactionManager.getTransaction();
   }
 
   @Override
   public void resume(Transaction transaction)
-    throws InvalidTransactionException, IllegalStateException, SystemException
-  {
+      throws InvalidTransactionException, IllegalStateException, SystemException {
     transactionManager.resume(transaction);
   }
 
   @Override
   public void rollback()
-    throws IllegalStateException, SecurityException, SystemException
-  {
+      throws IllegalStateException, SecurityException, SystemException {
     Transaction beforeTransaction = getTransaction();
 
-    try
-    {
+    try {
       transactionManager.rollback();
-    }
-    finally
-    {
+    } finally {
       Transaction afterTransaction = getTransaction();
 
-      if ((beforeTransaction != null) && (afterTransaction == null))
-      {
+      if ((beforeTransaction != null) && (afterTransaction == null)) {
         getActiveTransactionStackTraces().remove(beforeTransaction);
       }
     }
@@ -149,40 +144,26 @@ public class TransactionManagerProxy
 
   @Override
   public void setRollbackOnly()
-    throws IllegalStateException, SystemException
-  {
+      throws IllegalStateException, SystemException {
     /*
      * This check to confirm that we have a valid transaction was added to handle the issue
      * where the Hibernate JPA implementation would try to rollback a transaction even if one
      * didn't exist when a non-hibernate exception was thrown.
      */
-    if (getTransaction() != null)
-    {
+    if (getTransaction() != null) {
       transactionManager.setRollbackOnly();
     }
   }
 
   @Override
   public void setTransactionTimeout(int i)
-    throws SystemException
-  {
+      throws SystemException {
     transactionManager.setTransactionTimeout(i);
   }
 
   @Override
   public Transaction suspend()
-    throws SystemException
-  {
+      throws SystemException {
     return transactionManager.suspend();
-  }
-
-  /**
-   * Returns the active transaction stack traces for the current thread.
-   *
-   * @return the active transaction stack traces for the current thread
-   */
-  static Map<Transaction, StackTraceElement[]> getActiveTransactionStackTraces()
-  {
-    return activeTransactionStackTraces.get();
   }
 }

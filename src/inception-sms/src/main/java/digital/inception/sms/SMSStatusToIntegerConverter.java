@@ -23,8 +23,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>SMSStatusToIntegerConverter</code> class implements the Spring converter that
- * converts a <code>SMSStatus</code> type into an <code>Integer</code> type.
+ * The <code>SMSStatusToIntegerConverter</code> class implements the Spring converter that converts
+ * a <code>SMSStatus</code> type into an <code>Integer</code> type.
  *
  * @author Marcus Portmann
  */
@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @WritingConverter
 public class SMSStatusToIntegerConverter
-  implements Converter<SMSStatus, Integer>
-{
+    implements Converter<SMSStatus, Integer> {
+
   /**
    * Constructs a new <code>SMSStatusToIntegerConverter</code>.
    */
-  public SMSStatusToIntegerConverter() {}
+  public SMSStatusToIntegerConverter() {
+  }
 
   @Override
-  public Integer convert(SMSStatus source)
-  {
-    if (source == null)
-    {
+  public Integer convert(SMSStatus source) {
+    if (source == null) {
       return null;
     }
 

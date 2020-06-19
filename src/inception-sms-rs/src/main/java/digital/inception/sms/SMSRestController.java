@@ -19,14 +19,12 @@ package digital.inception.sms;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.SecureRestController;
-
 import io.swagger.annotations.Api;
+import javax.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.validation.Validator;
 
 /**
  * The <code>SMSRestController</code> class.
@@ -36,9 +34,9 @@ import javax.validation.Validator;
 @Api(tags = "SMS API")
 @RestController
 @RequestMapping(value = "/api/sms")
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class SMSRestController extends SecureRestController
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class SMSRestController extends SecureRestController {
+
   /**
    * The SMS Service.
    */
@@ -55,8 +53,7 @@ public class SMSRestController extends SecureRestController
    * @param smsService the SMS Service
    * @param validator  the JSR-303 validator
    */
-  public SMSRestController(ISMSService smsService, Validator validator)
-  {
+  public SMSRestController(ISMSService smsService, Validator validator) {
     this.smsService = smsService;
     this.validator = validator;
   }

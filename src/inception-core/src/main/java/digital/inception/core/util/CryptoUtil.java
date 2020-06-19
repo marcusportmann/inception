@@ -18,31 +18,34 @@ package digital.inception.core.util;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyStore;
+import java.security.MessageDigest;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPrivateCrtKey;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.UUID;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.InputStream;
-
-import java.math.BigInteger;
-
-import java.security.*;
-import java.security.cert.X509Certificate;
-import java.security.interfaces.RSAPrivateCrtKey;
-import java.security.spec.RSAPublicKeySpec;
-
-import java.util.UUID;
-
 /**
  * The <code>CryptoUtil</code> class provides a number of cryptography related utility functions.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class CryptoUtil
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class CryptoUtil {
+
   /**
    * The AES block size.
    */
@@ -71,8 +74,7 @@ public class CryptoUtil
    *
    * @return the random encryption initialization vector
    */
-  public static byte[] createRandomEncryptionIV(int length)
-  {
+  public static byte[] createRandomEncryptionIV(int length) {
     byte[] encryptionIV = new byte[length];
 
     secureRandom.nextBytes(encryptionIV);
@@ -90,18 +92,14 @@ public class CryptoUtil
    * @return the key pair
    */
   public static KeyPair getKeyPair(KeyStore keyStore, String alias, String password)
-    throws GeneralSecurityException
-  {
-    try
-    {
+      throws GeneralSecurityException {
+    try {
       RSAPrivateCrtKey key = (RSAPrivateCrtKey) keyStore.getKey(alias, password.toCharArray());
       RSAPublicKeySpec spec = new RSAPublicKeySpec(key.getModulus(), key.getPublicExponent());
       PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(spec);
 
       return new KeyPair(publicKey, key);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new GeneralSecurityException("Failed to load the key pair (" + alias
           + ") from the key store", e);
     }
@@ -112,8 +110,7 @@ public class CryptoUtil
    *
    * @return a randomly generated AES key
    */
-  public static byte[] getRandomAESKey()
-  {
+  public static byte[] getRandomAESKey() {
     String randomPassword = new BigInteger(130, secureRandom).toString(32);
 
     return CryptoUtil.passwordToAESKey(randomPassword, UUID.randomUUID().toString());
@@ -129,19 +126,16 @@ public class CryptoUtil
    * @return the key store that was loaded
    */
   public static KeyStore loadKeyStore(String type, String path, String password)
-    throws GeneralSecurityException
-  {
+      throws GeneralSecurityException {
     InputStream input = null;
 
-    try
-    {
+    try {
       PathMatchingResourcePatternResolver resourceLoader =
           new PathMatchingResourcePatternResolver();
 
       Resource keyStoreResource = resourceLoader.getResource(path);
 
-      if (!keyStoreResource.exists())
-      {
+      if (!keyStoreResource.exists()) {
         throw new GeneralSecurityException("The key store (" + path + ") could not be found");
       }
 
@@ -151,25 +145,19 @@ public class CryptoUtil
 
       ks.load(input,
           ((password == null) || (password.length() == 0))
-          ? new char[0]
-          : password.toCharArray());
+              ? new char[0]
+              : password.toCharArray());
 
       return ks;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new GeneralSecurityException("Failed to load the key store (" + path + ")", e);
-    }
-    finally
-    {
-      try
-      {
-        if (input != null)
-        {
+    } finally {
+      try {
+        if (input != null) {
           input.close();
         }
+      } catch (Throwable ignored) {
       }
-      catch (Throwable ignored) {}
     }
   }
 
@@ -184,19 +172,16 @@ public class CryptoUtil
    * @return the key store that was loaded
    */
   public static KeyStore loadKeyStore(String type, String path, String password, String alias)
-    throws GeneralSecurityException
-  {
+      throws GeneralSecurityException {
     InputStream input = null;
 
-    try
-    {
+    try {
       PathMatchingResourcePatternResolver resourceLoader =
           new PathMatchingResourcePatternResolver();
 
       Resource keyStoreResource = resourceLoader.getResource(path);
 
-      if (!keyStoreResource.exists())
-      {
+      if (!keyStoreResource.exists()) {
         throw new GeneralSecurityException("The key store (" + path + ") could not be found");
       }
 
@@ -206,17 +191,16 @@ public class CryptoUtil
 
       ks.load(input,
           ((password == null) || (password.length() == 0))
-          ? new char[0]
-          : password.toCharArray());
+              ? new char[0]
+              : password.toCharArray());
 
       // Attempt to retrieve the private key from the key store
       Key privateKey = ks.getKey(alias,
           StringUtils.isEmpty(password)
-          ? "".toCharArray()
-          : password.toCharArray());
+              ? "".toCharArray()
+              : password.toCharArray());
 
-      if (privateKey == null)
-      {
+      if (privateKey == null) {
         throw new GeneralSecurityException("A private key with alias (" + alias
             + ") could not be found in the key store (" + path + ")");
       }
@@ -224,35 +208,27 @@ public class CryptoUtil
       // Attempt to retrieve the certificate from the key store
       java.security.cert.Certificate certificate = ks.getCertificate(alias);
 
-      if (certificate == null)
-      {
+      if (certificate == null) {
         throw new GeneralSecurityException("A certificate with alias (" + alias
             + ") could not be found in the key store (" + path + ")");
       }
 
-      if (!(certificate instanceof X509Certificate))
-      {
+      if (!(certificate instanceof X509Certificate)) {
         throw new GeneralSecurityException("The certificate with alias (" + alias
             + ") is not an X509 certificate");
       }
 
       return ks;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new GeneralSecurityException("Failed to load and query the key store (" + path + ")",
           e);
-    }
-    finally
-    {
-      try
-      {
-        if (input != null)
-        {
+    } finally {
+      try {
+        if (input != null) {
           input.close();
         }
+      } catch (Throwable ignored) {
       }
-      catch (Throwable ignored) {}
     }
   }
 
@@ -266,21 +242,18 @@ public class CryptoUtil
    * @return the trust store that was loaded
    */
   public static KeyStore loadTrustStore(String type, String path, String password)
-    throws GeneralSecurityException
-  {
+      throws GeneralSecurityException {
     KeyStore ks;
 
     InputStream input = null;
 
-    try
-    {
+    try {
       PathMatchingResourcePatternResolver resourceLoader =
           new PathMatchingResourcePatternResolver();
 
       Resource trustStoreResource = resourceLoader.getResource(path);
 
-      if (!trustStoreResource.exists())
-      {
+      if (!trustStoreResource.exists()) {
         throw new GeneralSecurityException("The trust store (" + path + ") could not be found");
       }
 
@@ -290,25 +263,19 @@ public class CryptoUtil
 
       ks.load(input,
           ((password == null) || (password.length() == 0))
-          ? new char[0]
-          : password.toCharArray());
+              ? new char[0]
+              : password.toCharArray());
 
       return ks;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new GeneralSecurityException("Failed to load the trust store (" + path + ")", e);
-    }
-    finally
-    {
-      try
-      {
-        if (input != null)
-        {
+    } finally {
+      try {
+        if (input != null) {
           input.close();
         }
+      } catch (Throwable ignored) {
       }
-      catch (Throwable ignored) {}
     }
   }
 
@@ -321,8 +288,7 @@ public class CryptoUtil
    * @return the 3DES key
    */
   public static byte[] passwordTo3DESKey(String password)
-    throws CryptoException
-  {
+      throws CryptoException {
     byte[] salt = "0907df13-2ef5-41a8-90e7-f08a3ca16af4".getBytes();
 
     return passwordTo3DESKey(password.getBytes(), salt);
@@ -337,8 +303,7 @@ public class CryptoUtil
    * @return the AES key
    */
   public static byte[] passwordToAESKey(String password)
-    throws CryptoException
-  {
+      throws CryptoException {
     byte[] salt = "9aeabd0f-be94-486e-a693-ed2d553ea202".getBytes();
 
     return passwordToAESKey(password.getBytes(), salt, AES_KEY_SIZE);
@@ -354,8 +319,7 @@ public class CryptoUtil
    * @return the AES key
    */
   public static byte[] passwordToAESKey(String password, byte[] salt)
-    throws CryptoException
-  {
+      throws CryptoException {
     return passwordToAESKey(password.getBytes(), salt, AES_KEY_SIZE);
   }
 
@@ -369,15 +333,12 @@ public class CryptoUtil
    * @return the AES key
    */
   public static byte[] passwordToAESKey(String password, String salt)
-    throws CryptoException
-  {
+      throws CryptoException {
     return passwordToAESKey(password.getBytes(), salt.getBytes(), AES_KEY_SIZE);
   }
 
-  private static byte[] hashPasswordAndSalt(byte[] password, byte[] salt)
-  {
-    try
-    {
+  private static byte[] hashPasswordAndSalt(byte[] password, byte[] salt) {
+    try {
       // Concatenate password and salt.
       byte[] pwAndSalt = new byte[password.length + salt.length];
 
@@ -387,50 +348,39 @@ public class CryptoUtil
       // Create the key as sha1(sha1(sha1(sha1(...(pw+salt))...)
       MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
-      for (int i = 0; i < 4; i++)
-      {
+      for (int i = 0; i < 4; i++) {
         messageDigest.update(pwAndSalt, 0, pwAndSalt.length);
         messageDigest.digest(pwAndSalt, 0, messageDigest.getDigestLength());
       }
 
       return pwAndSalt;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CryptoException("Failed to hash the password and key", e);
     }
   }
 
   private static byte[] passwordTo3DESKey(byte[] password, byte[] salt)
-    throws CryptoException
-  {
-    try
-    {
+      throws CryptoException {
+    try {
       byte[] key = new byte[24];
 
       System.arraycopy(hashPasswordAndSalt(password, salt), 0, key, 0, 24);
 
       return key;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CryptoException("Failed to convert the password to a 3DES key", e);
     }
   }
 
   private static byte[] passwordToAESKey(byte[] password, byte[] salt, int keysize)
-    throws CryptoException
-  {
-    try
-    {
+      throws CryptoException {
+    try {
       byte[] key = new byte[keysize];
 
       System.arraycopy(hashPasswordAndSalt(password, salt), 0, key, 0, keysize);
 
       return key;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new CryptoException("Failed to convert the password to an AES key", e);
     }
   }

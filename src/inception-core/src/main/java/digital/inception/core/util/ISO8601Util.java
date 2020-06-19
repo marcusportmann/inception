@@ -19,13 +19,15 @@ package digital.inception.core.util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.text.SimpleDateFormat;
-
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-
 import java.util.Date;
 
 /**
@@ -34,13 +36,14 @@ import java.util.Date;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public final class ISO8601Util
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public final class ISO8601Util {
+
   private static final ThreadLocal<DateTimeFormatter> localDateTimeFormatter =
       ThreadLocal.withInitial(() -> (new DateTimeFormatterBuilder().appendPattern(
-      "yyyy-MM-dd'T'HH:mm:ss").parseLenient().optionalStart().appendPattern(".SSS").optionalEnd()
-      .optionalStart().appendOffset("+HH:MM", "Z").optionalEnd().toFormatter()));
+          "yyyy-MM-dd'T'HH:mm:ss").parseLenient().optionalStart().appendPattern(".SSS")
+          .optionalEnd()
+          .optionalStart().appendOffset("+HH:MM", "Z").optionalEnd().toFormatter()));
   private static final ThreadLocal<DateTimeFormatter> localDateFormatter = ThreadLocal.withInitial(
       () -> DateTimeFormatter.ISO_DATE);
   private static final ThreadLocal<DateTimeFormatter> localTimeFormatter = ThreadLocal.withInitial(
@@ -49,9 +52,9 @@ public final class ISO8601Util
       () -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
   private static final ThreadLocal<DateTimeFormatter> dateInputFormatter = ThreadLocal.withInitial(
       () -> (new DateTimeFormatterBuilder().appendPattern("yyyy-MM-dd").parseLenient()
-      .optionalStart().appendPattern("'T'HH:mm:ss").optionalEnd().optionalStart().appendPattern(
-      ".SSS").optionalEnd().optionalStart().appendOffset("+HH:MM", "Z").optionalEnd()
-      .toFormatter()));
+          .optionalStart().appendPattern("'T'HH:mm:ss").optionalEnd().optionalStart().appendPattern(
+              ".SSS").optionalEnd().optionalStart().appendOffset("+HH:MM", "Z").optionalEnd()
+          .toFormatter()));
   private static final ThreadLocal<SimpleDateFormat> dateFormatter = ThreadLocal.withInitial(
       () -> new SimpleDateFormat("yyyy-MM-dd"));
 
@@ -62,8 +65,7 @@ public final class ISO8601Util
    *
    * @return the ISO 8601 string for the <code>Date</code> instance
    */
-  public static String fromDate(Date date)
-  {
+  public static String fromDate(Date date) {
     return dateFormatter.get().format(date);
   }
 
@@ -74,8 +76,7 @@ public final class ISO8601Util
    *
    * @return the ISO 8601 string for the <code>Date</code> instance
    */
-  public static String fromDateTime(Date date)
-  {
+  public static String fromDateTime(Date date) {
     return dateTimeFormatter.get().format(date);
   }
 
@@ -86,8 +87,7 @@ public final class ISO8601Util
    *
    * @return the ISO 8601 string for the <code>LocalDate</code> instance
    */
-  public static String fromLocalDate(LocalDate localDate)
-  {
+  public static String fromLocalDate(LocalDate localDate) {
     return localDate.format(localDateFormatter.get());
   }
 
@@ -99,8 +99,7 @@ public final class ISO8601Util
    *
    * @return the ISO 8601 string for the <code>LocalDateTime</code> instance
    */
-  public static String fromLocalDateTime(LocalDateTime localDateTime)
-  {
+  public static String fromLocalDateTime(LocalDateTime localDateTime) {
     return ZonedDateTime.of(localDateTime, ZoneId.systemDefault()).format(
         localDateTimeFormatter.get());
   }
@@ -112,8 +111,7 @@ public final class ISO8601Util
    *
    * @return the ISO 8601 string for the <code>LocalTime</code> instance
    */
-  public static String fromLocalTime(LocalTime localTime)
-  {
+  public static String fromLocalTime(LocalTime localTime) {
     return localTime.format(localTimeFormatter.get());
   }
 
@@ -125,8 +123,7 @@ public final class ISO8601Util
    *
    * @return the ISO 8601 string for the <code>ZonedDateTime</code> instance
    */
-  public static String fromZonedDateTime(ZonedDateTime zonedDateTime)
-  {
+  public static String fromZonedDateTime(ZonedDateTime zonedDateTime) {
     return zonedDateTime.format(localDateTimeFormatter.get());
   }
 
@@ -193,8 +190,7 @@ public final class ISO8601Util
    *
    * @return the current date and time formatted as ISO 8601 string
    */
-  public static String now()
-  {
+  public static String now() {
     return fromLocalDateTime(LocalDateTime.now());
   }
 
@@ -205,25 +201,19 @@ public final class ISO8601Util
    *
    * @return the <code>LocalDate</code> instance for the ISO 8601 string
    */
-  public static Date toDate(String iso8601string)
-  {
+  public static Date toDate(String iso8601string) {
     TemporalAccessor temporalAccessor = dateInputFormatter.get().parse(iso8601string);
 
-    if (!temporalAccessor.isSupported(ChronoField.HOUR_OF_DAY))
-    {
+    if (!temporalAccessor.isSupported(ChronoField.HOUR_OF_DAY)) {
       LocalDate localDate = LocalDate.parse(iso8601string, localDateFormatter.get());
 
       return java.sql.Date.valueOf(localDate);
-    }
-    else if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS))
-    {
+    } else if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)) {
       ZonedDateTime zonedDateTime = ZonedDateTime.parse(iso8601string, localDateTimeFormatter.get())
           .withZoneSameInstant(ZoneId.systemDefault());
 
       return Date.from(zonedDateTime.toInstant());
-    }
-    else
-    {
+    } else {
       LocalDateTime localDateTime = LocalDateTime.parse(iso8601string,
           localDateTimeFormatter.get());
 
@@ -238,8 +228,7 @@ public final class ISO8601Util
    *
    * @return the <code>LocalDate</code> instance for the ISO 8601 string
    */
-  public static LocalDate toLocalDate(String iso8601string)
-  {
+  public static LocalDate toLocalDate(String iso8601string) {
     return LocalDate.parse(iso8601string, localDateFormatter.get());
   }
 
@@ -250,17 +239,13 @@ public final class ISO8601Util
    *
    * @return the <code>LocalDateTime</code> instance for the ISO 8601 string
    */
-  public static LocalDateTime toLocalDateTime(String iso8601string)
-  {
+  public static LocalDateTime toLocalDateTime(String iso8601string) {
     TemporalAccessor temporalAccessor = localDateTimeFormatter.get().parse(iso8601string);
 
-    if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS))
-    {
+    if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)) {
       return ZonedDateTime.parse(iso8601string, localDateTimeFormatter.get()).withZoneSameInstant(
           ZoneId.systemDefault()).toLocalDateTime();
-    }
-    else
-    {
+    } else {
       return LocalDateTime.parse(iso8601string, localDateTimeFormatter.get());
     }
   }
@@ -272,8 +257,7 @@ public final class ISO8601Util
    *
    * @return the <code>LocalTime</code> instance for the ISO 8601 string
    */
-  public static LocalTime toLocalTime(String iso8601string)
-  {
+  public static LocalTime toLocalTime(String iso8601string) {
     return LocalTime.parse(iso8601string, localTimeFormatter.get());
   }
 
@@ -284,17 +268,13 @@ public final class ISO8601Util
    *
    * @return the <code>ZonedDateTime</code> instance for the ISO 8601 string
    */
-  public static ZonedDateTime toZonedDateTime(String iso8601string)
-  {
+  public static ZonedDateTime toZonedDateTime(String iso8601string) {
     TemporalAccessor temporalAccessor = localDateTimeFormatter.get().parse(iso8601string);
 
-    if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS))
-    {
+    if (temporalAccessor.isSupported(ChronoField.OFFSET_SECONDS)) {
       return ZonedDateTime.parse(iso8601string, localDateTimeFormatter.get()).withZoneSameInstant(
           ZoneId.systemDefault());
-    }
-    else
-    {
+    } else {
       return LocalDateTime.parse(iso8601string, localDateTimeFormatter.get()).atZone(
           ZoneId.systemDefault());
     }

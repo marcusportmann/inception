@@ -19,28 +19,21 @@ package digital.inception.rs.oauth;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
-
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-
-import java.math.BigDecimal;
-
-import java.nio.charset.StandardCharsets;
-
-import java.time.LocalDateTime;
-
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * The <code>AccessDeniedHandler</code> implements the custom access denied handler.
@@ -48,15 +41,13 @@ import javax.servlet.http.HttpServletResponse;
  * @author Marcus Portmann
  */
 public class AccessDeniedHandler
-  implements org.springframework.security.web.access.AccessDeniedHandler
-{
+    implements org.springframework.security.web.access.AccessDeniedHandler {
+
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response,
       AccessDeniedException accessDeniedException)
-    throws IOException, ServletException
-  {
-    try
-    {
+      throws IOException, ServletException {
+    try {
       JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
 
       jsonObjectBuilder.add("uri", request.getRequestURI());
@@ -71,13 +62,11 @@ public class AccessDeniedHandler
       response.setCharacterEncoding(StandardCharsets.UTF_8.name());
       response.setContentType("application/json");
 
-      try (BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream()))
-      {
+      try (BufferedOutputStream outputStream = new BufferedOutputStream(
+          response.getOutputStream())) {
         outputStream.write(jsonObject.toString().getBytes(StandardCharsets.UTF_8));
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ServletException("Failed to handle the access denied error", e);
     }
   }

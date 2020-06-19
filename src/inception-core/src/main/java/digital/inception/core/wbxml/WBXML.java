@@ -22,8 +22,8 @@ package digital.inception.core.wbxml;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class WBXML
-{
+public class WBXML {
+
   /**
    * The ID for the ISO 8895-1 character set.
    */

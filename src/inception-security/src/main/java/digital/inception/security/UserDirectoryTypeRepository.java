@@ -29,8 +29,8 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface UserDirectoryTypeRepository extends JpaRepository<UserDirectoryType, String>
-{
+public interface UserDirectoryTypeRepository extends JpaRepository<UserDirectoryType, String> {
+
   @Modifying
   @Query("delete from UserDirectoryType udt where udt.code = :userDirectoryTypeCode")
   void deleteById(@Param("userDirectoryTypeCode") String userDirectoryTypeCode);

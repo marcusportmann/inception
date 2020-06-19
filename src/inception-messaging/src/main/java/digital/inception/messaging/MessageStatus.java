@@ -20,14 +20,12 @@ package digital.inception.messaging;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The enumeration giving the possible statuses for a message.
@@ -35,8 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "MessageStatus")
 @XmlEnum
 @XmlType(name = "MessageStatus", namespace = "http://messaging.inception.digital")
-public enum MessageStatus
-{
+public enum MessageStatus {
   @XmlEnumValue("Initialized")
   INITIALIZED(0, "Initialized"),
   @XmlEnumValue("QueuedForSending")
@@ -63,8 +60,7 @@ public enum MessageStatus
   private int code;
   private String description;
 
-  MessageStatus(int code, String description)
-  {
+  MessageStatus(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -77,10 +73,8 @@ public enum MessageStatus
    * @return the message status given by the specified numeric code value
    */
   @JsonCreator
-  public static MessageStatus fromCode(int code)
-  {
-    switch (code)
-    {
+  public static MessageStatus fromCode(int code) {
+    switch (code) {
       case 0:
         return MessageStatus.INITIALIZED;
 
@@ -122,8 +116,7 @@ public enum MessageStatus
    * @return the numeric code value identifying the message status
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -132,8 +125,7 @@ public enum MessageStatus
    *
    * @return the description for the message status
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 
@@ -142,8 +134,7 @@ public enum MessageStatus
    *
    * @return the string representation of the message status enumeration value
    */
-  public String toString()
-  {
+  public String toString() {
     return description;
   }
 }

@@ -18,6 +18,13 @@ package digital.inception.persistence;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import javax.sql.DataSource;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -35,26 +42,16 @@ import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
 /**
- * The <code>PersistenceConfiguration</code> class provides the Spring configuration
- * for the Persistence module.
+ * The <code>PersistenceConfiguration</code> class provides the Spring configuration for the
+ * Persistence module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories
-public class PersistenceConfiguration
-{
+public class PersistenceConfiguration {
+
   /**
    * The Spring application context.
    */
@@ -71,8 +68,7 @@ public class PersistenceConfiguration
    *
    * @param applicationContext the Spring application context
    */
-  public PersistenceConfiguration(ApplicationContext applicationContext)
-  {
+  public PersistenceConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
 
@@ -85,10 +81,8 @@ public class PersistenceConfiguration
   @Bean(name = "applicationPersistenceUnit")
   @DependsOn("applicationDataSource")
   @Primary
-  public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean()
-  {
-    try
-    {
+  public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean() {
+    try {
       DataSource dataSource = applicationContext.getBean("applicationDataSource", DataSource.class);
 
       LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
@@ -97,12 +91,10 @@ public class PersistenceConfiguration
       HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
       jpaVendorAdapter.setGenerateDdl(false);
 
-      try (Connection connection = dataSource.getConnection())
-      {
+      try (Connection connection = dataSource.getConnection()) {
         DatabaseMetaData metaData = connection.getMetaData();
 
-        switch (metaData.getDatabaseProductName())
-        {
+        switch (metaData.getDatabaseProductName()) {
           case "H2":
 
             jpaVendorAdapter.setDatabase(Database.H2);
@@ -138,8 +130,7 @@ public class PersistenceConfiguration
       PlatformTransactionManager platformTransactionManager = applicationContext.getBean(
           PlatformTransactionManager.class);
 
-      if (platformTransactionManager instanceof JtaTransactionManager)
-      {
+      if (platformTransactionManager instanceof JtaTransactionManager) {
         Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
 
         jpaPropertyMap.put("hibernate.transaction.jta.platform", new JtaPlatform(
@@ -147,9 +138,7 @@ public class PersistenceConfiguration
       }
 
       return entityManagerFactoryBean;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException(
           "Failed to initialize the application entity manager factory bean", e);
     }
@@ -160,14 +149,12 @@ public class PersistenceConfiguration
    *
    * @return the names of the packages to scan for JPA entities
    */
-  private List<String> packagesToScanForEntities()
-  {
+  private List<String> packagesToScanForEntities() {
     List<String> packagesToScanForEntities = new ArrayList<>();
 
     packagesToScanForEntities.add("digital.inception");
 
-    if (!StringUtils.isEmpty(this.packagesToScanForEntities))
-    {
+    if (!StringUtils.isEmpty(this.packagesToScanForEntities)) {
       String[] packagesToScan = this.packagesToScanForEntities.split(",");
 
       Collections.addAll(packagesToScanForEntities, StringUtils.trimArrayElements(packagesToScan));

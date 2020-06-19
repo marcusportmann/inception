@@ -18,6 +18,10 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,20 +31,14 @@ import org.springframework.data.repository.query.QueryByExampleExecutor;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 /**
  * The <code>UserRepository</code> interface declares the repository for the
  * <code>User</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampleExecutor<User>
-{
+public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampleExecutor<User> {
+
   @Modifying
   @Query("update User u set u.password = :password, u.passwordAttempts = :passwordAttempts, "
       + "u.passwordExpiry = :passwordExpiry where u.id = :userId")
@@ -95,7 +93,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
 
   @Query(
       "select u.id from User u where u.userDirectoryId = :userDirectoryId and lower(u.username) "
-      + "like lower(:username)")
+          + "like lower(:username)")
   Optional<UUID> getIdByUserDirectoryIdAndUsernameIgnoreCase(@Param(
       "userDirectoryId") UUID userDirectoryId, @Param("username") String username);
 

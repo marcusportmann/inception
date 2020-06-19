@@ -18,12 +18,11 @@ package digital.inception.persistence;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.io.Serializable;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentityGenerator;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
 
 /**
  * The <code>AssignedIdentityGenerator</code> implements a Hibernate generator that allows a value
@@ -33,8 +32,8 @@ import java.io.Serializable;
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused"})
-public class AssignedIdentityGenerator extends IdentityGenerator
-{
+public class AssignedIdentityGenerator extends IdentityGenerator {
+
   /**
    * Generate a new identifier.
    *
@@ -44,14 +43,11 @@ public class AssignedIdentityGenerator extends IdentityGenerator
    * @return a new identifier
    */
   @Override
-  public Serializable generate(SharedSessionContractImplementor session, Object object)
-  {
-    if (object instanceof Identifiable)
-    {
+  public Serializable generate(SharedSessionContractImplementor session, Object object) {
+    if (object instanceof Identifiable) {
       Identifiable identifiable = (Identifiable) object;
       Serializable id = identifiable.getId();
-      if (id != null)
-      {
+      if (id != null) {
         return id;
       }
     }

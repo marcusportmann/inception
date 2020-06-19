@@ -27,8 +27,8 @@ import java.io.Serializable;
  */
 @SuppressWarnings("unused")
 public class CodeId
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -44,17 +44,17 @@ public class CodeId
   /**
    * Constructs a new <code>CodeId</code>.
    */
-  public CodeId() {}
+  public CodeId() {
+  }
 
   /**
    * Constructs a new <code>CodeId</code>.
    *
-   * @param codeCategoryId the ID used to uniquely identify the code category the code is
-   *                       associated with
+   * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
+   *                       with
    * @param id             the ID used to uniquely identify the code
    */
-  public CodeId(String codeCategoryId, String id)
-  {
+  public CodeId(String codeCategoryId, String id) {
     this.codeCategoryId = codeCategoryId;
     this.id = id;
   }
@@ -65,23 +65,19 @@ public class CodeId
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -95,34 +91,8 @@ public class CodeId
    *
    * @return the ID used to uniquely identify the code category the code is associated with
    */
-  public String getCodeCategoryId()
-  {
+  public String getCodeCategoryId() {
     return codeCategoryId;
-  }
-
-  /**
-   * Returns the ID used to uniquely identify the code.
-   *
-   * @return the ID used to uniquely identify the code
-   */
-  public String getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return ((codeCategoryId == null)
-        ? 0
-        : codeCategoryId.hashCode()) + ((id == null)
-        ? 0
-        : id.hashCode());
   }
 
   /**
@@ -131,9 +101,17 @@ public class CodeId
    * @param codeCategoryId the ID used to uniquely identify the code category the code is associated
    *                       with
    */
-  public void setCodeCategoryId(String codeCategoryId)
-  {
+  public void setCodeCategoryId(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
+  }
+
+  /**
+   * Returns the ID used to uniquely identify the code.
+   *
+   * @return the ID used to uniquely identify the code
+   */
+  public String getId() {
+    return id;
   }
 
   /**
@@ -141,8 +119,21 @@ public class CodeId
    *
    * @param id the ID used to uniquely identify the code
    */
-  public void setId(String id)
-  {
+  public void setId(String id) {
     this.id = id;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((codeCategoryId == null)
+        ? 0
+        : codeCategoryId.hashCode()) + ((id == null)
+        ? 0
+        : id.hashCode());
   }
 }

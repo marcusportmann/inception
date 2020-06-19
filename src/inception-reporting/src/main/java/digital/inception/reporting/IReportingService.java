@@ -18,14 +18,12 @@ package digital.inception.reporting;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.sql.Connection;
+import java.util.List;
+import java.util.Map;
 import org.w3c.dom.Document;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.sql.Connection;
-
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -35,8 +33,8 @@ import java.util.Map;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface IReportingService
-{
+public interface IReportingService {
+
   /**
    * The username used to identify operations performed by the system.
    */
@@ -49,7 +47,7 @@ public interface IReportingService
    *                         for the new report definition
    */
   void createReportDefinition(ReportDefinition reportDefinition)
-    throws DuplicateReportDefinitionException, ReportingServiceException;
+      throws DuplicateReportDefinitionException, ReportingServiceException;
 
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
@@ -60,7 +58,7 @@ public interface IReportingService
    * @return the PDF data for the report
    */
   byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
-    throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Create the PDF for the report.
@@ -73,7 +71,7 @@ public interface IReportingService
    */
   byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
       Connection connection)
-    throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Create the PDF for the report.
@@ -84,8 +82,9 @@ public interface IReportingService
    *
    * @return the PDF data for the report
    */
-  byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters, Document document)
-    throws ReportDefinitionNotFoundException, ReportingServiceException;
+  byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters,
+      Document document)
+      throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Delete the existing report definition.
@@ -93,7 +92,7 @@ public interface IReportingService
    * @param reportDefinitionId the ID used to uniquely identify the report definition
    */
   void deleteReportDefinition(String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Returns the real path to the folder where the local Jasper reports are stored.
@@ -101,70 +100,6 @@ public interface IReportingService
    * @return the real path to the folder where the local Jasper reports are stored
    */
   String getLocalReportFolderPath();
-
-  /**
-   * Returns the number of report definitions.
-   *
-   * @return the number of report definitions
-   */
-  long getNumberOfReportDefinitions()
-    throws ReportingServiceException;
-
-  /**
-   * Retrieve the report definition.
-   *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
-   * @return the report definition
-   */
-  ReportDefinition getReportDefinition(String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, ReportingServiceException;
-
-  /**
-   * Retrieve the name of the report definition.
-   *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
-   * @return the name of the report definition
-   */
-  String getReportDefinitionName(String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, ReportingServiceException;
-
-  /**
-   * Returns the summaries for all the report definitions.
-   *
-   * @return the summaries for all the report definitions
-   */
-  List<ReportDefinitionSummary> getReportDefinitionSummaries()
-    throws ReportingServiceException;
-
-  /**
-   * Retrieve the summary for the report definition.
-   *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
-   * @return the summary for the report definition
-   */
-  ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
-    throws ReportDefinitionNotFoundException, ReportingServiceException;
-
-  /**
-   * Returns all the report definitions.
-   *
-   * @return all the report definitions
-   */
-  List<ReportDefinition> getReportDefinitions()
-    throws ReportingServiceException;
-
-  /**
-   * Check whether the report definition exists.
-   *
-   * @param reportDefinitionId the ID used to uniquely identify the report definition
-   *
-   * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
-   */
-  boolean reportDefinitionExists(String reportDefinitionId)
-    throws ReportingServiceException;
 
   /**
    * Set the real path to the folder where the local Jasper reports are stored.
@@ -175,11 +110,75 @@ public interface IReportingService
   void setLocalReportFolderPath(String localReportFolderPath);
 
   /**
+   * Returns the number of report definitions.
+   *
+   * @return the number of report definitions
+   */
+  long getNumberOfReportDefinitions()
+      throws ReportingServiceException;
+
+  /**
+   * Retrieve the report definition.
+   *
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   *
+   * @return the report definition
+   */
+  ReportDefinition getReportDefinition(String reportDefinitionId)
+      throws ReportDefinitionNotFoundException, ReportingServiceException;
+
+  /**
+   * Retrieve the name of the report definition.
+   *
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   *
+   * @return the name of the report definition
+   */
+  String getReportDefinitionName(String reportDefinitionId)
+      throws ReportDefinitionNotFoundException, ReportingServiceException;
+
+  /**
+   * Returns the summaries for all the report definitions.
+   *
+   * @return the summaries for all the report definitions
+   */
+  List<ReportDefinitionSummary> getReportDefinitionSummaries()
+      throws ReportingServiceException;
+
+  /**
+   * Retrieve the summary for the report definition.
+   *
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   *
+   * @return the summary for the report definition
+   */
+  ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
+      throws ReportDefinitionNotFoundException, ReportingServiceException;
+
+  /**
+   * Returns all the report definitions.
+   *
+   * @return all the report definitions
+   */
+  List<ReportDefinition> getReportDefinitions()
+      throws ReportingServiceException;
+
+  /**
+   * Check whether the report definition exists.
+   *
+   * @param reportDefinitionId the ID used to uniquely identify the report definition
+   *
+   * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
+   */
+  boolean reportDefinitionExists(String reportDefinitionId)
+      throws ReportingServiceException;
+
+  /**
    * Update the report definition.
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
    *                         information for the report definition
    */
   void updateReportDefinition(ReportDefinition reportDefinition)
-    throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws ReportDefinitionNotFoundException, ReportingServiceException;
 }

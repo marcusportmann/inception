@@ -24,44 +24,38 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
- * The <code>GetCodeCategoryResponseData</code> class manages the data for a
- * "Get Code Category Response" message.
+ * The <code>GetCodeCategoryResponseData</code> class manages the data for a "Get Code Category
+ * Response" message.
  * <p/>
  * This is a synchronous message.
  *
  * @author Marcus Portmann
  */
-public class GetCodeCategoryResponseData extends WbxmlMessageData
-{
+public class GetCodeCategoryResponseData extends WbxmlMessageData {
+
   /**
    * The error code returned when an unknown error occurred.
    */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
-
-  /**
-   * The error code returned to indicate success.
-   */
-  private static final int ERROR_CODE_SUCCESS = 0;
-
-  /**
-   * The message returned to indicate success.
-   */
-  private static final String ERROR_MESSAGE_SUCCESS = "Success";
-
   /**
    * The UUID for the "Get Code Category Response" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "0336b544-91e5-4eb9-81db-3dd94e116c92");
-
+      "0336b544-91e5-4eb9-81db-3dd94e116c92");
+  /**
+   * The error code returned to indicate success.
+   */
+  private static final int ERROR_CODE_SUCCESS = 0;
+  /**
+   * The message returned to indicate success.
+   */
+  private static final String ERROR_MESSAGE_SUCCESS = "Success";
   /**
    * The code category.
    */
@@ -81,8 +75,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
   /**
    * Constructs a new <code>GetCodesResponseData</code>.
    */
-  public GetCodeCategoryResponseData()
-  {
+  public GetCodeCategoryResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
@@ -91,8 +84,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    *
    * @param codeCategory the data for the code category
    */
-  public GetCodeCategoryResponseData(CodeCategoryData codeCategory)
-  {
+  public GetCodeCategoryResponseData(CodeCategoryData codeCategory) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.errorCode = ERROR_CODE_SUCCESS;
@@ -106,8 +98,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    * @param errorCode    the error code indicating the result of retrieving the code category
    * @param errorMessage the error message describing the result of retrieving the code category
    */
-  public GetCodeCategoryResponseData(int errorCode, String errorMessage)
-  {
+  public GetCodeCategoryResponseData(int errorCode, String errorMessage) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.errorCode = errorCode;
@@ -124,27 +115,22 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    */
   @Override
   public boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Element rootElement = parseWBXML(messageData).getRootElement();
 
-    if (!rootElement.getName().equals("GetCodeCategoryResponse"))
-    {
+    if (!rootElement.getName().equals("GetCodeCategoryResponse")) {
       return false;
     }
 
-    if ((!rootElement.hasChild("ErrorCode")) || (!rootElement.hasChild("ErrorMessage")))
-    {
+    if ((!rootElement.hasChild("ErrorCode")) || (!rootElement.hasChild("ErrorMessage"))) {
       return false;
     }
 
     this.errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
     this.errorMessage = rootElement.getChildText("ErrorMessage");
 
-    if (errorCode == 0)
-    {
-      if (!rootElement.hasChild("CodeCategory"))
-      {
+    if (errorCode == 0) {
+      if (!rootElement.hasChild("CodeCategory")) {
         return false;
       }
 
@@ -159,8 +145,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    *
    * @return the code category
    */
-  public CodeCategoryData getCodeCategory()
-  {
+  public CodeCategoryData getCodeCategory() {
     return codeCategory;
   }
 
@@ -171,8 +156,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    * @return the error code indicating the result of retrieving the code category where a code of
    * '0' indicates success and a non-zero code indicates an error condition
    */
-  public int getErrorCode()
-  {
+  public int getErrorCode() {
     return errorCode;
   }
 
@@ -181,8 +165,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    *
    * @return the error message describing the result of retrieving the code category
    */
-  public String getErrorMessage()
-  {
+  public String getErrorMessage() {
     return errorMessage;
   }
 
@@ -194,18 +177,16 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData
    * message
    */
   @Override
-  public byte[] toMessageData()
-  {
+  public byte[] toMessageData() {
     Element rootElement = new Element("GetCodeCategoryResponse");
 
     rootElement.addContent(new Element("ErrorCode", Integer.toString(errorCode)));
     rootElement.addContent(new Element("ErrorMessage",
-      StringUtils.isEmpty(errorMessage)
-        ? ""
-        : errorMessage));
+        StringUtils.isEmpty(errorMessage)
+            ? ""
+            : errorMessage));
 
-    if (codeCategory != null)
-    {
+    if (codeCategory != null) {
       rootElement.addContent(codeCategory.toElement());
     }
 

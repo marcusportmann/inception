@@ -21,28 +21,26 @@ package digital.inception.codes;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategorySummary</code> class holds the summary information for a code category.
@@ -51,16 +49,16 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "CodeCategorySummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name", "updated" })
+@JsonPropertyOrder({"id", "name", "updated"})
 @XmlRootElement(name = "CodeCategorySummary", namespace = "http://codes.inception.digital")
 @XmlType(name = "CodeCategorySummary", namespace = "http://codes.inception.digital",
-    propOrder = { "id", "name", "updated" })
+    propOrder = {"id", "name", "updated"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "code_categories")
 public class CodeCategorySummary
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -100,7 +98,8 @@ public class CodeCategorySummary
   /**
    * Constructs a new <code>CodeCategorySummary</code>.
    */
-  public CodeCategorySummary() {}
+  public CodeCategorySummary() {
+  }
 
   /**
    * Constructs a new <code>CodeCategorySummary</code>.
@@ -109,8 +108,7 @@ public class CodeCategorySummary
    * @param name    the name of the code category
    * @param updated the date and time the code category was last updated
    */
-  public CodeCategorySummary(String id, String name, LocalDateTime updated)
-  {
+  public CodeCategorySummary(String id, String name, LocalDateTime updated) {
     this.id = id;
     this.name = name;
     this.updated = updated;
@@ -122,23 +120,19 @@ public class CodeCategorySummary
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -152,8 +146,7 @@ public class CodeCategorySummary
    *
    * @return the ID used to uniquely identify the code category
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
   }
 
@@ -162,8 +155,7 @@ public class CodeCategorySummary
    *
    * @return the name of the code category
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -172,8 +164,7 @@ public class CodeCategorySummary
    *
    * @return the date and time the code category was last updated
    */
-  public LocalDateTime getUpdated()
-  {
+  public LocalDateTime getUpdated() {
     return updated;
   }
 
@@ -183,8 +174,7 @@ public class CodeCategorySummary
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();

@@ -21,25 +21,22 @@ package digital.inception.reporting;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
-
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ReportDefinitionSummary</code> class holds the summary information for a report
@@ -49,17 +46,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "ReportDefinitionSummary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "name" })
+@JsonPropertyOrder({"id", "name"})
 @XmlRootElement(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital")
 @XmlType(name = "ReportDefinitionSummary", namespace = "http://reporting.inception.digital",
-    propOrder = { "id", "name" })
+    propOrder = {"id", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reporting", name = "report_definitions")
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class ReportDefinitionSummary
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -90,7 +87,8 @@ public class ReportDefinitionSummary
    * Constructs a new <code>ReportDefinitionSummary</code>.
    */
   @SuppressWarnings("unused")
-  public ReportDefinitionSummary() {}
+  public ReportDefinitionSummary() {
+  }
 
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
@@ -98,8 +96,7 @@ public class ReportDefinitionSummary
    * @param id   the ID used to uniquely identify the report definition
    * @param name the name of the report definition
    */
-  ReportDefinitionSummary(String id, String name)
-  {
+  ReportDefinitionSummary(String id, String name) {
     this.id = id;
     this.name = name;
   }
@@ -110,23 +107,19 @@ public class ReportDefinitionSummary
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -140,8 +133,7 @@ public class ReportDefinitionSummary
    *
    * @return the ID used to uniquely identify the report definition
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
   }
 
@@ -150,8 +142,7 @@ public class ReportDefinitionSummary
    *
    * @return the name of the report definition
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -161,8 +152,7 @@ public class ReportDefinitionSummary
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -174,8 +164,7 @@ public class ReportDefinitionSummary
    * @return a string representation of the object
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     return "ReportDefinitionSummary {id=\"" + getId() + "\", name=\"" + getName() + "\"}";
   }
 }

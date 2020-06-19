@@ -19,19 +19,17 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
-
 /**
- * A <code>DuplicateFunctionException</code> is thrown to indicate that a security
- * operation failed as a result of a duplicate authorised function.
+ * A <code>DuplicateFunctionException</code> is thrown to indicate that a security operation failed
+ * as a result of a duplicate authorised function.
  * <p/>
  * NOTE: This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -43,9 +41,9 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class DuplicateFunctionException extends ServiceException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class DuplicateFunctionException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -53,8 +51,7 @@ public class DuplicateFunctionException extends ServiceException
    *
    * @param functionCode the code used to uniquely identify the function
    */
-  public DuplicateFunctionException(String functionCode)
-  {
+  public DuplicateFunctionException(String functionCode) {
     super("DuplicateFunctionError", "A function with the code (" + functionCode
         + ") already exists");
   }

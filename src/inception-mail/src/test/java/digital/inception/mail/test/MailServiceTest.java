@@ -18,14 +18,26 @@ package digital.inception.mail.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import digital.inception.core.util.ResourceUtil;
-import digital.inception.mail.*;
+import digital.inception.mail.IMailService;
+import digital.inception.mail.MailTemplate;
+import digital.inception.mail.MailTemplateContentType;
+import digital.inception.mail.MailTemplateNotFoundException;
+import digital.inception.mail.MailTemplateSummary;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
@@ -33,26 +45,20 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import static org.junit.Assert.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.*;
-
 /**
- * The <code>MailServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>MailService</code> class.
+ * The <code>MailServiceTest</code> class contains the implementation of the JUnit tests for the
+ * <code>MailService</code> class.
  *
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
-public class MailServiceTest
-{
+@ContextConfiguration(classes = {TestConfiguration.class})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
+public class MailServiceTest {
+
   private static int mailTemplateCount;
 
   /**
@@ -61,13 +67,28 @@ public class MailServiceTest
   @Autowired
   private IMailService mailService;
 
+  private static synchronized MailTemplate getTestMailTemplateDetails() {
+    mailTemplateCount++;
+
+    byte[] testMailTemplate = ResourceUtil.getClasspathResource(
+        "digital/inception/mail/test/TestMailTemplate");
+
+    MailTemplate mailTemplate = new MailTemplate();
+    mailTemplate.setId("TestMailTemplate" + mailTemplateCount);
+    mailTemplate.setName("Test Mail Template " + mailTemplateCount);
+    mailTemplate.setContentType(MailTemplateContentType.HTML);
+    mailTemplate.setTemplate(testMailTemplate);
+    mailTemplate.setUpdated(LocalDateTime.now());
+
+    return mailTemplate;
+  }
+
   /**
    * Test the mail template functionality.
    */
   @Test
   public void mailTemplateTest()
-    throws Exception
-  {
+      throws Exception {
     MailTemplate mailTemplate = getTestMailTemplateDetails();
 
     mailService.createMailTemplate(mailTemplate);
@@ -128,22 +149,20 @@ public class MailServiceTest
 
     compareMailTemplateToMailTemplateSummary(mailTemplate, mailTemplateSummaries.get(0));
 
-
     Map<String, String> mapTemplateParameters = new HashMap<>();
     mapTemplateParameters.put("name", "Joe Bloggs");
 
-    System.out.println(mailService.processMailTemplate(mailTemplate.getId(), mapTemplateParameters));
-
+    System.out
+        .println(mailService.processMailTemplate(mailTemplate.getId(), mapTemplateParameters));
 
     mailService.deleteMailTemplate(mailTemplate.getId());
 
-    try
-    {
+    try {
       mailService.getMailTemplate(mailTemplate.getId());
 
       fail("The mail template that should have been deleted was retrieved successfully");
+    } catch (MailTemplateNotFoundException ignored) {
     }
-    catch (MailTemplateNotFoundException ignored) {}
   }
 
   /**
@@ -151,8 +170,7 @@ public class MailServiceTest
    */
   // @Test
   public void sendMailTest()
-    throws Exception
-  {
+      throws Exception {
     MailTemplate mailTemplate = getTestMailTemplateDetails();
 
     mailService.createMailTemplate(mailTemplate);
@@ -164,34 +182,15 @@ public class MailServiceTest
         "no-reply@inception.digital", "Inception", mailTemplate.getId(), mapTemplateParameters);
   }
 
-  private static synchronized MailTemplate getTestMailTemplateDetails()
-  {
-    mailTemplateCount++;
-
-    byte[] testMailTemplate = ResourceUtil.getClasspathResource(
-      "digital/inception/mail/test/TestMailTemplate");
-
-    MailTemplate mailTemplate = new MailTemplate();
-    mailTemplate.setId("TestMailTemplate" + mailTemplateCount);
-    mailTemplate.setName("Test Mail Template " + mailTemplateCount);
-    mailTemplate.setContentType(MailTemplateContentType.HTML);
-    mailTemplate.setTemplate(testMailTemplate);
-    mailTemplate.setUpdated(LocalDateTime.now());
-
-    return mailTemplate;
-  }
-
   private void compareMailTemplateToMailTemplateSummary(MailTemplate mailTemplate,
-      MailTemplateSummary mailTemplateSummary)
-  {
+      MailTemplateSummary mailTemplateSummary) {
     assertEquals("The ID values for the two mail template summaries do not match",
         mailTemplate.getId(), mailTemplateSummary.getId());
     assertEquals("The name values for the two mail template summaries do not match",
         mailTemplate.getName(), mailTemplateSummary.getName());
   }
 
-  private void compareMailTemplates(MailTemplate mailTemplate1, MailTemplate mailTemplate2)
-  {
+  private void compareMailTemplates(MailTemplate mailTemplate1, MailTemplate mailTemplate2) {
     assertEquals("The ID values for the two mail templates do not match", mailTemplate1.getId(),
         mailTemplate2.getId());
     assertEquals("The name values for the two mail templates do not match",

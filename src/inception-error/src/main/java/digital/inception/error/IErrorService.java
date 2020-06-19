@@ -27,8 +27,8 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface IErrorService
-{
+public interface IErrorService {
+
   /**
    * Create the entry for the error report in the database.
    *
@@ -36,7 +36,7 @@ public interface IErrorService
    *                    error report
    */
   void createErrorReport(ErrorReport errorReport)
-    throws ErrorServiceException;
+      throws ErrorServiceException;
 
   /**
    * Retrieve the error report.
@@ -47,7 +47,7 @@ public interface IErrorService
    * @return the error report or <code>null</code> if the error report could not be found
    */
   ErrorReport getErrorReport(UUID errorReportId)
-    throws ErrorReportNotFoundException, ErrorServiceException;
+      throws ErrorReportNotFoundException, ErrorServiceException;
 
   /**
    * Retrieve the summary for the error report.
@@ -59,18 +59,18 @@ public interface IErrorService
    * found
    */
   ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-    throws ErrorReportNotFoundException, ErrorServiceException;
+      throws ErrorReportNotFoundException, ErrorServiceException;
 
   /**
    * Retrieve the summaries for the most recent error reports.
    *
-   * @param maximumNumberOfEntries the maximum number of summaries for the most recent error
-   *                               reports to retrieve
+   * @param maximumNumberOfEntries the maximum number of summaries for the most recent error reports
+   *                               to retrieve
    *
    * @return the summaries for the most recent error reports
    */
   List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-    throws ErrorServiceException;
+      throws ErrorServiceException;
 
   /**
    * Returns the total number of error reports.
@@ -78,5 +78,5 @@ public interface IErrorService
    * @return the total number of error reports
    */
   long getNumberOfErrorReports()
-    throws ErrorServiceException;
+      throws ErrorServiceException;
 }

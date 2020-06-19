@@ -19,18 +19,17 @@ package digital.inception.scheduler;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
-
 import java.util.Map;
 
 /**
- * The <code>JobExecutionContext</code> provides access to context information associated with
- * the execution of a job.
+ * The <code>JobExecutionContext</code> provides access to context information associated with the
+ * execution of a job.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class JobExecutionContext
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class JobExecutionContext {
+
   /**
    * The date and time that the job was scheduled to be executed.
    */
@@ -47,8 +46,7 @@ public class JobExecutionContext
    * @param executionDate the date and time that the job was scheduled to be executed
    * @param parameters    the parameters for the job
    */
-  public JobExecutionContext(LocalDateTime executionDate, Map<String, String> parameters)
-  {
+  public JobExecutionContext(LocalDateTime executionDate, Map<String, String> parameters) {
     this.executionDate = executionDate;
     this.parameters = parameters;
   }
@@ -58,8 +56,7 @@ public class JobExecutionContext
    *
    * @return the date and time that the job was scheduled to be executed
    */
-  public LocalDateTime getExecutionDate()
-  {
+  public LocalDateTime getExecutionDate() {
     return executionDate;
   }
 
@@ -71,8 +68,7 @@ public class JobExecutionContext
    * @return the value of the parameter with the specified name or <code>null</code> if the
    * parameter cannot be found
    */
-  public String getParameter(String name)
-  {
+  public String getParameter(String name) {
     return parameters.get(name);
   }
 }

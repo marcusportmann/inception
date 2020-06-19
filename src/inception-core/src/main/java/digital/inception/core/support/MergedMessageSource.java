@@ -18,15 +18,13 @@ package digital.inception.core.support;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.io.IOException;
+import java.util.Properties;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.IOException;
-
-import java.util.Properties;
 
 /**
  * The <code>MergedMessageSource</code> class implements the merged message source that provides
@@ -34,52 +32,43 @@ import java.util.Properties;
  *
  * @author Marcus Portmann
  */
-public class MergedMessageSource extends ReloadableResourceBundleMessageSource
-{
+public class MergedMessageSource extends ReloadableResourceBundleMessageSource {
+
   private static final String PROPERTIES_SUFFIX = ".properties";
   private PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
   @Override
-  protected PropertiesHolder refreshProperties(String filename, PropertiesHolder propertiesHolder)
-  {
-    if (filename.startsWith(PathMatchingResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX))
-    {
+  protected PropertiesHolder refreshProperties(String filename, PropertiesHolder propertiesHolder) {
+    if (filename.startsWith(PathMatchingResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX)) {
       return refreshClassPathProperties(filename, propertiesHolder);
-    }
-    else
-    {
+    } else {
       return super.refreshProperties(filename, propertiesHolder);
     }
   }
 
   private PropertiesHolder refreshClassPathProperties(String filename,
-      PropertiesHolder propertiesHolder)
-  {
+      PropertiesHolder propertiesHolder) {
     Properties properties = new Properties();
     long lastModified = -1;
-    try
-    {
+    try {
       Resource[] resources = resolver.getResources(filename + PROPERTIES_SUFFIX);
-      for (Resource resource : resources)
-      {
+      for (Resource resource : resources) {
         String resourcePath = resource.getURI().toString().replace(PROPERTIES_SUFFIX, "");
         PropertiesHolder resourcePropertiesHolder = super.refreshProperties(resourcePath,
             propertiesHolder);
 
         Properties resourceProperties = resourcePropertiesHolder.getProperties();
 
-        if (resourceProperties != null)
-        {
+        if (resourceProperties != null) {
           properties.putAll(resourceProperties);
         }
 
-        if (lastModified < resource.lastModified())
-        {
+        if (lastModified < resource.lastModified()) {
           lastModified = resource.lastModified();
         }
       }
+    } catch (IOException ignored) {
     }
-    catch (IOException ignored) {}
 
     return new PropertiesHolder(properties, lastModified);
   }

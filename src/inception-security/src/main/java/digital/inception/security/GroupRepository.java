@@ -18,6 +18,9 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,18 +30,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 /**
  * The <code>GroupRepository</code> interface declares the repository for the
  * <code>Group</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface GroupRepository extends JpaRepository<Group, UUID>
-{
+public interface GroupRepository extends JpaRepository<Group, UUID> {
+
   @Modifying
   @Query(value = "insert into security.role_to_group_map(role_code, group_id) "
       + "values (:roleCode, :groupId)",

@@ -23,13 +23,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The <code>SMSConfiguration</code> class provides the Spring configuration
- * for the SMS module.
+ * The <code>SMSConfiguration</code> class provides the Spring configuration for the SMS module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-    basePackages = { "digital.inception.sms" })
+    basePackages = {"digital.inception.sms"})
 @EnableScheduling
-public class SMSConfiguration {}
+public class SMSConfiguration {
+
+}

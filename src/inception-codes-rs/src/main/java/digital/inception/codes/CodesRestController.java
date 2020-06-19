@@ -24,21 +24,26 @@ import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
 import digital.inception.validation.InvalidArgumentException;
 import digital.inception.validation.ValidationError;
-
-import io.swagger.annotations.*;
-
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import java.util.List;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 /**
  * The <code>CodesRestController</code> class.
@@ -48,9 +53,9 @@ import javax.validation.Validator;
 @Api(tags = "Codes API")
 @RestController
 @RequestMapping(value = "/api/codes")
-@SuppressWarnings({ "unused" })
-public class CodesRestController extends SecureRestController
-{
+@SuppressWarnings({"unused"})
+public class CodesRestController extends SecureRestController {
+
   /**
    * The Codes Service.
    */
@@ -67,8 +72,7 @@ public class CodesRestController extends SecureRestController
    * @param codesService the Codes Service
    * @param validator    the JSR-303 validator
    */
-  public CodesRestController(ICodesService codesService, Validator validator)
-  {
+  public CodesRestController(ICodesService codesService, Validator validator) {
     this.codesService = codesService;
     this.validator = validator;
   }
@@ -80,15 +84,15 @@ public class CodesRestController extends SecureRestController
    * @param code           the code to create
    */
   @ApiOperation(value = "Create the code", notes = "Create the code")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The code was created successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 409, message = "A code with the specified ID already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -97,28 +101,23 @@ public class CodesRestController extends SecureRestController
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId, @ApiParam(name = "code", value = "The code", required = true)
   @RequestBody Code code)
-    throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
-        CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
+      CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (code == null)
-    {
+    if (code == null) {
       throw new InvalidArgumentException("code");
     }
 
-    if (!code.getCodeCategoryId().equals(codeCategoryId))
-    {
+    if (!code.getCodeCategoryId().equals(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
     Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("code", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -132,14 +131,14 @@ public class CodesRestController extends SecureRestController
    * @param codeCategory the code category to create
    */
   @ApiOperation(value = "Create the code category", notes = "Create the code category")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The code category was created successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The code category was created successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 409, message = "A code category with the specified ID already exists",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories", method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -147,17 +146,14 @@ public class CodesRestController extends SecureRestController
   public void createCodeCategory(@ApiParam(name = "codeCategory", value = "The code category",
       required = true)
   @RequestBody CodeCategory codeCategory)
-    throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException
-  {
-    if (codeCategory == null)
-    {
+      throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException {
+    if (codeCategory == null) {
       throw new InvalidArgumentException("codeCategory");
     }
 
     Set<ConstraintViolation<CodeCategory>> constraintViolations = validator.validate(codeCategory);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("codeCategory", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -172,13 +168,13 @@ public class CodesRestController extends SecureRestController
    * @param codeId         the ID used to uniquely identify the code
    */
   @ApiOperation(value = "Delete the code", notes = "Delete the code")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The code was deleted successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.DELETE, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -188,15 +184,12 @@ public class CodesRestController extends SecureRestController
   @PathVariable String codeCategoryId, @ApiParam(name = "codeId",
       value = "The ID used to uniquely identify the code", required = true)
   @PathVariable String codeId)
-    throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId))
-    {
+    if (StringUtils.isEmpty(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -209,14 +202,14 @@ public class CodesRestController extends SecureRestController
    * @param codeCategoryId the ID used to uniquely identify the code category
    */
   @ApiOperation(value = "Delete the code category", notes = "Delete the code category")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The code category was deleted successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The code category was deleted successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -224,10 +217,8 @@ public class CodesRestController extends SecureRestController
   public void deleteCodeCategory(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
-    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -244,13 +235,13 @@ public class CodesRestController extends SecureRestController
    * @return the code
    */
   @ApiOperation(value = "Retrieve the code", notes = "Retrieve the code")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -261,15 +252,12 @@ public class CodesRestController extends SecureRestController
   @PathVariable String codeCategoryId, @ApiParam(name = "codeId",
       value = "The ID uniquely identifying the code", required = true)
   @PathVariable String codeId)
-    throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId))
-    {
+    if (StringUtils.isEmpty(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -282,17 +270,16 @@ public class CodesRestController extends SecureRestController
    * @return the code categories
    */
   @ApiOperation(value = "Retrieve the code categories", notes = "Retrieve the code categories")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<CodeCategory> getCodeCategories()
-    throws CodesServiceException
-  {
+      throws CodesServiceException {
     return codesService.getCodeCategories();
   }
 
@@ -304,13 +291,13 @@ public class CodesRestController extends SecureRestController
    * @return the code category
    */
   @ApiOperation(value = "Retrieve the code category", notes = "Retrieve the code category")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -318,10 +305,8 @@ public class CodesRestController extends SecureRestController
   public CodeCategory getCodeCategory(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
-    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -337,13 +322,13 @@ public class CodesRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the XML or JSON data for a code category",
       notes = "Retrieve the XML or JSON data for a code category")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/data", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -351,10 +336,8 @@ public class CodesRestController extends SecureRestController
   public String getCodeCategoryData(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
-    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -374,13 +357,13 @@ public class CodesRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the name of the code category",
       notes = "Retrieve the name of the code category")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/name", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -388,10 +371,8 @@ public class CodesRestController extends SecureRestController
   public String getCodeCategoryName(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
-    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -405,17 +386,16 @@ public class CodesRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the code category summaries",
       notes = "Retrieve the code category summaries")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-category-summaries", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<CodeCategorySummary> getCodeCategorySummaries()
-    throws CodesServiceException
-  {
+      throws CodesServiceException {
     return codesService.getCodeCategorySummaries();
   }
 
@@ -428,13 +408,13 @@ public class CodesRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the date and time the code category was last updated",
       notes = "Retrieve the date and time the code category was last updated")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/updated", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -442,10 +422,8 @@ public class CodesRestController extends SecureRestController
   public String getCodeCategoryUpdated(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
-    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -463,13 +441,13 @@ public class CodesRestController extends SecureRestController
    * @return the code
    */
   @ApiOperation(value = "Retrieve the name of the code", notes = "Retrieve the name of the code")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}/name",
       method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -480,15 +458,12 @@ public class CodesRestController extends SecureRestController
   @PathVariable String codeCategoryId, @ApiParam(name = "codeId",
       value = "The ID uniquely identifying the code", required = true)
   @PathVariable String codeId)
-    throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId))
-    {
+    if (StringUtils.isEmpty(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -504,13 +479,13 @@ public class CodesRestController extends SecureRestController
    */
   @ApiOperation(value = "Retrieve the codes for a code category",
       notes = "Retrieve the codes for a code category")
-  @ApiResponses(value = { @ApiResponse(code = 200, message = "OK") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 200, message = "OK"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes", method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -518,10 +493,8 @@ public class CodesRestController extends SecureRestController
   public List<Code> getCodes(@ApiParam(name = "codeCategoryId",
       value = "The ID used to uniquely identify the code category", required = true)
   @PathVariable String codeCategoryId)
-    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -536,13 +509,13 @@ public class CodesRestController extends SecureRestController
    * @param code           the code to create
    */
   @ApiOperation(value = "Update the code", notes = "Update the code")
-  @ApiResponses(value = { @ApiResponse(code = 204, message = "The code was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204, message = "The code was updated successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}/codes/{codeId}",
       method = RequestMethod.PUT, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -553,37 +526,30 @@ public class CodesRestController extends SecureRestController
       value = "The ID used to uniquely identify the code", required = true)
   @PathVariable String codeId, @ApiParam(name = "code", value = "The code", required = true)
   @RequestBody Code code)
-    throws InvalidArgumentException, CodeNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId))
-    {
+    if (StringUtils.isEmpty(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
-    if (code == null)
-    {
+    if (code == null) {
       throw new InvalidArgumentException("code");
     }
 
-    if (!code.getCodeCategoryId().equals(codeCategoryId))
-    {
+    if (!code.getCodeCategoryId().equals(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (!code.getId().equals(codeId))
-    {
+    if (!code.getId().equals(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
     Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("code", ValidationError.toValidationErrors(
           constraintViolations));
     }
@@ -598,14 +564,14 @@ public class CodesRestController extends SecureRestController
    * @param codeCategory   the code category
    */
   @ApiOperation(value = "Update the code category", notes = "Update the code category")
-  @ApiResponses(value = { @ApiResponse(code = 204,
-      message = "The code category was updated successfully") ,
-      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class) ,
+  @ApiResponses(value = {@ApiResponse(code = 204,
+      message = "The code category was updated successfully"),
+      @ApiResponse(code = 400, message = "Invalid argument", response = RestControllerError.class),
       @ApiResponse(code = 404, message = "The code category could not be found",
-          response = RestControllerError.class) ,
+          response = RestControllerError.class),
       @ApiResponse(code = 500,
           message = "An error has occurred and the service is unable to process the request at this time",
-          response = RestControllerError.class) })
+          response = RestControllerError.class)})
   @RequestMapping(value = "/code-categories/{codeCategoryId}", method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -615,27 +581,22 @@ public class CodesRestController extends SecureRestController
   @PathVariable String codeCategoryId, @ApiParam(name = "codeCategory", value = "The code category",
       required = true)
   @RequestBody CodeCategory codeCategory)
-    throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException
-  {
-    if (StringUtils.isEmpty(codeCategoryId))
-    {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (codeCategory == null)
-    {
+    if (codeCategory == null) {
       throw new InvalidArgumentException("codeCategory");
     }
 
-    if (!codeCategory.getId().equals(codeCategoryId))
-    {
+    if (!codeCategory.getId().equals(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
     Set<ConstraintViolation<CodeCategory>> constraintViolations = validator.validate(codeCategory);
 
-    if (!constraintViolations.isEmpty())
-    {
+    if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException("codeCategory", ValidationError.toValidationErrors(
           constraintViolations));
     }

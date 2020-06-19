@@ -17,24 +17,23 @@
 package digital.inception.core.util;
 
 /**
- * The <code>CryptoException</code> exception is thrown to indicate an error condition when
- * working with the cryptography utilities.
+ * The <code>CryptoException</code> exception is thrown to indicate an error condition when working
+ * with the cryptography utilities.
  *
  * @author Marcus Portmann
  */
-public class CryptoException extends RuntimeException
-{
+public class CryptoException extends RuntimeException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
    * Constructs a new <code>CryptoException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  CryptoException(String message, Throwable cause)
-  {
+  CryptoException(String message, Throwable cause) {
     super(message, cause);
   }
 }

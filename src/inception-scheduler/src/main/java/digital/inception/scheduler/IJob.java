@@ -21,13 +21,13 @@ package digital.inception.scheduler;
  *
  * @author Marcus Portmann
  */
-public interface IJob
-{
+public interface IJob {
+
   /**
    * Execute the job.
    *
    * @param context the job execution context
    */
   void execute(JobExecutionContext context)
-    throws JobExecutionFailedException;
+      throws JobExecutionFailedException;
 }

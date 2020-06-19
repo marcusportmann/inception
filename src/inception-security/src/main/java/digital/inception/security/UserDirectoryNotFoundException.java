@@ -19,17 +19,14 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import java.util.UUID;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * An <code>UserDirectoryNotFoundException</code> is thrown to indicate that a security operation
@@ -44,9 +41,9 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class UserDirectoryNotFoundException extends ServiceException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class UserDirectoryNotFoundException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -55,8 +52,7 @@ public class UserDirectoryNotFoundException extends ServiceException
    * @param userDirectoryId the Universally Unique Identifier (UUID) used to uniquely identify the
    *                        user directory
    */
-  public UserDirectoryNotFoundException(UUID userDirectoryId)
-  {
+  public UserDirectoryNotFoundException(UUID userDirectoryId) {
     super("UserDirectoryNotFoundError", "The user directory with ID (" + userDirectoryId
         + ") could not be found");
   }

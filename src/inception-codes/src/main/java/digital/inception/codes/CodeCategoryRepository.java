@@ -18,6 +18,8 @@ package digital.inception.codes;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.time.LocalDateTime;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,18 +27,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDateTime;
-
-import java.util.Optional;
-
 /**
  * The <code>CodeCategoryRepository</code> interface declares the repository for the
  * <code>CodeCategory</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface CodeCategoryRepository extends JpaRepository<CodeCategory, String>
-{
+public interface CodeCategoryRepository extends JpaRepository<CodeCategory, String> {
+
   @Modifying
   @Query("delete from CodeCategory cc where cc.id = :codeCategoryId")
   void deleteById(@Param("codeCategoryId") String codeCategoryId);

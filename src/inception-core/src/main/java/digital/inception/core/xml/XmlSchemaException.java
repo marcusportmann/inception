@@ -23,15 +23,14 @@ package digital.inception.core.xml;
  * @author Marcus Portmann
  */
 public class XmlSchemaException
-  extends RuntimeException
-{
+    extends RuntimeException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
    * Constructs a new <code>XmlSchemaException</code> with <code>null</code> as its message.
    */
-  public XmlSchemaException()
-  {
+  public XmlSchemaException() {
     super();
   }
 
@@ -40,21 +39,19 @@ public class XmlSchemaException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public XmlSchemaException(String message)
-  {
+  public XmlSchemaException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>XmlSchemaException</code> with the specified cause and a message
-   * of <code>(cause==null ? null : cause.toString())</code> (which typically contains the class
-   * and message of cause).
+   * Constructs a new <code>XmlSchemaException</code> with the specified cause and a message of
+   * <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
+   * message of cause).
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method.
-   *              (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public XmlSchemaException(Throwable cause)
-  {
+  public XmlSchemaException(Throwable cause) {
     super(cause);
   }
 
@@ -62,11 +59,10 @@ public class XmlSchemaException
    * Constructs a new <code>XmlSchemaException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public XmlSchemaException(String message, Throwable cause)
-  {
+  public XmlSchemaException(String message, Throwable cause) {
     super(message, cause);
   }
 }

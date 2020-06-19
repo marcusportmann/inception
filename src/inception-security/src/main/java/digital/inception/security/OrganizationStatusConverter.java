@@ -30,8 +30,8 @@ import javax.persistence.Converter;
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
 public class OrganizationStatusConverter
-  implements AttributeConverter<OrganizationStatus, Integer>
-{
+    implements AttributeConverter<OrganizationStatus, Integer> {
+
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
@@ -41,8 +41,7 @@ public class OrganizationStatusConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(OrganizationStatus attribute)
-  {
+  public Integer convertToDatabaseColumn(OrganizationStatus attribute) {
     return attribute.code();
   }
 
@@ -57,8 +56,7 @@ public class OrganizationStatusConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public OrganizationStatus convertToEntityAttribute(Integer dbData)
-  {
+  public OrganizationStatus convertToEntityAttribute(Integer dbData) {
     return OrganizationStatus.fromCode(dbData);
   }
 }

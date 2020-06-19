@@ -21,27 +21,27 @@ package digital.inception.sms;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import java.time.LocalDateTime;
-
 import java.util.UUID;
-
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMS</code> class holds the information for a SMS.
@@ -50,19 +50,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "SMS")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "mobileNumber", "message", "status", "sendAttempts", "lockName",
-    "lastProcessed" })
+@JsonPropertyOrder({"id", "mobileNumber", "message", "status", "sendAttempts", "lockName",
+    "lastProcessed"})
 @XmlRootElement(name = "Job", namespace = "http://sms.inception.digital")
 @XmlType(name = "Job", namespace = "http://sms.inception.digital",
-    propOrder = { "id", "mobileNumber", "message", "status", "sendAttempts", "lockName",
-        "lastProcessed" })
+    propOrder = {"id", "mobileNumber", "message", "status", "sendAttempts", "lockName",
+        "lastProcessed"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "sms", name = "sms")
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class SMS
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -142,7 +142,8 @@ public class SMS
   /**
    * Constructs a new <code>SMS</code>.
    */
-  public SMS() {}
+  public SMS() {
+  }
 
   /**
    * Constructs a new <code>SMS</code>.
@@ -150,8 +151,7 @@ public class SMS
    * @param mobileNumber the mobile number to send the SMS to
    * @param message      the message to send
    */
-  public SMS(String mobileNumber, String message)
-  {
+  public SMS(String mobileNumber, String message) {
     this.mobileNumber = mobileNumber;
     this.message = message;
   }
@@ -163,8 +163,7 @@ public class SMS
    * @param message      the message to send
    * @param status       the status of the SMS
    */
-  SMS(String mobileNumber, String message, SMSStatus status)
-  {
+  SMS(String mobileNumber, String message, SMSStatus status) {
     this.mobileNumber = mobileNumber;
     this.message = message;
     this.status = status;
@@ -173,7 +172,8 @@ public class SMS
   /**
    * Constructs a new <code>SMS</code>.
    *
-   * @param id            the Universally Unique Identifier (UUID) used to uniquely identify the SMS
+   * @param id            the Universally Unique Identifier (UUID) used to uniquely identify the
+   *                      SMS
    * @param mobileNumber  the mobile number to send the SMS to
    * @param message       the message to send
    * @param status        the status of the SMS
@@ -182,8 +182,7 @@ public class SMS
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
   SMS(UUID id, String mobileNumber, String message, SMSStatus status, int sendAttempts,
-      String lockName, LocalDateTime lastProcessed)
-  {
+      String lockName, LocalDateTime lastProcessed) {
     this.id = id;
     this.mobileNumber = mobileNumber;
     this.message = message;
@@ -199,23 +198,19 @@ public class SMS
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -229,9 +224,17 @@ public class SMS
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the SMS
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to uniquely identify the SMS.
+   *
+   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the SMS
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**
@@ -239,9 +242,17 @@ public class SMS
    *
    * @return the date and time the last attempt was made to send the SMS
    */
-  public LocalDateTime getLastProcessed()
-  {
+  public LocalDateTime getLastProcessed() {
     return lastProcessed;
+  }
+
+  /**
+   * Set the date and time the last attempt was made to send the SMS.
+   *
+   * @param lastProcessed the date and time the last attempt was made to send the SMS
+   */
+  public void setLastProcessed(LocalDateTime lastProcessed) {
+    this.lastProcessed = lastProcessed;
   }
 
   /**
@@ -249,9 +260,17 @@ public class SMS
    *
    * @return the name of the entity that has locked the SMS for sending
    */
-  public String getLockName()
-  {
+  public String getLockName() {
     return lockName;
+  }
+
+  /**
+   * Set the name of the entity that has locked the SMS for sending.
+   *
+   * @param lockName the name of the entity that has locked the SMS for sending
+   */
+  public void setLockName(String lockName) {
+    this.lockName = lockName;
   }
 
   /**
@@ -259,9 +278,17 @@ public class SMS
    *
    * @return the message to send
    */
-  public String getMessage()
-  {
+  public String getMessage() {
     return message;
+  }
+
+  /**
+   * Set the message to send.
+   *
+   * @param message the message to send
+   */
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   /**
@@ -269,9 +296,17 @@ public class SMS
    *
    * @return the mobile number to send the SMS to
    */
-  public String getMobileNumber()
-  {
+  public String getMobileNumber() {
     return mobileNumber;
+  }
+
+  /**
+   * Set the mobile number to send the SMS to.
+   *
+   * @param mobileNumber the mobile number to send the SMS to
+   */
+  public void setMobileNumber(String mobileNumber) {
+    this.mobileNumber = mobileNumber;
   }
 
   /**
@@ -279,9 +314,17 @@ public class SMS
    *
    * @return the number of times that the sending of the SMS was attempted
    */
-  public Integer getSendAttempts()
-  {
+  public Integer getSendAttempts() {
     return sendAttempts;
+  }
+
+  /**
+   * Set the number of times that the sending of the SMS was attempted.
+   *
+   * @param sendAttempts the number of times that the sending of the SMS was attempted
+   */
+  public void setSendAttempts(Integer sendAttempts) {
+    this.sendAttempts = sendAttempts;
   }
 
   /**
@@ -289,9 +332,17 @@ public class SMS
    *
    * @return the status of the SMS
    */
-  public SMSStatus getStatus()
-  {
+  public SMSStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Set the status of the SMS.
+   *
+   * @param status the status of the SMS
+   */
+  public void setStatus(SMSStatus status) {
+    this.status = status;
   }
 
   /**
@@ -300,8 +351,7 @@ public class SMS
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (id == null)
         ? 0
         : id.hashCode();
@@ -310,85 +360,11 @@ public class SMS
   /**
    * Increment the number of times that the sending of the SMS was attempted.
    */
-  public void incrementSendAttempts()
-  {
-    if (sendAttempts == null)
-    {
+  public void incrementSendAttempts() {
+    if (sendAttempts == null) {
       sendAttempts = 1;
-    }
-    else
-    {
+    } else {
       sendAttempts++;
     }
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to uniquely identify the SMS.
-   *
-   * @param id the Universally Unique Identifier (UUID) used to uniquely identify the SMS
-   */
-  public void setId(UUID id)
-  {
-    this.id = id;
-  }
-
-  /**
-   * Set the date and time the last attempt was made to send the SMS.
-   *
-   * @param lastProcessed the date and time the last attempt was made to send the SMS
-   */
-  public void setLastProcessed(LocalDateTime lastProcessed)
-  {
-    this.lastProcessed = lastProcessed;
-  }
-
-  /**
-   * Set the name of the entity that has locked the SMS for sending.
-   *
-   * @param lockName the name of the entity that has locked the SMS for sending
-   */
-  public void setLockName(String lockName)
-  {
-    this.lockName = lockName;
-  }
-
-  /**
-   * Set the message to send.
-   *
-   * @param message the message to send
-   */
-  public void setMessage(String message)
-  {
-    this.message = message;
-  }
-
-  /**
-   * Set the mobile number to send the SMS to.
-   *
-   * @param mobileNumber the mobile number to send the SMS to
-   */
-  public void setMobileNumber(String mobileNumber)
-  {
-    this.mobileNumber = mobileNumber;
-  }
-
-  /**
-   * Set the number of times that the sending of the SMS was attempted.
-   *
-   * @param sendAttempts the number of times that the sending of the SMS was attempted
-   */
-  public void setSendAttempts(Integer sendAttempts)
-  {
-    this.sendAttempts = sendAttempts;
-  }
-
-  /**
-   * Set the status of the SMS.
-   *
-   * @param status the status of the SMS
-   */
-  public void setStatus(SMSStatus status)
-  {
-    this.status = status;
   }
 }

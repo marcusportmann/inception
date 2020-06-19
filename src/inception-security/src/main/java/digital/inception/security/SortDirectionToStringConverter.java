@@ -30,18 +30,17 @@ import org.springframework.stereotype.Component;
 @SuppressWarnings("unused")
 @Component
 public class SortDirectionToStringConverter
-  implements Converter<SortDirection, String>
-{
+    implements Converter<SortDirection, String> {
+
   /**
    * Constructs a new <code>SortDirectionToStringConverter</code>.
    */
-  public SortDirectionToStringConverter() {}
+  public SortDirectionToStringConverter() {
+  }
 
   @Override
-  public String convert(SortDirection source)
-  {
-    if (source == null)
-    {
+  public String convert(SortDirection source) {
+    if (source == null) {
       return null;
     }
 

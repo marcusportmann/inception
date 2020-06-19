@@ -19,15 +19,13 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * An <code>UserDirectoryParameterException</code> is thrown to indicate an invalid operation was
@@ -43,9 +41,9 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class UserDirectoryParameterException extends ServiceException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class UserDirectoryParameterException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -53,8 +51,7 @@ public class UserDirectoryParameterException extends ServiceException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public UserDirectoryParameterException(String message)
-  {
+  public UserDirectoryParameterException(String message) {
     super("UserDirectoryParameterError", message);
   }
 }

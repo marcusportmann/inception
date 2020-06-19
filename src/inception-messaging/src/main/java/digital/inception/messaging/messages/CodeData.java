@@ -20,12 +20,10 @@ package digital.inception.messaging.messages;
 
 import digital.inception.codes.Code;
 import digital.inception.core.wbxml.Element;
-
+import java.io.Serializable;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.Serializable;
 
 /**
  * The <code>CodeData</code> class holds the information for a code.
@@ -33,8 +31,8 @@ import java.io.Serializable;
  * @author Marcus Portmann
  */
 public class CodeData
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -62,8 +60,7 @@ public class CodeData
    *
    * @param code the <code>Code</code> instance containing the code data
    */
-  CodeData(Code code)
-  {
+  CodeData(Code code) {
     this.id = String.valueOf(code.getId());
     this.codeCategoryId = code.getCodeCategoryId();
     this.name = code.getName();
@@ -75,10 +72,8 @@ public class CodeData
    *
    * @param element the WBXML element containing the code data
    */
-  CodeData(Element element)
-  {
-    try
-    {
+  CodeData(Element element) {
+    try {
       this.id = element.getChildText("Id");
       this.codeCategoryId = element.getChildText("CodeCategoryId");
       this.name = StringUtils.isEmpty(element.getChildText("Name"))
@@ -87,9 +82,7 @@ public class CodeData
       this.value = StringUtils.isEmpty(element.getChildText("Value"))
           ? ""
           : element.getChildText("Value");
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to extract the code data from the WBXML", e);
     }
   }
@@ -99,8 +92,7 @@ public class CodeData
    *
    * @return the ID used to uniquely identify the category the code is associated with
    */
-  public String getCodeCategoryId()
-  {
+  public String getCodeCategoryId() {
     return codeCategoryId;
   }
 
@@ -109,8 +101,7 @@ public class CodeData
    *
    * @return the ID used to uniquely identify the code
    */
-  public String getId()
-  {
+  public String getId() {
     return id;
   }
 
@@ -119,8 +110,7 @@ public class CodeData
    *
    * @return the name of the code
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -129,8 +119,7 @@ public class CodeData
    *
    * @return the value for the code
    */
-  public String getValue()
-  {
+  public String getValue() {
     return value;
   }
 
@@ -139,8 +128,7 @@ public class CodeData
    *
    * @return the WBXML element containing the code data
    */
-  Element toElement()
-  {
+  Element toElement() {
     Element codeElement = new Element("Code");
 
     codeElement.addContent(new Element("Id", StringUtils.isEmpty(id)

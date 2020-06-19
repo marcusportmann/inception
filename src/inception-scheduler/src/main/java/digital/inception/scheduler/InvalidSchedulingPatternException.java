@@ -24,9 +24,9 @@ package digital.inception.scheduler;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class InvalidSchedulingPatternException extends Exception
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class InvalidSchedulingPatternException extends Exception {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -34,8 +34,7 @@ public class InvalidSchedulingPatternException extends Exception
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  InvalidSchedulingPatternException(String message)
-  {
+  InvalidSchedulingPatternException(String message) {
     super(message);
   }
 
@@ -44,11 +43,10 @@ public class InvalidSchedulingPatternException extends Exception
    * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public InvalidSchedulingPatternException(String message, Throwable cause)
-  {
+  public InvalidSchedulingPatternException(String message, Throwable cause) {
     super(message, cause);
   }
 }

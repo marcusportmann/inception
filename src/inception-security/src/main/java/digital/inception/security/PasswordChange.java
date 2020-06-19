@@ -21,18 +21,18 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordChange</code> class holds the information for a password change.
@@ -41,17 +41,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "PasswordChange")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "expirePassword", "lockUser", "newPassword", "password", "reason",
-    "resetPasswordHistory", "securityCode" })
+@JsonPropertyOrder({"expirePassword", "lockUser", "newPassword", "password", "reason",
+    "resetPasswordHistory", "securityCode"})
 @XmlRootElement(name = "PasswordChange", namespace = "http://security.inception.digital")
 @XmlType(name = "PasswordChange", namespace = "http://security.inception.digital",
-    propOrder = { "expirePassword", "lockUser", "newPassword", "password", "reason",
-        "resetPasswordHistory", "securityCode" })
+    propOrder = {"expirePassword", "lockUser", "newPassword", "password", "reason",
+        "resetPasswordHistory", "securityCode"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class PasswordChange
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -82,7 +82,8 @@ public class PasswordChange
   private String newPassword;
 
   /**
-   * The password for the user that is used to authorise the operation when performing a user password change.
+   * The password for the user that is used to authorise the operation when performing a user
+   * password change.
    */
   @ApiModelProperty(
       value = "The password for the user that is used to authorise the operation when performing a user password change")
@@ -120,7 +121,8 @@ public class PasswordChange
   /**
    * Constructs a new <code>PasswordChange</code>.
    */
-  public PasswordChange() {}
+  public PasswordChange() {
+  }
 
   /**
    * Constructs a new <code>PasswordChange</code> for a USER password change.
@@ -129,8 +131,7 @@ public class PasswordChange
    * @param password    the password for the user that is used to authorise the operation when
    *                    performing a user password change
    */
-  public PasswordChange(String newPassword, String password)
-  {
+  public PasswordChange(String newPassword, String password) {
     this.newPassword = newPassword;
     this.password = password;
     this.reason = PasswordChangeReason.USER;
@@ -147,8 +148,7 @@ public class PasswordChange
    *                             administrative password change
    */
   public PasswordChange(String newPassword, Boolean expirePassword, Boolean lockUser,
-      Boolean resetPasswordHistory)
-  {
+      Boolean resetPasswordHistory) {
     this.newPassword = newPassword;
     this.expirePassword = expirePassword;
     this.lockUser = lockUser;
@@ -161,76 +161,10 @@ public class PasswordChange
    * password change.
    *
    * @return <code>true</code> if the user's password should be expired when performing an
-   *         administrative password changeor <code>false</code> otherwise
+   * administrative password changeor <code>false</code> otherwise
    */
-  public Boolean getExpirePassword()
-  {
+  public Boolean getExpirePassword() {
     return expirePassword;
-  }
-
-  /**
-   * Returns whether the user should be locked when performing an administrative password change.
-   *
-   * @return <code>true</code> if the user should be locked when performing an administrative
-   *         password change or <code>false</code> otherwise
-   */
-  public Boolean getLockUser()
-  {
-    return lockUser;
-  }
-
-  /**
-   * Returns the new password.
-   *
-   * @return the new password
-   */
-  public String getNewPassword()
-  {
-    return newPassword;
-  }
-
-  /**
-   * Returns the password for the user that is used to authorise the operation when performing a
-   * user password change.
-   *
-   * @return the password for the user that is used to authorise the operation when performing a
-   *         user password change
-   */
-  public String getPassword()
-  {
-    return password;
-  }
-
-  /**
-   * Returns the reason for changing the password.
-   *
-   * @return the reason for changing the password
-   */
-  public PasswordChangeReason getReason()
-  {
-    return reason;
-  }
-
-  /**
-   * Returns whether the user's password history should be reset when performing an administrative
-   * password change.
-   *
-   * @return <code>true</code> if the user's password history should be reset when performing an
-   *         administrative password changeor <code>false</code> otherwise
-   */
-  public Boolean getResetPasswordHistory()
-  {
-    return resetPasswordHistory;
-  }
-
-  /**
-   * Returns the security code when performing a forgotten password change.
-   *
-   * @return the security code when performing a forgotten password change
-   */
-  public String getSecurityCode()
-  {
-    return securityCode;
   }
 
   /**
@@ -240,9 +174,18 @@ public class PasswordChange
    * @param expirePassword expire the user's password when performing an administrative password
    *                       change
    */
-  public void setExpirePassword(Boolean expirePassword)
-  {
+  public void setExpirePassword(Boolean expirePassword) {
     this.expirePassword = expirePassword;
+  }
+
+  /**
+   * Returns whether the user should be locked when performing an administrative password change.
+   *
+   * @return <code>true</code> if the user should be locked when performing an administrative
+   * password change or <code>false</code> otherwise
+   */
+  public Boolean getLockUser() {
+    return lockUser;
   }
 
   /**
@@ -250,9 +193,17 @@ public class PasswordChange
    *
    * @param lockUser lock the user when performing an administrative password change
    */
-  public void setLockUser(Boolean lockUser)
-  {
+  public void setLockUser(Boolean lockUser) {
     this.lockUser = lockUser;
+  }
+
+  /**
+   * Returns the new password.
+   *
+   * @return the new password
+   */
+  public String getNewPassword() {
+    return newPassword;
   }
 
   /**
@@ -260,9 +211,19 @@ public class PasswordChange
    *
    * @param newPassword the new password when performing a new password change
    */
-  public void setNewPassword(String newPassword)
-  {
+  public void setNewPassword(String newPassword) {
     this.newPassword = newPassword;
+  }
+
+  /**
+   * Returns the password for the user that is used to authorise the operation when performing a
+   * user password change.
+   *
+   * @return the password for the user that is used to authorise the operation when performing a
+   * user password change
+   */
+  public String getPassword() {
+    return password;
   }
 
   /**
@@ -272,9 +233,17 @@ public class PasswordChange
    * @param password the password for the user that is used to authorise the operation when
    *                 performing a user password change
    */
-  public void setPassword(String password)
-  {
+  public void setPassword(String password) {
     this.password = password;
+  }
+
+  /**
+   * Returns the reason for changing the password.
+   *
+   * @return the reason for changing the password
+   */
+  public PasswordChangeReason getReason() {
+    return reason;
   }
 
   /**
@@ -282,9 +251,19 @@ public class PasswordChange
    *
    * @param reason the reason for changing the password
    */
-  public void setReason(PasswordChangeReason reason)
-  {
+  public void setReason(PasswordChangeReason reason) {
     this.reason = reason;
+  }
+
+  /**
+   * Returns whether the user's password history should be reset when performing an administrative
+   * password change.
+   *
+   * @return <code>true</code> if the user's password history should be reset when performing an
+   * administrative password changeor <code>false</code> otherwise
+   */
+  public Boolean getResetPasswordHistory() {
+    return resetPasswordHistory;
   }
 
   /**
@@ -294,9 +273,17 @@ public class PasswordChange
    * @param resetPasswordHistory reset the user's password history when performing an administrative
    *                             password change
    */
-  public void setResetPasswordHistory(Boolean resetPasswordHistory)
-  {
+  public void setResetPasswordHistory(Boolean resetPasswordHistory) {
     this.resetPasswordHistory = resetPasswordHistory;
+  }
+
+  /**
+   * Returns the security code when performing a forgotten password change.
+   *
+   * @return the security code when performing a forgotten password change
+   */
+  public String getSecurityCode() {
+    return securityCode;
   }
 
   /**
@@ -304,8 +291,7 @@ public class PasswordChange
    *
    * @param securityCode the security code when performing a forgotten password change
    */
-  public void setSecurityCode(String securityCode)
-  {
+  public void setSecurityCode(String securityCode) {
     this.securityCode = securityCode;
   }
 }

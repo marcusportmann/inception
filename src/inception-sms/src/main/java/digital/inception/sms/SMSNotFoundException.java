@@ -19,17 +19,14 @@ package digital.inception.sms;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import java.util.UUID;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * The <code>SMSNotFoundException</code> exception is thrown to indicate an error condition as a
@@ -43,8 +40,8 @@ import javax.xml.ws.WebFault;
 @WebFault(name = "SMSNotFoundException", targetNamespace = "http://sms.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-public class SMSNotFoundException extends ServiceException
-{
+public class SMSNotFoundException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -52,8 +49,7 @@ public class SMSNotFoundException extends ServiceException
    *
    * @param smsId the Universally Unique Identifier (UUID) used to uniquely identify the SMS
    */
-  public SMSNotFoundException(UUID smsId)
-  {
+  public SMSNotFoundException(UUID smsId) {
     super("SMSNotFoundError", "The SMS with ID (" + smsId + ") could not be found");
   }
 }

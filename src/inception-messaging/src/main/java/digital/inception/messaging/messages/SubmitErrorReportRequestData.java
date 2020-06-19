@@ -25,32 +25,29 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
-import java.util.UUID;
-
 /**
- * The <code>SubmitErrorReportRequestData</code> class manages the data for a
- * "Submit Error Report Request" message.
+ * The <code>SubmitErrorReportRequestData</code> class manages the data for a "Submit Error Report
+ * Request" message.
  * <p/>
  * This is an asynchronous message.
  *
  * @author Marcus Portmann
  */
-public class SubmitErrorReportRequestData extends WbxmlMessageData
-{
+public class SubmitErrorReportRequestData extends WbxmlMessageData {
+
   /**
    * The UUID for the "Submit Error Report Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "ff638c33-b4f1-4e79-804c-9560da2543d6");
+      "ff638c33-b4f1-4e79-804c-9560da2543d6");
 
   /**
    * The ID used to uniquely identify the application that generated the error report.
@@ -106,8 +103,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
   /**
    * Constructs a new <code>SubmitErrorReportRequestData</code>.
    */
-  public SubmitErrorReportRequestData()
-  {
+  public SubmitErrorReportRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
@@ -129,9 +125,8 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @param data               the optional Base-64 encoded data associated with the error report
    */
   public SubmitErrorReportRequestData(UUID id, String applicationId, String applicationVersion,
-    String description, String detail, String feedback, LocalDateTime created, String who,
-    UUID deviceId, String data)
-  {
+      String description, String detail, String feedback, LocalDateTime created, String who,
+      UUID deviceId, String data) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.id = id;
@@ -156,27 +151,24 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    */
   @Override
   public boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
 
-    if (!rootElement.getName().equals("SubmitErrorReportRequest"))
-    {
+    if (!rootElement.getName().equals("SubmitErrorReportRequest")) {
       return false;
     }
 
     if ((!rootElement.hasChild("Id"))
-      || (!rootElement.hasChild("ApplicationId"))
-      || (!rootElement.hasChild("ApplicationVersion"))
-      || (!rootElement.hasChild("Description"))
-      || (!rootElement.hasChild("Detail"))
-      || (!rootElement.hasChild("Feedback"))
-      || (!rootElement.hasChild("Created"))
-      || (!rootElement.hasChild("Who"))
-      || (!rootElement.hasChild("DeviceId")))
-    {
+        || (!rootElement.hasChild("ApplicationId"))
+        || (!rootElement.hasChild("ApplicationVersion"))
+        || (!rootElement.hasChild("Description"))
+        || (!rootElement.hasChild("Detail"))
+        || (!rootElement.hasChild("Feedback"))
+        || (!rootElement.hasChild("Created"))
+        || (!rootElement.hasChild("Who"))
+        || (!rootElement.hasChild("DeviceId"))) {
       return false;
     }
 
@@ -189,29 +181,22 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
 
     String createdValue = rootElement.getChildText("Created");
 
-    if (createdValue.contains("T"))
-    {
-      try
-      {
+    if (createdValue.contains("T")) {
+      try {
         this.created = ISO8601Util.toLocalDateTime(createdValue);
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         throw new RuntimeException("Failed to parse the When ISO8601 timestamp (" + createdValue
-          + ") for the \"Submit Error Report Request\" message", e);
+            + ") for the \"Submit Error Report Request\" message", e);
       }
-    }
-    else
-    {
+    } else {
       this.created = LocalDateTime.ofInstant(Instant.ofEpochSecond(Long.parseLong(createdValue)),
-        ZoneId.systemDefault());
+          ZoneId.systemDefault());
     }
 
     this.who = rootElement.getChildText("Who");
     this.deviceId = UUID.fromString(rootElement.getChildText("DeviceId"));
 
-    if (rootElement.hasChild("Data"))
-    {
+    if (rootElement.hasChild("Data")) {
       this.data = rootElement.getChildText("Data");
     }
 
@@ -223,8 +208,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the ID used to uniquely identify the application that generated the error report
    */
-  public String getApplicationId()
-  {
+  public String getApplicationId() {
     return applicationId;
   }
 
@@ -233,8 +217,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the version of the application that generated the error report
    */
-  public String getApplicationVersion()
-  {
+  public String getApplicationVersion() {
     return applicationVersion;
   }
 
@@ -243,8 +226,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the date and time the error report was created
    */
-  public LocalDateTime getCreated()
-  {
+  public LocalDateTime getCreated() {
     return created;
   }
 
@@ -253,8 +235,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the optional base-64 encoded data associated with the error report
    */
-  public String getData()
-  {
+  public String getData() {
     return data;
   }
 
@@ -263,8 +244,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the description of the error
    */
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
   }
 
@@ -273,8 +253,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the error detail
    */
-  public String getDetail()
-  {
+  public String getDetail() {
     return detail;
   }
 
@@ -285,8 +264,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the error
    * report originated from
    */
-  public UUID getDeviceId()
-  {
+  public UUID getDeviceId() {
     return deviceId;
   }
 
@@ -295,8 +273,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the feedback provided by the user for the error
    */
-  public String getFeedback()
-  {
+  public String getFeedback() {
     return feedback;
   }
 
@@ -305,8 +282,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the Universally Unique Identifier (UUID) used to uniquely identify the error report
    */
-  public UUID getId()
-  {
+  public UUID getId() {
     return id;
   }
 
@@ -315,8 +291,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    *
    * @return the username identifying the user associated with the error report
    */
-  public String getWho()
-  {
+  public String getWho() {
     return who;
   }
 
@@ -328,37 +303,35 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData
    * message
    */
   @Override
-  public byte[] toMessageData()
-  {
+  public byte[] toMessageData() {
     Element rootElement = new Element("SubmitErrorReportRequest");
 
     rootElement.addContent(new Element("Id", id.toString()));
     rootElement.addContent(new Element("ApplicationId", applicationId));
     rootElement.addContent(new Element("ApplicationVersion", applicationVersion));
     rootElement.addContent(new Element("Description",
-      StringUtils.isEmpty(description)
-        ? ""
-        : description));
+        StringUtils.isEmpty(description)
+            ? ""
+            : description));
     rootElement.addContent(new Element("Detail",
-      StringUtils.isEmpty(detail)
-        ? ""
-        : detail));
+        StringUtils.isEmpty(detail)
+            ? ""
+            : detail));
     rootElement.addContent(new Element("Feedback",
-      StringUtils.isEmpty(feedback)
-        ? ""
-        : feedback));
+        StringUtils.isEmpty(feedback)
+            ? ""
+            : feedback));
     rootElement.addContent(new Element("Created",
-      (created == null)
-        ? ISO8601Util.now()
-        : ISO8601Util.fromLocalDateTime(created)));
+        (created == null)
+            ? ISO8601Util.now()
+            : ISO8601Util.fromLocalDateTime(created)));
     rootElement.addContent(new Element("Who",
-      StringUtils.isEmpty(who)
-        ? ""
-        : who));
+        StringUtils.isEmpty(who)
+            ? ""
+            : who));
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
 
-    if (data != null)
-    {
+    if (data != null) {
       rootElement.addContent(new Element("Data", data));
     }
 

@@ -36,10 +36,12 @@ import digital.inception.sample.model.ISampleService;
 import digital.inception.scheduler.ISchedulerService;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.SecurityWebService;
-
+import java.util.ArrayList;
+import javax.sql.DataSource;
+import javax.validation.Validator;
+import javax.xml.ws.Endpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
@@ -48,7 +50,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -59,14 +60,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.ArrayList;
-
-import javax.sql.DataSource;
-
-import javax.validation.Validator;
-
-import javax.xml.ws.Endpoint;
-
 /**
  * The <code>SampleApplication</code> provides the implementation of the Wicket Web Application
  * class for the sample application.
@@ -74,13 +67,13 @@ import javax.xml.ws.Endpoint;
  * @author Marcus Portmann
  */
 @SpringBootApplication
-@ComponentScan(basePackages = { "digital.inception" }, lazyInit = false)
+@ComponentScan(basePackages = {"digital.inception"}, lazyInit = false)
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-    basePackages = { "digital.inception.sample" })
+    basePackages = {"digital.inception.sample"})
 @EnableSwagger2
 public class SampleApplication extends Application
-  implements InitializingBean
-{
+    implements InitializingBean {
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleApplication.class);
 
@@ -137,25 +130,24 @@ public class SampleApplication extends Application
   /**
    * Constructs a new <code>SampleApplication</code>.
    *
-   * @param applicationContext      the Spring application context
-   * @param dataSource              the data source used to provide connections to the application
-   *                                database
-   * @param codesService            the Codes Service
-   * @param configurationService    the Configuration Service
-   * @param errorService            the Error Service
-   * @param mailService             the Mail Service
-   * @param reportingService        the Reporting Service
-   * @param sampleService           the Sample Service
-   * @param schedulerService        the Scheduler Service
-   * @param securityService         the Security Service
-   * @param validator               the JSR-303 validator
+   * @param applicationContext   the Spring application context
+   * @param dataSource           the data source used to provide connections to the application
+   *                             database
+   * @param codesService         the Codes Service
+   * @param configurationService the Configuration Service
+   * @param errorService         the Error Service
+   * @param mailService          the Mail Service
+   * @param reportingService     the Reporting Service
+   * @param sampleService        the Sample Service
+   * @param schedulerService     the Scheduler Service
+   * @param securityService      the Security Service
+   * @param validator            the JSR-303 validator
    */
   public SampleApplication(ApplicationContext applicationContext, @Qualifier(
       "applicationDataSource") DataSource dataSource, ICodesService codesService,
       IConfigurationService configurationService, IErrorService errorService,
       IMailService mailService, IReportingService reportingService, ISampleService sampleService,
-      ISchedulerService schedulerService, ISecurityService securityService, Validator validator)
-  {
+      ISchedulerService schedulerService, ISecurityService securityService, Validator validator) {
     super(applicationContext);
 
     this.dataSource = dataSource;
@@ -175,8 +167,7 @@ public class SampleApplication extends Application
    *
    * @param args the command-line arguments
    */
-  public static void main(String[] args)
-  {
+  public static void main(String[] args) {
     SpringApplication.run(SampleApplication.class, args);
   }
 
@@ -184,24 +175,19 @@ public class SampleApplication extends Application
    * Initialize the sample application.
    */
   @Override
-  public void afterPropertiesSet()
-  {
-    try
-    {
+  public void afterPropertiesSet() {
+    try {
       byte[] sampleReportDefinitionData = ResourceUtil.getClasspathResource(
           "digital/inception/sample/SampleReport.jasper");
 
       ReportDefinition sampleReportDefinition = new ReportDefinition(
           "Inception.Sample.SampleReport", "Sample Report", sampleReportDefinitionData);
 
-      if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId()))
-      {
+      if (!reportingService.reportDefinitionExists(sampleReportDefinition.getId())) {
         reportingService.createReportDefinition(sampleReportDefinition);
         logger.info("Saved the \"Sample Report\" report definition");
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to initialize the Sample application", e);
     }
   }
@@ -212,8 +198,7 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Springfox Swagger 2 documentation generation component
    */
   @Bean
-  public Docket api()
-  {
+  public Docket api() {
     ApiInfo apiInfo = new ApiInfo("Sample", "REST API documentation for the Sample application",
         Version.PROJECT_VERSION, "", new Contact("Marcus Portmann", "", ""), "Apache 2.0",
         "http://www.apache.org/licenses/LICENSE-2.0.html", new ArrayList<>());
@@ -221,7 +206,7 @@ public class SampleApplication extends Application
     // Versioned API path selector: /v[0-9]*/.*
     return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
         .paths(PathSelectors.regex("/api/.*")).build().useDefaultResponseMessages(false).apiInfo(
-        apiInfo);
+            apiInfo);
   }
 
   /**
@@ -230,8 +215,7 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Codes Service web service
    */
   @Bean
-  protected Endpoint codesWebService()
-  {
+  protected Endpoint codesWebService() {
     return createWebServiceEndpoint("CodesService", new CodesWebService(codesService, validator));
   }
 
@@ -241,8 +225,7 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Configuration Service web service
    */
   @Bean
-  protected Endpoint configurationWebService()
-  {
+  protected Endpoint configurationWebService() {
     return createWebServiceEndpoint("ConfigurationService", new ConfigurationWebService(
         configurationService, validator));
   }
@@ -253,8 +236,7 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Error Service web service
    */
   @Bean
-  protected Endpoint errorWebService()
-  {
+  protected Endpoint errorWebService() {
     return createWebServiceEndpoint("ErrorService", new ErrorWebService(errorService, validator));
   }
 
@@ -264,8 +246,7 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Mail Service web service
    */
   @Bean
-  protected Endpoint mailWebService()
-  {
+  protected Endpoint mailWebService() {
     return createWebServiceEndpoint("MailService", new MailWebService(mailService, validator));
   }
 
@@ -275,8 +256,7 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Reporting Service web service
    */
   @Bean
-  protected Endpoint reportingWebService()
-  {
+  protected Endpoint reportingWebService() {
     return createWebServiceEndpoint("ReportingService", new ReportingWebService(dataSource,
         reportingService, validator));
   }
@@ -287,8 +267,7 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Sample Service web service
    */
   @Bean
-  protected Endpoint sampleWebService()
-  {
+  protected Endpoint sampleWebService() {
     return createWebServiceEndpoint("SampleService", new SampleWebService(sampleService));
   }
 
@@ -310,8 +289,7 @@ public class SampleApplication extends Application
    * @return the Spring bean for the Security Service web service
    */
   @Bean
-  protected Endpoint securityWebService()
-  {
+  protected Endpoint securityWebService() {
     return createWebServiceEndpoint("SecurityService", new SecurityWebService(securityService,
         validator));
   }

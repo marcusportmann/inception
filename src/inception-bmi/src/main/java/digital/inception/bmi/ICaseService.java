@@ -27,8 +27,8 @@ import java.util.List;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface ICaseService
-{
+public interface ICaseService {
+
   /**
    * Create the new case definition(s).
    *
@@ -37,7 +37,7 @@ public interface ICaseService
    * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
   List<CaseDefinitionSummary> createCaseDefinition(byte[] caseDefinitionData)
-    throws InvalidCMMNException, DuplicateCaseDefinitionException, CaseServiceException;
+      throws InvalidCMMNException, DuplicateCaseDefinitionException, CaseServiceException;
 
 //  /**
 //   * Delete the existing case definition.
@@ -73,7 +73,7 @@ public interface ICaseService
    * @return the summaries for all the case definitions
    */
   List<CaseDefinitionSummary> getCaseDefinitionSummaries()
-    throws CaseServiceException;
+      throws CaseServiceException;
 
 //  /**
 //   * Retrieve the summary for the case definition.
@@ -101,7 +101,7 @@ public interface ICaseService
    * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
    */
   boolean caseDefinitionExists(String caseDefinitionId)
-    throws CaseServiceException;
+      throws CaseServiceException;
 
   /**
    * Update the case definition(s).
@@ -111,27 +111,27 @@ public interface ICaseService
    * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
   List<CaseDefinitionSummary> updateCaseDefinition(byte[] caseDefinitionData)
-    throws InvalidCMMNException, CaseDefinitionNotFoundException, CaseServiceException;
+      throws InvalidCMMNException, CaseDefinitionNotFoundException, CaseServiceException;
 
   /**
    * Validate the CMMN XML data.
    *
    * @param cmmnXml the CMMN XML data
    *
-   * @return the case definition summaries for the CMMN cases if the CMMN XML data was
-   *         successfully validated
+   * @return the case definition summaries for the CMMN cases if the CMMN XML data was successfully
+   * validated
    */
   List<CaseDefinitionSummary> validateCMMN(byte[] cmmnXml)
-    throws InvalidCMMNException, CaseServiceException;
+      throws InvalidCMMNException, CaseServiceException;
 
   /**
    * Validate the CMMN XML data.
    *
    * @param cmmnXml the CMMN XML data
    *
-   * @return the case definition summaries for the CMMN cases if the CMMN XML data was
-   *         successfully validated
+   * @return the case definition summaries for the CMMN cases if the CMMN XML data was successfully
+   * validated
    */
   List<CaseDefinitionSummary> validateCMMN(String cmmnXml)
-    throws InvalidCMMNException, CaseServiceException;
+      throws InvalidCMMNException, CaseServiceException;
 }

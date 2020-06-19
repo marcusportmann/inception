@@ -19,21 +19,34 @@ package digital.inception.test;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.JDBCUtil;
-
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import io.agroal.narayana.NarayanaTransactionIntegration;
-
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.Executor;
+import javax.sql.DataSource;
+import javax.transaction.TransactionManager;
+import javax.transaction.TransactionSynchronizationRegistry;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -50,23 +63,6 @@ import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.Executor;
-
-import javax.sql.DataSource;
-
-import javax.transaction.TransactionManager;
-import javax.transaction.TransactionSynchronizationRegistry;
-
 /**
  * The <code>TestConfiguration</code> class provides the base Spring configuration for the JUnit
  * test classes that test the capabilities provided by the <b>Inception</b> framework.
@@ -78,23 +74,23 @@ import javax.transaction.TransactionSynchronizationRegistry;
 @EnableAutoConfiguration
 @EnableScheduling
 @EnableTransactionManagement
-@ComponentScan(basePackages = { "digital.inception" }, lazyInit = true,
-    excludeFilters = { @ComponentScan.Filter(value = SpringBootApplication.class,
-        type = FilterType.ANNOTATION) ,
+@ComponentScan(basePackages = {"digital.inception"}, lazyInit = true,
+    excludeFilters = {@ComponentScan.Filter(value = SpringBootApplication.class,
+        type = FilterType.ANNOTATION),
         @ComponentScan.Filter(
             pattern = "digital\\.inception\\.application\\.ApplicationDatabaseConfiguration",
-                type = FilterType.REGEX) ,
+            type = FilterType.REGEX),
         @ComponentScan.Filter(
             pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
-                type = FilterType.REGEX) ,
+            type = FilterType.REGEX),
         @ComponentScan.Filter(
             pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
-                type = FilterType.REGEX) ,
+            type = FilterType.REGEX),
         @ComponentScan.Filter(pattern = "digital\\.inception\\.process\\.ProcessConfiguration",
-            type = FilterType.REGEX) })
+            type = FilterType.REGEX)})
 @SuppressWarnings("WeakerAccess")
-public class TestConfiguration
-{
+public class TestConfiguration {
+
   private static final Object dataSourceLock = new Object();
   private static DataSource dataSource;
   private final ApplicationContext applicationContext;
@@ -110,10 +106,8 @@ public class TestConfiguration
    * Constructs a new <code>TestConfiguration</code>.
    *
    * @param applicationContext the Spring application context
-   *
    */
-  public TestConfiguration(ApplicationContext applicationContext)
-  {
+  public TestConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
 
@@ -124,8 +118,7 @@ public class TestConfiguration
    */
   @Bean(name = "applicationPersistenceUnit")
   @DependsOn("applicationDataSource")
-  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory()
-  {
+  public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory() {
     LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
         new LocalContainerEntityManagerFactoryBean();
 
@@ -145,8 +138,7 @@ public class TestConfiguration
     PlatformTransactionManager transactionManager = applicationContext.getBean(
         PlatformTransactionManager.class);
 
-    if (transactionManager instanceof JtaTransactionManager)
-    {
+    if (transactionManager instanceof JtaTransactionManager) {
       jpaPropertyMap.put("hibernate.transaction.jta.platform", new SpringJtaPlatform(
           ((JtaTransactionManager) transactionManager)));
     }
@@ -160,8 +152,7 @@ public class TestConfiguration
    * @return the Spring task executor to use for @Async method invocations
    */
   @Bean
-  public Executor taskExecutor()
-  {
+  public Executor taskExecutor() {
     return new SimpleAsyncTaskExecutor();
   }
 
@@ -171,8 +162,7 @@ public class TestConfiguration
    * @return the Spring task scheduler
    */
   @Bean
-  public TaskScheduler taskScheduler()
-  {
+  public TaskScheduler taskScheduler() {
     return new ConcurrentTaskScheduler();
   }
 
@@ -186,15 +176,11 @@ public class TestConfiguration
    * @return the data source that can be used to interact with the in-memory database
    */
   @Bean(name = "applicationDataSource")
-  @DependsOn({ "transactionManager" })
-  protected DataSource dataSource()
-  {
-    synchronized (dataSourceLock)
-    {
-      if (dataSource == null)
-      {
-        try
-        {
+  @DependsOn({"transactionManager"})
+  protected DataSource dataSource() {
+    synchronized (dataSourceLock) {
+      if (dataSource == null) {
+        try {
           TransactionManager transactionManager = applicationContext.getBean(
               TransactionManager.class);
 
@@ -235,11 +221,9 @@ public class TestConfiguration
            * Initialize the in-memory database using the SQL statements contained in the resources
            * for the Inception framework.
            */
-          for (Resource databaseInitResource : databaseInitResources)
-          {
+          for (Resource databaseInitResource : databaseInitResources) {
             if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
-                && databaseInitResource.getFilename().startsWith("inception-"))
-            {
+                && databaseInitResource.getFilename().startsWith("inception-")) {
               loadSQL(dataSource, databaseInitResource);
             }
           }
@@ -248,17 +232,13 @@ public class TestConfiguration
            * Initialize the in-memory database using the SQL statements contained in any other
            * resources.
            */
-          for (Resource databaseInitResource : databaseInitResources)
-          {
+          for (Resource databaseInitResource : databaseInitResources) {
             if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
-                && (!databaseInitResource.getFilename().startsWith("inception-")))
-            {
+                && (!databaseInitResource.getFilename().startsWith("inception-"))) {
               loadSQL(dataSource, databaseInitResource);
             }
           }
-        }
-        catch (Throwable e)
-        {
+        } catch (Throwable e) {
           throw new RuntimeException("Failed to initialize the in-memory application database", e);
         }
       }
@@ -272,8 +252,7 @@ public class TestConfiguration
    *
    * @return the names of the packages to scan for JPA entity classes
    */
-  protected List<String> packagesToScanForEntities()
-  {
+  protected List<String> packagesToScanForEntities() {
     List<String> packagesToScan = new ArrayList<>();
 
     packagesToScan.add("digital.inception");
@@ -282,35 +261,25 @@ public class TestConfiguration
   }
 
   private void loadSQL(DataSource dataSource, Resource databaseInitResource)
-    throws IOException, SQLException
-  {
-    try
-    {
+      throws IOException, SQLException {
+    try {
       // Load the SQL statements used to initialize the database tables
       List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResource.getURL());
 
       // Get a connection to the in-memory database
-      try (Connection connection = dataSource.getConnection())
-      {
-        for (String sqlStatement : sqlStatements)
-        {
-          try (Statement statement = connection.createStatement())
-          {
+      try (Connection connection = dataSource.getConnection()) {
+        for (String sqlStatement : sqlStatements) {
+          try (Statement statement = connection.createStatement()) {
             statement.execute(sqlStatement);
           }
         }
 
         connection.commit();
       }
-    }
-    catch (SQLException e)
-    {
-      try (Connection connection = dataSource.getConnection())
-      {
+    } catch (SQLException e) {
+      try (Connection connection = dataSource.getConnection()) {
         JDBCUtil.shutdownHsqlDatabase(connection);
-      }
-      catch (Throwable f)
-      {
+      } catch (Throwable f) {
         LoggerFactory.getLogger(TestConfiguration.class).error(
             "Failed to shutdown the in-memory application database: " + e.getMessage());
       }

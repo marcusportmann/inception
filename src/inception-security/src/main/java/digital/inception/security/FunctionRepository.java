@@ -29,8 +29,8 @@ import org.springframework.data.repository.query.Param;
  *
  * @author Marcus Portmann
  */
-public interface FunctionRepository extends JpaRepository<Function, String>
-{
+public interface FunctionRepository extends JpaRepository<Function, String> {
+
   @Modifying
   @Query("delete from Function f where f.code = :functionCode")
   void deleteById(@Param("functionCode") String functionCode);

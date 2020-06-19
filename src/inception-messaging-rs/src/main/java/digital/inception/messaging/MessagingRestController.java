@@ -19,13 +19,11 @@ package digital.inception.messaging;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.rs.SecureRestController;
-
+import javax.validation.Validator;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.validation.Validator;
 
 /**
  * The <code>MessagingRestController</code> class.
@@ -34,9 +32,9 @@ import javax.validation.Validator;
  */
 @RestController
 @RequestMapping(value = "/api/messaging")
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class MessagingRestController extends SecureRestController
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class MessagingRestController extends SecureRestController {
+
   /**
    * The Messaging Service.
    */
@@ -53,8 +51,7 @@ public class MessagingRestController extends SecureRestController
    * @param messagingService the Messaging Service
    * @param validator        the JSR-303 validator
    */
-  public MessagingRestController(IMessagingService messagingService, Validator validator)
-  {
+  public MessagingRestController(IMessagingService messagingService, Validator validator) {
     this.messagingService = messagingService;
     this.validator = validator;
   }

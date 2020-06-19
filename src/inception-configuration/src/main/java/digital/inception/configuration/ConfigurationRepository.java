@@ -18,14 +18,13 @@ package digital.inception.configuration;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * The <code>ConfigurationRepository</code> interface declares the repository for the
@@ -33,8 +32,8 @@ import java.util.Optional;
  *
  * @author Marcus Portmann
  */
-public interface ConfigurationRepository extends JpaRepository<Configuration, String>
-{
+public interface ConfigurationRepository extends JpaRepository<Configuration, String> {
+
   void deleteByKeyIgnoreCase(String key);
 
   boolean existsByKeyIgnoreCase(String key);

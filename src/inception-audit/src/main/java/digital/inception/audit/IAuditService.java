@@ -17,14 +17,13 @@
 package digital.inception.audit;
 
 /**
- * The <code>IAuditService</code> interface defines the functionality provided by an Audit
- * Service implementation.
+ * The <code>IAuditService</code> interface defines the functionality provided by an Audit Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface IAuditService
-{
+public interface IAuditService {
 
 
 }

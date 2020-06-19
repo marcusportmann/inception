@@ -18,11 +18,10 @@ package digital.inception.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
 
 /**
  * The <code>ArchivedMessageRepository</code> interface declares the repository for the
@@ -30,4 +29,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface ArchivedMessageRepository extends JpaRepository<ArchivedMessage, UUID> {}
+public interface ArchivedMessageRepository extends JpaRepository<ArchivedMessage, UUID> {
+
+}

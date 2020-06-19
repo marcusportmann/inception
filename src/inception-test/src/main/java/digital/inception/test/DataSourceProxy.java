@@ -19,13 +19,14 @@ package digital.inception.test;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.io.PrintWriter;
-
-import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.ConnectionBuilder;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.sql.ShardingKeyBuilder;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
-
 import javax.sql.DataSource;
 
 /**
@@ -36,8 +37,8 @@ import javax.sql.DataSource;
  * @author Marcus Portmann
  */
 public class DataSourceProxy
-  implements DataSource
-{
+    implements DataSource {
+
   /**
    * The active database connections associated with the current thread.
    */
@@ -54,8 +55,7 @@ public class DataSourceProxy
    *
    * @param dataSource the data source
    */
-  public DataSourceProxy(DataSource dataSource)
-  {
+  public DataSourceProxy(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 
@@ -65,8 +65,7 @@ public class DataSourceProxy
    *
    * @param connection the connection
    */
-  public static void addActiveDatabaseConnection(Connection connection)
-  {
+  public static void addActiveDatabaseConnection(Connection connection) {
     getActiveDatabaseConnections().put(connection, Thread.currentThread().getStackTrace());
   }
 
@@ -75,29 +74,25 @@ public class DataSourceProxy
    *
    * @return the active database connections for all Data Sources associated with the tracker
    */
-  public static Map<Connection, StackTraceElement[]> getActiveDatabaseConnections()
-  {
+  public static Map<Connection, StackTraceElement[]> getActiveDatabaseConnections() {
     return activeDatabaseConnections.get();
   }
 
   @Override
   public ConnectionBuilder createConnectionBuilder()
-    throws SQLException
-  {
+      throws SQLException {
     return dataSource.createConnectionBuilder();
   }
 
   @Override
   public ShardingKeyBuilder createShardingKeyBuilder()
-    throws SQLException
-  {
+      throws SQLException {
     return dataSource.createShardingKeyBuilder();
   }
 
   @Override
   public Connection getConnection()
-    throws SQLException
-  {
+      throws SQLException {
     Connection connection = new ConnectionProxy(dataSource.getConnection());
 
     addActiveDatabaseConnection(connection);
@@ -107,8 +102,7 @@ public class DataSourceProxy
 
   @Override
   public Connection getConnection(String username, String password)
-    throws SQLException
-  {
+      throws SQLException {
     Connection connection = new ConnectionProxy(dataSource.getConnection(username, password));
 
     addActiveDatabaseConnection(connection);
@@ -118,58 +112,49 @@ public class DataSourceProxy
 
   @Override
   public PrintWriter getLogWriter()
-    throws SQLException
-  {
+      throws SQLException {
     return dataSource.getLogWriter();
   }
 
   @Override
+  public void setLogWriter(PrintWriter out)
+      throws SQLException {
+    dataSource.setLogWriter(out);
+  }
+
+  @Override
   public int getLoginTimeout()
-    throws SQLException
-  {
+      throws SQLException {
     return dataSource.getLoginTimeout();
   }
 
   @Override
+  public void setLoginTimeout(int seconds)
+      throws SQLException {
+    dataSource.setLoginTimeout(seconds);
+  }
+
+  @Override
   public Logger getParentLogger()
-    throws SQLFeatureNotSupportedException
-  {
+      throws SQLFeatureNotSupportedException {
     return dataSource.getParentLogger();
   }
 
   @Override
   public boolean isWrapperFor(Class<?> iface)
-    throws SQLException
-  {
+      throws SQLException {
     return iface.isAssignableFrom(getClass());
-  }
-
-  @Override
-  public void setLogWriter(PrintWriter out)
-    throws SQLException
-  {
-    dataSource.setLogWriter(out);
-  }
-
-  @Override
-  public void setLoginTimeout(int seconds)
-    throws SQLException
-  {
-    dataSource.setLoginTimeout(seconds);
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public <T> T unwrap(Class<T> iface)
-    throws SQLException
-  {
-    if (isWrapperFor(iface))
-    {
+      throws SQLException {
+    if (isWrapperFor(iface)) {
       return (T) this;
     }
 
-    if (iface.isAssignableFrom(this.dataSource.getClass()))
-    {
+    if (iface.isAssignableFrom(this.dataSource.getClass())) {
       return (T) this.dataSource;
     }
 

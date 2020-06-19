@@ -18,21 +18,30 @@ package digital.inception.scheduler;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.fasterxml.jackson.annotation.*;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
-
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JobParameter</code> class holds the information for a job parameter.
@@ -41,18 +50,18 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "JobParameter")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "name", "value" })
+@JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "JobParameter", namespace = "http://scheduler.inception.digital")
 @XmlType(name = "JobParameter", namespace = "http://scheduler.inception.digital",
-    propOrder = { "name", "value" })
+    propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "scheduler", name = "job_parameters")
 @IdClass(JobParameterId.class)
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class JobParameter
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -89,7 +98,8 @@ public class JobParameter
   /**
    * Constructs a new <code>JobParameter</code>.
    */
-  public JobParameter() {}
+  public JobParameter() {
+  }
 
   /**
    * Constructs a new <code>JobParameter</code>.
@@ -97,8 +107,7 @@ public class JobParameter
    * @param name  the name of the job parameter
    * @param value the value of the job parameter
    */
-  public JobParameter(String name, String value)
-  {
+  public JobParameter(String name, String value) {
     this.name = name;
     this.value = value;
   }
@@ -109,23 +118,19 @@ public class JobParameter
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -141,9 +146,17 @@ public class JobParameter
    *
    * @return the job the job parameter is associated with
    */
-  public Job getJob()
-  {
+  public Job getJob() {
     return job;
+  }
+
+  /**
+   * Set the job the job parameter is associated with.
+   *
+   * @param job the job the job parameter is associated with
+   */
+  public void setJob(Job job) {
+    this.job = job;
   }
 
   /**
@@ -151,9 +164,17 @@ public class JobParameter
    *
    * @return the name of the job parameter
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the job parameter.
+   *
+   * @param name the name of the job parameter
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -161,9 +182,17 @@ public class JobParameter
    *
    * @return the value of the job parameter
    */
-  public String getValue()
-  {
+  public String getValue() {
     return value;
+  }
+
+  /**
+   * Set the value of the job parameter.
+   *
+   * @param value the value of the job parameter
+   */
+  public void setValue(String value) {
+    this.value = value;
   }
 
   /**
@@ -172,42 +201,11 @@ public class JobParameter
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (((job == null) || (job.getId() == null))
         ? 0
         : job.getId().hashCode()) + ((name == null)
         ? 0
         : name.hashCode());
-  }
-
-  /**
-   * Set the job the job parameter is associated with.
-   *
-   * @param job the job the job parameter is associated with
-   */
-  public void setJob(Job job)
-  {
-    this.job = job;
-  }
-
-  /**
-   * Set the name of the job parameter.
-   *
-   * @param name the name of the job parameter
-   */
-  public void setName(String name)
-  {
-    this.name = name;
-  }
-
-  /**
-   * Set the value of the job parameter.
-   *
-   * @param value the value of the job parameter
-   */
-  public void setValue(String value)
-  {
-    this.value = value;
   }
 }

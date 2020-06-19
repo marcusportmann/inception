@@ -17,15 +17,15 @@
 package digital.inception.messaging.handler;
 
 /**
- * The <code>MessageHandler</code> class provides the base class that all message handlers should
- * be derived from.
+ * The <code>MessageHandler</code> class provides the base class that all message handlers should be
+ * derived from.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("WeakerAccess")
 public abstract class MessageHandler
-  implements IMessageHandler
-{
+    implements IMessageHandler {
+
   /**
    * The configuration information for the message handler.
    */
@@ -42,8 +42,7 @@ public abstract class MessageHandler
    * @param name                 the name of the message handler
    * @param messageHandlerConfig the configuration information for the message handler
    */
-  public MessageHandler(String name, MessageHandlerConfig messageHandlerConfig)
-  {
+  public MessageHandler(String name, MessageHandlerConfig messageHandlerConfig) {
     this.name = name;
     this.messageHandlerConfig = messageHandlerConfig;
   }
@@ -54,8 +53,7 @@ public abstract class MessageHandler
    * @return the configuration information for the message handler
    */
   @SuppressWarnings("unused")
-  public MessageHandlerConfig getMessageHandlerConfig()
-  {
+  public MessageHandlerConfig getMessageHandlerConfig() {
     return messageHandlerConfig;
   }
 
@@ -64,8 +62,7 @@ public abstract class MessageHandler
    *
    * @return the name of the message handler
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 }

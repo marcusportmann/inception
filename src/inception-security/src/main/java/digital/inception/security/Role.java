@@ -22,21 +22,28 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Role</code> class holds the information for a role.
@@ -45,17 +52,17 @@ import javax.xml.bind.annotation.*;
  */
 @ApiModel(value = "Role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "code", "name", "description" })
+@JsonPropertyOrder({"code", "name", "description"})
 @XmlRootElement(name = "Role", namespace = "http://security.inception.digital")
 @XmlType(name = "Role", namespace = "http://security.inception.digital",
-    propOrder = { "code", "name", "description" })
+    propOrder = {"code", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "security", name = "roles")
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class Role
-  implements java.io.Serializable
-{
+    implements java.io.Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -85,9 +92,9 @@ public class Role
    */
   @JsonIgnore
   @XmlTransient
-  @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(schema = "security", name = "function_to_role_map",
-      joinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code") ,
+      joinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"),
       inverseJoinColumns = @JoinColumn(name = "function_code", referencedColumnName = "code"))
   private Set<Function> functions = new HashSet<>();
 
@@ -113,15 +120,15 @@ public class Role
   /**
    * Constructs a new <code>Role</code>.
    */
-  public Role() {}
+  public Role() {
+  }
 
   /**
    * Add the function to the role.
    *
    * @param function the function
    */
-  public void addFunction(Function function)
-  {
+  public void addFunction(Function function) {
     functions.add(function);
     function.getRoles().add(this);
   }
@@ -132,23 +139,19 @@ public class Role
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -162,9 +165,17 @@ public class Role
    *
    * @return the code used to uniquely identify the role
    */
-  public String getCode()
-  {
+  public String getCode() {
     return code;
+  }
+
+  /**
+   * Set the code used to uniquely identify the role.
+   *
+   * @param code the code used to uniquely identify the role
+   */
+  public void setCode(String code) {
+    this.code = code;
   }
 
   /**
@@ -172,9 +183,17 @@ public class Role
    *
    * @return the description for the role
    */
-  public String getDescription()
-  {
+  public String getDescription() {
     return description;
+  }
+
+  /**
+   * Set the description for the role.
+   *
+   * @param description the description for the role
+   */
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**
@@ -182,9 +201,17 @@ public class Role
    *
    * @return the functions associated with the role
    */
-  public Set<Function> getFunctions()
-  {
+  public Set<Function> getFunctions() {
     return functions;
+  }
+
+  /**
+   * Set the functions associated with the role.
+   *
+   * @param functions the functions associated with the role
+   */
+  public void setFunctions(Set<Function> functions) {
+    this.functions = functions;
   }
 
   /**
@@ -192,9 +219,17 @@ public class Role
    *
    * @return the groups the role is associated with
    */
-  public Set<Group> getGroups()
-  {
+  public Set<Group> getGroups() {
     return groups;
+  }
+
+  /**
+   * Set the groups the role is associated with.
+   *
+   * @param groups the groups the role is associated with
+   */
+  public void setGroups(Set<Group> groups) {
+    this.groups = groups;
   }
 
   /**
@@ -202,9 +237,17 @@ public class Role
    *
    * @return the name of the role
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
+  }
+
+  /**
+   * Set the name of the role.
+   *
+   * @param name the name of the role
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**
@@ -213,8 +256,7 @@ public class Role
    * @return a hash code value for the object
    */
   @Override
-  public int hashCode()
-  {
+  public int hashCode() {
     return (code == null)
         ? 0
         : code.hashCode();
@@ -225,59 +267,8 @@ public class Role
    *
    * @param function the function
    */
-  public void removeFunction(Function function)
-  {
+  public void removeFunction(Function function) {
     functions.remove(function);
     function.getRoles().remove(this);
-  }
-
-  /**
-   * Set the code used to uniquely identify the role.
-   *
-   * @param code the code used to uniquely identify the role
-   */
-  public void setCode(String code)
-  {
-    this.code = code;
-  }
-
-  /**
-   * Set the description for the role.
-   *
-   * @param description the description for the role
-   */
-  public void setDescription(String description)
-  {
-    this.description = description;
-  }
-
-  /**
-   * Set the functions associated with the role.
-   *
-   * @param functions the functions associated with the role
-   */
-  public void setFunctions(Set<Function> functions)
-  {
-    this.functions = functions;
-  }
-
-  /**
-   * Set the groups the role is associated with.
-   *
-   * @param groups the groups the role is associated with
-   */
-  public void setGroups(Set<Group> groups)
-  {
-    this.groups = groups;
-  }
-
-  /**
-   * Set the name of the role.
-   *
-   * @param name the name of the role
-   */
-  public void setName(String name)
-  {
-    this.name = name;
   }
 }

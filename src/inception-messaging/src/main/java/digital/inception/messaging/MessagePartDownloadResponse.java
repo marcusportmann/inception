@@ -22,24 +22,22 @@ import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.core.wbxml.Parser;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
 import java.util.ArrayList;
 import java.util.List;
 
+//~--- JDK imports ------------------------------------------------------------
+
 /**
- * The <code>MessagePartDownloadResponse</code> class represents the response to a request sent by
- * a mobile device to download the queued message parts for the device.
+ * The <code>MessagePartDownloadResponse</code> class represents the response to a request sent by a
+ * mobile device to download the queued message parts for the device.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class MessagePartDownloadResponse
-{
+public class MessagePartDownloadResponse {
+
   /**
    * The error code returned to indicate an invalid request.
    */
@@ -87,15 +85,13 @@ public class MessagePartDownloadResponse
    * @param document the WBXML document containing the message part download response information
    */
   public MessagePartDownloadResponse(Document document)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Element rootElement = document.getRootElement();
 
     this.code = Long.parseLong(rootElement.getAttributeValue("code"));
     this.detail = rootElement.getAttributeValue("detail");
 
-    if (rootElement.hasChild("Exception"))
-    {
+    if (rootElement.hasChild("Exception")) {
       Element exceptionElement = rootElement.getChild("Exception");
 
       exception = exceptionElement.getText();
@@ -105,21 +101,17 @@ public class MessagePartDownloadResponse
 
     this.messageParts = new ArrayList<>();
 
-    for (Element messagePartElement : messagePartElements)
-    {
-      try
-      {
+    for (Element messagePartElement : messagePartElements) {
+      try {
         Parser parser = new Parser();
 
         Document messagePartDocument = parser.parse(messagePartElement.getOpaque());
 
         this.messageParts.add(new MessagePart(messagePartDocument));
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         throw new MessagingServiceException(
-          "Failed to parse the WBXML for a message part associated with "
-            + "the message part download response", e);
+            "Failed to parse the WBXML for a message part associated with "
+                + "the message part download response", e);
       }
     }
   }
@@ -129,8 +121,7 @@ public class MessagePartDownloadResponse
    *
    * @param messageParts the message parts being downloaded
    */
-  public MessagePartDownloadResponse(List<MessagePart> messageParts)
-  {
+  public MessagePartDownloadResponse(List<MessagePart> messageParts) {
     this.code = SUCCESS;
     this.detail = "";
     this.messageParts = messageParts;
@@ -143,8 +134,7 @@ public class MessagePartDownloadResponse
    * @param detail the text description of the result of processing the message part download
    *               request
    */
-  public MessagePartDownloadResponse(long code, String detail)
-  {
+  public MessagePartDownloadResponse(long code, String detail) {
     this.code = code;
     this.detail = detail;
   }
@@ -157,15 +147,12 @@ public class MessagePartDownloadResponse
    *               request
    * @param cause  the exception that resulted from processing the message part download request
    */
-  public MessagePartDownloadResponse(long code, String detail, Throwable cause)
-  {
+  public MessagePartDownloadResponse(long code, String detail, Throwable cause) {
     this.code = code;
     this.detail = detail;
 
-    if (cause != null)
-    {
-      try
-      {
+    if (cause != null) {
+      try {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baos);
 
@@ -173,9 +160,7 @@ public class MessagePartDownloadResponse
         pw.flush();
 
         exception = baos.toString();
-      }
-      catch (Throwable e)
-      {
+      } catch (Throwable e) {
         exception = "Unable to dump the stack for the exception (" + cause + "): " + e.getMessage();
       }
     }
@@ -190,14 +175,13 @@ public class MessagePartDownloadResponse
    * @return <code>true</code> if the WBXML document contains valid message part download response
    * information or <code>false</code> otherwise
    */
-  public static boolean isValidWBXML(Document document)
-  {
+  public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
 
     return rootElement.getName().equals("MessagePartDownloadResponse")
-      && (rootElement.getAttributes().size() == 2)
-      && rootElement.hasAttribute("code")
-      && rootElement.hasAttribute("detail");
+        && (rootElement.getAttributes().size() == 2)
+        && rootElement.hasAttribute("code")
+        && rootElement.hasAttribute("detail");
   }
 
   /**
@@ -205,20 +189,18 @@ public class MessagePartDownloadResponse
    *
    * @return the result code
    */
-  public long getCode()
-  {
+  public long getCode() {
     return code;
   }
 
   /**
-   * Return the user-friendly text description of the result of processing the message part
-   * download request.
+   * Return the user-friendly text description of the result of processing the message part download
+   * request.
    *
    * @return the user-friendly text description of the result of processing the message part
    * download request
    */
-  public String getDetail()
-  {
+  public String getDetail() {
     return detail;
   }
 
@@ -229,8 +211,7 @@ public class MessagePartDownloadResponse
    * @return the flattened information for the exception that resulted from processing the message
    * part download request
    */
-  public String getException()
-  {
+  public String getException() {
     return exception;
   }
 
@@ -239,8 +220,7 @@ public class MessagePartDownloadResponse
    *
    * @return the message parts being downloaded
    */
-  public List<MessagePart> getMessageParts()
-  {
+  public List<MessagePart> getMessageParts() {
     return messageParts;
   }
 
@@ -250,18 +230,15 @@ public class MessagePartDownloadResponse
    * @return the String representation of the message part download response.
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     StringBuilder buffer = new StringBuilder("<MessagePartDownloadResponse");
 
     buffer.append(" code=\"").append(code).append("\"");
     buffer.append(" detail=\"").append(detail).append("\"");
     buffer.append(">");
 
-    if (messageParts != null)
-    {
-      for (MessagePart messagePart : messageParts)
-      {
+    if (messageParts != null) {
+      for (MessagePart messagePart : messageParts) {
         buffer.append(messagePart.toString());
       }
     }
@@ -276,25 +253,21 @@ public class MessagePartDownloadResponse
    *
    * @return the WBXML representation of the message part download response
    */
-  public byte[] toWBXML()
-  {
+  public byte[] toWBXML() {
     Element rootElement = new Element("MessagePartDownloadResponse");
 
     rootElement.setAttribute("code", Long.toString(code));
     rootElement.setAttribute("detail", detail);
 
-    if (exception != null)
-    {
+    if (exception != null) {
       Element exceptionElement = new Element("Exception");
 
       exceptionElement.addContent(exception);
       rootElement.addContent(exceptionElement);
     }
 
-    if (messageParts != null)
-    {
-      for (MessagePart messagePart : messageParts)
-      {
+    if (messageParts != null) {
+      for (MessagePart messagePart : messageParts) {
         rootElement.addContent(new Element("MessagePart", messagePart.toWBXML()));
       }
     }

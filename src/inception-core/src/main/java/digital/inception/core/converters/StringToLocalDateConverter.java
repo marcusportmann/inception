@@ -19,45 +19,40 @@ package digital.inception.core.converters;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
-
+import java.time.LocalDate;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.LocalDate;
-
 /**
- * The <code>StringToLocalDateConverter</code> class implements the Spring converter that
- * converts a <code>String</code> type into a <code>LocalDate</code> type.
+ * The <code>StringToLocalDateConverter</code> class implements the Spring converter that converts
+ * a
+ * <code>String</code> type into a <code>LocalDate</code> type.
  *
  * @author Marcus Portmann
  */
 @Component
 @SuppressWarnings("unused")
 public final class StringToLocalDateConverter
-  implements Converter<String, LocalDate>
-{
+    implements Converter<String, LocalDate> {
+
   /**
    * Constructs a new <code>StringToLocalDateConverter</code>.
    */
-  public StringToLocalDateConverter() {}
+  public StringToLocalDateConverter() {
+  }
 
   @Override
-  public LocalDate convert(String source)
-  {
-    if (StringUtils.isEmpty(source))
-    {
+  public LocalDate convert(String source) {
+    if (StringUtils.isEmpty(source)) {
       return null;
     }
 
-    try
-    {
+    try {
       return ISO8601Util.toLocalDate(source);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to parse the ISO8601Util date value (" + source + ")", e);
     }
   }

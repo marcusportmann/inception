@@ -29,8 +29,8 @@ import java.io.Serializable;
  */
 @SuppressWarnings("WeakerAccess")
 public class CodeProviderConfig
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -49,8 +49,7 @@ public class CodeProviderConfig
    * @param name      the name of the code provider
    * @param className fully qualified name of the class that implements the code provider
    */
-  CodeProviderConfig(String name, String className)
-  {
+  CodeProviderConfig(String name, String className) {
     this.name = name;
     this.className = className;
   }
@@ -60,8 +59,7 @@ public class CodeProviderConfig
    *
    * @return the fully qualified name of the class that implements the code provider
    */
-  public String getClassName()
-  {
+  public String getClassName() {
     return className;
   }
 
@@ -70,8 +68,7 @@ public class CodeProviderConfig
    *
    * @return the name of the code provider
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 }

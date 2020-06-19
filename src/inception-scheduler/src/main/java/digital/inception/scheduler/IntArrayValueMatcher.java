@@ -29,10 +29,10 @@ import java.util.List;
  * @author Carlo Pelliccia
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class IntArrayValueMatcher
-  implements ValueMatcher
-{
+    implements ValueMatcher {
+
   /**
    * The accepted values.
    */
@@ -41,23 +41,18 @@ public class IntArrayValueMatcher
   /**
    * Builds the ValueMatcher.
    *
-   * @param integers The Integer elements, one for every value accepted by the matcher. The
-   *                 match() method will return true only if its parameter will be one of this list.
+   * @param integers The Integer elements, one for every value accepted by the matcher. The match()
+   *                 method will return true only if its parameter will be one of this list.
    */
-  IntArrayValueMatcher(List<Integer> integers)
-  {
+  IntArrayValueMatcher(List<Integer> integers) {
     int size = integers.size();
 
     values = new int[size];
 
-    for (int i = 0; i < size; i++)
-    {
-      try
-      {
+    for (int i = 0; i < size; i++) {
+      try {
         values[i] = integers.get(i);
-      }
-      catch (Exception e)
-      {
+      } catch (Exception e) {
         throw new IllegalArgumentException(e.getMessage());
       }
     }
@@ -71,14 +66,11 @@ public class IntArrayValueMatcher
    * @param value the value
    *
    * @return <code>true</code> if the given value matches the rules of the
-   *         <code>ValueMatcher</code>, <code>false</code> otherwise
+   * <code>ValueMatcher</code>, <code>false</code> otherwise
    */
-  public boolean match(int value)
-  {
-    for (int value1 : values)
-    {
-      if (value1 == value)
-      {
+  public boolean match(int value) {
+    for (int value1 : values) {
+      if (value1 == value) {
         return true;
       }
     }

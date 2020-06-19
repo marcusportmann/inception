@@ -18,6 +18,9 @@ package digital.inception.error;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +28,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 //~--- JDK imports ------------------------------------------------------------
 
@@ -38,10 +37,10 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @Service
-@SuppressWarnings({ "unused" })
+@SuppressWarnings({"unused"})
 public class ErrorService
-  implements IErrorService
-{
+    implements IErrorService {
+
   /**
    * The Error Report Repository.
    */
@@ -55,12 +54,11 @@ public class ErrorService
   /**
    * Constructs a new <code>ErrorService</code>.
    *
-   * @param errorReportRepository the Error Report Repository
+   * @param errorReportRepository        the Error Report Repository
    * @param errorReportSummaryRepository the Error Report Summary Repository
    */
   public ErrorService(ErrorReportRepository errorReportRepository,
-      ErrorReportSummaryRepository errorReportSummaryRepository)
-  {
+      ErrorReportSummaryRepository errorReportSummaryRepository) {
     this.errorReportRepository = errorReportRepository;
     this.errorReportSummaryRepository = errorReportSummaryRepository;
   }
@@ -74,14 +72,11 @@ public class ErrorService
   @Override
   @Transactional
   public void createErrorReport(ErrorReport errorReport)
-    throws ErrorServiceException
-  {
-    try
-    {
+      throws ErrorServiceException {
+    try {
       String description = errorReport.getDescription();
 
-      if (description.length() > 4000)
-      {
+      if (description.length() > 4000) {
         description = description.substring(0, 4000);
       }
 
@@ -91,8 +86,7 @@ public class ErrorService
           ? ""
           : errorReport.getDetail();
 
-      if (detail.length() > 4000)
-      {
+      if (detail.length() > 4000) {
         detail = detail.substring(0, 4000);
       }
 
@@ -100,8 +94,7 @@ public class ErrorService
 
       String who = errorReport.getWho();
 
-      if ((who != null) && (who.length() > 1000))
-      {
+      if ((who != null) && (who.length() > 1000)) {
         who = who.substring(0, 1000);
       }
 
@@ -109,17 +102,14 @@ public class ErrorService
 
       String feedback = errorReport.getFeedback();
 
-      if ((feedback != null) && (feedback.length() > 4000))
-      {
+      if ((feedback != null) && (feedback.length() > 4000)) {
         feedback = feedback.substring(0, 4000);
       }
 
       errorReport.setFeedback(feedback);
 
       errorReportRepository.saveAndFlush(errorReport);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ErrorServiceException("Failed to create the error report (" + errorReport.getId()
           + ")", e);
     }
@@ -135,27 +125,18 @@ public class ErrorService
    */
   @Override
   public ErrorReport getErrorReport(UUID errorReportId)
-    throws ErrorReportNotFoundException, ErrorServiceException
-  {
-    try
-    {
+      throws ErrorReportNotFoundException, ErrorServiceException {
+    try {
       Optional<ErrorReport> errorReportOptional = errorReportRepository.findById(errorReportId);
 
-      if (errorReportOptional.isPresent())
-      {
+      if (errorReportOptional.isPresent()) {
         return errorReportOptional.get();
-      }
-      else
-      {
+      } else {
         throw new ErrorReportNotFoundException(errorReportId);
       }
-    }
-    catch (ErrorReportNotFoundException e)
-    {
+    } catch (ErrorReportNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ErrorServiceException("Failed to retrieve the error report (" + errorReportId
           + ")", e);
     }
@@ -168,32 +149,23 @@ public class ErrorService
    *                      error report
    *
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   *         found
+   * found
    */
   @Override
   public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-    throws ErrorReportNotFoundException, ErrorServiceException
-  {
-    try
-    {
+      throws ErrorReportNotFoundException, ErrorServiceException {
+    try {
       Optional<ErrorReportSummary> errorReportSummaryOptional =
           errorReportSummaryRepository.findById(errorReportId);
 
-      if (errorReportSummaryOptional.isPresent())
-      {
+      if (errorReportSummaryOptional.isPresent()) {
         return errorReportSummaryOptional.get();
-      }
-      else
-      {
+      } else {
         throw new ErrorReportNotFoundException(errorReportId);
       }
-    }
-    catch (ErrorReportNotFoundException e)
-    {
+    } catch (ErrorReportNotFoundException e) {
       throw e;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ErrorServiceException("Failed to retrieve the summary for the error report ("
           + errorReportId + ")", e);
     }
@@ -202,26 +174,22 @@ public class ErrorService
   /**
    * Retrieve the summaries for the most recent error reports.
    *
-   * @param maximumNumberOfEntries the maximum number of summaries for the most recent error
-   *                               reports to retrieve
+   * @param maximumNumberOfEntries the maximum number of summaries for the most recent error reports
+   *                               to retrieve
    *
    * @return the summaries for the most recent error reports
    */
   @Override
   public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-    throws ErrorServiceException
-  {
-    try
-    {
+      throws ErrorServiceException {
+    try {
       Pageable pageable = PageRequest.of(0, maximumNumberOfEntries, Sort.Direction.DESC, "created");
 
       Page<ErrorReportSummary> errorReportSummaryPage = errorReportSummaryRepository.findAll(
           pageable);
 
       return errorReportSummaryPage.getContent();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ErrorServiceException(
           "Failed to retrieve the summaries for the most recent error reports", e);
     }
@@ -234,14 +202,10 @@ public class ErrorService
    */
   @Override
   public long getNumberOfErrorReports()
-    throws ErrorServiceException
-  {
-    try
-    {
+      throws ErrorServiceException {
+    try {
       return errorReportRepository.count();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new ErrorServiceException("Failed to retrieve the total number of error reports", e);
     }
   }

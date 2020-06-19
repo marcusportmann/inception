@@ -18,11 +18,10 @@ package digital.inception.error;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.UUID;
 
 /**
  * The <code>ErrorRepository</code> interface declares the repository for the
@@ -30,7 +29,6 @@ import java.util.UUID;
  *
  * @author Marcus Portmann
  */
-public interface ErrorReportSummaryRepository extends JpaRepository<ErrorReportSummary, UUID>
-{
+public interface ErrorReportSummaryRepository extends JpaRepository<ErrorReportSummary, UUID> {
 
 }

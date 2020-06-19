@@ -19,15 +19,13 @@ package digital.inception.security;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.service.ServiceException;
-
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.ws.WebFault;
 
 /**
  * An <code>AuthenticationFailedException</code> is thrown to indicate that a security operation
@@ -42,9 +40,9 @@ import javax.xml.ws.WebFault;
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class AuthenticationFailedException extends ServiceException
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class AuthenticationFailedException extends ServiceException {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -52,8 +50,7 @@ public class AuthenticationFailedException extends ServiceException
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public AuthenticationFailedException(String message)
-  {
+  public AuthenticationFailedException(String message) {
     super("AuthenticationFailedError", message);
   }
 
@@ -62,11 +59,10 @@ public class AuthenticationFailedException extends ServiceException
    * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method.
-   *                (A <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public AuthenticationFailedException(String message, Throwable cause)
-  {
+  public AuthenticationFailedException(String message, Throwable cause) {
     super("AuthenticationFailedError", message, cause);
   }
 }

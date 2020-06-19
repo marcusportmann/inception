@@ -19,22 +19,21 @@ package digital.inception.core.xml;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
+import java.time.ZonedDateTime;
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.time.ZonedDateTime;
-
-import javax.xml.bind.annotation.adapters.XmlAdapter;
-
 /**
- * The <code>ZonedDateTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert between
+ * The <code>ZonedDateTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert
+ * between
  * <code>String</code> and <code>ZonedDateTime</code> types.
  * <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
-public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime>
-{
+@SuppressWarnings({"unused", "WeakerAccess"})
+public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
+
   /**
    * Marshals the <code>java.time.ZonedDateTime</code> value as an ISO8601Util string.
    *
@@ -43,10 +42,8 @@ public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime>
    * @return the <code>java.time.ZonedDateTime</code> value as an ISO8601Util string
    */
   @Override
-  public String marshal(ZonedDateTime value)
-  {
-    if (value == null)
-    {
+  public String marshal(ZonedDateTime value) {
+    if (value == null) {
       return null;
     }
 
@@ -61,19 +58,14 @@ public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime>
    * @return the ISO8601Util string value as a <code>java.time.ZonedDateTime</code>
    */
   @Override
-  public ZonedDateTime unmarshal(String value)
-  {
-    if (value == null)
-    {
+  public ZonedDateTime unmarshal(String value) {
+    if (value == null) {
       return null;
     }
 
-    try
-    {
+    try {
       return ISO8601Util.toZonedDateTime(value);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to parse the xs:dateTime value (" + value + ")");
     }
   }

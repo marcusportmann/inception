@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @WritingConverter
 public class PasswordResetStatusToIntegerConverter
-  implements Converter<PasswordResetStatus, Integer>
-{
+    implements Converter<PasswordResetStatus, Integer> {
+
   /**
    * Constructs a new <code>PasswordResetStatusToIntegerConverter</code>.
    */
-  public PasswordResetStatusToIntegerConverter() {}
+  public PasswordResetStatusToIntegerConverter() {
+  }
 
   @Override
-  public Integer convert(PasswordResetStatus source)
-  {
-    if (source == null)
-    {
+  public Integer convert(PasswordResetStatus source) {
+    if (source == null) {
       return null;
     }
 

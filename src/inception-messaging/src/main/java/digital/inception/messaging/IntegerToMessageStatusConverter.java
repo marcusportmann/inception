@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @ReadingConverter
 public class IntegerToMessageStatusConverter
-  implements Converter<Integer, MessageStatus>
-{
+    implements Converter<Integer, MessageStatus> {
+
   /**
    * Constructs a new <code>IntegerToMessageStatusConverter</code>.
    */
-  public IntegerToMessageStatusConverter() {}
+  public IntegerToMessageStatusConverter() {
+  }
 
   @Override
-  public MessageStatus convert(Integer source)
-  {
-    if (source == null)
-    {
+  public MessageStatus convert(Integer source) {
+    if (source == null) {
       return null;
     }
 

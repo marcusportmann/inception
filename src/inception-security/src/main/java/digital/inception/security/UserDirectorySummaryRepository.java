@@ -18,6 +18,8 @@ package digital.inception.security;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.List;
+import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,17 +27,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
-import java.util.UUID;
-
 /**
  * The <code>UserDirectorySummaryRepository</code> interface declares the repository for the
  * <code>UserDirectorySummary</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface UserDirectorySummaryRepository extends JpaRepository<UserDirectorySummary, UUID>
-{
+public interface UserDirectorySummaryRepository extends JpaRepository<UserDirectorySummary, UUID> {
+
   List<UserDirectorySummary> findAllByOrderByNameAsc(Pageable pageable);
 
   List<UserDirectorySummary> findAllByOrderByNameDesc(Pageable pageable);

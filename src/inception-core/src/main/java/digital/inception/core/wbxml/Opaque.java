@@ -24,24 +24,23 @@ import java.io.PrintStream;
 import java.io.Serializable;
 
 /**
- * The <code>Opaque</code> class stores the data for an opaque (binary data) content type in a
- * WBXML document.
+ * The <code>Opaque</code> class stores the data for an opaque (binary data) content type in a WBXML
+ * document.
  * <p/>
  * This content type is used to store binary data.
  *
  * @author Marcus Portmann
  */
 public class Opaque
-  implements Serializable, Content
-{
+    implements Serializable, Content {
+
   private static final long serialVersionUID = 1000000;
   private BinaryBuffer buffer = null;
 
   /**
    * Constructs a new empty <code>Opaque</code>.
    */
-  public Opaque()
-  {
+  public Opaque() {
     buffer = new BinaryBuffer();
   }
 
@@ -50,8 +49,7 @@ public class Opaque
    *
    * @param data the binary data to populate the <code>Opaque</code> instance with
    */
-  public Opaque(byte[] data)
-  {
+  public Opaque(byte[] data) {
     buffer = new BinaryBuffer(data);
   }
 
@@ -61,8 +59,7 @@ public class Opaque
    *
    * @param data the binary data to add to the opaque instance
    */
-  public void append(byte[] data)
-  {
+  public void append(byte[] data) {
     buffer.append(data);
   }
 
@@ -72,8 +69,7 @@ public class Opaque
    *
    * @param opaque the existing <code>Opaque</code> instance containing the binary data to add
    */
-  public void append(Opaque opaque)
-  {
+  public void append(Opaque opaque) {
     buffer.append(opaque.buffer);
   }
 
@@ -82,8 +78,7 @@ public class Opaque
    *
    * @return the binary data for the <code>Opaque</code> instance
    */
-  public byte[] getData()
-  {
+  public byte[] getData() {
     return buffer.getData();
   }
 
@@ -92,8 +87,7 @@ public class Opaque
    *
    * @return the length of the binary data for the <code>Opaque</code> instance
    */
-  public int getLength()
-  {
+  public int getLength() {
     return buffer.getLength();
   }
 
@@ -102,8 +96,7 @@ public class Opaque
    *
    * @param indent the indent level
    */
-  public void print(int indent)
-  {
+  public void print(int indent) {
     print(System.out, indent);
   }
 
@@ -113,8 +106,7 @@ public class Opaque
    * @param out    the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
-  public void print(OutputStream out, int indent)
-  {
+  public void print(OutputStream out, int indent) {
     PrintStream pout = new PrintStream(out);
 
     pout.print("[BINARY: " + buffer.getLength() + " bytes]");
@@ -129,10 +121,8 @@ public class Opaque
    * @see Object#toString()
    */
   @Override
-  public String toString()
-  {
-    try
-    {
+  public String toString() {
+    try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
       print(baos, 0);
@@ -142,9 +132,7 @@ public class Opaque
       baos.close();
 
       return result;
-    }
-    catch (Exception e)
-    {
+    } catch (Exception e) {
       return super.toString();
     }
   }

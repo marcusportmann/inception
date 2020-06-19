@@ -27,8 +27,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
  * @author Marcus Portmann
  */
 @Configuration
-public class MailServiceTestConfiguration
-{
+public class MailServiceTestConfiguration {
+
   @Bean
   public JavaMailSender javaMailSender() {
     JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();

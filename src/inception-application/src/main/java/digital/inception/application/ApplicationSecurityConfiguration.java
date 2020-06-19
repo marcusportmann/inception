@@ -20,7 +20,7 @@ package digital.inception.application;
 
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
-
+import java.security.KeyStore;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,8 +29,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.security.KeyStore;
 
 /**
  * The <code>ApplicationSecurityConfiguration</code> class provides access to the application
@@ -41,8 +39,8 @@ import java.security.KeyStore;
 @Configuration
 @ConditionalOnProperty(value = "application.security.keyStore.path")
 @SuppressWarnings("unused")
-public class ApplicationSecurityConfiguration
-{
+public class ApplicationSecurityConfiguration {
+
   /**
    * The application key store alias.
    */
@@ -91,32 +89,25 @@ public class ApplicationSecurityConfiguration
    * @return the application key store
    */
   @Bean(name = "applicationKeyStore")
-  public KeyStore keyStore()
-  {
-    try
-    {
-      if (StringUtils.isEmpty(keyStoreType))
-      {
+  public KeyStore keyStore() {
+    try {
+      if (StringUtils.isEmpty(keyStoreType)) {
         throw new ConfigurationException(
             "The type was not specified for the application key store");
       }
 
-      if (StringUtils.isEmpty(keyStorePath))
-      {
+      if (StringUtils.isEmpty(keyStorePath)) {
         throw new ConfigurationException(
             "The path was not specified for the application key store");
       }
 
-      if (StringUtils.isEmpty(keyStorePassword))
-      {
+      if (StringUtils.isEmpty(keyStorePassword)) {
         throw new ConfigurationException(
             "The password was not specified for the application key store");
       }
 
       return CryptoUtil.loadKeyStore(keyStoreType, keyStorePath, keyStorePassword);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the application key store", e);
     }
   }
@@ -127,8 +118,7 @@ public class ApplicationSecurityConfiguration
    * @return the application key store password
    */
   @Bean(name = "applicationKeyStorePassword")
-  public String keyStorePassword()
-  {
+  public String keyStorePassword() {
     return keyStorePassword;
   }
 
@@ -138,18 +128,14 @@ public class ApplicationSecurityConfiguration
    * @return the application trust store
    */
   @Bean(name = "applicationTrustStore")
-  public KeyStore trustStore()
-  {
-    try
-    {
-      if (StringUtils.isEmpty(trustStoreType))
-      {
+  public KeyStore trustStore() {
+    try {
+      if (StringUtils.isEmpty(trustStoreType)) {
         throw new ConfigurationException(
             "The type was not specified for the application trust store");
       }
 
-      if (StringUtils.isEmpty(trustStorePath))
-      {
+      if (StringUtils.isEmpty(trustStorePath)) {
         throw new ConfigurationException(
             "The path was not specified for the application trust store");
       }
@@ -159,9 +145,7 @@ public class ApplicationSecurityConfiguration
           : trustStorePassword;
 
       return CryptoUtil.loadTrustStore(trustStoreType, trustStorePath, trustStorePassword);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException("Failed to initialize the application trust store", e);
     }
   }

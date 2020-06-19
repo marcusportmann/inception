@@ -20,14 +20,12 @@ package digital.inception.security;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.annotations.ApiModel;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>OrganizationStatus</code> enumeration defines the possible statuses for an
@@ -38,8 +36,7 @@ import javax.xml.bind.annotation.XmlType;
 @ApiModel(value = "OrganizationStatus")
 @XmlEnum
 @XmlType(name = "OrganizationStatus", namespace = "http://security.inception.digital")
-public enum OrganizationStatus
-{
+public enum OrganizationStatus {
   @XmlEnumValue("Inactive")
   INACTIVE(0, "Inactive"),
   @XmlEnumValue("Active")
@@ -48,8 +45,7 @@ public enum OrganizationStatus
   private int code;
   private String description;
 
-  OrganizationStatus(int code, String description)
-  {
+  OrganizationStatus(int code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -62,10 +58,8 @@ public enum OrganizationStatus
    * @return the organization status given by the specified numeric code value
    */
   @JsonCreator
-  public static OrganizationStatus fromCode(int code)
-  {
-    switch (code)
-    {
+  public static OrganizationStatus fromCode(int code) {
+    switch (code) {
       case 0:
         return OrganizationStatus.INACTIVE;
 
@@ -83,8 +77,7 @@ public enum OrganizationStatus
    * @return the numeric code value for the organization status
    */
   @JsonValue
-  public int code()
-  {
+  public int code() {
     return code;
   }
 
@@ -93,8 +86,7 @@ public enum OrganizationStatus
    *
    * @return the description for the organization status
    */
-  public String description()
-  {
+  public String description() {
     return description;
   }
 }

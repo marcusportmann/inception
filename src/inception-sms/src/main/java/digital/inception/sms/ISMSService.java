@@ -27,15 +27,15 @@ import java.util.UUID;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface ISMSService
-{
+public interface ISMSService {
+
   /**
    * Create the SMS.
    *
    * @param sms the <code>SMS</code> instance containing the information for the SMS
    */
   void createSMS(SMS sms)
-    throws SMSServiceException;
+      throws SMSServiceException;
 
   /**
    * Delete the existing SMS.
@@ -43,7 +43,7 @@ public interface ISMSService
    * @param smsId the ID uniquely identifying the SMS
    */
   void deleteSMS(UUID smsId)
-    throws SMSNotFoundException, SMSServiceException;
+      throws SMSNotFoundException, SMSServiceException;
 
   /**
    * Returns the maximum number of send attempts for a SMS.
@@ -58,10 +58,10 @@ public interface ISMSService
    * The SMS will be locked to prevent duplicate sending.
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   *         currently queued for sending
+   * currently queued for sending
    */
   SMS getNextSMSQueuedForSending()
-    throws SMSServiceException;
+      throws SMSServiceException;
 
   /**
    * Returns the number of SMS credits remaining.
@@ -69,7 +69,7 @@ public interface ISMSService
    * @return the number of SMS credits remaining
    */
   int getNumberOfSMSCreditsRemaining()
-    throws SMSServiceException;
+      throws SMSServiceException;
 
   /**
    * Retrieve the SMS.
@@ -79,7 +79,7 @@ public interface ISMSService
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   SMS getSMS(UUID smsId)
-    throws SMSNotFoundException, SMSServiceException;
+      throws SMSNotFoundException, SMSServiceException;
 
   /**
    * Reset the SMS locks.
@@ -88,7 +88,7 @@ public interface ISMSService
    * @param newStatus the new status for the SMSs that have been unlocked
    */
   void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
-    throws SMSServiceException;
+      throws SMSServiceException;
 
   /**
    * Send the SMS.
@@ -99,7 +99,7 @@ public interface ISMSService
    * @param message      the message
    */
   void sendSMS(String mobileNumber, String message)
-    throws SMSServiceException;
+      throws SMSServiceException;
 
   /**
    * Send the SMS synchronously.
@@ -113,7 +113,7 @@ public interface ISMSService
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
    */
   boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
-    throws SMSServiceException;
+      throws SMSServiceException;
 
   /**
    * Set the status for the SMS.
@@ -122,7 +122,7 @@ public interface ISMSService
    * @param status the new status for the SMS
    */
   void setSMSStatus(UUID smsId, SMSStatus status)
-    throws SMSNotFoundException, SMSServiceException;
+      throws SMSNotFoundException, SMSServiceException;
 
   /**
    * Unlock the SMS.
@@ -131,5 +131,5 @@ public interface ISMSService
    * @param status the new status for the unlocked SMS
    */
   void unlockSMS(UUID smsId, SMSStatus status)
-    throws SMSNotFoundException, SMSServiceException;
+      throws SMSNotFoundException, SMSServiceException;
 }

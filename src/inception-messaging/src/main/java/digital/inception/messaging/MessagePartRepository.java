@@ -18,6 +18,9 @@ package digital.inception.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import java.util.List;
+import java.util.UUID;
+import javax.persistence.LockModeType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
@@ -27,19 +30,14 @@ import org.springframework.data.repository.query.Param;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.LockModeType;
-
 /**
  * The <code>MessagePartRepository</code> interface declares the repository for the
  * <code>MessagePart</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface MessagePartRepository extends JpaRepository<MessagePart, UUID>
-{
+public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> {
+
   @Query("select count(mp.id) from MessagePart mp where mp.status = 3 and "
       + "mp.messageId = :messageId")
   int countMessagePartsQueuedForAssemblyByMessageId(@Param("messageId") UUID messageId);

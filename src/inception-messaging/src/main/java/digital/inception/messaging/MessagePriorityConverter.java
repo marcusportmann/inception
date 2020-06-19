@@ -28,8 +28,8 @@ import javax.persistence.Converter;
 @Converter(autoApply = true)
 @SuppressWarnings("unused")
 public class MessagePriorityConverter
-  implements AttributeConverter<MessagePriority, Integer>
-{
+    implements AttributeConverter<MessagePriority, Integer> {
+
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
    * the database.
@@ -39,8 +39,7 @@ public class MessagePriorityConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(MessagePriority attribute)
-  {
+  public Integer convertToDatabaseColumn(MessagePriority attribute) {
     return attribute.code();
   }
 
@@ -55,8 +54,7 @@ public class MessagePriorityConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public MessagePriority convertToEntityAttribute(Integer dbData)
-  {
+  public MessagePriority convertToEntityAttribute(Integer dbData) {
     return MessagePriority.fromCode(dbData);
   }
 }

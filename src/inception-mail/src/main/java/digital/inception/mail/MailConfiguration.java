@@ -18,17 +18,17 @@ package digital.inception.mail;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>MailConfiguration</code> class provides the Spring configuration
- * for the Mail module.
+ * The <code>MailConfiguration</code> class provides the Spring configuration for the Mail module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-  basePackages = { "digital.inception.mail" })
-public class MailConfiguration {}
+    basePackages = {"digital.inception.mail"})
+public class MailConfiguration {
+
+}

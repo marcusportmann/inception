@@ -24,10 +24,10 @@ package digital.inception.core.util;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class BinaryBuffer
-  implements java.io.Serializable
-{
+    implements java.io.Serializable {
+
   private static final long serialVersionUID = 1000000;
   private byte[] data;
 
@@ -37,8 +37,7 @@ public class BinaryBuffer
    * @param data <code>BinaryBuffer</code> instance containing the binary data that will be copied
    *             and managed by the <code>BinaryBuffer</code> instance
    */
-  public BinaryBuffer(BinaryBuffer data)
-  {
+  public BinaryBuffer(BinaryBuffer data) {
     this(data.getData());
   }
 
@@ -48,8 +47,7 @@ public class BinaryBuffer
    * @param data the binary data that will be copied and managed by the <code>BinaryBuffer</code>
    *             instance
    */
-  public BinaryBuffer(byte[] data)
-  {
+  public BinaryBuffer(byte[] data) {
     this.data = new byte[data.length];
     System.arraycopy(data, 0, this.data, 0, data.length);
   }
@@ -60,8 +58,7 @@ public class BinaryBuffer
    *
    * @param buffer the existing <code>BinaryBuffer</code> containing the binary data to append
    */
-  public void append(BinaryBuffer buffer)
-  {
+  public void append(BinaryBuffer buffer) {
     append(buffer.getData());
   }
 
@@ -71,8 +68,7 @@ public class BinaryBuffer
    *
    * @param data the binary data to append
    */
-  public synchronized void append(byte[] data)
-  {
+  public synchronized void append(byte[] data) {
     byte[] currentData = this.data;
     byte[] newData = new byte[currentData.length + data.length];
 
@@ -84,8 +80,7 @@ public class BinaryBuffer
   /**
    * Clears the <code>BinaryBuffer</code>.
    */
-  public void clear()
-  {
+  public void clear() {
     this.data = new byte[0];
   }
 
@@ -94,8 +89,7 @@ public class BinaryBuffer
    *
    * @return the binary data managed by the <code>BinaryBuffer</code>
    */
-  public byte[] getData()
-  {
+  public byte[] getData() {
     return data;
   }
 
@@ -104,8 +98,7 @@ public class BinaryBuffer
    *
    * @return the amount of binary data managed by the <code>BinaryBuffer</code>
    */
-  public int length()
-  {
+  public int length() {
     return data.length;
   }
 }

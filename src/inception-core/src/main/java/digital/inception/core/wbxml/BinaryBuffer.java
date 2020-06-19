@@ -29,16 +29,15 @@ import java.io.Serializable;
  * @author Marcus Portmann
  */
 public class BinaryBuffer
-  implements Serializable
-{
+    implements Serializable {
+
   private static final long serialVersionUID = 1000000;
   private ByteArrayOutputStream stream = null;
 
   /**
    * Constructs a new empty <code>BinaryBuffer</code>.
    */
-  public BinaryBuffer()
-  {
+  public BinaryBuffer() {
     stream = new ByteArrayOutputStream();
   }
 
@@ -47,15 +46,13 @@ public class BinaryBuffer
    *
    * @param data the binary data to initialize the <code>BinaryBuffer</code> with
    */
-  public BinaryBuffer(byte[] data)
-  {
+  public BinaryBuffer(byte[] data) {
     stream = new ByteArrayOutputStream(data.length);
 
-    try
-    {
+    try {
       stream.write(data);
+    } catch (IOException ignored) {
     }
-    catch (IOException ignored) {}
   }
 
   /**
@@ -64,8 +61,7 @@ public class BinaryBuffer
    *
    * @param buffer the existing <code>BinaryBuffer</code> containing the binary data to append
    */
-  public void append(BinaryBuffer buffer)
-  {
+  public void append(BinaryBuffer buffer) {
     append(buffer.getData());
   }
 
@@ -75,20 +71,17 @@ public class BinaryBuffer
    *
    * @param data the binary data to append
    */
-  public void append(byte[] data)
-  {
-    try
-    {
+  public void append(byte[] data) {
+    try {
       stream.write(data);
+    } catch (IOException ignored) {
     }
-    catch (IOException ignored) {}
   }
 
   /**
    * Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer.
    */
-  public void empty()
-  {
+  public void empty() {
     stream.reset();
   }
 
@@ -97,8 +90,7 @@ public class BinaryBuffer
    *
    * @return the binary data stored by the <code>BinaryBuffer</code>
    */
-  public byte[] getData()
-  {
+  public byte[] getData() {
     return stream.toByteArray();
   }
 
@@ -107,8 +99,7 @@ public class BinaryBuffer
    *
    * @return the length  of the binary data stored by the <code>BinaryBuffer</code>
    */
-  public int getLength()
-  {
+  public int getLength() {
     return stream.size();
   }
 
@@ -117,8 +108,7 @@ public class BinaryBuffer
    *
    * @param b the byte to append
    */
-  void append(int b)
-  {
+  void append(int b) {
     stream.write(b);
   }
 }

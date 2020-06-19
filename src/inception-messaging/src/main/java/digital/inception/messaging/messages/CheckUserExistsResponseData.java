@@ -24,44 +24,38 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
- * The <code>CheckUserExistsResponseData</code> class manages the data for a
- * "Check User Exists Response" message.
+ * The <code>CheckUserExistsResponseData</code> class manages the data for a "Check User Exists
+ * Response" message.
  * <p/>
  * This is a synchronous message.
  *
  * @author Marcus Portmann
  */
-public class CheckUserExistsResponseData extends WbxmlMessageData
-{
+public class CheckUserExistsResponseData extends WbxmlMessageData {
+
   /**
    * The error code returned when an unknown error occurred.
    */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
-
-  /**
-   * The error code returned to indicate success.
-   */
-  private static final int ERROR_CODE_SUCCESS = 0;
-
-  /**
-   * The message returned to indicate success.
-   */
-  private static final String ERROR_MESSAGE_SUCCESS = "Success";
-
   /**
    * The UUID for the "Check User Exists Response" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "a38bd55e-3470-46f1-a96a-a6b08a9adc63");
-
+      "a38bd55e-3470-46f1-a96a-a6b08a9adc63");
+  /**
+   * The error code returned to indicate success.
+   */
+  private static final int ERROR_CODE_SUCCESS = 0;
+  /**
+   * The message returned to indicate success.
+   */
+  private static final String ERROR_MESSAGE_SUCCESS = "Success";
   /**
    * The error code;
    */
@@ -80,8 +74,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
   /**
    * Constructs a new <code>CheckUserExistsResponseData</code>.
    */
-  public CheckUserExistsResponseData()
-  {
+  public CheckUserExistsResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
@@ -90,8 +83,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    *
    * @param userExists <code>true</code> if the user exists or <code>false</code> otherwise
    */
-  public CheckUserExistsResponseData(boolean userExists)
-  {
+  public CheckUserExistsResponseData(boolean userExists) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.userExists = userExists;
@@ -105,8 +97,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    * @param errorCode    the error code
    * @param errorMessage the error message
    */
-  public CheckUserExistsResponseData(int errorCode, String errorMessage)
-  {
+  public CheckUserExistsResponseData(int errorCode, String errorMessage) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.errorCode = errorCode;
@@ -119,45 +110,36 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
 
-    if (!rootElement.getName().equals("CheckUserExistsResponse"))
-    {
+    if (!rootElement.getName().equals("CheckUserExistsResponse")) {
       return false;
     }
 
     if ((!rootElement.hasChild("ErrorCode"))
-      || (!rootElement.hasChild("ErrorMessage"))
-      || (!rootElement.hasChild("UserExists")))
-    {
+        || (!rootElement.hasChild("ErrorMessage"))
+        || (!rootElement.hasChild("UserExists"))) {
       return false;
     }
 
-    try
-    {
+    try {
       this.errorCode = Integer.parseInt(rootElement.getChildText("ErrorCode"));
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       return false;
     }
 
     this.errorMessage = rootElement.getChildText("ErrorMessage");
 
-    try
-    {
+    try {
       this.userExists = Boolean.parseBoolean(rootElement.getChildText("UserExists"));
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       return false;
     }
 
@@ -169,8 +151,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    *
    * @return the error code
    */
-  public int getErrorCode()
-  {
+  public int getErrorCode() {
     return errorCode;
   }
 
@@ -179,8 +160,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    *
    * @return the error message
    */
-  public String getErrorMessage()
-  {
+  public String getErrorMessage() {
     return errorMessage;
   }
 
@@ -189,8 +169,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    *
    * @return <code>true</code> if the user exists or <code>false</code> otherwise
    */
-  public boolean getUserExists()
-  {
+  public boolean getUserExists() {
     return userExists;
   }
 
@@ -199,17 +178,16 @@ public class CheckUserExistsResponseData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    */
   @Override
-  public byte[] toMessageData()
-  {
+  public byte[] toMessageData() {
     Element rootElement = new Element("CheckUserExistsResponse");
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(new Element("ErrorMessage", StringUtils.isEmpty(errorMessage)
-      ? ""
-      : errorMessage));
+        ? ""
+        : errorMessage));
     rootElement.addContent(new Element("UserExists", String.valueOf(userExists)));
 
     Document document = new Document(rootElement);

@@ -18,26 +18,57 @@ package digital.inception.messaging.test;
 
 //~--- non-JDK imports --------------------------------------------------------
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import com.meterware.httpunit.PostMethodWebRequest;
 import com.meterware.httpunit.WebResponse;
 import com.meterware.servletunit.InvocationContext;
 import com.meterware.servletunit.ServletRunner;
 import com.meterware.servletunit.ServletUnitClient;
-
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
-import digital.inception.messaging.*;
-import digital.inception.messaging.messages.*;
+import digital.inception.messaging.Message;
+import digital.inception.messaging.MessageDownloadRequest;
+import digital.inception.messaging.MessageDownloadResponse;
+import digital.inception.messaging.MessagePart;
+import digital.inception.messaging.MessagePartDownloadRequest;
+import digital.inception.messaging.MessagePartDownloadResponse;
+import digital.inception.messaging.MessagePartReceivedRequest;
+import digital.inception.messaging.MessagePartReceivedResponse;
+import digital.inception.messaging.MessagePartResult;
+import digital.inception.messaging.MessagePartStatus;
+import digital.inception.messaging.MessagePriority;
+import digital.inception.messaging.MessageReceivedRequest;
+import digital.inception.messaging.MessageReceivedResponse;
+import digital.inception.messaging.MessageResult;
+import digital.inception.messaging.MessageTranslator;
+import digital.inception.messaging.MessagingServlet;
+import digital.inception.messaging.messages.AnotherTestRequestData;
+import digital.inception.messaging.messages.AnotherTestResponseData;
+import digital.inception.messaging.messages.AuthenticateRequestData;
+import digital.inception.messaging.messages.AuthenticateResponseData;
+import digital.inception.messaging.messages.TestRequestData;
+import digital.inception.messaging.messages.TestResponseData;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.List;
+import java.util.UUID;
+import javax.servlet.Servlet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.context.ApplicationContext;
@@ -48,36 +79,22 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import static org.junit.Assert.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-
-import java.security.MessageDigest;
-import java.security.SecureRandom;
-
-import java.util.List;
-import java.util.UUID;
-
-import javax.servlet.Servlet;
-
 /**
- * The <code>MessagingServletTest</code> class contains the implementation of the JUnit
- * tests for the <code>MessagingServlet</code> class.
+ * The <code>MessagingServletTest</code> class contains the implementation of the JUnit tests for
+ * the <code>MessagingServlet</code> class.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings({ "unused", "SameParameterValue" })
+@SuppressWarnings({"unused", "SameParameterValue"})
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = { TestConfiguration.class })
-@TestExecutionListeners(listeners = { DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class })
+@ContextConfiguration(classes = {TestConfiguration.class})
+@TestExecutionListeners(listeners = {DependencyInjectionTestExecutionListener.class,
+    DirtiesContextTestExecutionListener.class, TransactionalTestExecutionListener.class})
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
-public class MessagingServletTest
-{
+public class MessagingServletTest {
+
   private static final String PASSWORD = "Password1";
   private static final String USERNAME = "Administrator";
 
@@ -102,8 +119,7 @@ public class MessagingServletTest
    */
   @Test
   public void anotherTestMessageEncryptedNoCorrelationIdTest()
-    throws Exception
-  {
+      throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
@@ -122,11 +138,10 @@ public class MessagingServletTest
     assertNull(messageResult.getMessage());
 
     // Sleep to give the back-end a chance to process the message
-    try
-    {
+    try {
       Thread.sleep(1000L);
+    } catch (Throwable ignored) {
     }
-    catch (Throwable ignored) {}
 
     // Retrieve the messages queued for download
     MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
@@ -142,8 +157,7 @@ public class MessagingServletTest
 
     logger.info("Downloaded " + messages.size() + " messages");
 
-    for (Message message : messages)
-    {
+    for (Message message : messages) {
       assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
       assertEquals(Integer.valueOf(1), message.getDownloadAttempts());
 
@@ -172,8 +186,7 @@ public class MessagingServletTest
    */
   @Test
   public void anotherTestMessageEncryptedTest()
-    throws Exception
-  {
+      throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
@@ -192,11 +205,10 @@ public class MessagingServletTest
     assertNull(messageResult.getMessage());
 
     // Sleep to give the back-end a chance to process the message
-    try
-    {
+    try {
       Thread.sleep(1000L);
+    } catch (Throwable ignored) {
     }
-    catch (Throwable ignored) {}
 
     // Retrieve the messages queued for download
     MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
@@ -212,8 +224,7 @@ public class MessagingServletTest
 
     logger.info("Downloaded " + messages.size() + " messages");
 
-    for (Message message : messages)
-    {
+    for (Message message : messages) {
       assertEquals(requestMessage.getCorrelationId(), message.getCorrelationId());
       assertEquals(Integer.valueOf(1), message.getDownloadAttempts());
 
@@ -242,8 +253,7 @@ public class MessagingServletTest
    */
   @Test
   public void anotherTestMessageUnencryptedTest()
-    throws Exception
-  {
+      throws Exception {
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
     AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value",
@@ -259,11 +269,10 @@ public class MessagingServletTest
     assertNull(messageResult.getMessage());
 
     // Sleep to give the back-end a chance to process the message
-    try
-    {
+    try {
       Thread.sleep(1000L);
+    } catch (Throwable ignored) {
     }
-    catch (Throwable ignored) {}
 
     // TODO: Confirm that there is no message with the same correlation ID in the database
   }
@@ -273,8 +282,7 @@ public class MessagingServletTest
    */
   @Test
   public void anotherTestMultiPartMessageTest()
-    throws Exception
-  {
+      throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
@@ -294,11 +302,10 @@ public class MessagingServletTest
     assertNull(messageResult.getMessage());
 
     // Sleep to give the back-end a chance to process the message
-    try
-    {
+    try {
       Thread.sleep(1000L);
+    } catch (Throwable ignored) {
     }
-    catch (Throwable ignored) {}
 
     // Retrieve the messages queued for download
     MessageDownloadResponse messageDownloadResponse = sendMessageDownloadRequest(DEVICE_ID,
@@ -327,8 +334,7 @@ public class MessagingServletTest
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-    for (MessagePart messagePart : messageParts)
-    {
+    for (MessagePart messagePart : messageParts) {
       assertEquals(Integer.valueOf(1), messagePart.getDownloadAttempts());
       assertEquals(requestMessage.getCorrelationId(), messagePart.getMessageCorrelationId());
 
@@ -367,8 +373,7 @@ public class MessagingServletTest
    */
   @Test
   public void testMessageEncryptedTest()
-    throws Exception
-  {
+      throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID,
@@ -395,8 +400,7 @@ public class MessagingServletTest
    */
   @Test
   public void testMessageUnencryptedTest()
-    throws Exception
-  {
+      throws Exception {
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
     TestRequestData requestData = new TestRequestData("Test Value");
@@ -409,8 +413,7 @@ public class MessagingServletTest
   }
 
   private byte[] authenticateUser(String username, String password, UUID deviceId)
-    throws Exception
-  {
+      throws Exception {
     AuthenticateRequestData requestData = new AuthenticateRequestData(username, password, deviceId);
 
     MessageTranslator messageTranslator = new MessageTranslator(username, deviceId);
@@ -433,10 +436,8 @@ public class MessagingServletTest
   }
 
   private InvocationContext getMessagingServletInvocationContext(byte[] wbxmlRequestData)
-    throws Exception
-  {
-    if (servletUnitClient == null)
-    {
+      throws Exception {
+    if (servletUnitClient == null) {
       ServletRunner servletRunner = new ServletRunner();
       servletRunner.registerServlet("MessagingServlet", MessagingServlet.class.getName());
 
@@ -456,8 +457,7 @@ public class MessagingServletTest
   }
 
   private byte[] invokeMessagingServlet(byte[] requestData)
-    throws Exception
-  {
+      throws Exception {
     InvocationContext invocationContext = getMessagingServletInvocationContext(requestData);
 
     invocationContext.getServlet().service(invocationContext.getRequest(),
@@ -474,20 +474,16 @@ public class MessagingServletTest
     int numberOfBytesRead;
     byte[] buffer = new byte[1024];
 
-    while ((numberOfBytesRead = in.read(buffer)) != -1)
-    {
+    while ((numberOfBytesRead = in.read(buffer)) != -1) {
       baos.write(buffer, 0, numberOfBytesRead);
     }
 
     return baos.toByteArray();
   }
 
-  private MessageResult sendMessage(Message message)
-  {
-    try
-    {
-      if (message.getData().length > Message.MAX_ASYNC_MESSAGE_SIZE)
-      {
+  private MessageResult sendMessage(Message message) {
+    try {
+      if (message.getData().length > Message.MAX_ASYNC_MESSAGE_SIZE) {
         // Calculate the hash for the message data to use as the message checksum
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
@@ -498,18 +494,15 @@ public class MessagingServletTest
         // Split the message up into a number of message parts and persist each message part
         int numberOfParts = message.getData().length / MessagePart.MAX_MESSAGE_PART_SIZE;
 
-        if ((message.getData().length % MessagePart.MAX_MESSAGE_PART_SIZE) > 0)
-        {
+        if ((message.getData().length % MessagePart.MAX_MESSAGE_PART_SIZE) > 0) {
           numberOfParts++;
         }
 
-        for (int i = 0; i < numberOfParts; i++)
-        {
+        for (int i = 0; i < numberOfParts; i++) {
           byte[] messagePartData;
 
           // If this is not the last message part
-          if (i < (numberOfParts - 1))
-          {
+          if (i < (numberOfParts - 1)) {
             messagePartData = new byte[MessagePart.MAX_MESSAGE_PART_SIZE];
 
             System.arraycopy(message.getData(), (i * MessagePart.MAX_MESSAGE_PART_SIZE),
@@ -517,8 +510,7 @@ public class MessagingServletTest
           }
 
           // If this is the last message part
-          else
-          {
+          else {
             int sizeOfPart = message.getData().length - (i * MessagePart.MAX_MESSAGE_PART_SIZE);
 
             messagePartData = new byte[sizeOfPart];
@@ -542,16 +534,13 @@ public class MessagingServletTest
           Document document = parser.parse(data);
 
           // Check if we have received a valid message result
-          if (MessagePartResult.isValidWBXML(document))
-          {
+          if (MessagePartResult.isValidWBXML(document)) {
             logger.info("Uploaded the message part (" + messagePart.getPartNo() + "/"
                 + messagePart.getTotalParts() + ") for the message (" + messagePart.getMessageId()
                 + ") from the user (" + messagePart.getMessageUsername() + ") and the device ("
                 + messagePart.getMessageDeviceId() + ") with message type ("
                 + messagePart.getMessageTypeId() + ")");
-          }
-          else
-          {
+          } else {
             throw new RuntimeException("The WBXML response data from the remote server is not a "
                 + "valid MessageResult document");
           }
@@ -562,9 +551,7 @@ public class MessagingServletTest
         }
 
         return new MessageResult(MessageResult.SUCCESS, "");
-      }
-      else
-      {
+      } else {
         byte[] data = invokeMessagingServlet(message.toWBXML());
 
         Parser parser = new Parser();
@@ -572,27 +559,21 @@ public class MessagingServletTest
         Document document = parser.parse(data);
 
         // Check if we have received a valid message result
-        if (MessageResult.isValidWBXML(document))
-        {
+        if (MessageResult.isValidWBXML(document)) {
           return new MessageResult(document);
-        }
-        else
-        {
+        } else {
           throw new RuntimeException("The WBXML response data from the remote server is not a "
               + "valid MessageResult document");
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to send the message (" + message.getId() + "): "
           + e.getMessage(), e);
     }
   }
 
   private MessageDownloadResponse sendMessageDownloadRequest(UUID deviceId, String username)
-    throws Exception
-  {
+      throws Exception {
     MessageDownloadRequest messageDownloadRequest = new MessageDownloadRequest(deviceId, username);
 
     byte[] data = invokeMessagingServlet(messageDownloadRequest.toWBXML());
@@ -601,12 +582,9 @@ public class MessagingServletTest
 
     Document document = parser.parse(data);
 
-    if (MessageDownloadResponse.isValidWBXML(document))
-    {
+    if (MessageDownloadResponse.isValidWBXML(document)) {
       return new MessageDownloadResponse(document);
-    }
-    else
-    {
+    } else {
       throw new RuntimeException("Failed to send the message download request: "
           + "The WBXML response data from the remote server is not a valid "
           + "MessageDownloadResponse document");
@@ -614,8 +592,7 @@ public class MessagingServletTest
   }
 
   private MessagePartDownloadResponse sendMessagePartDownloadRequest(UUID deviceId, String username)
-    throws Exception
-  {
+      throws Exception {
     MessagePartDownloadRequest messagePartDownloadRequest = new MessagePartDownloadRequest(
         deviceId, username);
 
@@ -625,12 +602,9 @@ public class MessagingServletTest
 
     Document document = parser.parse(data);
 
-    if (MessagePartDownloadResponse.isValidWBXML(document))
-    {
+    if (MessagePartDownloadResponse.isValidWBXML(document)) {
       return new MessagePartDownloadResponse(document);
-    }
-    else
-    {
+    } else {
       throw new RuntimeException("Failed to send the message part download request: "
           + "The WBXML response data from the remote server is not a valid "
           + "MessagePartDownloadResponse document");
@@ -638,8 +612,7 @@ public class MessagingServletTest
   }
 
   private MessagePartReceivedResponse sendMessagePartReceivedRequest(UUID deviceId, UUID messageId)
-    throws Exception
-  {
+      throws Exception {
     MessagePartReceivedRequest messagePartReceivedRequest = new MessagePartReceivedRequest(
         deviceId, messageId);
 
@@ -649,12 +622,9 @@ public class MessagingServletTest
 
     Document document = parser.parse(data);
 
-    if (MessagePartReceivedResponse.isValidWBXML(document))
-    {
+    if (MessagePartReceivedResponse.isValidWBXML(document)) {
       return new MessagePartReceivedResponse(document);
-    }
-    else
-    {
+    } else {
       throw new RuntimeException("Failed to send the message part received request: "
           + "The WBXML response data from the remote server is not a valid "
           + "MessagePartReceivedResponse document");
@@ -662,8 +632,7 @@ public class MessagingServletTest
   }
 
   private MessageReceivedResponse sendMessageReceivedRequest(UUID deviceId, UUID messageId)
-    throws Exception
-  {
+      throws Exception {
     MessageReceivedRequest messageReceivedRequest = new MessageReceivedRequest(deviceId, messageId);
 
     byte[] data = invokeMessagingServlet(messageReceivedRequest.toWBXML());
@@ -672,12 +641,9 @@ public class MessagingServletTest
 
     Document document = parser.parse(data);
 
-    if (MessageReceivedResponse.isValidWBXML(document))
-    {
+    if (MessageReceivedResponse.isValidWBXML(document)) {
       return new MessageReceivedResponse(document);
-    }
-    else
-    {
+    } else {
       throw new RuntimeException("Failed to send the message received request: "
           + "The WBXML response data from the remote server is not a valid "
           + "MessageReceivedResponse document");

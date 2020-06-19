@@ -20,26 +20,24 @@ package digital.inception.validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.springframework.util.StringUtils;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 import java.io.StringReader;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
-import javax.xml.bind.annotation.*;
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ValidationError</code> class represents a validation error that occurred while
@@ -48,15 +46,15 @@ import javax.xml.bind.annotation.*;
  * @author Marcus Portmann
  */
 @ApiModel(value = "ValidationError")
-@JsonPropertyOrder({ "property", "message", "attributes" })
+@JsonPropertyOrder({"property", "message", "attributes"})
 @XmlRootElement(name = "ValidationError", namespace = "http://validation.inception.digital")
 @XmlType(name = "ValidationError", namespace = "http://validation.inception.digital",
-    propOrder = { "property", "message", "attributes" })
+    propOrder = {"property", "message", "attributes"})
 @XmlAccessorType(XmlAccessType.FIELD)
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ValidationError
-  implements Serializable, Cloneable
-{
+    implements Serializable, Cloneable {
+
   private static final long serialVersionUID = 1000000;
 
   /**
@@ -90,15 +88,15 @@ public class ValidationError
   /**
    * Constructs a new <code>ValidationError</code>.
    */
-  public ValidationError() {}
+  public ValidationError() {
+  }
 
   /**
    * Constructs a new <code>ValidationError</code>.
    *
    * @param constraintViolation the constraint violation
    */
-  public ValidationError(ConstraintViolation<?> constraintViolation)
-  {
+  public ValidationError(ConstraintViolation<?> constraintViolation) {
     this.property = constraintViolation.getPropertyPath().toString();
     this.message = constraintViolation.getMessage();
 
@@ -106,12 +104,10 @@ public class ValidationError
 
     Map<String, Object> attributes = constraintViolation.getConstraintDescriptor().getAttributes();
 
-    for (String attributeName : attributes.keySet())
-    {
+    for (String attributeName : attributes.keySet()) {
       Object attributeValue = attributes.get(attributeName);
 
-      if (!(attributeValue instanceof Class[]))
-      {
+      if (!(attributeValue instanceof Class[])) {
         this.attributes.add(new ValidationErrorAttribute(attributeName, attributeValue.toString()));
       }
     }
@@ -123,8 +119,7 @@ public class ValidationError
    * @param property the path for the property that resulted in the validation error
    * @param message  the error message for the validation error
    */
-  public ValidationError(String property, String message)
-  {
+  public ValidationError(String property, String message) {
     this.property = property;
     this.message = message;
     this.attributes = new ArrayList<>();
@@ -137,8 +132,8 @@ public class ValidationError
    * @param message    the error message for the validation error
    * @param attributes the attributes associated with the validation error
    */
-  public ValidationError(String property, String message, List<ValidationErrorAttribute> attributes)
-  {
+  public ValidationError(String property, String message,
+      List<ValidationErrorAttribute> attributes) {
     this.property = property;
     this.message = message;
     this.attributes = attributes;
@@ -151,32 +146,25 @@ public class ValidationError
    *
    * @return the capitalized string
    */
-  public static String capitalizePropertyName(String str)
-  {
-    if (StringUtils.isEmpty(str))
-    {
+  public static String capitalizePropertyName(String str) {
+    if (StringUtils.isEmpty(str)) {
       return str;
     }
 
     StringReader reader = new StringReader(str);
 
-    try
-    {
+    try {
       StringBuilder buffer = new StringBuilder();
 
       boolean capitilizeNextCharacter = true;
 
       int c;
-      while ((c = reader.read()) != -1)
-      {
+      while ((c = reader.read()) != -1) {
         char character = (char) c;
 
-        if (capitilizeNextCharacter)
-        {
+        if (capitilizeNextCharacter) {
           buffer.append(Character.toUpperCase(character));
-        }
-        else
-        {
+        } else {
           buffer.append(character);
         }
 
@@ -184,9 +172,7 @@ public class ValidationError
       }
 
       return buffer.toString();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new RuntimeException("Failed to capitalizePropertyName the string (" + str + ")", e);
     }
   }
@@ -196,36 +182,30 @@ public class ValidationError
    *
    * @param validationErrors the validation errors
    */
-  public static void capitalizePropertyNames(List<ValidationError> validationErrors)
-  {
-    if (validationErrors == null)
-    {
+  public static void capitalizePropertyNames(List<ValidationError> validationErrors) {
+    if (validationErrors == null) {
       return;
     }
 
-    for (ValidationError validationError : validationErrors)
-    {
+    for (ValidationError validationError : validationErrors) {
       validationError.setProperty(capitalizePropertyName(validationError.getProperty()));
     }
   }
 
   /**
-   * Helper method to convert a set of JSR 303 constraint violations to a set of validation
-   * errors.
+   * Helper method to convert a set of JSR 303 constraint violations to a set of validation errors.
    *
    * @param constraintViolations the JSR 303 constraint violations to convert
    *
    * @return the validation errors
    */
   public static <T> List<ValidationError> toValidationErrors(
-      Set<ConstraintViolation<T>> constraintViolations)
-  {
+      Set<ConstraintViolation<T>> constraintViolations) {
     return toValidationErrors(constraintViolations, false);
   }
 
   /**
-   * Helper method to convert a set of JSR 303 constraint violations to a set of validation
-   * errors.
+   * Helper method to convert a set of JSR 303 constraint violations to a set of validation errors.
    *
    * @param constraintViolations    the JSR 303 constraint violations to convert
    * @param capitalizePropertyNames should the property names be capitilized
@@ -233,16 +213,13 @@ public class ValidationError
    * @return the validation errors
    */
   public static <T> List<ValidationError> toValidationErrors(
-      Set<ConstraintViolation<T>> constraintViolations, boolean capitalizePropertyNames)
-  {
+      Set<ConstraintViolation<T>> constraintViolations, boolean capitalizePropertyNames) {
     List<ValidationError> validationErrors = new ArrayList<>();
 
-    for (ConstraintViolation<T> constraintViolation : constraintViolations)
-    {
+    for (ConstraintViolation<T> constraintViolation : constraintViolations) {
       ValidationError validationError = new ValidationError(constraintViolation);
 
-      if (capitalizePropertyNames)
-      {
+      if (capitalizePropertyNames) {
         validationError.setProperty(capitalizePropertyName(validationError.getProperty()));
       }
 
@@ -257,29 +234,8 @@ public class ValidationError
    *
    * @return the attributes associated with the validation error
    */
-  public List<ValidationErrorAttribute> getAttributes()
-  {
+  public List<ValidationErrorAttribute> getAttributes() {
     return attributes;
-  }
-
-  /**
-   * Returns the error message for the validation error.
-   *
-   * @return the error message for the validation error
-   */
-  public String getMessage()
-  {
-    return message;
-  }
-
-  /**
-   * Returns the path for the property that resulted in the validation error.
-   *
-   * @return the path for the property that resulted in the validation error
-   */
-  public String getProperty()
-  {
-    return property;
   }
 
   /**
@@ -287,9 +243,17 @@ public class ValidationError
    *
    * @param attributes the attributes associated with the validation error
    */
-  public void setAttributes(List<ValidationErrorAttribute> attributes)
-  {
+  public void setAttributes(List<ValidationErrorAttribute> attributes) {
     this.attributes = attributes;
+  }
+
+  /**
+   * Returns the error message for the validation error.
+   *
+   * @return the error message for the validation error
+   */
+  public String getMessage() {
+    return message;
   }
 
   /**
@@ -297,9 +261,17 @@ public class ValidationError
    *
    * @param message the error message for the validation error
    */
-  public void setMessage(String message)
-  {
+  public void setMessage(String message) {
     this.message = message;
+  }
+
+  /**
+   * Returns the path for the property that resulted in the validation error.
+   *
+   * @return the path for the property that resulted in the validation error
+   */
+  public String getProperty() {
+    return property;
   }
 
   /**
@@ -307,21 +279,18 @@ public class ValidationError
    *
    * @param property the path for the property that resulted in the validation error
    */
-  public void setProperty(String property)
-  {
+  public void setProperty(String property) {
     this.property = property;
   }
 
   @Override
   protected Object clone()
-    throws CloneNotSupportedException
-  {
+      throws CloneNotSupportedException {
     Object clone = super.clone();
 
     List<ValidationErrorAttribute> attributes = new ArrayList<>();
 
-    for (ValidationErrorAttribute attribute : this.attributes)
-    {
+    for (ValidationErrorAttribute attribute : this.attributes) {
       attributes.add((ValidationErrorAttribute) attribute.clone());
     }
 

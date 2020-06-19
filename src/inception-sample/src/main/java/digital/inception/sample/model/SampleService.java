@@ -19,25 +19,20 @@ package digital.inception.sample.model;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.validation.ValidationError;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 
 /**
  * The <code>SampleService</code> class provides the Sample Service implementation.
@@ -45,10 +40,10 @@ import javax.validation.Validator;
  * @author Marcus Portmann
  */
 @Service
-@SuppressWarnings({ "unused", "WeakerAccess" })
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class SampleService
-  implements ISampleService
-{
+    implements ISampleService {
+
   private static final String VERSION = "1.0.0";
 
   /* Entity Manager */
@@ -65,8 +60,7 @@ public class SampleService
    *
    * @param validator the JSR-303 validator
    */
-  public SampleService(Validator validator)
-  {
+  public SampleService(Validator validator) {
     this.validator = validator;
   }
 
@@ -76,10 +70,8 @@ public class SampleService
   @Override
   @Transactional
   public void addData()
-    throws SampleServiceException
-  {
-    try
-    {
+      throws SampleServiceException {
+    try {
       Data newData = new Data();
       newData.setId(666);
       newData.setName("New Name");
@@ -88,9 +80,7 @@ public class SampleService
       newData.setTimestampValue(LocalDateTime.now());
 
       entityManager.persist(newData);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SampleServiceException("Failed to add the data", e);
     }
   }
@@ -103,14 +93,10 @@ public class SampleService
   @Override
   @Transactional
   public void addData(Data data)
-    throws SampleServiceException
-  {
-    try
-    {
+      throws SampleServiceException {
+    try {
       entityManager.persist(data);
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SampleServiceException("Failed to add the data", e);
     }
   }
@@ -123,16 +109,12 @@ public class SampleService
   @Override
   @Transactional
   public List<Data> getAllData()
-    throws SampleServiceException
-  {
-    try
-    {
+      throws SampleServiceException {
+    try {
       TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
 
       return query.getResultList();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SampleServiceException("Failed to retrieve the data", e);
     }
   }
@@ -147,10 +129,8 @@ public class SampleService
   @Override
   @Transactional
   public Data getData(long id)
-    throws SampleServiceException
-  {
-    try
-    {
+      throws SampleServiceException {
+    try {
       TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d WHERE ID=:id",
           Data.class);
 
@@ -158,17 +138,12 @@ public class SampleService
 
       List<Data> list = query.getResultList();
 
-      if (list.size() > 0)
-      {
+      if (list.size() > 0) {
         return list.get(0);
-      }
-      else
-      {
+      } else {
         return null;
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SampleServiceException("Failed to retrieve the data (" + id + ")", e);
     }
   }
@@ -177,8 +152,7 @@ public class SampleService
    * The test method.
    */
   @Override
-  public void testMethod()
-  {
+  public void testMethod() {
     System.out.println("[DEBUG] Hello world from the test method!!!");
   }
 
@@ -189,23 +163,18 @@ public class SampleService
    */
   @Override
   public List<ValidationError> validate(Data data)
-    throws SampleServiceException
-  {
-    try
-    {
+      throws SampleServiceException {
+    try {
       Set<ConstraintViolation<Data>> constraintViolations = validator.validate(data);
 
       List<ValidationError> errors = new ArrayList<>();
 
-      for (ConstraintViolation<Data> constraintViolation : constraintViolations)
-      {
+      for (ConstraintViolation<Data> constraintViolation : constraintViolations) {
         errors.add(new ValidationError(constraintViolation));
       }
 
       return errors;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new SampleServiceException("Failed to validate the data", e);
     }
   }

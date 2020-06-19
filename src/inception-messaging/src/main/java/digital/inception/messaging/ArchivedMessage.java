@@ -18,35 +18,30 @@ package digital.inception.messaging;
 
 //~--- non-JDK imports --------------------------------------------------------
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import digital.inception.core.util.ISO8601Util;
-import digital.inception.core.wbxml.Document;
-import digital.inception.core.wbxml.Element;
-import digital.inception.core.wbxml.Encoder;
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
-import org.springframework.util.StringUtils;
-
-//~--- JDK imports ------------------------------------------------------------
-
 import java.time.LocalDateTime;
-
 import java.util.UUID;
-
-import javax.persistence.*;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+//~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ArchivedMessage</code> class holds the information for an archived message.
@@ -55,18 +50,18 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @ApiModel(value = "ArchivedMessage")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "id", "username", "deviceId", "typeId", "correlationId", "created", "archived",
-    "data" })
+@JsonPropertyOrder({"id", "username", "deviceId", "typeId", "correlationId", "created", "archived",
+    "data"})
 @XmlRootElement(name = "ArchivedMessage", namespace = "http://messaging.inception.digital")
 @XmlType(name = "ArchivedMessage", namespace = "http://messaging.inception.digital",
-    propOrder = { "id", "username", "deviceId", "typeId", "correlationId", "created", "archived",
-        "data" })
+    propOrder = {"id", "username", "deviceId", "typeId", "correlationId", "created", "archived",
+        "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "messaging", name = "archived_messages")
-@SuppressWarnings({ "WeakerAccess" })
-public class ArchivedMessage
-{
+@SuppressWarnings({"WeakerAccess"})
+public class ArchivedMessage {
+
   /**
    * The date and time the message was archived.
    */
@@ -163,15 +158,15 @@ public class ArchivedMessage
   /**
    * Constructs a new <code>ArchivedMessage</code>.
    */
-  public ArchivedMessage() {}
+  public ArchivedMessage() {
+  }
 
   /**
    * Constructs a new <code>ArchivedMessage</code>.
    *
    * @param message the message to archive
    */
-  public ArchivedMessage(Message message)
-  {
+  public ArchivedMessage(Message message) {
     this.id = message.getId();
     this.username = message.getUsername();
     this.deviceId = message.getDeviceId();
@@ -199,8 +194,7 @@ public class ArchivedMessage
    * @param data          the data for the message which is NOT encrypted
    */
   public ArchivedMessage(UUID id, String username, UUID deviceId, UUID typeId, UUID correlationId,
-      LocalDateTime created, LocalDateTime archived, byte[] data)
-  {
+      LocalDateTime created, LocalDateTime archived, byte[] data) {
     this.id = id;
     this.username = username;
     this.deviceId = deviceId;
@@ -217,23 +211,19 @@ public class ArchivedMessage
    * @param object the reference object with which to compare
    *
    * @return <code>true</code> if this object is the same as the object argument otherwise
-   *         <code>false</code>
+   * <code>false</code>
    */
   @Override
-  public boolean equals(Object object)
-  {
-    if (this == object)
-    {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
 
-    if (object == null)
-    {
+    if (object == null) {
       return false;
     }
 
-    if (getClass() != object.getClass())
-    {
+    if (getClass() != object.getClass()) {
       return false;
     }
 
@@ -247,94 +237,8 @@ public class ArchivedMessage
    *
    * @return the date and time the message was archived
    */
-  public LocalDateTime getArchived()
-  {
+  public LocalDateTime getArchived() {
     return archived;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to correlate the message.
-   *
-   * @return the Universally Unique Identifier (UUID) used to correlate the message
-   */
-  public UUID getCorrelationId()
-  {
-    return correlationId;
-  }
-
-  /**
-   * Returns the date and time the message was created.
-   *
-   * @return the date and time the message was created
-   */
-  public LocalDateTime getCreated()
-  {
-    return created;
-  }
-
-  /**
-   * Returns the data for the message which may be encrypted.
-   *
-   * @return the data for the message which may be encrypted
-   */
-  public byte[] getData()
-  {
-    return data;
-  }
-
-  /**
-   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
-   * originated from.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
-   *         message originated from
-   */
-  public UUID getDeviceId()
-  {
-    return deviceId;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message
-   */
-  public UUID getId()
-  {
-    return id;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of message.
-   *
-   * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of message
-   */
-  public UUID getTypeId()
-  {
-    return typeId;
-  }
-
-  /**
-   * Returns the username identifying the user associated with the message.
-   *
-   * @return the username identifying the user associated with the message
-   */
-  public String getUsername()
-  {
-    return username;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode()
-  {
-    return (id == null)
-        ? 0
-        : id.hashCode();
   }
 
   /**
@@ -342,9 +246,17 @@ public class ArchivedMessage
    *
    * @param archived the date and time the message was archived
    */
-  public void setArchived(LocalDateTime archived)
-  {
+  public void setArchived(LocalDateTime archived) {
     this.archived = archived;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to correlate the message.
+   *
+   * @return the Universally Unique Identifier (UUID) used to correlate the message
+   */
+  public UUID getCorrelationId() {
+    return correlationId;
   }
 
   /**
@@ -352,9 +264,17 @@ public class ArchivedMessage
    *
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    */
-  public void setCorrelationId(UUID correlationId)
-  {
+  public void setCorrelationId(UUID correlationId) {
     this.correlationId = correlationId;
+  }
+
+  /**
+   * Returns the date and time the message was created.
+   *
+   * @return the date and time the message was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
   }
 
   /**
@@ -362,9 +282,17 @@ public class ArchivedMessage
    *
    * @param created the date and time the message was created
    */
-  public void setCreated(LocalDateTime created)
-  {
+  public void setCreated(LocalDateTime created) {
     this.created = created;
+  }
+
+  /**
+   * Returns the data for the message which may be encrypted.
+   *
+   * @return the data for the message which may be encrypted
+   */
+  public byte[] getData() {
+    return data;
   }
 
   /**
@@ -372,9 +300,19 @@ public class ArchivedMessage
    *
    * @param data the data for the message which may be encrypted
    */
-  public void setData(byte[] data)
-  {
+  public void setData(byte[] data) {
     this.data = data;
+  }
+
+  /**
+   * The Universally Unique Identifier (UUID) used to uniquely identify the device the message
+   * originated from.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the device the
+   * message originated from
+   */
+  public UUID getDeviceId() {
+    return deviceId;
   }
 
   /**
@@ -384,9 +322,17 @@ public class ArchivedMessage
    * @param deviceId the Universally Unique Identifier (UUID) used to uniquely identify the device
    *                 the message originated from
    */
-  public void setDeviceId(UUID deviceId)
-  {
+  public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the message.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the message
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
@@ -394,9 +340,18 @@ public class ArchivedMessage
    *
    * @param id the Universally Unique Identifier (UUID) used to uniquely identify the message
    */
-  public void setId(UUID id)
-  {
+  public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) used to uniquely identify the type of
+   * message.
+   *
+   * @return the Universally Unique Identifier (UUID) used to uniquely identify the type of message
+   */
+  public UUID getTypeId() {
+    return typeId;
   }
 
   /**
@@ -405,9 +360,17 @@ public class ArchivedMessage
    * @param typeId the Universally Unique Identifier (UUID) used to uniquely identify the type of
    *               message
    */
-  public void setTypeId(UUID typeId)
-  {
+  public void setTypeId(UUID typeId) {
     this.typeId = typeId;
+  }
+
+  /**
+   * Returns the username identifying the user associated with the message.
+   *
+   * @return the username identifying the user associated with the message
+   */
+  public String getUsername() {
+    return username;
   }
 
   /**
@@ -415,9 +378,20 @@ public class ArchivedMessage
    *
    * @param username the username identifying the user associated with the message
    */
-  public void setUsername(String username)
-  {
+  public void setUsername(String username) {
     this.username = username;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (id == null)
+        ? 0
+        : id.hashCode();
   }
 
   /**
@@ -426,8 +400,7 @@ public class ArchivedMessage
    * @return the String representation of the message
    */
   @Override
-  public String toString()
-  {
+  public String toString() {
     StringBuilder buffer = new StringBuilder("<ArchivedMessage");
 
     buffer.append(" id=\"").append(id).append("\"");

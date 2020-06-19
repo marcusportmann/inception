@@ -23,13 +23,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The <code>SchedulerConfiguration</code> class provides the Spring configuration
- * for the Scheduler module.
+ * The <code>SchedulerConfiguration</code> class provides the Spring configuration for the Scheduler
+ * module.
  *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = "applicationPersistenceUnit",
-    basePackages = { "digital.inception.scheduler" })
+    basePackages = {"digital.inception.scheduler"})
 @EnableScheduling
-public class SchedulerConfiguration {}
+public class SchedulerConfiguration {
+
+}

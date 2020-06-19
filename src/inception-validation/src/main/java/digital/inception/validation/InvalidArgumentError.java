@@ -19,21 +19,21 @@ package digital.inception.validation;
 //~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.xml.LocalDateTimeAdapter;
-
+import java.io.ByteArrayOutputStream;
+import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-
-import java.time.LocalDateTime;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The <code>InvalidArgumentError</code> class holds the invalid argument error information.
@@ -43,10 +43,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "InvalidArgumentError", namespace = "http://validation.inception.digital")
 @XmlType(name = "InvalidArgumentError", namespace = "http://validation.inception.digital",
-    propOrder = { "when", "message", "name", "detail", "validationErrors" })
-@SuppressWarnings({ "unused" })
-public class InvalidArgumentError
-{
+    propOrder = {"when", "message", "name", "detail", "validationErrors"})
+@SuppressWarnings({"unused"})
+public class InvalidArgumentError {
+
   /**
    * The detail for the invalid argument error
    */
@@ -82,15 +82,15 @@ public class InvalidArgumentError
   /**
    * Constructs a new <code>InvalidArgumentError</code>.
    */
-  public InvalidArgumentError() {}
+  public InvalidArgumentError() {
+  }
 
   /**
    * Constructs a new <code>InvalidArgumentError</code>.
    *
    * @param cause the cause of the invalid argument error
    */
-  public InvalidArgumentError(InvalidArgumentException cause)
-  {
+  public InvalidArgumentError(InvalidArgumentException cause) {
     this.when = LocalDateTime.now();
     this.message = (cause.getMessage() != null)
         ? cause.getMessage()
@@ -99,8 +99,7 @@ public class InvalidArgumentError
         ? ValidationError.capitalizePropertyName(cause.getName())
         : "Unknown";
 
-    try
-    {
+    try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
       PrintWriter pw = new PrintWriter(baos);
 
@@ -109,20 +108,15 @@ public class InvalidArgumentError
       cause.printStackTrace(pw);
       pw.flush();
       this.detail = baos.toString();
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       this.detail = "Failed to dump the stack for the exception (" + cause + "): " + e.getMessage();
     }
 
-    try
-    {
-      if (cause.getValidationErrors() != null)
-      {
+    try {
+      if (cause.getValidationErrors() != null) {
         this.validationErrors = new ArrayList<>();
 
-        for (ValidationError validationError : cause.getValidationErrors())
-        {
+        for (ValidationError validationError : cause.getValidationErrors()) {
           ValidationError newValidationError = (ValidationError) validationError.clone();
 
           newValidationError.setProperty(ValidationError.capitalizePropertyName(
@@ -131,9 +125,7 @@ public class InvalidArgumentError
           this.validationErrors.add(newValidationError);
         }
       }
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       this.validationErrors = cause.getValidationErrors();
     }
   }
@@ -143,8 +135,7 @@ public class InvalidArgumentError
    *
    * @return the detail for the invalid argument error
    */
-  public String getDetail()
-  {
+  public String getDetail() {
     return detail;
   }
 
@@ -153,8 +144,7 @@ public class InvalidArgumentError
    *
    * @return the message for the invalid argument error
    */
-  public String getMessage()
-  {
+  public String getMessage() {
     return message;
   }
 
@@ -163,8 +153,7 @@ public class InvalidArgumentError
    *
    * @return the name of the argument associated with the invalid argument error
    */
-  public String getName()
-  {
+  public String getName() {
     return name;
   }
 
@@ -173,8 +162,7 @@ public class InvalidArgumentError
    *
    * @return the optional validation errors associated with the invalid argument error
    */
-  public List<ValidationError> getValidationErrors()
-  {
+  public List<ValidationError> getValidationErrors() {
     return validationErrors;
   }
 
@@ -183,8 +171,7 @@ public class InvalidArgumentError
    *
    * @return the date and time the invalid argument error occurred
    */
-  public LocalDateTime getWhen()
-  {
+  public LocalDateTime getWhen() {
     return when;
   }
 }

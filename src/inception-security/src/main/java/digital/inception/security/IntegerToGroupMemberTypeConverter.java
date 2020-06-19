@@ -32,18 +32,17 @@ import org.springframework.stereotype.Component;
 @Component
 @ReadingConverter
 public class IntegerToGroupMemberTypeConverter
-  implements Converter<Integer, GroupMemberType>
-{
+    implements Converter<Integer, GroupMemberType> {
+
   /**
    * Constructs a new <code>IntegerToGroupMemberTypeConverter</code>.
    */
-  public IntegerToGroupMemberTypeConverter() {}
+  public IntegerToGroupMemberTypeConverter() {
+  }
 
   @Override
-  public GroupMemberType convert(Integer source)
-  {
-    if (source == null)
-    {
+  public GroupMemberType convert(Integer source) {
+    if (source == null) {
       return null;
     }
 

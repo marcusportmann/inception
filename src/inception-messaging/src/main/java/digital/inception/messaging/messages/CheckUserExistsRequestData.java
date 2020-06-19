@@ -24,28 +24,26 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-
+import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.UUID;
-
 /**
- * The <code>CheckUserExistsRequestData</code> class manages the data for a
- * "Check User Exists Request" message.
+ * The <code>CheckUserExistsRequestData</code> class manages the data for a "Check User Exists
+ * Request" message.
  * <p/>
  * This is a synchronous message.
  *
  * @author Marcus Portmann
  */
-public class CheckUserExistsRequestData extends WbxmlMessageData
-{
+public class CheckUserExistsRequestData extends WbxmlMessageData {
+
   /**
    * The UUID for the "Check User Exists Request" message.
    */
   public static final UUID MESSAGE_TYPE_ID = UUID.fromString(
-    "cc005e6a-b01b-48eb-98a0-026297be69f3");
+      "cc005e6a-b01b-48eb-98a0-026297be69f3");
 
   /**
    * The username identifying the user.
@@ -55,8 +53,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
   /**
    * Constructs a new <code>CheckUserExistsRequestData</code>.
    */
-  public CheckUserExistsRequestData()
-  {
+  public CheckUserExistsRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
@@ -65,8 +62,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
    *
    * @param username the username identifying the user
    */
-  public CheckUserExistsRequestData(String username)
-  {
+  public CheckUserExistsRequestData(String username) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.username = username;
@@ -78,23 +74,20 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
    * @param messageData the WBXML data for the message
    *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *         <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData)
-    throws MessagingServiceException
-  {
+      throws MessagingServiceException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
 
-    if (!rootElement.getName().equals("CheckUserExistsRequest"))
-    {
+    if (!rootElement.getName().equals("CheckUserExistsRequest")) {
       return false;
     }
 
-    if (!rootElement.hasChild("Username"))
-    {
+    if (!rootElement.hasChild("Username")) {
       return false;
     }
 
@@ -108,8 +101,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
    *
    * @return the username identifying the user
    */
-  public String getUsername()
-  {
+  public String getUsername() {
     return username;
   }
 
@@ -118,16 +110,15 @@ public class CheckUserExistsRequestData extends WbxmlMessageData
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *         message
+   * message
    */
   @Override
-  public byte[] toMessageData()
-  {
+  public byte[] toMessageData() {
     Element rootElement = new Element("CheckUserExistsRequest");
 
     rootElement.addContent(new Element("Username", StringUtils.isEmpty(username)
-      ? ""
-      : username));
+        ? ""
+        : username));
 
     Document document = new Document(rootElement);
 

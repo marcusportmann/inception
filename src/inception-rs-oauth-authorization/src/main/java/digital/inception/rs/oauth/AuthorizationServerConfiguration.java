@@ -22,7 +22,7 @@ import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.SecurityServiceAuthenticationManager;
 import digital.inception.security.UserDetailsService;
-
+import java.util.Arrays;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -32,16 +32,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
-import org.springframework.security.oauth2.config.annotation.configurers
-    .ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration
-    .AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration
-    .EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configurers
-    .AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers
-    .AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -50,8 +45,6 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.util.StringUtils;
 
 //~--- JDK imports ------------------------------------------------------------
-
-import java.util.Arrays;
 
 /**
  * The <code>AuthorizationServerConfiguration</code> class provides the OAuth2 Authorization Server
@@ -76,8 +69,8 @@ import java.util.Arrays;
 @EnableAuthorizationServer
 @EnableWebSecurity
 @SuppressWarnings("WeakerAccess")
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter
-{
+public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+
   /**
    * The access token validity in seconds (10 minutes).
    */
@@ -110,8 +103,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @param securityService the Security Service
    */
-  public AuthorizationServerConfiguration(ISecurityService securityService)
-  {
+  public AuthorizationServerConfiguration(ISecurityService securityService) {
     this.securityService = securityService;
   }
 
@@ -120,24 +112,20 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the JWT access token converter for the authorization server
    */
-  public JwtAccessTokenConverter accessTokenConverter()
-  {
-    if (StringUtils.isEmpty(jwtPrivateKey))
-    {
+  public JwtAccessTokenConverter accessTokenConverter() {
+    if (StringUtils.isEmpty(jwtPrivateKey)) {
       throw new ConfigurationException(
           "Failed to initialize the JWT access token converter for the authorization server: "
-          + "The JWT private key was not specified");
+              + "The JWT private key was not specified");
     }
 
-    if (StringUtils.isEmpty(jwtPublicKey))
-    {
+    if (StringUtils.isEmpty(jwtPublicKey)) {
       throw new ConfigurationException(
           "Failed to initialize the JWT access token converter for the authorization server: "
-          + "The JWT public key was not specified");
+              + "The JWT public key was not specified");
     }
 
-    try
-    {
+    try {
       JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
 
       converter.setSigningKey(jwtPrivateKey);
@@ -145,9 +133,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
       converter.setVerifier(new RsaVerifier(jwtPublicKey));
 
       return converter;
-    }
-    catch (Throwable e)
-    {
+    } catch (Throwable e) {
       throw new FatalBeanException(
           "Failed to initialize the JWT access token converter for the authorization server", e);
     }
@@ -160,8 +146,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    * @param endpoints the endpoints configurer
    */
   @Override
-  public void configure(AuthorizationServerEndpointsConfigurer endpoints)
-  {
+  public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
     // Set the token store
     endpoints.tokenStore(tokenStore());
 
@@ -197,8 +182,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    */
   @Override
   public void configure(AuthorizationServerSecurityConfigurer security)
-    throws Exception
-  {
+      throws Exception {
     super.configure(security);
 
     // Allow form authentication for clients
@@ -214,16 +198,15 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
   /**
    * Configure the ClientDetailsService, e.g. declaring individual clients and their properties.
    * Note that password grant is not enabled (even if some clients are allowed it) unless an
-   * AuthenticationManager is supplied to the configure(AuthorizationServerEndpointsConfigurer).
-   * At least one client, or a fully formed custom ClientDetailsService must be declared or the
-   * server will not start.
+   * AuthenticationManager is supplied to the configure(AuthorizationServerEndpointsConfigurer). At
+   * least one client, or a fully formed custom ClientDetailsService must be declared or the server
+   * will not start.
    *
    * @param clients the client details service configurer
    */
   @Override
   public void configure(ClientDetailsServiceConfigurer clients)
-    throws Exception
-  {
+      throws Exception {
     clients.withClientDetails(new ClientDetailsService());
   }
 
@@ -234,8 +217,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    */
   @Bean
   @DependsOn("securityService")
-  public TokenEnhancer tokenEnhancer()
-  {
+  public TokenEnhancer tokenEnhancer() {
     return new TokenEnhancer(securityService);
   }
 
@@ -244,8 +226,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the token services for the authorization server
    */
-  public DefaultTokenServices tokenServices()
-  {
+  public DefaultTokenServices tokenServices() {
     DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
     defaultTokenServices.setTokenStore(tokenStore());
     defaultTokenServices.setSupportRefreshToken(true);
@@ -262,8 +243,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    *
    * @return the OAuth2 token store for the authorization server
    */
-  public TokenStore tokenStore()
-  {
+  public TokenStore tokenStore() {
     return new JwtTokenStore(accessTokenConverter());
   }
 
@@ -273,8 +253,7 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
    * @return the user details service
    */
   @Bean
-  public UserDetailsService userDetailsService()
-  {
+  public UserDetailsService userDetailsService() {
     return new UserDetailsService();
   }
 }

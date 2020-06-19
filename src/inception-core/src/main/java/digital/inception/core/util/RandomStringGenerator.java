@@ -19,7 +19,6 @@ package digital.inception.core.util;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.security.SecureRandom;
-
 import java.util.Objects;
 import java.util.Random;
 
@@ -29,8 +28,8 @@ import java.util.Random;
  *
  * @author Marcus Portmann
  */
-public class RandomStringGenerator
-{
+public class RandomStringGenerator {
+
   private static final String DIGITS = "0123456789";
   private static final String UPPER_CASE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   private static final String LOWER_CASE_CHARACTERS = UPPER_CASE_CHARACTERS.toLowerCase();
@@ -43,8 +42,7 @@ public class RandomStringGenerator
    * Constructs a new <code>RandomStringGenerator</code> that can be used to generate session
    * identifiers.
    */
-  public RandomStringGenerator()
-  {
+  public RandomStringGenerator() {
     this(21);
   }
 
@@ -53,8 +51,7 @@ public class RandomStringGenerator
    *
    * @param length the length of the random strings that should be generated
    */
-  public RandomStringGenerator(int length)
-  {
+  public RandomStringGenerator(int length) {
     this(length, new SecureRandom());
   }
 
@@ -64,8 +61,7 @@ public class RandomStringGenerator
    * @param length the length of the random strings that should be generated
    * @param random the random number generator
    */
-  public RandomStringGenerator(int length, Random random)
-  {
+  public RandomStringGenerator(int length, Random random) {
     this(length, random, ALPHANUMERIC);
   }
 
@@ -76,15 +72,12 @@ public class RandomStringGenerator
    * @param random  the random number generator
    * @param symbols the symbols to use when generating the random string
    */
-  public RandomStringGenerator(int length, Random random, String symbols)
-  {
-    if (length < 1)
-    {
+  public RandomStringGenerator(int length, Random random, String symbols) {
+    if (length < 1) {
       throw new IllegalArgumentException();
     }
 
-    if (symbols.length() < 2)
-    {
+    if (symbols.length() < 2) {
       throw new IllegalArgumentException();
     }
 
@@ -98,10 +91,8 @@ public class RandomStringGenerator
    *
    * @return the next random alphanumeric string
    */
-  public String nextString()
-  {
-    for (int idx = 0; idx < buf.length; ++idx)
-    {
+  public String nextString() {
+    for (int idx = 0; idx < buf.length; ++idx) {
       buf[idx] = symbols[random.nextInt(symbols.length)];
     }
 

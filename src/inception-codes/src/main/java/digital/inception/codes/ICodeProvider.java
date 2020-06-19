@@ -19,7 +19,6 @@ package digital.inception.codes;
 //~--- JDK imports ------------------------------------------------------------
 
 import java.time.LocalDateTime;
-
 import java.util.List;
 import java.util.Map;
 
@@ -29,18 +28,18 @@ import java.util.Map;
  *
  * @author Marcus Portmann
  */
-public interface ICodeProvider
-{
+public interface ICodeProvider {
+
   /**
    * Returns whether the code provider supports the code category.
    *
    * @param codeCategoryId the ID used to uniquely identify the code category
    *
    * @return <code>true</code> if the code provider supports the code category or <code>false</code>
-   *         otherwise
+   * otherwise
    */
   boolean codeCategoryExists(String codeCategoryId)
-    throws CodeProviderException;
+      throws CodeProviderException;
 
   /**
    * Check whether the code exists.
@@ -51,7 +50,7 @@ public interface ICodeProvider
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
   boolean codeExists(String codeCategoryId, String codeId)
-    throws CodeProviderException;
+      throws CodeProviderException;
 
   /**
    * Retrieve the code.
@@ -62,7 +61,7 @@ public interface ICodeProvider
    * @return the code
    */
   Code getCode(String codeCategoryId, String codeId)
-    throws CodeNotFoundException, CodeProviderException;
+      throws CodeNotFoundException, CodeProviderException;
 
   /**
    * Returns all the code categories for the code provider.
@@ -70,7 +69,7 @@ public interface ICodeProvider
    * @return all the code categories for the code provider
    */
   List<CodeCategory> getCodeCategories()
-    throws CodeProviderException;
+      throws CodeProviderException;
 
   /**
    * Retrieve the code category.
@@ -80,7 +79,7 @@ public interface ICodeProvider
    * @return the code category
    */
   CodeCategory getCodeCategory(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException;
+      throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
    * Returns the date and time the code category was last updated.
@@ -90,7 +89,7 @@ public interface ICodeProvider
    * @return the date and time the code category was last updated
    */
   LocalDateTime getCodeCategoryLastUpdated(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException;
+      throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
    * Retrieve the name of the code category.
@@ -100,7 +99,7 @@ public interface ICodeProvider
    * @return the name of the code category
    */
   String getCodeCategoryName(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException;
+      throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
    * Retrieve the name of the code.
@@ -111,7 +110,7 @@ public interface ICodeProvider
    * @return the name of code
    */
   String getCodeName(String codeCategoryId, String codeId)
-    throws CodeNotFoundException, CodeProviderException;
+      throws CodeNotFoundException, CodeProviderException;
 
   /**
    * Retrieve the codes for the code category.
@@ -125,7 +124,7 @@ public interface ICodeProvider
    * @return the codes for the code category
    */
   List<Code> getCodesForCodeCategory(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException;
+      throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
    * Retrieve the codes for the code category using the specified parameters.
@@ -141,7 +140,7 @@ public interface ICodeProvider
    */
   List<Code> getCodesForCodeCategoryWithParameters(String codeCategoryId, Map<String,
       String> parameters)
-    throws CodeCategoryNotFoundException, CodeProviderException;
+      throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
    * Retrieve the XML or JSON data for the code category.
@@ -155,7 +154,7 @@ public interface ICodeProvider
    * @return the XML or JSON data for the code category
    */
   String getDataForCodeCategory(String codeCategoryId)
-    throws CodeCategoryNotFoundException, CodeProviderException;
+      throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
    * Retrieve the XML or JSON data for the code category using the specified parameters.
@@ -170,5 +169,5 @@ public interface ICodeProvider
    * @return the XML or JSON data for the code category
    */
   String getDataForCodeCategoryWithParameters(String codeCategoryId, Map<String, String> parameters)
-    throws CodeCategoryNotFoundException, CodeProviderException;
+      throws CodeCategoryNotFoundException, CodeProviderException;
 }
