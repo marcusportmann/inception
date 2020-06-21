@@ -21,7 +21,7 @@ import {MatSort} from '@angular/material/sort';
 import {finalize, first, map, tap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, merge, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
-import {MatSelect, MatSelectChange} from '@angular/material';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
 import {Error} from '../../core/errors/error';
 import {AdminContainerView} from '../../layout/components/admin-container-view';
 import {UserDatasource} from '../services/user.datasource';

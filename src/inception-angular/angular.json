@@ -60,7 +60,7 @@
             "main": "projects/inception-sample/src/main.ts",
             "polyfills": "projects/inception-sample/src/polyfills.ts",
             "tsConfig": "projects/inception-sample/tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "projects/inception-sample/src/favicon.ico",
               "projects/inception-sample/src/assets"
@@ -85,7 +85,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,

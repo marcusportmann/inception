@@ -15,25 +15,21 @@
  */
 
 import {Injector, ModuleWithProviders, NgModule} from '@angular/core';
+import {ObserversModule} from '@angular/cdk/observers';
 import {CommonModule, HashLocationStrategy, LocationStrategy} from '@angular/common';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-  MAT_FORM_FIELD_DEFAULT_OPTIONS, MatButtonModule,
-  MatCheckboxModule,
-  MatFormFieldModule,
-  MatRadioModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {setInceptionInjector} from './inception-injector';
 import {FormsModule} from '@angular/forms';
-import {CheckboxFormFieldComponent} from './components/checkbox-form-field.component';
 import {FileUploadComponent} from './components/file-upload.component';
-import {RadioGroupFormFieldComponent} from './components/radio-group-form-field.component';
 import {TableFilterComponent} from './components/table-filter.component';
 import {AutofocusDirective} from './directives/autofocus.directive';
 import {ValidatedFormDirective} from './directives/validated-form.directive';
+import {GroupFormFieldComponent} from "./components/group-form-field.component";
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
@@ -58,7 +54,7 @@ export const INCEPTION_DATE_FORMATS = {
   declarations: [
 
     // Components
-    CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent,
+    FileUploadComponent, GroupFormFieldComponent, TableFilterComponent,
 
     // Directives
     AutofocusDirective, ValidatedFormDirective
@@ -67,6 +63,9 @@ export const INCEPTION_DATE_FORMATS = {
 
     // Angular modules
     CommonModule, FormsModule,
+
+    // CDK modules
+    ObserversModule,
 
     // Material modules
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatRadioModule
@@ -80,7 +79,7 @@ export const INCEPTION_DATE_FORMATS = {
     MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatRadioModule,
 
     // Components
-    CheckboxFormFieldComponent, FileUploadComponent, RadioGroupFormFieldComponent, TableFilterComponent,
+    FileUploadComponent, GroupFormFieldComponent, TableFilterComponent,
 
     // Directives
     AutofocusDirective, ValidatedFormDirective,
@@ -92,7 +91,7 @@ export class CoreModule {
     setInceptionInjector(injector);
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
       providers: [{

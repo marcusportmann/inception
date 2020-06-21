@@ -136,7 +136,7 @@
       </div>
       <div class="row">
         <div class="col-sm">
-          <radio-group-form-field>
+          <group-form-field>
             <mat-label>Favorite color</mat-label>
             <mat-radio-group formControlName="favoriteColor" required="true">
               <mat-radio-button value="1">Red</mat-radio-button>
@@ -147,16 +147,16 @@
             <mat-error *ngIf="exampleForm.controls['favoriteColor'].errors && !exampleForm.controls['favoriteColor'].untouched">
               <span *ngIf="exampleForm.controls['favoriteColor'].errors?.required">A favorite colour is required.</span>
             </mat-error>
-          </radio-group-form-field>
+          </group-form-field>
         </div>
         <div class="col-sm">
-          <checkbox-form-field>
+          <group-form-field>
             <mat-label>Favorite pet</mat-label>
             <mat-checkbox formControlName="favoritePetDog">Dog</mat-checkbox>
             <mat-checkbox formControlName="favoritePetCat">Cat</mat-checkbox>
             <mat-checkbox formControlName="favoritePetFish">Fish</mat-checkbox>
             <mat-hint>Select your favorite pet(s).</mat-hint>
-          </checkbox-form-field>
+          </group-form-field>
         </div>
       </div>
       <div class="row">

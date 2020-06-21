@@ -49,7 +49,7 @@ export class MailModule {
     console.log('Initializing the Inception Mail Module');
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<MailModule> {
     return {
       ngModule: MailModule
     };

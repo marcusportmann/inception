@@ -48,9 +48,9 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
 
   editUserDirectoryForm: FormGroup;
 
-  @ViewChild(InternalUserDirectoryComponent, {static: false}) internalUserDirectory?: InternalUserDirectoryComponent;
+  @ViewChild(InternalUserDirectoryComponent) internalUserDirectory?: InternalUserDirectoryComponent;
 
-  @ViewChild(LdapUserDirectoryComponent, {static: false}) ldapUserDirectory?: LdapUserDirectoryComponent;
+  @ViewChild(LdapUserDirectoryComponent) ldapUserDirectory?: LdapUserDirectoryComponent;
 
   nameFormControl: FormControl;
 

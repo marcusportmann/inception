@@ -17,7 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {MailService} from '../services/mail.service';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 
 /**
  * The MailTemplateTitleResolver class provides the route data resolver that resolves the
@@ -25,6 +25,7 @@ import {Inject} from '@angular/core';
  *
  * @author Marcus Portmann
  */
+@Injectable()
 export class MailTemplateTitleResolver implements Resolve<string> {
 
   /**

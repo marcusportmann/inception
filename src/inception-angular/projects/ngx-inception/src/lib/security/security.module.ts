@@ -59,7 +59,7 @@ export class SecurityModule {
     console.log('Initializing the Inception Security Module');
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SecurityModule> {
     return {
       ngModule: SecurityModule,
       providers: [{

@@ -16,7 +16,7 @@
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {SecurityService} from '../services/security.service';
 
 /**
@@ -25,6 +25,7 @@ import {SecurityService} from '../services/security.service';
  *
  * @author Marcus Portmann
  */
+@Injectable()
 export class OrganizationTitleResolver implements Resolve<string> {
 
   /**

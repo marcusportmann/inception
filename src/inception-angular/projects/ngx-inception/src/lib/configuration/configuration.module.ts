@@ -48,7 +48,7 @@ export class ConfigurationModule {
     console.log('Initializing the Inception Configuration Module');
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<ConfigurationModule> {
     return {
       ngModule: ConfigurationModule
     };

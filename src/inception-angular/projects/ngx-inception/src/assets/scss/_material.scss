@@ -1,5 +1,7 @@
 @import '~@angular/material/theming';
 
+@import 'mixins';
+
 @include mat-core();
 
 $inception-palette-base:  #20a8d8 !default;
@@ -267,6 +269,16 @@ label {
 
 .mat-form-field {
   width: 100%;
+
+  &.mat-form-field-should-float {
+    .mat-form-field-label {
+      font-weight: 600;
+    }
+  }
+
+  .mat-hint {
+    color: $gray-400;
+  }
 }
 
 .mat-form-field.static {
@@ -275,79 +287,35 @@ label {
     color: rgba(0, 0, 0, 0.87);
     opacity: 1;
   }
-
-  .mat-form-field-underline {
-    background-color: rgba(0, 0, 0, 0.42) !important;
-    background-image: none !important;
-  }
-}
-
-.mat-radio-label-content {
-  padding-left: 0.4em !important;
 }
 
 .mat-tab-body-content {
   padding: 1em;
 }
 
-.mat-radio-group {
-  padding-top: 2px !important;
 
-  .mat-radio-button:not(:last-child) {
-    .mat-radio-label-content {
-      padding-right: 0.8em !important;
-    }
-  }
-}
 
-.mat-form-field {
-  .mat-form-field-wrapper {
-    .mat-form-field-flex {
-      .mat-form-field-infix {
-        input {
-          min-height: 1.3rem;
-        }
 
-        textarea {
-          min-height: 1.3rem;
-        }
-      }
-    }
-  }
 
-  &.mat-form-field-should-float {
-    .mat-form-field-label {
-      font-weight: 600;
-    }
-  }
 
-  &.static, &.mat-form-field-disabled {
-    .mat-form-field-wrapper {
-      .mat-form-field-underline {
-      }
-    }
-  }
 
-  .mat-form-field-subscript-wrapper {
-    margin-top: 5px !important;
-  }
 
-  .mat-hint {
-    color: $gray-400;
-  }
-}
+
+
+
+
+
+
+
 
 .mat-form-field input::-webkit-outer-spin-button,
 .mat-form-field input::-webkit-inner-spin-button {
   display: none;
 }
 
-.mat-form-field-infix {
-}
-
-.mat-form-field-appearance-standard .mat-form-field-ripple {
-  height: 1px !important;
-}
+//.mat-form-field-appearance-standard .mat-form-field-ripple {
+//  height: 1px !important;
+//}
 
 .mat-form-field.mat-form-field-slim {
   .mat-form-field-wrapper {
@@ -426,6 +394,11 @@ mat-cell, mat-footer-cell, mat-header-cell {
 .mat-checkbox-label {
   color: mat-color($foreground, secondary-text);
 }
+
+.mat-radio-label {
+  color: mat-color($foreground, secondary-text);
+}
+
 
 mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {
   padding-right: 12px !important;
@@ -764,14 +737,6 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
       max-width: 360px !important;
     }
   }
-}
-
-.checkbox-form-field .mat-form-field-wrapper .mat-form-field-infix {
-  display: inline-flex !important;
-}
-
-.radio-group-form-field .mat-form-field-wrapper .mat-form-field-infix {
-  display: inline-flex !important;
 }
 
 .mat-menu-panel.user-menu {

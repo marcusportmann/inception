@@ -16,6 +16,7 @@
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
+import { Injectable } from "@angular/core";
 
 /**
  * The OrganizationsTitleResolver class provides the route data resolver that resolves the
@@ -23,6 +24,7 @@ import {Observable, of} from 'rxjs';
  *
  * @author Marcus Portmann
  */
+@Injectable()
 export class OrganizationsTitleResolver implements Resolve<string> {
 
   /**

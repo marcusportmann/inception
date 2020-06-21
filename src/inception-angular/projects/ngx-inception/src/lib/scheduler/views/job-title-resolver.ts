@@ -16,7 +16,7 @@
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Inject} from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {SchedulerService} from '../services/scheduler.service';
 
 /**
@@ -25,6 +25,7 @@ import {SchedulerService} from '../services/scheduler.service';
  *
  * @author Marcus Portmann
  */
+@Injectable()
 export class JobTitleResolver implements Resolve<string> {
 
   /**

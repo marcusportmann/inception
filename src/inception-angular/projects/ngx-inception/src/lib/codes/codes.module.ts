@@ -48,7 +48,7 @@ export class CodesModule {
     console.log('Initializing the Inception Codes Module');
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<CodesModule> {
     return {
       ngModule: CodesModule
     };

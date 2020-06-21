@@ -49,7 +49,7 @@ export class SchedulerModule {
     console.log('Initializing the Inception Scheduler Module');
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SchedulerModule> {
     return {
       ngModule: SchedulerModule
     };

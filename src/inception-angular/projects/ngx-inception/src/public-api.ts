@@ -19,10 +19,11 @@ export * from './lib/configuration/views/configuration-views.module';
 
 // Core
 export * from './lib/core/core.module';
-export * from './lib/core/components/checkbox-form-field.component';
 export * from './lib/core/components/file-upload.component';
-export * from './lib/core/components/radio-group-form-field.component';
+export * from './lib/core/components/group-form-field.component';
 export * from './lib/core/components/table-filter.component';
+export * from './lib/core/directives/autofocus.directive';
+export * from './lib/core/directives/validated-form.directive';
 export * from './lib/core/errors/access-denied-error';
 export * from './lib/core/errors/api-error';
 export * from './lib/core/errors/communication-error';
@@ -48,10 +49,29 @@ export * from './lib/error/views/error-views.module';
 export * from './lib/layout/layout.module';
 export * from './lib/layout/components/admin-container.component';
 export * from './lib/layout/components/admin-container-view';
+export * from './lib/layout/components/admin-footer.component';
+export * from './lib/layout/components/admin-header.component';
 export * from './lib/layout/components/back-navigation';
+export * from './lib/layout/components/breadcrumbs.component';
 export * from './lib/layout/components/not-found.component';
+export * from './lib/layout/components/sidebar.component';
+export * from './lib/layout/components/sidebar-footer.component';
+export * from './lib/layout/components/sidebar-form.component';
+export * from './lib/layout/components/sidebar-header.component';
+export * from './lib/layout/components/sidebar-minimizer.component';
+export * from './lib/layout/components/sidebar-nav.component';
+export * from './lib/layout/components/sidebar-nav-dropdown.component';
+export * from './lib/layout/components/sidebar-nav-item.component';
 export * from './lib/layout/components/simple-container.component';
 export * from './lib/layout/components/spinner.component';
+export * from './lib/layout/components/title-bar.component';
+export * from './lib/layout/directives/brand-minimizer.directive';
+export * from './lib/layout/directives/mobile-sidebar-toggler.directive';
+export * from './lib/layout/directives/sidebar-minimizer.directive';
+export * from './lib/layout/directives/sidebar-nav-dropdown.directive';
+export * from './lib/layout/directives/sidebar-nav-dropdown-toggler.directive';
+export * from './lib/layout/directives/sidebar-off-canvas-close.directive';
+export * from './lib/layout/directives/sidebar-toggler.directive';
 export * from './lib/layout/services/navigation-badge';
 export * from './lib/layout/services/navigation-item';
 export * from './lib/layout/services/navigation-title';
@@ -75,8 +95,11 @@ export * from './lib/scheduler/views/scheduler-views.module';
 
 // Security
 export * from './lib/security/security.module';
+export * from './lib/security/directives/has-authority.directive';
 export * from './lib/security/routing/can-activate-function-guard';
 export * from './lib/security/routing/disabled-function-guard';
 export * from './lib/security/views/login-views.module';
 export * from './lib/security/views/security-title-resolver';
 export * from './lib/security/views/security-views.module';
+
+export * from './lib/ngx-inception.component';

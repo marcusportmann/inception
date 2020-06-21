@@ -51,9 +51,9 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
 
   newUserDirectoryForm: FormGroup;
 
-  @ViewChild(InternalUserDirectoryComponent, {static: false}) internalUserDirectory?: InternalUserDirectoryComponent;
+  @ViewChild(InternalUserDirectoryComponent) internalUserDirectory?: InternalUserDirectoryComponent;
 
-  @ViewChild(LdapUserDirectoryComponent, {static: false}) ldapUserDirectory?: LdapUserDirectoryComponent;
+  @ViewChild(LdapUserDirectoryComponent) ldapUserDirectory?: LdapUserDirectoryComponent;
 
   userDirectory?: UserDirectory;
 

@@ -71,7 +71,7 @@ export class InceptionModule {
   }
 
   // TODO: MOVE THE PROVISION OF THE INCEPTION CONFIGURATION TO THE APPLICATION MODULE -- MARCUS
-  static forRoot(config: InceptionConfig): ModuleWithProviders {
+  static forRoot(config: InceptionConfig): ModuleWithProviders<InceptionModule> {
     return {
       ngModule: InceptionModule,
       providers: [{

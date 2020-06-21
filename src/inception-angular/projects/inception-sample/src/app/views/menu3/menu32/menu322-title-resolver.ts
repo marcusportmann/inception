@@ -16,12 +16,14 @@
 
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable, of} from 'rxjs';
+import { Injectable } from "@angular/core";
 
 /**
  * The Menu322TitleResolver class provides the resolver for the Menu322Component.
  *
  * @author Marcus Portmann
  */
+@Injectable()
 export class Menu322TitleResolver implements Resolve<string> {
 
   /**

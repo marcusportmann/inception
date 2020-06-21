@@ -48,7 +48,7 @@ export class ErrorModule {
     console.log('Initializing the Inception Error Module');
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<ErrorModule> {
     return {
       ngModule: ErrorModule
     };

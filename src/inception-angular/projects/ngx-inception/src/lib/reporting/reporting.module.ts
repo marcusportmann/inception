@@ -49,7 +49,7 @@ export class ReportingModule {
     console.log('Initializing the Inception Reporting Module');
   }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<ReportingModule> {
     return {
       ngModule: ReportingModule
     };
