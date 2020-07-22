@@ -161,6 +161,33 @@ public class ProcessService implements IProcessService {
   }
 
   /**
+   * Start a process instance.
+   *
+   * @param processDefinitionId the ID uniquely identifying the process definition
+   * @param parameters the parameters for the process instance
+   */
+  @Override
+  @Transactional
+  public void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)
+      throws ProcessDefinitionNotFoundException, ProcessServiceException {
+    try {
+      if (!processDefinitionExists(processDefinitionId)) {
+        throw new ProcessDefinitionNotFoundException(processDefinitionId);
+      }
+
+      ProcessInstance processInstance =
+          processEngine
+              .getRuntimeService()
+              .startProcessInstanceByKey(processDefinitionId, parameters);
+    } catch (ProcessDefinitionNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new ProcessServiceException(
+          "Failed to start the process instance (" + processDefinitionId + ")", e);
+    }
+  }
+
+  /**
    * Update the process definition(s).
    *
    * @param processDefinitionData the BPMN XML data for the process definition(s)
@@ -198,6 +225,19 @@ public class ProcessService implements IProcessService {
     } catch (Throwable e) {
       throw new ProcessServiceException("Failed to update the process definition", e);
     }
+  }
+
+  /**
+   * Validate the BPMN XML data.
+   *
+   * @param bpmnXml the BPMN XML data
+   * @return the process definition summaries for the BPMN processes if the BPMN XML data was
+   *     successfully validated
+   */
+  @Override
+  public List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
+      throws InvalidBPMNException, ProcessServiceException {
+    return validateBPMN(bpmnXml.getBytes(StandardCharsets.UTF_8));
   }
 
   /**
@@ -263,17 +303,17 @@ public class ProcessService implements IProcessService {
       documentBuilder.setErrorHandler(
           new ErrorHandler() {
             @Override
-            public void warning(SAXParseException exception) throws SAXException {
-              throw new SAXException("Failed to process the BPMN XML data", exception);
-            }
-
-            @Override
             public void error(SAXParseException exception) throws SAXException {
               throw new SAXException("Failed to process the BPMN XML data", exception);
             }
 
             @Override
             public void fatalError(SAXParseException exception) throws SAXException {
+              throw new SAXException("Failed to process the BPMN XML data", exception);
+            }
+
+            @Override
+            public void warning(SAXParseException exception) throws SAXException {
               throw new SAXException("Failed to process the BPMN XML data", exception);
             }
           });
@@ -309,46 +349,6 @@ public class ProcessService implements IProcessService {
       throw new InvalidBPMNException(e);
     } catch (Throwable e) {
       throw new ProcessServiceException("Failed to validate the BPMN XML", e);
-    }
-  }
-
-  /**
-   * Validate the BPMN XML data.
-   *
-   * @param bpmnXml the BPMN XML data
-   * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   *     successfully validated
-   */
-  @Override
-  public List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
-      throws InvalidBPMNException, ProcessServiceException {
-    return validateBPMN(bpmnXml.getBytes(StandardCharsets.UTF_8));
-  }
-
-  /**
-   * Start a process instance.
-   *
-   * @param processDefinitionId the ID uniquely identifying the process definition
-   * @param parameters the parameters for the process instance
-   */
-  @Override
-  @Transactional
-  public void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)
-      throws ProcessDefinitionNotFoundException, ProcessServiceException {
-    try {
-      if (!processDefinitionExists(processDefinitionId)) {
-        throw new ProcessDefinitionNotFoundException(processDefinitionId);
-      }
-
-      ProcessInstance processInstance =
-          processEngine
-              .getRuntimeService()
-              .startProcessInstanceByKey(processDefinitionId, parameters);
-    } catch (ProcessDefinitionNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new ProcessServiceException(
-          "Failed to start the process instance (" + processDefinitionId + ")", e);
     }
   }
 }

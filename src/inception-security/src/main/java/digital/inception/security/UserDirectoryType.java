@@ -156,16 +156,6 @@ public class UserDirectoryType implements java.io.Serializable {
   }
 
   /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode() {
-    return (code == null) ? 0 : code.hashCode();
-  }
-
-  /**
    * Returns the Java class that implements the user directory type.
    *
    * @return the Java class that implements the user directory type
@@ -199,5 +189,15 @@ public class UserDirectoryType implements java.io.Serializable {
    */
   String getUserDirectoryClassName() {
     return userDirectoryClassName;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (code == null) ? 0 : code.hashCode();
   }
 }

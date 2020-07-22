@@ -42,7 +42,7 @@ public class InceptionRSConfiguration {
    * Instruct browsers to expose the response to frontend JavaScript code when the request's
    * credentials mode (Request.credentials) is "include".
    */
-  @Value("${server.cors.allowCredentials:false}")
+  @Value("${server.cors.allowCredentials:#{false}}")
   private boolean corsAllowCredentials;
 
   /** Instruct browsers to allow the specified headers. */
@@ -58,7 +58,7 @@ public class InceptionRSConfiguration {
   private String[] corsAllowedOrigins;
 
   /** Enable cross-origin resource sharing (CORS). */
-  @Value("${server.cors.enabled:false}")
+  @Value("${server.cors.enabled:#{false}}")
   private boolean corsEnabled;
 
   /** Instruct browsers to expose the specified headers. */

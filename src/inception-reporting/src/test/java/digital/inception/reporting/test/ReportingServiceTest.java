@@ -84,6 +84,34 @@ public class ReportingServiceTest {
     return reportDefinition;
   }
 
+  private void compareReportDefinitionToReportDefinitionSummary(
+      ReportDefinition reportDefinition, ReportDefinitionSummary reportDefinitionSummary) {
+    assertEquals(
+        "The ID values for the two report definition summaries do not match",
+        reportDefinition.getId(),
+        reportDefinitionSummary.getId());
+    assertEquals(
+        "The name values for the two report definition summaries do not match",
+        reportDefinition.getName(),
+        reportDefinitionSummary.getName());
+  }
+
+  private void compareReportDefinitions(
+      ReportDefinition reportDefinition1, ReportDefinition reportDefinition2) {
+    assertEquals(
+        "The ID values for the two report definitions do not match",
+        reportDefinition1.getId(),
+        reportDefinition2.getId());
+    assertEquals(
+        "The name values for the two report definitions do not match",
+        reportDefinition1.getName(),
+        reportDefinition2.getName());
+    assertArrayEquals(
+        "The template values for the two report definitions do not match",
+        reportDefinition1.getTemplate(),
+        reportDefinition2.getTemplate());
+  }
+
   /** Test the create report PDF functionality. */
   @Test
   public void createReportPDFTest() throws Exception {
@@ -174,33 +202,5 @@ public class ReportingServiceTest {
       fail("The report definition that should have been deleted was retrieved successfully");
     } catch (ReportDefinitionNotFoundException ignored) {
     }
-  }
-
-  private void compareReportDefinitionToReportDefinitionSummary(
-      ReportDefinition reportDefinition, ReportDefinitionSummary reportDefinitionSummary) {
-    assertEquals(
-        "The ID values for the two report definition summaries do not match",
-        reportDefinition.getId(),
-        reportDefinitionSummary.getId());
-    assertEquals(
-        "The name values for the two report definition summaries do not match",
-        reportDefinition.getName(),
-        reportDefinitionSummary.getName());
-  }
-
-  private void compareReportDefinitions(
-      ReportDefinition reportDefinition1, ReportDefinition reportDefinition2) {
-    assertEquals(
-        "The ID values for the two report definitions do not match",
-        reportDefinition1.getId(),
-        reportDefinition2.getId());
-    assertEquals(
-        "The name values for the two report definitions do not match",
-        reportDefinition1.getName(),
-        reportDefinition2.getName());
-    assertArrayEquals(
-        "The template values for the two report definitions do not match",
-        reportDefinition1.getTemplate(),
-        reportDefinition2.getTemplate());
   }
 }

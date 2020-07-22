@@ -75,6 +75,15 @@ public class BinaryBuffer implements Serializable {
     }
   }
 
+  /**
+   * Append the specified byte to the binary data already stored in the <code>BinaryBuffer</code>.
+   *
+   * @param b the byte to append
+   */
+  void append(int b) {
+    stream.write(b);
+  }
+
   /** Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer. */
   public void empty() {
     stream.reset();
@@ -96,14 +105,5 @@ public class BinaryBuffer implements Serializable {
    */
   public int getLength() {
     return stream.size();
-  }
-
-  /**
-   * Append the specified byte to the binary data already stored in the <code>BinaryBuffer</code>.
-   *
-   * @param b the byte to append
-   */
-  void append(int b) {
-    stream.write(b);
   }
 }

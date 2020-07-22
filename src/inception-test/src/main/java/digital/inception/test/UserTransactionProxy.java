@@ -108,6 +108,21 @@ public class UserTransactionProxy implements UserTransaction {
     }
   }
 
+  /**
+   * Returns the current transaction.
+   *
+   * @return the current transaction or <code>null</code> if there is no current transaction
+   */
+  private Transaction getCurrentTransaction() {
+    try {
+      return transactionManager.getTransaction();
+    } catch (Throwable e) {
+      logger.error("Failed to retrieve the current transaction", e);
+
+      return null;
+    }
+  }
+
   @Override
   public int getStatus() throws SystemException {
     return userTransaction.getStatus();
@@ -136,20 +151,5 @@ public class UserTransactionProxy implements UserTransaction {
   @Override
   public void setTransactionTimeout(int i) throws SystemException {
     userTransaction.setTransactionTimeout(i);
-  }
-
-  /**
-   * Returns the current transaction.
-   *
-   * @return the current transaction or <code>null</code> if there is no current transaction
-   */
-  private Transaction getCurrentTransaction() {
-    try {
-      return transactionManager.getTransaction();
-    } catch (Throwable e) {
-      logger.error("Failed to retrieve the current transaction", e);
-
-      return null;
-    }
   }
 }

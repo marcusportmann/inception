@@ -89,16 +89,6 @@ public class TestData {
   }
 
   /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode() {
-    return (id == null) ? 0 : id.hashCode();
-  }
-
-  /**
    * Returns the ID.
    *
    * @return the ID
@@ -123,5 +113,15 @@ public class TestData {
    */
   String getValue() {
     return value;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (id == null) ? 0 : id.hashCode();
   }
 }

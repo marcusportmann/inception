@@ -63,13 +63,13 @@ public class SMSServiceTest {
   /** The SMS Service. */
   @Autowired private ISMSService smsService;
 
-  /** The username to use for the MyMobileAPI SMS API. */
-  @Value("${application.sms.myMobileAPIUsername:#{null}}")
-  private String myMobileApiUsername;
+  /** The client ID to use for the SMS Portal API. */
+  @Value("${application.sms.smsPortalClientId:#{null}}")
+  private String smsPortalClientId;
 
-  /** The password to use for the MyMobileAPI SMS API. */
-  @Value("${application.sms.myMobileAPIPassword:#{null}}")
-  private String myMobileApiPassword;
+  /** The client secret to use for the SMS Portal API. */
+  @Value("${application.sms.smsPortalClientSecret:#{null}}")
+  private String smsPortalClientSecret;
 
   private static synchronized SMS getTestSMSDetails() {
     SMS sms = new SMS();
@@ -80,10 +80,34 @@ public class SMSServiceTest {
     return sms;
   }
 
+  private void compareSMSs(SMS sms1, SMS sms2) {
+    assertEquals("The ID values for the two SMSs do not match", sms1.getId(), sms2.getId());
+    assertEquals(
+        "The mobile number values for the two SMSs do not match",
+        sms1.getMobileNumber(),
+        sms2.getMobileNumber());
+    assertEquals(
+        "The message values for the two SMSs do not match", sms1.getMessage(), sms2.getMessage());
+    assertEquals(
+        "The status values for the two SMSs do not match", sms1.getStatus(), sms2.getStatus());
+    assertEquals(
+        "The send attempts values for the two SMSs do not match",
+        sms1.getSendAttempts(),
+        sms2.getSendAttempts());
+    assertEquals(
+        "The lock name values for the two SMSs do not match",
+        sms1.getLockName(),
+        sms2.getLockName());
+    assertEquals(
+        "The last processed values for the two SMSs do not match",
+        sms1.getLastProcessed(),
+        sms2.getLastProcessed());
+  }
+
   /** Test the get number of SMS credits remaining functionality. */
   @Test
   public void getNumberOfSMSCreditsRemainingTest() throws Exception {
-    if ((!StringUtils.isEmpty(myMobileApiUsername)) && (!myMobileApiUsername.equals("USERNAME"))) {
+    if ((!StringUtils.isEmpty(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
       int numberOfSMSCreditsRemaining = smsService.getNumberOfSMSCreditsRemaining();
     }
   }
@@ -96,7 +120,7 @@ public class SMSServiceTest {
   /** Test the send SMS functionality. */
   @Test
   public void sendSMSTest() throws Exception {
-    if ((!StringUtils.isEmpty(myMobileApiUsername)) && (!myMobileApiUsername.equals("USERNAME"))) {
+    if ((!StringUtils.isEmpty(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
       smsService.sendSMS("0832763107", "Testing 1.. 2.. 3..");
 
       Thread.sleep(100000L);
@@ -153,29 +177,5 @@ public class SMSServiceTest {
 
     assertEquals(
         "The status for the SMS is not correct", SMSStatus.UNKNOWN, retrievedSMS.getStatus());
-  }
-
-  private void compareSMSs(SMS sms1, SMS sms2) {
-    assertEquals("The ID values for the two SMSs do not match", sms1.getId(), sms2.getId());
-    assertEquals(
-        "The mobile number values for the two SMSs do not match",
-        sms1.getMobileNumber(),
-        sms2.getMobileNumber());
-    assertEquals(
-        "The message values for the two SMSs do not match", sms1.getMessage(), sms2.getMessage());
-    assertEquals(
-        "The status values for the two SMSs do not match", sms1.getStatus(), sms2.getStatus());
-    assertEquals(
-        "The send attempts values for the two SMSs do not match",
-        sms1.getSendAttempts(),
-        sms2.getSendAttempts());
-    assertEquals(
-        "The lock name values for the two SMSs do not match",
-        sms1.getLockName(),
-        sms2.getLockName());
-    assertEquals(
-        "The last processed values for the two SMSs do not match",
-        sms1.getLastProcessed(),
-        sms2.getLastProcessed());
   }
 }

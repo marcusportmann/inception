@@ -66,6 +66,39 @@ public class IDGenerator {
     this.platformTransactionManager = platformTransactionManager;
   }
 
+  private Long getCurrentId(Connection connection, String type) throws SQLException {
+    try (PreparedStatement statement =
+        connection.prepareStatement(
+            "SELECT current FROM idgenerator.idgenerator WHERE name=? FOR UPDATE")) {
+      statement.setString(1, type);
+
+      try (ResultSet rs = statement.executeQuery()) {
+        if (rs.next()) {
+          return rs.getLong(1);
+        } else {
+          return null;
+        }
+      }
+    }
+  }
+
+  private void insertId(Connection connection, String type, long id) throws SQLException {
+    try (PreparedStatement statement =
+        connection.prepareStatement(
+            "INSERT INTO idgenerator.idgenerator (current, name) VALUES (?, ?)")) {
+      statement.setLong(1, id);
+      statement.setString(2, type);
+
+      if (statement.executeUpdate() == 0) {
+        throw new SQLException(
+            "No rows were affected while inserting the idgenerator.idgenerator "
+                + "table row for the type ("
+                + type
+                + ")");
+      }
+    }
+  }
+
   /**
    * Get the next unique <code>long</code> ID for the entity with the specified type.
    *
@@ -149,39 +182,6 @@ public class IDGenerator {
     }
 
     return UUID.randomUUID();
-  }
-
-  private Long getCurrentId(Connection connection, String type) throws SQLException {
-    try (PreparedStatement statement =
-        connection.prepareStatement(
-            "SELECT current FROM idgenerator.idgenerator WHERE name=? FOR UPDATE")) {
-      statement.setString(1, type);
-
-      try (ResultSet rs = statement.executeQuery()) {
-        if (rs.next()) {
-          return rs.getLong(1);
-        } else {
-          return null;
-        }
-      }
-    }
-  }
-
-  private void insertId(Connection connection, String type, long id) throws SQLException {
-    try (PreparedStatement statement =
-        connection.prepareStatement(
-            "INSERT INTO idgenerator.idgenerator (current, name) VALUES (?, ?)")) {
-      statement.setLong(1, id);
-      statement.setString(2, type);
-
-      if (statement.executeUpdate() == 0) {
-        throw new SQLException(
-            "No rows were affected while inserting the idgenerator.idgenerator "
-                + "table row for the type ("
-                + type
-                + ")");
-      }
-    }
   }
 
   private void updateId(Connection connection, String type, long id) throws SQLException {

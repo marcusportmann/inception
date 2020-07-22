@@ -257,17 +257,17 @@ public class CaseService implements ICaseService {
       documentBuilder.setErrorHandler(
           new ErrorHandler() {
             @Override
-            public void warning(SAXParseException exception) throws SAXException {
-              throw new SAXException("Failed to process the CMMN XML data", exception);
-            }
-
-            @Override
             public void error(SAXParseException exception) throws SAXException {
               throw new SAXException("Failed to process the CMMN XML data", exception);
             }
 
             @Override
             public void fatalError(SAXParseException exception) throws SAXException {
+              throw new SAXException("Failed to process the CMMN XML data", exception);
+            }
+
+            @Override
+            public void warning(SAXParseException exception) throws SAXException {
               throw new SAXException("Failed to process the CMMN XML data", exception);
             }
           });

@@ -370,44 +370,6 @@ public class MessagingServletTest {
     assertArrayEquals(testData, anotherTestResponseData.getTestData());
   }
 
-  /** Test the "Test" synchronous encrypted message functionality. */
-  @Test
-  public void testMessageEncryptedTest() throws Exception {
-    byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
-
-    MessageTranslator messageTranslator =
-        new MessageTranslator(USERNAME, DEVICE_ID, userEncryptionKey);
-
-    TestRequestData requestData = new TestRequestData("Test Value");
-
-    Message requestMessage = messageTranslator.toMessage(requestData);
-
-    MessageResult messageResult = sendMessage(requestMessage);
-
-    assertEquals(MessageResult.SUCCESS, messageResult.getCode());
-
-    TestResponseData responseData =
-        messageTranslator.fromMessage(messageResult.getMessage(), new TestResponseData());
-
-    assertEquals(TestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
-    assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
-    assertEquals("Test Value", responseData.getTestValue());
-  }
-
-  /** Test the "Test" synchronous unencrypted message functionality. */
-  @Test
-  public void testMessageUnencryptedTest() throws Exception {
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
-
-    TestRequestData requestData = new TestRequestData("Test Value");
-
-    Message requestMessage = messageTranslator.toMessage(requestData);
-
-    MessageResult messageResult = sendMessage(requestMessage);
-
-    assertEquals(MessageResult.ERROR_DECRYPTION_FAILED, messageResult.getCode());
-  }
-
   private byte[] authenticateUser(String username, String password, UUID deviceId)
       throws Exception {
     AuthenticateRequestData requestData = new AuthenticateRequestData(username, password, deviceId);
@@ -681,5 +643,43 @@ public class MessagingServletTest {
               + "The WBXML response data from the remote server is not a valid "
               + "MessageReceivedResponse document");
     }
+  }
+
+  /** Test the "Test" synchronous encrypted message functionality. */
+  @Test
+  public void testMessageEncryptedTest() throws Exception {
+    byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
+
+    MessageTranslator messageTranslator =
+        new MessageTranslator(USERNAME, DEVICE_ID, userEncryptionKey);
+
+    TestRequestData requestData = new TestRequestData("Test Value");
+
+    Message requestMessage = messageTranslator.toMessage(requestData);
+
+    MessageResult messageResult = sendMessage(requestMessage);
+
+    assertEquals(MessageResult.SUCCESS, messageResult.getCode());
+
+    TestResponseData responseData =
+        messageTranslator.fromMessage(messageResult.getMessage(), new TestResponseData());
+
+    assertEquals(TestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
+    assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
+    assertEquals("Test Value", responseData.getTestValue());
+  }
+
+  /** Test the "Test" synchronous unencrypted message functionality. */
+  @Test
+  public void testMessageUnencryptedTest() throws Exception {
+    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+    TestRequestData requestData = new TestRequestData("Test Value");
+
+    Message requestMessage = messageTranslator.toMessage(requestData);
+
+    MessageResult messageResult = sendMessage(requestMessage);
+
+    assertEquals(MessageResult.ERROR_DECRYPTION_FAILED, messageResult.getCode());
   }
 }

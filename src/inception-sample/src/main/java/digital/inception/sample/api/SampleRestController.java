@@ -21,6 +21,7 @@ package digital.inception.sample.api;
 import digital.inception.sample.model.Data;
 import digital.inception.sample.model.ISampleService;
 import digital.inception.sample.model.SampleServiceException;
+import digital.inception.sms.smsportal.AuthenticationResponse;
 import digital.inception.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -38,6 +39,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -52,14 +55,18 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused"})
 public class SampleRestController {
 
-  private ISampleService sampleService;
+  private final ISampleService sampleService;
+
+  private final WebClient.Builder webClientBuilder;
 
   /**
    * Constructs a new <code>SampleServiceController</code>.
    *
+   * @param webClientBuilder the web client builder
    * @param sampleService the Sample Service
    */
-  public SampleRestController(ISampleService sampleService) {
+  public SampleRestController(WebClient.Builder webClientBuilder, ISampleService sampleService) {
+    this.webClientBuilder = webClientBuilder;
     this.sampleService = sampleService;
   }
 
@@ -124,6 +131,40 @@ public class SampleRestController {
     System.out.println("localDateTime = " + localDateTime);
 
     return localDateTime;
+  }
+
+  @RequestMapping(
+      value = "/test-web-client",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  public AuthenticationResponse testWebClient() throws SampleServiceException {
+    try {
+      WebClient webClient =
+          webClientBuilder
+              .baseUrl("https://rest.smsportal.com/v1")
+              .defaultHeaders(
+                  header ->
+                      header.setBasicAuth(
+                          "ed4cd4f8-e8aa-4e20-9991-20b74abb1fc9",
+                          "65gBqKkv4Fgp73yJDBQPMs6pM76lkrpV_XXX"))
+              .build();
+
+      Mono<AuthenticationResponse> response =
+          webClient
+              .get()
+              .uri("/Authentication")
+              .retrieve()
+              .bodyToFlux(AuthenticationResponse.class)
+              .single();
+
+      AuthenticationResponse authenticationResponse = response.block();
+
+      System.out.println("Token: " + authenticationResponse.getToken());
+
+      return authenticationResponse;
+    } catch (Throwable e) {
+      throw new SampleServiceException("Failed to test the web client", e);
+    }
   }
 
   /**

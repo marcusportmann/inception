@@ -44,7 +44,7 @@ public class ProcessServiceTestConfiguration {
   /** The data source used to provide connections to the application database. */
   private DataSource dataSource;
 
-  /* The name of the Process Engine instance. */
+  /** The name of the Process Engine instance. */
   private String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
 
   /** The Spring platform transaction manager. */

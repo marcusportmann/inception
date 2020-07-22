@@ -96,6 +96,20 @@ public class ProcessServiceTest {
   /** The Case Service. */
   @Autowired private ICaseService caseService;
 
+  /** Test the case definition functionality. */
+  @Test
+  public void caseDefinitionTest() throws Exception {
+    byte[] testCaseData = ResourceUtil.getClasspathResource("digital/inception/bmi/test/Test.cmmn");
+
+    List<CaseDefinitionSummary> caseDefinitionSummaries =
+        caseService.createCaseDefinition(testCaseData);
+
+    caseDefinitionSummaries = caseService.updateCaseDefinition(testCaseData);
+
+    int xxx = 0;
+    xxx++;
+  }
+
   /** Check database test. */
   // @Test
   public void checkDatabaseTest() throws Exception {
@@ -117,20 +131,6 @@ public class ProcessServiceTest {
         }
       }
     }
-  }
-
-  /** Test the case definition functionality. */
-  @Test
-  public void caseDefinitionTest() throws Exception {
-    byte[] testCaseData = ResourceUtil.getClasspathResource("digital/inception/bmi/test/Test.cmmn");
-
-    List<CaseDefinitionSummary> caseDefinitionSummaries =
-        caseService.createCaseDefinition(testCaseData);
-
-    caseDefinitionSummaries = caseService.updateCaseDefinition(testCaseData);
-
-    int xxx = 0;
-    xxx++;
   }
 
   /** Test the process definition functionality. */

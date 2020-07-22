@@ -30,13 +30,12 @@ import java.util.List;
 public interface ICaseService {
 
   /**
-   * Create the new case definition(s).
+   * Check whether the case definition exists.
    *
-   * @param caseDefinitionData the CMMN XML data for the case definition(s)
-   * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
+   * @param caseDefinitionId the ID uniquely identifying the case definition
+   * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
    */
-  List<CaseDefinitionSummary> createCaseDefinition(byte[] caseDefinitionData)
-      throws InvalidCMMNException, DuplicateCaseDefinitionException, CaseServiceException;
+  boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException;
 
   //  /**
   //   * Delete the existing case definition.
@@ -67,11 +66,13 @@ public interface ICaseService {
   //    throws CaseDefinitionNotFoundException, CaseServiceException;
 
   /**
-   * Returns the summaries for all the case definitions.
+   * Create the new case definition(s).
    *
-   * @return the summaries for all the case definitions
+   * @param caseDefinitionData the CMMN XML data for the case definition(s)
+   * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
-  List<CaseDefinitionSummary> getCaseDefinitionSummaries() throws CaseServiceException;
+  List<CaseDefinitionSummary> createCaseDefinition(byte[] caseDefinitionData)
+      throws InvalidCMMNException, DuplicateCaseDefinitionException, CaseServiceException;
 
   //  /**
   //   * Retrieve the summary for the case definition.
@@ -92,12 +93,11 @@ public interface ICaseService {
   //    throws CaseServiceException;
 
   /**
-   * Check whether the case definition exists.
+   * Returns the summaries for all the case definitions.
    *
-   * @param caseDefinitionId the ID uniquely identifying the case definition
-   * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
+   * @return the summaries for all the case definitions
    */
-  boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException;
+  List<CaseDefinitionSummary> getCaseDefinitionSummaries() throws CaseServiceException;
 
   /**
    * Update the case definition(s).

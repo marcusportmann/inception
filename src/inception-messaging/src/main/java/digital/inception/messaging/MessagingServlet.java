@@ -62,18 +62,6 @@ public class MessagingServlet extends HttpServlet {
   /** Constructs a new <code>MessagingServlet</code>. */
   public MessagingServlet() {}
 
-  /**
-   * Initialize the servlet.
-   *
-   * @param config the servlet configuration
-   */
-  @Override
-  public void init(ServletConfig config) throws ServletException {
-    super.init(config);
-
-    initMessagingServlet();
-  }
-
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
@@ -185,6 +173,18 @@ public class MessagingServlet extends HttpServlet {
 
       writeErrorResponse(e.getMessage(), e, response);
     }
+  }
+
+  /**
+   * Initialize the servlet.
+   *
+   * @param config the servlet configuration
+   */
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
+
+    initMessagingServlet();
   }
 
   private synchronized void initMessagingServlet() {

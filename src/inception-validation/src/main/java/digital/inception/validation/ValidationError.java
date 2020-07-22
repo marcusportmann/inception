@@ -218,6 +218,21 @@ public class ValidationError implements Serializable, Cloneable {
     return validationErrors;
   }
 
+  @Override
+  protected Object clone() throws CloneNotSupportedException {
+    Object clone = super.clone();
+
+    List<ValidationErrorAttribute> attributes = new ArrayList<>();
+
+    for (ValidationErrorAttribute attribute : this.attributes) {
+      attributes.add((ValidationErrorAttribute) attribute.clone());
+    }
+
+    ((ValidationError) clone).setAttributes(attributes);
+
+    return clone;
+  }
+
   /**
    * Returns the attributes associated with the validation error.
    *
@@ -270,20 +285,5 @@ public class ValidationError implements Serializable, Cloneable {
    */
   public void setProperty(String property) {
     this.property = property;
-  }
-
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    Object clone = super.clone();
-
-    List<ValidationErrorAttribute> attributes = new ArrayList<>();
-
-    for (ValidationErrorAttribute attribute : this.attributes) {
-      attributes.add((ValidationErrorAttribute) attribute.clone());
-    }
-
-    ((ValidationError) clone).setAttributes(attributes);
-
-    return clone;
   }
 }

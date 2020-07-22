@@ -107,7 +107,7 @@ public class ApplicationDatabaseConfiguration {
   private String password;
 
   /** Is transaction recovery enabled for the application database. */
-  @Value("${application.database.recoveryEnabled:false}")
+  @Value("${application.database.recoveryEnabled:#{false}}")
   private boolean recoveryEnabled;
 
   /** The recovery password for the application database. */

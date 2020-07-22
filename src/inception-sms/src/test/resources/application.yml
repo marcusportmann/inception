@@ -1,8 +1,8 @@
 application:
 
   sms:
-    myMobileAPIEndPoint: http://www.mymobileapi.com/api5/api.asmx
-    myMobileAPIUsername: USERNAME
-    myMobileAPIPassword: PASSWORD
+    smsPortalAPIEndPoint: https://rest.smsportal.com/v1
+    smsPortalClientId: USERNAME
+    smsPortalClientSecret: XXX
     maximumSendAttempts: 100
     sendRetryDelay: 600000

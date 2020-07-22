@@ -72,6 +72,11 @@ public class ValidationErrorAttribute implements Serializable, Cloneable {
     this.value = value;
   }
 
+  @Override
+  protected Object clone() throws CloneNotSupportedException {
+    return new ValidationErrorAttribute(name, value);
+  }
+
   /**
    * Returns the name for the validation error attribute.
    *
@@ -106,10 +111,5 @@ public class ValidationErrorAttribute implements Serializable, Cloneable {
    */
   public void setValue(String value) {
     this.value = value;
-  }
-
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    return new ValidationErrorAttribute(name, value);
   }
 }

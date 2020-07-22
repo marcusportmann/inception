@@ -76,17 +76,6 @@ public class BackgroundMessageAssembler implements InitializingBean {
     }
   }
 
-  /** Assemble the messages. */
-  @Scheduled(cron = "0 * * * * *")
-  @Async
-  public void assembleMessages() {
-    // TODO: Retrieve a list of messages that have message parts that are queued for assembly
-
-    // TODO: Retrieve the total number of message parts for each message
-
-    // TODO: Attempt to assemble each message
-  }
-
   /**
    * Assemble the message from the message parts that have been queued for assembly.
    *
@@ -105,5 +94,16 @@ public class BackgroundMessageAssembler implements InitializingBean {
        * assembly of the message can be retried.
        */
     }
+  }
+
+  /** Assemble the messages. */
+  @Scheduled(cron = "0 * * * * *")
+  @Async
+  public void assembleMessages() {
+    // TODO: Retrieve a list of messages that have message parts that are queued for assembly
+
+    // TODO: Retrieve the total number of message parts for each message
+
+    // TODO: Attempt to assemble each message
   }
 }

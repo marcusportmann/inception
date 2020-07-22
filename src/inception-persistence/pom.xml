@@ -20,12 +20,6 @@
     </dependency>
 
     <!-- Dependencies -->
-    <!--
-    <dependency>
-      <groupId>javax.persistence</groupId>
-      <artifactId>javax.persistence-api</artifactId>
-    </dependency>
-    -->
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
@@ -42,7 +36,6 @@
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
     </dependency>
-
 
     <!-- Test Dependencies -->
     <dependency>

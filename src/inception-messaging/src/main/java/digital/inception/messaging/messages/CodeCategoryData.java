@@ -165,6 +165,40 @@ public class CodeCategoryData implements Serializable {
   }
 
   /**
+   * Returns the WBXML element containing the code category data.
+   *
+   * @return the WBXML element containing the code category data
+   */
+  Element toElement() {
+    Element codeCategoryElement = new Element("CodeCategory");
+
+    codeCategoryElement.addContent(new Element("Id", id));
+    codeCategoryElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
+    codeCategoryElement.addContent(
+        new Element(
+            "LastUpdated",
+            (lastUpdated == null)
+                ? ISO8601Util.now()
+                : ISO8601Util.fromLocalDateTime(lastUpdated)));
+
+    if (codeData != null) {
+      codeCategoryElement.addContent(new Element("CodeData", codeData));
+    }
+
+    Element codesElement = new Element("Codes");
+
+    if (codes != null) {
+      for (CodeData code : codes) {
+        codesElement.addContent(code.toElement());
+      }
+    }
+
+    codeCategoryElement.addContent(codesElement);
+
+    return codeCategoryElement;
+  }
+
+  /**
    * Returns a string representation of the object.
    *
    * @return a string representation of the object
@@ -213,39 +247,5 @@ public class CodeCategoryData implements Serializable {
     buffer.append("}");
 
     return buffer.toString();
-  }
-
-  /**
-   * Returns the WBXML element containing the code category data.
-   *
-   * @return the WBXML element containing the code category data
-   */
-  Element toElement() {
-    Element codeCategoryElement = new Element("CodeCategory");
-
-    codeCategoryElement.addContent(new Element("Id", id));
-    codeCategoryElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
-    codeCategoryElement.addContent(
-        new Element(
-            "LastUpdated",
-            (lastUpdated == null)
-                ? ISO8601Util.now()
-                : ISO8601Util.fromLocalDateTime(lastUpdated)));
-
-    if (codeData != null) {
-      codeCategoryElement.addContent(new Element("CodeData", codeData));
-    }
-
-    Element codesElement = new Element("Codes");
-
-    if (codes != null) {
-      for (CodeData code : codes) {
-        codesElement.addContent(code.toElement());
-      }
-    }
-
-    codeCategoryElement.addContent(codesElement);
-
-    return codeCategoryElement;
   }
 }

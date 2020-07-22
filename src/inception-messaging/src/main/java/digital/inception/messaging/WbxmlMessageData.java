@@ -79,15 +79,6 @@ public abstract class WbxmlMessageData {
   }
 
   /**
-   * Returns the WBXML data representation of the message data that will be sent as part of a
-   * message.
-   *
-   * @return the WBXML data representation of the message data that will be sent as part of a
-   *     message
-   */
-  public abstract byte[] toMessageData() throws MessagingServiceException;
-
-  /**
    * Parse the WBXML data representation of the message data.
    *
    * @param data the WBXML data representation of the message data
@@ -102,4 +93,13 @@ public abstract class WbxmlMessageData {
       throw new MessagingServiceException("Failed to parse the WBXML message data", e);
     }
   }
+
+  /**
+   * Returns the WBXML data representation of the message data that will be sent as part of a
+   * message.
+   *
+   * @return the WBXML data representation of the message data that will be sent as part of a
+   *     message
+   */
+  public abstract byte[] toMessageData() throws MessagingServiceException;
 }

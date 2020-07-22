@@ -46,6 +46,14 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
     super(integers);
   }
 
+  private boolean isLastDayOfMonth(int value, int month, boolean isLeapYear) {
+    if (isLeapYear && (month == 2)) {
+      return value == 29;
+    } else {
+      return value == lastDays[month - 1];
+    }
+  }
+
   /**
    * Returns <code>true</code> if the given value is included in the matcher list or the
    * last-day-of-month setting applies otherwise <code>false</code>.
@@ -59,13 +67,5 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
   public boolean match(int value, int month, boolean isLeapYear) {
     return (super.match(value)
         || ((value > 27) && match(32) && isLastDayOfMonth(value, month, isLeapYear)));
-  }
-
-  private boolean isLastDayOfMonth(int value, int month, boolean isLeapYear) {
-    if (isLeapYear && (month == 2)) {
-      return value == 29;
-    } else {
-      return value == lastDays[month - 1];
-    }
   }
 }

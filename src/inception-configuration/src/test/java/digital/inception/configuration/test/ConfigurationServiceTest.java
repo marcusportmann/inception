@@ -176,6 +176,21 @@ public class ConfigurationServiceTest {
         value);
   }
 
+  private void compareConfiguration(Configuration configuration1, Configuration configuration2) {
+    assertEquals(
+        "The key values for the two codes do not match",
+        configuration1.getKey(),
+        configuration2.getKey());
+    assertEquals(
+        "The value values for the two codes do not match",
+        configuration1.getValue(),
+        configuration2.getValue());
+    assertEquals(
+        "The description values for the two codes do not match",
+        configuration1.getDescription(),
+        configuration2.getDescription());
+  }
+
   /** Test the <code>Configuration</code> configuration. */
   @Test
   public void configurationConfigurationTest()
@@ -436,20 +451,5 @@ public class ConfigurationServiceTest {
               + TEST_STRING_KEY
               + ")");
     }
-  }
-
-  private void compareConfiguration(Configuration configuration1, Configuration configuration2) {
-    assertEquals(
-        "The key values for the two codes do not match",
-        configuration1.getKey(),
-        configuration2.getKey());
-    assertEquals(
-        "The value values for the two codes do not match",
-        configuration1.getValue(),
-        configuration2.getValue());
-    assertEquals(
-        "The description values for the two codes do not match",
-        configuration1.getDescription(),
-        configuration2.getDescription());
   }
 }

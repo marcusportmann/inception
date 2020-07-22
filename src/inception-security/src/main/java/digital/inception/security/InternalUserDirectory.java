@@ -1350,6 +1350,22 @@ public class InternalUserDirectory extends UserDirectoryBase {
   }
 
   /**
+   * Is the password, given by the specified password hash, a historical password that cannot be
+   * reused for a period of time i.e. was the password used previously in the last X months.
+   *
+   * @param userId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param passwordHash the password hash
+   * @return <code>true</code> if the password was previously used and cannot be reused for a period
+   *     of time or <code>false</code> otherwise
+   */
+  private boolean isPasswordInHistory(UUID userId, String passwordHash) {
+    LocalDateTime after = LocalDateTime.now();
+    after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);
+
+    return getUserRepository().countPasswordHistory(userId, after, passwordHash) > 0;
+  }
+
+  /**
    * Is the user in the group?
    *
    * @param groupName the name identifying the group
@@ -1647,21 +1663,5 @@ public class InternalUserDirectory extends UserDirectoryBase {
               + ")",
           e);
     }
-  }
-
-  /**
-   * Is the password, given by the specified password hash, a historical password that cannot be
-   * reused for a period of time i.e. was the password used previously in the last X months.
-   *
-   * @param userId the Universally Unique Identifier (UUID) uniquely identifying the user
-   * @param passwordHash the password hash
-   * @return <code>true</code> if the password was previously used and cannot be reused for a period
-   *     of time or <code>false</code> otherwise
-   */
-  private boolean isPasswordInHistory(UUID userId, String passwordHash) {
-    LocalDateTime after = LocalDateTime.now();
-    after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);
-
-    return getUserRepository().countPasswordHistory(userId, after, passwordHash) > 0;
   }
 }

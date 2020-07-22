@@ -1,0 +1,131 @@
+/*
+ * Copyright 2020 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package digital.inception.rs.oauth2.controller;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import java.io.StringWriter;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+
+/**
+ * The <code>ResourceOwnerPasswordCredentialsGrantResponse</code> class holds the information for a
+ * Resource Owner Password Credentials Grant response.
+ *
+ * @author Marcus Portmann
+ */
+public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
+
+  /** The access token. */
+  private String accessToken;
+
+  /** The refresh token. */
+  private String refreshToken;
+
+  /** The access token validity in seconds. */
+  private int expiresIn;
+
+  /** The access token scope. */
+  private String scope;
+
+  /**
+   * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
+   *
+   * @param accessToken the access token
+   * @param expiresIn the access token validity in seconds
+   * @param scope the access token scope
+   * @param refreshToken the refresh token
+   */
+  public ResourceOwnerPasswordCredentialsGrantResponse(
+      String accessToken, int expiresIn, String scope, String refreshToken) {
+    super(HttpStatus.OK);
+
+    this.accessToken = accessToken;
+    this.expiresIn = expiresIn;
+    this.scope = scope;
+    this.refreshToken = refreshToken;
+  }
+
+  /**
+   * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
+   *
+   * @param accessToken the access token
+   * @param expiresIn the access token validity in seconds
+   * @param refreshToken the refresh token
+   */
+  public ResourceOwnerPasswordCredentialsGrantResponse(
+      String accessToken, int expiresIn, String refreshToken) {
+    super(HttpStatus.OK);
+
+    this.accessToken = accessToken;
+    this.expiresIn = expiresIn;
+    this.scope = null;
+    this.refreshToken = refreshToken;
+  }
+
+  /**
+   * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
+   *
+   * @param accessToken the access token
+   * @param expiresIn the access token validity in seconds
+   */
+  public ResourceOwnerPasswordCredentialsGrantResponse(String accessToken, int expiresIn) {
+    super(HttpStatus.OK);
+
+    this.accessToken = accessToken;
+    this.expiresIn = expiresIn;
+    this.scope = null;
+    this.refreshToken = null;
+  }
+
+  /**
+   * Returns the body for the OAuth2 response.
+   *
+   * @return the body for the OAuth2 response
+   */
+  @Override
+  public String getBody() {
+    try {
+      JsonFactory jsonFactory = new JsonFactory();
+
+      StringWriter stringWriter = new StringWriter();
+
+      JsonGenerator jsonGenerator = jsonFactory.createGenerator(stringWriter);
+
+      jsonGenerator.writeStartObject();
+      jsonGenerator.writeStringField("access_token", accessToken);
+      jsonGenerator.writeStringField("token_type", "bearer");
+      jsonGenerator.writeNumberField("expires_in", expiresIn);
+
+      if (!StringUtils.isEmpty(refreshToken)) {
+        jsonGenerator.writeStringField("refresh_token", refreshToken);
+      }
+
+      if (!StringUtils.isEmpty(scope)) {
+        jsonGenerator.writeStringField("scope", scope);
+      }
+
+      jsonGenerator.writeEndObject();
+      jsonGenerator.close();
+
+      return stringWriter.getBuffer().toString();
+    } catch (Throwable e) {
+      throw new RuntimeException(
+          "Failed to construct the body for the Resource Owner Password Credentials Grant response",
+          e);
+    }
+  }
+}

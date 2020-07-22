@@ -1,3 +1,4 @@
+
 server:
   port: 8080
 
@@ -26,48 +27,51 @@ server:
       password: Sample
     clientAuthMode: required
 
+# NOTE: To generate an RSA key-pair to sign JWTs, use the following commands:
+#           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > rsa-2048-private-key.p8
+#           openssl pkey -pubout -inform pem -outform pem -in rsa-2048-private-key.p8 -out rsa-2048-public-key.p8
 security:
   oauth2:
     jwt:
       privateKey: |
-        -----BEGIN RSA PRIVATE KEY-----
-        MIIEpQIBAAKCAQEA3q/ZhTMRvFfjSEI9GJ0OUUIDkuupnDNL/7Z2TvPK/j52ihUe
-        BuhZgLtd+hFMEptIt7Ay1vSBF1AnJ5FWQnhV88NZCzah82P9YLFqBuaO/EIHxt4T
-        vG1ZDeV8pJRr20wrxxS7OZ/d6NXMvI4Mh8EfHFEDVgLZU3yE9NAZrVLaKhLDXUBe
-        mbsYlOeBdkiJrZX07xwqMDSKYRi0N3ubvPrP0vtO0Rhe2spiMjqqRAZRyscAdIBA
-        LTGyK8o6mA2EkcgnoehFsv4P5P5oV50Xni9gzz3qKUvmXlEMBiv8J9T/MWX+d0Px
-        +LxHo5gclU7/YYvvBmlVltfOLQ95goi3ydBmFwIDAQABAoIBAQCIkU/VYHyABWZd
-        6kGN1sPxEYsfj2d1ZAA30q67vMfBJI2OIWVI1zYMvNvlgLYmsxTlkimbqleA9KcO
-        nRNJsIMF+8egGOE5YxkBM8zSbpNCITyjuY5hAK6c1yCZzmxXEV/Ht+8aZ/Cv2m61
-        NGh62PU7aHOjTBv8F2Fywiz9HtKs+a9Jz1MPv0rGTB+5iKIk8BMcRw4wQXVw4C7m
-        dQA6lJ66OnfPEMfHrkSNtUP/AsuFahOvONx/8SO9NX06UW7ZFQJoRrbDbPDAWW/V
-        LJrWk2RIBGisnBQXiNEj/fBxCEObWA+C9UuqDvlpW6ZbkO95iR0LeNaSqMJzL1jg
-        gP3Vk7gBAoGBAP+/B9rBwo/DVGXd28CnQtBOPeespUkXyZCxQ0nk7mqR/DYU+qJO
-        dOOWnSFcWA14RmDN3Y7R2bN/pMLYK93UkXaLm43526K31Nc+fzgr3hv/Jj98q2LY
-        RvCaOu+62OZmz84aziJRM2ysnyypu5iAXA8f5c3VWMK7SsS2LXj8xEbTAoGBAN7o
-        a7G1nKVRbcUjlPc0rhkivWC8H1IWN0sF/cfB5yOHW7h4ZIVcS6IZNXkU4skpZY8v
-        Hbn2kackPY3di8i12ftLpJInyTpXFbFppiCmM4spG27Yn0lPOyxB27iPRfPgbFYZ
-        k3nZgUq1NSsVnlaB2H7ADlHfqocwosuGfBI5XmEtAoGBAMm59woYd81KN5I6U5I8
-        3LjOXooVZjKnbriQ+hCZYW3yRMyr855+4Dh8nuinnFTToD/PYom7AUtSzbVbKg7K
-        Ews8x7BPe214L4ywoUy/XW0b7yF4xv8qtZonLYHXEit6wUNDZYEwJ63643spTu3V
-        ocfUU0HunRrM/Qb45Blg17k9AoGALtotYLHqlfjymKAs/HTPLytVINMJxkgzIQrG
-        V8lS2u3lgnWTs1A9+XlQ+v0/2cZguWLO3bqMzNPaOEpbyjkm8yHoGmxQaHnLbnnl
-        WDF23gYq5PaVLGSB7IB/PWCn9GW0f7hqfg8QlPJXlZG6sTYjmiimGeFoR3gaj6rZ
-        wz7ZrpUCgYEAqPK8B8tpc+TpQOQMLVYWbsBbOJ4QK+51CFXmG7TB3wKpmWlnT6xn
-        QcKz2VlIxaLIy4uCeT7/kSoG4ga/wj8NgWMkrJQOaDMsWSs8S30Babp/WIVjfVZC
-        HzoJOD3Px5hJyICNMd+svoWVyJq2k063RUM+mfdvdFjGQbig5th1XPQ=
-        -----END RSA PRIVATE KEY-----
+        -----BEGIN PRIVATE KEY-----
+        MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDEU6aNz1iZ4cQv
+        sQjd45G9IpUPROpGNwnv4g+soOfkroPneG+598g9SfoZmfiqVYqUYjjBqVNRTiDv
+        g27SRfe321y9rc9UJDV1RQ7MhTKGP2IB75JEUAaUdugDpHD6pOJeUnrOIFhxAIl7
+        aZzOKJEO+kJnnXaiPXvLvJWnVBBNmMXa2fF1/WOVTgq4m0EoYX/Eah6tuLdUQF1D
+        OPu2CrjCOjPqi/IVMHuoU1rly/pQheTgWKICiLXS7fei6Jt1cNS7ufa77f/P6UdB
+        WNwUj1NKNQ38q8aCA280vvMJ44qP4MiDPJMUBS2O89wePhojZnEcdGB4/B6/r68t
+        VKd+/glbAgMBAAECggEBAKcz8updh8DutU5EwR9wu+NPu5FYiQmpwE3LwrusAjMR
+        qgcN3GGOtLv18Amzx0MSPUbobBwLYIkjOAukbVKqAjJUoaRtjeDEQb8RRGxMmF4b
+        RxYM+g4x9ZiluC258/qTSLM6HZrFk20SHwS7Sq+NfxU5cCqcwbelE3TNtMrgXk4m
+        aYl5Yj/zB5oO/e5qibXWzJ2fMIf2UooVQRVpWN3ADmQy2Ltamh2rGr4Pu4XN61Nk
+        4TL5ZtmF0wZKCo+5s03XxOFtr8H16ly7PUWTWn2Skl+QIZ0BrLYY13fn2WlCgneT
+        B7wjExoeAc7+AOngRR8yS3U+E/1le138Tt8fLBieugkCgYEA+QcK+QKlep4aMaI1
+        9A1cmPWe7q+iaSMJvHicEEiQyCUzP7O0NNLiWWURCeDqdiBvBRrTdvoLQT5C9lQR
+        9YczLljIgM+Ph2R+nX3MFd1YcAlWSp4rONL6FLC8jCvWV5L4FrERUjcNnE34dmzN
+        WFf2IAszoOQSsXnNGWsz0Doecn8CgYEAydLdL4LMhEfWI73LaWJ5ydwlaM5JVVv0
+        6SomQ3ZHQMDoKiDpqoRZ2JjORyRGJ45KzPed3PFAWIrdvOsksqfo7F4dktIFRzwW
+        7Qk9eNTLlui9xWVSMruenLEnVN6AXDwStM5aknBvLmGD97r7+mQVM4SnRpXkJOm2
+        9BkEKiLAAyUCgYEA33CNTN4uAjYnxI8KH/95LRl90CYw8Grqynvhc87YcWzHbgnc
+        0GTDiXhgcF+pn/H8CzWFtcQnIxQtWv4V2xrDNnuc887Itq/Z14/O9XNUbbpC/dKr
+        b2IF11i45IBU4uDQzvNzWjRhdvSS0hdPrEvIX/oNCfh6OVnTSFJi/BuZxBsCgYA9
+        vEm6cck7oXnIfxMMznmwnK24zHk0KifVdvYzZqfPD/M0h9LSPR/6mGto6ZioGueY
+        oRnh7s4fB4NieY9FMwWV4Agt1B6XNrNQmKX8IyOPquv5yM+HA0s2ZR5B4Lnk/N8/
+        /WtJJilsR5oFmmXfpuOxWZ+NgOZDwFYdftV+ShjwHQKBgQDmPjcyOivzu+WpgWnK
+        k7gqFO6XKyX0vKm06MIFH2RYpFz55aXl56eoLe5fzStXr2jXyb5uFUhNBubQBmJA
+        uEqtm19zpkOyZdrs1ffd1l25ux0qsLZqnFUiTyCEctVU6QpB0Wm1Eh/bqJXKVvCt
+        Ws+WQuxCFIlCUSzZ+jNR+aJg0g==
+        -----END PRIVATE KEY-----
       publicKey: |
         -----BEGIN PUBLIC KEY-----
-        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3q/ZhTMRvFfjSEI9GJ0O
-        UUIDkuupnDNL/7Z2TvPK/j52ihUeBuhZgLtd+hFMEptIt7Ay1vSBF1AnJ5FWQnhV
-        88NZCzah82P9YLFqBuaO/EIHxt4TvG1ZDeV8pJRr20wrxxS7OZ/d6NXMvI4Mh8Ef
-        HFEDVgLZU3yE9NAZrVLaKhLDXUBembsYlOeBdkiJrZX07xwqMDSKYRi0N3ubvPrP
-        0vtO0Rhe2spiMjqqRAZRyscAdIBALTGyK8o6mA2EkcgnoehFsv4P5P5oV50Xni9g
-        zz3qKUvmXlEMBiv8J9T/MWX+d0Px+LxHo5gclU7/YYvvBmlVltfOLQ95goi3ydBm
-        FwIDAQAB
+        MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxFOmjc9YmeHEL7EI3eOR
+        vSKVD0TqRjcJ7+IPrKDn5K6D53hvuffIPUn6GZn4qlWKlGI4walTUU4g74Nu0kX3
+        t9tcva3PVCQ1dUUOzIUyhj9iAe+SRFAGlHboA6Rw+qTiXlJ6ziBYcQCJe2mcziiR
+        DvpCZ512oj17y7yVp1QQTZjF2tnxdf1jlU4KuJtBKGF/xGoerbi3VEBdQzj7tgq4
+        wjoz6ovyFTB7qFNa5cv6UIXk4FiiAoi10u33ouibdXDUu7n2u+3/z+lHQVjcFI9T
+        SjUN/KvGggNvNL7zCeOKj+DIgzyTFAUtjvPcHj4aI2ZxHHRgePwev6+vLVSnfv4J
+        WwIDAQAB
         -----END PUBLIC KEY-----
-    userAuthenticationConverter: digital.inception.sample.SampleUserAuthenticationConverter
 
 application:
 

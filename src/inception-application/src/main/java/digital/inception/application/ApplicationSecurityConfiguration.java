@@ -37,7 +37,7 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Configuration
-@ConditionalOnProperty(value = "application.security.keyStore.path")
+@ConditionalOnProperty(value = "application.security.trustStore.path")
 @SuppressWarnings("unused")
 public class ApplicationSecurityConfiguration {
 
@@ -68,6 +68,28 @@ public class ApplicationSecurityConfiguration {
   /** The optional application trust store type. */
   @Value("${application.security.trustStore.type:#{null}}")
   private String trustStoreType;
+
+  /**
+   * Returns whether the key store configuration has been specified.
+   *
+   * @return <code>true</code> if the key store configuration has been specified or <code>false
+   *     </code> otherwise
+   */
+  public boolean hasKeyStoreConfiguration() {
+    return ((!StringUtils.isEmpty(keyStoreType))
+        && (!StringUtils.isEmpty(keyStorePath))
+        && (!StringUtils.isEmpty(keyStorePassword)));
+  }
+
+  /**
+   * Returns whether the trust store configuration has been specified.
+   *
+   * @return <code>true</code> if the trust store configuration has been specified or <code>false
+   *     </code> otherwise
+   */
+  public boolean hasTrustStoreConfiguration() {
+    return ((!StringUtils.isEmpty(trustStoreType)) && (!StringUtils.isEmpty(trustStorePath)));
+  }
 
   /**
    * Returns the application key store.

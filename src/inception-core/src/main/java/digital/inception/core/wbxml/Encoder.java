@@ -77,24 +77,6 @@ public class Encoder {
     data = buffer.getData();
   }
 
-  /**
-   * Returns the binary data which represents the WBXML encoded document
-   *
-   * @return the binary data which represents the WBXML encoded document
-   */
-  public byte[] getData() {
-    return data;
-  }
-
-  /**
-   * Returns the length of the binary data which represents the WBXML encoded document
-   *
-   * @return the length of the binary data which represents the WBXML encoded document
-   */
-  public int getLength() {
-    return length;
-  }
-
   private void addToStringTable(String str) {
     for (String tmpStr : stringTable) {
       // If this string already exists in the string table then dont add it again
@@ -240,6 +222,24 @@ public class Encoder {
 
     // Append the end of element space token
     appendByte(WBXML.TOKEN_END);
+  }
+
+  /**
+   * Returns the binary data which represents the WBXML encoded document
+   *
+   * @return the binary data which represents the WBXML encoded document
+   */
+  public byte[] getData() {
+    return data;
+  }
+
+  /**
+   * Returns the length of the binary data which represents the WBXML encoded document
+   *
+   * @return the length of the binary data which represents the WBXML encoded document
+   */
+  public int getLength() {
+    return length;
   }
 
   private int getStringTableLength() {

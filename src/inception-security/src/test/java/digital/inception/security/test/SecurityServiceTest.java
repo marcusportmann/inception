@@ -393,6 +393,102 @@ public class SecurityServiceTest {
         "The correct user directory ID was not returned", userDirectory.getId(), userDirectoryId);
   }
 
+  private void compareFunctions(Function function1, Function function2) {
+    assertEquals(
+        "The code values for the two functions do not match",
+        function1.getCode(),
+        function2.getCode());
+    assertEquals(
+        "The description values for the two functions do not match",
+        function1.getDescription(),
+        function2.getDescription());
+    assertEquals(
+        "The name values for the two functions do not match",
+        function1.getName(),
+        function2.getName());
+  }
+
+  private void compareGroups(Group group1, Group group2) {
+    assertEquals(
+        "The description values for the two groups do not match",
+        group1.getDescription(),
+        group2.getDescription());
+    assertEquals("The ID values for the two groups do not match", group1.getId(), group2.getId());
+    assertEquals(
+        "The group name values for the two groups do not match",
+        group1.getName(),
+        group2.getName());
+    assertEquals(
+        "The user directory ID values for the two groups do not match",
+        group1.getUserDirectoryId(),
+        group2.getUserDirectoryId());
+  }
+
+  private void compareOrganizations(Organization organization1, Organization organization2) {
+    assertEquals(
+        "The ID values for the two organizations do not match",
+        organization1.getId(),
+        organization2.getId());
+    assertEquals(
+        "The name values for the two organizations do not match",
+        organization1.getName(),
+        organization2.getName());
+  }
+
+  private void compareUserDirectories(UserDirectory userDirectory1, UserDirectory userDirectory2) {
+    assertEquals(
+        "The ID values for the two user directories do not match",
+        userDirectory1.getId(),
+        userDirectory2.getId());
+    assertEquals(
+        "The name values for the two user directories do not match",
+        userDirectory1.getName(),
+        userDirectory2.getName());
+    assertEquals(
+        "The type ID values for the two user directories do not match",
+        userDirectory1.getType(),
+        userDirectory2.getType());
+    assertEquals(
+        "The configuration values for the two user directories do not match",
+        userDirectory1.getConfiguration(),
+        userDirectory2.getConfiguration());
+  }
+
+  private void compareUsers(User user1, User user2, boolean checkPasswordExpiry) {
+    assertEquals(
+        "The status values for the two users do not match", user1.getStatus(), user2.getStatus());
+    assertEquals(
+        "The e-mail values for the two users do not match", user1.getEmail(), user2.getEmail());
+    assertEquals(
+        "The first name values for the two users do not match",
+        user1.getFirstName(),
+        user2.getFirstName());
+    assertEquals("The ID values for the two users do not match", user1.getId(), user2.getId());
+    assertEquals(
+        "The phone number values for the two users do not match",
+        user1.getPhoneNumber(),
+        user2.getPhoneNumber());
+    assertEquals(
+        "The mobile number values for the two users do not match",
+        user1.getMobileNumber(),
+        user2.getMobileNumber());
+    assertEquals(
+        "The password attempt values for the two users do not match",
+        user1.getPasswordAttempts(),
+        user2.getPasswordAttempts());
+    assertEquals(
+        "The username values for the two users do not match",
+        user1.getUsername(),
+        user2.getUsername());
+
+    if (checkPasswordExpiry) {
+      assertEquals(
+          "The password expiry values for the two users do not match",
+          user1.getPasswordExpiry(),
+          user2.getPasswordExpiry());
+    }
+  }
+
   /** Test the functionality to delete a group with existing members. */
   @Test(expected = digital.inception.security.ExistingGroupMembersException.class)
   public void deleteGroupWithExistingMembers() throws Exception {
@@ -1445,102 +1541,6 @@ public class SecurityServiceTest {
 
       fail("Retrieved the user (" + user.getUsername() + ") that should have been deleted");
     } catch (UserNotFoundException ignored) {
-    }
-  }
-
-  private void compareFunctions(Function function1, Function function2) {
-    assertEquals(
-        "The code values for the two functions do not match",
-        function1.getCode(),
-        function2.getCode());
-    assertEquals(
-        "The description values for the two functions do not match",
-        function1.getDescription(),
-        function2.getDescription());
-    assertEquals(
-        "The name values for the two functions do not match",
-        function1.getName(),
-        function2.getName());
-  }
-
-  private void compareGroups(Group group1, Group group2) {
-    assertEquals(
-        "The description values for the two groups do not match",
-        group1.getDescription(),
-        group2.getDescription());
-    assertEquals("The ID values for the two groups do not match", group1.getId(), group2.getId());
-    assertEquals(
-        "The group name values for the two groups do not match",
-        group1.getName(),
-        group2.getName());
-    assertEquals(
-        "The user directory ID values for the two groups do not match",
-        group1.getUserDirectoryId(),
-        group2.getUserDirectoryId());
-  }
-
-  private void compareOrganizations(Organization organization1, Organization organization2) {
-    assertEquals(
-        "The ID values for the two organizations do not match",
-        organization1.getId(),
-        organization2.getId());
-    assertEquals(
-        "The name values for the two organizations do not match",
-        organization1.getName(),
-        organization2.getName());
-  }
-
-  private void compareUserDirectories(UserDirectory userDirectory1, UserDirectory userDirectory2) {
-    assertEquals(
-        "The ID values for the two user directories do not match",
-        userDirectory1.getId(),
-        userDirectory2.getId());
-    assertEquals(
-        "The name values for the two user directories do not match",
-        userDirectory1.getName(),
-        userDirectory2.getName());
-    assertEquals(
-        "The type ID values for the two user directories do not match",
-        userDirectory1.getType(),
-        userDirectory2.getType());
-    assertEquals(
-        "The configuration values for the two user directories do not match",
-        userDirectory1.getConfiguration(),
-        userDirectory2.getConfiguration());
-  }
-
-  private void compareUsers(User user1, User user2, boolean checkPasswordExpiry) {
-    assertEquals(
-        "The status values for the two users do not match", user1.getStatus(), user2.getStatus());
-    assertEquals(
-        "The e-mail values for the two users do not match", user1.getEmail(), user2.getEmail());
-    assertEquals(
-        "The first name values for the two users do not match",
-        user1.getFirstName(),
-        user2.getFirstName());
-    assertEquals("The ID values for the two users do not match", user1.getId(), user2.getId());
-    assertEquals(
-        "The phone number values for the two users do not match",
-        user1.getPhoneNumber(),
-        user2.getPhoneNumber());
-    assertEquals(
-        "The mobile number values for the two users do not match",
-        user1.getMobileNumber(),
-        user2.getMobileNumber());
-    assertEquals(
-        "The password attempt values for the two users do not match",
-        user1.getPasswordAttempts(),
-        user2.getPasswordAttempts());
-    assertEquals(
-        "The username values for the two users do not match",
-        user1.getUsername(),
-        user2.getUsername());
-
-    if (checkPasswordExpiry) {
-      assertEquals(
-          "The password expiry values for the two users do not match",
-          user1.getPasswordExpiry(),
-          user2.getPasswordExpiry());
     }
   }
 }

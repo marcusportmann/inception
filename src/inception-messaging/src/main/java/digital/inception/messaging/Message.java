@@ -243,7 +243,8 @@ public class Message {
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the type of message. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the type of message",
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the type of message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TypeId", required = true)

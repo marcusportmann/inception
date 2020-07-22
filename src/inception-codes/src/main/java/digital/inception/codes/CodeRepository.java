@@ -37,10 +37,6 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
 
   long countByCodeCategoryId(String codeCategoryId);
 
-  @Query("select c.name from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
-  Optional<String> getNameById(
-      @Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
-
   @Modifying
   @Query("delete from Code c where c.codeCategoryId = :#{#id.codeCategoryId} and c.id = :#{#id.id}")
   void deleteById(@Param("id") CodeId id);
@@ -50,4 +46,8 @@ public interface CodeRepository extends JpaRepository<Code, CodeId> {
   void deleteById(@Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
 
   List<Code> findByCodeCategoryId(String codeCategoryId);
+
+  @Query("select c.name from Code c where c.codeCategoryId = :codeCategoryId and c.id = :codeId")
+  Optional<String> getNameById(
+      @Param("codeCategoryId") String codeCategoryId, @Param("codeId") String codeId);
 }

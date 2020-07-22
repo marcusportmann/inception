@@ -409,12 +409,12 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-rs-oauth-authorization</artifactId>
+        <artifactId>inception-rs-oauth2-authorization</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-rs-oauth-resource</artifactId>
+        <artifactId>inception-rs-oauth2-resource</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -518,8 +518,8 @@
     <module>inception-reporting-rs</module>
     <module>inception-reporting-ws</module>
     <module>inception-rs</module>
-    <module>inception-rs-oauth-authorization</module>
-    <module>inception-rs-oauth-resource</module>
+    <module>inception-rs-oauth2-authorization</module>
+    <module>inception-rs-oauth2-resource</module>
     <module>inception-sample</module>
     <module>inception-scheduler</module>
     <module>inception-scheduler-rs</module>

@@ -264,6 +264,57 @@ public class CodesServiceTest {
     compareCodes(codes, retrievedCodes);
   }
 
+  private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2) {
+    assertEquals(
+        "The ID values for the two code categories do not match",
+        codeCategory1.getId(),
+        codeCategory2.getId());
+    assertEquals(
+        "The name values for the two code categories do not match",
+        codeCategory1.getName(),
+        codeCategory2.getName());
+    assertEquals(
+        "The data values for the two code categories do not match",
+        codeCategory1.getData(),
+        codeCategory2.getData());
+    assertEquals(
+        "The updated values for the two code categories do not match",
+        codeCategory1.getUpdated(),
+        codeCategory2.getUpdated());
+  }
+
+  private void compareCodes(Code code1, Code code2) {
+    assertEquals("The ID values for the two codes do not match", code1.getId(), code2.getId());
+    assertEquals(
+        "The category ID values for the two codes do not match",
+        code1.getCodeCategoryId(),
+        code2.getCodeCategoryId());
+    assertEquals(
+        "The name values for the two codes do not match", code1.getName(), code2.getName());
+    assertEquals(
+        "The value values for the two codes do not match", code1.getValue(), code2.getValue());
+  }
+
+  private void compareCodes(List<Code> codes1, List<Code> codes2) {
+    for (Code code1 : codes1) {
+      boolean foundCode = false;
+
+      for (Code code2 : codes2) {
+        if (code1.getId().equals(code2.getId())) {
+          compareCodes(code1, code2);
+
+          foundCode = true;
+
+          break;
+        }
+      }
+
+      if (!foundCode) {
+        fail("Failed to find the code (" + code1.getId() + ") in the list of codes");
+      }
+    }
+  }
+
   /** Test the code category and code constructors. */
   @Test
   public void constructorTest() {
@@ -318,56 +369,5 @@ public class CodesServiceTest {
         "The correct number of code categories was not retrieved",
         1,
         codesService.getNumberOfCodeCategories());
-  }
-
-  private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2) {
-    assertEquals(
-        "The ID values for the two code categories do not match",
-        codeCategory1.getId(),
-        codeCategory2.getId());
-    assertEquals(
-        "The name values for the two code categories do not match",
-        codeCategory1.getName(),
-        codeCategory2.getName());
-    assertEquals(
-        "The data values for the two code categories do not match",
-        codeCategory1.getData(),
-        codeCategory2.getData());
-    assertEquals(
-        "The updated values for the two code categories do not match",
-        codeCategory1.getUpdated(),
-        codeCategory2.getUpdated());
-  }
-
-  private void compareCodes(Code code1, Code code2) {
-    assertEquals("The ID values for the two codes do not match", code1.getId(), code2.getId());
-    assertEquals(
-        "The category ID values for the two codes do not match",
-        code1.getCodeCategoryId(),
-        code2.getCodeCategoryId());
-    assertEquals(
-        "The name values for the two codes do not match", code1.getName(), code2.getName());
-    assertEquals(
-        "The value values for the two codes do not match", code1.getValue(), code2.getValue());
-  }
-
-  private void compareCodes(List<Code> codes1, List<Code> codes2) {
-    for (Code code1 : codes1) {
-      boolean foundCode = false;
-
-      for (Code code2 : codes2) {
-        if (code1.getId().equals(code2.getId())) {
-          compareCodes(code1, code2);
-
-          foundCode = true;
-
-          break;
-        }
-      }
-
-      if (!foundCode) {
-        fail("Failed to find the code (" + code1.getId() + ") in the list of codes");
-      }
-    }
   }
 }

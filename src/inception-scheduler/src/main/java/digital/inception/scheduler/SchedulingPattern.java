@@ -261,15 +261,48 @@ public class SchedulingPattern {
   }
 
   /**
-   * Returns <code>true</code> if the given EPOCH timestamp in milliseconds matches the pattern,
-   * according to the system default time zone.
+   * A <code>ValueMatcher</code> utility builder.
    *
-   * @param timestamp the EPOCH timestamp in milliseconds
-   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
-   *     otherwise
+   * @param str the pattern part for the <code>ValueMatcher</code> creation
+   * @param parser the parser used to parse the values
+   * @return the requested <code>ValueMatcher</code>
    */
-  public boolean match(long timestamp) {
-    return match(TimeZone.getDefault(), timestamp);
+  private ValueMatcher buildValueMatcher(String str, ValueParser parser) throws Exception {
+    if ((str.length() == 1) && str.equals("*")) {
+      return new AlwaysTrueValueMatcher();
+    }
+
+    List<Integer> values = new ArrayList<>();
+    StringTokenizer st = new StringTokenizer(str, ",");
+
+    while (st.hasMoreTokens()) {
+      String element = st.nextToken();
+      List<Integer> local;
+
+      try {
+        local = parseListElement(element, parser);
+      } catch (Exception e) {
+        throw new Exception(
+            String.format(
+                "Invalid field \"%s\", invalid element \"%s\": %s", str, element, e.getMessage()));
+      }
+
+      for (Integer value : local) {
+        if (!values.contains(value)) {
+          values.add(value);
+        }
+      }
+    }
+
+    if (values.size() == 0) {
+      throw new Exception(String.format("Invalid field \"%s\"", str));
+    }
+
+    if (parser == DAY_OF_MONTH_VALUE_PARSER) {
+      return new DayOfMonthValueMatcher(values);
+    } else {
+      return new IntArrayValueMatcher(values);
+    }
   }
 
   /**
@@ -319,57 +352,15 @@ public class SchedulingPattern {
   }
 
   /**
-   * Returns the pattern as a string.
+   * Returns <code>true</code> if the given EPOCH timestamp in milliseconds matches the pattern,
+   * according to the system default time zone.
    *
-   * @return The pattern as a string.
+   * @param timestamp the EPOCH timestamp in milliseconds
+   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
+   *     otherwise
    */
-  public String toString() {
-    return asString;
-  }
-
-  /**
-   * A <code>ValueMatcher</code> utility builder.
-   *
-   * @param str the pattern part for the <code>ValueMatcher</code> creation
-   * @param parser the parser used to parse the values
-   * @return the requested <code>ValueMatcher</code>
-   */
-  private ValueMatcher buildValueMatcher(String str, ValueParser parser) throws Exception {
-    if ((str.length() == 1) && str.equals("*")) {
-      return new AlwaysTrueValueMatcher();
-    }
-
-    List<Integer> values = new ArrayList<>();
-    StringTokenizer st = new StringTokenizer(str, ",");
-
-    while (st.hasMoreTokens()) {
-      String element = st.nextToken();
-      List<Integer> local;
-
-      try {
-        local = parseListElement(element, parser);
-      } catch (Exception e) {
-        throw new Exception(
-            String.format(
-                "Invalid field \"%s\", invalid element \"%s\": %s", str, element, e.getMessage()));
-      }
-
-      for (Integer value : local) {
-        if (!values.contains(value)) {
-          values.add(value);
-        }
-      }
-    }
-
-    if (values.size() == 0) {
-      throw new Exception(String.format("Invalid field \"%s\"", str));
-    }
-
-    if (parser == DAY_OF_MONTH_VALUE_PARSER) {
-      return new DayOfMonthValueMatcher(values);
-    } else {
-      return new IntArrayValueMatcher(values);
-    }
+  public boolean match(long timestamp) {
+    return match(TimeZone.getDefault(), timestamp);
   }
 
   /**
@@ -497,6 +488,15 @@ public class SchedulingPattern {
 
       return values;
     }
+  }
+
+  /**
+   * Returns the pattern as a string.
+   *
+   * @return The pattern as a string.
+   */
+  public String toString() {
+    return asString;
   }
 
   /** Definition for a value parser. */

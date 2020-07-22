@@ -204,13 +204,18 @@ public class MessageTranslator {
   }
 
   /**
-   * Returns the message containing the WBXML-based message data.
+   * Generate the SHA-256 hash for the message data.
    *
-   * @param messageData the WBXML-based message data
-   * @return the message that can be sent via the messaging infrastructure
+   * @param data the message data to return the SHA-256 hash for
+   * @return the SHA-256 hash for the message data
    */
-  public Message toMessage(WbxmlMessageData messageData) throws MessagingServiceException {
-    return toMessage(messageData, null);
+  private String getMessageDataHash(byte[] data) throws MessagingServiceException {
+    try {
+      return Base64Util.encodeBytes(threadLocalMessageDigest.get().digest(data));
+    } catch (Throwable e) {
+      throw new MessagingServiceException(
+          "Failed to generate the SHA-256 hash for the message data", e);
+    }
   }
 
   /**
@@ -268,17 +273,12 @@ public class MessageTranslator {
   }
 
   /**
-   * Generate the SHA-256 hash for the message data.
+   * Returns the message containing the WBXML-based message data.
    *
-   * @param data the message data to return the SHA-256 hash for
-   * @return the SHA-256 hash for the message data
+   * @param messageData the WBXML-based message data
+   * @return the message that can be sent via the messaging infrastructure
    */
-  private String getMessageDataHash(byte[] data) throws MessagingServiceException {
-    try {
-      return Base64Util.encodeBytes(threadLocalMessageDigest.get().digest(data));
-    } catch (Throwable e) {
-      throw new MessagingServiceException(
-          "Failed to generate the SHA-256 hash for the message data", e);
-    }
+  public Message toMessage(WbxmlMessageData messageData) throws MessagingServiceException {
+    return toMessage(messageData, null);
   }
 }

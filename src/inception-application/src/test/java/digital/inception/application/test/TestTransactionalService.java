@@ -63,6 +63,10 @@ public class TestTransactionalService implements ITestTransactionalService {
     this.idGenerator = idGenerator;
   }
 
+  private TestData buildTestDataFromResultSet(ResultSet rs) throws SQLException {
+    return new TestData(rs.getString(1), rs.getString(2), rs.getString(3));
+  }
+
   /**
    * Create the test data.
    *
@@ -217,9 +221,5 @@ public class TestTransactionalService implements ITestTransactionalService {
       throw new TestTransactionalServiceException(
           "Failed to create the test data in a new transaction", e);
     }
-  }
-
-  private TestData buildTestDataFromResultSet(ResultSet rs) throws SQLException {
-    return new TestData(rs.getString(1), rs.getString(2), rs.getString(3));
   }
 }

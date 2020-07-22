@@ -152,26 +152,6 @@ public class TestConfiguration {
   }
 
   /**
-   * Returns the Spring task executor to use for @Async method invocations.
-   *
-   * @return the Spring task executor to use for @Async method invocations
-   */
-  @Bean
-  public Executor taskExecutor() {
-    return new SimpleAsyncTaskExecutor();
-  }
-
-  /**
-   * Returns the Spring task scheduler.
-   *
-   * @return the Spring task scheduler
-   */
-  @Bean
-  public TaskScheduler taskScheduler() {
-    return new ConcurrentTaskScheduler();
-  }
-
-  /**
    * Initialize the in-memory application database and return a data source that can be used to
    * interact with the database.
    *
@@ -259,19 +239,6 @@ public class TestConfiguration {
     }
   }
 
-  /**
-   * Returns the names of the packages to scan for JPA entity classes.
-   *
-   * @return the names of the packages to scan for JPA entity classes
-   */
-  protected List<String> packagesToScanForEntities() {
-    List<String> packagesToScan = new ArrayList<>();
-
-    packagesToScan.add("digital.inception");
-
-    return packagesToScan;
-  }
-
   private void loadSQL(DataSource dataSource, Resource databaseInitResource)
       throws IOException, SQLException {
     try {
@@ -298,5 +265,38 @@ public class TestConfiguration {
 
       throw e;
     }
+  }
+
+  /**
+   * Returns the names of the packages to scan for JPA entity classes.
+   *
+   * @return the names of the packages to scan for JPA entity classes
+   */
+  protected List<String> packagesToScanForEntities() {
+    List<String> packagesToScan = new ArrayList<>();
+
+    packagesToScan.add("digital.inception");
+
+    return packagesToScan;
+  }
+
+  /**
+   * Returns the Spring task executor to use for @Async method invocations.
+   *
+   * @return the Spring task executor to use for @Async method invocations
+   */
+  @Bean
+  public Executor taskExecutor() {
+    return new SimpleAsyncTaskExecutor();
+  }
+
+  /**
+   * Returns the Spring task scheduler.
+   *
+   * @return the Spring task scheduler
+   */
+  @Bean
+  public TaskScheduler taskScheduler() {
+    return new ConcurrentTaskScheduler();
   }
 }

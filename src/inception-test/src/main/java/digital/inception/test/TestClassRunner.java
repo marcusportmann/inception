@@ -47,35 +47,6 @@ public class TestClassRunner extends SpringJUnit4ClassRunner {
     super(testClass);
   }
 
-  /**
-   * Run the tests for this runner.
-   *
-   * @param notifier the run notifier that will be notified of events while tests are being run
-   */
-  @Override
-  public void run(RunNotifier notifier) {
-    super.run(notifier);
-  }
-
-  /**
-   * Run the child test for this runner.
-   *
-   * @param method the test method being run
-   * @param notifier the run notifier that will be notified of events while tests are being run
-   */
-  @Override
-  protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-    super.runChild(method, notifier);
-
-    checkForActiveTransactions(method, TransactionManagerProxy.getActiveTransactionStackTraces());
-
-    checkForActiveTransactions(method, UserTransactionProxy.getActiveTransactionStackTraces());
-
-    checkForOpenDatabaseConnections(method, DataSourceProxy.getActiveDatabaseConnections());
-
-    checkForOpenXADatabaseConnections(method, XADataSourceProxy.getActiveXADatabaseConnections());
-  }
-
   private void checkForActiveTransactions(
       FrameworkMethod method, Map<Transaction, StackTraceElement[]> activeTransactionStackTraces) {
     for (Transaction transaction : activeTransactionStackTraces.keySet()) {
@@ -195,5 +166,34 @@ public class TestClassRunner extends SpringJUnit4ClassRunner {
         }
       }
     }
+  }
+
+  /**
+   * Run the tests for this runner.
+   *
+   * @param notifier the run notifier that will be notified of events while tests are being run
+   */
+  @Override
+  public void run(RunNotifier notifier) {
+    super.run(notifier);
+  }
+
+  /**
+   * Run the child test for this runner.
+   *
+   * @param method the test method being run
+   * @param notifier the run notifier that will be notified of events while tests are being run
+   */
+  @Override
+  protected void runChild(FrameworkMethod method, RunNotifier notifier) {
+    super.runChild(method, notifier);
+
+    checkForActiveTransactions(method, TransactionManagerProxy.getActiveTransactionStackTraces());
+
+    checkForActiveTransactions(method, UserTransactionProxy.getActiveTransactionStackTraces());
+
+    checkForOpenDatabaseConnections(method, DataSourceProxy.getActiveDatabaseConnections());
+
+    checkForOpenXADatabaseConnections(method, XADataSourceProxy.getActiveXADatabaseConnections());
   }
 }
