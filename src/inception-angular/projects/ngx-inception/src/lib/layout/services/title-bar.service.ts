@@ -42,7 +42,6 @@ export class TitleBarService {
    * Constructs a new TitleBarService.
    */
   constructor() {
-    console.log('Initializing the Inception Title Bar Service');
   }
 
   /**

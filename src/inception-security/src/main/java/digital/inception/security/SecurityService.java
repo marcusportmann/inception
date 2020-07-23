@@ -27,6 +27,7 @@ import digital.inception.mail.MailTemplateContentType;
 import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -109,48 +110,42 @@ public class SecurityService implements ISecurityService, InitializingBean {
   private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /** The Function Repository. */
-  private FunctionRepository functionRepository;
+  private final FunctionRepository functionRepository;
 
   /** The Group repository. */
-  private GroupRepository groupRepository;
+  private final GroupRepository groupRepository;
 
   /** The Mail Service. */
-  private IMailService mailService;
+  private final IMailService mailService;
 
   /** The Organization Repository. */
-  private OrganizationRepository organizationRepository;
+  private final OrganizationRepository organizationRepository;
 
   /** The Password Reset Repository. */
-  private PasswordResetRepository passwordResetRepository;
+  private final PasswordResetRepository passwordResetRepository;
 
   /** The Role Repository. */
-  private RoleRepository roleRepository;
-
-  /** The user directories. */
-  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
-
+  private final RoleRepository roleRepository;
   /**
    * The random alphanumeric string generator that will be used to generate security codes for
    * password resets.
    */
-  private RandomStringGenerator securityCodeGenerator =
+  private final RandomStringGenerator securityCodeGenerator =
       new RandomStringGenerator(
           20, new SecureRandom(), "1234567890ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx");
-
   /** The User Directory Repository. */
-  private UserDirectoryRepository userDirectoryRepository;
-
+  private final UserDirectoryRepository userDirectoryRepository;
   /** The User Directory Summary Repository. */
-  private UserDirectorySummaryRepository userDirectorySummaryRepository;
-
+  private final UserDirectorySummaryRepository userDirectorySummaryRepository;
   /** The User Directory Type Repository. */
-  private UserDirectoryTypeRepository userDirectoryTypeRepository;
-
+  private final UserDirectoryTypeRepository userDirectoryTypeRepository;
   /** The User Repository. */
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
+  /** The user directories. */
+  private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
 
   /**
    * Constructs a new <code>SecurityService</code>.
@@ -1676,6 +1671,57 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
+   * the user is associated with. Every user is associated with a user directory, which is in turn
+   * associated with one or more organizations, which are in turn associated with one or more user
+   * directories. The user is therefore associated indirectly with all these user directories.
+   *
+   * @param username the username identifying the user
+   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
+   *     the user is associated with
+   */
+  @Override
+  public List<UUID> getUserDirectoryIdsForUser(String username)
+      throws UserNotFoundException, SecurityServiceException {
+    try {
+      List<UUID> userDirectoryIdsForUser = new ArrayList<>();
+
+      UUID userDirectoryId = getUserDirectoryIdForUser(username);
+
+      if (userDirectoryId == null) {
+        throw new UserNotFoundException(username);
+      }
+
+      /*
+       * Retrieve the list of IDs for the organizations the user is associated with as a result
+       * of their user directory being associated with these organizations.
+       */
+      List<UUID> organizationIds = getOrganizationIdsForUserDirectory(userDirectoryId);
+
+      /*
+       * Retrieve the list of IDs for the user directories the user is associated with as a result
+       * of being associated with one or more organizations.
+       */
+      for (var organizationId : organizationIds) {
+        // Retrieve the list of user directories associated with the organization
+        var userDirectoryIdsForOrganization = getUserDirectoryIdsForOrganization(organizationId);
+
+        userDirectoryIdsForUser.addAll(userDirectoryIdsForOrganization);
+      }
+
+      return userDirectoryIdsForUser;
+    } catch (UserNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          "Failed to retrieve the IDs for the user directories the user ("
+              + username
+              + ") is associated with",
+          e);
+    }
+  }
+
+  /**
    * Retrieve the name of the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -2088,15 +2134,17 @@ public class SecurityService implements ISecurityService, InitializingBean {
           Class<? extends IUserDirectory> userDirectoryClass =
               clazz.asSubclass(IUserDirectory.class);
 
-          Constructor<? extends IUserDirectory> userDirectoryClassConstructor =
-              userDirectoryClass.getConstructor(
-                  UUID.class,
-                  List.class,
-                  GroupRepository.class,
-                  UserRepository.class,
-                  RoleRepository.class);
+          Constructor<? extends IUserDirectory> userDirectoryClassConstructor;
 
-          if (userDirectoryClassConstructor == null) {
+          try {
+            userDirectoryClassConstructor =
+                userDirectoryClass.getConstructor(
+                    UUID.class,
+                    List.class,
+                    GroupRepository.class,
+                    UserRepository.class,
+                    RoleRepository.class);
+          } catch (NoSuchMethodException e) {
             throw new SecurityServiceException(
                 "The user directory class ("
                     + userDirectoryType.getUserDirectoryClassName()

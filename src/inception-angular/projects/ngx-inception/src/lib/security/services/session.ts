@@ -26,6 +26,47 @@ import {Organization} from './organization';
 export class Session {
 
   /**
+   * The base-64 encoded OAuth2 JWT access token for the user session.
+   */
+  accessToken: string;
+
+  /**
+   * The date and time the OAuth2 JWT access token for the user session will expire.
+   */
+  accessTokenExpiry?: Date;
+
+  /**
+   * The codes identifying the functions assigned to the user associated with the user session.
+   */
+  functionCodes: string[];
+
+  /**
+   * The selected organization for the user session.
+   */
+  organization?: Organization;
+
+  /**
+   * The Universally Unique Identifiers (UUIDs) uniquely identifying the organizations the user is
+   * associated with.
+   */
+  organizationIds: string[];
+
+  /**
+   * The base-64 encoded OAuth2 refresh token for the user session.
+   */
+  refreshToken?: string;
+
+  /**
+   * The codes identifying the roles assigned to the user associated with the user session.
+   */
+  roleCodes: string[];
+
+  /**
+   * The OAuth2 scopes for the user session.
+   */
+  scopes: string[];
+
+  /**
    * The username for the user, the user session is associated with.
    */
   username: string;
@@ -42,36 +83,6 @@ export class Session {
   userFullName: string;
 
   /**
-   * The OAuth2 scopes for the user session.
-   */
-  scopes: string[];
-
-  /**
-   * The authorities for the user session associated with the session.
-   */
-  authorities: string[];
-
-  /**
-   * The base-64 encoded OAuth2 JWT access token for the user session.
-   */
-  accessToken: string;
-
-  /**
-   * The date and time the OAuth2 JWT access token for the user session will expire.
-   */
-  accessTokenExpiry?: Date;
-
-  /**
-   * The base-64 encoded OAuth2 refresh token for the user session.
-   */
-  refreshToken?: string;
-
-  /**
-   * The selected organization for the user session.
-   */
-  organization?: Organization;
-
-  /**
    * Constructs a new Session.
    *
    * @param username          The username for the user the user session is associated with.
@@ -79,19 +90,27 @@ export class Session {
    *                          user directory the user is associated with.
    * @param userFullName      The full name for the user.
    * @param scopes            The OAuth2 scopes for the user session.
-   * @param authorities       The The authorities for the user session associated with the session.
+   * @param roleCodes         The codes identifying the roles assigned to the user associated with
+   *                          the user session.
+   * @param functionCodes     The codes identifying the functions assigned to the user associated
+   *                          with the user session.
+   * @param organizationIds   The Universally Unique Identifiers (UUIDs) uniquely identifying the
+   *                          organizations the user is associated with.
    * @param accessToken       The base-64 encoded OAuth2 JWT access token for the user session.
    * @param accessTokenExpiry The string representation of the epoch timestamp giving the date and
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
-  constructor(username: string, userDirectoryId: string, userFullName: string, scopes: string[], authorities: string[],
+  constructor(username: string, userDirectoryId: string, userFullName: string, scopes: string[],
+              roleCodes: string[], functionCodes: string[], organizationIds: string[],
               accessToken: string, accessTokenExpiry?: Date, refreshToken?: string) {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
     this.userFullName = userFullName;
     this.scopes = scopes;
-    this.authorities = authorities;
+    this.roleCodes = roleCodes;
+    this.functionCodes = functionCodes;
+    this.organizationIds = organizationIds;
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;
@@ -106,11 +125,36 @@ export class Session {
    *         otherwise.
    */
   hasAuthority(requiredAuthority: string): boolean {
+    if (requiredAuthority.startsWith("ROLE_")) {
+      if (requiredAuthority.length < 6) {
+        return false;
+      } else {
+        return this.hasRole(requiredAuthority.substr(5));
+      }
+    }
 
-    requiredAuthority = requiredAuthority.toLowerCase();
+    if (requiredAuthority.startsWith("FUNCTION_")) {
+      if (requiredAuthority.length < 10) {
+        return false;
+      } else {
+        return this.hasFunction(requiredAuthority.substr(9));
+      }
+    }
 
-    for (const authority of this.authorities) {
-      if (authority.toLowerCase() === requiredAuthority) {
+    return false;
+  }
+
+  /**
+   * Confirm that the user associated with the session has been assigned the required function.
+   *
+   * @param requiredFunctionCode The code uniquely identifying the required function.
+   *
+   * @return True if the user associated with the session has been assigned the required function
+   *         or false otherwise.
+   */
+  hasFunction(requiredFunctionCode: string): boolean {
+    for (const functionCode of this.functionCodes) {
+      if (functionCode.localeCompare(requiredFunctionCode, undefined, {sensitivity: 'accent'}) === 0) {
         return true;
       }
     }
@@ -119,26 +163,20 @@ export class Session {
   }
 
   /**
-   * Confirm that the user associated with the session has access to the specified function.
+   * Confirm that the user associated with the session has been assigned the required role.
    *
-   * @param functionCode The code uniquely identifying the function.
+   * @param requiredRoleCode The code uniquely identifying the required role.
    *
-   * @return True if the user associated with the session has access to the specified function
-   *         or false otherwise.
+   * @return True if the user associated with the session has been assigned the required role or
+   *         false otherwise.
    */
-  hasFunction(functionCode: string): boolean {
-    return this.hasAuthority('FUNCTION_' + functionCode);
-  }
+  hasRole(requiredRoleCode: string): boolean {
+    for (const roleCode of this.roleCodes) {
+      if (roleCode.localeCompare(requiredRoleCode, undefined, {sensitivity: 'accent'}) === 0) {
+        return true;
+      }
+    }
 
-  /**
-   * Confirm that the user associated with the session has the specified role.
-   *
-   * @param roleName The name of the role.
-   *
-   * @return True if the user associated with the session has the specified role or false
-   *         otherwise.
-   */
-  hasRole(roleName: string): boolean {
-    return this.hasAuthority('ROLE_' + roleName);
+    return false;
   }
 }

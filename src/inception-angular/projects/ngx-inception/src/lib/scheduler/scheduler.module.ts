@@ -46,7 +46,6 @@ import {SchedulerService} from './services/scheduler.service';
 })
 export class SchedulerModule {
   constructor() {
-    console.log('Initializing the Inception Scheduler Module');
   }
 
   static forRoot(): ModuleWithProviders<SchedulerModule> {

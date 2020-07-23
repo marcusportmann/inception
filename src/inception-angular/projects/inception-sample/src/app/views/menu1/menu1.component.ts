@@ -22,41 +22,7 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  template: `Menu 1<br/>
-  <br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  <!--
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  Line 1<br/>
-  -->`
+  template: `Menu 1`
 })
 export class Menu1Component {
 

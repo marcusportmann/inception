@@ -45,7 +45,6 @@ import {HttpClientModule} from '@angular/common/http';
 })
 export class ErrorModule {
   constructor() {
-    console.log('Initializing the Inception Error Module');
   }
 
   static forRoot(): ModuleWithProviders<ErrorModule> {

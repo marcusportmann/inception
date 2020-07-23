@@ -644,6 +644,19 @@ public interface ISecurityService {
       throws OrganizationNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
+   * the user is associated with. Every user is associated with a user directory, which is in turn
+   * associated with one or more organizations, which are in turn associated with one or more user
+   * directories. The user is therefore associated indirectly with all these user directories.
+   *
+   * @param username the username identifying the user
+   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
+   *     the user is associated with
+   */
+  List<UUID> getUserDirectoryIdsForUser(String username)
+      throws UserNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the name of the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user

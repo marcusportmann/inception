@@ -66,7 +66,6 @@ import {WarningDialogComponent} from './components/warning-dialog.component';
 })
 export class DialogModule {
   constructor() {
-    console.log('Initializing the Inception Dialog Module');
   }
 
   static forRoot(): ModuleWithProviders<DialogModule> {

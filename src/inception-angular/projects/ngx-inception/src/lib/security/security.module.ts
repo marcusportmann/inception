@@ -56,7 +56,6 @@ import {HasAuthorityDirective} from './directives/has-authority.directive';
 })
 export class SecurityModule {
   constructor() {
-    console.log('Initializing the Inception Security Module');
   }
 
   static forRoot(): ModuleWithProviders<SecurityModule> {

@@ -63,14 +63,6 @@ public class UserDetails implements org.springframework.security.core.userdetail
     // Build the list of granted authorities
     this.authorities = new ArrayList<>();
 
-    organizationIds.stream()
-        .map(organizationId -> new SimpleGrantedAuthority("ORGANIZATION_" + organizationId))
-        .forEach(authorities::add);
-
-    userDirectoryIds.stream()
-        .map(userDirectoryId -> new SimpleGrantedAuthority("USER_DIRECTORY_" + userDirectoryId))
-        .forEach(authorities::add);
-
     functionCodes.stream()
         .map(functionCode -> new SimpleGrantedAuthority("FUNCTION_" + functionCode))
         .forEach(authorities::add);

@@ -45,7 +45,6 @@ import {HttpClientModule} from '@angular/common/http';
 })
 export class ConfigurationModule {
   constructor() {
-    console.log('Initializing the Inception Configuration Module');
   }
 
   static forRoot(): ModuleWithProviders<ConfigurationModule> {

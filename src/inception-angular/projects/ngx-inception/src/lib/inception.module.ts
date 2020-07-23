@@ -67,7 +67,6 @@ import {SecurityModule} from './security/security.module';
 })
 export class InceptionModule {
   constructor() {
-    console.log('Initializing the Inception Module');
   }
 
   // TODO: MOVE THE PROVISION OF THE INCEPTION CONFIGURATION TO THE APPLICATION MODULE -- MARCUS

@@ -48,7 +48,6 @@ export class CodesService {
    * @param i18n       The internationalization service.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
-    console.log('Initializing the Inception Codes Service');
   }
 
   /**

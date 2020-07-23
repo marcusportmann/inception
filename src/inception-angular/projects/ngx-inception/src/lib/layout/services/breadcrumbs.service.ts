@@ -42,8 +42,6 @@ export class BreadcrumbsService {
    * @param activatedRoute The activated route.
    */
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-    console.log('Initializing the Inception Breadcrumbs Service');
-
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         const breadcrumbs: Breadcrumb[] = [];

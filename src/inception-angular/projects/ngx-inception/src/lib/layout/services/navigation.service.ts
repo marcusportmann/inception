@@ -41,8 +41,6 @@ export class NavigationService {
    * @param securityService The security service.
    */
   constructor(private securityService: SecurityService) {
-    console.log('Initializing the Inception Navigation Service');
-
     this.securityService.session$.pipe(map((session: Session | null) => {
       this.userNavigation$.next(Object.assign([], this.filterNavigationItems(this.navigation, session)));
     })).subscribe();

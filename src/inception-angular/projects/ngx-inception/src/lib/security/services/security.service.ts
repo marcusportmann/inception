@@ -93,8 +93,6 @@ export class SecurityService {
    * @param httpClient The HTTP client.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
-    console.log('Initializing the Inception Security Service');
-
     // Start the session refresher
     timer(0, 10000).pipe(switchMap(() => this.refreshSession()))
       .subscribe((refreshedSession: Session | null) => {
@@ -1456,9 +1454,9 @@ export class SecurityService {
     const body = new HttpParams()
       .set('grant_type', 'password')
       .set('username', username)
-      .set('password', password)
-      .set('scope', 'inception-sample')
-      .set('client_id', 'inception-sample');
+      .set('password', password);
+      // .set('scope', 'inception-sample')
+      // .set('client_id', 'inception-sample');
 
     const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
@@ -1469,6 +1467,7 @@ export class SecurityService {
 
         return this.session$;
       }), catchError((httpErrorResponse: HttpErrorResponse) => {
+
         if (httpErrorResponse.status === 400) {
           if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
             httpErrorResponse.error.error_description) {
@@ -1789,10 +1788,17 @@ export class SecurityService {
 
     const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(accessToken);
 
-    return new Session((!!token.user_name) ? token.user_name : '',
-      (!!token.user_directory_id) ? token.user_directory_id : '', (!!token.user_full_name) ? token.user_full_name : '',
-      (!!token.scope) ? token.scope : [], (!!token.authorities) ? token.authorities : [], accessToken,
+    const session = new Session((!!token.user_name) ? token.user_name : '',
+      (!!token.user_directory_id) ? token.user_directory_id : '',
+      (!!token.user_full_name) ? token.user_full_name : '',
+      (!!token.scope) ? token.scope.split(' ') : [],
+      (!!token.roles) ? token.roles : [],
+      (!!token.functions) ? token.functions : [],
+      (!!token.organizations) ? token.organizations : [],
+      accessToken,
       (!!accessTokenExpiry) ? accessTokenExpiry : undefined, refreshToken);
+
+    return session;
   }
 
   private refreshSession(): Observable<Session | null> {

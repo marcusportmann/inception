@@ -47,7 +47,6 @@ export class ReportingService {
    * @param httpClient The HTTP client.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
-    console.log('Initializing the Inception Reporting Service');
   }
 
   /**
