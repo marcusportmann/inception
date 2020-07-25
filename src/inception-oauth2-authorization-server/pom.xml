@@ -1,22 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-
   <artifactId>inception-oauth2-authorization-server</artifactId>
-  <name>inception-oauth2-authorization-server</name>
-
-  <parent>
-    <groupId>digital.inception</groupId>
-    <artifactId>inception</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
 
   <dependencies>
     <!-- Inception Dependencies -->
     <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-core</artifactId>
+      <groupId>digital.inception</groupId>
     </dependency>
     <!--
     <dependency>
@@ -25,46 +17,54 @@
     </dependency>
     -->
     <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-security</artifactId>
+      <groupId>digital.inception</groupId>
     </dependency>
 
     <!-- Dependencies -->
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+      <groupId>com.fasterxml.jackson.core</groupId>
     </dependency>
 
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.security</groupId>-->
-<!--      <artifactId>spring-security-jwt</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.security.oauth</groupId>-->
-<!--      <artifactId>spring-security-oauth2</artifactId>-->
-<!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.security</groupId>-->
+    <!--      <artifactId>spring-security-jwt</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.security.oauth</groupId>-->
+    <!--      <artifactId>spring-security-oauth2</artifactId>-->
+    <!--    </dependency>-->
 
     <dependency>
-      <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-oauth2-jose</artifactId>
+      <groupId>org.springframework.security</groupId>
     </dependency>
-
 
 
     <!-- Provided Dependencies -->
     <dependency>
-      <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
+      <groupId>javax.servlet</groupId>
       <scope>provided</scope>
     </dependency>
 
     <!-- Test Dependencies -->
     <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-test</artifactId>
+      <groupId>digital.inception</groupId>
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>inception-oauth2-authorization-server</name>
+
+  <parent>
+    <artifactId>inception</artifactId>
+    <groupId>digital.inception</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
 
 </project>
 

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package digital.inception.oauth2.server.authorization.controller;
 
 import java.util.Map;
@@ -37,9 +38,9 @@ public class RefreshAccessTokenGrantRequest extends GrantRequest {
    * <p>This parameter is REQUIRED.
    */
   public static final String REFRESH_TOKEN_PARAMETER = "refresh_token";
-  
+
   /** The refresh token. */
-  private String refreshToken;
+  private final String refreshToken;
 
   /**
    * Constructs a new <code>RefreshAccessTokenGrantRequest</code>.

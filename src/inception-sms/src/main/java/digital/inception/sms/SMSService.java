@@ -75,19 +75,19 @@ public class SMSService implements ISMSService {
   /* The name of the SMS Service instance. */
   private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
   /** The maximum number of times sending will be attempted for a SMS. */
-  @Value("${application.sms.maximumSendAttempts:100}")
+  @Value("${inception.sms.maximumSendAttempts:100}")
   private int maximumSendAttempts;
   /** The SMS Portal API endpoint. */
-  @Value("${application.sms.smsPortalAPIEndPoint:#{null}}")
+  @Value("${inception.sms.smsPortalAPIEndPoint:#{null}}")
   private String smsPortalAPIEndPoint;
   /** The SMS Portal client ID. */
-  @Value("${application.sms.smsPortalClientId:#{null}}")
+  @Value("${inception.sms.smsPortalClientId:#{null}}")
   private String smsPortalClientId;
   /** The SMS Portal client secret. */
-  @Value("${application.sms.smsPortalClientSecret:#{null}}")
+  @Value("${inception.sms.smsPortalClientSecret:#{null}}")
   private String smsPortalClientSecret;
   /** The delay in milliseconds to wait before re-attempting to send a SMS. */
-  @Value("${application.sms.sendRetryDelay:600000}")
+  @Value("${inception.sms.sendRetryDelay:600000}")
   private int sendRetryDelay;
   /** The SMS Repository. */
   private SMSRepository smsRepository;

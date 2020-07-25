@@ -16,67 +16,78 @@
 
 package digital.inception.oauth2.server.authorization.token;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import java.io.Serializable;
-import java.util.Objects;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.JWTClaimsSet.Builder;
+import com.nimbusds.jwt.SignedJWT;
+import java.security.interfaces.RSAPrivateKey;
+import java.time.Instant;
+import java.util.Date;
+import java.util.Set;
+import org.springframework.util.StringUtils;
 
 /**
  * The <code>OAuth2RefreshToken</code> class holds the information for an OAuth2 refresh token.
  *
  * @author Marcus Portmann
  */
-public class OAuth2RefreshToken implements Serializable {
+public class OAuth2RefreshToken
+    extends org.springframework.security.oauth2.core.OAuth2RefreshToken {
+
+  /** The name of the scope claim. */
+  public static final String SCOPE_CLAIM = "scope";
 
   private static final long serialVersionUID = 1000000;
-  /** The value of the token. */
-  @JsonValue private final String value;
 
   /**
    * Constructs a new <code>OAuth2RefreshToken</code>.
    *
-   * @param value the value of the token
+   * @param tokenValue the token value
+   * @param issuedAt the time at which the token was issued
    */
-  @JsonCreator
-  public OAuth2RefreshToken(String value) {
-    this.value = value;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    if (this == object) {
-      return true;
-    }
-
-    if (object == null) {
-      return false;
-    }
-
-    if (getClass() != object.getClass()) {
-      return false;
-    }
-
-    OAuth2RefreshToken other = (OAuth2RefreshToken) object;
-
-    return Objects.equals(value, other.value);
+  public OAuth2RefreshToken(String tokenValue, Instant issuedAt) {
+    super(tokenValue, issuedAt);
   }
 
   /**
-   * Returns the value of the token.
+   * Build a new <code>OAuthRefreshToken</code>.
    *
-   * @return the value of the token
+   * @param username the username for the user the token is being issued for
+   * @param scopes the optional scope(s) associated to the token
    */
-  public String getValue() {
-    return value;
-  }
+  public static OAuth2RefreshToken build(
+      String username, Set<String> scopes, int validFor, RSAPrivateKey rsaPrivateKey) {
+    try {
+      Instant issuedAt = Instant.now();
+      Instant expiresAt = issuedAt.plusSeconds(validFor);
 
-  @Override
-  public int hashCode() {
-    return value != null ? value.hashCode() : 0;
-  }
+      JWSSigner signer = new RSASSASigner(rsaPrivateKey);
 
-  @Override
-  public String toString() {
-    return getValue();
+      JWTClaimsSet.Builder jwtClaimsSetBuilder = new Builder();
+
+      jwtClaimsSetBuilder.subject(username);
+
+      if ((scopes != null) && (!scopes.isEmpty())) {
+        jwtClaimsSetBuilder.claim(
+            SCOPE_CLAIM, StringUtils.collectionToDelimitedString(scopes, " "));
+      }
+
+      jwtClaimsSetBuilder.issueTime(Date.from(issuedAt));
+
+      jwtClaimsSetBuilder.expirationTime(Date.from(expiresAt));
+
+      SignedJWT signedJWT =
+          new SignedJWT(
+              new JWSHeader.Builder(JWSAlgorithm.RS256).build(), jwtClaimsSetBuilder.build());
+
+      signedJWT.sign(signer);
+
+      return new OAuth2RefreshToken(signedJWT.serialize(), issuedAt);
+    } catch (Throwable e) {
+      throw new OAuth2AccessTokenException("Failed to build the OAuth2 refresh token", e);
+    }
   }
 }

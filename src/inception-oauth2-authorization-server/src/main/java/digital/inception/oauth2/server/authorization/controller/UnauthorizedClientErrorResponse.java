@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package digital.inception.oauth2.server.authorization.controller;
 
 import org.springframework.http.HttpStatus;
@@ -42,4 +43,3 @@ public class UnauthorizedClientErrorResponse extends ErrorResponse {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE, errorDescription);
   }
 }
-

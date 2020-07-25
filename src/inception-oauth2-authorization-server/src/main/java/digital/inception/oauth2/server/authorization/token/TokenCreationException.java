@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>TokenServiceException</code> exception is thrown to indicate an error condition when
- * working with the Token Service.
+ * The <code>TokenCreationException</code> exception is thrown to indicate an error condition when
+ * creating an OAuth2 token.
  *
  * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
  * transaction.
@@ -35,29 +35,29 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(
     value = HttpStatus.INTERNAL_SERVER_ERROR,
-    reason = "An error has occurred and the request could not be processed at this time")
+    reason = "The OAuth2 token could not be created")
 @SuppressWarnings({"unused"})
-public class TokenServiceException extends ServiceException {
+public class TokenCreationException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>TokenServiceException</code> with the specified message.
+   * Constructs a new <code>TokenCreationException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public TokenServiceException(String message) {
-    super("TokenServiceError", message);
+  public TokenCreationException(String message) {
+    super("TokenCreationError", message);
   }
 
   /**
-   * Constructs a new <code>TokenServiceException</code> with the specified message and cause.
+   * Constructs a new <code>TokenCreationException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
    *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
-  public TokenServiceException(String message, Throwable cause) {
-    super("TokenServiceError", message, cause);
+  public TokenCreationException(String message, Throwable cause) {
+    super("TokenCreationError", message, cause);
   }
 }

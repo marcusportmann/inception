@@ -1,9 +1,7 @@
+#debug: false
 
 server:
-  port: 8080
-
   cors:
-    enabled: true
     allowCredentials: false
     allowedOrigins: http://localhost:4200,http://localhost:8080,http://localhost:20000
     allowedHeaders: "*"
@@ -12,6 +10,8 @@ server:
     maxAge: 3600
 
   enableCORS: true
+
+  port: 8080
 
   security:
     enabled: true
@@ -28,9 +28,7 @@ server:
     clientAuthMode: required
 
 
-
 application:
-
   database:
     dataSource: org.h2.jdbcx.JdbcDataSource
     url: jdbc:h2:mem:application;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -66,31 +64,46 @@ application:
       path: classpath:META-INF/Sample.jks
       password: Sample
 
-  hazelcast:
-    server:
-      enabled: true
-      cluster:
-        port: 15000
-        name: sample-cluster
-        password: YROTLEYO6Z05WAXbCuK4
-        members:
-      caches:
-        - cache:
-          name: sample-cache
-          maxSizePolicy: PER_NODE
-          maxSize: 10000
-          inMemoryFormat: OBJECT
-          evictionPolicy: LRU
-          statisticsEnabled: true
-          maxIdleSeconds: 300
-          backupCount: 0
-          asyncBackupCount: 0
-          readBackupData: false
+
+inception:
+  cache:
+    hazelcast:
+      server:
+        enabled: true
+        cluster:
+          port: 15000
+          name: sample-cluster
+          password: YROTLEYO6Z05WAXbCuK4
+          members:
+        caches:
+          - cache:
+            name: sample-cache
+            maxSizePolicy: PER_NODE
+            maxSize: 10000
+            inMemoryFormat: OBJECT
+            evictionPolicy: LRU
+            statisticsEnabled: true
+            maxIdleSeconds: 300
+            backupCount: 0
+            asyncBackupCount: 0
+            readBackupData: false
 
   messaging:
     encryptionKey: m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE=
     processingRetryDelay: 60000
     maximumProcessingAttempts: 1000
+
+  #
+  # NOTE: To generate an RSA key-pair to sign JWTs, use the following commands:
+  #
+  #           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > rsa-2048-private-key.p8
+  #
+  #           openssl pkey -pubout -inform pem -outform pem -in rsa-2048-private-key.p8 -out rsa-2048-public-key.p8
+  oauth2:
+    authorizationserver:
+      jwt:
+        private-key-location: classpath:security/oauth2-jwt-key
+        public-key-location: classpath:security/oauth2-jwt-key.pub
 
   sms:
     myMobileAPIEndPoint: http://www.mymobileapi.com/api5/api.asmx
@@ -99,43 +112,6 @@ application:
     maximumSendAttempts: 100
     sendRetryDelay: 600000
 
-inception:
-
-  # NOTE: To generate an RSA key-pair to sign JWTs, use the following commands:
-  #           openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > rsa-2048-private-key.p8
-  #           openssl pkey -pubout -inform pem -outform pem -in rsa-2048-private-key.p8 -out rsa-2048-public-key.p8
-  oauth2:
-    authorizationserver:
-      jwt:
-        private-key-value: |
-          -----BEGIN PRIVATE KEY-----
-          MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDEU6aNz1iZ4cQv
-          sQjd45G9IpUPROpGNwnv4g+soOfkroPneG+598g9SfoZmfiqVYqUYjjBqVNRTiDv
-          g27SRfe321y9rc9UJDV1RQ7MhTKGP2IB75JEUAaUdugDpHD6pOJeUnrOIFhxAIl7
-          aZzOKJEO+kJnnXaiPXvLvJWnVBBNmMXa2fF1/WOVTgq4m0EoYX/Eah6tuLdUQF1D
-          OPu2CrjCOjPqi/IVMHuoU1rly/pQheTgWKICiLXS7fei6Jt1cNS7ufa77f/P6UdB
-          WNwUj1NKNQ38q8aCA280vvMJ44qP4MiDPJMUBS2O89wePhojZnEcdGB4/B6/r68t
-          VKd+/glbAgMBAAECggEBAKcz8updh8DutU5EwR9wu+NPu5FYiQmpwE3LwrusAjMR
-          qgcN3GGOtLv18Amzx0MSPUbobBwLYIkjOAukbVKqAjJUoaRtjeDEQb8RRGxMmF4b
-          RxYM+g4x9ZiluC258/qTSLM6HZrFk20SHwS7Sq+NfxU5cCqcwbelE3TNtMrgXk4m
-          aYl5Yj/zB5oO/e5qibXWzJ2fMIf2UooVQRVpWN3ADmQy2Ltamh2rGr4Pu4XN61Nk
-          4TL5ZtmF0wZKCo+5s03XxOFtr8H16ly7PUWTWn2Skl+QIZ0BrLYY13fn2WlCgneT
-          B7wjExoeAc7+AOngRR8yS3U+E/1le138Tt8fLBieugkCgYEA+QcK+QKlep4aMaI1
-          9A1cmPWe7q+iaSMJvHicEEiQyCUzP7O0NNLiWWURCeDqdiBvBRrTdvoLQT5C9lQR
-          9YczLljIgM+Ph2R+nX3MFd1YcAlWSp4rONL6FLC8jCvWV5L4FrERUjcNnE34dmzN
-          WFf2IAszoOQSsXnNGWsz0Doecn8CgYEAydLdL4LMhEfWI73LaWJ5ydwlaM5JVVv0
-          6SomQ3ZHQMDoKiDpqoRZ2JjORyRGJ45KzPed3PFAWIrdvOsksqfo7F4dktIFRzwW
-          7Qk9eNTLlui9xWVSMruenLEnVN6AXDwStM5aknBvLmGD97r7+mQVM4SnRpXkJOm2
-          9BkEKiLAAyUCgYEA33CNTN4uAjYnxI8KH/95LRl90CYw8Grqynvhc87YcWzHbgnc
-          0GTDiXhgcF+pn/H8CzWFtcQnIxQtWv4V2xrDNnuc887Itq/Z14/O9XNUbbpC/dKr
-          b2IF11i45IBU4uDQzvNzWjRhdvSS0hdPrEvIX/oNCfh6OVnTSFJi/BuZxBsCgYA9
-          vEm6cck7oXnIfxMMznmwnK24zHk0KifVdvYzZqfPD/M0h9LSPR/6mGto6ZioGueY
-          oRnh7s4fB4NieY9FMwWV4Agt1B6XNrNQmKX8IyOPquv5yM+HA0s2ZR5B4Lnk/N8/
-          /WtJJilsR5oFmmXfpuOxWZ+NgOZDwFYdftV+ShjwHQKBgQDmPjcyOivzu+WpgWnK
-          k7gqFO6XKyX0vKm06MIFH2RYpFz55aXl56eoLe5fzStXr2jXyb5uFUhNBubQBmJA
-          uEqtm19zpkOyZdrs1ffd1l25ux0qsLZqnFUiTyCEctVU6QpB0Wm1Eh/bqJXKVvCt
-          Ws+WQuxCFIlCUSzZ+jNR+aJg0g==
-          -----END PRIVATE KEY-----
 
 spring:
   mail:
@@ -151,11 +127,10 @@ spring:
         jwt:
           public-key-location: classpath:security/oauth2-jwt-key.pub
 
-
-
 ---
 spring:
     profiles: development
+
 
 ---
 spring:

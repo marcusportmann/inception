@@ -94,12 +94,12 @@ export class SecurityService {
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
     // Start the session refresher
-    timer(0, 10000).pipe(switchMap(() => this.refreshSession()))
-      .subscribe((refreshedSession: Session | null) => {
-        if (refreshedSession) {
-          console.log('Successfully refreshed session: ', refreshedSession);
-        }
-      });
+    timer(0, 15000).pipe(switchMap(() => this.refreshSession()))
+    .subscribe((refreshedSession: Session | null) => {
+      if (refreshedSession) {
+        console.log('Successfully refreshed session: ', refreshedSession);
+      }
+    });
   }
 
   /**
@@ -120,29 +120,29 @@ export class SecurityService {
     return this.httpClient.post<boolean>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members', groupMember, {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(apiError));
-          } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(apiError));
-          } else if (apiError.code === 'ExistingGroupMemberError') {
-            return throwError(new ExistingGroupMemberError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to add the group member to the group.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'GroupNotFoundError') {
+          return throwError(new GroupNotFoundError(apiError));
+        } else if (apiError.code === 'UserNotFoundError') {
+          return throwError(new UserNotFoundError(apiError));
+        } else if (apiError.code === 'ExistingGroupMemberError') {
+          return throwError(new ExistingGroupMemberError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to add the group member to the group.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -161,29 +161,29 @@ export class SecurityService {
     return this.httpClient.post<boolean>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/roles', groupRole, {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(apiError));
-          } else if (apiError.code === 'RoleNotFoundError') {
-            return throwError(new UserNotFoundError(apiError));
-          } else if (apiError.code === 'ExistingGroupRoleError') {
-            return throwError(new ExistingGroupRoleError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to add the role to the group.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'GroupNotFoundError') {
+          return throwError(new GroupNotFoundError(apiError));
+        } else if (apiError.code === 'RoleNotFoundError') {
+          return throwError(new UserNotFoundError(apiError));
+        } else if (apiError.code === 'ExistingGroupRoleError') {
+          return throwError(new ExistingGroupRoleError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to add the role to the group.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -203,28 +203,28 @@ export class SecurityService {
     return this.httpClient.post<boolean>(
       this.config.securityApiUrlPrefix + '/organizations/' + organizationId + '/user-directories',
       organizationUserDirectory, {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(apiError));
-          } else if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'ExistingOrganizationUserDirectoryError') {
-            return throwError(new ExistingOrganizationUserDirectoryError(apiError));
-          } else {
-            return throwError(
-              new SecurityServiceError('Failed to add the user directory to the organization.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'OrganizationNotFoundError') {
+          return throwError(new OrganizationNotFoundError(apiError));
+        } else if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'ExistingOrganizationUserDirectoryError') {
+          return throwError(new ExistingOrganizationUserDirectoryError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(
+            new SecurityServiceError('Failed to add the user directory to the organization.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -431,23 +431,23 @@ export class SecurityService {
   createUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
     return this.httpClient.post<boolean>(this.config.securityApiUrlPrefix + '/user-directories', userDirectory,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'DuplicateUserDirectoryError') {
-            return throwError(new DuplicateUserDirectoryError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to create the user directory.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'DuplicateUserDirectoryError') {
+          return throwError(new DuplicateUserDirectoryError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to create the user directory.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -463,27 +463,27 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName), {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(apiError));
-          } else if (apiError.code === 'ExistingGroupMembersError') {
-            return throwError(new ExistingGroupMembersError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to delete the group.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'GroupNotFoundError') {
+          return throwError(new GroupNotFoundError(apiError));
+        } else if (apiError.code === 'ExistingGroupMembersError') {
+          return throwError(new ExistingGroupMembersError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to delete the group.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -497,23 +497,23 @@ export class SecurityService {
   deleteOrganization(organizationId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(this.config.securityApiUrlPrefix + '/organizations/' + organizationId,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to delete the organization.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'OrganizationNotFoundError') {
+          return throwError(new OrganizationNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to delete the organization.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -529,25 +529,25 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
       encodeURIComponent(username), {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to delete the user.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'UserNotFoundError') {
+          return throwError(new UserNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to delete the user.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -561,23 +561,23 @@ export class SecurityService {
   deleteUserDirectory(userDirectoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to delete the user directory.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to delete the user directory.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -657,25 +657,25 @@ export class SecurityService {
     return this.httpClient.get<string[]>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
       encodeURIComponent(username) + '/group-names', {reportProgress: true})
-      .pipe(map((groupNames: string[]) => {
-        return groupNames;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((groupNames: string[]) => {
+      return groupNames;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to retrieve the group names for the user.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'UserNotFoundError') {
+          return throwError(new UserNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to retrieve the group names for the user.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -749,23 +749,23 @@ export class SecurityService {
   getOrganization(organizationId: string): Observable<Organization> {
     return this.httpClient.get<Organization>(this.config.securityApiUrlPrefix + '/organizations/' + organizationId,
       {reportProgress: true})
-      .pipe(map((organization: Organization) => {
-        return organization;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((organization: Organization) => {
+      return organization;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to retrieve the organization.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'OrganizationNotFoundError') {
+          return throwError(new OrganizationNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to retrieve the organization.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -926,25 +926,25 @@ export class SecurityService {
     return this.httpClient.get<Organization[]>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/organizations',
       {reportProgress: true})
-      .pipe(map((organizations: Organization[]) => {
-        return organizations;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((organizations: Organization[]) => {
+      return organizations;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else {
-            return throwError(
-              new SecurityServiceError('Failed to retrieve the organizations associated with the user directory.',
-                apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(
+            new SecurityServiceError('Failed to retrieve the organizations associated with the user directory.',
+              apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1084,23 +1084,23 @@ export class SecurityService {
   getUserDirectory(userDirectoryId: string): Observable<UserDirectory> {
     return this.httpClient.get<UserDirectory>(this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId,
       {reportProgress: true})
-      .pipe(map((userDirectory: UserDirectory) => {
-        return userDirectory;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((userDirectory: UserDirectory) => {
+      return userDirectory;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to retrieve the user directory.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to retrieve the user directory.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1115,24 +1115,24 @@ export class SecurityService {
     return this.httpClient.get<UserDirectoryCapabilities>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/capabilities',
       {reportProgress: true})
-      .pipe(map((capabilities: UserDirectoryCapabilities) => {
-        return capabilities;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((capabilities: UserDirectoryCapabilities) => {
+      return capabilities;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else {
-            return throwError(
-              new SecurityServiceError('Failed to retrieve the capabilities for the user directory.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(
+            new SecurityServiceError('Failed to retrieve the capabilities for the user directory.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1146,23 +1146,23 @@ export class SecurityService {
   getUserDirectoryName(userDirectoryId: string): Observable<string> {
     return this.httpClient.get<string>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/name', {reportProgress: true})
-      .pipe(map((userDirectoryName: string) => {
-        return userDirectoryName;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((userDirectoryName: string) => {
+      return userDirectoryName;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to retrieve the user directory name.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to retrieve the user directory name.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1177,24 +1177,24 @@ export class SecurityService {
     return this.httpClient.get<UserDirectorySummary[]>(
       this.config.securityApiUrlPrefix + '/organizations/' + organizationId + '/user-directory-summaries',
       {reportProgress: true})
-      .pipe(map((codeCategories: UserDirectorySummary[]) => {
-        return codeCategories;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((codeCategories: UserDirectorySummary[]) => {
+      return codeCategories;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError(
-              'Failed to retrieve the summaries for the user directories associated with the organization.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'OrganizationNotFoundError') {
+          return throwError(new OrganizationNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError(
+            'Failed to retrieve the summaries for the user directories associated with the organization.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1209,24 +1209,24 @@ export class SecurityService {
     return this.httpClient.get<UserDirectoryType>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/user-directory-type',
       {reportProgress: true})
-      .pipe(map((userDirectoryType: UserDirectoryType) => {
-        return userDirectoryType;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((userDirectoryType: UserDirectoryType) => {
+      return userDirectoryType;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else {
-            return throwError(
-              new SecurityServiceError('Failed to retrieve the user directory type for the user directory.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(
+            new SecurityServiceError('Failed to retrieve the user directory type for the user directory.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1237,19 +1237,19 @@ export class SecurityService {
   getUserDirectoryTypes(): Observable<UserDirectoryType[]> {
     return this.httpClient.get<UserDirectoryType[]>(this.config.securityApiUrlPrefix + '/user-directory-types',
       {reportProgress: true})
-      .pipe(map((userDirectoryTypes: UserDirectoryType[]) => {
-        return userDirectoryTypes;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((userDirectoryTypes: UserDirectoryType[]) => {
+      return userDirectoryTypes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new SecurityServiceError('Failed to retrieve the user directory types.', apiError));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
-        }
-      }));
+        return throwError(new SecurityServiceError('Failed to retrieve the user directory types.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1265,25 +1265,25 @@ export class SecurityService {
     return this.httpClient.get<string>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
       encodeURIComponent(username) + '/full-name', {reportProgress: true})
-      .pipe(map((userFullName: string) => {
-        return userFullName;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((userFullName: string) => {
+      return userFullName;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'UserNotFoundError') {
-            return throwError(new UserNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to retrieve the full name for the user.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'UserNotFoundError') {
+          return throwError(new UserNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to retrieve the full name for the user.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1452,41 +1452,41 @@ export class SecurityService {
     // TODO: REMOVE HARD CODED SCOPE AND CLIENT ID -- MARCUS
 
     const body = new HttpParams()
-      .set('grant_type', 'password')
-      .set('username', username)
-      .set('password', password);
-      // .set('scope', 'inception-sample')
-      // .set('client_id', 'inception-sample');
+    .set('grant_type', 'password')
+    .set('username', username)
+    .set('password', password);
+    // .set('scope', 'inception-sample')
+    // .set('client_id', 'inception-sample');
 
     const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
     return this.httpClient.post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
-      .pipe(flatMap((tokenResponse: TokenResponse) => {
-        this.session$.next(
-          SecurityService.createSessionFromAccessToken(tokenResponse.access_token, tokenResponse.refresh_token));
+    .pipe(flatMap((tokenResponse: TokenResponse) => {
+      this.session$.next(
+        SecurityService.createSessionFromAccessToken(tokenResponse.access_token, tokenResponse.refresh_token));
 
-        return this.session$;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      return this.session$;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
 
-        if (httpErrorResponse.status === 400) {
-          if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
-            httpErrorResponse.error.error_description) {
-            if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
-              return throwError(new LoginError(httpErrorResponse));
-            } else if (httpErrorResponse.error.error_description.includes('User locked')) {
-              return throwError(new UserLockedError(httpErrorResponse));
-            } else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
-              return throwError(new PasswordExpiredError(httpErrorResponse));
-            }
+      if (httpErrorResponse.status === 400) {
+        if (httpErrorResponse.error && (httpErrorResponse.error.error === 'invalid_grant') &&
+          httpErrorResponse.error.error_description) {
+          if (httpErrorResponse.error.error_description.includes('Bad credentials')) {
+            return throwError(new LoginError(httpErrorResponse));
+          } else if (httpErrorResponse.error.error_description.includes('User locked')) {
+            return throwError(new UserLockedError(httpErrorResponse));
+          } else if (httpErrorResponse.error.error_description.includes('Credentials expired')) {
+            return throwError(new PasswordExpiredError(httpErrorResponse));
           }
-
-          return throwError(new LoginError(httpErrorResponse));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
         }
-      }));
+
+        return throwError(new LoginError(httpErrorResponse));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1513,27 +1513,27 @@ export class SecurityService {
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members/' + memberType + '/' + encodeURIComponent(memberName),
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(apiError));
-          } else if (apiError.code === 'GroupMemberNotFoundError') {
-            return throwError(new GroupMemberNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to remove the group member from the group.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'GroupNotFoundError') {
+          return throwError(new GroupNotFoundError(apiError));
+        } else if (apiError.code === 'GroupMemberNotFoundError') {
+          return throwError(new GroupMemberNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to remove the group member from the group.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1550,27 +1550,27 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/roles/' + roleCode, {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else if (apiError.code === 'GroupNotFoundError') {
-            return throwError(new GroupNotFoundError(apiError));
-          } else if (apiError.code === 'GroupRoleNotFoundError') {
-            return throwError(new GroupRoleNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to remove the role from the group.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else if (apiError.code === 'GroupNotFoundError') {
+          return throwError(new GroupNotFoundError(apiError));
+        } else if (apiError.code === 'GroupRoleNotFoundError') {
+          return throwError(new GroupRoleNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to remove the role from the group.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1588,26 +1588,26 @@ export class SecurityService {
     return this.httpClient.delete<boolean>(
       this.config.securityApiUrlPrefix + '/organizations/' + organizationId + '/user-directories/' + userDirectoryId,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(apiError));
-          } else if (apiError.code === 'OrganizationUserDirectoryNotFoundError') {
-            return throwError(new OrganizationUserDirectoryNotFound(apiError));
-          } else {
-            return throwError(
-              new SecurityServiceError('Failed to remove the user directory from the organization.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'OrganizationNotFoundError') {
+          return throwError(new OrganizationNotFoundError(apiError));
+        } else if (apiError.code === 'OrganizationUserDirectoryNotFoundError') {
+          return throwError(new OrganizationUserDirectoryNotFound(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(
+            new SecurityServiceError('Failed to remove the user directory from the organization.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1691,23 +1691,23 @@ export class SecurityService {
   updateOrganization(organization: Organization): Observable<boolean> {
     return this.httpClient.put<boolean>(this.config.securityApiUrlPrefix + '/organizations/' + organization.id,
       organization, {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'OrganizationNotFoundError') {
-            return throwError(new OrganizationNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to update the organization.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'OrganizationNotFoundError') {
+          return throwError(new OrganizationNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to update the organization.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -1761,23 +1761,23 @@ export class SecurityService {
   updateUserDirectory(userDirectory: UserDirectory): Observable<boolean> {
     return this.httpClient.put<boolean>(this.config.securityApiUrlPrefix + '/user-directories/' + userDirectory.id,
       userDirectory, {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'UserDirectoryNotFoundError') {
-            return throwError(new UserDirectoryNotFoundError(apiError));
-          } else {
-            return throwError(new SecurityServiceError('Failed to update the user directory.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new SecurityServiceError('Failed to update the user directory.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   private static createSessionFromAccessToken(accessToken: string, refreshToken: string | undefined): Session {
@@ -1788,7 +1788,7 @@ export class SecurityService {
 
     const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(accessToken);
 
-    const session = new Session((!!token.user_name) ? token.user_name : '',
+    const session = new Session((!!token.sub) ? token.sub : '',
       (!!token.user_directory_id) ? token.user_directory_id : '',
       (!!token.user_full_name) ? token.user_full_name : '',
       (!!token.scope) ? token.scope.split(' ') : [],
@@ -1808,37 +1808,37 @@ export class SecurityService {
 
         /*
          * If the access token will expire with 60 seconds then obtain a new one using the refresh
-         * token if it exists.
+         * token if it exists. This will cause constant refreshes if the lifespan of the token
+         * is less than 60 seconds.
          */
         if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
           if (Date.now() > (currentSession.accessTokenExpiry.getTime() - 60000)) {
             const body = new HttpParams()
-              .set('grant_type', 'refresh_token')
-              .set('refresh_token', currentSession.refreshToken)
-              .set('scope', 'inception-sample')
-              .set('client_id', 'inception-sample');
+            .set('grant_type', 'refresh_token')
+            .set('refresh_token', currentSession.refreshToken);
 
             const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
             return this.httpClient.post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
-              .pipe(map((tokenResponse: TokenResponse) => {
-                const refreshedSession: Session = SecurityService.createSessionFromAccessToken(
-                  tokenResponse.access_token, currentSession.refreshToken);
+            .pipe(map((tokenResponse: TokenResponse) => {
+              const refreshedSession: Session = SecurityService.createSessionFromAccessToken(
+                tokenResponse.access_token,
+                (!!tokenResponse.refresh_token) ? tokenResponse.refresh_token : currentSession.refreshToken);
 
-                refreshedSession.organization = selectedOrganization;
+              refreshedSession.organization = selectedOrganization;
 
-                this.session$.next(refreshedSession);
+              this.session$.next(refreshedSession);
 
-                return refreshedSession;
-              }), catchError((httpErrorResponse: HttpErrorResponse) => {
-                console.log('Failed to refresh the user session.', httpErrorResponse);
+              return refreshedSession;
+            }), catchError((httpErrorResponse: HttpErrorResponse) => {
+              console.log('Failed to refresh the user session.', httpErrorResponse);
 
-                if (httpErrorResponse.status === 401) {
-                  this.session$.next(null);
-                }
+              if (httpErrorResponse.status === 401) {
+                this.session$.next(null);
+              }
 
-                return of(null);
-              }));
+              return of(null);
+            }));
           }
         }
       }

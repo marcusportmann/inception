@@ -58,7 +58,7 @@ public class InceptionRSConfiguration {
   private String[] corsAllowedOrigins;
 
   /** Enable cross-origin resource sharing (CORS). */
-  @Value("${server.cors.enabled:#{false}}")
+  @Value("${server.enableCORS:#{false}}")
   private boolean corsEnabled;
 
   /** Instruct browsers to expose the specified headers. */

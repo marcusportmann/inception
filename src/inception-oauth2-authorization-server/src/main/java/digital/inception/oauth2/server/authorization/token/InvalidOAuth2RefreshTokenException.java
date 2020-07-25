@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>TokenServiceException</code> exception is thrown to indicate an error condition when
- * working with the Token Service.
+ * The <code>InvalidOAuth2RefreshTokenException</code> exception is thrown to indicate an error
+ * condition as a result of an invalid OAuth2 refresh token.
  *
  * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
  * transaction.
@@ -35,29 +35,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(
     value = HttpStatus.INTERNAL_SERVER_ERROR,
-    reason = "An error has occurred and the request could not be processed at this time")
-@SuppressWarnings({"unused"})
-public class TokenServiceException extends ServiceException {
+    reason = "The OAuth2 refresh token is invalid")
+public class InvalidOAuth2RefreshTokenException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>TokenServiceException</code> with the specified message.
-   *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * Constructs a new <code>InvalidOAuth2RefreshTokenException</code> with the specified message.
    */
-  public TokenServiceException(String message) {
-    super("TokenServiceError", message);
-  }
-
-  /**
-   * Constructs a new <code>TokenServiceException</code> with the specified message and cause.
-   *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
-   */
-  public TokenServiceException(String message, Throwable cause) {
-    super("TokenServiceError", message, cause);
+  public InvalidOAuth2RefreshTokenException() {
+    super("InvalidOAuth2RefreshTokenError", "The OAuth2 refresh token is invalid");
   }
 }

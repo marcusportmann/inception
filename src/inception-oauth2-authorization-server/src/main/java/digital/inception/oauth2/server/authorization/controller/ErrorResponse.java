@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package digital.inception.oauth2.server.authorization.controller;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -22,10 +23,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>ErrorGrantResponse</code> class holds the information for an OAuth2 error response
- * and provides the base class that all OAuth2 error response classes should be derived from.
+ * The <code>ErrorGrantResponse</code> class holds the information for an OAuth2 error response and
+ * provides the base class that all OAuth2 error response classes should be derived from.
  *
- * See: <a href="https://tools.ietf.org/html/rfc6749#section-5.2">Error Response</a>
+ * <p>See: <a href="https://tools.ietf.org/html/rfc6749#section-5.2">Error Response</a>
  *
  * @author Marcus Portmann
  */

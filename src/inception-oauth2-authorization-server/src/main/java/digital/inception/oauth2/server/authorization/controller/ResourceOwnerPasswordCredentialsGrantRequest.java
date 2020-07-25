@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package digital.inception.oauth2.server.authorization.controller;
 
 import java.util.Map;
@@ -32,24 +33,24 @@ public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
   public static final String GRANT_TYPE = "password";
 
   /**
-   * The name of the resource owner username parameter.
-   *
-   * <p>This parameter is REQUIRED.
-   */
-  public static final String USERNAME_PARAMETER = "username";
-
-  /**
    * The name of the resource owner password parameter.
    *
    * <p>This parameter is REQUIRED.
    */
   public static final String PASSWORD_PARAMETER = "password";
 
-  /** The resource owner username. */
-  private final String username;
+  /**
+   * The name of the resource owner username parameter.
+   *
+   * <p>This parameter is REQUIRED.
+   */
+  public static final String USERNAME_PARAMETER = "username";
 
   /** The resource owner password. */
   private final String password;
+
+  /** The resource owner username. */
+  private final String username;
 
   /**
    * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantRequest</code>.

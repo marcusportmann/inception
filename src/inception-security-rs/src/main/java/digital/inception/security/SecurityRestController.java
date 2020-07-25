@@ -2897,53 +2897,6 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Confirm that the user associated with the authenticated request has access to the user
-   * directory.
-   *
-   * @param authentication the authenticated principal
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @return <code>true</code> if the user associated with the authenticated request has access to
-   *     the user directory or <code>false</code> otherwise
-   */
-  protected boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId) {
-    try {
-      // If the user is not authenticated then they cannot have access
-      if (!authentication.isAuthenticated()) {
-        return false;
-      }
-
-      // If the user has the "Administrator" role they always have access
-      if (hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE)) {
-        return true;
-      }
-
-      List<UUID> userDirectoryIdsForUser = new ArrayList<>();
-
-      List<UUID> organizationIds =
-          getUUIDValuesForAuthoritiesWithPrefix(authentication, "ORGANIZATION_");
-
-      for (UUID organizationId : organizationIds) {
-        var userDirectoryIdsForOrganization =
-            securityService.getUserDirectoryIdsForOrganization(organizationId);
-
-        userDirectoryIdsForUser.addAll(userDirectoryIdsForOrganization);
-      }
-
-      return userDirectoryIdsForUser.stream().anyMatch(userDirectoryId::equals);
-    } catch (Throwable e) {
-      logger.error(
-          "Failed to check if the user ("
-              + authentication.getName()
-              + ") has access to the user directory ("
-              + userDirectoryId
-              + ")",
-          e);
-      return false;
-    }
-  }
-
-  /**
    * Remove the group member from the group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -3632,5 +3585,52 @@ public class SecurityRestController extends SecureRestController {
     }
 
     securityService.updateUserDirectory(userDirectory);
+  }
+
+  /**
+   * Confirm that the user associated with the authenticated request has access to the user
+   * directory.
+   *
+   * @param authentication the authenticated principal
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @return <code>true</code> if the user associated with the authenticated request has access to
+   *     the user directory or <code>false</code> otherwise
+   */
+  protected boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId) {
+    try {
+      // If the user is not authenticated then they cannot have access
+      if (!authentication.isAuthenticated()) {
+        return false;
+      }
+
+      // If the user has the "Administrator" role they always have access
+      if (hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE)) {
+        return true;
+      }
+
+      List<UUID> userDirectoryIdsForUser = new ArrayList<>();
+
+      List<UUID> organizationIds =
+          getUUIDValuesForAuthoritiesWithPrefix(authentication, "ORGANIZATION_");
+
+      for (UUID organizationId : organizationIds) {
+        var userDirectoryIdsForOrganization =
+            securityService.getUserDirectoryIdsForOrganization(organizationId);
+
+        userDirectoryIdsForUser.addAll(userDirectoryIdsForOrganization);
+      }
+
+      return userDirectoryIdsForUser.stream().anyMatch(userDirectoryId::equals);
+    } catch (Throwable e) {
+      logger.error(
+          "Failed to check if the user ("
+              + authentication.getName()
+              + ") has access to the user directory ("
+              + userDirectoryId
+              + ")",
+          e);
+      return false;
+    }
   }
 }

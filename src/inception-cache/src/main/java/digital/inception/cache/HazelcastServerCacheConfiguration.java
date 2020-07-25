@@ -49,7 +49,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnClass(name = "com.hazelcast.config.Config")
 @ConditionalOnProperty(value = "application.hazelcast.server.enabled", havingValue = "true")
 @EnableCaching
-@ConfigurationProperties("application.hazelcast.server")
+@ConfigurationProperties("inception.cache.hazelcast.server")
 public class HazelcastServerCacheConfiguration {
 
   /** The distributed in-memory caches. */

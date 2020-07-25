@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package digital.inception.oauth2.server.authorization.token;
 
 import com.nimbusds.jose.JWSAlgorithm;
@@ -27,7 +28,6 @@ import java.security.interfaces.RSAPrivateKey;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -53,6 +53,9 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   /** The name of the roles claim that provides the roles assigned to the user. */
   public static final String ROLES_CLAIM = "roles";
 
+  /** The name of the scope claim. */
+  public static final String SCOPE_CLAIM = "scope";
+
   /**
    * The name of the user directory ID claim that provides the Universally Unique Identifier (UUID)
    * uniquely identifying the user directory the user is associated with.
@@ -62,24 +65,17 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   /** The name of the user full name claim that provides the full name of the user. */
   public static final String USER_FULL_NAME_CLAIM = "user_full_name";
 
-  /**
-   * Constructs a new <code>OAuth2AccessToken</code>.
-   *
-   * @param tokenType the token type
-   * @param tokenValue the token value
-   * @param issuedAt the time at which the token was issued
-   * @param expiresAt the expiration time on or after which the token MUST NOT be accepted
-   */
-  public OAuth2AccessToken(
-      TokenType tokenType, String tokenValue, Instant issuedAt, Instant expiresAt) {
-    this(tokenType, tokenValue, issuedAt, expiresAt, Collections.emptySet());
-  }
+  private static final long serialVersionUID = 1000000;
+
+  /** The subject for the token. */
+  private final String subject;
 
   /**
    * Constructs a new <code>OAuth2AccessToken</code>.
    *
    * @param tokenType the token type
    * @param tokenValue the token value
+   * @param subject the subject for the token
    * @param issuedAt the time at which the token was issued
    * @param expiresAt the expiration time on or after which the token MUST NOT be accepted
    * @param scopes the scope(s) associated to the token
@@ -87,10 +83,13 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   public OAuth2AccessToken(
       TokenType tokenType,
       String tokenValue,
+      String subject,
       Instant issuedAt,
       Instant expiresAt,
       Set<String> scopes) {
     super(tokenType, tokenValue, issuedAt, expiresAt, scopes);
+
+    this.subject = subject;
   }
 
   /**
@@ -100,7 +99,8 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
    * @param roleCodes the role codes for the user the token is being issued for
    * @param functionCodes the function codes for the user the token is being issued for
    * @param organizationIds the IDs identifying the organizations that the user the token is being
-   *     issued for is associated with*
+   *     issued for is associated with
+   * @param scopes the optional scope(s) associated to the token
    * @param issuer the optional issuer of the token, which can be <code>null</code>
    * @param validFor the number of seconds the token should be valid for
    * @param rsaPrivateKey the RSA private key used to sign the token
@@ -110,12 +110,13 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
       List<String> roleCodes,
       List<String> functionCodes,
       List<UUID> organizationIds,
+      Set<String> scopes,
       String issuer,
       int validFor,
       RSAPrivateKey rsaPrivateKey) {
     try {
-      Instant notBefore = Instant.now();
-      Instant expiresAt = Instant.ofEpochMilli(System.currentTimeMillis() + (validFor * 1000L));
+      Instant issuedAt = Instant.now();
+      Instant expiresAt = issuedAt.plusSeconds(validFor);
 
       JWSSigner signer = new RSASSASigner(rsaPrivateKey);
 
@@ -141,7 +142,7 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
 
       jwtClaimsSetBuilder.claim(USER_DIRECTORY_ID_CLAIM, user.getUserDirectoryId().toString());
 
-      jwtClaimsSetBuilder.notBeforeTime(Date.from(notBefore));
+      jwtClaimsSetBuilder.issueTime(Date.from(issuedAt));
 
       jwtClaimsSetBuilder.expirationTime(Date.from(expiresAt));
 
@@ -155,13 +156,24 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
 
       jwtClaimsSetBuilder.claim(FUNCTIONS_CLAIM, functionCodes);
 
+      if ((scopes != null) && (!scopes.isEmpty())) {
+        jwtClaimsSetBuilder.claim(
+            SCOPE_CLAIM, StringUtils.collectionToDelimitedString(scopes, " "));
+      }
+
       SignedJWT signedJWT =
           new SignedJWT(
               new JWSHeader.Builder(JWSAlgorithm.RS256).build(), jwtClaimsSetBuilder.build());
 
       signedJWT.sign(signer);
 
-      return new OAuth2AccessToken(TokenType.BEARER, signedJWT.serialize(), notBefore, expiresAt);
+      return new OAuth2AccessToken(
+          TokenType.BEARER,
+          signedJWT.serialize(),
+          user.getUsername(),
+          issuedAt,
+          expiresAt,
+          scopes);
 
     } catch (Throwable e) {
       throw new OAuth2AccessTokenException("Failed to build the OAuth2 access token", e);
@@ -179,5 +191,14 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
     } else {
       return Duration.between(getIssuedAt(), getExpiresAt()).toSeconds();
     }
+  }
+
+  /**
+   * Returns the subject for the token.
+   *
+   * @return the subject for the token
+   */
+  public String getSubject() {
+    return subject;
   }
 }

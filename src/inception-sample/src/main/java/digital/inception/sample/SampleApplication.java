@@ -72,7 +72,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(
     entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.sample"})
-// @EnableSwagger2
 public class SampleApplication extends Application implements InitializingBean {
 
   /* Logger */

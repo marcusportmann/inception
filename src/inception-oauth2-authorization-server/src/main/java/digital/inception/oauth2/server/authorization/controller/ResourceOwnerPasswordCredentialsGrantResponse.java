@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package digital.inception.oauth2.server.authorization.controller;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -32,11 +33,11 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   /** The access token. */
   private String accessToken;
 
-  /** The refresh token. */
-  private String refreshToken;
-
   /** The lifetime in seconds of the access token. */
   private long expiresIn;
+
+  /** The refresh token. */
+  private String refreshToken;
 
   /** The access token scope. */
   private String scope;
@@ -67,7 +68,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
    * @param refreshToken the refresh token
    */
   public ResourceOwnerPasswordCredentialsGrantResponse(
-      String accessToken, int expiresIn, String refreshToken) {
+      String accessToken, long expiresIn, String refreshToken) {
     super(HttpStatus.OK);
 
     this.accessToken = accessToken;

@@ -29,8 +29,7 @@ export interface TokenResponse {
   access_token: string;
 
   /**
-   * The epoch timestamp, for the local timezone, giving the date and time the OAuth2 JWT access
-   * token will expire.
+   * The lifetime in seconds of the access token.
    */
   expires_in?: number;
 

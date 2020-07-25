@@ -104,7 +104,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * The base64 encoded AES encryption master key used to derive the device/user encryption keys.
    */
-  @Value("${application.messaging.encryptionKey:#{null}}")
+  @Value("${inception.messaging.encryptionKey:#{null}}")
   private String encryptionKeyBase64;
 
   /** The AES encryption master key used to derive the device/user encryption keys. */
@@ -115,7 +115,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   private EntityManager entityManager;
 
   /** The maximum number of times processing will be attempted for a message. */
-  @Value("${application.messaging.maximumProcessingAttempts:1000}")
+  @Value("${inception.messaging.maximumProcessingAttempts:1000}")
   private int maximumProcessingAttempts;
 
   /** The message handlers. */
@@ -134,7 +134,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   private MessageRepository messageRepository;
 
   /** The delay in milliseconds to wait before re-attempting to process a message. */
-  @Value("${application.messaging.processingRetryDelay:60000}")
+  @Value("${inception.messaging.processingRetryDelay:60000}")
   private int processingRetryDelay;
 
   /** The internal reference to the Messaging Service for transaction management. */

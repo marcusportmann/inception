@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package digital.inception.oauth2.server.authorization.controller;
 
 import java.util.Map;
@@ -47,12 +48,6 @@ public abstract class GrantRequest {
   public static final String GRANT_TYPE_PARAMETER = "grant_type";
 
   /**
-   * The name of the state parameter.
-   *
-   * <p>This parameter is OPTIONAL.
-   */
-  public static final String STATE_PARAMETER = "state";
-  /**
    * The name of the parameter providing the requested access token scope.
    *
    * <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.3">Access Token Scope</a>
@@ -61,8 +56,12 @@ public abstract class GrantRequest {
    */
   public static final String SCOPE_PARAMETER = "scope";
 
-  /** The state received from the client. */
-  private final String state;
+  /**
+   * The name of the state parameter.
+   *
+   * <p>This parameter is OPTIONAL.
+   */
+  public static final String STATE_PARAMETER = "state";
 
   /** The client identifier issued to the client. */
   private final String clientId;
@@ -73,8 +72,11 @@ public abstract class GrantRequest {
   /** The grant type. */
   private final String grantType;
 
-  /** The requested access token scope. */
+  /** The requested scope(s) for the access request. */
   private final String scope;
+
+  /** The state received from the client. */
+  private final String state;
 
   /**
    * Constructs a new <code>GrantRequest</code>.
@@ -117,9 +119,9 @@ public abstract class GrantRequest {
   }
 
   /**
-   * Returns the requested access token scope.
+   * Returns the requested scope(s) for the access request.
    *
-   * @return the requested access token scope
+   * @return the requested scope(s) for the access request
    */
   public String getScope() {
     return scope;
