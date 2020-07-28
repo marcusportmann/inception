@@ -751,7 +751,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    securityService.createGroup(userDirectoryId, group);
+    securityService.createGroup(group);
   }
 
   /**
@@ -913,7 +913,6 @@ public class SecurityRestController extends SecureRestController {
     }
 
     securityService.createUser(
-        userDirectoryId,
         user,
         (expiredPassword != null) && expiredPassword,
         (userLocked != null) && userLocked);
@@ -3300,7 +3299,7 @@ public class SecurityRestController extends SecureRestController {
           "group", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    securityService.updateGroup(userDirectoryId, group);
+    securityService.updateGroup(group);
   }
 
   /**
@@ -3480,7 +3479,6 @@ public class SecurityRestController extends SecureRestController {
     }
 
     securityService.updateUser(
-        userDirectoryId,
         user,
         (expirePassword != null) && expirePassword,
         (lockUser != null) && lockUser);

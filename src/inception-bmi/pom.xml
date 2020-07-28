@@ -27,7 +27,6 @@
       <artifactId>inception-security</artifactId>
     </dependency>
 
-
     <!-- Dependencies -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

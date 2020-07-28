@@ -272,7 +272,7 @@ public class SecurityWebService {
           SecurityServiceException {
     validateGroup(group);
 
-    securityService.createGroup(group.getUserDirectoryId(), group);
+    securityService.createGroup(group);
   }
 
   /**
@@ -310,7 +310,6 @@ public class SecurityWebService {
     validateUser(user);
 
     securityService.createUser(
-        user.getUserDirectoryId(),
         user,
         (expiredPassword != null) && expiredPassword,
         (userLocked != null) && userLocked);
@@ -1045,7 +1044,7 @@ public class SecurityWebService {
           SecurityServiceException {
     validateGroup(group);
 
-    securityService.updateGroup(group.getUserDirectoryId(), group);
+    securityService.updateGroup(group);
   }
 
   /**
@@ -1078,7 +1077,7 @@ public class SecurityWebService {
           SecurityServiceException {
     validateUser(user);
 
-    securityService.updateUser(user.getUserDirectoryId(), user, expirePassword, lockUser);
+    securityService.updateUser(user, expirePassword, lockUser);
   }
 
   /**

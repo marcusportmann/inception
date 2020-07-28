@@ -10,12 +10,6 @@
       <artifactId>inception-core</artifactId>
       <groupId>digital.inception</groupId>
     </dependency>
-    <!--
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-rs</artifactId>
-    </dependency>
-    -->
     <dependency>
       <artifactId>inception-security</artifactId>
       <groupId>digital.inception</groupId>
@@ -26,21 +20,10 @@
       <artifactId>jackson-databind</artifactId>
       <groupId>com.fasterxml.jackson.core</groupId>
     </dependency>
-
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.security</groupId>-->
-    <!--      <artifactId>spring-security-jwt</artifactId>-->
-    <!--    </dependency>-->
-    <!--    <dependency>-->
-    <!--      <groupId>org.springframework.security.oauth</groupId>-->
-    <!--      <artifactId>spring-security-oauth2</artifactId>-->
-    <!--    </dependency>-->
-
     <dependency>
       <artifactId>spring-security-oauth2-jose</artifactId>
       <groupId>org.springframework.security</groupId>
     </dependency>
-
 
     <!-- Provided Dependencies -->
     <dependency>

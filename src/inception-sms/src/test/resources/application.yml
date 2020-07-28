@@ -1,8 +1,7 @@
-application:
-
+inception:
   sms:
     smsPortalAPIEndPoint: https://rest.smsportal.com/v1
-    smsPortalClientId: USERNAME
-    smsPortalClientSecret: XXX
+    smsPortalClientId: CLIENT_ID
+    smsPortalClientSecret: CLIENT_SECRET
     maximumSendAttempts: 100
     sendRetryDelay: 600000

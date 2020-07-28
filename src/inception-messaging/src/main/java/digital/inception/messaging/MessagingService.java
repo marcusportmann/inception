@@ -1369,7 +1369,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     try {
       if (StringUtils.isEmpty(encryptionKeyBase64)) {
         throw new MessagingServiceException(
-            "No application.messaging.encryptionKey configuration value found");
+            "No inception.messaging.encryptionKey configuration value found");
       } else {
         encryptionMasterKey = Base64Util.decode(encryptionKeyBase64);
       }

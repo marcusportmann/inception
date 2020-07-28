@@ -509,18 +509,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Create the new group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
    * @param group the group
    */
   @Override
   @Transactional
-  public void createGroup(UUID userDirectoryId, Group group)
+  public void createGroup(Group group)
       throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    IUserDirectory userDirectory = userDirectories.get(group.getUserDirectoryId());
 
     if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
+      throw new UserDirectoryNotFoundException(group.getUserDirectoryId());
     }
 
     userDirectory.createGroup(group);
@@ -576,21 +574,18 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Create the new user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
    * @param user the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked create the user locked
    */
   @Override
   @Transactional
-  public void createUser(
-      UUID userDirectoryId, User user, boolean expiredPassword, boolean userLocked)
+  public void createUser(User user, boolean expiredPassword, boolean userLocked)
       throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    IUserDirectory userDirectory = userDirectories.get(user.getUserDirectoryId());
 
     if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
+      throw new UserDirectoryNotFoundException(user.getUserDirectoryId());
     }
 
     if (getUserDirectoryIdForUser(user.getUsername()) != null) {
@@ -2328,18 +2323,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Update the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
    * @param group the group
    */
   @Override
   @Transactional
-  public void updateGroup(UUID userDirectoryId, Group group)
+  public void updateGroup(Group group)
       throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    IUserDirectory userDirectory = userDirectories.get(group.getUserDirectoryId());
 
     if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
+      throw new UserDirectoryNotFoundException(group.getUserDirectoryId());
     }
 
     userDirectory.updateGroup(group);
@@ -2371,20 +2364,18 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Update the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
    * @param user the user
    * @param expirePassword expire the user's password as part of the update
    * @param lockUser lock the user as part of the update
    */
   @Override
   @Transactional
-  public void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
+  public void updateUser(User user, boolean expirePassword, boolean lockUser)
       throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
-    IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
+    IUserDirectory userDirectory = userDirectories.get(user.getUserDirectoryId());
 
     if (userDirectory == null) {
-      throw new UserDirectoryNotFoundException(userDirectoryId);
+      throw new UserDirectoryNotFoundException(user.getUserDirectoryId());
     }
 
     userDirectory.updateUser(user, expirePassword, lockUser);

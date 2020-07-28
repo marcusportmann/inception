@@ -135,11 +135,9 @@ public interface ISecurityService {
   /**
    * Create the new group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
    * @param group the group
    */
-  void createGroup(UUID userDirectoryId, Group group)
+  void createGroup(Group group)
       throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException;
 
   /**
@@ -156,13 +154,11 @@ public interface ISecurityService {
   /**
    * Create the new user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
    * @param user the user
    * @param expiredPassword create the user with its password expired
    * @param userLocked create the user locked
    */
-  void createUser(UUID userDirectoryId, User user, boolean expiredPassword, boolean userLocked)
+  void createUser(User user, boolean expiredPassword, boolean userLocked)
       throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException;
 
   /**
@@ -870,11 +866,9 @@ public interface ISecurityService {
   /**
    * Update the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
    * @param group the group
    */
-  void updateGroup(UUID userDirectoryId, Group group)
+  void updateGroup(Group group)
       throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
@@ -888,13 +882,11 @@ public interface ISecurityService {
   /**
    * Update the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
    * @param user the user
    * @param expirePassword expire the user's password as part of the update
    * @param lockUser lock the user as part of the update
    */
-  void updateUser(UUID userDirectoryId, User user, boolean expirePassword, boolean lockUser)
+  void updateUser(User user, boolean expirePassword, boolean lockUser)
       throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
 
   /**

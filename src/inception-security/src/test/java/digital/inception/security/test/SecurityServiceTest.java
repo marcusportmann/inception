@@ -204,11 +204,11 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
 
     List<String> groupNames =
@@ -255,7 +255,7 @@ public class SecurityServiceTest {
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.adminChangePassword(
         userDirectory.getId(),
         user.getUsername(),
@@ -385,7 +385,7 @@ public class SecurityServiceTest {
 
     String originalPassword = user.getPassword();
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
 
     UUID userDirectoryId =
         securityService.changePassword(user.getUsername(), originalPassword, "New Password");
@@ -408,11 +408,11 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
 
     List<String> groupNames =
@@ -461,7 +461,7 @@ public class SecurityServiceTest {
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.deleteUser(userDirectory.getId(), "INVALID");
   }
 
@@ -483,8 +483,8 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
+    securityService.createGroup(group);
   }
 
   /** Test the duplicate organization functionality. */
@@ -505,8 +505,8 @@ public class SecurityServiceTest {
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
+    securityService.createUser(user, false, false);
   }
 
   /** Test the expired user password functionality. */
@@ -518,7 +518,7 @@ public class SecurityServiceTest {
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.adminChangePassword(
         userDirectory.getId(),
         user.getUsername(),
@@ -539,7 +539,7 @@ public class SecurityServiceTest {
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
 
     try {
       securityService.authenticate(user.getUsername(), "Invalid Password");
@@ -564,7 +564,7 @@ public class SecurityServiceTest {
     for (int i = 1; i < 20; i++) {
       User user = getNumberedTestUserDetails(userDirectory.getId(), i);
 
-      securityService.createUser(userDirectory.getId(), user, false, false);
+      securityService.createUser(user, false, false);
     }
 
     List<User> retrievedUsersAll = securityService.getUsers(userDirectory.getId());
@@ -655,8 +655,7 @@ public class SecurityServiceTest {
   public void getFunctionCodesForUserTest() throws Exception {
     User user = getTestUserDetails(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID);
 
-    securityService.createUser(
-        SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, user, false, false);
+    securityService.createUser(user, false, false);
 
     securityService.addUserToGroup(
         SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "Administrators", user.getUsername());
@@ -693,7 +692,7 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
 
     long numberOfGroupMembers =
         securityService.getNumberOfMembersForGroup(userDirectory.getId(), group.getName());
@@ -708,11 +707,11 @@ public class SecurityServiceTest {
 
     User firstUser = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), firstUser, false, false);
+    securityService.createUser(firstUser, false, false);
 
     User secondUser = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), secondUser, false, false);
+    securityService.createUser(secondUser, false, false);
 
     securityService.addMemberToGroup(
         userDirectory.getId(), group.getName(), GroupMemberType.USER, firstUser.getUsername());
@@ -762,7 +761,7 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
 
     Group retrievedGroup = securityService.getGroup(userDirectory.getId(), group.getName());
 
@@ -801,7 +800,7 @@ public class SecurityServiceTest {
     compareGroups(group, retrievedFilteredGroups.getGroups().get(0));
 
     group.setDescription("Test Updated Group Description");
-    securityService.updateGroup(userDirectory.getId(), group);
+    securityService.updateGroup(group);
 
     Group retrievedUpdatedGroup = securityService.getGroup(userDirectory.getId(), group.getName());
 
@@ -826,11 +825,11 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
     assertTrue(
         "Could not determine that the user ("
@@ -850,7 +849,7 @@ public class SecurityServiceTest {
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.adminChangePassword(
         userDirectory.getId(),
         user.getUsername(),
@@ -1014,11 +1013,11 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
 
     securityService.initiatePasswordReset(user.getUsername(), "", false, "Testing123");
 
@@ -1042,11 +1041,11 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.addUserToGroup(userDirectory.getId(), group.getName(), user.getUsername());
 
     List<String> groupNames =
@@ -1175,7 +1174,7 @@ public class SecurityServiceTest {
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
-    securityService.createGroup(userDirectory.getId(), group);
+    securityService.createGroup(group);
 
     securityService.addRoleToGroup(
         userDirectory.getId(),
@@ -1359,7 +1358,7 @@ public class SecurityServiceTest {
 
     String originalPassword = user.getPassword();
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
     securityService.changePassword(user.getUsername(), originalPassword, "Password1");
     securityService.changePassword(user.getUsername(), "Password1", "Password2");
     securityService.changePassword(user.getUsername(), "Password2", "Password1");
@@ -1374,7 +1373,7 @@ public class SecurityServiceTest {
 
     User user = getTestUserDetails(userDirectory.getId());
 
-    securityService.createUser(userDirectory.getId(), user, false, false);
+    securityService.createUser(user, false, false);
 
     UUID userDirectoryId = securityService.getUserDirectoryIdForUser(user.getUsername());
 
@@ -1382,6 +1381,15 @@ public class SecurityServiceTest {
         "The correct user directory ID was not retrieved for the user",
         userDirectory.getId(),
         userDirectoryId);
+
+    List<UUID> userDirectorIds = securityService.getUserDirectoryIdsForUser(user.getUsername());
+
+    assertEquals("The correct number of user director IDs was not retrieved for the user", 1, userDirectorIds.size());
+
+    assertEquals(
+        "The correct user directory ID was not retrieved for the user",
+        userDirectory.getId(),
+        userDirectorIds.get(0));
 
     User retrievedUser = securityService.getUser(userDirectory.getId(), user.getUsername());
 
@@ -1442,7 +1450,7 @@ public class SecurityServiceTest {
     user.setPhoneNumber("Test Updated Phone Number");
     user.setMobileNumber("Test Updated Mobile Number");
 
-    securityService.updateUser(userDirectory.getId(), user, false, false);
+    securityService.updateUser(user, false, false);
 
     User retrievedUpdatedUser = securityService.getUser(userDirectory.getId(), user.getUsername());
 
