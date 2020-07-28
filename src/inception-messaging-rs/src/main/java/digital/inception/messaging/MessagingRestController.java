@@ -21,6 +21,7 @@ package digital.inception.messaging;
 import digital.inception.rs.SecureRestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Validator;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Messaging API")
 @RestController
 @RequestMapping(value = "/api/messaging")
+@CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class MessagingRestController extends SecureRestController {
 

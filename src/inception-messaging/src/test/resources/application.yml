@@ -1,5 +1,5 @@
 inception:
   messaging:
-    encryptionKey: m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE=
-    processingRetryDelay: 60000
-    maximumProcessingAttempts: 1000
+    encryption-key: m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE=
+    processing-retry-delay: 60000
+    maximum-processing-attempts: 1000

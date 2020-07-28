@@ -45,6 +45,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +64,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Security API")
 @RestController
 @RequestMapping(value = "/api/security")
+@CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SecurityRestController extends SecureRestController {
 

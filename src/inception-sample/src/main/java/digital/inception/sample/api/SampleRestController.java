@@ -34,6 +34,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,6 +53,7 @@ import reactor.core.publisher.Mono;
 @Schema(description = "Sample API")
 @RestController
 @RequestMapping(value = "/api/sample")
+@CrossOrigin
 @SuppressWarnings({"unused"})
 public class SampleRestController {
 

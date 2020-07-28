@@ -65,34 +65,52 @@ public class SMSService implements ISMSService {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSService.class);
+
+  /** The SMS Portal provider. */
+  private final String PROVIDER_SMS_PORTAL = "sms-portal";
+
+  /** The Spring application context. */
+  private final ApplicationContext applicationContext;
+
+  /* The name of the SMS Service instance. */
+  private final String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
+
+  /** The SMS Repository. */
+  private final SMSRepository smsRepository;
+
   /** The web client builder. */
   private final WebClient.Builder webClientBuilder;
-  /** The Spring application context. */
-  private ApplicationContext applicationContext;
+
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
-  /* The name of the SMS Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
-  /** The maximum number of times sending will be attempted for a SMS. */
-  @Value("${inception.sms.maximumSendAttempts:100}")
-  private int maximumSendAttempts;
-  /** The SMS Portal API endpoint. */
-  @Value("${inception.sms.smsPortalAPIEndPoint:#{null}}")
-  private String smsPortalAPIEndPoint;
-  /** The SMS Portal client ID. */
-  @Value("${inception.sms.smsPortalClientId:#{null}}")
-  private String smsPortalClientId;
-  /** The SMS Portal client secret. */
-  @Value("${inception.sms.smsPortalClientSecret:#{null}}")
-  private String smsPortalClientSecret;
-  /** The delay in milliseconds to wait before re-attempting to send a SMS. */
-  @Value("${inception.sms.sendRetryDelay:600000}")
-  private int sendRetryDelay;
-  /** The SMS Repository. */
-  private SMSRepository smsRepository;
+
   /** The HTTP Client. */
   private HttpClient httpClient;
+
+  /** The maximum number of times sending will be attempted for a SMS. */
+  @Value("${inception.sms.maximum-send-attempts:100}")
+  private int maximumSendAttempts;
+
+  /** The delay in milliseconds to wait before re-attempting to send a SMS. */
+  @Value("${inception.sms.send-retry-delay:600000}")
+  private int sendRetryDelay;
+
+  /** The SMS Portal API endpoint. */
+  @Value("${inception.sms.providers.sms-portal.api-endpoint:#{null}}")
+  private String smsPortalAPIEndPoint;
+
+  /** The SMS Portal client ID. */
+  @Value("${inception.sms.providers.sms-portal.client-id:#{null}}")
+  private String smsPortalClientId;
+
+  /** The SMS Portal client secret. */
+  @Value("${inception.sms.providers.sms-portal.client-secret:#{null}}")
+  private String smsPortalClientSecret;
+
+  /** The SMS provider to use. */
+  @Value("${inception.sms.use-provider:#{null}}")
+  private String useProvider;
 
   /**
    * Constructs a new <code>SMSService</code>.
@@ -108,42 +126,6 @@ public class SMSService implements ISMSService {
     this.applicationContext = applicationContext;
     this.webClientBuilder = webClientBuilder;
     this.smsRepository = smsRepository;
-  }
-
-  private String buildSendDataXml(UUID smsId, String mobileNumber, String message) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
-    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-
-    Date now = new Date();
-
-    // buffer.append("<validityperiod>").append("48").append("</validityperiod>");
-
-    return "<senddata><settings><live>True</live>"
-        + "<return_credits>True</return_credits><default_date>"
-        + dateFormat.format(now)
-        + "</default_date><default_time>"
-        + timeFormat.format(now)
-        + "</default_time>"
-        + "<default_curdate>"
-        + dateFormat.format(now)
-        + "</default_curdate><default_curtime>"
-        + timeFormat.format(now)
-        + "</default_curtime><mo_forwardemail>"
-        + "sms-reply@mmp.guru</mo_forwardemail>"
-        + "</settings>"
-        + "<entries>"
-        + "<numto>"
-        + mobileNumber
-        + "</numto><customerid>"
-        + smsId
-        + "</customerid>"
-        + "<data1>"
-        + message
-        + "</data1><type>"
-        + "SMS"
-        + "</type>"
-        + "</entries>"
-        + "</senddata>";
   }
 
   /**
@@ -184,31 +166,6 @@ public class SMSService implements ISMSService {
     } catch (Throwable e) {
       throw new SMSServiceException("Failed to delete the SMS (" + smsId + ")", e);
     }
-  }
-
-  private String formatMobileNumber(String mobileNumber) {
-    if (StringUtils.isEmpty(mobileNumber)) {
-      return "";
-    }
-
-    // Remove whitespace
-    mobileNumber = mobileNumber.trim();
-    mobileNumber = StringUtils.replace(mobileNumber, " ", "");
-    mobileNumber = StringUtils.replace(mobileNumber, "\t", "");
-
-    if (mobileNumber.length() > 30) {
-      mobileNumber = mobileNumber.substring(0, 30);
-    }
-
-    if (mobileNumber.startsWith("0") && (mobileNumber.length() > 1)) {
-      mobileNumber = "27" + mobileNumber.substring(1);
-    }
-
-    if (!mobileNumber.startsWith("+")) {
-      mobileNumber = "+" + mobileNumber;
-    }
-
-    return mobileNumber;
   }
 
   /**
@@ -274,6 +231,7 @@ public class SMSService implements ISMSService {
    */
   @Override
   public int getNumberOfSMSCreditsRemaining() throws SMSServiceException {
+    if (PROVIDER_SMS_PORTAL.equalsIgnoreCase(useProvider)) {}
 
     return 0;
 
@@ -323,65 +281,6 @@ public class SMSService implements ISMSService {
     } catch (Throwable e) {
       throw new SMSServiceException(
           "Failed to retrieve the SMS (" + smsId + ") from the database", e);
-    }
-  }
-
-  private String getSMSPortalToken() throws SMSServiceException {
-    try {
-      // WebClient webClient = WebClient.builder()
-
-      return "";
-
-    } catch (Throwable e) {
-      throw new SMSServiceException("Failed to retrieve the SMS Portal token", e);
-    }
-  }
-
-  private Element parseAPIResultXML(String xml) {
-    try {
-      // Retrieve a document builder instance using the factory
-      DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-
-      builderFactory.setValidating(false);
-      builderFactory.setNamespaceAware(false);
-
-      // Create the document builder
-      DocumentBuilder builder = builderFactory.newDocumentBuilder();
-
-      builder.setErrorHandler(new XmlParserErrorHandler());
-
-      // Parse the XML
-      InputSource inputSource = new InputSource(new StringReader(xml));
-      Document document = builder.parse(inputSource);
-      Element apiResultElement = document.getDocumentElement();
-
-      if (!apiResultElement.getNodeName().equals("api_result")) {
-        throw new RuntimeException("Invalid API result XML: api_result element not found");
-      }
-
-      Element callResultElement = XmlUtil.getChildElement(apiResultElement, "call_result");
-
-      if (callResultElement == null) {
-        throw new RuntimeException("Invalid API result XML: call_result element not found");
-      }
-
-      Boolean result = XmlUtil.getChildElementBoolean(callResultElement, "result");
-
-      if (result == null) {
-        throw new RuntimeException("Invalid API result XML: result element not found");
-      }
-
-      if (!result) {
-        String error = XmlUtil.getChildElementText(callResultElement, "error");
-
-        throw new RuntimeException(
-            "The MyMobileAPI service returned an error: "
-                + (StringUtils.isEmpty(error) ? "UNKNOWN" : error));
-      }
-
-      return apiResultElement;
-    } catch (Throwable e) {
-      throw new RuntimeException("Failed to parse the API result XML", e);
     }
   }
 
@@ -468,9 +367,11 @@ public class SMSService implements ISMSService {
         return true;
       }
 
-      String smsPortalToken = getSMSPortalToken();
+      if (PROVIDER_SMS_PORTAL.equalsIgnoreCase(useProvider)) {
+        String smsPortalToken = getSMSPortalToken();
 
-      String sendXML = buildSendDataXml(smsId, mobileNumber, message);
+        String sendXML = buildSendDataXml(smsId, mobileNumber, message);
+      }
 
       /*
       APISoap myMobileAPIService = getMyMobileAPIService();
@@ -553,26 +454,6 @@ public class SMSService implements ISMSService {
     }
   }
 
-  /*
-  private APISoap getMyMobileAPIService() {
-    // Retrieve the proxy for the MyMobileAPI service
-    URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
-        "META-INF/wsdl/MyMobileAPI.wsdl");
-
-    API api = new API(wsdlLocation, new QName("http://www.mymobileapi.com/api5", "API"));
-
-    APISoap apiSoap = api.getAPISoap();
-
-    BindingProvider bindingProvider = ((BindingProvider) apiSoap);
-
-    // Set the endpoint for the service
-    bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-        myMobileAPIEndPoint);
-
-    return apiSoap;
-  }
-  */
-
   /**
    * Set the status for the SMS.
    *
@@ -628,6 +509,146 @@ public class SMSService implements ISMSService {
               + status
               + ") in the database",
           e);
+    }
+  }
+
+  private String buildSendDataXml(UUID smsId, String mobileNumber, String message) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+    Date now = new Date();
+
+    // buffer.append("<validityperiod>").append("48").append("</validityperiod>");
+
+    return "<senddata><settings><live>True</live>"
+        + "<return_credits>True</return_credits><default_date>"
+        + dateFormat.format(now)
+        + "</default_date><default_time>"
+        + timeFormat.format(now)
+        + "</default_time>"
+        + "<default_curdate>"
+        + dateFormat.format(now)
+        + "</default_curdate><default_curtime>"
+        + timeFormat.format(now)
+        + "</default_curtime><mo_forwardemail>"
+        + "sms-reply@mmp.guru</mo_forwardemail>"
+        + "</settings>"
+        + "<entries>"
+        + "<numto>"
+        + mobileNumber
+        + "</numto><customerid>"
+        + smsId
+        + "</customerid>"
+        + "<data1>"
+        + message
+        + "</data1><type>"
+        + "SMS"
+        + "</type>"
+        + "</entries>"
+        + "</senddata>";
+  }
+
+  private String formatMobileNumber(String mobileNumber) {
+    if (StringUtils.isEmpty(mobileNumber)) {
+      return "";
+    }
+
+    // Remove whitespace
+    mobileNumber = mobileNumber.trim();
+    mobileNumber = StringUtils.replace(mobileNumber, " ", "");
+    mobileNumber = StringUtils.replace(mobileNumber, "\t", "");
+
+    if (mobileNumber.length() > 30) {
+      mobileNumber = mobileNumber.substring(0, 30);
+    }
+
+    if (mobileNumber.startsWith("0") && (mobileNumber.length() > 1)) {
+      mobileNumber = "27" + mobileNumber.substring(1);
+    }
+
+    if (!mobileNumber.startsWith("+")) {
+      mobileNumber = "+" + mobileNumber;
+    }
+
+    return mobileNumber;
+  }
+
+  /*
+  private APISoap getMyMobileAPIService() {
+    // Retrieve the proxy for the MyMobileAPI service
+    URL wsdlLocation = Thread.currentThread().getContextClassLoader().getResource(
+        "META-INF/wsdl/MyMobileAPI.wsdl");
+
+    API api = new API(wsdlLocation, new QName("http://www.mymobileapi.com/api5", "API"));
+
+    APISoap apiSoap = api.getAPISoap();
+
+    BindingProvider bindingProvider = ((BindingProvider) apiSoap);
+
+    // Set the endpoint for the service
+    bindingProvider.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+        myMobileAPIEndPoint);
+
+    return apiSoap;
+  }
+  */
+
+  private String getSMSPortalToken() throws SMSServiceException {
+    try {
+      // WebClient webClient = WebClient.builder()
+
+      return "";
+
+    } catch (Throwable e) {
+      throw new SMSServiceException("Failed to retrieve the SMS Portal token", e);
+    }
+  }
+
+  private Element parseAPIResultXML(String xml) {
+    try {
+      // Retrieve a document builder instance using the factory
+      DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+      builderFactory.setValidating(false);
+      builderFactory.setNamespaceAware(false);
+
+      // Create the document builder
+      DocumentBuilder builder = builderFactory.newDocumentBuilder();
+
+      builder.setErrorHandler(new XmlParserErrorHandler());
+
+      // Parse the XML
+      InputSource inputSource = new InputSource(new StringReader(xml));
+      Document document = builder.parse(inputSource);
+      Element apiResultElement = document.getDocumentElement();
+
+      if (!apiResultElement.getNodeName().equals("api_result")) {
+        throw new RuntimeException("Invalid API result XML: api_result element not found");
+      }
+
+      Element callResultElement = XmlUtil.getChildElement(apiResultElement, "call_result");
+
+      if (callResultElement == null) {
+        throw new RuntimeException("Invalid API result XML: call_result element not found");
+      }
+
+      Boolean result = XmlUtil.getChildElementBoolean(callResultElement, "result");
+
+      if (result == null) {
+        throw new RuntimeException("Invalid API result XML: result element not found");
+      }
+
+      if (!result) {
+        String error = XmlUtil.getChildElementText(callResultElement, "error");
+
+        throw new RuntimeException(
+            "The MyMobileAPI service returned an error: "
+                + (StringUtils.isEmpty(error) ? "UNKNOWN" : error));
+      }
+
+      return apiResultElement;
+    } catch (Throwable e) {
+      throw new RuntimeException("Failed to parse the API result XML", e);
     }
   }
 }

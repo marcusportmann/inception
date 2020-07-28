@@ -80,7 +80,7 @@ import org.springframework.util.StringUtils;
     excludeFilters = {
       @ComponentScan.Filter(value = SpringBootApplication.class, type = FilterType.ANNOTATION),
       @ComponentScan.Filter(
-          pattern = "digital\\.inception\\.application\\.ApplicationDatabaseConfiguration",
+          pattern = "digital\\.inception\\.application\\.ApplicationDataSourceConfiguration",
           type = FilterType.REGEX),
       @ComponentScan.Filter(
           pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
@@ -104,7 +104,7 @@ public class TestConfiguration {
    * application database.
    */
   @Value("classpath*:**/*-h2.sql")
-  private Resource[] databaseInitResources;
+  private Resource[] inMemoryInitResources;
 
   /**
    * Constructs a new <code>TestConfiguration</code>.
@@ -149,6 +149,26 @@ public class TestConfiguration {
     }
 
     return localContainerEntityManagerFactoryBean;
+  }
+
+  /**
+   * Returns the Spring task executor to use for @Async method invocations.
+   *
+   * @return the Spring task executor to use for @Async method invocations
+   */
+  @Bean
+  public Executor taskExecutor() {
+    return new SimpleAsyncTaskExecutor();
+  }
+
+  /**
+   * Returns the Spring task scheduler.
+   *
+   * @return the Spring task scheduler
+   */
+  @Bean
+  public TaskScheduler taskScheduler() {
+    return new ConcurrentTaskScheduler();
   }
 
   /**
@@ -213,7 +233,7 @@ public class TestConfiguration {
            * Initialize the in-memory database using the SQL statements contained in the resources
            * for the Inception framework.
            */
-          for (Resource databaseInitResource : databaseInitResources) {
+          for (Resource databaseInitResource : inMemoryInitResources) {
             if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
                 && databaseInitResource.getFilename().startsWith("inception-")) {
               loadSQL(dataSource, databaseInitResource);
@@ -224,7 +244,7 @@ public class TestConfiguration {
            * Initialize the in-memory database using the SQL statements contained in any other
            * resources.
            */
-          for (Resource databaseInitResource : databaseInitResources) {
+          for (Resource databaseInitResource : inMemoryInitResources) {
             if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
                 && (!databaseInitResource.getFilename().startsWith("inception-"))) {
               loadSQL(dataSource, databaseInitResource);
@@ -237,6 +257,19 @@ public class TestConfiguration {
 
       return dataSource;
     }
+  }
+
+  /**
+   * Returns the names of the packages to scan for JPA entity classes.
+   *
+   * @return the names of the packages to scan for JPA entity classes
+   */
+  protected List<String> packagesToScanForEntities() {
+    List<String> packagesToScan = new ArrayList<>();
+
+    packagesToScan.add("digital.inception");
+
+    return packagesToScan;
   }
 
   private void loadSQL(DataSource dataSource, Resource databaseInitResource)
@@ -265,38 +298,5 @@ public class TestConfiguration {
 
       throw e;
     }
-  }
-
-  /**
-   * Returns the names of the packages to scan for JPA entity classes.
-   *
-   * @return the names of the packages to scan for JPA entity classes
-   */
-  protected List<String> packagesToScanForEntities() {
-    List<String> packagesToScan = new ArrayList<>();
-
-    packagesToScan.add("digital.inception");
-
-    return packagesToScan;
-  }
-
-  /**
-   * Returns the Spring task executor to use for @Async method invocations.
-   *
-   * @return the Spring task executor to use for @Async method invocations
-   */
-  @Bean
-  public Executor taskExecutor() {
-    return new SimpleAsyncTaskExecutor();
-  }
-
-  /**
-   * Returns the Spring task scheduler.
-   *
-   * @return the Spring task scheduler
-   */
-  @Bean
-  public TaskScheduler taskScheduler() {
-    return new ConcurrentTaskScheduler();
   }
 }

@@ -49,101 +49,81 @@ import org.springframework.util.StringUtils;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ApplicationDatabaseConfiguration</code> class provides access to the application
- * database configuration and initialises the application data source and the application entity
- * manager factory bean associated with the application data source.
+ * The <code>ApplicationDataSourceConfiguration</code> class provides access to the application data
+ * source configuration and initialises the application data source.
  *
  * @author Marcus Portmann
  */
 @Configuration
-@ConditionalOnProperty(value = "application.database.dataSource")
+@ConditionalOnProperty(value = "inception.application.data-source.class-name")
 @SuppressWarnings("unused")
-public class ApplicationDatabaseConfiguration {
+public class ApplicationDataSourceConfiguration {
 
   /* Logger */
   private static final Logger logger =
-      LoggerFactory.getLogger(ApplicationDatabaseConfiguration.class);
+      LoggerFactory.getLogger(ApplicationDataSourceConfiguration.class);
 
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
-
-  /** The application data source. */
-  private DataSource dataSource;
+  private final ApplicationContext applicationContext;
 
   /**
    * The fully qualified name of the data source class used to connect to the application database.
    */
-  @Value("${application.database.dataSource:#{null}}")
-  private String dataSourceClass;
+  @Value("${inception.application.data-source.class-name:#{null}}")
+  private String className;
+
+  /** The application data source. */
+  private DataSource dataSource;
 
   /**
    * The resources on the classpath that contain the SQL statements used to initialize the in-memory
    * application database.
    */
   @Value("classpath*:**/*-h2.sql")
-  private Resource[] databaseInitResources;
-
-  /**
-   * The optional paths to the resources on the classpath that contain the SQL statements used to
-   * initialize the in-memory application database.
-   */
-  @Value("${application.database.inMemoryDatabaseInitResources:#{null}}")
-  private String inMemoryDatabaseInitResources;
+  private Resource[] inMemoryInitResources;
 
   /**
    * The maximum size of the database connection pool used to connect to the application database.
    */
-  @Value("${application.database.maxPoolSize:5}")
+  @Value("${inception.application.data-source.max-pool-size:5}")
   private int maxPoolSize;
 
   /**
    * The minimum size of the database connection pool used to connect to the application database.
    */
-  @Value("${application.database.minPoolSize:1}")
+  @Value("${inception.application.data-source.min-pool-size:1}")
   private int minPoolSize;
 
   /** The password for the application database. */
-  @Value("${application.database.password:#{null}}")
+  @Value("${inception.application.data-source.password:#{null}}")
   private String password;
 
   /** Is transaction recovery enabled for the application database. */
-  @Value("${application.database.recoveryEnabled:#{false}}")
+  @Value("${inception.application.data-source.recovery.enabled:#{false}}")
   private boolean recoveryEnabled;
 
   /** The recovery password for the application database. */
-  @Value("${application.database.recoveryPassword:#{null}}")
+  @Value("${inception.application.data-source.recovery.password:#{null}}")
   private String recoveryPassword;
 
   /** The recovery username for the application database. */
-  @Value("${application.database.recoveryUsername:#{null}}")
+  @Value("${inception.application.data-source.recovery.username:#{null}}")
   private String recoveryUsername;
 
   /** The URL used to connect to the application database. */
-  @Value("${application.database.url:#{null}}")
+  @Value("${inception.application.data-source.url:#{null}}")
   private String url;
 
   /** The username for the application database. */
-  @Value("${application.database.username:#{null}}")
+  @Value("${inception.application.data-source.username:#{null}}")
   private String username;
 
-  /** The XA password for the application database. */
-  @Value("${application.database.xaPassword:#{null}}")
-  private String xaPassword;
-
-  /** The XA server name for the application database. */
-  @Value("${application.database.xaServerName:#{null}}")
-  private String xaServerName;
-
-  /** The XA username for the application database. */
-  @Value("${application.database.xaUsername:#{null}}")
-  private String xaUsername;
-
   /**
-   * Constructs a new <code>ApplicationDatabaseConfiguration</code>.
+   * Constructs a new <code>ApplicationDataSourceConfiguration</code>.
    *
    * @param applicationContext the Spring application context
    */
-  public ApplicationDatabaseConfiguration(ApplicationContext applicationContext) {
+  public ApplicationDataSourceConfiguration(ApplicationContext applicationContext) {
     this.applicationContext = applicationContext;
   }
 
@@ -156,7 +136,7 @@ public class ApplicationDatabaseConfiguration {
   @DependsOn({"transactionManager"})
   public DataSource dataSource() {
     try {
-      if ((dataSourceClass == null) || (url == null)) {
+      if ((className == null) || (url == null)) {
         throw new ApplicationException("Failed to retrieve the application database configuration");
       }
 
@@ -165,6 +145,7 @@ public class ApplicationDatabaseConfiguration {
       TransactionSynchronizationRegistry transactionSynchronizationRegistry =
           applicationContext.getBean(TransactionSynchronizationRegistry.class);
 
+      // See: https://agroal.github.io/docs.html
       Properties agroalProperties = new Properties();
       agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, url);
 
@@ -187,7 +168,7 @@ public class ApplicationDatabaseConfiguration {
         }
       }
 
-      agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME, dataSourceClass);
+      agroalProperties.setProperty(AgroalPropertiesReader.PROVIDER_CLASS_NAME, className);
 
       agroalProperties.setProperty(
           AgroalPropertiesReader.MIN_SIZE, (minPoolSize > 0) ? Integer.toString(minPoolSize) : "1");
@@ -268,10 +249,10 @@ public class ApplicationDatabaseConfiguration {
          * Initialize the in-memory database using the SQL statements contained in the resources
          * for the Inception framework.
          */
-        for (Resource databaseInitResource : databaseInitResources) {
-          if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
-              && databaseInitResource.getFilename().contains("inception-")) {
-            loadSQL(dataSource, databaseInitResource);
+        for (Resource inMemoryInitResource : inMemoryInitResources) {
+          if ((!StringUtils.isEmpty(inMemoryInitResource.getFilename()))
+              && inMemoryInitResource.getFilename().contains("inception-")) {
+            loadSQL(dataSource, inMemoryInitResource);
           }
         }
 
@@ -279,10 +260,10 @@ public class ApplicationDatabaseConfiguration {
          * Initialize the in-memory database using the SQL statements contained in any other
          * resources for the application.
          */
-        for (Resource databaseInitResource : databaseInitResources) {
-          if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
-              && (!databaseInitResource.getFilename().contains("inception-"))) {
-            loadSQL(dataSource, databaseInitResource);
+        for (Resource inMemoryInitResource : inMemoryInitResources) {
+          if ((!StringUtils.isEmpty(inMemoryInitResource.getFilename()))
+              && (!inMemoryInitResource.getFilename().contains("inception-"))) {
+            loadSQL(dataSource, inMemoryInitResource);
           }
         }
       }

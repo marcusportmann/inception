@@ -21,6 +21,7 @@ package digital.inception.sms;
 import digital.inception.rs.SecureRestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Validator;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "SMS API")
 @RestController
 @RequestMapping(value = "/api/sms")
+@CrossOrigin
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SMSRestController extends SecureRestController {
 

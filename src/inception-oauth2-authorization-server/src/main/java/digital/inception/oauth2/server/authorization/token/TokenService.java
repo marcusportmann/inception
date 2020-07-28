@@ -59,11 +59,11 @@ public class TokenService implements ITokenService {
   private String applicationName;
 
   /* The RSA private key used to sign the JWTs. */
-  @Value("${inception.oauth2.authorizationserver.jwt.private-key-location}")
+  @Value("${inception.oauth2.authorization-server.jwt.private-key-location}")
   private RSAPrivateKey rsaPrivateKey;
 
   /* The RSA public key used to verify the JWTs. */
-  @Value("${inception.oauth2.authorizationserver.jwt.public-key-location}")
+  @Value("${inception.oauth2.authorization-server.jwt.public-key-location}")
   private RSAPublicKey rsaPublicKey;
 
   /**

@@ -44,7 +44,8 @@ import org.springframework.util.StringUtils;
 
 /**
  * The <code>PersistenceConfiguration</code> class provides the Spring configuration for the
- * Persistence module.
+ * persistence module and initializes the application entity  manager factory bean associated with
+ * the application data source.
  *
  * @author Marcus Portmann
  */
@@ -56,7 +57,7 @@ public class PersistenceConfiguration {
   private ApplicationContext applicationContext;
 
   /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
-  @Value("${application.database.packagesToScanForEntities:#{null}}")
+  @Value("${inception.application.data-source.entity-packages:#{null}}")
   private String packagesToScanForEntities;
 
   /**

@@ -64,11 +64,11 @@ public class SMSServiceTest {
   @Autowired private ISMSService smsService;
 
   /** The client ID to use for the SMS Portal API. */
-  @Value("${inception.sms.smsPortalClientId:#{null}}")
+  @Value("${inception.sms.providers.sms-portal.client-id:#{null}}")
   private String smsPortalClientId;
 
   /** The client secret to use for the SMS Portal API. */
-  @Value("${inception.sms.smsPortalClientSecret:#{null}}")
+  @Value("${inception.sms.providers.sms-portal.client-secret:#{null}}")
   private String smsPortalClientSecret;
 
   private static synchronized SMS getTestSMSDetails() {

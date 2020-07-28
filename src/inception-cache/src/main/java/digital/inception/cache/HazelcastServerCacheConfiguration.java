@@ -47,7 +47,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ConditionalOnClass(name = "com.hazelcast.config.Config")
-@ConditionalOnProperty(value = "application.hazelcast.server.enabled", havingValue = "true")
+@ConditionalOnProperty(value = "inception.cache.hazelcast.server.enabled", havingValue = "true")
 @EnableCaching
 @ConfigurationProperties("inception.cache.hazelcast.server")
 public class HazelcastServerCacheConfiguration {
@@ -57,6 +57,9 @@ public class HazelcastServerCacheConfiguration {
 
   /** The distributed in-memory cache cluster configuration. */
   private ClusterConfig cluster;
+
+  /** Is the Hazelcast server cache enabled? */
+  private boolean enabled;
 
   /**
    * Returns the distributed in-memory caches.
@@ -176,6 +179,26 @@ public class HazelcastServerCacheConfiguration {
     // HazelcastInstanceFactory
 
     return config;
+  }
+
+  /**
+   * Returns whether the Hazelcast server cache is enabled.
+   *
+   * @return <code>true</code> if the Hazelcast server cache is enabled or <code>false</code>
+   *     otherwise
+   */
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  /**
+   * Set whether the Hazelcast server cache is enabled.
+   *
+   * @param enabled <code>true</code> if the Hazelcast server cache is enabled or <code>false</code>
+   *     otherwise
+   */
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
   /**
