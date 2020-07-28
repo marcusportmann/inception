@@ -45,10 +45,10 @@ import javax.xml.bind.annotation.XmlElement;
 public class ErrorWebService {
 
   /** The Error Service. */
-  private IErrorService errorService;
+  private final IErrorService errorService;
 
   /** The JSR-303 validator. */
-  private Validator validator;
+  private final Validator validator;
 
   /**
    * Constructs a new <code>ErrorWebService</code>.
@@ -62,7 +62,7 @@ public class ErrorWebService {
   }
 
   /**
-   * Create the error report.
+   * Create the new error report.
    *
    * @param errorReport the error report to create
    */

@@ -80,7 +80,7 @@ public class UserDirectoryType implements java.io.Serializable {
   private String name;
 
   /** The Java class that implements the user directory type. */
-  @JsonIgnore @XmlTransient @Transient private transient Class userDirectoryClass;
+  @JsonIgnore @Transient private transient Class userDirectoryClass;
 
   /** The fully qualified name of the Java class that implements the user directory type. */
   @Schema(

@@ -50,10 +50,10 @@ import org.springframework.util.StringUtils;
 public class CodesWebService {
 
   /** The Codes Service. */
-  private ICodesService codesService;
+  private final ICodesService codesService;
 
   /** The JSR-303 Validator. */
-  private Validator validator;
+  private final Validator validator;
 
   /**
    * Constructs a new <code>CodesRestController</code>.
@@ -67,7 +67,7 @@ public class CodesWebService {
   }
 
   /**
-   * Create the code.
+   * Create the new code.
    *
    * @param code the code to create
    */
@@ -81,7 +81,7 @@ public class CodesWebService {
   }
 
   /**
-   * Create the code category.
+   * Create the new code category.
    *
    * @param codeCategory the code category to create
    */
@@ -185,24 +185,6 @@ public class CodesWebService {
   }
 
   /**
-   * Retrieve the codes for a code category
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   * @return the codes for the code category
-   */
-  @WebMethod(operationName = "GetCodes")
-  @WebResult(name = "Code")
-  public List<Code> getCodeCategoryCodes(
-      @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    return codesService.getCodes(codeCategoryId);
-  }
-
-  /**
    * Retrieve the XML or JSON data for a code category
    *
    * @param codeCategoryId the ID uniquely identifying the code category
@@ -220,6 +202,24 @@ public class CodesWebService {
     String data = codesService.getCodeCategoryData(codeCategoryId);
 
     return StringUtils.isEmpty(data) ? "" : data;
+  }
+
+  /**
+   * Retrieve the name of the code category
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @return the name of the code category
+   */
+  @WebMethod(operationName = "GetCodeCategoryName")
+  @WebResult(name = "GetCodeCategoryName")
+  public String getCodeCategoryName(
+      @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    return codesService.getCodeCategoryName(codeCategoryId);
   }
 
   /**
@@ -253,6 +253,48 @@ public class CodesWebService {
             .getCodeCategoryUpdated(codeCategoryId)
             .atZone(ZoneId.systemDefault())
             .toInstant());
+  }
+
+  /**
+   * Retrieve the name of the code.
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param codeId the ID uniquely identifying the code
+   * @return the name of the code
+   */
+  @WebMethod(operationName = "GetCodeName")
+  @WebResult(name = "CodeName")
+  public String getCodeName(
+      @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
+      @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    if (StringUtils.isEmpty(codeId)) {
+      throw new InvalidArgumentException("codeId");
+    }
+
+    return codesService.getCodeName(codeCategoryId, codeId);
+  }
+
+  /**
+   * Retrieve the codes for a code category
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @return the codes for the code category
+   */
+  @WebMethod(operationName = "GetCodes")
+  @WebResult(name = "Code")
+  public List<Code> getCodesForCodeCategory(
+      @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (StringUtils.isEmpty(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    return codesService.getCodesForCodeCategory(codeCategoryId);
   }
 
   /**

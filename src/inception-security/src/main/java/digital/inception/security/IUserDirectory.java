@@ -195,8 +195,7 @@ interface IUserDirectory {
    * @param pageSize the optional page size
    * @return the groups
    */
-  List<Group> getGroups(
-      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+  Groups getGroups(String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException;
 
   /**
@@ -227,7 +226,7 @@ interface IUserDirectory {
    * @param pageSize the optional page size
    * @return the group members for the group
    */
-  List<GroupMember> getMembersForGroup(
+  GroupMembers getMembersForGroup(
       String groupName,
       String filter,
       SortDirection sortDirection,
@@ -321,7 +320,7 @@ interface IUserDirectory {
    * @param pageSize the optional page size
    * @return the users
    */
-  List<User> getUsers(
+  Users getUsers(
       String filter,
       UserSortBy sortBy,
       SortDirection sortDirection,

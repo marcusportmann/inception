@@ -255,11 +255,11 @@ public class CodesServiceTest {
 
     assertEquals("The correct number of codes was not retrieved", codes.size(), numberOfCodes);
 
-    List<Code> retrievedCodes = codesService.getCodes(codeCategory.getId());
+    List<Code> retrievedCodes = codesService.getCodesForCodeCategory(codeCategory.getId());
 
     compareCodes(codes, retrievedCodes);
 
-    retrievedCodes = codesService.getCodesWithParameters(codeCategory.getId(), new HashMap<>());
+    retrievedCodes = codesService.getCodesForCodeCategoryWithParameters(codeCategory.getId(), new HashMap<>());
 
     compareCodes(codes, retrievedCodes);
   }

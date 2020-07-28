@@ -74,17 +74,14 @@ import org.xml.sax.InputSource;
 @SuppressWarnings("unused")
 public class MessagingService implements IMessagingService, InitializingBean {
 
-  /**
-   * The path to the messaging configuration files (META-INF/MessagingConfig.xml) on the classpath.
-   */
-  private static final String MESSAGING_CONFIGURATION_PATH = "META-INF/MessagingConfig.xml";
-
   /** The AES encryption IV used when generating user-device AES encryption keys. */
   private static final byte[] AES_USER_DEVICE_ENCRYPTION_KEY_GENERATION_ENCRYPTION_IV =
       Base64Util.decode("QSaz5pMnMbar66FsNdI/ZQ==");
 
-  /* Logger */
-  private static final Logger logger = LoggerFactory.getLogger(MessagingService.class);
+  /**
+   * The path to the messaging configuration files (META-INF/MessagingConfig.xml) on the classpath.
+   */
+  private static final String MESSAGING_CONFIGURATION_PATH = "META-INF/MessagingConfig.xml";
 
   /** The maximum number of messages to download at one time. */
   private static final int NUMBER_OF_MESSAGES_TO_DOWNLOAD = 3;
@@ -92,14 +89,23 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /** The maximum number of message parts to download at one time. */
   private static final int NUMBER_OF_MESSAGE_PARTS_TO_DOWNLOAD = 3;
 
-  /* The name of the Messaging Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("MessagingService");
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(MessagingService.class);
 
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /** The Archived Message Repository. */
-  private ArchivedMessageRepository archivedMessageRepository;
+  private final ArchivedMessageRepository archivedMessageRepository;
+
+  /* The name of the Messaging Service instance. */
+  private final String instanceName = ServiceUtil.getServiceInstanceName("MessagingService");
+
+  /** The Message Part Repository. */
+  private final MessagePartRepository messagePartRepository;
+
+  /** The Message Repository. */
+  private final MessageRepository messageRepository;
 
   /**
    * The base64 encoded AES encryption master key used to derive the device/user encryption keys.
@@ -126,12 +132,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * files (META-INF/MessagingConfig.xml) on the classpath.
    */
   private List<MessageHandlerConfig> messageHandlersConfig;
-
-  /** The Message Part Repository. */
-  private MessagePartRepository messagePartRepository;
-
-  /** The Message Repository. */
-  private MessageRepository messageRepository;
 
   /** The delay in milliseconds to wait before re-attempting to process a message. */
   @Value("${inception.messaging.processingRetryDelay:60000}")
@@ -350,7 +350,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   }
 
   /**
-   * Create the message.
+   * Create the new message.
    *
    * @param message the <code>Message</code> instance containing the information for the message
    */
@@ -366,7 +366,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   }
 
   /**
-   * Create the message part.
+   * Create the new message part.
    *
    * @param messagePart the <code>MessagePart</code> instance containing the information for the
    *     message part
@@ -882,87 +882,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
   }
 
-  /** Initialize the configuration for the Messaging Service. */
-  private void initConfiguration() throws MessagingServiceException {
-    try {
-      if (StringUtils.isEmpty(encryptionKeyBase64)) {
-        throw new MessagingServiceException(
-            "No application.messaging.encryptionKey configuration value found");
-      } else {
-        encryptionMasterKey = Base64Util.decode(encryptionKeyBase64);
-      }
-    } catch (Throwable e) {
-      throw new MessagingServiceException(
-          "Failed to initialize the configuration for the Messaging Service", e);
-    }
-  }
-
-  /** Initialize the message handlers. */
-  private void initMessageHandlers() {
-    // Initialize each message handler
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      try {
-        logger.info(
-            "Initializing the message handler ("
-                + messageHandlerConfig.getName()
-                + ") with class ("
-                + messageHandlerConfig.getClassName()
-                + ")");
-
-        Class<?> clazz =
-            Thread.currentThread()
-                .getContextClassLoader()
-                .loadClass(messageHandlerConfig.getClassName());
-
-        Constructor<?> constructor = clazz.getConstructor(MessageHandlerConfig.class);
-
-        if (constructor != null) {
-          // Create an instance of the message handler
-          IMessageHandler messageHandler =
-              (IMessageHandler) constructor.newInstance(messageHandlerConfig);
-
-          // Perform dependency injection on the message handler
-          applicationContext.getAutowireCapableBeanFactory().autowireBean(messageHandler);
-
-          List<MessageHandlerConfig.MessageConfig> messagesConfig =
-              messageHandlerConfig.getMessagesConfig();
-
-          for (MessageHandlerConfig.MessageConfig messageConfig : messagesConfig) {
-            if (messageHandlers.containsKey(messageConfig.getMessageTypeId())) {
-              IMessageHandler existingMessageHandler =
-                  messageHandlers.get(messageConfig.getMessageTypeId());
-
-              logger.warn(
-                  "Failed to register the message handler ("
-                      + messageHandler.getClass().getName()
-                      + ") for the message type ("
-                      + messageConfig.getMessageTypeId()
-                      + ") since another message handler ("
-                      + existingMessageHandler.getClass().getName()
-                      + ") has already been registered to process messages of this type");
-            } else {
-              messageHandlers.put(messageConfig.getMessageTypeId(), messageHandler);
-            }
-          }
-        } else {
-          logger.error(
-              "Failed to register the message handler ("
-                  + messageHandlerConfig.getClassName()
-                  + ") since the message handler class does not provide a constructor with the required"
-                  + " signature");
-        }
-      } catch (Throwable e) {
-        logger.error(
-            "Failed to initialize the message handler ("
-                + messageHandlerConfig.getName()
-                + ") with class ("
-                + messageHandlerConfig.getClassName()
-                + ")",
-            e);
-      }
-    }
-  }
-
   /**
    * Should the specified message be archived?
    *
@@ -975,26 +894,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
   }
 
   /**
-   * Should a message with the specified type be archived?
-   *
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the message type
-   * @return <code>true</code> if a message with the specified type should be archived or <code>
-   *     false</code> otherwise
-   */
-  private boolean isArchivableMessage(UUID typeId) {
-    // TODO: Add caching of this check
-
-    // Check if any of the configured handlers supports archiving of the message
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      if (messageHandlerConfig.isArchivable(typeId)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /**
    * Can the specified message be processed asynchronously?
    *
    * @param message the message
@@ -1004,26 +903,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   public boolean isAsynchronousMessage(Message message) {
     return isAsynchronousMessage(message.getTypeId());
-  }
-
-  /**
-   * Can a message with the specified type be processed asynchronously?
-   *
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the message type
-   * @return <code>true</code> if a message with the specified type can be processed asynchronously
-   *     or <code>false</code> otherwise
-   */
-  private boolean isAsynchronousMessage(UUID typeId) {
-    // TODO: Add caching of this check
-
-    // Check if any of the configured handlers support the synchronous processing of this message
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      if (messageHandlerConfig.supportsAsynchronousProcessing(typeId)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   /**
@@ -1076,26 +955,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
   }
 
   /**
-   * Should a message with the specified type be processed securely?
-   *
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the message type
-   * @return <code>true</code> if a message with the specified type should be processed securely or
-   *     <code>false</code> otherwise
-   */
-  private boolean isSecureMessage(UUID typeId) {
-    // TODO: Add caching of this check
-
-    // Check if any of the configured handlers required secure processing of the message type
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      if (messageHandlerConfig.isSecure(typeId)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /**
    * Should the specified message be processed synchronously?
    *
    * @param message the message
@@ -1104,26 +963,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   public boolean isSynchronousMessage(Message message) {
     return isSynchronousMessage(message.getTypeId());
-  }
-
-  /**
-   * Can a message with the specified type be processed synchronously?
-   *
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the message type
-   * @return <code>true</code> if a message with the specified type can be processed synchronously
-   *     or <code>false</code> otherwise
-   */
-  private boolean isSynchronousMessage(UUID typeId) {
-    // TODO: Add caching of this check
-
-    // Check if any of the configured handlers support the synchronous processing of this message
-    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
-      if (messageHandlerConfig.supportsSynchronousProcessing(typeId)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 
   /**
@@ -1381,86 +1220,6 @@ public class MessagingService implements IMessagingService, InitializingBean {
   }
 
   /**
-   * Read the messaging configuration from all the <i>META-INF/MessagingConfig.xml</i> configuration
-   * files that can be found on the classpath.
-   */
-  private void readMessagingConfig() throws MessagingServiceException {
-    try {
-      messageHandlersConfig = new ArrayList<>();
-
-      ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
-      // Load the messaging configuration files from the classpath
-      Enumeration<URL> configurationFiles = classLoader.getResources(MESSAGING_CONFIGURATION_PATH);
-
-      while (configurationFiles.hasMoreElements()) {
-        URL configurationFile = configurationFiles.nextElement();
-
-        if (logger.isDebugEnabled()) {
-          logger.debug(
-              "Reading the messaging configuration file ("
-                  + configurationFile.toURI().toString()
-                  + ")");
-        }
-
-        // Retrieve a document builder instance using the factory
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-
-        builderFactory.setValidating(true);
-
-        // builderFactory.setNamespaceAware(true);
-        DocumentBuilder builder = builderFactory.newDocumentBuilder();
-
-        builder.setEntityResolver(
-            new DtdJarResolver("MessagingConfig.dtd", "META-INF/MessagingConfig.dtd"));
-        builder.setErrorHandler(new XmlParserErrorHandler());
-
-        // Parse the XML messaging configuration file using the document builder
-        InputSource inputSource = new InputSource(configurationFile.openStream());
-        Document document = builder.parse(inputSource);
-        Element rootElement = document.getDocumentElement();
-
-        List<Element> messageHandlerElements =
-            XmlUtil.getChildElements(rootElement, "messageHandler");
-
-        for (Element messageHandlerElement : messageHandlerElements) {
-          // Read the handler configuration
-          String name = XmlUtil.getChildElementText(messageHandlerElement, "name");
-          String className = XmlUtil.getChildElementText(messageHandlerElement, "class");
-
-          MessageHandlerConfig messageHandlerConfig = new MessageHandlerConfig(name, className);
-
-          // Get the "Messages" element
-          Element messagesElement = XmlUtil.getChildElement(messageHandlerElement, "messages");
-
-          // Read the message configuration for the handler
-          if (messagesElement != null) {
-            List<Element> messageElements = XmlUtil.getChildElements(messagesElement, "message");
-
-            for (Element messageElement : messageElements) {
-              UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
-              boolean isSynchronous =
-                  messageElement.getAttribute("isSynchronous").equalsIgnoreCase("Y");
-              boolean isAsynchronous =
-                  messageElement.getAttribute("isAsynchronous").equalsIgnoreCase("Y");
-              boolean isSecure = messageElement.getAttribute("isSecure").equalsIgnoreCase("Y");
-              boolean isArchivable =
-                  messageElement.getAttribute("isArchivable").equalsIgnoreCase("Y");
-
-              messageHandlerConfig.addMessageConfig(
-                  messageType, isSynchronous, isAsynchronous, isSecure, isArchivable);
-            }
-          }
-
-          messageHandlersConfig.add(messageHandlerConfig);
-        }
-      }
-    } catch (Throwable e) {
-      throw new MessagingServiceException("Failed to read the messaging configuration", e);
-    }
-  }
-
-  /**
    * Reset the locks for the messages.
    *
    * @param status the current status of the messages that have been locked
@@ -1602,6 +1361,253 @@ public class MessagingService implements IMessagingService, InitializingBean {
               + status.toString()
               + ")",
           e);
+    }
+  }
+
+  /** Initialize the configuration for the Messaging Service. */
+  private void initConfiguration() throws MessagingServiceException {
+    try {
+      if (StringUtils.isEmpty(encryptionKeyBase64)) {
+        throw new MessagingServiceException(
+            "No application.messaging.encryptionKey configuration value found");
+      } else {
+        encryptionMasterKey = Base64Util.decode(encryptionKeyBase64);
+      }
+    } catch (Throwable e) {
+      throw new MessagingServiceException(
+          "Failed to initialize the configuration for the Messaging Service", e);
+    }
+  }
+
+  /** Initialize the message handlers. */
+  private void initMessageHandlers() {
+    // Initialize each message handler
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      try {
+        logger.info(
+            "Initializing the message handler ("
+                + messageHandlerConfig.getName()
+                + ") with class ("
+                + messageHandlerConfig.getClassName()
+                + ")");
+
+        Class<?> clazz =
+            Thread.currentThread()
+                .getContextClassLoader()
+                .loadClass(messageHandlerConfig.getClassName());
+
+        Constructor<?> constructor;
+
+        try {
+          constructor = clazz.getConstructor(MessageHandlerConfig.class);
+        } catch (NoSuchMethodException e) {
+          constructor = null;
+        }
+
+        if (constructor != null) {
+          // Create an instance of the message handler
+          IMessageHandler messageHandler =
+              (IMessageHandler) constructor.newInstance(messageHandlerConfig);
+
+          // Perform dependency injection on the message handler
+          applicationContext.getAutowireCapableBeanFactory().autowireBean(messageHandler);
+
+          List<MessageHandlerConfig.MessageConfig> messagesConfig =
+              messageHandlerConfig.getMessagesConfig();
+
+          for (MessageHandlerConfig.MessageConfig messageConfig : messagesConfig) {
+            if (messageHandlers.containsKey(messageConfig.getMessageTypeId())) {
+              IMessageHandler existingMessageHandler =
+                  messageHandlers.get(messageConfig.getMessageTypeId());
+
+              logger.warn(
+                  "Failed to register the message handler ("
+                      + messageHandler.getClass().getName()
+                      + ") for the message type ("
+                      + messageConfig.getMessageTypeId()
+                      + ") since another message handler ("
+                      + existingMessageHandler.getClass().getName()
+                      + ") has already been registered to process messages of this type");
+            } else {
+              messageHandlers.put(messageConfig.getMessageTypeId(), messageHandler);
+            }
+          }
+        } else {
+          logger.error(
+              "Failed to register the message handler ("
+                  + messageHandlerConfig.getClassName()
+                  + ") since the message handler class does not provide a constructor with the required"
+                  + " signature");
+        }
+      } catch (Throwable e) {
+        logger.error(
+            "Failed to initialize the message handler ("
+                + messageHandlerConfig.getName()
+                + ") with class ("
+                + messageHandlerConfig.getClassName()
+                + ")",
+            e);
+      }
+    }
+  }
+
+  /**
+   * Should a message with the specified type be archived?
+   *
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the message type
+   * @return <code>true</code> if a message with the specified type should be archived or <code>
+   *     false</code> otherwise
+   */
+  private boolean isArchivableMessage(UUID typeId) {
+    // TODO: Add caching of this check
+
+    // Check if any of the configured handlers supports archiving of the message
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      if (messageHandlerConfig.isArchivable(typeId)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Can a message with the specified type be processed asynchronously?
+   *
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the message type
+   * @return <code>true</code> if a message with the specified type can be processed asynchronously
+   *     or <code>false</code> otherwise
+   */
+  private boolean isAsynchronousMessage(UUID typeId) {
+    // TODO: Add caching of this check
+
+    // Check if any of the configured handlers support the synchronous processing of this message
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      if (messageHandlerConfig.supportsAsynchronousProcessing(typeId)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Should a message with the specified type be processed securely?
+   *
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the message type
+   * @return <code>true</code> if a message with the specified type should be processed securely or
+   *     <code>false</code> otherwise
+   */
+  private boolean isSecureMessage(UUID typeId) {
+    // TODO: Add caching of this check
+
+    // Check if any of the configured handlers required secure processing of the message type
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      if (messageHandlerConfig.isSecure(typeId)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Can a message with the specified type be processed synchronously?
+   *
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the message type
+   * @return <code>true</code> if a message with the specified type can be processed synchronously
+   *     or <code>false</code> otherwise
+   */
+  private boolean isSynchronousMessage(UUID typeId) {
+    // TODO: Add caching of this check
+
+    // Check if any of the configured handlers support the synchronous processing of this message
+    for (MessageHandlerConfig messageHandlerConfig : messageHandlersConfig) {
+      if (messageHandlerConfig.supportsSynchronousProcessing(typeId)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Read the messaging configuration from all the <i>META-INF/MessagingConfig.xml</i> configuration
+   * files that can be found on the classpath.
+   */
+  private void readMessagingConfig() throws MessagingServiceException {
+    try {
+      messageHandlersConfig = new ArrayList<>();
+
+      ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+      // Load the messaging configuration files from the classpath
+      Enumeration<URL> configurationFiles = classLoader.getResources(MESSAGING_CONFIGURATION_PATH);
+
+      while (configurationFiles.hasMoreElements()) {
+        URL configurationFile = configurationFiles.nextElement();
+
+        if (logger.isDebugEnabled()) {
+          logger.debug(
+              "Reading the messaging configuration file ("
+                  + configurationFile.toURI().toString()
+                  + ")");
+        }
+
+        // Retrieve a document builder instance using the factory
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+        builderFactory.setValidating(true);
+
+        // builderFactory.setNamespaceAware(true);
+        DocumentBuilder builder = builderFactory.newDocumentBuilder();
+
+        builder.setEntityResolver(
+            new DtdJarResolver("MessagingConfig.dtd", "META-INF/MessagingConfig.dtd"));
+        builder.setErrorHandler(new XmlParserErrorHandler());
+
+        // Parse the XML messaging configuration file using the document builder
+        InputSource inputSource = new InputSource(configurationFile.openStream());
+        Document document = builder.parse(inputSource);
+        Element rootElement = document.getDocumentElement();
+
+        List<Element> messageHandlerElements =
+            XmlUtil.getChildElements(rootElement, "messageHandler");
+
+        for (Element messageHandlerElement : messageHandlerElements) {
+          // Read the handler configuration
+          String name = XmlUtil.getChildElementText(messageHandlerElement, "name");
+          String className = XmlUtil.getChildElementText(messageHandlerElement, "class");
+
+          MessageHandlerConfig messageHandlerConfig = new MessageHandlerConfig(name, className);
+
+          // Get the "Messages" element
+          Element messagesElement = XmlUtil.getChildElement(messageHandlerElement, "messages");
+
+          // Read the message configuration for the handler
+          if (messagesElement != null) {
+            List<Element> messageElements = XmlUtil.getChildElements(messagesElement, "message");
+
+            for (Element messageElement : messageElements) {
+              UUID messageType = UUID.fromString(messageElement.getAttribute("type"));
+              boolean isSynchronous =
+                  messageElement.getAttribute("isSynchronous").equalsIgnoreCase("Y");
+              boolean isAsynchronous =
+                  messageElement.getAttribute("isAsynchronous").equalsIgnoreCase("Y");
+              boolean isSecure = messageElement.getAttribute("isSecure").equalsIgnoreCase("Y");
+              boolean isArchivable =
+                  messageElement.getAttribute("isArchivable").equalsIgnoreCase("Y");
+
+              messageHandlerConfig.addMessageConfig(
+                  messageType, isSynchronous, isAsynchronous, isSecure, isArchivable);
+            }
+          }
+
+          messageHandlersConfig.add(messageHandlerConfig);
+        }
+      }
+    } catch (Throwable e) {
+      throw new MessagingServiceException("Failed to read the messaging configuration", e);
     }
   }
 }

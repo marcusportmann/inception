@@ -30,12 +30,12 @@ export class Organizations {
   filter?: string;
 
   /**
-   * The optional page size.
+   * The optional page index.
    */
   pageIndex?: number;
 
   /**
-   * The optional page index.
+   * The optional page size.
    */
   pageSize?: number;
 

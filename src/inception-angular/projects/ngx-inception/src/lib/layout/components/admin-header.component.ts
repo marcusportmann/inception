@@ -97,7 +97,7 @@ export class AdminHeaderComponent implements OnInit {
    *
    * @param elementRef      The element reference.
    * @param router          The router.
-   * @param securityService The session service.
+   * @param securityService The security service.
    */
   constructor(private elementRef: ElementRef, private router: Router, private securityService: SecurityService) {
   }
@@ -136,9 +136,6 @@ export class AdminHeaderComponent implements OnInit {
 
   logout(): void {
     this.securityService.logout();
-
-    // noinspection JSIgnoredPromiseFromCall
-    this.router.navigate(['/']);
   }
 
   userFullName(): Observable<string> {

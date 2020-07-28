@@ -75,6 +75,33 @@ public interface ICodeProvider {
       throws CodeCategoryNotFoundException, CodeProviderException;
 
   /**
+   * Retrieve the XML or JSON data for the code category.
+   *
+   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
+   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   * configuration file.
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @return the XML or JSON data for the code category
+   */
+  String getCodeCategoryData(String codeCategoryId)
+      throws CodeCategoryNotFoundException, CodeProviderException;
+
+  /**
+   * Retrieve the XML or JSON data for the code category using the specified parameters.
+   *
+   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
+   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   * configuration file.
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param parameters the parameters
+   * @return the XML or JSON data for the code category
+   */
+  String getCodeCategoryDataWithParameters(String codeCategoryId, Map<String, String> parameters)
+      throws CodeCategoryNotFoundException, CodeProviderException;
+
+  /**
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
@@ -128,32 +155,5 @@ public interface ICodeProvider {
    */
   List<Code> getCodesForCodeCategoryWithParameters(
       String codeCategoryId, Map<String, String> parameters)
-      throws CodeCategoryNotFoundException, CodeProviderException;
-
-  /**
-   * Retrieve the XML or JSON data for the code category.
-   *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   * @return the XML or JSON data for the code category
-   */
-  String getDataForCodeCategory(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodeProviderException;
-
-  /**
-   * Retrieve the XML or JSON data for the code category using the specified parameters.
-   *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
-   * @return the XML or JSON data for the code category
-   */
-  String getDataForCodeCategoryWithParameters(String codeCategoryId, Map<String, String> parameters)
       throws CodeCategoryNotFoundException, CodeProviderException;
 }

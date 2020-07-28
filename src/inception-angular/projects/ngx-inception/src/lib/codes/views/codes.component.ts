@@ -125,7 +125,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
   loadCodes(): void {
     this.spinnerService.showSpinner();
 
-    this.codesService.getCodes(this.codeCategoryId)
+    this.codesService.getCodesForCodeCategory(this.codeCategoryId)
       .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
       .subscribe((codes: Code[]) => {
         this.dataSource.data = codes;

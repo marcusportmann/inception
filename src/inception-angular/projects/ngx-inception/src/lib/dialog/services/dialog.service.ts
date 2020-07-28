@@ -39,6 +39,7 @@ export class DialogService {
    * @param matDialog The material dialog.
    */
   constructor(private matDialog: MatDialog) {
+    console.log('Initializing the Dialog Service');
   }
 
   /**

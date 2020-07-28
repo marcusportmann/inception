@@ -147,7 +147,7 @@ public class SMSService implements ISMSService {
   }
 
   /**
-   * Create the SMS.
+   * Create the new SMS.
    *
    * @param sms the <code>SMS</code> instance containing the information for the SMS
    */

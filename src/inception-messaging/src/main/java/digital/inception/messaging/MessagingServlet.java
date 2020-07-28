@@ -481,7 +481,7 @@ public class MessagingServlet extends HttpServlet {
     }
 
     /*
-     * Create the message part and initialize it using the WBXML document sent as part of the
+     * Create the new message part and initialize it using the WBXML document sent as part of the
      * request
      */
     MessagePart messagePart = new MessagePart(document);

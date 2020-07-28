@@ -37,10 +37,10 @@ import org.springframework.util.StringUtils;
 public class ConfigurationService implements IConfigurationService {
 
   /** The Configuration Repository. */
-  private ConfigurationRepository configurationRepository;
+  private final ConfigurationRepository configurationRepository;
 
   /** The Configuration Summary Repository. */
-  private ConfigurationSummaryRepository configurationSummaryRepository;
+  private final ConfigurationSummaryRepository configurationSummaryRepository;
 
   /**
    * Constructs a new <code>ConfigurationService</code>.

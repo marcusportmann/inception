@@ -52,13 +52,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class ReportingWebService {
 
   /** The data source used to provide connections to the application database. */
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /** The Reporting Service. */
-  private IReportingService reportingService;
+  private final IReportingService reportingService;
 
   /** The JSR-303 validator. */
-  private Validator validator;
+  private final Validator validator;
 
   /**
    * Constructs a new <code>ReportingWebService</code>.
@@ -77,7 +77,7 @@ public class ReportingWebService {
   }
 
   /**
-   * Create the report definition.
+   * Create the new report definition.
    *
    * @param reportDefinition the report definition to create
    */
@@ -151,6 +151,44 @@ public class ReportingWebService {
     } catch (Throwable e) {
       throw new ReportingServiceException("Failed to generate the PDF report", e);
     }
+  }
+
+  /**
+   * Get the report definition.
+   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @return the report definition
+   */
+  @WebMethod(operationName = "GetReportDefinition")
+  @WebResult(name = "ReportDefinition")
+  public ReportDefinition getReportDefinition(
+      @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (reportDefinitionId == null) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
+    return reportingService.getReportDefinition(reportDefinitionId);
+  }
+
+  /**
+   * Retrieve the name of the report definition.
+   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @return the name of report definition
+   */
+  @WebMethod(operationName = "GetReportDefinitionName")
+  @WebResult(name = "ReportDefinitionName")
+  public String getReportDefinitionName(
+      @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (reportDefinitionId == null) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
+    return reportingService.getReportDefinitionName(reportDefinitionId);
   }
 
   /**

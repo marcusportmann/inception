@@ -65,22 +65,22 @@ public class InternalUserDirectory extends UserDirectoryBase {
       new UserDirectoryCapabilities(true, true, true, true, true, true, true, true);
 
   /** The maximum number of filtered group members to return. */
-  private int maxFilteredGroupMembers;
+  private final int maxFilteredGroupMembers;
 
   /** The maximum number of filtered groups to return. */
-  private int maxFilteredGroups;
+  private final int maxFilteredGroups;
 
   /** The maximum number of filtered users to return. */
-  private int maxFilteredUsers;
+  private final int maxFilteredUsers;
 
   /** The maximum number of password attempts. */
-  private int maxPasswordAttempts;
+  private final int maxPasswordAttempts;
 
   /** The password expiry period in months. */
-  private int passwordExpiryMonths;
+  private final int passwordExpiryMonths;
 
   /** The password history period in months. */
-  private int passwordHistoryMonths;
+  private final int passwordHistoryMonths;
 
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
@@ -789,7 +789,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * @return the groups
    */
   @Override
-  public List<Group> getGroups(
+  public Groups getGroups(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException {
     try {
@@ -808,13 +808,22 @@ public class InternalUserDirectory extends UserDirectoryBase {
               (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
               "name");
 
+      List<Group> groups;
       if (StringUtils.isEmpty(filter)) {
-        return getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
+        groups = getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
       } else {
-        return getGroupRepository()
-            .findFiltered(getUserDirectoryId(), "%" + filter + "%", pageable);
+        groups =
+            getGroupRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageable);
       }
 
+      return new Groups(
+          getUserDirectoryId(),
+          groups,
+          getNumberOfGroups(filter),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered groups for the user directory ("
@@ -909,7 +918,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * @return the group members for the group
    */
   @Override
-  public List<GroupMember> getMembersForGroup(
+  public GroupMembers getMembersForGroup(
       String groupName,
       String filter,
       SortDirection sortDirection,
@@ -963,7 +972,15 @@ public class InternalUserDirectory extends UserDirectoryBase {
         groupMembers.sort(Comparator.comparing(GroupMember::getMemberName).reversed());
       }
 
-      return groupMembers;
+      return new GroupMembers(
+          getUserDirectoryId(),
+          groupName,
+          groupMembers,
+          getNumberOfMembersForGroup(groupName, filter),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -1264,7 +1281,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * @return the users
    */
   @Override
-  public List<User> getUsers(
+  public Users getUsers(
       String filter,
       UserSortBy sortBy,
       SortDirection sortDirection,
@@ -1311,12 +1328,22 @@ public class InternalUserDirectory extends UserDirectoryBase {
                 "lastName");
       }
 
+      List<User> users;
       if (StringUtils.isEmpty(filter)) {
-        return getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
+        users = getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
       } else {
-        return getUserRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageable);
+        users =
+            getUserRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageable);
       }
 
+      return new Users(
+          getUserDirectoryId(),
+          users,
+          getNumberOfUsers(filter),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered users for the user directory ("
@@ -1347,22 +1374,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
               + ")",
           e);
     }
-  }
-
-  /**
-   * Is the password, given by the specified password hash, a historical password that cannot be
-   * reused for a period of time i.e. was the password used previously in the last X months.
-   *
-   * @param userId the Universally Unique Identifier (UUID) uniquely identifying the user
-   * @param passwordHash the password hash
-   * @return <code>true</code> if the password was previously used and cannot be reused for a period
-   *     of time or <code>false</code> otherwise
-   */
-  private boolean isPasswordInHistory(UUID userId, String passwordHash) {
-    LocalDateTime after = LocalDateTime.now();
-    after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);
-
-    return getUserRepository().countPasswordHistory(userId, after, passwordHash) > 0;
   }
 
   /**
@@ -1663,5 +1674,21 @@ public class InternalUserDirectory extends UserDirectoryBase {
               + ")",
           e);
     }
+  }
+
+  /**
+   * Is the password, given by the specified password hash, a historical password that cannot be
+   * reused for a period of time i.e. was the password used previously in the last X months.
+   *
+   * @param userId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param passwordHash the password hash
+   * @return <code>true</code> if the password was previously used and cannot be reused for a period
+   *     of time or <code>false</code> otherwise
+   */
+  private boolean isPasswordInHistory(UUID userId, String passwordHash) {
+    LocalDateTime after = LocalDateTime.now();
+    after = after.minus(passwordHistoryMonths, ChronoUnit.MONTHS);
+
+    return getUserRepository().countPasswordHistory(userId, after, passwordHash) > 0;
   }
 }

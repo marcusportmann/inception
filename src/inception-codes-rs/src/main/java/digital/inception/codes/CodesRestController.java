@@ -76,7 +76,7 @@ public class CodesRestController extends SecureRestController {
   }
 
   /**
-   * Create the code.
+   * Create the new code.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
    * @param code the code to create
@@ -685,7 +685,7 @@ public class CodesRestController extends SecureRestController {
    *
    * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
    * @param codeId the ID uniquely identifying the code
-   * @return the code
+   * @return the name of the code
    */
   @Operation(
       summary = "Retrieve the name of the code",
@@ -789,7 +789,7 @@ public class CodesRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
-  public List<Code> getCodes(
+  public List<Code> getCodesForCodeCategory(
       @Parameter(
               name = "codeCategoryId",
               description = "The ID uniquely identifying the code category",
@@ -801,7 +801,7 @@ public class CodesRestController extends SecureRestController {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    return codesService.getCodes(codeCategoryId);
+    return codesService.getCodesForCodeCategory(codeCategoryId);
   }
 
   /**

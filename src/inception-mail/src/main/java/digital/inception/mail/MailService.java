@@ -57,20 +57,20 @@ public class MailService implements IMailService, InitializingBean {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MailService.class);
 
-  /** The Java mail sender. */
-  JavaMailSender javaMailSender;
-
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /** The Apache FreeMarker configuration., */
-  private Configuration freeMarkerConfiguration;
+  private final Configuration freeMarkerConfiguration;
 
   /** The Mail Template Repository. */
-  private MailTemplateRepository mailTemplateRepository;
+  private final MailTemplateRepository mailTemplateRepository;
 
   /** The Mail Template Summary Repository. */
-  private MailTemplateSummaryRepository mailTemplateSummaryRepository;
+  private final MailTemplateSummaryRepository mailTemplateSummaryRepository;
+
+  /** The Java mail sender. */
+  JavaMailSender javaMailSender;
 
   /**
    * Constructs a new <code>MailService</code>.
@@ -106,7 +106,7 @@ public class MailService implements IMailService, InitializingBean {
   }
 
   @Override
-  public void afterPropertiesSet() throws Exception {
+  public void afterPropertiesSet() {
     try {
       javaMailSender = applicationContext.getBean(JavaMailSender.class);
     } catch (NoSuchBeanDefinitionException ignored) {
@@ -348,7 +348,7 @@ public class MailService implements IMailService, InitializingBean {
   public String processMailTemplate(String mailTemplateId, Map<String, String> templateParameters)
       throws MailServiceException {
     try {
-      Template template = freeMarkerConfiguration.getTemplate(mailTemplateId.toString());
+      Template template = freeMarkerConfiguration.getTemplate(mailTemplateId);
 
       StringWriter sw = new StringWriter();
       template.process(templateParameters, sw);
@@ -396,7 +396,7 @@ public class MailService implements IMailService, InitializingBean {
 
         helper.setFrom(new InternetAddress(from, fromName));
 
-        helper.setTo(to.toArray(new String[to.size()]));
+        helper.setTo(to.toArray(new String[0]));
 
         helper.setSubject(subject);
 

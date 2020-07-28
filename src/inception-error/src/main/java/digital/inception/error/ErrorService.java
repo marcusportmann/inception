@@ -41,10 +41,10 @@ import org.springframework.util.StringUtils;
 public class ErrorService implements IErrorService {
 
   /** The Error Report Repository. */
-  private ErrorReportRepository errorReportRepository;
+  private final ErrorReportRepository errorReportRepository;
 
   /** The Error Report Summary Repository. */
-  private ErrorReportSummaryRepository errorReportSummaryRepository;
+  private final ErrorReportSummaryRepository errorReportSummaryRepository;
 
   /**
    * Constructs a new <code>ErrorService</code>.
@@ -60,7 +60,7 @@ public class ErrorService implements IErrorService {
   }
 
   /**
-   * Create the error report.
+   * Create the new error report.
    *
    * @param errorReport the <code>ErrorReport</code> instance containing the information for the
    *     error report

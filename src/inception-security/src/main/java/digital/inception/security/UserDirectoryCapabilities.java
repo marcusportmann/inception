@@ -43,9 +43,11 @@ import javax.xml.bind.annotation.XmlType;
   "supportsAdminChangePassword",
   "supportsChangePassword",
   "supportsGroupAdministration",
+  "supportsGroupMemberAdministration",
   "supportsPasswordExpiry",
   "supportsPasswordHistory",
-  "supportsUserAdministration"
+  "supportsUserAdministration",
+  "supportsUserLocks"
 })
 @XmlRootElement(name = "UserDirectoryCapabilities", namespace = "http://security.inception.digital")
 @XmlType(
@@ -55,9 +57,11 @@ import javax.xml.bind.annotation.XmlType;
       "supportsAdminChangePassword",
       "supportsChangePassword",
       "supportsGroupAdministration",
+      "supportsGroupMemberAdministration",
       "supportsPasswordExpiry",
       "supportsPasswordHistory",
-      "supportsUserAdministration"
+      "supportsUserAdministration",
+      "supportsUserLocks"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})

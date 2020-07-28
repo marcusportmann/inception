@@ -36,10 +36,10 @@ import javax.validation.Validator;
 public class MessagingWebService {
 
   /** The Messaging Service. */
-  private IMessagingService messagingService;
+  private final IMessagingService messagingService;
 
   /** The JSR-303 validator. */
-  private Validator validator;
+  private final Validator validator;
 
   /**
    * Constructs a new <code>MessagingWebService</code>.

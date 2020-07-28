@@ -80,7 +80,7 @@ public class MailRestController extends SecureRestController {
   }
 
   /**
-   * Create the mail template.
+   * Create the new mail template.
    *
    * @param mailTemplate the mail template to create
    */
@@ -200,7 +200,7 @@ public class MailRestController extends SecureRestController {
    *
    * @param mailTemplateId the ID uniquely identifying the mail template
    */
-  @Operation(summary = "Delete the mail template", description = "Delete the mail template")
+  @Operation(summary = "Retrieve the mail template", description = "Retrieve the mail template")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),

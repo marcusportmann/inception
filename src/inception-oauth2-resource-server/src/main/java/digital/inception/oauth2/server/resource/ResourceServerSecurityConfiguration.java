@@ -15,10 +15,7 @@
  */
 package digital.inception.oauth2.server.resource;
 
-import java.security.interfaces.RSAPublicKey;
 import java.util.Collection;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -29,8 +26,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 
 /**
@@ -42,9 +37,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-//  @Value("${security.oauth2.resource.jwt.key-value}")
-//  private RSAPublicKey rsaPublicKey;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -60,9 +52,8 @@ public class ResourceServerSecurityConfiguration extends WebSecurityConfigurerAd
                     .authenticated())
         .oauth2ResourceServer(
             oauth2ResourceServer ->
-                oauth2ResourceServer
-//                    .jwt(jwt -> jwt.decoder(jwtDecoder()))
-                    .jwt(jwt -> jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter())))
+                oauth2ResourceServer.jwt(
+                    jwt -> jwt.jwtAuthenticationConverter(getJwtAuthenticationConverter())))
         .sessionManagement(
             sessionManagement ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -78,11 +69,4 @@ public class ResourceServerSecurityConfiguration extends WebSecurityConfigurerAd
   private Converter<Jwt, Collection<GrantedAuthority>> getJwtGrantedAuthoritiesConverter() {
     return new JwtGrantedAuthoritiesConverter();
   }
-
-
-
-//  @Bean
-//  JwtDecoder jwtDecoder() {
-//    return NimbusJwtDecoder.withPublicKey(this.rsaPublicKey).build();
-//  }
 }

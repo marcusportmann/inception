@@ -30,17 +30,17 @@ export class GroupMembers {
   filter?: string;
 
   /**
-   * The name identifying the group.
+   * The name identifying the group the group members are associated with.
    */
   groupName: string;
 
   /**
-   * The optional page size.
+   * The optional page index.
    */
   pageIndex?: number;
 
   /**
-   * The optional page index.
+   * The optional page size.
    */
   pageSize?: number;
 
@@ -60,16 +60,17 @@ export class GroupMembers {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * members are associated with.
    */
   userDirectoryId: string;
 
   /**
-   * Constructs a new Groups.
+   * Constructs a new GroupMembers.
    *
    * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
-   *                        user directory.
-   * @param groupName       The name identifying the group.
+   *                        user directory the group members are associated with.
+   * @param groupName       The name identifying the group the group members are associated with.
    * @param groupMembers    The group members.
    * @param total           The total number of groups.
    * @param filter          The optional filter that was applied to the group members.

@@ -42,6 +42,7 @@ export class TitleBarService {
    * Constructs a new TitleBarService.
    */
   constructor() {
+    console.log('Initializing the Title Bar Service');
   }
 
   /**

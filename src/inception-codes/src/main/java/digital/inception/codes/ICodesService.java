@@ -179,7 +179,7 @@ public interface ICodesService {
    * @param codeCategoryId the ID uniquely identifying the code category
    * @return the codes for the code category
    */
-  List<Code> getCodes(String codeCategoryId)
+  List<Code> getCodesForCodeCategory(String codeCategoryId)
       throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
@@ -193,7 +193,8 @@ public interface ICodesService {
    * @param parameters the parameters
    * @return the codes for the code category
    */
-  List<Code> getCodesWithParameters(String codeCategoryId, Map<String, String> parameters)
+  List<Code> getCodesForCodeCategoryWithParameters(
+      String codeCategoryId, Map<String, String> parameters)
       throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**

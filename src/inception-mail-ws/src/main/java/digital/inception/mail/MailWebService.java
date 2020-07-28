@@ -47,10 +47,10 @@ import javax.xml.bind.annotation.XmlElement;
 public class MailWebService {
 
   /** The Mail Service. */
-  private IMailService mailService;
+  private final IMailService mailService;
 
   /** The JSR-303 validator. */
-  private Validator validator;
+  private final Validator validator;
 
   /**
    * Constructs a new <code>MailWebService</code>.
@@ -64,7 +64,7 @@ public class MailWebService {
   }
 
   /**
-   * Create the mail template.
+   * Create the new mail template.
    *
    * @param mailTemplate the mail template to create
    */
@@ -100,6 +100,42 @@ public class MailWebService {
     }
 
     mailService.deleteMailTemplate(mailTemplateId);
+  }
+
+  /**
+   * Retrieve the mail template.
+   *
+   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @return the mail template
+   */
+  @WebMethod(operationName = "GetMailTemplate")
+  @WebResult(name = "MailTemplate")
+  public MailTemplate getMailTemplate(
+      @WebParam(name = "MailTemplateId") @XmlElement(required = true) String mailTemplateId)
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (mailTemplateId == null) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
+    return mailService.getMailTemplate(mailTemplateId);
+  }
+
+  /**
+   * Retrieve the name of the mail template.
+   *
+   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @return the name of the mail template
+   */
+  @WebMethod(operationName = "GetMailTemplateName")
+  @WebResult(name = "MailTemplateName")
+  public String getMailTemplateName(
+      @WebParam(name = "MailTemplateId") @XmlElement(required = true) String mailTemplateId)
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (mailTemplateId == null) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
+    return mailService.getMailTemplateName(mailTemplateId);
   }
 
   /**

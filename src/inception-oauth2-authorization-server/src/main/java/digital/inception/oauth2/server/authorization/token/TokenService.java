@@ -42,9 +42,14 @@ public class TokenService implements ITokenService {
   /** The access token validity in seconds. */
   public static final int ACCESS_TOKEN_VALIDITY = 5 * 60;
 
+  /**
+   * The period in seconds prior to expiry of the refresh token during which it will be
+   * automatically re-issued.
+   */
+  public static final int REFRESH_TOKEN_REISSUE_INTERVAL = 90 * 24 * 60 * 60;
+
   /** The refresh token validity in seconds. */
-  // public static final int REFRESH_TOKEN_VALIDITY = 2 * 365 * 24 * 60 * 60;
-  public static final int REFRESH_TOKEN_VALIDITY = 30 * 60;
+  public static final int REFRESH_TOKEN_VALIDITY = 365 * 24 * 60 * 60;
 
   /* Security Service */
   private final ISecurityService securityService;
@@ -128,21 +133,17 @@ public class TokenService implements ITokenService {
       Instant issuedAt = claimsSet.getIssueTime().toInstant();
       Instant expiresAt = claimsSet.getExpirationTime().toInstant();
 
+      if (Instant.now().isAfter(expiresAt)) {
+        throw new InvalidOAuth2RefreshTokenException();
+      }
+
       OAuth2AccessToken accessToken =
           createOAuth2AccessToken(
               username, (scopeClaim != null) ? Set.of(scopeClaim.split(" ")) : null);
 
-      if (expiresAt.isAfter(Instant.now())) {
-        System.err.println("[DEBUG] Refreshing ONLY the access token");
-
+      if (Instant.now().isBefore(expiresAt.minusSeconds(REFRESH_TOKEN_REISSUE_INTERVAL))) {
         return new RefreshedOAuth2Tokens(accessToken, null);
       } else {
-        System.err.println("[DEBUG] Refreshing the access token AND the refresh token");
-
-        System.err.println("[DEBUG] The refresh token was issued at: " + issuedAt);
-        System.err.println("[DEBUG] The refresh token expires at: " + expiresAt);
-        System.err.println("[DEBUG] The current time is: " + Instant.now());
-
         OAuth2RefreshToken refreshToken =
             createOAuth2RefreshToken(
                 username, (scopeClaim != null) ? Set.of(scopeClaim.split(" ")) : null);

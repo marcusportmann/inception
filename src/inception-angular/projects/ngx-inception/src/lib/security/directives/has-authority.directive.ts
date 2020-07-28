@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
-import {Subscription} from 'rxjs';
+import {Directive, Input, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
 import {first} from 'rxjs/operators';
 import {SecurityService} from '../services/security.service';
 import {Session} from '../services/session';
@@ -29,9 +28,7 @@ import {Session} from '../services/session';
   // tslint:disable-next-line
   selector: '[hasAuthority]'
 })
-export class HasAuthorityDirective implements OnDestroy, OnInit {
-
-  private subscriptions: Subscription = new Subscription();
+export class HasAuthorityDirective implements OnInit {
 
   @Input('hasAuthority') requiredAuthorities: string[] = [];
 
@@ -47,13 +44,9 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
               private securityService: SecurityService) {
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-
   ngOnInit(): void {
     if (this.requiredAuthorities.length > 0) {
-      this.subscriptions.add(this.securityService.session$.pipe(first()).subscribe((session: (Session | null)) => {
+      this.securityService.session$.pipe(first()).subscribe((session: (Session | null)) => {
         if (session) {
           let foundAuthority = false;
 
@@ -70,7 +63,7 @@ export class HasAuthorityDirective implements OnDestroy, OnInit {
             this.viewContainer.clear();
           }
         }
-      }));
+      });
     } else {
       this.viewContainer.createEmbeddedView(this.templateRef);
     }

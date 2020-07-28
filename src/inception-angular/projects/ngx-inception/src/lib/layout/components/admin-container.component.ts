@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
+import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
 
 import {Observable, Subscription} from 'rxjs';
 
 import {AdminContainerView} from './admin-container-view';
 import {TitleBarService} from '../services/title-bar.service';
+import {SecurityService} from "../../security/services/security.service";
+import {first} from "rxjs/operators";
+import {Session} from "../../security/services/session";
+import {SpinnerService} from "../services/spinner.service";
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -51,7 +55,7 @@ import {TitleBarService} from '../services/title-bar.service';
     </admin-footer>
   `
 })
-export class AdminContainerComponent {
+export class AdminContainerComponent implements OnInit, OnDestroy {
 
   element: HTMLElement = document.body;
 
@@ -61,13 +65,20 @@ export class AdminContainerComponent {
 
   private changes: MutationObserver;
 
+  private subscriptions: Subscription = new Subscription();
+
   /**
    * Constructs a new AdminContainerComponent.
    *
+   * @param router          The router.
    * @param activatedRoute  The activated route.
+   * @param securityService The security service.
+   * @param spinnerService  The spinner service.
    * @param titleBarService The title bar service.
    */
-  constructor(private activatedRoute: ActivatedRoute, private titleBarService: TitleBarService) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private securityService: SecurityService, private spinnerService: SpinnerService,
+              private titleBarService: TitleBarService) {
     this.changes = new MutationObserver(() => {
       this.sidebarMinimized = document.body.classList.contains('sidebar-minimized');
     });
@@ -75,6 +86,22 @@ export class AdminContainerComponent {
     this.changes.observe(this.element, {
       attributes: true
     });
+
+    this.subscriptions.add(this.securityService.session$.subscribe((session: (Session | null)) => {
+      if (!session) {
+        spinnerService.hideSpinner();
+
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/']);
+      }
+    }));
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  ngOnInit(): void {
   }
 
   /**

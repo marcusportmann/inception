@@ -57,16 +57,16 @@ import org.springframework.web.util.UriUtils;
 public class SecurityService implements ISecurityService, InitializingBean {
 
   /**
+   * The Universally Unique Identifier (UUID) uniquely identifying the Administration organization.
+   */
+  public static final UUID ADMINISTRATION_ORGANIZATION_ID =
+      UUID.fromString("00000000-0000-0000-0000-000000000000");
+
+  /**
    * The Universally Unique Identifier (UUID) uniquely identifying the Administration user
    * directory.
    */
   public static final UUID ADMINISTRATION_USER_DIRECTORY_ID =
-      UUID.fromString("00000000-0000-0000-0000-000000000000");
-
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the Administration organization.
-   */
-  public static final UUID ADMINISTRATION_ORGANIZATION_ID =
       UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the Administrators group. */
@@ -920,7 +920,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the groups
    */
   @Override
-  public List<Group> getGroups(
+  public Groups getGroups(
       UUID userDirectoryId,
       String filter,
       SortDirection sortDirection,
@@ -957,30 +957,6 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the internal user
-   * directory the internal user with the specified username is associated with.
-   *
-   * @param username the username uniquely identifying the internal user
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the internal user
-   *     directory the internal user with the specified username is associated with or <code>null
-   *     </code> if an internal user with the specified username could not be found
-   */
-  private UUID getInternalUserDirectoryIdForUser(String username) throws SecurityServiceException {
-    try {
-      Optional<UUID> userDirectoryIdOptional =
-          userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
-
-      return userDirectoryIdOptional.orElse(null);
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the ID for the internal user directory for the internal user ("
-              + username
-              + ")",
-          e);
-    }
-  }
-
-  /**
    * Retrieve the group members for the group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -1014,7 +990,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   @Transactional
-  public List<GroupMember> getMembersForGroup(
+  public GroupMembers getMembersForGroup(
       UUID userDirectoryId,
       String groupName,
       String filter,
@@ -1303,7 +1279,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the organizations
    */
   @Override
-  public List<Organization> getOrganizations(
+  public Organizations getOrganizations(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException {
     PageRequest pageRequest;
@@ -1315,21 +1291,33 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     try {
+      List<Organization> organizations;
+
       if (StringUtils.isEmpty(filter)) {
         if (sortDirection == SortDirection.ASCENDING) {
-          return organizationRepository.findAllByOrderByNameAsc(pageRequest);
+          organizations = organizationRepository.findAllByOrderByNameAsc(pageRequest);
         } else {
-          return organizationRepository.findAllByOrderByNameDesc(pageRequest);
+          organizations = organizationRepository.findAllByOrderByNameDesc(pageRequest);
         }
       } else {
         if (sortDirection == SortDirection.ASCENDING) {
-          return organizationRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
-              filter, pageRequest);
+          organizations =
+              organizationRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
+                  filter, pageRequest);
         } else {
-          return organizationRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
-              filter, pageRequest);
+          organizations =
+              organizationRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
+                  filter, pageRequest);
         }
       }
+
+      return new Organizations(
+          organizations,
+          getNumberOfOrganizations(filter),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       String message = "Failed to retrieve the organizations";
 
@@ -1494,7 +1482,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the user directories
    */
   @Override
-  public List<UserDirectory> getUserDirectories(
+  public UserDirectories getUserDirectories(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException {
     PageRequest pageRequest;
@@ -1506,21 +1494,33 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     try {
+      List<UserDirectory> userDirectories;
+
       if (StringUtils.isEmpty(filter)) {
         if (sortDirection == SortDirection.ASCENDING) {
-          return userDirectoryRepository.findAllByOrderByNameAsc(pageRequest);
+          userDirectories = userDirectoryRepository.findAllByOrderByNameAsc(pageRequest);
         } else {
-          return userDirectoryRepository.findAllByOrderByNameDesc(pageRequest);
+          userDirectories = userDirectoryRepository.findAllByOrderByNameDesc(pageRequest);
         }
       } else {
         if (sortDirection == SortDirection.ASCENDING) {
-          return userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
-              filter, pageRequest);
+          userDirectories =
+              userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
+                  filter, pageRequest);
         } else {
-          return userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
-              filter, pageRequest);
+          userDirectories =
+              userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
+                  filter, pageRequest);
         }
       }
+
+      return new UserDirectories(
+          userDirectories,
+          getNumberOfOrganizations(filter),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException("Failed to retrieve the filtered user directories", e);
     }
@@ -1757,7 +1757,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the summaries for the user directories
    */
   @Override
-  public List<UserDirectorySummary> getUserDirectorySummaries(
+  public UserDirectorySummaries getUserDirectorySummaries(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException {
     PageRequest pageRequest;
@@ -1769,21 +1769,35 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     try {
+      List<UserDirectorySummary> userDirectorySummaries;
+
       if (StringUtils.isEmpty(filter)) {
         if (sortDirection == SortDirection.ASCENDING) {
-          return userDirectorySummaryRepository.findAllByOrderByNameAsc(pageRequest);
+          userDirectorySummaries =
+              userDirectorySummaryRepository.findAllByOrderByNameAsc(pageRequest);
         } else {
-          return userDirectorySummaryRepository.findAllByOrderByNameDesc(pageRequest);
+          userDirectorySummaries =
+              userDirectorySummaryRepository.findAllByOrderByNameDesc(pageRequest);
         }
       } else {
         if (sortDirection == SortDirection.ASCENDING) {
-          return userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
-              filter, pageRequest);
+          userDirectorySummaries =
+              userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
+                  filter, pageRequest);
         } else {
-          return userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
-              filter, pageRequest);
+          userDirectorySummaries =
+              userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
+                  filter, pageRequest);
         }
       }
+
+      return new UserDirectorySummaries(
+          userDirectorySummaries,
+          getNumberOfUserDirectories(filter),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered summaries for the user directories", e);
@@ -1922,7 +1936,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the users
    */
   @Override
-  public List<User> getUsers(
+  public Users getUsers(
       UUID userDirectoryId,
       String filter,
       UserSortBy sortBy,
@@ -2027,24 +2041,6 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Checks whether the specified value is <code>null</code> or blank.
-   *
-   * @param value the value to check
-   * @return true if the value is <code>null</code> or blank
-   */
-  private boolean isNullOrEmpty(Object value) {
-    if (value == null) {
-      return true;
-    }
-
-    if (value instanceof String) {
-      return ((String) value).length() == 0;
-    }
-
-    return false;
-  }
-
-  /**
    * Is the user in the group?
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -2064,31 +2060,6 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     return userDirectory.isUserInGroup(groupName, username);
-  }
-
-  private UserDirectory newInternalUserDirectoryForOrganization(Organization organization)
-      throws SecurityServiceException {
-    UserDirectory userDirectory = new UserDirectory();
-
-    if (organization.getId() != null) {
-      userDirectory.setId(organization.getId());
-    }
-
-    userDirectory.setType("InternalUserDirectory");
-    userDirectory.setName(organization.getName() + " Internal User Directory");
-
-    String buffer =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
-            + "SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>"
-            + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
-            + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
-            + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
-            + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
-            + "</userDirectory>";
-
-    userDirectory.setConfiguration(buffer);
-
-    return userDirectory;
   }
 
   /** Reload the user directories. */
@@ -2331,41 +2302,6 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
   }
 
-  private void sendPasswordResetEmail(User user, String resetPasswordUrl, String securityCode)
-      throws SecurityServiceException {
-    try {
-      if (!StringUtils.isEmpty(user.getEmail())) {
-        Map<String, String> parameters = new HashMap<>();
-        parameters.put(
-            "name",
-            (user.getFirstName()
-                    + ((user.getFirstName().length() > 0) ? " " : "")
-                    + user.getLastName())
-                .toUpperCase());
-        parameters.put("firstName", user.getFirstName());
-        parameters.put("lastName", user.getLastName());
-        parameters.put("securityCode", securityCode);
-        parameters.put(
-            "resetPasswordUrl",
-            resetPasswordUrl
-                + "?username="
-                + UriUtils.encodeQueryParam(user.getUsername(), StandardCharsets.UTF_8)
-                + "&securityCode="
-                + UriUtils.encodeQueryParam(securityCode, StandardCharsets.UTF_8));
-
-        mailService.sendMail(
-            Collections.singletonList(user.getEmail()),
-            "Password Reset",
-            "no-reply@inception.digital",
-            "Inception",
-            PASSWORD_RESET_MAIL_TEMPLATE_ID,
-            parameters);
-      }
-    } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to send the password reset e-mail", e);
-    }
-  }
-
   /**
    * Update the authorised function.
    *
@@ -2476,6 +2412,108 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to update the user directory (" + userDirectory.getName() + ")", e);
+    }
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the internal user
+   * directory the internal user with the specified username is associated with.
+   *
+   * @param username the username uniquely identifying the internal user
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the internal user
+   *     directory the internal user with the specified username is associated with or <code>null
+   *     </code> if an internal user with the specified username could not be found
+   */
+  private UUID getInternalUserDirectoryIdForUser(String username) throws SecurityServiceException {
+    try {
+      Optional<UUID> userDirectoryIdOptional =
+          userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
+
+      return userDirectoryIdOptional.orElse(null);
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          "Failed to retrieve the ID for the internal user directory for the internal user ("
+              + username
+              + ")",
+          e);
+    }
+  }
+
+  /**
+   * Checks whether the specified value is <code>null</code> or blank.
+   *
+   * @param value the value to check
+   * @return true if the value is <code>null</code> or blank
+   */
+  private boolean isNullOrEmpty(Object value) {
+    if (value == null) {
+      return true;
+    }
+
+    if (value instanceof String) {
+      return ((String) value).length() == 0;
+    }
+
+    return false;
+  }
+
+  private UserDirectory newInternalUserDirectoryForOrganization(Organization organization)
+      throws SecurityServiceException {
+    UserDirectory userDirectory = new UserDirectory();
+
+    if (organization.getId() != null) {
+      userDirectory.setId(organization.getId());
+    }
+
+    userDirectory.setType("InternalUserDirectory");
+    userDirectory.setName(organization.getName() + " Internal User Directory");
+
+    String buffer =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "
+            + "SYSTEM \"UserDirectoryConfiguration.dtd\"><userDirectory>"
+            + "<parameter><name>MaxPasswordAttempts</name><value>5</value></parameter>"
+            + "<parameter><name>PasswordExpiryMonths</name><value>12</value></parameter>"
+            + "<parameter><name>PasswordHistoryMonths</name><value>24</value></parameter>"
+            + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
+            + "</userDirectory>";
+
+    userDirectory.setConfiguration(buffer);
+
+    return userDirectory;
+  }
+
+  private void sendPasswordResetEmail(User user, String resetPasswordUrl, String securityCode)
+      throws SecurityServiceException {
+    try {
+      if (!StringUtils.isEmpty(user.getEmail())) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put(
+            "name",
+            (user.getFirstName()
+                    + ((user.getFirstName().length() > 0) ? " " : "")
+                    + user.getLastName())
+                .toUpperCase());
+        parameters.put("firstName", user.getFirstName());
+        parameters.put("lastName", user.getLastName());
+        parameters.put("securityCode", securityCode);
+        parameters.put(
+            "resetPasswordUrl",
+            resetPasswordUrl
+                + "?username="
+                + UriUtils.encodeQueryParam(user.getUsername(), StandardCharsets.UTF_8)
+                + "&securityCode="
+                + UriUtils.encodeQueryParam(securityCode, StandardCharsets.UTF_8));
+
+        mailService.sendMail(
+            Collections.singletonList(user.getEmail()),
+            "Password Reset",
+            "no-reply@inception.digital",
+            "Inception",
+            PASSWORD_RESET_MAIL_TEMPLATE_ID,
+            parameters);
+      }
+    } catch (Throwable e) {
+      throw new SecurityServiceException("Failed to send the password reset e-mail", e);
     }
   }
 }

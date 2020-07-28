@@ -54,16 +54,16 @@ public class ReportingService implements IReportingService {
   private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
 
   /** The data source used to provide connections to the application database. */
-  private DataSource dataSource;
+  private final DataSource dataSource;
+
+  /** The Report Definition Repository. */
+  private final ReportDefinitionRepository reportDefinitionRepository;
+
+  /** The Report Definition Summary Repository. */
+  private final ReportDefinitionSummaryRepository reportDefinitionSummaryRepository;
 
   /* The real path to the folder where the local Jasper reports are stored. */
   private String localReportFolderPath;
-
-  /** The Report Definition Repository. */
-  private ReportDefinitionRepository reportDefinitionRepository;
-
-  /** The Report Definition Summary Repository. */
-  private ReportDefinitionSummaryRepository reportDefinitionSummaryRepository;
 
   /**
    * Constructs a new <code>ReportingService</code>.

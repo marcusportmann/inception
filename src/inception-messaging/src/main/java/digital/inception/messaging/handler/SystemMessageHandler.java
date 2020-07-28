@@ -229,10 +229,10 @@ public class SystemMessageHandler extends MessageHandler {
         List<Code> codes;
 
         if (requestData.getParameters().isEmpty()) {
-          codes = codesService.getCodes(requestData.getCodeCategoryId());
+          codes = codesService.getCodesForCodeCategory(requestData.getCodeCategoryId());
         } else {
           codes =
-              codesService.getCodesWithParameters(
+              codesService.getCodesForCodeCategoryWithParameters(
                   requestData.getCodeCategoryId(), requestData.getParameters());
         }
 

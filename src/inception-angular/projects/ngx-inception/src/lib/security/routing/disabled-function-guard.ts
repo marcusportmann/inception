@@ -31,7 +31,7 @@ export class DisabledFunctionGuard implements CanActivate {
    * Constructs a new DisabledFunctionGuard.
    *
    * @param router          The router.
-   * @param securityService The session service.
+   * @param securityService The security service.
    */
   constructor(private router: Router, private securityService: SecurityService) {
   }

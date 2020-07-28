@@ -48,6 +48,7 @@ export class CodesService {
    * @param i18n       The internationalization service.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
+    console.log('Initializing the Codes Service');
   }
 
   /**
@@ -325,7 +326,7 @@ export class CodesService {
    *
    * @return the codes for the code category
    */
-  getCodes(codeCategoryId: string): Observable<Code[]> {
+  getCodesForCodeCategory(codeCategoryId: string): Observable<Code[]> {
     return this.httpClient.get<Code[]>(
       this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes',
       {reportProgress: true}).pipe(map((codes: Code[]) => {

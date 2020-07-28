@@ -311,7 +311,7 @@ public interface ISecurityService {
    * @param pageSize the optional page size
    * @return the groups
    */
-  List<Group> getGroups(
+  Groups getGroups(
       UUID userDirectoryId,
       String filter,
       SortDirection sortDirection,
@@ -353,7 +353,7 @@ public interface ISecurityService {
    * @param pageSize the optional page size
    * @return the group members for the group
    */
-  List<GroupMember> getMembersForGroup(
+  GroupMembers getMembersForGroup(
       UUID userDirectoryId,
       String groupName,
       String filter,
@@ -505,7 +505,7 @@ public interface ISecurityService {
    * @param pageSize the optional page size
    * @return the organizations
    */
-  List<Organization> getOrganizations(
+  Organizations getOrganizations(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException;
 
@@ -586,7 +586,7 @@ public interface ISecurityService {
    * @param pageSize the optional page size
    * @return the user directories
    */
-  List<UserDirectory> getUserDirectories(
+  UserDirectories getUserDirectories(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException;
 
@@ -675,7 +675,7 @@ public interface ISecurityService {
    * @param pageSize the optional page size
    * @return the summaries for the user directories
    */
-  List<UserDirectorySummary> getUserDirectorySummaries(
+  UserDirectorySummaries getUserDirectorySummaries(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException;
 
@@ -740,7 +740,7 @@ public interface ISecurityService {
    * @param pageSize the optional page size
    * @return the users
    */
-  List<User> getUsers(
+  Users getUsers(
       UUID userDirectoryId,
       String filter,
       UserSortBy sortBy,

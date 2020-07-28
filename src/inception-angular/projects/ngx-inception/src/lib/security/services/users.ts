@@ -31,12 +31,12 @@ export class Users {
   filter?: string;
 
   /**
-   * The optional page size.
+   * The optional page index.
    */
   pageIndex?: number;
 
   /**
-   * The optional page index.
+   * The optional page size.
    */
   pageSize?: number;
 
@@ -61,7 +61,8 @@ export class Users {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the users are
+   * associated with.
    */
   userDirectoryId: string;
 
@@ -69,7 +70,7 @@ export class Users {
    * Constructs a new Users.
    *
    * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
-   *                        user directory.
+   *                        user directory the users are associated with.
    * @param users           The users.
    * @param total           The total number of users.
    * @param filter          The optional filter that was applied to the users.

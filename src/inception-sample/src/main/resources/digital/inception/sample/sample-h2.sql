@@ -65,7 +65,7 @@ INSERT INTO security.users (id, user_directory_id, username, status, first_name,
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
   VALUES ('07166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Nickolas.Sampson@leafblower.com'), 1, 'Nickolas', 'Sampson', '', '', 'Nickolas.Sampson@leafblower.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
-  VALUES ('08166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Amiah.Sanford@ dating.com'), 1, 'Amiah', 'Sanford', '', '', 'Amiah.Sanford@ dating.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
+  VALUES ('08166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Amiah.Sanford@dating.com'), 1, 'Amiah', 'Sanford', '', '', 'Amiah.Sanford@ dating.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
   VALUES ('09166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Janae.Reeves@jollyfracture.com'), 1, 'Janae', 'Reeves', '', '', 'Janae.Reeves@jollyfracture.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
@@ -310,4 +310,4 @@ INSERT INTO security.role_to_group_map (role_code, group_id)
 
 
 INSERT INTO scheduler.jobs (id, name, scheduling_pattern, job_class, enabled, status)
-   VALUES ('34c5c53e-55db-4114-92e8-bd364d31ec47', 'Sample Job', '* * * * *', 'digital.inception.sample.job.SampleJob', true, 0);
+   VALUES ('SampleJob', 'Sample Job', '* * * * *', 'digital.inception.sample.job.SampleJob', true, 0);

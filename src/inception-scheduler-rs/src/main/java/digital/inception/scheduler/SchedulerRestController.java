@@ -75,7 +75,7 @@ public class SchedulerRestController extends SecureRestController {
   }
 
   /**
-   * Create the job.
+   * Create the new job.
    *
    * @param job the job to create
    */
@@ -370,10 +370,6 @@ public class SchedulerRestController extends SecureRestController {
       @Parameter(name = "job", description = "The job", required = true) @RequestBody Job job)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
-    if (jobId == null) {
       throw new InvalidArgumentException("jobId");
     }
 

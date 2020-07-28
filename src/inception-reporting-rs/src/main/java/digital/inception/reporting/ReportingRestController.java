@@ -91,7 +91,7 @@ public class ReportingRestController extends SecureRestController {
   }
 
   /**
-   * Create the report definition.
+   * Create the new report definition.
    *
    * @param reportDefinition the report definition to create
    */

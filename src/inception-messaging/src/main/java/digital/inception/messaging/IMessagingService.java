@@ -77,14 +77,14 @@ public interface IMessagingService {
   boolean canQueueMessagePartForAssembly(MessagePart messagePart);
 
   /**
-   * Create the message.
+   * Create the new message.
    *
    * @param message the <code>Message</code> instance containing the information for the message
    */
   void createMessage(Message message) throws MessagingServiceException;
 
   /**
-   * Create the message part.
+   * Create the new message part.
    *
    * @param messagePart the <code>MessagePart</code> instance containing the information for the
    *     message part

@@ -72,7 +72,7 @@ public class ErrorRestController extends SecureRestController {
   }
 
   /**
-   * Create the error report.
+   * Create the new error report.
    *
    * @param errorReport the error report
    */

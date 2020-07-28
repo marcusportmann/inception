@@ -39,6 +39,8 @@ export class SpinnerService {
    * @param overlay The overlay.
    */
   constructor(private overlay: Overlay) {
+    console.log('Initializing the Spinner Service');
+
     // Create ComponentPortal that can be attached to a PortalHost
     this.spinnerComponentPortal = new ComponentPortal(SpinnerComponent);
   }

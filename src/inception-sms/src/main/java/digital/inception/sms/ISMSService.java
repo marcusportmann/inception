@@ -30,7 +30,7 @@ import java.util.UUID;
 public interface ISMSService {
 
   /**
-   * Create the SMS.
+   * Create the new SMS.
    *
    * @param sms the <code>SMS</code> instance containing the information for the SMS
    */

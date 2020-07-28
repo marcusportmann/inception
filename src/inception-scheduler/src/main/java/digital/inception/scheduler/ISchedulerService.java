@@ -30,7 +30,7 @@ import java.util.List;
 public interface ISchedulerService {
 
   /**
-   * Create the job.
+   * Create the new job.
    *
    * @param job the <code>Job</code> instance containing the information for the job
    */

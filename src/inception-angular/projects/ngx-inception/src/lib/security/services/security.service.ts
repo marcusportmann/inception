@@ -93,8 +93,10 @@ export class SecurityService {
    * @param httpClient The HTTP client.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
+    console.log('Initializing the Security Service');
+
     // Start the session refresher
-    timer(0, 15000).pipe(switchMap(() => this.refreshSession()))
+    timer(0, 10000).pipe(switchMap(() => this.refreshSession()))
     .subscribe((refreshedSession: Session | null) => {
       if (refreshedSession) {
         console.log('Successfully refreshed session: ', refreshedSession);
@@ -711,16 +713,12 @@ export class SecurityService {
       params = params.append('pageSize', String(pageSize));
     }
 
-    return this.httpClient.get<Group[]>(
+    return this.httpClient.get<Groups>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups', {
-        observe: 'response',
         params,
         reportProgress: true,
-      }).pipe(map((response: HttpResponse<Group[]>) => {
-      const totalCount = Number(response.headers.get('X-Total-Count'));
-
-      return new Groups(userDirectoryId, response.body ? response.body : [], totalCount, filter, sortDirection,
-        pageIndex, pageSize);
+      }).pipe(map((groups: Groups) => {
+      return groups;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -831,17 +829,13 @@ export class SecurityService {
       params = params.append('pageSize', String(pageSize));
     }
 
-    return this.httpClient.get<GroupMember[]>(
+    return this.httpClient.get<GroupMembers>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/groups/' +
       encodeURIComponent(groupName) + '/members', {
-        observe: 'response',
         params,
         reportProgress: true,
-      }).pipe(map((response: HttpResponse<GroupMember[]>) => {
-      const totalCount = Number(response.headers.get('X-Total-Count'));
-
-      return new GroupMembers(userDirectoryId, groupName, response.body ? response.body : [], totalCount, filter,
-        sortDirection, pageIndex, pageSize);
+      }).pipe(map((groupMembers: GroupMembers) => {
+      return groupMembers;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -892,15 +886,11 @@ export class SecurityService {
       params = params.append('pageSize', String(pageSize));
     }
 
-    return this.httpClient.get<Organization[]>(this.config.securityApiUrlPrefix + '/organizations', {
-      observe: 'response',
+    return this.httpClient.get<Organizations>(this.config.securityApiUrlPrefix + '/organizations', {
       params,
       reportProgress: true,
-    }).pipe(map((response: HttpResponse<Organization[]>) => {
-      const totalCount = Number(response.headers.get('X-Total-Count'));
-
-      return new Organizations(response.body ? response.body : [], totalCount, filter, sortDirection, pageIndex,
-        pageSize);
+    }).pipe(map((organizations: Organizations) => {
+      return organizations;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -1324,16 +1314,12 @@ export class SecurityService {
       params = params.append('pageSize', String(pageSize));
     }
 
-    return this.httpClient.get<User[]>(
+    return this.httpClient.get<Users>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users', {
-        observe: 'response',
         params,
         reportProgress: true,
-      }).pipe(map((response: HttpResponse<User[]>) => {
-      const totalCount = Number(response.headers.get('X-Total-Count'));
-
-      return new Users(userDirectoryId, response.body ? response.body : [], totalCount, filter, sortBy, sortDirection,
-        pageIndex, pageSize);
+      }).pipe(map((users: Users) => {
+      return users;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -1382,15 +1368,11 @@ export class SecurityService {
       params = params.append('pageSize', String(pageSize));
     }
 
-    return this.httpClient.get<UserDirectorySummary[]>(this.config.securityApiUrlPrefix + '/user-directory-summaries', {
-      observe: 'response',
+    return this.httpClient.get<UserDirectorySummaries>(this.config.securityApiUrlPrefix + '/user-directory-summaries', {
       params,
       reportProgress: true,
-    }).pipe(map((response: HttpResponse<UserDirectorySummary[]>) => {
-      const totalCount = Number(response.headers.get('X-Total-Count'));
-
-      return new UserDirectorySummaries(response.body ? response.body : [], totalCount, filter, sortDirection,
-        pageIndex, pageSize);
+    }).pipe(map((userDirectorySummaries: UserDirectorySummaries) => {
+      return userDirectorySummaries;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -1812,7 +1794,7 @@ export class SecurityService {
          * is less than 60 seconds.
          */
         if (currentSession.accessTokenExpiry && currentSession.refreshToken) {
-          if (Date.now() > (currentSession.accessTokenExpiry.getTime() - 60000)) {
+          if (Date.now() > (currentSession.accessTokenExpiry.getTime() - 30000)) {
             const body = new HttpParams()
             .set('grant_type', 'refresh_token')
             .set('refresh_token', currentSession.refreshToken);
@@ -1833,8 +1815,11 @@ export class SecurityService {
             }), catchError((httpErrorResponse: HttpErrorResponse) => {
               console.log('Failed to refresh the user session.', httpErrorResponse);
 
-              if (httpErrorResponse.status === 401) {
+              if ((httpErrorResponse.status === 400) || (httpErrorResponse.status === 401)) {
                 this.session$.next(null);
+
+                // // noinspection JSIgnoredPromiseFromCall
+                // this.router.navigate(['/']);
               }
 
               return of(null);

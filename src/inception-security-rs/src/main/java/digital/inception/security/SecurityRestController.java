@@ -38,7 +38,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -173,6 +172,14 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("groupMember");
     }
 
+    if (!userDirectoryId.equals(groupMember.getUserDirectoryId())) {
+      throw new InvalidArgumentException("groupMember");
+    }
+
+    if (!groupName.equals(groupMember.getGroupName())) {
+      throw new InvalidArgumentException("groupMember");
+    }
+
     if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
@@ -269,6 +276,14 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (groupRole == null) {
+      throw new InvalidArgumentException("groupRole");
+    }
+
+    if (!userDirectoryId.equals(groupRole.getUserDirectoryId())) {
+      throw new InvalidArgumentException("groupRole");
+    }
+
+    if (!groupName.equals(groupRole.getGroupName())) {
       throw new InvalidArgumentException("groupRole");
     }
 
@@ -375,6 +390,10 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (organizationUserDirectory == null) {
+      throw new InvalidArgumentException("organizationUserDirectory");
+    }
+
+    if (!organizationId.equals(organizationUserDirectory.getOrganizationId())) {
       throw new InvalidArgumentException("organizationUserDirectory");
     }
 
@@ -647,7 +666,7 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Create the group.
+   * Create the new group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
@@ -708,7 +727,7 @@ public class SecurityRestController extends SecureRestController {
           SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -803,7 +822,7 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Create the user.
+   * Create the new user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
@@ -873,7 +892,7 @@ public class SecurityRestController extends SecureRestController {
           SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1028,7 +1047,7 @@ public class SecurityRestController extends SecureRestController {
           ExistingGroupMembersException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1095,7 +1114,7 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    if (StringUtils.isEmpty(organizationId)) {
+    if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -1161,7 +1180,7 @@ public class SecurityRestController extends SecureRestController {
           SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1228,7 +1247,7 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1295,7 +1314,7 @@ public class SecurityRestController extends SecureRestController {
           SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1363,7 +1382,7 @@ public class SecurityRestController extends SecureRestController {
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1442,7 +1461,7 @@ public class SecurityRestController extends SecureRestController {
           SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1503,7 +1522,7 @@ public class SecurityRestController extends SecureRestController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public ResponseEntity<List<Group>> getGroups(
+  public Groups getGroups(
       @Parameter(
               name = "userDirectoryId",
               description =
@@ -1528,7 +1547,7 @@ public class SecurityRestController extends SecureRestController {
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(userDirectoryId)) {
+    if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
@@ -1537,15 +1556,7 @@ public class SecurityRestController extends SecureRestController {
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    var groups =
-        securityService.getGroups(userDirectoryId, filter, sortDirection, pageIndex, pageSize);
-
-    var numberOfGroups = securityService.getNumberOfGroups(userDirectoryId, filter);
-
-    var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(numberOfGroups));
-
-    return new ResponseEntity<>(groups, httpHeaders, HttpStatus.OK);
+    return securityService.getGroups(userDirectoryId, filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -1593,7 +1604,7 @@ public class SecurityRestController extends SecureRestController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public ResponseEntity<List<GroupMember>> getMembersForGroup(
+  public GroupMembers getMembersForGroup(
       @Parameter(
               name = "userDirectoryId",
               description =
@@ -1638,17 +1649,8 @@ public class SecurityRestController extends SecureRestController {
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    var groupMembers =
-        securityService.getMembersForGroup(
-            userDirectoryId, groupName, filter, sortDirection, pageIndex, pageSize);
-
-    var numberOfGroupMembers =
-        securityService.getNumberOfMembersForGroup(userDirectoryId, groupName, filter);
-
-    var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(numberOfGroupMembers));
-
-    return new ResponseEntity<>(groupMembers, httpHeaders, HttpStatus.OK);
+    return securityService.getMembersForGroup(
+        userDirectoryId, groupName, filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -1703,7 +1705,7 @@ public class SecurityRestController extends SecureRestController {
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId)) {
+    if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -1764,7 +1766,7 @@ public class SecurityRestController extends SecureRestController {
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId)) {
+    if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -1800,7 +1802,7 @@ public class SecurityRestController extends SecureRestController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public ResponseEntity<List<Organization>> getOrganizations(
+  public Organizations getOrganizations(
       @Parameter(name = "filter", description = "The optional filter to apply to the organizations")
           @RequestParam(value = "filter", required = false)
           String filter,
@@ -1816,14 +1818,7 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
       throws SecurityServiceException {
-    var httpHeaders = new HttpHeaders();
-    httpHeaders.add(
-        "x-total-count", String.valueOf(securityService.getNumberOfOrganizations(filter)));
-
-    return new ResponseEntity<>(
-        securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize),
-        httpHeaders,
-        HttpStatus.OK);
+    return securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -2194,7 +2189,7 @@ public class SecurityRestController extends SecureRestController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public ResponseEntity<List<UserDirectory>> getUserDirectories(
+  public UserDirectories getUserDirectories(
       @Parameter(
               name = "filter",
               description = "The optional filter to apply to the user directories")
@@ -2212,14 +2207,7 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
       throws SecurityServiceException {
-    var httpHeaders = new HttpHeaders();
-    httpHeaders.add(
-        "x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(filter)));
-
-    return new ResponseEntity<>(
-        securityService.getUserDirectories(filter, sortDirection, pageIndex, pageSize),
-        httpHeaders,
-        HttpStatus.OK);
+    return securityService.getUserDirectories(filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -2276,7 +2264,7 @@ public class SecurityRestController extends SecureRestController {
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId)) {
+    if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -2516,7 +2504,7 @@ public class SecurityRestController extends SecureRestController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
-  public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummaries(
+  public UserDirectorySummaries getUserDirectorySummaries(
       @Parameter(
               name = "filter",
               description = "The optional filter to apply to the user directories")
@@ -2534,14 +2522,7 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
       throws SecurityServiceException {
-    var httpHeaders = new HttpHeaders();
-    httpHeaders.add(
-        "x-total-count", String.valueOf(securityService.getNumberOfUserDirectories(filter)));
-
-    return new ResponseEntity<>(
-        securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize),
-        httpHeaders,
-        HttpStatus.OK);
+    return securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -2600,7 +2581,7 @@ public class SecurityRestController extends SecureRestController {
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId)) {
+    if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 
@@ -2845,7 +2826,7 @@ public class SecurityRestController extends SecureRestController {
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
-  public ResponseEntity<List<User>> getUsers(
+  public Users getUsers(
       @Parameter(
               name = "userDirectoryId",
               description =
@@ -2884,16 +2865,8 @@ public class SecurityRestController extends SecureRestController {
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    var users =
-        securityService.getUsers(
-            userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize);
-
-    var numberOfUsers = securityService.getNumberOfUsers(userDirectoryId, filter);
-
-    var httpHeaders = new HttpHeaders();
-    httpHeaders.add("x-total-count", String.valueOf(numberOfUsers));
-
-    return new ResponseEntity<>(users, httpHeaders, HttpStatus.OK);
+    return securityService.getUsers(
+        userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
   /**
@@ -3177,6 +3150,7 @@ public class SecurityRestController extends SecureRestController {
    * Initiate the password reset process for the user.
    *
    * @param username the username identifying the user
+   * @param resetPasswordUrl the reset password URL
    */
   @Operation(
       summary = "Initiate the password reset process for the user",
@@ -3229,6 +3203,10 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("username");
     }
 
+    if (StringUtils.isEmpty(resetPasswordUrl)) {
+      throw new InvalidArgumentException("resetPasswordUrl");
+    }
+
     securityService.initiatePasswordReset(username, resetPasswordUrl, true);
   }
 
@@ -3238,6 +3216,7 @@ public class SecurityRestController extends SecureRestController {
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    * @param groupName the name identifying the group
+   * @param group the group
    */
   @Operation(summary = "Update the group", description = "Update the group")
   @ApiResponses(
@@ -3381,7 +3360,7 @@ public class SecurityRestController extends SecureRestController {
       throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(organizationId)) {
+    if (organizationId == null) {
       throw new InvalidArgumentException("organizationId");
     }
 

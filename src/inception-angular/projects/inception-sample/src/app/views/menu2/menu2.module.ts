@@ -23,6 +23,7 @@ import {Menu21Component} from './menu21.component';
 import {Menu22Component} from './menu22.component';
 import {CoreModule} from 'ngx-inception';
 import {LayoutModule} from 'ngx-inception';
+import {InceptionModule} from 'ngx-inception';
 
 const routes: Routes = [{
   path: '',
@@ -55,7 +56,8 @@ const routes: Routes = [{
     CommonModule, RouterModule.forChild(routes),
 
     // Inception modules
-    CoreModule.forRoot(), LayoutModule.forRoot()
+    //CoreModule.forRoot(), LayoutModule.forRoot()
+    InceptionModule
   ],
   declarations: [Menu21Component, Menu22Component]
 })

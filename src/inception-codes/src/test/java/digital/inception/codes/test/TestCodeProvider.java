@@ -314,7 +314,7 @@ public class TestCodeProvider implements ICodeProvider {
    * @return the XML or JSON data for the code category
    */
   @Override
-  public String getDataForCodeCategory(String codeCategoryId)
+  public String getCodeCategoryData(String codeCategoryId)
       throws CodeCategoryNotFoundException, CodeProviderException {
     try {
       if (codeCategory.getId().equals(codeCategoryId)) {
@@ -343,9 +343,9 @@ public class TestCodeProvider implements ICodeProvider {
    * @return the XML or JSON data for the code category
    */
   @Override
-  public String getDataForCodeCategoryWithParameters(
+  public String getCodeCategoryDataWithParameters(
       String codeCategoryId, Map<String, String> parameters)
       throws CodeCategoryNotFoundException, CodeProviderException {
-    return getDataForCodeCategory(codeCategoryId);
+    return getCodeCategoryData(codeCategoryId);
   }
 }

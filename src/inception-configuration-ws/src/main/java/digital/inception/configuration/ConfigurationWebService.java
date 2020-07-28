@@ -48,10 +48,10 @@ import org.springframework.util.StringUtils;
 public class ConfigurationWebService {
 
   /** The Configuration Service. */
-  private IConfigurationService configurationService;
+  private final IConfigurationService configurationService;
 
   /** The JSR-303 validator. */
-  private Validator validator;
+  private final Validator validator;
 
   /**
    * Constructs a new <code>ConfigurationWebService</code>.

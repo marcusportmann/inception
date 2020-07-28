@@ -34,7 +34,7 @@ export class CanActivateFunctionGuard implements CanActivate {
    * Constructs a new CanActivateFunctionGuard.
    *
    * @param router          The router.
-   * @param securityService The session service.
+   * @param securityService The security service.
    */
   constructor(private router: Router, private securityService: SecurityService) {
   }

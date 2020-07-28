@@ -63,13 +63,16 @@ public class CodesService implements ICodesService, InitializingBean {
   private static final Logger logger = LoggerFactory.getLogger(CodesService.class);
 
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /** The Code Category Repository. */
-  private CodeCategoryRepository codeCategoryRepository;
+  private final CodeCategoryRepository codeCategoryRepository;
 
   /** The Code Category Summary Repository. */
-  private CodeCategorySummaryRepository codeCategorySummaryRepository;
+  private final CodeCategorySummaryRepository codeCategorySummaryRepository;
+
+  /** The Code Repository. */
+  private final CodeRepository codeRepository;
 
   /**
    * The configuration information for the code providers read from the code provider configuration
@@ -79,9 +82,6 @@ public class CodesService implements ICodesService, InitializingBean {
 
   /* The code providers. */
   private List<ICodeProvider> codeProviders;
-
-  /** The Code Repository. */
-  private CodeRepository codeRepository;
 
   /**
    * Constructs a new <code>CodesService</code>.
@@ -379,7 +379,7 @@ public class CodesService implements ICodesService, InitializingBean {
       // Check if one of the registered code providers supports the code category
       for (ICodeProvider codeProvider : codeProviders) {
         if (codeProvider.codeCategoryExists(codeCategoryId)) {
-          String codeProviderData = codeProvider.getDataForCodeCategory(codeCategoryId);
+          String codeProviderData = codeProvider.getCodeCategoryData(codeCategoryId);
 
           return StringUtils.isEmpty(codeProviderData) ? "" : codeProviderData;
         }
@@ -420,7 +420,7 @@ public class CodesService implements ICodesService, InitializingBean {
       for (ICodeProvider codeProvider : codeProviders) {
         if (codeProvider.codeCategoryExists(codeCategoryId)) {
           String codeProviderData =
-              codeProvider.getDataForCodeCategoryWithParameters(codeCategoryId, parameters);
+              codeProvider.getCodeCategoryDataWithParameters(codeCategoryId, parameters);
 
           return StringUtils.isEmpty(codeProviderData) ? "" : codeProviderData;
         }
@@ -567,7 +567,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * @return the codes for the code category
    */
   @Override
-  public List<Code> getCodes(String codeCategoryId)
+  public List<Code> getCodesForCodeCategory(String codeCategoryId)
       throws CodeCategoryNotFoundException, CodesServiceException {
     try {
       if (codeCategoryRepository.existsById(codeCategoryId)) {
@@ -602,7 +602,8 @@ public class CodesService implements ICodesService, InitializingBean {
    * @return the codes for the code category
    */
   @Override
-  public List<Code> getCodesWithParameters(String codeCategoryId, Map<String, String> parameters)
+  public List<Code> getCodesForCodeCategoryWithParameters(
+      String codeCategoryId, Map<String, String> parameters)
       throws CodeCategoryNotFoundException, CodesServiceException {
     try {
       if (codeCategoryRepository.existsById(codeCategoryId)) {
@@ -663,6 +664,75 @@ public class CodesService implements ICodesService, InitializingBean {
     }
   }
 
+  /**
+   * Update the existing code.
+   *
+   * @param code the <code>Code</code> instance containing the updated information for the code
+   */
+  @Override
+  public void updateCode(Code code) throws CodeNotFoundException, CodesServiceException {
+    try {
+      if (!codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId()))) {
+        throw new CodeNotFoundException(code.getCodeCategoryId(), code.getId());
+      }
+
+      codeRepository.saveAndFlush(code);
+    } catch (CodeNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new CodesServiceException("Failed to update the code (" + code.getId() + ")", e);
+    }
+  }
+
+  /**
+   * Update the existing code category.
+   *
+   * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
+   *     for the code category
+   */
+  @Override
+  public void updateCodeCategory(CodeCategory codeCategory)
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (!codeCategoryRepository.existsById(codeCategory.getId())) {
+        throw new CodeCategoryNotFoundException(codeCategory.getId());
+      }
+
+      codeCategory.setUpdated(LocalDateTime.now());
+
+      codeCategoryRepository.saveAndFlush(codeCategory);
+    } catch (CodeCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new CodesServiceException(
+          "Failed to update the code category (" + codeCategory.getId() + ")", e);
+    }
+  }
+
+  /**
+   * Update the XML or JSON data for the code category.
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param data the updated XML or JSON data
+   */
+  @Override
+  @Transactional
+  public void updateCodeCategoryData(String codeCategoryId, String data)
+      throws CodeCategoryNotFoundException, CodesServiceException {
+    try {
+      if (!codeCategoryRepository.existsById(codeCategoryId)) {
+        throw new CodeCategoryNotFoundException(codeCategoryId);
+      }
+
+      codeCategoryRepository.setDataAndUpdatedById(codeCategoryId, data, LocalDateTime.now());
+    } catch (CodeCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new CodesServiceException(
+          "Failed to update the data for the code category (" + codeCategoryId + ")", e);
+    }
+  }
+
   /** Initialize the code providers. */
   private void initCodeProviders() {
     // Initialize each code provider
@@ -680,7 +750,13 @@ public class CodesService implements ICodesService, InitializingBean {
                 .getContextClassLoader()
                 .loadClass(codeProviderConfig.getClassName());
 
-        Constructor<?> constructor = clazz.getConstructor(CodeProviderConfig.class);
+        Constructor<?> constructor;
+
+        try {
+          constructor = clazz.getConstructor(CodeProviderConfig.class);
+        } catch (NoSuchMethodException e) {
+          constructor = null;
+        }
 
         if (constructor != null) {
           // Create an instance of the code provider
@@ -764,75 +840,6 @@ public class CodesService implements ICodesService, InitializingBean {
       }
     } catch (Throwable e) {
       throw new CodesServiceException("Failed to read the code provider configuration files", e);
-    }
-  }
-
-  /**
-   * Update the existing code.
-   *
-   * @param code the <code>Code</code> instance containing the updated information for the code
-   */
-  @Override
-  public void updateCode(Code code) throws CodeNotFoundException, CodesServiceException {
-    try {
-      if (!codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId()))) {
-        throw new CodeNotFoundException(code.getCodeCategoryId(), code.getId());
-      }
-
-      codeRepository.saveAndFlush(code);
-    } catch (CodeNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new CodesServiceException("Failed to update the code (" + code.getId() + ")", e);
-    }
-  }
-
-  /**
-   * Update the existing code category.
-   *
-   * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
-   *     for the code category
-   */
-  @Override
-  public void updateCodeCategory(CodeCategory codeCategory)
-      throws CodeCategoryNotFoundException, CodesServiceException {
-    try {
-      if (!codeCategoryRepository.existsById(codeCategory.getId())) {
-        throw new CodeCategoryNotFoundException(codeCategory.getId());
-      }
-
-      codeCategory.setUpdated(LocalDateTime.now());
-
-      codeCategoryRepository.saveAndFlush(codeCategory);
-    } catch (CodeCategoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new CodesServiceException(
-          "Failed to update the code category (" + codeCategory.getId() + ")", e);
-    }
-  }
-
-  /**
-   * Update the XML or JSON data for the code category.
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   * @param data the updated XML or JSON data
-   */
-  @Override
-  @Transactional
-  public void updateCodeCategoryData(String codeCategoryId, String data)
-      throws CodeCategoryNotFoundException, CodesServiceException {
-    try {
-      if (!codeCategoryRepository.existsById(codeCategoryId)) {
-        throw new CodeCategoryNotFoundException(codeCategoryId);
-      }
-
-      codeCategoryRepository.setDataAndUpdatedById(codeCategoryId, data, LocalDateTime.now());
-    } catch (CodeCategoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new CodesServiceException(
-          "Failed to update the data for the code category (" + codeCategoryId + ")", e);
     }
   }
 }

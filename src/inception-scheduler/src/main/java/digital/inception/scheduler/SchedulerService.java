@@ -52,23 +52,23 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
+
+  /* The name of the Scheduler Service instance. */
+  private final String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
+
+  /** The Job Repository. */
+  private final JobRepository jobRepository;
 
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
-
-  /* The name of the Scheduler Service instance. */
-  private String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
 
   /*
    * The delay in milliseconds between successive attempts to execute a job.
    */
   @Value("${application.scheduler.jobExecutionRetryDelay:60000}")
   private int jobExecutionRetryDelay;
-
-  /** The Job Repository. */
-  private JobRepository jobRepository;
 
   /*
    * The maximum number of times execution will be attempted for a job.
@@ -94,7 +94,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   }
 
   /**
-   * Create the job.
+   * Create the new job.
    *
    * @param job the <code>Job</code> instance containing the information for the job
    */

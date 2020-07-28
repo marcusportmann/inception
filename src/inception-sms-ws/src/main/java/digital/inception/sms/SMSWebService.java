@@ -36,10 +36,10 @@ import javax.validation.Validator;
 public class SMSWebService {
 
   /** The SMS Service. */
-  private ISMSService smsService;
+  private final ISMSService smsService;
 
   /** The JSR-303 validator. */
-  private Validator validator;
+  private final Validator validator;
 
   /**
    * Constructs a new <code>SMSWebService</code>.

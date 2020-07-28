@@ -69,46 +69,62 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(LDAPUserDirectory.class);
-  private LdapName baseDN;
-  private String bindDN;
-  private String bindPassword;
+  private final LdapName baseDN;
+  private final String bindDN;
+  private final String bindPassword;
 
   /** The user directory capabilities supported by this user directory instance. */
-  private UserDirectoryCapabilities capabilities;
+  private final UserDirectoryCapabilities capabilities;
+
+  private final LdapName groupBaseDN;
+
+  private final String groupMemberAttribute;
+
+  private final String[] groupMemberAttributeArray;
+
+  private final String groupNameAttribute;
+
+  private final String groupObjectClass;
+
+  private final String host;
+
+  /** The maximum number of filtered group members to return. */
+  private final int maxFilteredGroupMembers;
+
+  /** The maximum number of filtered groups to return. */
+  private final int maxFilteredGroups;
+
+  /** The maximum number of filtered users to return. */
+  private final int maxFilteredUsers;
+
+  private final int port;
+
+  private final boolean useSSL;
+
+  private final LdapName userBaseDN;
+
+  private final String userEmailAttribute;
+
+  private final String userFirstNameAttribute;
+
+  private final String userFullNameAttribute;
+
+  private final String userLastNameAttribute;
+
+  private final String userMobileNumberAttribute;
+
+  private final String userObjectClass;
+
+  private final String userPhoneNumberAttribute;
+
+  private final String userUsernameAttribute;
 
   /** The data source used to provide connections to the application database. */
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
 
-  private LdapName groupBaseDN;
   private String groupDescriptionAttribute;
-  private String groupMemberAttribute;
-  private String[] groupMemberAttributeArray;
-  private String groupNameAttribute;
-  private String groupObjectClass;
-  private String host;
-
-  /** The maximum number of filtered group members to return. */
-  private int maxFilteredGroupMembers;
-
-  /** The maximum number of filtered groups to return. */
-  private int maxFilteredGroups;
-
-  /** The maximum number of filtered users to return. */
-  private int maxFilteredUsers;
-
-  private int port;
-  private boolean useSSL;
-  private LdapName userBaseDN;
-  private String userEmailAttribute;
-  private String userFirstNameAttribute;
-  private String userFullNameAttribute;
-  private String userLastNameAttribute;
-  private String userMobileNumberAttribute;
-  private String userObjectClass;
-  private String userPhoneNumberAttribute;
-  private String userUsernameAttribute;
 
   /**
    * Constructs a new <code>LDAPUserDirectory</code>.
@@ -666,75 +682,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     }
   }
 
-  private Group buildGroupFromSearchResult(SearchResult searchResult) throws NamingException {
-    Attributes attributes = searchResult.getAttributes();
-
-    Group group = new Group(String.valueOf(attributes.get(groupNameAttribute).get()));
-
-    group.setId(null);
-    group.setUserDirectoryId(getUserDirectoryId());
-
-    if ((!StringUtils.isEmpty(groupDescriptionAttribute))
-        && (attributes.get(groupDescriptionAttribute) != null)) {
-      group.setDescription(String.valueOf(attributes.get(groupDescriptionAttribute).get()));
-    } else {
-      group.setDescription("");
-    }
-
-    return group;
-  }
-
-  private User buildUserFromSearchResult(SearchResult searchResult) throws NamingException {
-    Attributes attributes = searchResult.getAttributes();
-
-    User user = new User();
-
-    // user.setId(new LdapName(searchResult.getNameInNamespace().toLowerCase()).toString());
-    user.setUsername(String.valueOf(attributes.get(userUsernameAttribute).get()));
-    user.setUserDirectoryId(getUserDirectoryId());
-
-    // TODO: Correctly process LDAP attributes for user to set status -- MARCUS
-    user.setStatus(UserStatus.ACTIVE);
-    user.setPassword("");
-
-    if ((!StringUtils.isEmpty(userFirstNameAttribute))
-        && (attributes.get(userFirstNameAttribute) != null)) {
-      user.setFirstName(String.valueOf(attributes.get(userFirstNameAttribute).get()));
-    } else {
-      user.setFirstName("");
-    }
-
-    if ((!StringUtils.isEmpty(userLastNameAttribute))
-        && (attributes.get(userLastNameAttribute) != null)) {
-      user.setLastName(String.valueOf(attributes.get(userLastNameAttribute).get()));
-    } else {
-      user.setLastName("");
-    }
-
-    if ((!StringUtils.isEmpty(userPhoneNumberAttribute))
-        && (attributes.get(userPhoneNumberAttribute) != null)) {
-      user.setPhoneNumber(String.valueOf(attributes.get(userPhoneNumberAttribute).get()));
-    } else {
-      user.setPhoneNumber("");
-    }
-
-    if ((!StringUtils.isEmpty(userMobileNumberAttribute))
-        && (attributes.get(userMobileNumberAttribute) != null)) {
-      user.setMobileNumber(String.valueOf(attributes.get(userMobileNumberAttribute).get()));
-    } else {
-      user.setMobileNumber("");
-    }
-
-    if ((!StringUtils.isEmpty(userEmailAttribute))
-        && (attributes.get(userEmailAttribute) != null)) {
-      user.setEmail(String.valueOf(attributes.get(userEmailAttribute).get()));
-    } else {
-      user.setEmail("");
-    }
-
-    return user;
-  }
-
   /**
    * Change the password for the user.
    *
@@ -1228,33 +1175,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     return capabilities;
   }
 
-  private DirContext getDirContext(String userDN, String password) throws SecurityServiceException {
-    try {
-      String url = useSSL ? "ldaps://" : "ldap://";
-      url += host;
-      url += ":";
-      url += port;
-
-      String connectionType = "simple";
-
-      Hashtable<String, String> environment = new Hashtable<>();
-
-      environment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
-      environment.put(Context.PROVIDER_URL, url);
-      environment.put(Context.SECURITY_AUTHENTICATION, connectionType);
-      environment.put(Context.SECURITY_PRINCIPAL, userDN);
-      environment.put(Context.SECURITY_CREDENTIALS, password);
-
-      return new InitialDirContext(environment);
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          String.format(
-              "Failed to retrieve the JNDI directory context for the user directory (%s)",
-              getUserDirectoryId()),
-          e);
-    }
-  }
-
   /**
    * Retrieve the authorised function codes for the user.
    *
@@ -1363,59 +1283,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } finally {
       JNDIUtil.close(searchResults);
       JNDIUtil.close(dirContext);
-    }
-  }
-
-  private LdapName getGroupDN(DirContext dirContext, String groupName)
-      throws SecurityServiceException {
-    NamingEnumeration<SearchResult> searchResults = null;
-
-    try {
-      List<LdapName> groupDNs = new ArrayList<>();
-
-      String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupNameAttribute, groupName);
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
-
-      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
-
-      while (searchResults.hasMore()) {
-        groupDNs.add(new LdapName(searchResults.next().getNameInNamespace().toLowerCase()));
-      }
-
-      if (groupDNs.size() == 0) {
-        return null;
-      } else if (groupDNs.size() == 1) {
-        return groupDNs.get(0);
-      } else {
-        StringBuilder buffer = new StringBuilder();
-
-        for (LdapName groupDN : groupDNs) {
-          if (buffer.length() > 0) {
-            buffer.append(" ");
-          }
-
-          buffer.append("(").append(groupDN).append(")");
-        }
-
-        throw new SecurityServiceException(
-            String.format(
-                "Found multiple groups (%d) with the names identifying the group (%s) with DNs %s",
-                groupDNs.size(), groupName, buffer.toString()));
-      }
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          String.format(
-              "Failed to retrieve the DN for the group (%s) from the LDAP directory (%s:%d)",
-              groupName, host, port),
-          e);
-    } finally {
-      JNDIUtil.close(searchResults);
     }
   }
 
@@ -1573,7 +1440,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @return the groups
    */
   @Override
-  public List<Group> getGroups(
+  public Groups getGroups(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws SecurityServiceException {
     DirContext dirContext = null;
@@ -1618,7 +1485,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         groups = groups.subList(pageIndex * pageSize, Math.min(toIndex, groups.size()));
       }
 
-      return groups;
+      return new Groups(
+          getUserDirectoryId(),
+          groups,
+          getNumberOfGroups(filter),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered groups for the user directory ("
@@ -1768,7 +1642,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @return the group members for the group
    */
   @Override
-  public List<GroupMember> getMembersForGroup(
+  public GroupMembers getMembersForGroup(
       String groupName,
       String filter,
       SortDirection sortDirection,
@@ -1856,7 +1730,15 @@ public class LDAPUserDirectory extends UserDirectoryBase {
               groupMembers.subList(pageIndex * pageSize, Math.min(toIndex, groupMembers.size()));
         }
 
-        return groupMembers;
+        return new GroupMembers(
+            getUserDirectoryId(),
+            groupName,
+            groupMembers,
+            getNumberOfMembersForGroup(groupName, filter),
+            filter,
+            sortDirection,
+            pageIndex,
+            pageSize);
       } else {
         throw new GroupNotFoundException(groupName);
       }
@@ -2267,111 +2149,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     }
   }
 
-  private User getUser(DirContext dirContext, String username) throws SecurityServiceException {
-    NamingEnumeration<SearchResult> searchResults = null;
-
-    try {
-      List<User> users = new ArrayList<>();
-
-      String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", userObjectClass, userUsernameAttribute, username);
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-
-      // First search for a non-shared user
-      searchResults = dirContext.search(baseDN, searchFilter, searchControls);
-
-      while (searchResults.hasMore()) {
-        users.add(buildUserFromSearchResult(searchResults.next()));
-      }
-
-      if (users.size() == 0) {
-        return null;
-      } else if (users.size() == 1) {
-        return users.get(0);
-      } else {
-        StringBuilder buffer = new StringBuilder();
-
-        for (User user : users) {
-          if (buffer.length() > 0) {
-            buffer.append(" ");
-          }
-
-          buffer.append("(").append(user.getId()).append(")");
-        }
-
-        throw new SecurityServiceException(
-            String.format(
-                "Found multiple users (%d) with the username (%s) with DNs %s",
-                users.size(), username, buffer.toString()));
-      }
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          String.format(
-              "Failed to retrieve the details for the user (%s) from the LDAP directory (%s:%d)",
-              username, host, port),
-          e);
-    } finally {
-      JNDIUtil.close(searchResults);
-    }
-  }
-
-  private LdapName getUserDN(DirContext dirContext, String username)
-      throws SecurityServiceException {
-    NamingEnumeration<SearchResult> searchResults = null;
-
-    try {
-      List<LdapName> userDNs = new ArrayList<>();
-
-      String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", userObjectClass, userUsernameAttribute, username);
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
-
-      searchResults = dirContext.search(baseDN, searchFilter, searchControls);
-
-      while (searchResults.hasMore()) {
-        userDNs.add(new LdapName(searchResults.next().getNameInNamespace().toLowerCase()));
-      }
-
-      if (userDNs.size() == 0) {
-        return null;
-      } else if (userDNs.size() == 1) {
-        return userDNs.get(0);
-      } else {
-        StringBuilder buffer = new StringBuilder();
-
-        for (LdapName userDN : userDNs) {
-          if (buffer.length() > 0) {
-            buffer.append(" ");
-          }
-
-          buffer.append("(").append(userDN).append(")");
-        }
-
-        throw new SecurityServiceException(
-            String.format(
-                "Found multiple users (%d) with the username (%s) with DNs %s",
-                userDNs.size(), username, buffer.toString()));
-      }
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          String.format(
-              "Failed to retrieve the DN for the user (%s) from the LDAP directory (%s:%d)",
-              username, host, port),
-          e);
-    } finally {
-      JNDIUtil.close(searchResults);
-    }
-  }
-
   /**
    * Retrieve the full name for the user.
    *
@@ -2467,7 +2244,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @param pageSize the optional page size
    * @return the users
    */
-  public List<User> getUsers(
+  public Users getUsers(
       String filter,
       UserSortBy sortBy,
       SortDirection sortDirection,
@@ -2539,7 +2316,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         users = users.subList(pageIndex * pageSize, Math.min(toIndex, users.size()));
       }
 
-      return users;
+      return new Users(
+          getUserDirectoryId(),
+          users,
+          getNumberOfUsers(filter),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered users for the user directory ("
@@ -3062,6 +2846,260 @@ public class LDAPUserDirectory extends UserDirectoryBase {
           e);
     } finally {
       JNDIUtil.close(dirContext);
+    }
+  }
+
+  private Group buildGroupFromSearchResult(SearchResult searchResult) throws NamingException {
+    Attributes attributes = searchResult.getAttributes();
+
+    Group group = new Group(String.valueOf(attributes.get(groupNameAttribute).get()));
+
+    group.setId(null);
+    group.setUserDirectoryId(getUserDirectoryId());
+
+    if ((!StringUtils.isEmpty(groupDescriptionAttribute))
+        && (attributes.get(groupDescriptionAttribute) != null)) {
+      group.setDescription(String.valueOf(attributes.get(groupDescriptionAttribute).get()));
+    } else {
+      group.setDescription("");
+    }
+
+    return group;
+  }
+
+  private User buildUserFromSearchResult(SearchResult searchResult) throws NamingException {
+    Attributes attributes = searchResult.getAttributes();
+
+    User user = new User();
+
+    // user.setId(new LdapName(searchResult.getNameInNamespace().toLowerCase()).toString());
+    user.setUsername(String.valueOf(attributes.get(userUsernameAttribute).get()));
+    user.setUserDirectoryId(getUserDirectoryId());
+
+    // TODO: Correctly process LDAP attributes for user to set status -- MARCUS
+    user.setStatus(UserStatus.ACTIVE);
+    user.setPassword("");
+
+    if ((!StringUtils.isEmpty(userFirstNameAttribute))
+        && (attributes.get(userFirstNameAttribute) != null)) {
+      user.setFirstName(String.valueOf(attributes.get(userFirstNameAttribute).get()));
+    } else {
+      user.setFirstName("");
+    }
+
+    if ((!StringUtils.isEmpty(userLastNameAttribute))
+        && (attributes.get(userLastNameAttribute) != null)) {
+      user.setLastName(String.valueOf(attributes.get(userLastNameAttribute).get()));
+    } else {
+      user.setLastName("");
+    }
+
+    if ((!StringUtils.isEmpty(userPhoneNumberAttribute))
+        && (attributes.get(userPhoneNumberAttribute) != null)) {
+      user.setPhoneNumber(String.valueOf(attributes.get(userPhoneNumberAttribute).get()));
+    } else {
+      user.setPhoneNumber("");
+    }
+
+    if ((!StringUtils.isEmpty(userMobileNumberAttribute))
+        && (attributes.get(userMobileNumberAttribute) != null)) {
+      user.setMobileNumber(String.valueOf(attributes.get(userMobileNumberAttribute).get()));
+    } else {
+      user.setMobileNumber("");
+    }
+
+    if ((!StringUtils.isEmpty(userEmailAttribute))
+        && (attributes.get(userEmailAttribute) != null)) {
+      user.setEmail(String.valueOf(attributes.get(userEmailAttribute).get()));
+    } else {
+      user.setEmail("");
+    }
+
+    return user;
+  }
+
+  private DirContext getDirContext(String userDN, String password) throws SecurityServiceException {
+    try {
+      String url = useSSL ? "ldaps://" : "ldap://";
+      url += host;
+      url += ":";
+      url += port;
+
+      String connectionType = "simple";
+
+      Hashtable<String, String> environment = new Hashtable<>();
+
+      environment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+      environment.put(Context.PROVIDER_URL, url);
+      environment.put(Context.SECURITY_AUTHENTICATION, connectionType);
+      environment.put(Context.SECURITY_PRINCIPAL, userDN);
+      environment.put(Context.SECURITY_CREDENTIALS, password);
+
+      return new InitialDirContext(environment);
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          String.format(
+              "Failed to retrieve the JNDI directory context for the user directory (%s)",
+              getUserDirectoryId()),
+          e);
+    }
+  }
+
+  private LdapName getGroupDN(DirContext dirContext, String groupName)
+      throws SecurityServiceException {
+    NamingEnumeration<SearchResult> searchResults = null;
+
+    try {
+      List<LdapName> groupDNs = new ArrayList<>();
+
+      String searchFilter =
+          String.format(
+              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupNameAttribute, groupName);
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
+
+      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
+
+      while (searchResults.hasMore()) {
+        groupDNs.add(new LdapName(searchResults.next().getNameInNamespace().toLowerCase()));
+      }
+
+      if (groupDNs.size() == 0) {
+        return null;
+      } else if (groupDNs.size() == 1) {
+        return groupDNs.get(0);
+      } else {
+        StringBuilder buffer = new StringBuilder();
+
+        for (LdapName groupDN : groupDNs) {
+          if (buffer.length() > 0) {
+            buffer.append(" ");
+          }
+
+          buffer.append("(").append(groupDN).append(")");
+        }
+
+        throw new SecurityServiceException(
+            String.format(
+                "Found multiple groups (%d) with the names identifying the group (%s) with DNs %s",
+                groupDNs.size(), groupName, buffer.toString()));
+      }
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          String.format(
+              "Failed to retrieve the DN for the group (%s) from the LDAP directory (%s:%d)",
+              groupName, host, port),
+          e);
+    } finally {
+      JNDIUtil.close(searchResults);
+    }
+  }
+
+  private User getUser(DirContext dirContext, String username) throws SecurityServiceException {
+    NamingEnumeration<SearchResult> searchResults = null;
+
+    try {
+      List<User> users = new ArrayList<>();
+
+      String searchFilter =
+          String.format(
+              "(&(objectClass=%s)(%s=%s))", userObjectClass, userUsernameAttribute, username);
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+
+      // First search for a non-shared user
+      searchResults = dirContext.search(baseDN, searchFilter, searchControls);
+
+      while (searchResults.hasMore()) {
+        users.add(buildUserFromSearchResult(searchResults.next()));
+      }
+
+      if (users.size() == 0) {
+        return null;
+      } else if (users.size() == 1) {
+        return users.get(0);
+      } else {
+        StringBuilder buffer = new StringBuilder();
+
+        for (User user : users) {
+          if (buffer.length() > 0) {
+            buffer.append(" ");
+          }
+
+          buffer.append("(").append(user.getId()).append(")");
+        }
+
+        throw new SecurityServiceException(
+            String.format(
+                "Found multiple users (%d) with the username (%s) with DNs %s",
+                users.size(), username, buffer.toString()));
+      }
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          String.format(
+              "Failed to retrieve the details for the user (%s) from the LDAP directory (%s:%d)",
+              username, host, port),
+          e);
+    } finally {
+      JNDIUtil.close(searchResults);
+    }
+  }
+
+  private LdapName getUserDN(DirContext dirContext, String username)
+      throws SecurityServiceException {
+    NamingEnumeration<SearchResult> searchResults = null;
+
+    try {
+      List<LdapName> userDNs = new ArrayList<>();
+
+      String searchFilter =
+          String.format(
+              "(&(objectClass=%s)(%s=%s))", userObjectClass, userUsernameAttribute, username);
+
+      SearchControls searchControls = new SearchControls();
+      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+      searchControls.setReturningObjFlag(false);
+      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
+
+      searchResults = dirContext.search(baseDN, searchFilter, searchControls);
+
+      while (searchResults.hasMore()) {
+        userDNs.add(new LdapName(searchResults.next().getNameInNamespace().toLowerCase()));
+      }
+
+      if (userDNs.size() == 0) {
+        return null;
+      } else if (userDNs.size() == 1) {
+        return userDNs.get(0);
+      } else {
+        StringBuilder buffer = new StringBuilder();
+
+        for (LdapName userDN : userDNs) {
+          if (buffer.length() > 0) {
+            buffer.append(" ");
+          }
+
+          buffer.append("(").append(userDN).append(")");
+        }
+
+        throw new SecurityServiceException(
+            String.format(
+                "Found multiple users (%d) with the username (%s) with DNs %s",
+                userDNs.size(), username, buffer.toString()));
+      }
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          String.format(
+              "Failed to retrieve the DN for the user (%s) from the LDAP directory (%s:%d)",
+              username, host, port),
+          e);
+    } finally {
+      JNDIUtil.close(searchResults);
     }
   }
 }
