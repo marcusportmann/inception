@@ -46,7 +46,7 @@ public class CXFNoTrustSecurityProxyConfigurator {
    *
    * @param proxy the web service proxy to configure
    */
-  public static void configureProxy(Object proxy) throws Exception {
+  public static void configureProxy(Object proxy) {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
     if (invocationHandler instanceof ClientProxy) {

@@ -43,8 +43,7 @@ public class CXFBasicSecurityProxyConfigurator {
    * @param username the username to use when authenticating using basic authentication
    * @param password the password to use when authenticating using basic authentication
    */
-  public static void configureProxy(Object proxy, String username, String password)
-      throws Exception {
+  public static void configureProxy(Object proxy, String username, String password) {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
     if (invocationHandler instanceof ClientProxy) {

@@ -58,8 +58,7 @@ public class CXFWSSX509CertificateTokenProfileEndpointConfigurator {
       KeyStore keyStore,
       String keyStorePassword,
       String keyStoreAlias,
-      KeyStore trustStore)
-      throws Exception {
+      KeyStore trustStore) {
     if (endpoint instanceof EndpointImpl) {
       EndpointImpl endpointImpl = (EndpointImpl) endpoint;
 
@@ -81,7 +80,7 @@ public class CXFWSSX509CertificateTokenProfileEndpointConfigurator {
           new WSS4JInInterceptor(inProperties) {
             @Override
             protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
-                String propFilename, RequestData reqData) throws WSSecurityException {
+                String propFilename, RequestData reqData) {
               return crypto;
             }
           };

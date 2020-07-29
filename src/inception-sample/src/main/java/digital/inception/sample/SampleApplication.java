@@ -19,26 +19,18 @@ package digital.inception.sample;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.application.Application;
-import digital.inception.codes.CodesWebService;
 import digital.inception.codes.ICodesService;
-import digital.inception.configuration.ConfigurationWebService;
 import digital.inception.configuration.IConfigurationService;
 import digital.inception.core.util.ResourceUtil;
-import digital.inception.error.ErrorWebService;
 import digital.inception.error.IErrorService;
 import digital.inception.mail.IMailService;
-import digital.inception.mail.MailWebService;
 import digital.inception.reporting.IReportingService;
 import digital.inception.reporting.ReportDefinition;
-import digital.inception.reporting.ReportingWebService;
-import digital.inception.sample.api.SampleWebService;
 import digital.inception.sample.model.ISampleService;
 import digital.inception.scheduler.ISchedulerService;
 import digital.inception.security.ISecurityService;
-import digital.inception.security.SecurityWebService;
 import javax.sql.DataSource;
 import javax.validation.Validator;
-import javax.xml.ws.Endpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -46,7 +38,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 // import springfox.documentation.builders.PathSelectors;
@@ -205,67 +196,67 @@ public class SampleApplication extends Application implements InitializingBean {
   //        .apiInfo(apiInfo);
   //  }
 
-  /**
-   * Returns the Spring bean for the Codes Service web service.
-   *
-   * @return the Spring bean for the Codes Service web service
-   */
-  @Bean
-  protected Endpoint codesWebService() {
-    return createWebServiceEndpoint("CodesService", new CodesWebService(codesService, validator));
-  }
+//  /**
+//   * Returns the Spring bean for the Codes Service web service.
+//   *
+//   * @return the Spring bean for the Codes Service web service
+//   */
+//  @Bean
+//  protected Endpoint codesWebService() {
+//    return createWebServiceEndpoint("CodesService", new CodesWebService(codesService, validator));
+//  }
+//
+//  /**
+//   * Returns the Spring bean for the Configuration Service web service.
+//   *
+//   * @return the Spring bean for the Configuration Service web service
+//   */
+//  @Bean
+//  protected Endpoint configurationWebService() {
+//    return createWebServiceEndpoint(
+//        "ConfigurationService", new ConfigurationWebService(configurationService, validator));
+//  }
+//
+//  /**
+//   * Returns the Spring bean for the Error Service web service.
+//   *
+//   * @return the Spring bean for the Error Service web service
+//   */
+//  @Bean
+//  protected Endpoint errorWebService() {
+//    return createWebServiceEndpoint("ErrorService", new ErrorWebService(errorService, validator));
+//  }
+//
+//  /**
+//   * Returns the Spring bean for the Mail Service web service.
+//   *
+//   * @return the Spring bean for the Mail Service web service
+//   */
+//  @Bean
+//  protected Endpoint mailWebService() {
+//    return createWebServiceEndpoint("MailService", new MailWebService(mailService, validator));
+//  }
+//
+//  /**
+//   * Returns the Spring bean for the Reporting Service web service.
+//   *
+//   * @return the Spring bean for the Reporting Service web service
+//   */
+//  @Bean
+//  protected Endpoint reportingWebService() {
+//    return createWebServiceEndpoint(
+//        "ReportingService", new ReportingWebService(dataSource, reportingService, validator));
+//  }
 
-  /**
-   * Returns the Spring bean for the Configuration Service web service.
-   *
-   * @return the Spring bean for the Configuration Service web service
-   */
-  @Bean
-  protected Endpoint configurationWebService() {
-    return createWebServiceEndpoint(
-        "ConfigurationService", new ConfigurationWebService(configurationService, validator));
-  }
-
-  /**
-   * Returns the Spring bean for the Error Service web service.
-   *
-   * @return the Spring bean for the Error Service web service
-   */
-  @Bean
-  protected Endpoint errorWebService() {
-    return createWebServiceEndpoint("ErrorService", new ErrorWebService(errorService, validator));
-  }
-
-  /**
-   * Returns the Spring bean for the Mail Service web service.
-   *
-   * @return the Spring bean for the Mail Service web service
-   */
-  @Bean
-  protected Endpoint mailWebService() {
-    return createWebServiceEndpoint("MailService", new MailWebService(mailService, validator));
-  }
-
-  /**
-   * Returns the Spring bean for the Reporting Service web service.
-   *
-   * @return the Spring bean for the Reporting Service web service
-   */
-  @Bean
-  protected Endpoint reportingWebService() {
-    return createWebServiceEndpoint(
-        "ReportingService", new ReportingWebService(dataSource, reportingService, validator));
-  }
-
-  /**
-   * Returns the Spring bean for the Sample Service web service.
-   *
-   * @return the Spring bean for the Sample Service web service
-   */
-  @Bean
-  protected Endpoint sampleWebService() {
-    return createWebServiceEndpoint("SampleService", new SampleWebService(sampleService));
-  }
+//  /**
+//   * Returns the Spring bean for the Sample Service web service.
+//   *
+//   * @return the Spring bean for the Sample Service web service
+//   */
+//  @Bean
+//  protected Endpoint sampleWebService() {
+//    return createWebServiceEndpoint("SampleService", new SampleWebService(sampleService));
+//  }
 
   /// **
   // * Returns the in-memory distributed cache manager.
@@ -279,14 +270,14 @@ public class SampleApplication extends Application implements InitializingBean {
   //  return new CacheManager(configuration.getCacheManager());
   // }
 
-  /**
-   * Returns the Spring bean for the Security Service web service.
-   *
-   * @return the Spring bean for the Security Service web service
-   */
-  @Bean
-  protected Endpoint securityWebService() {
-    return createWebServiceEndpoint(
-        "SecurityService", new SecurityWebService(securityService, validator));
-  }
+//  /**
+//   * Returns the Spring bean for the Security Service web service.
+//   *
+//   * @return the Spring bean for the Security Service web service
+//   */
+//  @Bean
+//  protected Endpoint securityWebService() {
+//    return createWebServiceEndpoint(
+//        "SecurityService", new SecurityWebService(securityService, validator));
+//  }
 }

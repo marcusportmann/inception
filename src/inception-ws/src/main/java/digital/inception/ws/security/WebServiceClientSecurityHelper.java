@@ -41,6 +41,7 @@ import javax.xml.ws.handler.HandlerResolver;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class WebServiceClientSecurityHelper {
 
   /**

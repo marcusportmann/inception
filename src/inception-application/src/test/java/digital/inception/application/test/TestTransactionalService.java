@@ -18,7 +18,6 @@ package digital.inception.application.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.core.persistence.IDGenerator;
 import digital.inception.test.DataSourceProxy;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,25 +45,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class TestTransactionalService implements ITestTransactionalService {
 
   /** The data source used to provide connections to the application database. */
-  private DataSource dataSource;
-
-  /** The ID generator. */
-  private IDGenerator idGenerator;
+  private final DataSource dataSource;
 
   /**
    * Constructs a new <code>TestTransactionalService</code>.
    *
    * @param dataSource the data source used to provide connections to the application database
-   * @param idGenerator the ID generator
    */
-  public TestTransactionalService(
-      @Qualifier("applicationDataSource") DataSource dataSource, IDGenerator idGenerator) {
+  public TestTransactionalService(@Qualifier("applicationDataSource") DataSource dataSource) {
     this.dataSource = dataSource;
-    this.idGenerator = idGenerator;
-  }
-
-  private TestData buildTestDataFromResultSet(ResultSet rs) throws SQLException {
-    return new TestData(rs.getString(1), rs.getString(2), rs.getString(3));
   }
 
   /**
@@ -178,26 +167,6 @@ public class TestTransactionalService implements ITestTransactionalService {
   }
 
   /**
-   * Retrieve the next ID and throw an exception.
-   *
-   * @return the next ID
-   */
-  public long getNextIDWithException() throws TestTransactionalServiceException {
-    idGenerator.next("Application.TestId");
-
-    throw new TestTransactionalServiceException("Testing 1.. 2.. 3..");
-  }
-
-  /**
-   * Retrieve the next ID without throwing an exception.
-   *
-   * @return the next ID
-   */
-  public long getNextIDWithoutException() throws TestTransactionalServiceException {
-    return idGenerator.next("Application.TestId");
-  }
-
-  /**
    * Retrieve the test data.
    *
    * @param id the ID
@@ -221,5 +190,9 @@ public class TestTransactionalService implements ITestTransactionalService {
       throw new TestTransactionalServiceException(
           "Failed to create the test data in a new transaction", e);
     }
+  }
+
+  private TestData buildTestDataFromResultSet(ResultSet rs) throws SQLException {
+    return new TestData(rs.getString(1), rs.getString(2), rs.getString(3));
   }
 }

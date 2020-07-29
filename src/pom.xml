@@ -1,5 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -30,11 +31,13 @@
       </snapshots>
     </repository>
     -->
+    <!--
     <repository>
       <id>spring-milestones</id>
       <name>Spring Milestones</name>
       <url>https://repo.spring.io/milestone</url>
     </repository>
+    -->
     <!--
     <repository>
       <id>spring-libs-milestone</id>
@@ -86,6 +89,7 @@
     <glassfish-jaxb-runtime.version>2.4.0-b180830.0438</glassfish-jaxb-runtime.version>
     <groovy.version>3.0.5</groovy.version>
     <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
+    <jaxb-xew-plugin.version>1.11</jaxb-xew-plugin.version>
     <jasperreports.version>6.13.0</jasperreports.version>
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <mssql-jdbc.version>8.2.2.jre11</mssql-jdbc.version>
@@ -342,6 +346,16 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-oauth2-authorization-server</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-oauth2-resource-server</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-persistence</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -367,17 +381,12 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-oauth2-authorization-server</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-oauth2-resource-server </artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-sample</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-sample-client</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -477,8 +486,9 @@
     <module>inception-reporting-ws</module>
     <module>inception-rs</module>
     <module>inception-oauth2-authorization-server</module>
-    <module>inception-oauth2-resource-server </module>
+    <module>inception-oauth2-resource-server</module>
     <module>inception-sample</module>
+    <module>inception-sample-client</module>
     <module>inception-scheduler</module>
     <module>inception-scheduler-rs</module>
     <module>inception-scheduler-ws</module>

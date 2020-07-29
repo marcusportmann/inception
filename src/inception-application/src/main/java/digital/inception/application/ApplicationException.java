@@ -18,9 +18,7 @@ package digital.inception.application;
 
 // ~--- JDK imports ------------------------------------------------------------
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import digital.inception.core.exception.RichRuntimeException;
 
 /**
  * The <code>ApplicationException</code> exception is thrown to indicate an application error
@@ -29,18 +27,13 @@ import java.util.Date;
  * @author Marcus Portmann
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class ApplicationException extends RuntimeException {
+public class ApplicationException extends RichRuntimeException {
 
-  private static final String NO_ERROR_CODE = "NONE";
-  private static final String WHEN_FORMAT = "yyyy-MM-dd HH:mm:ss:SSS";
   private static final long serialVersionUID = 1000000;
-  private String code;
-  private Date when;
 
   /** Constructs a new <code>ApplicationException</code> with <code>null</code> as its message. */
   public ApplicationException() {
     super();
-    this.when = new Date();
   }
 
   /**
@@ -50,7 +43,6 @@ public class ApplicationException extends RuntimeException {
    */
   public ApplicationException(String message) {
     super(message);
-    this.when = new Date();
   }
 
   /**
@@ -63,7 +55,6 @@ public class ApplicationException extends RuntimeException {
    */
   public ApplicationException(Throwable cause) {
     super(cause);
-    this.when = new Date();
   }
 
   /**
@@ -73,9 +64,7 @@ public class ApplicationException extends RuntimeException {
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    */
   public ApplicationException(String code, String message) {
-    super(message);
-    this.code = code;
-    this.when = new Date();
+    super(code, message);
   }
 
   /**
@@ -87,7 +76,6 @@ public class ApplicationException extends RuntimeException {
    */
   public ApplicationException(String message, Throwable cause) {
     super(message, cause);
-    this.when = new Date();
   }
 
   /**
@@ -99,38 +87,6 @@ public class ApplicationException extends RuntimeException {
    *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ApplicationException(String code, String message, Throwable cause) {
-    super(message, cause);
-    this.code = code;
-    this.when = new Date();
-  }
-
-  /**
-   * Returns the error code identifying the error or NONE if no error code was specified.
-   *
-   * @return the error code identifying the error or NONE if no error code was specified
-   */
-  public String getCode() {
-    return (code == null) ? NO_ERROR_CODE : code;
-  }
-
-  /**
-   * Returns the date and time the exception occurred.
-   *
-   * @return the date and time the exception occurred
-   */
-  public Date getWhen() {
-    return when;
-  }
-
-  /**
-   * Returns the date and time the exception occurred as a String.
-   *
-   * @return the date and time the exception occurred as a String
-   */
-  @SuppressWarnings("unused")
-  public String getWhenAsString() {
-    DateFormat dateFormat = new SimpleDateFormat(WHEN_FORMAT);
-
-    return dateFormat.format(when);
+    super(code, message, cause);
   }
 }

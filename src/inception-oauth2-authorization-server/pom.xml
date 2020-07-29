@@ -3,6 +3,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <artifactId>inception-oauth2-authorization-server</artifactId>
+  <name>inception-oauth2-authorization-server</name>
+
+  <parent>
+    <artifactId>inception</artifactId>
+    <groupId>digital.inception</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
 
   <dependencies>
     <!-- Inception Dependencies -->
@@ -40,14 +47,6 @@
     </dependency>
   </dependencies>
   <modelVersion>4.0.0</modelVersion>
-
-  <name>inception-oauth2-authorization-server</name>
-
-  <parent>
-    <artifactId>inception</artifactId>
-    <groupId>digital.inception</groupId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
 
 </project>
 

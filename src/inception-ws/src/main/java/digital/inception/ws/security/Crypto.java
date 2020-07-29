@@ -67,14 +67,23 @@ import org.slf4j.LoggerFactory;
  *
  * @author Marcus Portmann
  */
+@SuppressWarnings("unused")
 public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto.Crypto {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Crypto.class);
-  private CertStore crlStore;
-  private KeyStore keyStore;
-  private String keyStorePassword;
-  private KeyStore trustStore;
+
+  /** The certificate revocation list store. */
+  private final CertStore crlStore;
+
+  /** The key store. */
+  private final KeyStore keyStore;
+
+  /** The key store password. */
+  private final String keyStorePassword;
+
+  /** The trust store. */
+  private final KeyStore trustStore;
 
   /**
    * Constructs a new <code>Crypto</code>.
@@ -128,6 +137,268 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         + ") and aliases: {"
         + buffer.toString()
         + "}";
+  }
+
+  /**
+   * Get the private key associated with the public key.
+   *
+   * @param publicKey the public key
+   * @param callbackHandler the callback handler
+   * @return the private key associated with the public key
+   */
+  @Override
+  public PrivateKey getPrivateKey(PublicKey publicKey, CallbackHandler callbackHandler)
+      throws WSSecurityException {
+    if (keyStore == null) {
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
+    }
+
+    if (callbackHandler == null) {
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE,
+          "empty",
+          new Object[] {"The callback handler is null"});
+    }
+
+    String alias = getAliasForPublicKey(publicKey, keyStore);
+    if (alias == null) {
+      try {
+        String message = "Failed to find the private key for the public key";
+        String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
+        logger.error(message + keyStoreErrorMessage);
+
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
+      } catch (KeyStoreException ex) {
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE,
+            ex,
+            "noPrivateKey",
+            new Object[] {ex.getMessage()});
+      }
+    }
+
+    String password = getPassword(alias, callbackHandler);
+
+    return getPrivateKey(alias, password);
+  }
+
+  /**
+   * Gets the private key corresponding to the identifier.
+   *
+   * @param identifier the implementation-specific identifier corresponding to the private key
+   * @param password the password required to access the key
+   * @return the private key
+   */
+  @Override
+  public PrivateKey getPrivateKey(String identifier, String password) throws WSSecurityException {
+    if (keyStore == null) {
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
+    }
+
+    try {
+      if ((identifier == null) || (!keyStore.isKeyEntry(identifier))) {
+        String message = "Failed to find the private key for the alias (" + identifier + ")";
+        String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
+        logger.error(message + keyStoreErrorMessage);
+
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
+      }
+
+      String pwd = password;
+      if ((pwd == null) && (keyStorePassword != null)) {
+        pwd = keyStorePassword;
+      }
+
+      Key key = keyStore.getKey(identifier, (pwd == null) ? new char[] {} : pwd.toCharArray());
+      if (!(key instanceof PrivateKey)) {
+        String message = "The key with the alias (" + identifier + ") is not a private key";
+        String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
+        logger.error(message + keyStoreErrorMessage);
+
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
+      }
+
+      return (PrivateKey) key;
+    } catch (KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException ex) {
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE,
+          ex,
+          "noPrivateKey",
+          new Object[] {ex.getMessage()});
+    }
+  }
+
+  /**
+   * Get the private key associated with the X.509 certificate using the password provided by the
+   * callback handler.
+   *
+   * @param certificate the X.509 certificate
+   * @param callbackHandler the callback handler
+   * @return the private key associated with the X.509 certificate
+   */
+  @Override
+  public PrivateKey getPrivateKey(X509Certificate certificate, CallbackHandler callbackHandler)
+      throws WSSecurityException {
+    if (keyStore == null) {
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
+    }
+
+    if (callbackHandler == null) {
+      throw new WSSecurityException(
+          WSSecurityException.ErrorCode.FAILURE,
+          "empty",
+          new Object[] {"The callback handler is null"});
+    }
+
+    String alias = getAliasForPublicKey(certificate, keyStore);
+    if (alias == null) {
+      try {
+        String message = "Failed to find the private key for the X.509 certificate";
+        String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
+        logger.error(message + keyStoreErrorMessage);
+
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
+      } catch (KeyStoreException ex) {
+        throw new WSSecurityException(
+            WSSecurityException.ErrorCode.FAILURE,
+            ex,
+            "noPrivateKey",
+            new Object[] {ex.getMessage()});
+      }
+    }
+
+    String password = getPassword(alias, callbackHandler);
+
+    return getPrivateKey(alias, password);
+  }
+
+  /**
+   * Get the X.509 certificate or certificate chain for the crypto type.
+   *
+   * <p>The supported types are as follows:
+   *
+   * <ul>
+   *   <li><b>TYPE.ISSUER_SERIAL</b><br>
+   *       The X.509 certificate (chain) is identified by the issuer name and serial number.
+   *   <li><b>TYPE.THUMBPRINT_SHA1</b><br>
+   *       The X.509 certificate (chain) is identified by the SHA1 of the (root) certificate.
+   *   <li><b>TYPE.SKI_BYTES</b><br>
+   *       The X.509 certificate (chain) is identified by the SKI bytes of the (root) certificate.
+   *   <li><b>TYPE.SUBJECT_DN</b><br>
+   *       The X.509 certificate (chain) is identified by the subject DN of the (root) certificate.
+   *   <li><b>TYPE.ALIAS</b><br>
+   *       The X.509 certificate (chain) is identified by an alias, which for this implementation
+   *       means an alias of the key store or trust store.
+   * </ul>
+   *
+   * @param cryptoType the crypto type
+   * @return the X.509 certificate or certificate chain for the crypto type
+   */
+  @Override
+  public X509Certificate[] getX509Certificates(CryptoType cryptoType) throws WSSecurityException {
+    if (cryptoType == null) {
+      return null;
+    }
+
+    CryptoType.TYPE type = cryptoType.getType();
+    X509Certificate[] certificateChain = null;
+    switch (type) {
+      case ISSUER_SERIAL:
+        certificateChain =
+            getX509CertificateChainForIssuerAndSerialNumber(
+                cryptoType.getIssuer(), cryptoType.getSerial());
+
+        break;
+
+      case THUMBPRINT_SHA1:
+        certificateChain = getX509CertificateChainForThumbprint(cryptoType.getBytes());
+
+        break;
+
+      case SKI_BYTES:
+        certificateChain = getX509CertificateChainForSKI(cryptoType.getBytes());
+
+        break;
+
+      case SUBJECT_DN:
+        certificateChain = getX509CertificateChainForSubject(cryptoType.getSubjectDN());
+
+        break;
+
+      case ALIAS:
+        certificateChain = getX509CertificateChainForAlias(cryptoType.getAlias());
+
+        break;
+
+      case ENDPOINT:
+        break;
+    }
+
+    return certificateChain;
+  }
+
+  /**
+   * Get the identifier for the X.509 certificate i.e. the key store alias.
+   *
+   * @param certificate the X.509 certificate
+   * @return the identifier for the X.509 certificate i.e. the key store alias or <code>null</code>
+   *     if the X.509 certificate could not be found
+   */
+  @Override
+  public String getX509Identifier(X509Certificate certificate) throws WSSecurityException {
+    String alias = null;
+
+    if (keyStore != null) {
+      alias = getAliasForPublicKey(certificate, keyStore);
+    }
+
+    if ((alias == null) && (trustStore != null)) {
+      alias = getAliasForPublicKey(certificate, trustStore);
+    }
+
+    return alias;
+  }
+
+  /**
+   * Evaluate whether the public key is trusted.
+   *
+   * @param publicKey the public key
+   */
+  public void verifyTrust(PublicKey publicKey) throws WSSecurityException {
+    // If the public key is null, do not trust the signature
+    if (publicKey == null) {
+      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
+    }
+
+    /*
+     * Search the key store for the transmitted public key (direct trust). If not found then search
+     * the trust store for the transmitted public key (direct trust).
+     */
+    if ((!isPublicKeyInKeyStore(publicKey, keyStore))
+        && (!isPublicKeyInKeyStore(publicKey, trustStore))) {
+      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
+    }
+  }
+
+  @Override
+  public void verifyTrust(
+      X509Certificate[] certs,
+      boolean enableRevocation,
+      Collection<Pattern> subjectCertConstraints,
+      Collection<Pattern> issuerCertConstraints)
+      throws WSSecurityException {
+    verifyTrust(certs, enableRevocation, subjectCertConstraints);
+
+    if (!matchesIssuerDnPattern(certs[0], issuerCertConstraints)) {
+      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
+    }
   }
 
   /**
@@ -522,146 +793,6 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   }
 
   /**
-   * Get the private key associated with the public key.
-   *
-   * @param publicKey the public key
-   * @param callbackHandler the callback handler
-   * @return the private key associated with the public key
-   */
-  @Override
-  public PrivateKey getPrivateKey(PublicKey publicKey, CallbackHandler callbackHandler)
-      throws WSSecurityException {
-    if (keyStore == null) {
-      throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
-    }
-
-    if (callbackHandler == null) {
-      throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE,
-          "empty",
-          new Object[] {"The callback handler is null"});
-    }
-
-    String alias = getAliasForPublicKey(publicKey, keyStore);
-    if (alias == null) {
-      try {
-        String message = "Failed to find the private key for the public key";
-        String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
-        logger.error(message + keyStoreErrorMessage);
-
-        throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
-      } catch (KeyStoreException ex) {
-        throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE,
-            ex,
-            "noPrivateKey",
-            new Object[] {ex.getMessage()});
-      }
-    }
-
-    String password = getPassword(alias, callbackHandler);
-
-    return getPrivateKey(alias, password);
-  }
-
-  /**
-   * Gets the private key corresponding to the identifier.
-   *
-   * @param identifier the implementation-specific identifier corresponding to the private key
-   * @param password the password required to access the key
-   * @return the private key
-   */
-  @Override
-  public PrivateKey getPrivateKey(String identifier, String password) throws WSSecurityException {
-    if (keyStore == null) {
-      throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
-    }
-
-    try {
-      if ((identifier == null) || (!keyStore.isKeyEntry(identifier))) {
-        String message = "Failed to find the private key for the alias (" + identifier + ")";
-        String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
-        logger.error(message + keyStoreErrorMessage);
-
-        throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
-      }
-
-      String pwd = password;
-      if ((pwd == null) && (keyStorePassword != null)) {
-        pwd = keyStorePassword;
-      }
-
-      Key key = keyStore.getKey(identifier, (pwd == null) ? new char[] {} : pwd.toCharArray());
-      if (!(key instanceof PrivateKey)) {
-        String message = "The key with the alias (" + identifier + ") is not a private key";
-        String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
-        logger.error(message + keyStoreErrorMessage);
-
-        throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
-      }
-
-      return (PrivateKey) key;
-    } catch (KeyStoreException | UnrecoverableKeyException | NoSuchAlgorithmException ex) {
-      throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE,
-          ex,
-          "noPrivateKey",
-          new Object[] {ex.getMessage()});
-    }
-  }
-
-  /**
-   * Get the private key associated with the X.509 certificate using the password provided by the
-   * callback handler.
-   *
-   * @param certificate the X.509 certificate
-   * @param callbackHandler the callback handler
-   * @return the private key associated with the X.509 certificate
-   */
-  @Override
-  public PrivateKey getPrivateKey(X509Certificate certificate, CallbackHandler callbackHandler)
-      throws WSSecurityException {
-    if (keyStore == null) {
-      throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
-    }
-
-    if (callbackHandler == null) {
-      throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE,
-          "empty",
-          new Object[] {"The callback handler is null"});
-    }
-
-    String alias = getAliasForPublicKey(certificate, keyStore);
-    if (alias == null) {
-      try {
-        String message = "Failed to find the private key for the X.509 certificate";
-        String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
-        logger.error(message + keyStoreErrorMessage);
-
-        throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
-      } catch (KeyStoreException ex) {
-        throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE,
-            ex,
-            "noPrivateKey",
-            new Object[] {ex.getMessage()});
-      }
-    }
-
-    String password = getPassword(alias, callbackHandler);
-
-    return getPrivateKey(alias, password);
-  }
-
-  /**
    * Get the X.509 certificate or certificate chain that corresponds to the key store alias from the
    * key store or trust store.
    *
@@ -728,7 +859,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
      * the DN contains "E" instead of "EMAILADDRESS"), then fall back on a direct conversion to a
      * BC X509Name.
      */
-    Object issuerName = null;
+    Object issuerName;
     try {
       X500Principal issuerRDN = new X500Principal(issuer);
       issuerName = createBCX509Name(issuerRDN.getName());
@@ -851,93 +982,6 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   }
 
   /**
-   * Get the X.509 certificate or certificate chain for the crypto type.
-   *
-   * <p>The supported types are as follows:
-   *
-   * <ul>
-   *   <li><b>TYPE.ISSUER_SERIAL</b><br>
-   *       The X.509 certificate (chain) is identified by the issuer name and serial number.
-   *   <li><b>TYPE.THUMBPRINT_SHA1</b><br>
-   *       The X.509 certificate (chain) is identified by the SHA1 of the (root) certificate.
-   *   <li><b>TYPE.SKI_BYTES</b><br>
-   *       The X.509 certificate (chain) is identified by the SKI bytes of the (root) certificate.
-   *   <li><b>TYPE.SUBJECT_DN</b><br>
-   *       The X.509 certificate (chain) is identified by the subject DN of the (root) certificate.
-   *   <li><b>TYPE.ALIAS</b><br>
-   *       The X.509 certificate (chain) is identified by an alias, which for this implementation
-   *       means an alias of the key store or trust store.
-   * </ul>
-   *
-   * @param cryptoType the crypto type
-   * @return the X.509 certificate or certificate chain for the crypto type
-   */
-  @Override
-  public X509Certificate[] getX509Certificates(CryptoType cryptoType) throws WSSecurityException {
-    if (cryptoType == null) {
-      return null;
-    }
-
-    CryptoType.TYPE type = cryptoType.getType();
-    X509Certificate[] certificateChain = null;
-    switch (type) {
-      case ISSUER_SERIAL:
-        certificateChain =
-            getX509CertificateChainForIssuerAndSerialNumber(
-                cryptoType.getIssuer(), cryptoType.getSerial());
-
-        break;
-
-      case THUMBPRINT_SHA1:
-        certificateChain = getX509CertificateChainForThumbprint(cryptoType.getBytes());
-
-        break;
-
-      case SKI_BYTES:
-        certificateChain = getX509CertificateChainForSKI(cryptoType.getBytes());
-
-        break;
-
-      case SUBJECT_DN:
-        certificateChain = getX509CertificateChainForSubject(cryptoType.getSubjectDN());
-
-        break;
-
-      case ALIAS:
-        certificateChain = getX509CertificateChainForAlias(cryptoType.getAlias());
-
-        break;
-
-      case ENDPOINT:
-        break;
-    }
-
-    return certificateChain;
-  }
-
-  /**
-   * Get the identifier for the X.509 certificate i.e. the key store alias.
-   *
-   * @param certificate the X.509 certificate
-   * @return the identifier for the X.509 certificate i.e. the key store alias or <code>null</code>
-   *     if the X.509 certificate could not be found
-   */
-  @Override
-  public String getX509Identifier(X509Certificate certificate) throws WSSecurityException {
-    String alias = null;
-
-    if (keyStore != null) {
-      alias = getAliasForPublicKey(certificate, keyStore);
-    }
-
-    if ((alias == null) && (trustStore != null)) {
-      alias = getAliasForPublicKey(certificate, trustStore);
-    }
-
-    return alias;
-  }
-
-  /**
    * Check whether the public key is in the key store.
    *
    * @param publicKey the public key to search for
@@ -985,41 +1029,6 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
     }
 
     return false;
-  }
-
-  /**
-   * Evaluate whether the public key is trusted.
-   *
-   * @param publicKey the public key
-   */
-  public void verifyTrust(PublicKey publicKey) throws WSSecurityException {
-    // If the public key is null, do not trust the signature
-    if (publicKey == null) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
-    }
-
-    /*
-     * Search the key store for the transmitted public key (direct trust). If not found then search
-     * the trust store for the transmitted public key (direct trust).
-     */
-    if ((!isPublicKeyInKeyStore(publicKey, keyStore))
-        && (!isPublicKeyInKeyStore(publicKey, trustStore))) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
-    }
-  }
-
-  @Override
-  public void verifyTrust(
-      X509Certificate[] certs,
-      boolean enableRevocation,
-      Collection<Pattern> subjectCertConstraints,
-      Collection<Pattern> issuerCertConstraints)
-      throws WSSecurityException {
-    verifyTrust(certs, enableRevocation, subjectCertConstraints);
-
-    if (!matchesIssuerDnPattern(certs[0], issuerCertConstraints)) {
-      throw new WSSecurityException(WSSecurityException.ErrorCode.FAILED_AUTHENTICATION);
-    }
   }
 
   /**

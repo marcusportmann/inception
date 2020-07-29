@@ -57,7 +57,7 @@ public class PersistenceConfiguration {
   private ApplicationContext applicationContext;
 
   /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
-  @Value("${inception.application.data-source.entity-packages:#{null}}")
+  @Value("${inception.persistence.entity-packages:#{null}}")
   private String packagesToScanForEntities;
 
   /**

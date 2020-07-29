@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://sample.inception.digital" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="SampleService" targetNamespace="http://sample.inception.digital">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://validation.inception.digital" targetNamespace="http://validation.inception.digital" version="1.0">
+
+  <xs:element name="ValidationError" type="tns:ValidationError"/>
+
+  <xs:element name="ValidationErrorAttribute" type="tns:ValidationErrorAttribute"/>
+
+  <xs:complexType name="ValidationError">
+    <xs:sequence>
+      <xs:element name="Property" type="xs:string"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="tns:ValidationErrorAttribute"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ValidationErrorAttribute">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element minOccurs="0" name="Value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:validation="http://validation.inception.digital" xmlns:tns="http://sample.inception.digital" xmlns:sample="http://sample.inception.digital" xmlns:core="http://core.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sample.inception.digital" version="1.0">
+  <xs:import namespace="http://validation.inception.digital"/>
+  <xs:element name="Data" type="tns:Data"/>
+  <xs:element name="GetAllData" type="tns:GetAllData"/>
+  <xs:element name="GetAllDataResponse" type="tns:GetAllDataResponse"/>
+  <xs:element name="GetData" type="tns:GetData"/>
+  <xs:element name="GetDataResponse" type="tns:GetDataResponse"/>
+  <xs:element name="TestExceptionHandling" type="tns:TestExceptionHandling"/>
+  <xs:element name="TestExceptionHandlingResponse" type="tns:TestExceptionHandlingResponse"/>
+  <xs:element name="TestLocalDateTime" type="tns:TestLocalDateTime"/>
+  <xs:element name="TestLocalDateTimeResponse" type="tns:TestLocalDateTimeResponse"/>
+  <xs:element name="TestZonedDateTime" type="tns:TestZonedDateTime"/>
+  <xs:element name="TestZonedDateTimeResponse" type="tns:TestZonedDateTimeResponse"/>
+  <xs:element name="Validate" type="tns:Validate"/>
+  <xs:element name="ValidateResponse" type="tns:ValidateResponse"/>
+  <xs:complexType name="GetAllData">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="GetAllDataResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Data" type="tns:Data"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Data">
+    <xs:sequence>
+      <xs:element name="Id" type="xs:long"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element minOccurs="0" name="StringValue" type="xs:string"/>
+      <xs:element minOccurs="0" name="IntegerValue" type="xs:int"/>
+      <xs:element minOccurs="0" name="DateValue" type="xs:date"/>
+      <xs:element minOccurs="0" name="TimestampValue" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TestZonedDateTime">
+    <xs:sequence>
+      <xs:element name="ZonedDateTime" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TestZonedDateTimeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TestExceptionHandling">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="TestExceptionHandlingResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="TestLocalDateTime">
+    <xs:sequence>
+      <xs:element name="LocalDateTime" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TestLocalDateTimeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Validate">
+    <xs:sequence>
+      <xs:element name="Data" type="tns:Data"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidateResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationError" type="validation:ValidationError"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetData">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="GetDataResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Data" type="tns:Data"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SampleServiceException" nillable="true" type="core:ServiceError"/>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://core.inception.digital" xmlns:core="http://core.inception.digital" elementFormDefault="unqualified" targetNamespace="http://core.inception.digital" version="1.0">
+
+  <xs:element name="ServiceError" type="tns:ServiceError"/>
+
+  <xs:complexType name="ServiceError">
+    <xs:sequence>
+      <xs:element name="When" type="xs:dateTime"/>
+      <xs:element name="Code" type="xs:string"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element name="Detail" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="TestZonedDateTime">
+    <wsdl:part element="tns:TestZonedDateTime" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetDataResponse">
+    <wsdl:part element="tns:GetDataResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TestLocalDateTimeResponse">
+    <wsdl:part element="tns:TestLocalDateTimeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="Validate">
+    <wsdl:part element="tns:Validate" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetData">
+    <wsdl:part element="tns:GetData" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TestExceptionHandlingResponse">
+    <wsdl:part element="tns:TestExceptionHandlingResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetAllData">
+    <wsdl:part element="tns:GetAllData" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TestExceptionHandling">
+    <wsdl:part element="tns:TestExceptionHandling" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetAllDataResponse">
+    <wsdl:part element="tns:GetAllDataResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TestZonedDateTimeResponse">
+    <wsdl:part element="tns:TestZonedDateTimeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="TestLocalDateTime">
+    <wsdl:part element="tns:TestLocalDateTime" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SampleServiceException">
+    <wsdl:part element="tns:SampleServiceException" name="SampleServiceException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ValidateResponse">
+    <wsdl:part element="tns:ValidateResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ISampleService">
+    <wsdl:operation name="GetAllData">
+      <wsdl:input message="tns:GetAllData" name="GetAllData">
+    </wsdl:input>
+      <wsdl:output message="tns:GetAllDataResponse" name="GetAllDataResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestZonedDateTime">
+      <wsdl:input message="tns:TestZonedDateTime" name="TestZonedDateTime">
+    </wsdl:input>
+      <wsdl:output message="tns:TestZonedDateTimeResponse" name="TestZonedDateTimeResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestExceptionHandling">
+      <wsdl:input message="tns:TestExceptionHandling" name="TestExceptionHandling">
+    </wsdl:input>
+      <wsdl:output message="tns:TestExceptionHandlingResponse" name="TestExceptionHandlingResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestLocalDateTime">
+      <wsdl:input message="tns:TestLocalDateTime" name="TestLocalDateTime">
+    </wsdl:input>
+      <wsdl:output message="tns:TestLocalDateTimeResponse" name="TestLocalDateTimeResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <wsdl:input message="tns:Validate" name="Validate">
+    </wsdl:input>
+      <wsdl:output message="tns:ValidateResponse" name="ValidateResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <wsdl:input message="tns:GetData" name="GetData">
+    </wsdl:input>
+      <wsdl:output message="tns:GetDataResponse" name="GetDataResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:SampleServiceException" name="SampleServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SampleServiceSoapBinding" type="tns:ISampleService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetAllData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetAllData">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetAllDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestZonedDateTime">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="TestZonedDateTime">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TestZonedDateTimeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestExceptionHandling">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="TestExceptionHandling">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TestExceptionHandlingResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="TestLocalDateTime">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="TestLocalDateTime">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="TestLocalDateTimeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="Validate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="ValidateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetData">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SampleServiceException">
+        <soap:fault name="SampleServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SampleService">
+    <wsdl:port binding="tns:SampleServiceSoapBinding" name="ISampleServicePort">
+      <soap:address location="http://localhost:8080/service/SampleService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

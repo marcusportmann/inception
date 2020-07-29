@@ -229,35 +229,6 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testIDGenerator */
-  @Test
-  public void testIDGenerator() throws Exception {
-    TransactionStatus transactionStatus =
-        platformTransactionManager.getTransaction(
-            new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED));
-
-    testTransactionalService.getNextIDWithoutException();
-
-    try {
-      testTransactionalService.getNextIDWithException();
-    } catch (TestTransactionalServiceException ignored) {
-    }
-
-    long id = testTransactionalService.getNextIDWithoutException();
-
-    if (id != 3) {
-      fail("The generated ID is incorrect");
-    }
-
-    platformTransactionManager.rollback(transactionStatus);
-
-    id = testTransactionalService.getNextIDWithoutException();
-
-    if (id != 4) {
-      fail("The generated ID is incorrect");
-    }
-  }
-
   /** testSuccessfulExecutionInExistingTransaction */
   @Test
   public void testSuccessfulExecutionInExistingTransaction() throws Exception {

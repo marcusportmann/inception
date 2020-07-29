@@ -27,7 +27,6 @@ import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
-import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.dom.handler.RequestData;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
 
@@ -60,8 +59,7 @@ public class CXFWSSX509CertificateTokenProfileProxyConfigurator {
       KeyStore keyStore,
       String keyStorePassword,
       String keyStoreAlias,
-      KeyStore trustStore)
-      throws Exception {
+      KeyStore trustStore) {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
     if (invocationHandler instanceof ClientProxy) {
@@ -87,7 +85,7 @@ public class CXFWSSX509CertificateTokenProfileProxyConfigurator {
           new WSS4JInInterceptor(inProperties) {
             @Override
             protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
-                String propFilename, RequestData reqData) throws WSSecurityException {
+                String propFilename, RequestData reqData) {
               return crypto;
             }
           };
@@ -110,7 +108,7 @@ public class CXFWSSX509CertificateTokenProfileProxyConfigurator {
           new WSS4JOutInterceptor(outProperties) {
             @Override
             protected org.apache.wss4j.common.crypto.Crypto loadCryptoFromPropertiesFile(
-                String propFilename, RequestData reqData) throws WSSecurityException {
+                String propFilename, RequestData reqData) {
               return crypto;
             }
           };

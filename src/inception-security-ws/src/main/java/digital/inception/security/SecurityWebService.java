@@ -310,9 +310,7 @@ public class SecurityWebService {
     validateUser(user);
 
     securityService.createUser(
-        user,
-        (expiredPassword != null) && expiredPassword,
-        (userLocked != null) && userLocked);
+        user, (expiredPassword != null) && expiredPassword, (userLocked != null) && userLocked);
   }
 
   /**

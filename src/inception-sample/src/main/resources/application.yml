@@ -21,9 +21,6 @@ server:
 #    trust-store-type: pkcs12
 #    trust-store-password: sample
 
-
-
-
 #  security:
 #    keyStore:
 #      type: JKS
@@ -43,27 +40,24 @@ inception:
       url: jdbc:h2:mem:application;MODE=DB2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
       min-pool-size: 5
       max-pool-size: 10
-      entity-packages: digital.inception.sample
 #      recovery:
 #        enabled: false
 #        username: USERNAME
 #        password: PASSWORD
 
-    data-source-postgresql:
-      class-name: org.postgresql.jdbc3.Jdbc3SimpleDataSource
-      url: jdbc:postgresql://localhost:5432/sample
-      username: sample
-      password: Password1
-      min-pool-size: 5
-      max-pool-size: 10
-      entity-packages: digital.inception.sample
+#    data-source:
+#      class-name: org.postgresql.jdbc3.Jdbc3SimpleDataSource
+#      url: jdbc:postgresql://localhost:5432/sample
+#      username: sample
+#      password: Password1
+#      min-pool-size: 5
+#      max-pool-size: 10
 
-    data-source-sql-server:
-      class-name: com.microsoft.sqlserver.jdbc.SQLServerXADataSource
-      url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Sample;user=Sample;password=Password1
-      min-pool-size: 5
-      max-pool-size: 10
-      entity-packages: digital.inception.sample
+#    data-source:
+#      class-name: com.microsoft.sqlserver.jdbc.SQLServerXADataSource
+#      url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Sample;user=Sample;password=Password1
+#      min-pool-size: 5
+#      max-pool-size: 10
 
   cache:
     hazelcast:
@@ -86,15 +80,21 @@ inception:
             backup-count: 0
             async-backup-count: 0
             read-backup-data: false
+
   messaging:
     encryption-key: m/4Wu7iHTCBVu0Bb1JojAhzWQtA5cWIzbWY2YjhmOGE=
     processing-retry-delay: 60000
     maximum-processing-attempts: 1000
+
   oauth2:
     authorization-server:
       jwt:
         private-key-location: classpath:security/oauth2-jwt-key
         public-key-location: classpath:security/oauth2-jwt-key.pub
+
+  persistence:
+    entity-packages: digital.inception.sample
+
   sms:
     maximum-send-attempts: 100
     providers:
@@ -104,6 +104,21 @@ inception:
         client-secret: CLIENT_SECRET
     send-retry-delay: 600000
     use-provider: sms-portal
+
+  ws:
+    security:
+      x509-certificate-token-profile:
+        enabled: true
+        key-store: classpath:META-INF/sample.p12
+        key-store-type: pkcs12
+        key-store-password: sample
+        key-password: sample
+        key-alias: sample
+        protocol: TLS
+        trust-store: classpath:META-INF/sample.p12
+        trust-store-type: pkcs12
+        trust-store-password: sample
+
 
 
 spring:

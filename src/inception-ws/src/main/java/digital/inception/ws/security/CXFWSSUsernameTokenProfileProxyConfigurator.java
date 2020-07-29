@@ -49,8 +49,7 @@ public class CXFWSSUsernameTokenProfileProxyConfigurator {
    * @param usePlainTextPassword should a plain text password be used
    */
   public static void configureProxy(
-      Object proxy, String username, String password, boolean usePlainTextPassword)
-      throws Exception {
+      Object proxy, String username, String password, boolean usePlainTextPassword) {
     InvocationHandler invocationHandler = Proxy.getInvocationHandler(proxy);
 
     if (invocationHandler instanceof ClientProxy) {

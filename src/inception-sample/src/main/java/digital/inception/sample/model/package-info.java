@@ -19,8 +19,8 @@
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
       @javax.xml.bind.annotation.XmlNs(
-          prefix = "inception",
-          namespaceURI = "http://inception.digital"),
+          prefix = "core",
+          namespaceURI = "http://core.inception.digital"),
       @javax.xml.bind.annotation.XmlNs(
           prefix = "validation",
           namespaceURI = "http://validation.inception.digital"),

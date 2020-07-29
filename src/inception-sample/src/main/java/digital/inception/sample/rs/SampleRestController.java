@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.sample.api;
+package digital.inception.sample.rs;
 
 // ~--- non-JDK imports --------------------------------------------------------
 

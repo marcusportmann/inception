@@ -71,20 +71,6 @@ public interface ITestTransactionalService {
       throws TestTransactionalServiceException;
 
   /**
-   * Retrieve the next ID and throw an exception.
-   *
-   * @return the next ID
-   */
-  long getNextIDWithException() throws TestTransactionalServiceException;
-
-  /**
-   * Retrieve the next ID without throwing an exception.
-   *
-   * @return the next ID
-   */
-  long getNextIDWithoutException() throws TestTransactionalServiceException;
-
-  /**
    * Retrieve the test data.
    *
    * @param id the ID
