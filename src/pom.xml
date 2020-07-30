@@ -99,7 +99,7 @@
     <springdoc-openapi-ui.version>1.4.3</springdoc-openapi-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
     <swagger-annotations.version>2.1.4</swagger-annotations.version>
-    <wss4j-ws-security-common.version>2.3.0</wss4j-ws-security-common.version>
+    <wss4j-ws-security-common.version>2.2.5</wss4j-ws-security-common.version>
   </properties>
 
   <dependencyManagement>

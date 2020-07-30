@@ -19,7 +19,9 @@ package digital.inception.sample;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.CodesService;
 import digital.inception.codes.ICodesService;
+import digital.inception.core.util.CryptoUtil;
 import digital.inception.ws.security.WebServiceClientSecurityHelper;
+import java.security.KeyStore;
 import java.util.List;
 
 /**
@@ -30,10 +32,25 @@ import java.util.List;
 public class SimpleSampleClient {
 
   /** The Codes Service endpoint. */
-  public static final String CODES_SERVICE_ENDPOINT = "http://localhost:8080/service/CodesService";
+  public static final String CODES_SERVICE_ENDPOINT = "http://localhost:20000/service/CodesService";
 
   /** The path to the classpath resource containing the WSDL for the Codes Service. */
   public static final String CODES_SERVICE_WSDL = "META-INF/wsdl/CodesService.wsdl";
+
+  /** Enable the web services security X509 certificate token profile for the sample client. */
+  private static final boolean SAMPLE_CLIENT_ENABLE_X509_CERTIFICATE_TOKEN_PROFILE = false;
+
+  /** The keystore alias for the sample client. */
+  private static final String SAMPLE_CLIENT_KEYSTORE_ALIAS = "sample-client";
+
+  /** The keystore password for the sample client. */
+  private static final String SAMPLE_CLIENT_KEYSTORE_PASSWORD = "sample-client";
+
+  /** The keystore path for the sample client. */
+  private static final String SAMPLE_CLIENT_KEYSTORE_PATH = "META-INF/sample-client.p12";
+
+  /** The keystore type for the sample client. */
+  private static final String SAMPLE_CLIENT_KEYSTORE_TYPE = "pkcs12";
 
   /**
    * The main method.
@@ -42,9 +59,34 @@ public class SimpleSampleClient {
    */
   public static void main(String[] args) {
     try {
-      ICodesService codesService =
-          WebServiceClientSecurityHelper.getServiceProxy(
-              CodesService.class, ICodesService.class, CODES_SERVICE_WSDL, CODES_SERVICE_ENDPOINT);
+      KeyStore keyStore =
+          CryptoUtil.loadKeyStore(
+              SAMPLE_CLIENT_KEYSTORE_TYPE,
+              SAMPLE_CLIENT_KEYSTORE_PATH,
+              SAMPLE_CLIENT_KEYSTORE_PASSWORD,
+              SAMPLE_CLIENT_KEYSTORE_ALIAS);
+
+      ICodesService codesService;
+
+      if (SAMPLE_CLIENT_ENABLE_X509_CERTIFICATE_TOKEN_PROFILE) {
+        codesService =
+            WebServiceClientSecurityHelper.getWSSecurityX509CertificateServiceProxy(
+                CodesService.class,
+                ICodesService.class,
+                CODES_SERVICE_WSDL,
+                CODES_SERVICE_ENDPOINT,
+                keyStore,
+                SAMPLE_CLIENT_KEYSTORE_PASSWORD,
+                SAMPLE_CLIENT_KEYSTORE_ALIAS,
+                keyStore);
+      } else {
+        codesService =
+            WebServiceClientSecurityHelper.getServiceProxy(
+                CodesService.class,
+                ICodesService.class,
+                CODES_SERVICE_WSDL,
+                CODES_SERVICE_ENDPOINT);
+      }
 
       List<CodeCategory> codeCategories = codesService.getCodeCategories();
 

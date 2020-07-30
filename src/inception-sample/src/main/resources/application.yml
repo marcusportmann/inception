@@ -1,5 +1,5 @@
 # To generate the application keystore:
-#   keytool -genkeypair -keystore sample.p12 -storetype pkcs12 -storepass sample -alias sample -keyalg RSA -keysize 2048 -keypass sample -validity 3650 -dname "CN=sample" -ext san=dns:sample.local,dns:localhost,ip:127.0.0.1
+#   keytool -genkeypair -keystore sample.p12 -storetype pkcs12 -storepass sample -alias sample -keyalg RSA -keysize 2048 -keypass sample -validity 7300 -dname "CN=sample" -ext san=dns:sample.local,dns:localhost,ip:127.0.0.1
 #
 # To generate an RSA PKCS8 key-pair to sign JWTs, execute the following commands:
 #   openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > rsa-2048-private-key.p8
@@ -108,7 +108,7 @@ inception:
   ws:
     security:
       x509-certificate-token-profile:
-        enabled: true
+        enabled: false
         key-store: classpath:META-INF/sample.p12
         key-store-type: pkcs12
         key-store-password: sample
@@ -118,8 +118,6 @@ inception:
         trust-store: classpath:META-INF/sample.p12
         trust-store-type: pkcs12
         trust-store-password: sample
-
-
 
 spring:
   mail:

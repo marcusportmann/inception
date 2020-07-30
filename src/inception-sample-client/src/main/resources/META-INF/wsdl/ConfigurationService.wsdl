@@ -1,0 +1,309 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://configuration.inception.digital" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://validation.inception.digital" name="ConfigurationService" targetNamespace="http://configuration.inception.digital">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://validation.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://validation.inception.digital" version="1.0">
+  <xs:element name="InvalidArgumentError" type="tns:InvalidArgumentError"/>
+  <xs:element name="ValidationError" type="tns:ValidationError"/>
+  <xs:element name="ValidationErrorAttribute" type="tns:ValidationErrorAttribute"/>
+  <xs:complexType name="InvalidArgumentError">
+    <xs:sequence>
+      <xs:element name="When" type="xs:dateTime"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element name="Detail" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ValidationErrors" type="tns:ValidationError"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidationError">
+    <xs:sequence>
+      <xs:element name="Property" type="xs:string"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Attributes" type="tns:ValidationErrorAttribute"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ValidationErrorAttribute">
+    <xs:sequence>
+      <xs:element name="Name" type="xs:string"/>
+      <xs:element minOccurs="0" name="Value" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InvalidArgumentException" nillable="true" type="tns:InvalidArgumentError"/>
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://core.inception.digital" xmlns:core="http://core.inception.digital" elementFormDefault="unqualified" targetNamespace="http://core.inception.digital" version="1.0">
+
+  <xs:element name="ServiceError" type="tns:ServiceError"/>
+
+  <xs:complexType name="ServiceError">
+    <xs:sequence>
+      <xs:element name="When" type="xs:dateTime"/>
+      <xs:element name="Code" type="xs:string"/>
+      <xs:element name="Message" type="xs:string"/>
+      <xs:element name="Detail" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:validation="http://validation.inception.digital" xmlns:tns="http://configuration.inception.digital" xmlns:core="http://core.inception.digital" xmlns:configuration="http://configuration.inception.digital" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://configuration.inception.digital" version="1.0">
+  <xs:element name="Configuration" type="configuration:Configuration"/>
+  <xs:element name="DeleteConfiguration" type="configuration:DeleteConfiguration"/>
+  <xs:element name="DeleteConfigurationResponse" type="configuration:DeleteConfigurationResponse"/>
+  <xs:element name="GetConfiguration" type="configuration:GetConfiguration"/>
+  <xs:element name="GetConfigurationResponse" type="configuration:GetConfigurationResponse"/>
+  <xs:element name="GetConfigurationValue" type="configuration:GetConfigurationValue"/>
+  <xs:element name="GetConfigurationValueResponse" type="configuration:GetConfigurationValueResponse"/>
+  <xs:element name="GetConfigurations" type="configuration:GetConfigurations"/>
+  <xs:element name="GetConfigurationsResponse" type="configuration:GetConfigurationsResponse"/>
+  <xs:element name="SetConfiguration" type="configuration:SetConfiguration"/>
+  <xs:element name="SetConfigurationResponse" type="configuration:SetConfigurationResponse"/>
+  <xs:complexType name="SetConfiguration">
+    <xs:sequence>
+      <xs:element name="Configuration" type="configuration:Configuration"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Configuration">
+    <xs:sequence>
+      <xs:element name="Key" type="xs:string"/>
+      <xs:element name="Value" type="xs:string"/>
+      <xs:element name="Description" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SetConfigurationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="DeleteConfiguration">
+    <xs:sequence>
+      <xs:element name="Key" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DeleteConfigurationResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="GetConfiguration">
+    <xs:sequence>
+      <xs:element name="Key" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetConfigurationResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Configuration" type="configuration:Configuration"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetConfigurations">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="GetConfigurationsResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Configuration" type="configuration:Configuration"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetConfigurationValue">
+    <xs:sequence>
+      <xs:element name="Key" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="GetConfigurationValueResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ConfigurationValue" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConfigurationServiceException" nillable="true" type="core:ServiceError"/>
+  <xs:element name="ConfigurationNotFoundException" nillable="true" type="core:ServiceError"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="InvalidArgumentException">
+    <wsdl:part element="ns1:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetConfiguration">
+    <wsdl:part element="tns:GetConfiguration" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SetConfigurationResponse">
+    <wsdl:part element="tns:SetConfigurationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetConfigurationValue">
+    <wsdl:part element="tns:GetConfigurationValue" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SetConfiguration">
+    <wsdl:part element="tns:SetConfiguration" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteConfigurationResponse">
+    <wsdl:part element="tns:DeleteConfigurationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetConfigurationValueResponse">
+    <wsdl:part element="tns:GetConfigurationValueResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetConfigurationsResponse">
+    <wsdl:part element="tns:GetConfigurationsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetConfigurations">
+    <wsdl:part element="tns:GetConfigurations" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ConfigurationServiceException">
+    <wsdl:part element="tns:ConfigurationServiceException" name="ConfigurationServiceException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeleteConfiguration">
+    <wsdl:part element="tns:DeleteConfiguration" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ConfigurationNotFoundException">
+    <wsdl:part element="tns:ConfigurationNotFoundException" name="ConfigurationNotFoundException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetConfigurationResponse">
+    <wsdl:part element="tns:GetConfigurationResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IConfigurationService">
+    <wsdl:operation name="SetConfiguration">
+      <wsdl:input message="tns:SetConfiguration" name="SetConfiguration">
+    </wsdl:input>
+      <wsdl:output message="tns:SetConfigurationResponse" name="SetConfigurationResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConfigurationServiceException" name="ConfigurationServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteConfiguration">
+      <wsdl:input message="tns:DeleteConfiguration" name="DeleteConfiguration">
+    </wsdl:input>
+      <wsdl:output message="tns:DeleteConfigurationResponse" name="DeleteConfigurationResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConfigurationServiceException" name="ConfigurationServiceException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConfigurationNotFoundException" name="ConfigurationNotFoundException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfiguration">
+      <wsdl:input message="tns:GetConfiguration" name="GetConfiguration">
+    </wsdl:input>
+      <wsdl:output message="tns:GetConfigurationResponse" name="GetConfigurationResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConfigurationServiceException" name="ConfigurationServiceException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConfigurationNotFoundException" name="ConfigurationNotFoundException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfigurations">
+      <wsdl:input message="tns:GetConfigurations" name="GetConfigurations">
+    </wsdl:input>
+      <wsdl:output message="tns:GetConfigurationsResponse" name="GetConfigurationsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ConfigurationServiceException" name="ConfigurationServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfigurationValue">
+      <wsdl:input message="tns:GetConfigurationValue" name="GetConfigurationValue">
+    </wsdl:input>
+      <wsdl:output message="tns:GetConfigurationValueResponse" name="GetConfigurationValueResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:InvalidArgumentException" name="InvalidArgumentException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConfigurationServiceException" name="ConfigurationServiceException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:ConfigurationNotFoundException" name="ConfigurationNotFoundException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ConfigurationServiceSoapBinding" type="tns:IConfigurationService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="SetConfiguration">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="SetConfiguration">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="SetConfigurationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConfigurationServiceException">
+        <soap:fault name="ConfigurationServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteConfiguration">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="DeleteConfiguration">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="DeleteConfigurationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConfigurationServiceException">
+        <soap:fault name="ConfigurationServiceException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConfigurationNotFoundException">
+        <soap:fault name="ConfigurationNotFoundException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfiguration">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetConfiguration">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetConfigurationResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConfigurationServiceException">
+        <soap:fault name="ConfigurationServiceException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConfigurationNotFoundException">
+        <soap:fault name="ConfigurationNotFoundException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfigurations">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetConfigurations">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetConfigurationsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ConfigurationServiceException">
+        <soap:fault name="ConfigurationServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfigurationValue">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetConfigurationValue">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetConfigurationValueResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="InvalidArgumentException">
+        <soap:fault name="InvalidArgumentException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConfigurationServiceException">
+        <soap:fault name="ConfigurationServiceException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="ConfigurationNotFoundException">
+        <soap:fault name="ConfigurationNotFoundException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ConfigurationService">
+    <wsdl:port binding="tns:ConfigurationServiceSoapBinding" name="IConfigurationServicePort">
+      <soap:address location="http://localhost:8080/service/ConfigurationService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

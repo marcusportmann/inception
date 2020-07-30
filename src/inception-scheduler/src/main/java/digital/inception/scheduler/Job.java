@@ -67,7 +67,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
   "executionAttempts",
   "lockName",
   "lastExecuted",
-  "nextExecution"
+  "nextExecution",
+  "parameters"
 })
 @XmlRootElement(name = "Job", namespace = "http://scheduler.inception.digital")
 @XmlType(
@@ -83,7 +84,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
       "executionAttempts",
       "lockName",
       "lastExecuted",
-      "nextExecution"
+      "nextExecution",
+      "parameters"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
