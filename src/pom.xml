@@ -75,6 +75,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>11</java.version>
 
     <inception.version>1.0.0-SNAPSHOT</inception.version>
@@ -94,6 +95,7 @@
     <jsr181-api.version>1.0-MR1</jsr181-api.version>
     <mssql-jdbc.version>8.2.2.jre11</mssql-jdbc.version>
     <narayana.version>5.10.5.Final</narayana.version>
+    <postgresql.version>42.2.14</postgresql.version>
     <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
     <spring-shell.version>2.0.0</spring-shell.version>
     <springdoc-openapi-ui.version>1.4.3</springdoc-openapi-ui.version>
@@ -223,6 +225,11 @@
         <groupId>org.jboss.narayana.jts</groupId>
         <artifactId>narayana-jts-integration</artifactId>
         <version>${narayana.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${postgresql.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springdoc</groupId>

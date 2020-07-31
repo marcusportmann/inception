@@ -52,12 +52,20 @@ inception:
 #      password: Password1
 #      min-pool-size: 5
 #      max-pool-size: 10
+#      recovery:
+#        enabled: false
+#        username: USERNAME
+#        password: PASSWORD
 
 #    data-source:
 #      class-name: com.microsoft.sqlserver.jdbc.SQLServerXADataSource
 #      url: jdbc:sqlserver://192.168.185.130:1433;databaseName=Sample;user=Sample;password=Password1
 #      min-pool-size: 5
 #      max-pool-size: 10
+#      recovery:
+#        enabled: false
+#        username: USERNAME
+#        password: PASSWORD
 
   cache:
     hazelcast:
@@ -89,8 +97,8 @@ inception:
   oauth2:
     authorization-server:
       jwt:
-        private-key-location: classpath:security/oauth2-jwt-key
-        public-key-location: classpath:security/oauth2-jwt-key.pub
+        private-key-location: classpath:META-INF/oauth2-jwt-key
+        public-key-location: classpath:META-INF/oauth2-jwt-key.pub
 
   persistence:
     entity-packages: digital.inception.sample
@@ -120,6 +128,8 @@ inception:
         trust-store-password: sample
 
 spring:
+  application:
+    name: inception-sample
   mail:
     default-encoding: UTF-8
     protocol: smtp
@@ -131,17 +141,15 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          public-key-location: classpath:security/oauth2-jwt-key.pub
+          public-key-location: classpath:META-INF/oauth2-jwt-key.pub
 
 ---
 spring:
     profiles: development
 
-
 ---
 spring:
     profiles: production
-
 
 
 #    properties:

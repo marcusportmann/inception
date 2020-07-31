@@ -30,6 +30,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -50,7 +51,7 @@ import reactor.core.publisher.Mono;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Sample API")
+@Tag(name = "Sample API")
 @RestController
 @RequestMapping(value = "/api/sample")
 @CrossOrigin
