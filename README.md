@@ -56,7 +56,6 @@ front-end applications.
     npm install -g @angular/cli@9
     ```
 
-
 ### Checkout and build the Inception Framework on MacOS
 
 1. Checkout the Inception Framework by executing the following command in a Terminal window:
@@ -87,4 +86,18 @@ front-end applications.
    ```
    ng serve --host 0.0.0.0
    ```
+
+## Creating a new application based on the Inception Framework
+
+### Creating a new Java-based back-end application using the Inception Framework
+
+1. XXX
+
+
+### Creating a new Angular-based front-end application using the Inception Framework
+
+1. XXX
+
+
+
 
