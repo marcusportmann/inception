@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     // Added the "emitDecoratorMetadata" to enable injection for resolvers -- MARCUS
     // See: https://github.com/thymikee/jest-preset-angular/issues/288
