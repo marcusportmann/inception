@@ -22,11 +22,11 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'administration.component.html'
+  template: `Administration
+  `
 })
 export class AdministrationComponent {
 
   constructor() {
   }
-
 }

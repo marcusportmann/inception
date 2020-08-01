@@ -15,6 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
+
 import {SchedulerViewsModule} from 'ngx-inception';
 
 @NgModule({

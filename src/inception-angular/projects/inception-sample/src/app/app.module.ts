@@ -21,15 +21,13 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 
-
 import {
   InceptionAppModule, InceptionConfig, InceptionModule, NavigationBadge, NavigationItem, NavigationTitle
 } from 'ngx-inception';
 
-
-const ngxInceptionConfiguration: InceptionConfig = {
+const ngxInceptionConfig: InceptionConfig = {
   // Application Information
-  applicationId: 'digital.inception.sample.angular',
+  applicationId: 'digital.inception.sample',
   applicationVersion: '1.0.0',
 
   // OAuth Token URL
@@ -48,13 +46,16 @@ const ngxInceptionConfiguration: InceptionConfig = {
   forgottenPasswordEnabled: true
 };
 
-
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [AppComponent
   ],
   exports: [InceptionModule],
-  imports: [BrowserAnimationsModule, BrowserModule, AppRoutingModule, InceptionModule.forRoot(ngxInceptionConfiguration)
+  imports: [
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    InceptionModule.forRoot(ngxInceptionConfig)
   ]
 })
 export class AppModule extends InceptionAppModule {

@@ -22,7 +22,8 @@ import {Component} from '@angular/core';
  * @author Marcus Portmann
  */
 @Component({
-  templateUrl: 'dashboard.component.html'
+  template: `Dashboard
+  `
 })
 export class DashboardComponent {
 

@@ -17,12 +17,8 @@
 
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
-
 import {RouterModule, Routes} from '@angular/router';
 
-import {AdministrationComponent} from './administration.component';
-import {AdministrationTitleResolver} from './administration-title-resolver';
-import {SystemTitleResolver} from './system-title-resolver';
 import {
   CodeCategoriesTitleResolver,
   ConfigurationsTitleResolver,
@@ -31,6 +27,10 @@ import {
   SchedulerTitleResolver,
   SecurityTitleResolver
 } from 'ngx-inception';
+
+import {AdministrationComponent} from './administration.component';
+import {AdministrationTitleResolver} from './administration-title-resolver';
+import {SystemTitleResolver} from './system-title-resolver';
 
 const routes: Routes = [{
   path: '',

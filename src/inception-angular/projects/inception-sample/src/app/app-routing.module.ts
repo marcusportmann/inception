@@ -16,9 +16,11 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+
 import {
   AdminContainerComponent, CanActivateFunctionGuard, NotFoundComponent, SimpleContainerComponent
 } from 'ngx-inception';
+
 import {AdministrationTitleResolver} from './views/administration/administration-title-resolver';
 
 export const routes: Routes = [{

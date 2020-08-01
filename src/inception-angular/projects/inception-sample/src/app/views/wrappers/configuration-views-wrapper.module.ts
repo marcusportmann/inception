@@ -15,6 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
+
 import {ConfigurationViewsModule} from 'ngx-inception';
 
 @NgModule({
