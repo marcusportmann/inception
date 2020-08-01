@@ -381,17 +381,26 @@ front-end applications.
       ```
       ng new --skip-git --routing --style scss frontend
       ```
-   2. Edit the *src/main/frontend/package.json* file, change the *name* of the application and
-      add the *--prod* parameter to the *build* script as shown below.
+   2. Edit the *src/main/frontend/angular.json* file and the fontawesome path to the
+      *styles* array as shown below.
       ```
       {
-        "name": "demo",
         ...
-        "scripts": {
-          ...
-          "build": "ng build --prod",
-          ...
-        },
+
+        "projects": {
+          "angular": {
+            ...
+            "architect": {
+              "build": {
+                ...
+                "options": {
+                  ...
+                  "styles": [
+                    "node_modules/@fortawesome/fontawesome-free/css/all.css",
+                    "src/styles.scss"
+                  ],
+                  ...
+                },
         ...
       }
       ```
