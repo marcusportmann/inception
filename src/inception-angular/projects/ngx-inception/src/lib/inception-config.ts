@@ -55,6 +55,11 @@ export interface InceptionConfig {
   forgottenPasswordEnabled: boolean;
 
   /**
+   * The application URI to redirect to on logout.
+   */
+  logoutRedirectUri: string;
+
+  /**
    * The Mail API URL prefix.
    */
   mailApiUrlPrefix: string;
@@ -63,6 +68,18 @@ export interface InceptionConfig {
    * The OAuth Token URL e.g. http://localhost:8080/oauth/token.
    */
   oauthTokenUrl: string;
+
+  /**
+   * The username to prepopulate the username form control on the login component with for testing
+   * purposes.
+   */
+  prepopulatedLoginUsername?: string;
+
+  /**
+   * The password to prepopulate the password form control on the login component with for testing
+   * purposes.
+   */
+  prepopulatedLoginPassword?: string;
 
   /**
    * The Reporting API URL prefix.

@@ -18,6 +18,7 @@ package digital.inception.sms;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.Debug;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.xml.XmlParserErrorHandler;
@@ -60,55 +61,79 @@ import org.xml.sax.InputSource;
 @SuppressWarnings("unused")
 public class SMSService implements ISMSService {
 
-  /** The maximum SMS length. */
+  /**
+   * The maximum SMS length.
+   */
   private static final int MAXIMUM_SMS_LENGTH = 160;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SMSService.class);
 
-  /** The SMS Portal provider. */
+  /**
+   * The SMS Portal provider.
+   */
   private final String PROVIDER_SMS_PORTAL = "sms-portal";
 
-  /** The Spring application context. */
+  /**
+   * The Spring application context.
+   */
   private final ApplicationContext applicationContext;
 
   /* The name of the SMS Service instance. */
   private final String instanceName = ServiceUtil.getServiceInstanceName("SMSService");
 
-  /** The SMS Repository. */
+  /**
+   * The SMS Repository.
+   */
   private final SMSRepository smsRepository;
 
-  /** The web client builder. */
+  /**
+   * The web client builder.
+   */
   private final WebClient.Builder webClientBuilder;
 
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
 
-  /** The HTTP Client. */
+  /**
+   * The HTTP Client.
+   */
   private HttpClient httpClient;
 
-  /** The maximum number of times sending will be attempted for a SMS. */
+  /**
+   * The maximum number of times sending will be attempted for a SMS.
+   */
   @Value("${inception.sms.maximum-send-attempts:100}")
   private int maximumSendAttempts;
 
-  /** The delay in milliseconds to wait before re-attempting to send a SMS. */
+  /**
+   * The delay in milliseconds to wait before re-attempting to send a SMS.
+   */
   @Value("${inception.sms.send-retry-delay:600000}")
   private int sendRetryDelay;
 
-  /** The SMS Portal API endpoint. */
+  /**
+   * The SMS Portal API endpoint.
+   */
   @Value("${inception.sms.providers.sms-portal.api-endpoint:#{null}}")
   private String smsPortalAPIEndPoint;
 
-  /** The SMS Portal client ID. */
+  /**
+   * The SMS Portal client ID.
+   */
   @Value("${inception.sms.providers.sms-portal.client-id:#{null}}")
   private String smsPortalClientId;
 
-  /** The SMS Portal client secret. */
+  /**
+   * The SMS Portal client secret.
+   */
   @Value("${inception.sms.providers.sms-portal.client-secret:#{null}}")
   private String smsPortalClientSecret;
 
-  /** The SMS provider to use. */
+  /**
+   * The SMS provider to use.
+   */
   @Value("${inception.sms.use-provider:#{null}}")
   private String useProvider;
 
@@ -116,8 +141,8 @@ public class SMSService implements ISMSService {
    * Constructs a new <code>SMSService</code>.
    *
    * @param applicationContext the Spring application context
-   * @param webClientBuilder the web client builder
-   * @param smsRepository the SMS repository
+   * @param webClientBuilder   the web client builder
+   * @param smsRepository      the SMS repository
    */
   public SMSService(
       ApplicationContext applicationContext,
@@ -138,7 +163,7 @@ public class SMSService implements ISMSService {
   public void createSMS(SMS sms) throws SMSServiceException {
     try {
       if (sms.getId() == null) {
-        sms.setId(UUID.randomUUID());
+        sms.setId(UuidCreator.getShortPrefixComb());
       }
 
       smsRepository.saveAndFlush(sms);
@@ -184,7 +209,7 @@ public class SMSService implements ISMSService {
    * <p>The SMS will be locked to prevent duplicate sending.
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   *     currently queued for sending
+   * currently queued for sending
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -231,7 +256,8 @@ public class SMSService implements ISMSService {
    */
   @Override
   public int getNumberOfSMSCreditsRemaining() throws SMSServiceException {
-    if (PROVIDER_SMS_PORTAL.equalsIgnoreCase(useProvider)) {}
+    if (PROVIDER_SMS_PORTAL.equalsIgnoreCase(useProvider)) {
+    }
 
     return 0;
 
@@ -264,6 +290,7 @@ public class SMSService implements ISMSService {
    * Retrieve the SMS.
    *
    * @param smsId the ID uniquely identifying the SMS
+   *
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   @Override
@@ -287,7 +314,7 @@ public class SMSService implements ISMSService {
   /**
    * Reset the SMS locks.
    *
-   * @param status the current status of the SMSs that have been locked
+   * @param status    the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
    */
   @Override
@@ -312,7 +339,7 @@ public class SMSService implements ISMSService {
    * <p>NOTE: This will queue the SMS for sending. The SMS will actually be sent asynchronously.
    *
    * @param mobileNumber the mobile number
-   * @param message the message
+   * @param message      the message
    */
   public void sendSMS(String mobileNumber, String message) throws SMSServiceException {
     try {
@@ -332,9 +359,10 @@ public class SMSService implements ISMSService {
    *
    * <p>NOTE: This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
    *
-   * @param smsId the ID of the SMS
+   * @param smsId        the ID of the SMS
    * @param mobileNumber the mobile number
-   * @param message the message
+   * @param message      the message
+   *
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
    */
   public boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
@@ -457,7 +485,7 @@ public class SMSService implements ISMSService {
   /**
    * Set the status for the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
   @Override
@@ -486,7 +514,7 @@ public class SMSService implements ISMSService {
   /**
    * Unlock the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
   @Override

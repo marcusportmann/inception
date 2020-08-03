@@ -21,6 +21,7 @@ package digital.inception.messaging;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -335,7 +336,7 @@ public class Message {
    */
   public Message(
       String username, UUID deviceId, UUID typeId, MessagePriority priority, byte[] data) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getShortPrefixComb();
     this.username = username;
     this.deviceId = deviceId;
     this.typeId = typeId;
@@ -363,7 +364,7 @@ public class Message {
       UUID correlationId,
       MessagePriority priority,
       byte[] data) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getShortPrefixComb();
     this.username = username;
     this.deviceId = deviceId;
     this.typeId = typeId;
@@ -394,7 +395,7 @@ public class Message {
       byte[] data,
       String dataHash,
       String encryptionIV) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getShortPrefixComb();
     this.username = username;
     this.deviceId = deviceId;
     this.typeId = typeId;
@@ -434,7 +435,7 @@ public class Message {
       byte[] data,
       String dataHash,
       String encryptionIV) {
-    this.id = UUID.randomUUID();
+    this.id = UuidCreator.getShortPrefixComb();
     this.username = username;
     this.deviceId = deviceId;
     this.typeId = typeId;

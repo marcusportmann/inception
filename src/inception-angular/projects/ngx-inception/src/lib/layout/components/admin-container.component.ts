@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
 
 import {Observable, Subscription} from 'rxjs';
@@ -22,9 +22,9 @@ import {Observable, Subscription} from 'rxjs';
 import {AdminContainerView} from './admin-container-view';
 import {TitleBarService} from '../services/title-bar.service';
 import {SecurityService} from "../../security/services/security.service";
-import {first} from "rxjs/operators";
 import {Session} from "../../security/services/session";
 import {SpinnerService} from "../services/spinner.service";
+import {INCEPTION_CONFIG, InceptionConfig} from "../../inception-config";
 
 /**
  * The AdminContainerComponent class implements the admin container component.
@@ -45,7 +45,8 @@ import {SpinnerService} from "../services/spinner.service";
         <title-bar [fixed]="true"></title-bar>
         <breadcrumbs [fixed]="true"></breadcrumbs>
         <div class="container-fluid">
-          <router-outlet (activate)="routerOutletActive($event)" (deactivate)="routerOutletDeactive($event)">
+          <router-outlet (activate)="routerOutletActive($event)"
+                         (deactivate)="routerOutletDeactive($event)">
           </router-outlet>
         </div>
       </main>
@@ -70,13 +71,15 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
   /**
    * Constructs a new AdminContainerComponent.
    *
+   * @param config          The Inception configuration.
    * @param router          The router.
    * @param activatedRoute  The activated route.
    * @param securityService The security service.
    * @param spinnerService  The spinner service.
    * @param titleBarService The title bar service.
    */
-  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+  constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
+              private router: Router, private activatedRoute: ActivatedRoute,
               private securityService: SecurityService, private spinnerService: SpinnerService,
               private titleBarService: TitleBarService) {
     this.changes = new MutationObserver(() => {
@@ -92,7 +95,7 @@ export class AdminContainerComponent implements OnInit, OnDestroy {
         spinnerService.hideSpinner();
 
         // noinspection JSIgnoredPromiseFromCall
-        this.router.navigate(['/']);
+        this.router.navigate([!!config.logoutRedirectUri ? config.logoutRedirectUri : '/']);
       }
     }));
   }

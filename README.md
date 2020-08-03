@@ -86,15 +86,15 @@ front-end applications.
    ng build
    cd dist/ngx-inception
    ```
-3. To launch the *inception-sample* back-end application, execute the following command in
-   the *src/inception-sample/target* directory in a Terminal window, after building the
-   Java components of the Inception Framework.
+3. To launch the *inception-sample* back-end application, execute the following command
+   in the *src/inception-sample/target* directory in a Terminal window, after building
+   the Java components of the Inception Framework.
    ```
    java -jar inception-sample-1.0.0-SNAPSHOT.jar
    ```
 4. To launch the *inception-sample* front-end application, execute the following command
    in the *inception/src/inception-angular* directory in a Terminal window, after building
-  the Angular components of the Inception Framework.
+   the Angular components of the Inception Framework.
    ```
    ng serve --host 0.0.0.0
    ```
@@ -105,8 +105,8 @@ front-end applications.
    for the application with the same name. The directory **MUST** be created under the
    same directory that the Inception Framework project was cloned into. This is because
    the Inception Framework will be installed as an npm dependency using a relative path.
-2. Execute the following commands under the top-level directory for the new application to
-   create the project directory structure.
+2. Execute the following commands under the top-level directory for the new application
+   to create the project directory structure.
    ```
    mkdir -p src/main/java
    mkdir -p src/main/java-templates
@@ -114,16 +114,22 @@ front-end applications.
    mkdir -p src/test/java
    mkdir -p src/test/resources
    ```
-3. Setup the Spring Boot back-end.
-   1. Execute the following commands under the top-level directory for the new application to
-      generate the RSA keypair used to sign and verify OAuth2 JWTs.
+3. Setup the Spring Boot back-end for the application.
+   1. Execute the following commands under the top-level directory for the new application
+      to generate the RSA keypair used to sign and verify OAuth2 JWTs issued by the
+      application.
       ```
       openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > src/main/resources/META-INF/oauth2-jwt-key
       openssl pkey -pubout -inform pem -outform pem -in src/main/resources/META-INF/oauth2-jwt-key -out src/main/resources/META-INF/oauth2-jwt-key.pub
       ```
    2. Create the *pom.xml* file under the *src* directory with the following contents,
-      changing the *groupId*, *artifactId*, *version*, *name* and *description* details as
-      appropriate.
+      changing the *groupId*, *artifactId*, *version*, *name* and *description* values
+      as appropriate.
+
+      **NOTE:** If you do not require all the capabilities provided by the Inception
+      Framework you can remove the appropriate dependencies from the *pom.xml* file, e.g.
+      removing the *inception-reporting-rs* dependency will remove the JasperReports-based
+      reporting functionality.
       ```
       <?xml version="1.0" encoding="UTF-8"?>
       <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -261,14 +267,16 @@ front-end applications.
 
       </project>
       ```
-   3. Create the class and resource packages.
+   3. Create the class and resource packages for the application. The classes and
+      resources for the application will be created under these packages, e.g. the Spring
+      Boot application class, the in-memory H2 database scripts for the application, etc.
       ```
       mkdir -p src/main/java/digital/inception/demo
       mkdir -p src/main/resources/digital/inception/demo
       ```
-   4. Add the application class,
-      e.g. *src/main/java/digital/inception/demo/DemoApplication.java*,
-      to the project.
+   4. Add the Spring Boot Application class,
+      e.g. *src/main/java/digital/inception/demo/DemoApplication.java*, that extends the
+      Inception Framework application class (digital.inception.application.Application).
       ```
       package digital.inception.demo;
 
@@ -320,8 +328,8 @@ front-end applications.
         }
       }
       ```
-   5. Add the Spring application configuration file, *src/main/resources/application.yml*, to
-      the project changing the *spring.application.name* value.
+   5. Add the Spring application configuration file, *src/main/resources/application.yml*,
+      changing the *spring.application.name* value to the name of the application.
       ```
       server:
         port: 8080
@@ -348,9 +356,13 @@ front-end applications.
               jwt:
                 public-key-location: classpath:META-INF/oauth2-jwt-key.pub
       ```
-   6. Add the application in-memory database script,
-      e.g. *src/main/resources/digital/inception/demo/demo-h2.sql*,
-      to the project.
+   6. Add the in-memory H2 database script for the application,
+      e.g. *src/main/resources/digital/inception/demo/demo-h2.sql*, to the project. This
+      file will contain all the Data Definition Language (DDL) and Data Manipulation
+      Language (DML) commands use to initialize the in-memory H2 database for the
+      application. This database allows developers to run the application locally while
+      developing the application and is also used to execute all Junit tests for the
+      application as part of the build process.
       ```
       -- -------------------------------------------------------------------------------------------------
       -- CREATE SCHEMAS
@@ -365,30 +377,21 @@ front-end applications.
       -- -------------------------------------------------------------------------------------------------
       -- POPULATE TABLES
       -- -------------------------------------------------------------------------------------------------
-      INSERT INTO security.organizations (id, name, status)
-        VALUES ('11111111-1111-1111-1111-111111111111', 'Demo', 1);
+4. Setup the Angular front-end for the application.
 
-      INSERT INTO security.user_directories (id, type, name, configuration)
-        VALUES ('11111111-1111-1111-1111-111111111111', 'InternalUserDirectory', 'Demo Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
-
-      INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
-        VALUES ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111');
-      ```
-4. Setup the Angular front-end.
-
-   1. Execute the following command under the *src/main* directory to create the new Angular
-      frontend application.
+   1. Execute the following command under the *src/main* directory to create the new
+      Angular frontend.
       ```
       ng new --skip-git --routing --style scss frontend
       ```
-   2. Edit the *src/main/frontend/angular.json* file and the fontawesome path to the
+   2. Edit the *src/main/frontend/angular.json* file and add the fontawesome path to the
       *styles* array as shown below.
       ```
       {
         ...
 
         "projects": {
-          "angular": {
+          "frontend": {
             ...
             "architect": {
               "build": {
@@ -405,12 +408,14 @@ front-end applications.
       }
       ```
    3. Edit the *src/main/frontend/angular.json* file and change the *outputPath* option to
-      *../../../target/classes/static* as shown below.
+      *../../../target/classes/static* as shown below. This will result in the Angular
+      font-end being packaged as part of the Spring Boot application as a set of static
+      resources.
       ```
       {
         ...
         "projects": {
-          "angular": {
+          "frontend": {
             ...
             "architect": {
               "build": {
@@ -422,12 +427,7 @@ front-end applications.
         ...
       }
       ```
-   4. Execute the following command under the *src/main/frontend* directory to install the
-      local *ngx-inception* library dependency using a relative path.
-      ```
-      npm install ../../../../inception/src/inception-angular/dist/ngx-inception
-      ```
-   5. Execute the following commands under the *src/main/frontend* directory to install the
+   4. Execute the following commands under the *src/main/frontend* directory to install the
       dependencies for the *ngx-inception* library.
       ```
       npm install --save @angular/cdk@10
@@ -446,6 +446,11 @@ front-end applications.
       npm install --save-dev @types/uuid@8
       npm install --save-dev @types/string-template@1
       npm install --save-dev codelyzer
+      ```
+   5. Execute the following command under the *src/main/frontend* directory to install the
+      local *ngx-inception* library dependency using a relative path.
+      ```
+      npm install ../../../../inception/src/inception-angular/dist/ngx-inception
       ```
    6. Edit the *src/main/frontend/src/polyfills.ts* file and add the line below under the
       *APPLICATION IMPORTS* section.
@@ -466,6 +471,10 @@ front-end applications.
       ...
       ```
    8. Add the *ngxInceptionConfig* to the *src/main/frontend/src/app/app.module.ts* file.
+
+      **NOTE:** If the application has a logged out landing page, which unauthenticated
+      users can access, then the *logoutRedirectUri* should be changed to the URL for this
+      page.
       ```
       ...
 
@@ -476,6 +485,9 @@ front-end applications.
 
         // OAuth Token URL
         oauthTokenUrl: 'http://localhost:8080/oauth/token',
+
+        // Logout redirect URI
+        logoutRedirectUri: '/login',
 
         // Inception API URLs
         codesApiUrlPrefix: 'http://localhost:8080/api/codes',
@@ -529,8 +541,7 @@ front-end applications.
            const navigation: NavigationItem[] = [];
 
            navigation.push(new NavigationItem('fa fa-tachometer-alt', 'Dashboard', '/dashboard',
-             ['ROLE_Administrator', 'FUNCTION_Application.Dashboard'], undefined, undefined, undefined,
-             new NavigationBadge('info', 'NEW')));
+             ['ROLE_Administrator', 'FUNCTION_Application.Dashboard'], undefined, undefined, undefined));
 
            navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration',
              ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration',

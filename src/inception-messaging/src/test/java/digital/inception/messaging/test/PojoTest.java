@@ -21,6 +21,7 @@ package digital.inception.messaging.test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.messaging.Message;
@@ -42,35 +43,62 @@ import org.junit.Test;
  */
 public class PojoTest {
 
+  private static final UUID DEVICE_ID = UuidCreator.getShortPrefixComb();
+
   private static final Integer DOWNLOAD_ATTEMPTS = 3;
+
+  private static final LocalDateTime LAST_PROCESSED = LocalDateTime.now();
+
   private static final String LOCK_NAME = "Lock Name";
+
   private static final String MESSAGE_CHECKSUM = "MessageChecksum";
+
+  private static final UUID MESSAGE_CORRELATION_ID = UuidCreator.getShortPrefixComb();
+
+  private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
+
+  private static final byte[] MESSAGE_DATA = "Message Data".getBytes();
+
   private static final String MESSAGE_DATA_HASH = "DataHash";
-  private static final UUID MESSAGE_ID = UUID.randomUUID();
-  private static final int PART_NO = 7;
-  private static final Integer PROCESS_ATTEMPTS = 2;
-  private static final Integer SEND_ATTEMPTS = 1;
-  private static final int TOTAL_PARTS = 8;
-  private static final String USERNAME = "Administrator";
-  private static final LocalDateTime MESSAGE_UPDATED = LocalDateTime.now();
-  private static final UUID MESSAGE_TYPE_ID = UUID.randomUUID();
-  private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALIZED;
-  private static final MessagePriority MESSAGE_PRIORITY = MessagePriority.HIGH;
-  private static final LocalDateTime MESSAGE_PERSISTED = LocalDateTime.now();
-  private static final LocalDateTime MESSAGE_PART_UPDATED = LocalDateTime.now();
-  private static final MessagePartStatus MESSAGE_PART_STATUS = MessagePartStatus.DOWNLOADING;
-  private static final LocalDateTime MESSAGE_PART_PERSISTED = LocalDateTime.now();
-  private static final UUID MESSAGE_PART_ID = UUID.randomUUID();
-  private static final byte[] MESSAGE_PART_DATA = "Message Part Data".getBytes();
+
   private static final String MESSAGE_ENCRYPTION_IV =
       Base64Util.encodeBytes(CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE));
-  private static final byte[] MESSAGE_DATA = "Message Data".getBytes();
-  private static final LocalDateTime MESSAGE_CREATED = LocalDateTime.now();
-  private static final UUID MESSAGE_CORRELATION_ID = UUID.randomUUID();
-  private static final LocalDateTime LAST_PROCESSED = LocalDateTime.now();
-  private static final UUID DEVICE_ID = UUID.randomUUID();
 
-  /** Test the <code>MessagePart</code> POJO. */
+  private static final UUID MESSAGE_ID = UuidCreator.getShortPrefixComb();
+
+  private static final byte[] MESSAGE_PART_DATA = "Message Part Data".getBytes();
+
+  private static final UUID MESSAGE_PART_ID = UuidCreator.getShortPrefixComb();
+
+  private static final LocalDateTime MESSAGE_PART_PERSISTED = LocalDateTime.now();
+
+  private static final MessagePartStatus MESSAGE_PART_STATUS = MessagePartStatus.DOWNLOADING;
+
+  private static final LocalDateTime MESSAGE_PART_UPDATED = LocalDateTime.now();
+
+  private static final LocalDateTime MESSAGE_PERSISTED = LocalDateTime.now();
+
+  private static final MessagePriority MESSAGE_PRIORITY = MessagePriority.HIGH;
+
+  private static final MessageStatus MESSAGE_STATUS = MessageStatus.INITIALIZED;
+
+  private static final UUID MESSAGE_TYPE_ID = UuidCreator.getShortPrefixComb();
+
+  private static final LocalDateTime MESSAGE_UPDATED = LocalDateTime.now();
+
+  private static final int PART_NO = 7;
+
+  private static final Integer PROCESS_ATTEMPTS = 2;
+
+  private static final Integer SEND_ATTEMPTS = 1;
+
+  private static final int TOTAL_PARTS = 8;
+
+  private static final String USERNAME = "Administrator";
+
+  /**
+   * Test the <code>MessagePart</code> POJO.
+   */
   @Test
   public void messagePartTest() {
     MessagePart messagePart =
@@ -156,7 +184,9 @@ public class PojoTest {
     assertEquals(true, anotherMessagePart.messageIsEncrypted());
   }
 
-  /** Test the <code>Message</code> POJO. */
+  /**
+   * Test the <code>Message</code> POJO.
+   */
   @Test
   public void messageTest() {
     Message message =

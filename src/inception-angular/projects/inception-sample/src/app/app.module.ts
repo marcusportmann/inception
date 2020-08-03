@@ -33,6 +33,9 @@ const ngxInceptionConfig: InceptionConfig = {
   // OAuth Token URL
   oauthTokenUrl: 'http://localhost:8080/oauth/token',
 
+  // Logout redirect URL
+  logoutRedirectUri: '/',
+
   // Inception API URLs
   codesApiUrlPrefix: 'http://localhost:8080/api/codes',
   configurationApiUrlPrefix: 'http://localhost:8080/api/configuration',

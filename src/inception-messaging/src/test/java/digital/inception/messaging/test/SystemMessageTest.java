@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.ICodesService;
@@ -80,24 +81,34 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class SystemMessageTest {
 
-  private static final UUID DEVICE_ID = UUID.randomUUID();
+  private static final UUID DEVICE_ID = UuidCreator.getShortPrefixComb();
+
   private static final String PASSWORD = "Password1";
+
   private static final String USERNAME = "Administrator";
 
-  /** The Codes Service. */
-  @Autowired private ICodesService codesService;
+  /**
+   * The Codes Service.
+   */
+  @Autowired
+  private ICodesService codesService;
 
-  /** The Messaging Service. */
-  @Autowired private IMessagingService messagingService;
+  /**
+   * The Messaging Service.
+   */
+  @Autowired
+  private IMessagingService messagingService;
 
-  /** Test the "Another Test" request and response message functionality. */
+  /**
+   * Test the "Another Test" request and response message functionality.
+   */
   @Test
   public void anotherTestMessageTest() throws Exception {
     String testValue = "This is the test value";
@@ -110,7 +121,8 @@ public class SystemMessageTest {
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -121,7 +133,9 @@ public class SystemMessageTest {
     assertArrayEquals(testData, responseData.getTestData());
   }
 
-  /** Test the "Authentication" message. */
+  /**
+   * Test the "Authentication" message.
+   */
   @Test
   public void authenticationTest() throws Exception {
     AuthenticateRequestData requestData =
@@ -129,7 +143,8 @@ public class SystemMessageTest {
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -157,14 +172,17 @@ public class SystemMessageTest {
     assertEquals(requestMessage.getCorrelationId(), responseMessage.getCorrelationId());
   }
 
-  /** Test the "Check User Exists" message. */
+  /**
+   * Test the "Check User Exists" message.
+   */
   @Test
   public void checkUserExistsTest() throws Exception {
     CheckUserExistsRequestData requestData = new CheckUserExistsRequestData(USERNAME);
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -176,7 +194,9 @@ public class SystemMessageTest {
     assertTrue(responseData.getUserExists());
   }
 
-  /** Test the "Get Code Category" message. */
+  /**
+   * Test the "Get Code Category" message.
+   */
   @Test
   public void getGetCodeCategoryTest() throws Exception {
     CodeCategory testStandardCodeCategory =
@@ -210,7 +230,8 @@ public class SystemMessageTest {
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+      Message requestMessage = messageTranslator
+          .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
       Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -265,7 +286,8 @@ public class SystemMessageTest {
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+      Message requestMessage = messageTranslator
+          .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
       Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -283,7 +305,9 @@ public class SystemMessageTest {
     }
   }
 
-  /** Test the "Get Code Category With Parameters" message. */
+  /**
+   * Test the "Get Code Category With Parameters" message.
+   */
   @Test
   public void getGetCodeCategoryWithParametersTest() throws Exception {
     Map<String, String> parameters = new HashMap<>();
@@ -322,7 +346,8 @@ public class SystemMessageTest {
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+      Message requestMessage = messageTranslator
+          .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
       Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -378,7 +403,8 @@ public class SystemMessageTest {
 
       MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+      Message requestMessage = messageTranslator
+          .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
       Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -396,12 +422,14 @@ public class SystemMessageTest {
     }
   }
 
-  /** Test the "Submit Error Report" message. */
+  /**
+   * Test the "Submit Error Report" message.
+   */
   @Test
   public void submitErrorReportTest() throws Exception {
     SubmitErrorReportRequestData requestData =
         new SubmitErrorReportRequestData(
-            UUID.randomUUID(),
+            UuidCreator.getShortPrefixComb(),
             "ApplicationId",
             "1.0.0",
             "Test Description",
@@ -409,12 +437,13 @@ public class SystemMessageTest {
             "Test Feedback",
             LocalDateTime.now(),
             "Administrator",
-            UUID.randomUUID(),
+            UuidCreator.getShortPrefixComb(),
             Base64Util.encodeBytes("Test Data".getBytes()));
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 
@@ -426,7 +455,9 @@ public class SystemMessageTest {
     assertEquals(requestData.getId(), responseData.getErrorReportId());
   }
 
-  /** Test the "Test" request and response message functionality. */
+  /**
+   * Test the "Test" request and response message functionality.
+   */
   @Test
   public void testMessageTest() throws Exception {
     String testValue = "This is the test value";
@@ -437,7 +468,8 @@ public class SystemMessageTest {
 
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     Message responseMessage = messagingService.processMessage(requestMessage);
 

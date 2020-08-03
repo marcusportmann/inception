@@ -20,6 +20,7 @@ package digital.inception.error.test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.util.Base64Util;
 import digital.inception.error.ErrorReport;
 import digital.inception.error.ErrorReportSummary;
@@ -29,7 +30,6 @@ import digital.inception.test.TestConfiguration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,27 +51,91 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 public class ErrorServiceTest {
 
-  /** The Error Service. */
-  @Autowired private IErrorService errorService;
+  /**
+   * The Error Service.
+   */
+  @Autowired
+  private IErrorService errorService;
 
   private static synchronized ErrorReport getTestErrorReport() {
     return new ErrorReport(
-        UUID.randomUUID(),
+        UuidCreator.getShortPrefixComb(),
         "ApplicationId",
         "ApplicationVersion",
         "Description",
         "Detail",
         LocalDateTime.now(),
         "Who",
-        UUID.randomUUID(),
+        UuidCreator.getShortPrefixComb(),
         "Feedback",
         Base64Util.encodeBytes("Data".getBytes()));
+  }
+
+  /**
+   * Test the error report functionality.
+   */
+  @Test
+  public void errorReportTest() throws Exception {
+    ErrorReport errorReport = getTestErrorReport();
+
+    errorService.createErrorReport(errorReport);
+
+    ErrorReport retrievedErrorReport = errorService.getErrorReport(errorReport.getId());
+
+    compareErrorReports(errorReport, retrievedErrorReport);
+
+    ErrorReportSummary retrievedErrorReportSummary =
+        errorService.getErrorReportSummary(errorReport.getId());
+
+    compareErrorReportAndErrorReportSummary(errorReport, retrievedErrorReportSummary);
+
+    assertEquals(
+        "The number of error reports is incorrect", 1, errorService.getNumberOfErrorReports());
+
+    List<ErrorReportSummary> errorReportSummaries =
+        errorService.getMostRecentErrorReportSummaries(1000);
+
+    assertEquals(
+        "The number of error report summaries is incorrect", 1, errorReportSummaries.size());
+
+    compareErrorReportAndErrorReportSummary(errorReport, errorReportSummaries.get(0));
+  }
+
+  /**
+   * Test the functionality to retrieve the most recent error report summaries.
+   */
+  @Test
+  public void getMostRecentErrorReportSummariesTest() throws Exception {
+    List<ErrorReport> errorReports = new ArrayList<>();
+
+    for (int i = 0; i < 20; i++) {
+      ErrorReport errorReport = getTestErrorReport();
+
+      errorService.createErrorReport(errorReport);
+
+      errorReports.add(errorReport);
+
+      Thread.sleep(10L);
+    }
+
+    List<ErrorReportSummary> errorReportSummaries =
+        errorService.getMostRecentErrorReportSummaries(10);
+
+    assertEquals(
+        "The number of error report summaries is incorrect", 10, errorReportSummaries.size());
+
+    for (int i = 0; i < 10; i++) {
+      assertEquals(
+          "The error report summary does not match the error report",
+          errorReportSummaries.get(i).getId(),
+          errorReports.get((errorReports.size() - 1) - i).getId());
+    }
   }
 
   private void compareErrorReportAndErrorReportSummary(
@@ -147,62 +211,5 @@ public class ErrorServiceTest {
         "The data values for the two error reports do not match",
         errorReport1.getData(),
         errorReport2.getData());
-  }
-
-  /** Test the error report functionality. */
-  @Test
-  public void errorReportTest() throws Exception {
-    ErrorReport errorReport = getTestErrorReport();
-
-    errorService.createErrorReport(errorReport);
-
-    ErrorReport retrievedErrorReport = errorService.getErrorReport(errorReport.getId());
-
-    compareErrorReports(errorReport, retrievedErrorReport);
-
-    ErrorReportSummary retrievedErrorReportSummary =
-        errorService.getErrorReportSummary(errorReport.getId());
-
-    compareErrorReportAndErrorReportSummary(errorReport, retrievedErrorReportSummary);
-
-    assertEquals(
-        "The number of error reports is incorrect", 1, errorService.getNumberOfErrorReports());
-
-    List<ErrorReportSummary> errorReportSummaries =
-        errorService.getMostRecentErrorReportSummaries(1000);
-
-    assertEquals(
-        "The number of error report summaries is incorrect", 1, errorReportSummaries.size());
-
-    compareErrorReportAndErrorReportSummary(errorReport, errorReportSummaries.get(0));
-  }
-
-  /** Test the functionality to retrieve the most recent error report summaries. */
-  @Test
-  public void getMostRecentErrorReportSummariesTest() throws Exception {
-    List<ErrorReport> errorReports = new ArrayList<>();
-
-    for (int i = 0; i < 20; i++) {
-      ErrorReport errorReport = getTestErrorReport();
-
-      errorService.createErrorReport(errorReport);
-
-      errorReports.add(errorReport);
-
-      Thread.sleep(10L);
-    }
-
-    List<ErrorReportSummary> errorReportSummaries =
-        errorService.getMostRecentErrorReportSummaries(10);
-
-    assertEquals(
-        "The number of error report summaries is incorrect", 10, errorReportSummaries.size());
-
-    for (int i = 0; i < 10; i++) {
-      assertEquals(
-          "The error report summary does not match the error report",
-          errorReportSummaries.get(i).getId(),
-          errorReports.get((errorReports.size() - 1) - i).getId());
-    }
   }
 }

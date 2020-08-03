@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.util.BinaryBuffer;
 import digital.inception.security.Attribute;
 import digital.inception.security.AttributeException;
@@ -78,7 +79,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit tests for the
+ * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit tests for
+ * the
  * <code>SecurityService</code> class.
  *
  * @author Marcus Portmann
@@ -87,20 +89,27 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 public class SecurityServiceTest {
 
   private static int functionCount;
+
   private static int groupCount;
+
   private static int organizationCount;
+
   private static int userCount;
+
   private static int userDirectoryCount;
 
-  /** The Security Service. */
-  @Autowired private ISecurityService securityService;
+  /**
+   * The Security Service.
+   */
+  @Autowired
+  private ISecurityService securityService;
 
   private static synchronized User getNumberedTestUserDetails(UUID userDirectoryId, int number) {
     User user = new User();
@@ -147,7 +156,7 @@ public class SecurityServiceTest {
 
     Organization organization = new Organization();
 
-    organization.setId(UUID.randomUUID());
+    organization.setId(UuidCreator.getShortPrefixComb());
     organization.setName("Test Organization Name " + organizationCount);
     organization.setStatus(OrganizationStatus.ACTIVE);
 
@@ -177,7 +186,7 @@ public class SecurityServiceTest {
 
     UserDirectory userDirectory = new UserDirectory();
 
-    userDirectory.setId(UUID.randomUUID());
+    userDirectory.setId(UuidCreator.getShortPrefixComb());
     userDirectory.setType(SecurityService.INTERNAL_USER_DIRECTORY_TYPE);
     userDirectory.setName("Test User Directory Name " + userDirectoryCount);
 
@@ -195,7 +204,9 @@ public class SecurityServiceTest {
     return userDirectory;
   }
 
-  /** Test the functionality to add a user to a group. */
+  /**
+   * Test the functionality to add a user to a group.
+   */
   @Test
   public void addUserToGroupTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -246,7 +257,9 @@ public class SecurityServiceTest {
         groups.get(0).getName());
   }
 
-  /** Test the administrative change user password functionality. */
+  /**
+   * Test the administrative change user password functionality.
+   */
   @Test
   public void adminChangePasswordTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -267,7 +280,9 @@ public class SecurityServiceTest {
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
-  /** Test the name-value attribute functionality. */
+  /**
+   * Test the name-value attribute functionality.
+   */
   @Test
   public void attributeTest() throws AttributeException {
     byte[] byteArrayValue = "Hello World".getBytes();
@@ -374,7 +389,9 @@ public class SecurityServiceTest {
     assertEquals("String", stringAttribute.getName());
   }
 
-  /** Test the change user password functionality. */
+  /**
+   * Test the change user password functionality.
+   */
   @Test
   public void changePasswordTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -399,7 +416,9 @@ public class SecurityServiceTest {
         "The correct user directory ID was not returned", userDirectory.getId(), userDirectoryId);
   }
 
-  /** Test the functionality to delete a group with existing members. */
+  /**
+   * Test the functionality to delete a group with existing members.
+   */
   @Test(expected = digital.inception.security.ExistingGroupMembersException.class)
   public void deleteGroupWithExistingMembers() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -435,7 +454,9 @@ public class SecurityServiceTest {
     securityService.deleteGroup(userDirectory.getId(), group.getName());
   }
 
-  /** Test the delete invalid function functionality. */
+  /**
+   * Test the delete invalid function functionality.
+   */
   @Test(expected = digital.inception.security.FunctionNotFoundException.class)
   public void deleteInvalidFunctionTest() throws Exception {
     Function function = getTestFunctionDetails();
@@ -444,7 +465,9 @@ public class SecurityServiceTest {
     securityService.deleteFunction("INVALID");
   }
 
-  /** Test the delete invalid group functionality. */
+  /**
+   * Test the delete invalid group functionality.
+   */
   @Test(expected = digital.inception.security.GroupNotFoundException.class)
   public void deleteInvalidGroupTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -452,7 +475,9 @@ public class SecurityServiceTest {
     securityService.deleteGroup(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "INVALID");
   }
 
-  /** Test the delete invalid user functionality. */
+  /**
+   * Test the delete invalid user functionality.
+   */
   @Test(expected = digital.inception.security.UserNotFoundException.class)
   public void deleteInvalidUserTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -465,7 +490,9 @@ public class SecurityServiceTest {
     securityService.deleteUser(userDirectory.getId(), "INVALID");
   }
 
-  /** Test the duplicate function functionality. */
+  /**
+   * Test the duplicate function functionality.
+   */
   @Test(expected = digital.inception.security.DuplicateFunctionException.class)
   public void duplicateFunctionTest() throws Exception {
     Function function = getTestFunctionDetails();
@@ -474,7 +501,9 @@ public class SecurityServiceTest {
     securityService.createFunction(function);
   }
 
-  /** Test the duplicate group functionality. */
+  /**
+   * Test the duplicate group functionality.
+   */
   @Test(expected = digital.inception.security.DuplicateGroupException.class)
   public void duplicateGroupTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -487,7 +516,9 @@ public class SecurityServiceTest {
     securityService.createGroup(group);
   }
 
-  /** Test the duplicate organization functionality. */
+  /**
+   * Test the duplicate organization functionality.
+   */
   @Test(expected = DuplicateOrganizationException.class)
   public void duplicateOrganizationTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -496,7 +527,9 @@ public class SecurityServiceTest {
     securityService.createOrganization(organization, false);
   }
 
-  /** Test the duplicate user functionality. */
+  /**
+   * Test the duplicate user functionality.
+   */
   @Test(expected = digital.inception.security.DuplicateUserException.class)
   public void duplicateUserTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -509,7 +542,9 @@ public class SecurityServiceTest {
     securityService.createUser(user, false, false);
   }
 
-  /** Test the expired user password functionality. */
+  /**
+   * Test the expired user password functionality.
+   */
   @Test(expected = digital.inception.security.ExpiredPasswordException.class)
   public void expiredUserPasswordTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -530,7 +565,9 @@ public class SecurityServiceTest {
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
-  /** Test the failed authentication functionality. */
+  /**
+   * Test the failed authentication functionality.
+   */
   @Test
   public void failedAuthenticationTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -554,7 +591,9 @@ public class SecurityServiceTest {
         user.getPasswordAttempts().intValue());
   }
 
-  /** Test the find users functionality. */
+  /**
+   * Test the find users functionality.
+   */
   @Test
   public void findUsersTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -591,7 +630,9 @@ public class SecurityServiceTest {
     }
   }
 
-  /** Test the create function functionality. */
+  /**
+   * Test the create function functionality.
+   */
   @Test
   public void functionTest() throws Exception {
     Function function = getTestFunctionDetails();
@@ -650,7 +691,9 @@ public class SecurityServiceTest {
     }
   }
 
-  /** Test the functionality to retrieve the authorised function codes for the user. */
+  /**
+   * Test the functionality to retrieve the authorised function codes for the user.
+   */
   @Test
   public void getFunctionCodesForUserTest() throws Exception {
     User user = getTestUserDetails(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID);
@@ -683,7 +726,9 @@ public class SecurityServiceTest {
         functionCodesForUser.size());
   }
 
-  /** Test the group membership functionality. */
+  /**
+   * Test the group membership functionality.
+   */
   @Test
   public void groupMembershipTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -746,7 +791,9 @@ public class SecurityServiceTest {
         filteredGroupMembers.getGroupMembers().size());
   }
 
-  /** Test the group functionality. */
+  /**
+   * Test the group functionality.
+   */
   @Test
   public void groupTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -816,7 +863,9 @@ public class SecurityServiceTest {
     }
   }
 
-  /** Test the functionality to check whether a user is a member of a group. */
+  /**
+   * Test the functionality to check whether a user is a member of a group.
+   */
   @Test
   public void isUserInGroupTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -840,7 +889,9 @@ public class SecurityServiceTest {
         securityService.isUserInGroup(userDirectory.getId(), group.getName(), user.getUsername()));
   }
 
-  /** Test the locked user functionality. */
+  /**
+   * Test the locked user functionality.
+   */
   @Test(expected = digital.inception.security.UserLockedException.class)
   public void lockedUserTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -861,7 +912,9 @@ public class SecurityServiceTest {
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
-  /** Test the organization functionality. */
+  /**
+   * Test the organization functionality.
+   */
   @Test
   public void organizationTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -1004,7 +1057,9 @@ public class SecurityServiceTest {
     }
   }
 
-  /** Test the password reset functionality. */
+  /**
+   * Test the password reset functionality.
+   */
   @Test
   public void passwordResetTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -1026,13 +1081,17 @@ public class SecurityServiceTest {
     securityService.authenticate(user.getUsername(), "New Password");
   }
 
-  /** Test the reload user directories functionality. */
+  /**
+   * Test the reload user directories functionality.
+   */
   @Test
   public void reloadUserDirectoriesTest() throws Exception {
     securityService.reloadUserDirectories();
   }
 
-  /** Test the functionality to remove a user from a group. */
+  /**
+   * Test the functionality to remove a user from a group.
+   */
   @Test
   public void removeUserFromGroupTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -1077,7 +1136,9 @@ public class SecurityServiceTest {
         groupNames.size());
   }
 
-  /** Test the retrieve user directory types functionality. */
+  /**
+   * Test the retrieve user directory types functionality.
+   */
   @Test
   public void retrieveUserDirectoryTypesTest() throws Exception {
     List<UserDirectoryType> userDirectoryTypes = securityService.getUserDirectoryTypes();
@@ -1122,7 +1183,9 @@ public class SecurityServiceTest {
     }
   }
 
-  /** Test the role functionality. */
+  /**
+   * Test the role functionality.
+   */
   @Test
   public void roleTest() throws Exception {
     List<Role> retrievedRoles = securityService.getRoles();
@@ -1213,7 +1276,9 @@ public class SecurityServiceTest {
         "The correct number of group roles was not retrieved", 0, retrievedGroupRoles.size());
   }
 
-  /** Test the user directory organization mapping functionality. */
+  /**
+   * Test the user directory organization mapping functionality.
+   */
   @Test
   public void userDirectoryOrganizationMappingTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -1245,7 +1310,9 @@ public class SecurityServiceTest {
         userDirectoriesForOrganization.size());
   }
 
-  /** Test the user directory functionality. */
+  /**
+   * Test the user directory functionality.
+   */
   @Test
   public void userDirectoryTest() throws Exception {
     List<UserDirectory> beforeRetrievedUserDirectories = securityService.getUserDirectories();
@@ -1347,7 +1414,9 @@ public class SecurityServiceTest {
     }
   }
 
-  /** Test the user password history functionality. */
+  /**
+   * Test the user password history functionality.
+   */
   @Test(expected = digital.inception.security.ExistingPasswordException.class)
   public void userPasswordHistoryTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -1364,7 +1433,9 @@ public class SecurityServiceTest {
     securityService.changePassword(user.getUsername(), "Password2", "Password1");
   }
 
-  /** Test the user functionality. */
+  /**
+   * Test the user functionality.
+   */
   @Test
   public void userTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -1384,7 +1455,8 @@ public class SecurityServiceTest {
 
     List<UUID> userDirectorIds = securityService.getUserDirectoryIdsForUser(user.getUsername());
 
-    assertEquals("The correct number of user director IDs was not retrieved for the user", 1, userDirectorIds.size());
+    assertEquals("The correct number of user director IDs was not retrieved for the user", 1,
+        userDirectorIds.size());
 
     assertEquals(
         "The correct user directory ID was not retrieved for the user",

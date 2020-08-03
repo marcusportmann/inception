@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import com.meterware.httpunit.PostMethodWebRequest;
 import com.meterware.httpunit.WebResponse;
 import com.meterware.servletunit.InvocationContext;
@@ -92,29 +93,38 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class MessagingServletTest {
 
+  private static final UUID DEVICE_ID = UuidCreator.getShortPrefixComb();
+
   private static final String PASSWORD = "Password1";
+
   private static final String USERNAME = "Administrator";
 
-  /** The HTTP content-type used when receiving and sending WBXML. */
+  /**
+   * The HTTP content-type used when receiving and sending WBXML.
+   */
   private static final String WBXML_CONTENT_TYPE = "application/wbxml";
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MessagingServletTest.class);
-  private static final UUID DEVICE_ID = UUID.randomUUID();
 
-  /** The Spring application context. */
-  @Autowired private ApplicationContext applicationContext;
+  /**
+   * The Spring application context.
+   */
+  @Autowired
+  private ApplicationContext applicationContext;
 
   private ServletUnitClient servletUnitClient;
 
-  /** Test the "Another Test" asynchronous encrypted message functionality with no correlation. */
+  /**
+   * Test the "Another Test" asynchronous encrypted message functionality with no correlation.
+   */
   @Test
   public void anotherTestMessageEncryptedNoCorrelationIdTest() throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
@@ -179,7 +189,9 @@ public class MessagingServletTest {
     }
   }
 
-  /** Test the "Another Test" asynchronous encrypted message functionality. */
+  /**
+   * Test the "Another Test" asynchronous encrypted message functionality.
+   */
   @Test
   public void anotherTestMessageEncryptedTest() throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
@@ -190,7 +202,8 @@ public class MessagingServletTest {
     AnotherTestRequestData requestData =
         new AnotherTestRequestData("Test Value", "Test Data".getBytes());
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     assertTrue(requestMessage.isEncrypted());
 
@@ -244,7 +257,9 @@ public class MessagingServletTest {
     }
   }
 
-  /** Test the "Another Test" asynchronous unencrypted message functionality. */
+  /**
+   * Test the "Another Test" asynchronous unencrypted message functionality.
+   */
   @Test
   public void anotherTestMessageUnencryptedTest() throws Exception {
     MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
@@ -252,7 +267,8 @@ public class MessagingServletTest {
     AnotherTestRequestData requestData =
         new AnotherTestRequestData("Test Value", "Test Data".getBytes());
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     assertFalse(requestMessage.isEncrypted());
 
@@ -270,7 +286,9 @@ public class MessagingServletTest {
     // TODO: Confirm that there is no message with the same correlation ID in the database
   }
 
-  /** Test the "Another Test" asynchronous multi-part message functionality. */
+  /**
+   * Test the "Another Test" asynchronous multi-part message functionality.
+   */
   @Test
   public void anotherTestMultiPartMessageTest() throws Exception {
     byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
@@ -284,7 +302,8 @@ public class MessagingServletTest {
 
     AnotherTestRequestData requestData = new AnotherTestRequestData("Test Value", testData);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -370,13 +389,56 @@ public class MessagingServletTest {
     assertArrayEquals(testData, anotherTestResponseData.getTestData());
   }
 
+  /**
+   * Test the "Test" synchronous encrypted message functionality.
+   */
+  @Test
+  public void testMessageEncryptedTest() throws Exception {
+    byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
+
+    MessageTranslator messageTranslator =
+        new MessageTranslator(USERNAME, DEVICE_ID, userEncryptionKey);
+
+    TestRequestData requestData = new TestRequestData("Test Value");
+
+    Message requestMessage = messageTranslator.toMessage(requestData);
+
+    MessageResult messageResult = sendMessage(requestMessage);
+
+    assertEquals(MessageResult.SUCCESS, messageResult.getCode());
+
+    TestResponseData responseData =
+        messageTranslator.fromMessage(messageResult.getMessage(), new TestResponseData());
+
+    assertEquals(TestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
+    assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
+    assertEquals("Test Value", responseData.getTestValue());
+  }
+
+  /**
+   * Test the "Test" synchronous unencrypted message functionality.
+   */
+  @Test
+  public void testMessageUnencryptedTest() throws Exception {
+    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+
+    TestRequestData requestData = new TestRequestData("Test Value");
+
+    Message requestMessage = messageTranslator.toMessage(requestData);
+
+    MessageResult messageResult = sendMessage(requestMessage);
+
+    assertEquals(MessageResult.ERROR_DECRYPTION_FAILED, messageResult.getCode());
+  }
+
   private byte[] authenticateUser(String username, String password, UUID deviceId)
       throws Exception {
     AuthenticateRequestData requestData = new AuthenticateRequestData(username, password, deviceId);
 
     MessageTranslator messageTranslator = new MessageTranslator(username, deviceId);
 
-    Message requestMessage = messageTranslator.toMessage(requestData, UUID.randomUUID());
+    Message requestMessage = messageTranslator
+        .toMessage(requestData, UuidCreator.getShortPrefixComb());
 
     MessageResult messageResult = sendMessage(requestMessage);
 
@@ -643,43 +705,5 @@ public class MessagingServletTest {
               + "The WBXML response data from the remote server is not a valid "
               + "MessageReceivedResponse document");
     }
-  }
-
-  /** Test the "Test" synchronous encrypted message functionality. */
-  @Test
-  public void testMessageEncryptedTest() throws Exception {
-    byte[] userEncryptionKey = authenticateUser(USERNAME, PASSWORD, DEVICE_ID);
-
-    MessageTranslator messageTranslator =
-        new MessageTranslator(USERNAME, DEVICE_ID, userEncryptionKey);
-
-    TestRequestData requestData = new TestRequestData("Test Value");
-
-    Message requestMessage = messageTranslator.toMessage(requestData);
-
-    MessageResult messageResult = sendMessage(requestMessage);
-
-    assertEquals(MessageResult.SUCCESS, messageResult.getCode());
-
-    TestResponseData responseData =
-        messageTranslator.fromMessage(messageResult.getMessage(), new TestResponseData());
-
-    assertEquals(TestResponseData.MESSAGE_TYPE_ID, responseData.getMessageTypeId());
-    assertEquals(MessagePriority.HIGH, responseData.getMessageTypePriority());
-    assertEquals("Test Value", responseData.getTestValue());
-  }
-
-  /** Test the "Test" synchronous unencrypted message functionality. */
-  @Test
-  public void testMessageUnencryptedTest() throws Exception {
-    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
-
-    TestRequestData requestData = new TestRequestData("Test Value");
-
-    Message requestMessage = messageTranslator.toMessage(requestData);
-
-    MessageResult messageResult = sendMessage(requestMessage);
-
-    assertEquals(MessageResult.ERROR_DECRYPTION_FAILED, messageResult.getCode());
   }
 }

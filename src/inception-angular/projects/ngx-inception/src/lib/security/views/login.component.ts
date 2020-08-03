@@ -61,8 +61,12 @@ export class LoginComponent implements OnInit {
               private securityService: SecurityService, private spinnerService: SpinnerService) {
 
     // Initialise the form controls
-    this.passwordFormControl = new FormControl('Password1', [Validators.required, Validators.maxLength(100)]);
-    this.usernameFormControl = new FormControl('Administrator', [Validators.required, Validators.maxLength(100)]);
+    this.passwordFormControl = new FormControl(
+      !!this.config.prepopulatedLoginPassword ? this.config.prepopulatedLoginPassword : '',
+      [Validators.required, Validators.maxLength(100)]);
+    this.usernameFormControl = new FormControl(
+      !!this.config.prepopulatedLoginUsername ? this.config.prepopulatedLoginUsername : '',
+      [Validators.required, Validators.maxLength(100)]);
 
     // Initialise the form
     this.loginForm = new FormGroup({
@@ -89,94 +93,94 @@ export class LoginComponent implements OnInit {
       this.spinnerService.showSpinner();
 
       this.securityService.login(username, password)
-        .pipe(first())
-        .subscribe((session: Session | null) => {
-          if (session) {
-            if (session.hasRole('Administrator')) {
-              this.securityService.getOrganizations()
-                .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-                .subscribe((organizations: Organizations) => {
-                  if (organizations.total === 1) {
-                    session.organization = organizations.organizations[0];
-                    // noinspection JSIgnoredPromiseFromCall
-                    this.router.navigate(['/']);
-                  } else {
-                    // noinspection JSIgnoredPromiseFromCall
-                    this.router.navigate(['select-organization'], {
-                      relativeTo: this.activatedRoute,
-                      state: {organizations: organizations.organizations}
-                    });
-                  }
-                }, (error: Error) => {
-                  // noinspection SuspiciousTypeOfGuard
-                  if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                    (error instanceof SystemUnavailableError)) {
-                    // noinspection JSIgnoredPromiseFromCall
-                    this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-                  } else {
-                    this.dialogService.showErrorDialog(error);
-                  }
+      .pipe(first())
+      .subscribe((session: Session | null) => {
+        if (session) {
+          if (session.hasRole('Administrator')) {
+            this.securityService.getOrganizations()
+            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe((organizations: Organizations) => {
+              if (organizations.total === 1) {
+                session.organization = organizations.organizations[0];
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['/']);
+              } else {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['select-organization'], {
+                  relativeTo: this.activatedRoute,
+                  state: {organizations: organizations.organizations}
                 });
-            } else {
-              this.securityService.getOrganizationsForUserDirectory(session.userDirectoryId)
-                .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-                .subscribe((organizations: Organization[]) => {
-                  if (organizations.length === 1) {
-                    session.organization = organizations[0];
-                    // noinspection JSIgnoredPromiseFromCall
-                    this.router.navigate(['/']);
-                  } else {
-                    // noinspection JSIgnoredPromiseFromCall
-                    this.router.navigate(['select-organization'], {
-                      relativeTo: this.activatedRoute,
-                      state: {organizations}
-                    });
-                  }
-                }, (error: Error) => {
-                  // noinspection SuspiciousTypeOfGuard
-                  if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                    (error instanceof SystemUnavailableError)) {
-                    // noinspection JSIgnoredPromiseFromCall
-                    this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-                  } else {
-                    this.dialogService.showErrorDialog(error);
-                  }
-                });
-            }
-          } else {
-            this.spinnerService.hideSpinner();
-
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['/']);
-          }
-        }, (error: Error) => {
-          this.spinnerService.hideSpinner();
-
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else if (error instanceof PasswordExpiredError) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigate(['expired-password'], {
-              relativeTo: this.activatedRoute,
-              state: {username}
+              }
+            }, (error: Error) => {
+              // noinspection SuspiciousTypeOfGuard
+              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
             });
           } else {
-            this.dialogService.showErrorDialog(error);
+            this.securityService.getOrganizationsForUserDirectory(session.userDirectoryId)
+            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+            .subscribe((organizations: Organization[]) => {
+              if (organizations.length === 1) {
+                session.organization = organizations[0];
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['/']);
+              } else {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigate(['select-organization'], {
+                  relativeTo: this.activatedRoute,
+                  state: {organizations}
+                });
+              }
+            }, (error: Error) => {
+              // noinspection SuspiciousTypeOfGuard
+              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+                (error instanceof SystemUnavailableError)) {
+                // noinspection JSIgnoredPromiseFromCall
+                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+              } else {
+                this.dialogService.showErrorDialog(error);
+              }
+            });
           }
-        });
+        } else {
+          this.spinnerService.hideSpinner();
+
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
+        }
+      }, (error: Error) => {
+        this.spinnerService.hideSpinner();
+
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else if (error instanceof PasswordExpiredError) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['expired-password'], {
+            relativeTo: this.activatedRoute,
+            state: {username}
+          });
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(first(), map(() => window.history.state))
-      .subscribe((state) => {
-        if (state.username) {
-          this.usernameFormControl.setValue(state.username);
-        }
-      });
+    .pipe(first(), map(() => window.history.state))
+    .subscribe((state) => {
+      if (state.username) {
+        this.usernameFormControl.setValue(state.username);
+      }
+    });
   }
 }
