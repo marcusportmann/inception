@@ -34,8 +34,9 @@ public interface ICodeProvider {
    * Returns whether the code provider supports the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return <code>true</code> if the code provider supports the code category or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   boolean codeCategoryExists(String codeCategoryId) throws CodeProviderException;
 
@@ -43,7 +44,8 @@ public interface ICodeProvider {
    * Check whether the code exists.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId the ID uniquely identifying the code
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
   boolean codeExists(String codeCategoryId, String codeId) throws CodeProviderException;
@@ -52,7 +54,8 @@ public interface ICodeProvider {
    * Retrieve the code.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId the ID uniquely identifying the code
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return the code
    */
   Code getCode(String codeCategoryId, String codeId)
@@ -69,6 +72,7 @@ public interface ICodeProvider {
    * Retrieve the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the code category
    */
   CodeCategory getCodeCategory(String codeCategoryId)
@@ -82,6 +86,7 @@ public interface ICodeProvider {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the XML or JSON data for the code category
    */
   String getCodeCategoryData(String codeCategoryId)
@@ -95,7 +100,8 @@ public interface ICodeProvider {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
+   * @param parameters     the parameters
+   *
    * @return the XML or JSON data for the code category
    */
   String getCodeCategoryDataWithParameters(String codeCategoryId, Map<String, String> parameters)
@@ -105,6 +111,7 @@ public interface ICodeProvider {
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the date and time the code category was last updated
    */
   LocalDateTime getCodeCategoryLastUpdated(String codeCategoryId)
@@ -114,6 +121,7 @@ public interface ICodeProvider {
    * Retrieve the name of the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the name of the code category
    */
   String getCodeCategoryName(String codeCategoryId)
@@ -123,7 +131,8 @@ public interface ICodeProvider {
    * Retrieve the name of the code.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId the ID uniquely identifying the code
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return the name of code
    */
   String getCodeName(String codeCategoryId, String codeId)
@@ -137,6 +146,7 @@ public interface ICodeProvider {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the codes for the code category
    */
   List<Code> getCodesForCodeCategory(String codeCategoryId)
@@ -150,7 +160,8 @@ public interface ICodeProvider {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
+   * @param parameters     the parameters
+   *
    * @return the codes for the code category
    */
   List<Code> getCodesForCodeCategoryWithParameters(

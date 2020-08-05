@@ -50,26 +50,26 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Schema(description = "SMS")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "id",
-  "mobileNumber",
-  "message",
-  "status",
-  "sendAttempts",
-  "lockName",
-  "lastProcessed"
+    "id",
+    "mobileNumber",
+    "message",
+    "status",
+    "sendAttempts",
+    "lockName",
+    "lastProcessed"
 })
 @XmlRootElement(name = "Job", namespace = "http://sms.inception.digital")
 @XmlType(
     name = "Job",
     namespace = "http://sms.inception.digital",
     propOrder = {
-      "id",
-      "mobileNumber",
-      "message",
-      "status",
-      "sendAttempts",
-      "lockName",
-      "lastProcessed"
+        "id",
+        "mobileNumber",
+        "message",
+        "status",
+        "sendAttempts",
+        "lockName",
+        "lastProcessed"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -79,7 +79,9 @@ public class SMS implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the SMS. */
+  /**
+   * The Universally Unique Identifier (UUID) uniquely identifying the SMS.
+   */
   @Schema(
       description = "The Universally Unique Identifier (UUID) uniquely identifying the SMS",
       required = true)
@@ -90,7 +92,9 @@ public class SMS implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The date and time the last attempt was made to send the SMS. */
+  /**
+   * The date and time the last attempt was made to send the SMS.
+   */
   @Schema(description = "The date and time the last attempt was made to send the SMS")
   @JsonProperty
   @XmlElement(name = "LastProcessed")
@@ -99,14 +103,18 @@ public class SMS implements Serializable {
   @Column(name = "last_processed")
   private LocalDateTime lastProcessed;
 
-  /** The name of the entity that has locked the SMS for sending. */
+  /**
+   * The name of the entity that has locked the SMS for sending.
+   */
   @Schema(description = "The name of the entity that has locked the SMS for sending")
   @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
   @Column(name = "lock_name", length = 100)
   private String lockName;
 
-  /** The message to send. */
+  /**
+   * The message to send.
+   */
   @Schema(description = "The message to send", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Message", required = true)
@@ -115,7 +123,9 @@ public class SMS implements Serializable {
   @Column(name = "message", nullable = false, length = 1000)
   private String message;
 
-  /** The mobile number to send the SMS to. */
+  /**
+   * The mobile number to send the SMS to.
+   */
   @Schema(description = "The mobile number to send the SMS to", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MobileNumber", required = true)
@@ -124,14 +134,18 @@ public class SMS implements Serializable {
   @Column(name = "mobile_number", nullable = false, length = 100)
   private String mobileNumber;
 
-  /** The number of times that the sending of the SMS was attempted. */
+  /**
+   * The number of times that the sending of the SMS was attempted.
+   */
   @Schema(description = "The number of times that the sending of the SMS was attempted")
   @JsonProperty
   @XmlElement(name = "SendAttempts")
   @Column(name = "send_attempts")
   private Integer sendAttempts;
 
-  /** The status of the SMS. */
+  /**
+   * The status of the SMS.
+   */
   @Schema(description = "The status of the SMS", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
@@ -139,14 +153,17 @@ public class SMS implements Serializable {
   @Column(name = "status", nullable = false)
   private SMSStatus status;
 
-  /** Constructs a new <code>SMS</code>. */
-  public SMS() {}
+  /**
+   * Constructs a new <code>SMS</code>.
+   */
+  public SMS() {
+  }
 
   /**
    * Constructs a new <code>SMS</code>.
    *
    * @param mobileNumber the mobile number to send the SMS to
-   * @param message the message to send
+   * @param message      the message to send
    */
   public SMS(String mobileNumber, String message) {
     this.mobileNumber = mobileNumber;
@@ -157,8 +174,8 @@ public class SMS implements Serializable {
    * Constructs a new <code>SMS</code>.
    *
    * @param mobileNumber the mobile number to send the SMS to
-   * @param message the message to send
-   * @param status the status of the SMS
+   * @param message      the message to send
+   * @param status       the status of the SMS
    */
   SMS(String mobileNumber, String message, SMSStatus status) {
     this.mobileNumber = mobileNumber;
@@ -169,12 +186,12 @@ public class SMS implements Serializable {
   /**
    * Constructs a new <code>SMS</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the SMS
-   * @param mobileNumber the mobile number to send the SMS to
-   * @param message the message to send
-   * @param status the status of the SMS
-   * @param sendAttempts the number of times that the sending of the SMS was attempted
-   * @param lockName the name of the entity that has locked the SMS for sending
+   * @param id            the Universally Unique Identifier (UUID) uniquely identifying the SMS
+   * @param mobileNumber  the mobile number to send the SMS to
+   * @param message       the message to send
+   * @param status        the status of the SMS
+   * @param sendAttempts  the number of times that the sending of the SMS was attempted
+   * @param lockName      the name of the entity that has locked the SMS for sending
    * @param lastProcessed the date and time the last attempt was made to send the SMS
    */
   SMS(
@@ -198,8 +215,9 @@ public class SMS implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -356,7 +374,9 @@ public class SMS implements Serializable {
     return (id == null) ? 0 : id.hashCode();
   }
 
-  /** Increment the number of times that the sending of the SMS was attempted. */
+  /**
+   * Increment the number of times that the sending of the SMS was attempted.
+   */
   public void incrementSendAttempts() {
     if (sendAttempts == null) {
       sendAttempts = 1;

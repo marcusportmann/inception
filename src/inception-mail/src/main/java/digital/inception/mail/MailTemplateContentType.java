@@ -46,6 +46,7 @@ public enum MailTemplateContentType {
   HTML(2, "HTML");
 
   private int code;
+
   private String description;
 
   MailTemplateContentType(int code, String description) {
@@ -57,6 +58,7 @@ public enum MailTemplateContentType {
    * Returns the mail template content type given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the mail template content type
+   *
    * @return the mail template content type given by the specified numeric code value
    */
   @JsonCreator
@@ -103,7 +105,7 @@ public enum MailTemplateContentType {
    * content type.
    *
    * @return the <code>String</code> representation of the numeric code for the mail template
-   *     content type
+   * content type
    */
   public String getCodeAsString() {
     return String.valueOf(code);

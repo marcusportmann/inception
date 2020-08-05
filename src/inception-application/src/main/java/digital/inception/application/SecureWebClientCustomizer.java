@@ -39,7 +39,9 @@ import reactor.netty.http.client.HttpClient;
 @ConditionalOnBean(ApplicationSecurityConfiguration.class)
 public class SecureWebClientCustomizer implements WebClientCustomizer {
 
-  /** The application security configuration. */
+  /**
+   * The application security configuration.
+   */
   ApplicationSecurityConfiguration applicationSecurityConfiguration;
 
   public SecureWebClientCustomizer(

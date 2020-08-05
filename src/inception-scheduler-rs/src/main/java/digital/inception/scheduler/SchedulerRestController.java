@@ -59,17 +59,21 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SchedulerRestController extends SecureRestController {
 
-  /** The Scheduler Service. */
+  /**
+   * The Scheduler Service.
+   */
   private final ISchedulerService schedulerService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>SchedulerRestController</code>.
    *
    * @param schedulerService the Scheduler Service
-   * @param validator the JSR-303 validator
+   * @param validator        the JSR-303 validator
    */
   public SchedulerRestController(ISchedulerService schedulerService, Validator validator) {
     this.schedulerService = schedulerService;
@@ -84,29 +88,29 @@ public class SchedulerRestController extends SecureRestController {
   @Operation(summary = "Create the job", description = "Create the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The job was created successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "409",
-            description = "A job with the specified ID already exists",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "204", description = "The job was created successfully"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "409",
+              description = "A job with the specified ID already exists",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(value = "/jobs", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -138,29 +142,29 @@ public class SchedulerRestController extends SecureRestController {
   @Operation(summary = "Delete the job", description = "Delete the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The job was deleted successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The job could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "204", description = "The job was deleted successfully"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The job could not be found",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/jobs/{jobId}",
@@ -172,10 +176,10 @@ public class SchedulerRestController extends SecureRestController {
           + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void deleteJob(
       @Parameter(
-              name = "jobId",
-              description = "The ID uniquely identifying the job",
-              required = true)
-          @PathVariable
+          name = "jobId",
+          description = "The ID uniquely identifying the job",
+          required = true)
+      @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
@@ -189,34 +193,35 @@ public class SchedulerRestController extends SecureRestController {
    * Retrieve the job.
    *
    * @param jobId the ID uniquely identifying the code job
+   *
    * @return the job
    */
   @Operation(summary = "Retrieve the job", description = "Retrieve the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The job could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "200", description = "OK"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The job could not be found",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/jobs/{jobId}",
@@ -228,7 +233,7 @@ public class SchedulerRestController extends SecureRestController {
           + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public Job getJob(
       @Parameter(name = "job", description = "The ID uniquely identifying the job", required = true)
-          @PathVariable
+      @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
@@ -242,34 +247,35 @@ public class SchedulerRestController extends SecureRestController {
    * Retrieve the name of the job.
    *
    * @param jobId the ID uniquely identifying the job
+   *
    * @return the name of the job
    */
   @Operation(summary = "Retrieve the name of the job", description = "Retrieve the name of the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The job could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "200", description = "OK"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The job could not be found",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/jobs/{jobId}/name",
@@ -281,10 +287,10 @@ public class SchedulerRestController extends SecureRestController {
           + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public String getJobName(
       @Parameter(
-              name = "jobId",
-              description = "The ID uniquely identifying the job",
-              required = true)
-          @PathVariable
+          name = "jobId",
+          description = "The ID uniquely identifying the job",
+          required = true)
+      @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
@@ -302,15 +308,15 @@ public class SchedulerRestController extends SecureRestController {
   @Operation(summary = "Retrieve the jobs", description = "Retrieve the jobs")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "200", description = "OK"),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(value = "/jobs", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
@@ -325,34 +331,34 @@ public class SchedulerRestController extends SecureRestController {
    * Update the job.
    *
    * @param jobId the ID uniquely identifying the job
-   * @param job the job
+   * @param job   the job
    */
   @Operation(summary = "Update the job", description = "Update the job")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The job was updated successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The job could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "204", description = "The job was updated successfully"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The job could not be found",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/jobs/{jobId}",
@@ -364,10 +370,10 @@ public class SchedulerRestController extends SecureRestController {
           + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void updateJob(
       @Parameter(
-              name = "jobId",
-              description = "The ID uniquely identifying the job",
-              required = true)
-          @PathVariable
+          name = "jobId",
+          description = "The ID uniquely identifying the job",
+          required = true)
+      @PathVariable
           String jobId,
       @Parameter(name = "job", description = "The job", required = true) @RequestBody Job job)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {

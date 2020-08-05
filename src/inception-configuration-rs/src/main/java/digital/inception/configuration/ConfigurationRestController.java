@@ -59,17 +59,21 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused"})
 public class ConfigurationRestController extends SecureRestController {
 
-  /** The Configuration Service. */
+  /**
+   * The Configuration Service.
+   */
   private final IConfigurationService configurationService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>ConfigurationRestController</code>.
    *
    * @param configurationService the Configuration Service
-   * @param validator the JSR-303 validator
+   * @param validator            the JSR-303 validator
    */
   public ConfigurationRestController(
       IConfigurationService configurationService, Validator validator) {
@@ -85,31 +89,31 @@ public class ConfigurationRestController extends SecureRestController {
   @Operation(summary = "Delete the configuration", description = "Delete the configuration")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The configuration was deleted successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The configuration could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(
+              responseCode = "204",
+              description = "The configuration was deleted successfully"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The configuration could not be found",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/configurations/{key}",
@@ -120,13 +124,13 @@ public class ConfigurationRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
   public void deleteConfiguration(
       @Parameter(
-              name = "key",
-              description = "The key uniquely identifying the configuration",
-              required = true)
-          @PathVariable
+          name = "key",
+          description = "The key uniquely identifying the configuration",
+          required = true)
+      @PathVariable
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      ConfigurationServiceException {
     if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -138,34 +142,35 @@ public class ConfigurationRestController extends SecureRestController {
    * Retrieve the configuration.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the configuration
    */
   @Operation(summary = "Retrieve the configuration", description = "Retrieve the configuration")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The configuration could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "200", description = "OK"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The configuration could not be found",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/configurations/{key}",
@@ -175,13 +180,13 @@ public class ConfigurationRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
   public Configuration getConfiguration(
       @Parameter(
-              name = "key",
-              description = "The key uniquely identifying the configuration",
-              required = true)
-          @PathVariable
+          name = "key",
+          description = "The key uniquely identifying the configuration",
+          required = true)
+      @PathVariable
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      ConfigurationServiceException {
     if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -193,6 +198,7 @@ public class ConfigurationRestController extends SecureRestController {
    * Retrieve the configuration value.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the configuration value
    */
   @Operation(
@@ -200,29 +206,29 @@ public class ConfigurationRestController extends SecureRestController {
       description = "Retrieve the configuration value")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The configuration could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "200", description = "OK"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "404",
+              description = "The configuration could not be found",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/configurations/{key}/value",
@@ -232,13 +238,13 @@ public class ConfigurationRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
   public String getConfigurationValue(
       @Parameter(
-              name = "key",
-              description = "The key uniquely identifying the configuration",
-              required = true)
-          @PathVariable
+          name = "key",
+          description = "The key uniquely identifying the configuration",
+          required = true)
+      @PathVariable
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      ConfigurationServiceException {
     if (StringUtils.isEmpty(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -256,15 +262,15 @@ public class ConfigurationRestController extends SecureRestController {
       description = "Retrieve all the configurations")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "200", description = "OK"),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/configurations",
@@ -284,22 +290,22 @@ public class ConfigurationRestController extends SecureRestController {
   @Operation(summary = "Set the configuration", description = "Set the configuration")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "204", description = "The configuration was set successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(responseCode = "204", description = "The configuration was set successfully"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/configurations",
@@ -310,7 +316,7 @@ public class ConfigurationRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
   public void setConfiguration(
       @Parameter(name = "configuration", description = "The configuration", required = true)
-          @RequestBody
+      @RequestBody
           Configuration configuration)
       throws InvalidArgumentException, ConfigurationServiceException {
     Set<ConstraintViolation<Configuration>> constraintViolations =

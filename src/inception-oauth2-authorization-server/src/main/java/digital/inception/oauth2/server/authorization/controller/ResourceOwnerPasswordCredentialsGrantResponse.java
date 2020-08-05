@@ -30,24 +30,32 @@ import org.springframework.util.StringUtils;
  */
 public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
 
-  /** The access token. */
+  /**
+   * The access token.
+   */
   private String accessToken;
 
-  /** The lifetime in seconds of the access token. */
+  /**
+   * The lifetime in seconds of the access token.
+   */
   private long expiresIn;
 
-  /** The refresh token. */
+  /**
+   * The refresh token.
+   */
   private String refreshToken;
 
-  /** The access token scope. */
+  /**
+   * The access token scope.
+   */
   private String scope;
 
   /**
    * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
    *
-   * @param accessToken the access token
-   * @param expiresIn the access token validity in seconds
-   * @param scope the access token scope
+   * @param accessToken  the access token
+   * @param expiresIn    the access token validity in seconds
+   * @param scope        the access token scope
    * @param refreshToken the refresh token
    */
   public ResourceOwnerPasswordCredentialsGrantResponse(
@@ -63,8 +71,8 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   /**
    * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
    *
-   * @param accessToken the access token
-   * @param expiresIn the access token validity in seconds
+   * @param accessToken  the access token
+   * @param expiresIn    the access token validity in seconds
    * @param refreshToken the refresh token
    */
   public ResourceOwnerPasswordCredentialsGrantResponse(
@@ -81,7 +89,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
    * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
    *
    * @param accessToken the access token
-   * @param expiresIn the lifetime in seconds of the access token
+   * @param expiresIn   the lifetime in seconds of the access token
    */
   public ResourceOwnerPasswordCredentialsGrantResponse(String accessToken, long expiresIn) {
     super(HttpStatus.OK);

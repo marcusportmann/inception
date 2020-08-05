@@ -53,23 +53,30 @@ import org.springframework.util.StringUtils;
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class SMSServiceTest {
 
-  /** The SMS Service. */
-  @Autowired private ISMSService smsService;
-
-  /** The client ID to use for the SMS Portal API. */
+  /**
+   * The client ID to use for the SMS Portal API.
+   */
   @Value("${inception.sms.providers.sms-portal.client-id:#{null}}")
   private String smsPortalClientId;
 
-  /** The client secret to use for the SMS Portal API. */
+  /**
+   * The client secret to use for the SMS Portal API.
+   */
   @Value("${inception.sms.providers.sms-portal.client-secret:#{null}}")
   private String smsPortalClientSecret;
+
+  /**
+   * The SMS Service.
+   */
+  @Autowired
+  private ISMSService smsService;
 
   private static synchronized SMS getTestSMSDetails() {
     SMS sms = new SMS();
@@ -80,31 +87,9 @@ public class SMSServiceTest {
     return sms;
   }
 
-  private void compareSMSs(SMS sms1, SMS sms2) {
-    assertEquals("The ID values for the two SMSs do not match", sms1.getId(), sms2.getId());
-    assertEquals(
-        "The mobile number values for the two SMSs do not match",
-        sms1.getMobileNumber(),
-        sms2.getMobileNumber());
-    assertEquals(
-        "The message values for the two SMSs do not match", sms1.getMessage(), sms2.getMessage());
-    assertEquals(
-        "The status values for the two SMSs do not match", sms1.getStatus(), sms2.getStatus());
-    assertEquals(
-        "The send attempts values for the two SMSs do not match",
-        sms1.getSendAttempts(),
-        sms2.getSendAttempts());
-    assertEquals(
-        "The lock name values for the two SMSs do not match",
-        sms1.getLockName(),
-        sms2.getLockName());
-    assertEquals(
-        "The last processed values for the two SMSs do not match",
-        sms1.getLastProcessed(),
-        sms2.getLastProcessed());
-  }
-
-  /** Test the get number of SMS credits remaining functionality. */
+  /**
+   * Test the get number of SMS credits remaining functionality.
+   */
   @Test
   public void getNumberOfSMSCreditsRemainingTest() throws Exception {
     if ((!StringUtils.isEmpty(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
@@ -112,12 +97,16 @@ public class SMSServiceTest {
     }
   }
 
-  /** Test the send SMS synchronously functionality */
+  /**
+   * Test the send SMS synchronously functionality
+   */
   public void sendSMSSynchronouslyTest() {
     // smsService.sendSMSSynchronously(1, "0832763107", "Testing at 23:02...");
   }
 
-  /** Test the send SMS functionality. */
+  /**
+   * Test the send SMS functionality.
+   */
   @Test
   public void sendSMSTest() throws Exception {
     if ((!StringUtils.isEmpty(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
@@ -127,7 +116,9 @@ public class SMSServiceTest {
     }
   }
 
-  /** Test the SMS functionality. */
+  /**
+   * Test the SMS functionality.
+   */
   @Test
   public void smsTest() throws Exception {
     SMS sms = getTestSMSDetails();
@@ -177,5 +168,29 @@ public class SMSServiceTest {
 
     assertEquals(
         "The status for the SMS is not correct", SMSStatus.UNKNOWN, retrievedSMS.getStatus());
+  }
+
+  private void compareSMSs(SMS sms1, SMS sms2) {
+    assertEquals("The ID values for the two SMSs do not match", sms1.getId(), sms2.getId());
+    assertEquals(
+        "The mobile number values for the two SMSs do not match",
+        sms1.getMobileNumber(),
+        sms2.getMobileNumber());
+    assertEquals(
+        "The message values for the two SMSs do not match", sms1.getMessage(), sms2.getMessage());
+    assertEquals(
+        "The status values for the two SMSs do not match", sms1.getStatus(), sms2.getStatus());
+    assertEquals(
+        "The send attempts values for the two SMSs do not match",
+        sms1.getSendAttempts(),
+        sms2.getSendAttempts());
+    assertEquals(
+        "The lock name values for the two SMSs do not match",
+        sms1.getLockName(),
+        sms2.getLockName());
+    assertEquals(
+        "The last processed values for the two SMSs do not match",
+        sms1.getLastProcessed(),
+        sms2.getLastProcessed());
   }
 }

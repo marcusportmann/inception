@@ -28,11 +28,15 @@ import java.io.Serializable;
  */
 public class Document implements Serializable {
 
-  /** The Public ID for an Unknown WBXML document type. */
+  /**
+   * The Public ID for an Unknown WBXML document type.
+   */
   public static final int PUBLIC_ID_UNKNOWN = 0x01;
 
   private static final long serialVersionUID = 1000000;
+
   private int publicId = PUBLIC_ID_UNKNOWN;
+
   private Element rootElement = null;
 
   /**
@@ -47,7 +51,7 @@ public class Document implements Serializable {
   /**
    * Constructs a new <code>Document</code> with the specified root element and public ID.
    *
-   * @param element the root element for the document
+   * @param element  the root element for the document
    * @param publicId the public ID for the document
    */
   public Document(Element element, int publicId) {
@@ -73,7 +77,9 @@ public class Document implements Serializable {
     return rootElement;
   }
 
-  /** Print the document. */
+  /**
+   * Print the document.
+   */
   public void print() {
     rootElement.print(System.out, 0);
   }

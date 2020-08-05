@@ -29,4 +29,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface ErrorReportSummaryRepository extends JpaRepository<ErrorReportSummary, UUID> {}
+public interface ErrorReportSummaryRepository extends JpaRepository<ErrorReportSummary, UUID> {
+
+}

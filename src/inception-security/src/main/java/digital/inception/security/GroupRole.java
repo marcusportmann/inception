@@ -53,7 +53,9 @@ public class GroupRole implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The name identifying the group. */
+  /**
+   * The name identifying the group.
+   */
   @Schema(description = "The name identifying the group", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "GroupName", required = true)
@@ -61,7 +63,9 @@ public class GroupRole implements Serializable {
   @Size(min = 1, max = 100)
   private String groupName;
 
-  /** The code uniquely identifying the role. */
+  /**
+   * The code uniquely identifying the role.
+   */
   @Schema(description = "The code uniquely identifying the role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "RoleCode", required = true)
@@ -83,16 +87,19 @@ public class GroupRole implements Serializable {
   @NotNull
   private UUID userDirectoryId;
 
-  /** Constructs a new <code>GroupRole</code>. */
-  public GroupRole() {}
+  /**
+   * Constructs a new <code>GroupRole</code>.
+   */
+  public GroupRole() {
+  }
 
   /**
    * Constructs a new <code>GroupRole</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the group is associated with
-   * @param groupName the name identifying the group
-   * @param roleCode the code uniquely identifying the role
+   *                        directory the group is associated with
+   * @param groupName       the name identifying the group
+   * @param roleCode        the code uniquely identifying the role
    */
   public GroupRole(UUID userDirectoryId, String groupName, String roleCode) {
     this.userDirectoryId = userDirectoryId;
@@ -141,7 +148,7 @@ public class GroupRole implements Serializable {
    * group is associated with.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   *     group is associated with
+   * group is associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
@@ -152,7 +159,7 @@ public class GroupRole implements Serializable {
    * is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the group is associated with
+   *                        directory the group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

@@ -33,8 +33,11 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class IntegerToSMSStatusConverter implements Converter<Integer, SMSStatus> {
 
-  /** Constructs a new <code>IntegerToSMSStatusConverter</code>. */
-  public IntegerToSMSStatusConverter() {}
+  /**
+   * Constructs a new <code>IntegerToSMSStatusConverter</code>.
+   */
+  public IntegerToSMSStatusConverter() {
+  }
 
   @Override
   public SMSStatus convert(Integer source) {

@@ -36,16 +36,21 @@ import java.util.stream.Stream;
  */
 public class PasswordUtil {
 
-  /** Special characters allowed in password. */
+  /**
+   * Special characters allowed in password.
+   */
   private static final String ALLOWED_SPL_CHARACTERS = "!@#$%^&*()_+";
 
-  /** The secure random number generator. */
+  /**
+   * The secure random number generator.
+   */
   private static final Random random = new SecureRandom();
 
   /**
    * Create the SHA-256 hash of the specified password.
    *
    * @param password the password to hash
+   *
    * @return the SHA-256 hash of the password
    */
   public static final String createPasswordHash(String password) {

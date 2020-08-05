@@ -45,14 +45,14 @@ public class CXFWSSX509CertificateTokenProfileProxyConfigurator {
    * Configure the CXF web service proxy to support authentication using the the Web Services
    * Security X.509 Certificate Token profile.
    *
-   * @param proxy the web service proxy to configure
-   * @param keyStore the key store containing the private key and certificate (public key) that will
-   *     be used to authenticate
+   * @param proxy            the web service proxy to configure
+   * @param keyStore         the key store containing the private key and certificate (public key)
+   *                         that will be used to authenticate
    * @param keyStorePassword the password for the key store that will be used to authenticate
-   * @param keyStoreAlias the alias of the key-pair in the key store that will be used to
-   *     authenticate
-   * @param trustStore the key store containing the certificates that will be used to verify the
-   *     remote web service
+   * @param keyStoreAlias    the alias of the key-pair in the key store that will be used to
+   *                         authenticate
+   * @param trustStore       the key store containing the certificates that will be used to verify
+   *                         the remote web service
    */
   public static void configureProxy(
       Object proxy,

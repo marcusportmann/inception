@@ -31,8 +31,11 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class MessageStatusToIntegerConverter implements Converter<MessageStatus, Integer> {
 
-  /** Constructs a new <code>MessageStatusToIntegerConverter</code>. */
-  public MessageStatusToIntegerConverter() {}
+  /**
+   * Constructs a new <code>MessageStatusToIntegerConverter</code>.
+   */
+  public MessageStatusToIntegerConverter() {
+  }
 
   @Override
   public Integer convert(MessageStatus source) {

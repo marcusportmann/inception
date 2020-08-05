@@ -46,31 +46,42 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ServiceError {
 
-  /** The code identifying the service error. */
+  /**
+   * The code identifying the service error.
+   */
   @XmlElement(name = "Code", required = true)
   private String code;
 
-  /** The detail for the service error */
+  /**
+   * The detail for the service error
+   */
   @XmlElement(name = "Detail", required = true)
   private String detail;
 
-  /** The message for the service error. */
+  /**
+   * The message for the service error.
+   */
   @XmlElement(name = "Message", required = true)
   private String message;
 
-  /** The date and time the service error occurred. */
+  /**
+   * The date and time the service error occurred.
+   */
   @XmlElement(name = "When", required = true)
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   private LocalDateTime when;
 
-  /** Constructs a new <code>ServiceError</code>. */
-  public ServiceError() {}
+  /**
+   * Constructs a new <code>ServiceError</code>.
+   */
+  public ServiceError() {
+  }
 
   /**
    * Constructs a new <code>ServiceError</code>.
    *
-   * @param code the code identifying the service error
+   * @param code  the code identifying the service error
    * @param cause the cause of the service error
    */
   public ServiceError(String code, Throwable cause) {

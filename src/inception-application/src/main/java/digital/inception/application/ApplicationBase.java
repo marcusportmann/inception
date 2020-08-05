@@ -50,7 +50,9 @@ public abstract class ApplicationBase implements WebApplicationInitializer {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ApplicationBase.class);
 
-  /** The Spring application context. */
+  /**
+   * The Spring application context.
+   */
   private final ApplicationContext applicationContext;
 
   /**
@@ -84,7 +86,7 @@ public abstract class ApplicationBase implements WebApplicationInitializer {
    * processor package.
    *
    * @return the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
-   *     processor package
+   * processor package
    */
   @Bean
   protected Jackson2ObjectMapperBuilder jacksonBuilder() {

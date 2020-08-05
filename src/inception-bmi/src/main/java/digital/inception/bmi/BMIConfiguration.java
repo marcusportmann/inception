@@ -45,23 +45,30 @@ import org.springframework.transaction.PlatformTransactionManager;
     basePackages = {"digital.inception.bmi"})
 public class BMIConfiguration {
 
-  /** The Spring application context. */
+  /**
+   * The Spring application context.
+   */
   private ApplicationContext applicationContext;
 
-  /** The data source used to provide connections to the application database. */
+  /**
+   * The data source used to provide connections to the application database.
+   */
   private DataSource dataSource;
 
   /* The name of the Process Engine instance. */
   private String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
 
-  /** The Spring platform transaction manager. */
+  /**
+   * The Spring platform transaction manager.
+   */
   private PlatformTransactionManager transactionManager;
 
   /**
    * Constructs a new <code>ProcessConfiguration</code>.
    *
    * @param applicationContext the Spring application context
-   * @param dataSource the data source used to provide connections to the application database
+   * @param dataSource         the data source used to provide connections to the application
+   *                           database
    * @param transactionManager the Spring platform transaction manager
    */
   public BMIConfiguration(

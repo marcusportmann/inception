@@ -26,6 +26,7 @@ import java.io.Serializable;
  * generated value for an identity column in the database.
  *
  * @param <T>
+ *
  * @author Marcus Portmann
  */
 public interface Identifiable<T extends Serializable> {

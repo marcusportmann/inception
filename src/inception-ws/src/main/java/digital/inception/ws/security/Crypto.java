@@ -73,24 +73,32 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Crypto.class);
 
-  /** The certificate revocation list store. */
+  /**
+   * The certificate revocation list store.
+   */
   private final CertStore crlStore;
 
-  /** The key store. */
+  /**
+   * The key store.
+   */
   private final KeyStore keyStore;
 
-  /** The key store password. */
+  /**
+   * The key store password.
+   */
   private final String keyStorePassword;
 
-  /** The trust store. */
+  /**
+   * The trust store.
+   */
   private final KeyStore trustStore;
 
   /**
    * Constructs a new <code>Crypto</code>.
    *
-   * @param keyStore the key store
+   * @param keyStore         the key store
    * @param keyStorePassword the key store password
-   * @param trustStore the trust store
+   * @param trustStore       the trust store
    */
   public Crypto(KeyStore keyStore, String keyStorePassword, KeyStore trustStore) {
     this.keyStore = keyStore;
@@ -102,10 +110,10 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   /**
    * Constructs a new <code>Crypto</code>.
    *
-   * @param keyStore the key store
+   * @param keyStore         the key store
    * @param keyStorePassword the key store password
-   * @param trustStore the trust store
-   * @param crlStore the certificate revocation list store
+   * @param trustStore       the trust store
+   * @param crlStore         the certificate revocation list store
    */
   public Crypto(
       KeyStore keyStore, String keyStorePassword, KeyStore trustStore, CertStore crlStore) {
@@ -142,8 +150,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   /**
    * Get the private key associated with the public key.
    *
-   * @param publicKey the public key
+   * @param publicKey       the public key
    * @param callbackHandler the callback handler
+   *
    * @return the private key associated with the public key
    */
   @Override
@@ -151,14 +160,14 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       throws WSSecurityException {
     if (keyStore == null) {
       throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{"The key store is null"});
     }
 
     if (callbackHandler == null) {
       throw new WSSecurityException(
           WSSecurityException.ErrorCode.FAILURE,
           "empty",
-          new Object[] {"The callback handler is null"});
+          new Object[]{"The callback handler is null"});
     }
 
     String alias = getAliasForPublicKey(publicKey, keyStore);
@@ -169,13 +178,13 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         logger.error(message + keyStoreErrorMessage);
 
         throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{message});
       } catch (KeyStoreException ex) {
         throw new WSSecurityException(
             WSSecurityException.ErrorCode.FAILURE,
             ex,
             "noPrivateKey",
-            new Object[] {ex.getMessage()});
+            new Object[]{ex.getMessage()});
       }
     }
 
@@ -188,14 +197,15 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Gets the private key corresponding to the identifier.
    *
    * @param identifier the implementation-specific identifier corresponding to the private key
-   * @param password the password required to access the key
+   * @param password   the password required to access the key
+   *
    * @return the private key
    */
   @Override
   public PrivateKey getPrivateKey(String identifier, String password) throws WSSecurityException {
     if (keyStore == null) {
       throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{"The key store is null"});
     }
 
     try {
@@ -205,7 +215,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         logger.error(message + keyStoreErrorMessage);
 
         throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{message});
       }
 
       String pwd = password;
@@ -213,14 +223,14 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         pwd = keyStorePassword;
       }
 
-      Key key = keyStore.getKey(identifier, (pwd == null) ? new char[] {} : pwd.toCharArray());
+      Key key = keyStore.getKey(identifier, (pwd == null) ? new char[]{} : pwd.toCharArray());
       if (!(key instanceof PrivateKey)) {
         String message = "The key with the alias (" + identifier + ") is not a private key";
         String keyStoreErrorMessage = createKeyStoreErrorMessage(keyStore);
         logger.error(message + keyStoreErrorMessage);
 
         throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{message});
       }
 
       return (PrivateKey) key;
@@ -229,7 +239,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           WSSecurityException.ErrorCode.FAILURE,
           ex,
           "noPrivateKey",
-          new Object[] {ex.getMessage()});
+          new Object[]{ex.getMessage()});
     }
   }
 
@@ -237,8 +247,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the private key associated with the X.509 certificate using the password provided by the
    * callback handler.
    *
-   * @param certificate the X.509 certificate
+   * @param certificate     the X.509 certificate
    * @param callbackHandler the callback handler
+   *
    * @return the private key associated with the X.509 certificate
    */
   @Override
@@ -246,14 +257,14 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       throws WSSecurityException {
     if (keyStore == null) {
       throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {"The key store is null"});
+          WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{"The key store is null"});
     }
 
     if (callbackHandler == null) {
       throw new WSSecurityException(
           WSSecurityException.ErrorCode.FAILURE,
           "empty",
-          new Object[] {"The callback handler is null"});
+          new Object[]{"The callback handler is null"});
     }
 
     String alias = getAliasForPublicKey(certificate, keyStore);
@@ -264,13 +275,13 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         logger.error(message + keyStoreErrorMessage);
 
         throw new WSSecurityException(
-            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[] {message});
+            WSSecurityException.ErrorCode.FAILURE, "empty", new Object[]{message});
       } catch (KeyStoreException ex) {
         throw new WSSecurityException(
             WSSecurityException.ErrorCode.FAILURE,
             ex,
             "noPrivateKey",
-            new Object[] {ex.getMessage()});
+            new Object[]{ex.getMessage()});
       }
     }
 
@@ -299,6 +310,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * </ul>
    *
    * @param cryptoType the crypto type
+   *
    * @return the X.509 certificate or certificate chain for the crypto type
    */
   @Override
@@ -348,8 +360,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the identifier for the X.509 certificate i.e. the key store alias.
    *
    * @param certificate the X.509 certificate
+   *
    * @return the identifier for the X.509 certificate i.e. the key store alias or <code>null</code>
-   *     if the X.509 certificate could not be found
+   * if the X.509 certificate could not be found
    */
   @Override
   public String getX509Identifier(X509Certificate certificate) throws WSSecurityException {
@@ -405,7 +418,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Adds the trust anchors in the key store to the set.
    *
    * @param trustAnchors the set to which to add the trust anchors
-   * @param keyStore the key store to search for trust anchors
+   * @param keyStore     the key store to search for trust anchors
    */
   private void addTrustAnchors(Set<TrustAnchor> trustAnchors, KeyStore keyStore)
       throws KeyStoreException, WSSecurityException {
@@ -424,6 +437,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Convert the subject DN to an X.500 principal.
    *
    * @param subjectDN the subject DN
+   *
    * @return the X.500 principal
    */
   private Object convertSubjectToPrincipal(String subjectDN) {
@@ -449,8 +463,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   /**
    * Create the parameters for the PXIX algorithm used to validate the certificate path.
    *
-   * @param trustAnchors the trust anchors
+   * @param trustAnchors     the trust anchors
    * @param enableRevocation are certificate revocation checks enabled
+   *
    * @return he parameters for the PXIX algorithm used to validate the certificate path
    */
   private PKIXParameters createPKIXParameters(
@@ -470,7 +485,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the key store alias that corresponds to the public key in the key store.
    *
    * @param publicKey the public key
-   * @param keyStore the key store
+   * @param keyStore  the key store
+   *
    * @return the key store alias that corresponds to the public key in the key store
    */
   private String getAliasForPublicKey(PublicKey publicKey, KeyStore keyStore)
@@ -484,7 +500,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           // No certificate chain, so check if getCertificate gives a result
           Certificate retrievedCert = keyStore.getCertificate(alias);
           if (retrievedCert != null) {
-            certificateChain = new Certificate[] {retrievedCert};
+            certificateChain = new Certificate[]{retrievedCert};
           }
         }
 
@@ -505,7 +521,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the key store alias that corresponds to the X.509 certificate in the key store.
    *
    * @param certificate the X.509 certificate
-   * @param keyStore the key store
+   * @param keyStore    the key store
+   *
    * @return the key store alias that corresponds to the X.509 certificate in the key store
    */
   private String getAliasForPublicKey(X509Certificate certificate, KeyStore keyStore)
@@ -519,7 +536,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           // No certificate chain, so check if getCertificate gives a result
           Certificate retrievedCertificate = keyStore.getCertificate(alias);
           if (retrievedCertificate != null) {
-            certificateChain = new Certificate[] {retrievedCertificate};
+            certificateChain = new Certificate[]{retrievedCertificate};
           }
         }
 
@@ -540,9 +557,10 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the certificate or certificate chain with the serial number and issuer DN from the key
    * store.
    *
-   * @param issuerRDN the X500Principal or BouncyCastle X509Name instance identifying the issuer
+   * @param issuerRDN    the X500Principal or BouncyCastle X509Name instance identifying the issuer
    * @param serialNumber the serial number
-   * @param keyStore the key store
+   * @param keyStore     the key store
+   *
    * @return the certificate or certificate chain
    */
   private Certificate[] getCertificateChainForIssuerAndSerialNumber(
@@ -562,7 +580,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           // No certificate chain, so check if getCertificate gives a result
           Certificate cert = keyStore.getCertificate(alias);
           if (cert != null) {
-            certificateChain = new Certificate[] {cert};
+            certificateChain = new Certificate[]{cert};
           }
         }
 
@@ -600,7 +618,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       logger.debug("No issuer serial match found in the key store");
     }
 
-    return new Certificate[] {};
+    return new Certificate[]{};
   }
 
   /**
@@ -609,9 +627,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param skiBytes the subject key identifier bytes
    * @param keyStore the key store
+   *
    * @return the certificate or certificate chain or <code>null</code> if the certificate or
-   *     certificate chain identified by the subject key identifier could not be found in the key
-   *     store
+   * certificate chain identified by the subject key identifier could not be found in the key store
    */
   private Certificate[] getCertificateChainForSKI(byte[] skiBytes, KeyStore keyStore)
       throws WSSecurityException {
@@ -626,7 +644,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           // No certificate chain, so check if getCertificate gives a result.
           Certificate certificate = keyStore.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[] {certificate};
+            certificateChain = new Certificate[]{certificate};
           }
         }
 
@@ -651,16 +669,17 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
     logger.debug(
         "Failed to find the certificate or certificate chain matching the subject key identifier in the key store");
 
-    return new Certificate[] {};
+    return new Certificate[]{};
   }
 
   /**
    * Get the certificate or certificate chain with the thumbprint from the key store using the SHA-1
    * message digest.
    *
-   * @param thumbprint the thumbprint
-   * @param keyStore the key store
+   * @param thumbprint        the thumbprint
+   * @param keyStore          the key store
    * @param sha1MessageDigest the SHA-1 message digest
+   *
    * @return the certificate or certificate chain
    */
   private Certificate[] getCertificateChainForThumbprint(
@@ -678,7 +697,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           // No certificate chain, so check if getCertificate gives a result
           Certificate certificate = keyStore.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[] {certificate};
+            certificateChain = new Certificate[]{certificate};
           }
         }
 
@@ -712,14 +731,15 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
       logger.debug("No thumbprint match found in the key store");
     }
 
-    return new Certificate[] {};
+    return new Certificate[]{};
   }
 
   /**
    * Get all the certificates and certificate chains matching the subject in the key store.
    *
    * @param subjectDN either an X500Principal or a BouncyCastle X509Name instance for the subject
-   * @param store the key store
+   * @param store     the key store
+   *
    * @return the certificates and certificate chains matching the subject in the key store
    */
   private List<Certificate[]> getCertificateChainsForSubject(Object subjectDN, KeyStore store)
@@ -737,7 +757,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           // No certificate chain, so check if getCertificate gives a result
           Certificate certificate = store.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[] {certificate};
+            certificateChain = new Certificate[]{certificate};
           }
         }
 
@@ -773,8 +793,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   /**
    * Get a password from the callback handler.
    *
-   * @param identifier the identifier
+   * @param identifier      the identifier
    * @param callbackHandler the callback handler
+   *
    * @return the password retrieved from the callback handler
    */
   private String getPassword(String identifier, CallbackHandler callbackHandler)
@@ -782,11 +803,11 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
     WSPasswordCallback passwordCallback =
         new WSPasswordCallback(identifier, WSPasswordCallback.DECRYPT);
     try {
-      Callback[] callbacks = new Callback[] {passwordCallback};
+      Callback[] callbacks = new Callback[]{passwordCallback};
       callbackHandler.handle(callbacks);
     } catch (IOException | UnsupportedCallbackException e) {
       throw new WSSecurityException(
-          WSSecurityException.ErrorCode.FAILURE, e, "noPassword", new Object[] {identifier});
+          WSSecurityException.ErrorCode.FAILURE, e, "noPassword", new Object[]{identifier});
     }
 
     return passwordCallback.getPassword();
@@ -797,8 +818,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * key store or trust store.
    *
    * @param alias the key store alias
+   *
    * @return the X.509 certificate or certificate chain that corresponds to the identifier or <code>
-   *     null</code> if no X.509 certificate or certificate chain could not be found
+   * null</code> if no X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForAlias(String alias)
       throws WSSecurityException {
@@ -814,7 +836,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         if ((certificateChain == null) || (certificateChain.length == 0)) {
           Certificate certificate = keyStore.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[] {certificate};
+            certificateChain = new Certificate[]{certificate};
           }
         }
       }
@@ -825,7 +847,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         if (certificateChain == null) {
           Certificate certificate = trustStore.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[] {certificate};
+            certificateChain = new Certificate[]{certificate};
           }
         }
       }
@@ -844,10 +866,11 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the X.509 certificate or certificate chain with the serial number and issuer from the key
    * store or trust store.
    *
-   * @param issuer the issuer
+   * @param issuer       the issuer
    * @param serialNumber the serial number
+   *
    * @return the X.509 certificate or certificate chain or <code>null</code> if the X.509
-   *     certificate or certificate chain could not be found
+   * certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForIssuerAndSerialNumber(
       String issuer, BigInteger serialNumber) throws WSSecurityException {
@@ -891,9 +914,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * the key store or trust store.
    *
    * @param skiBytes the subject key identifier bytes
+   *
    * @return the X.509 certificate or certificate chain or <code>null</code> if the X.509
-   *     certificate or certificate chain identified by the subject key identifier could not be
-   *     found
+   * certificate or certificate chain identified by the subject key identifier could not be found
    */
   private X509Certificate[] getX509CertificateChainForSKI(byte[] skiBytes)
       throws WSSecurityException {
@@ -919,8 +942,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * or trust store.
    *
    * @param subjectDN the subject DN
+   *
    * @return the X.509 certificate or certificate chain identified by the subject DN or <code>null
-   *     </code> if the X.509 certificate or certificate chain could not be found
+   * </code> if the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForSubject(String subjectDN)
       throws WSSecurityException {
@@ -950,8 +974,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * trust store.
    *
    * @param thumbprint the SHA1 thumbprint
+   *
    * @return the X.509 certificate or certificate chain matching the thumbprint or <code>null</code>
-   *     if the X.509 certificate or certificate chain could not be found
+   * if the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForThumbprint(byte[] thumbprint)
       throws WSSecurityException {
@@ -984,8 +1009,9 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   /**
    * Check whether the public key is in the key store.
    *
-   * @param publicKey the public key to search for
+   * @param publicKey        the public key to search for
    * @param keyStoreToSearch the key store to search
+   *
    * @return <code>true</code> if the public key is in the key store or <code>false</code> otherwise
    */
   private boolean isPublicKeyInKeyStore(PublicKey publicKey, KeyStore keyStoreToSearch) {
@@ -1005,7 +1031,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
           // No certificate chain, so check if getCertificate gives a result
           Certificate certificate = keyStoreToSearch.getCertificate(alias);
           if (certificate != null) {
-            certificateChain = new Certificate[] {certificate};
+            certificateChain = new Certificate[]{certificate};
           }
         }
 
@@ -1034,10 +1060,10 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   /**
    * Evaluate whether a given certificate or certificate chain should be trusted.
    *
-   * @param certificateChain the X.509 certificate (chain) to validate
-   * @param enableRevocation whether to enable CRL verification or not
+   * @param certificateChain              the X.509 certificate (chain) to validate
+   * @param enableRevocation              whether to enable CRL verification or not
    * @param subjectCertificateConstraints the set of constraints on the Subject DN of the
-   *     certificates
+   *                                      certificates
    */
   private void verifyTrust(
       X509Certificate[] certificateChain,
@@ -1100,7 +1126,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
 
       // If we cannot find the issuer in the key store then look at the trust store
       if (((issuingCertificateChainsToVerifyAgainst == null)
-              || issuingCertificateChainsToVerifyAgainst.isEmpty())
+          || issuingCertificateChainsToVerifyAgainst.isEmpty())
           && (trustStore != null)) {
         issuingCertificateChainsToVerifyAgainst =
             getCertificateChainsForSubject(subject, trustStore);
@@ -1121,7 +1147,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
         throw new WSSecurityException(
             WSSecurityException.ErrorCode.FAILURE,
             "certpath",
-            new Object[] {"No trusted certs found"});
+            new Object[]{"No trusted certs found"});
       }
     }
 

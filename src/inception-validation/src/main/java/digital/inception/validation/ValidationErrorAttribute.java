@@ -50,31 +50,33 @@ public class ValidationErrorAttribute implements Serializable, Cloneable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The name for the validation error attribute. */
+  /**
+   * The name for the validation error attribute.
+   */
   @XmlElement(name = "Name", required = true)
   private String name;
 
-  /** The value for the validation error attribute. */
+  /**
+   * The value for the validation error attribute.
+   */
   @XmlElement(name = "Value")
   private String value;
 
-  /** Constructs a new <code>ValidationErrorAttribute</code>. */
-  public ValidationErrorAttribute() {}
+  /**
+   * Constructs a new <code>ValidationErrorAttribute</code>.
+   */
+  public ValidationErrorAttribute() {
+  }
 
   /**
    * Constructs a new <code>ValidationErrorAttribute</code>.
    *
-   * @param name the name for the validation error attribute
+   * @param name  the name for the validation error attribute
    * @param value the value for the validation error attribute
    */
   public ValidationErrorAttribute(String name, String value) {
     this.name = name;
     this.value = value;
-  }
-
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    return new ValidationErrorAttribute(name, value);
   }
 
   /**
@@ -111,5 +113,10 @@ public class ValidationErrorAttribute implements Serializable, Cloneable {
    */
   public void setValue(String value) {
     this.value = value;
+  }
+
+  @Override
+  protected Object clone() throws CloneNotSupportedException {
+    return new ValidationErrorAttribute(name, value);
   }
 }

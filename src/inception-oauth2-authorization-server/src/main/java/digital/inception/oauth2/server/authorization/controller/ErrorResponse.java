@@ -32,17 +32,21 @@ import org.springframework.util.StringUtils;
  */
 public abstract class ErrorResponse extends Response {
 
-  /** The single ASCII error code. */
+  /**
+   * The single ASCII error code.
+   */
   private final String error;
 
-  /** The optional human-readable ASCII text description of the error. */
+  /**
+   * The optional human-readable ASCII text description of the error.
+   */
   private final String errorDescription;
 
   /**
    * Constructs a new <code>ErrorGrantResponse</code>.
    *
    * @param status the HTTP status that should be returned for the OAuth2 error response
-   * @param error the single ASCII error code
+   * @param error  the single ASCII error code
    */
   public ErrorResponse(HttpStatus status, String error) {
     super(status);
@@ -54,8 +58,8 @@ public abstract class ErrorResponse extends Response {
   /**
    * Constructs a new <code>ErrorResponse</code>.
    *
-   * @param status the HTTP status that should be returned for the OAuth2 error response
-   * @param error the single ASCII error code
+   * @param status           the HTTP status that should be returned for the OAuth2 error response
+   * @param error            the single ASCII error code
    * @param errorDescription the optional human-readable ASCII text description of the error
    */
   public ErrorResponse(HttpStatus status, String error, String errorDescription) {

@@ -57,21 +57,27 @@ public class ValidationError implements Serializable, Cloneable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The attributes associated with the validation error. */
+  /**
+   * The attributes associated with the validation error.
+   */
   @Schema(description = "The attributes associated with the validation error")
   @JsonProperty
   @XmlElement(name = "Attributes")
   @NotNull
   private List<ValidationErrorAttribute> attributes;
 
-  /** The error message for the validation error. */
+  /**
+   * The error message for the validation error.
+   */
   @Schema(description = "The error message for the validation error", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Message", required = true)
   @NotNull
   private String message;
 
-  /** The path for the property that resulted in the validation error. */
+  /**
+   * The path for the property that resulted in the validation error.
+   */
   @Schema(
       description = "The path for the property that resulted in the validation error",
       required = true)
@@ -80,8 +86,11 @@ public class ValidationError implements Serializable, Cloneable {
   @NotNull
   private String property;
 
-  /** Constructs a new <code>ValidationError</code>. */
-  public ValidationError() {}
+  /**
+   * Constructs a new <code>ValidationError</code>.
+   */
+  public ValidationError() {
+  }
 
   /**
    * Constructs a new <code>ValidationError</code>.
@@ -109,7 +118,7 @@ public class ValidationError implements Serializable, Cloneable {
    * Constructs a new <code>ValidationError</code>.
    *
    * @param property the path for the property that resulted in the validation error
-   * @param message the error message for the validation error
+   * @param message  the error message for the validation error
    */
   public ValidationError(String property, String message) {
     this.property = property;
@@ -120,8 +129,8 @@ public class ValidationError implements Serializable, Cloneable {
   /**
    * Constructs a new <code>ValidationError</code>.
    *
-   * @param property the path for the property that resulted in the validation error
-   * @param message the error message for the validation error
+   * @param property   the path for the property that resulted in the validation error
+   * @param message    the error message for the validation error
    * @param attributes the attributes associated with the validation error
    */
   public ValidationError(
@@ -135,6 +144,7 @@ public class ValidationError implements Serializable, Cloneable {
    * Capitalize each word in the string.
    *
    * @param str the string
+   *
    * @return the capitalized string
    */
   public static String capitalizePropertyName(String str) {
@@ -187,6 +197,7 @@ public class ValidationError implements Serializable, Cloneable {
    * Helper method to convert a set of JSR 303 constraint violations to a set of validation errors.
    *
    * @param constraintViolations the JSR 303 constraint violations to convert
+   *
    * @return the validation errors
    */
   public static <T> List<ValidationError> toValidationErrors(
@@ -197,8 +208,9 @@ public class ValidationError implements Serializable, Cloneable {
   /**
    * Helper method to convert a set of JSR 303 constraint violations to a set of validation errors.
    *
-   * @param constraintViolations the JSR 303 constraint violations to convert
+   * @param constraintViolations    the JSR 303 constraint violations to convert
    * @param capitalizePropertyNames should the property names be capitilized
+   *
    * @return the validation errors
    */
   public static <T> List<ValidationError> toValidationErrors(
@@ -216,21 +228,6 @@ public class ValidationError implements Serializable, Cloneable {
     }
 
     return validationErrors;
-  }
-
-  @Override
-  protected Object clone() throws CloneNotSupportedException {
-    Object clone = super.clone();
-
-    List<ValidationErrorAttribute> attributes = new ArrayList<>();
-
-    for (ValidationErrorAttribute attribute : this.attributes) {
-      attributes.add((ValidationErrorAttribute) attribute.clone());
-    }
-
-    ((ValidationError) clone).setAttributes(attributes);
-
-    return clone;
   }
 
   /**
@@ -285,5 +282,20 @@ public class ValidationError implements Serializable, Cloneable {
    */
   public void setProperty(String property) {
     this.property = property;
+  }
+
+  @Override
+  protected Object clone() throws CloneNotSupportedException {
+    Object clone = super.clone();
+
+    List<ValidationErrorAttribute> attributes = new ArrayList<>();
+
+    for (ValidationErrorAttribute attribute : this.attributes) {
+      attributes.add((ValidationErrorAttribute) attribute.clone());
+    }
+
+    ((ValidationError) clone).setAttributes(attributes);
+
+    return clone;
   }
 }

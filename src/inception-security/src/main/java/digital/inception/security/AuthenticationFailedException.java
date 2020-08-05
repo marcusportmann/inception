@@ -61,8 +61,8 @@ public class AuthenticationFailedException extends ServiceException {
    * cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public AuthenticationFailedException(String message, Throwable cause) {
     super("AuthenticationFailedError", message, cause);

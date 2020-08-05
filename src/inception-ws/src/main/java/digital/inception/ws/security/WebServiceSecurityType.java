@@ -16,9 +16,13 @@
 
 package digital.inception.ws.security;
 
-/** The enumeration giving the supported types of web service security. */
+/**
+ * The enumeration giving the supported types of web service security.
+ */
 public enum WebServiceSecurityType {
-  /** The value indicating that the web service does not implement a security service. */
+  /**
+   * The value indicating that the web service does not implement a security service.
+   */
   NONE(0, "None"),
 
   /**
@@ -33,7 +37,9 @@ public enum WebServiceSecurityType {
    */
   WSS_SECURITY_USERNAME_TOKEN(2, "WS-Security Username Token"),
 
-  /** The value indicating that the web service implements the Mutual SSL security service. */
+  /**
+   * The value indicating that the web service implements the Mutual SSL security service.
+   */
   MUTUAL_SSL(3, "Mutual SSL"),
 
   /**
@@ -49,6 +55,7 @@ public enum WebServiceSecurityType {
   DIGEST_AUTHENTICATION(5, "Digest Authentication");
 
   private int code;
+
   private String description;
 
   WebServiceSecurityType(int code, String description) {
@@ -60,6 +67,7 @@ public enum WebServiceSecurityType {
    * Returns the web service security type given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the web service security type
+   *
    * @return the web service security type given by the specified numeric code value
    */
   public static WebServiceSecurityType fromCode(int code) {

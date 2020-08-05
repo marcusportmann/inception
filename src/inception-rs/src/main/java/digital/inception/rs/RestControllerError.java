@@ -44,63 +44,94 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "uri",
-  "timestamp",
-  "status",
-  "statusText",
-  "code",
-  "message",
-  "detail",
-  "exception",
-  "stackTrace",
-  "name",
-  "validationErrors"
+    "uri",
+    "timestamp",
+    "status",
+    "statusText",
+    "code",
+    "message",
+    "detail",
+    "exception",
+    "stackTrace",
+    "name",
+    "validationErrors"
 })
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class RestControllerError implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The optional code identifying the error. */
-  @JsonProperty private String code;
+  /**
+   * The optional code identifying the error.
+   */
+  @JsonProperty
+  private String code;
 
-  /** The optional detail. */
-  @JsonProperty private String detail;
+  /**
+   * The optional detail.
+   */
+  @JsonProperty
+  private String detail;
 
-  /** The optional fully qualified name of the exception associated with the error. */
-  @JsonProperty private String exception;
+  /**
+   * The optional fully qualified name of the exception associated with the error.
+   */
+  @JsonProperty
+  private String exception;
 
-  /** The message. */
-  @JsonProperty private String message;
+  /**
+   * The message.
+   */
+  @JsonProperty
+  private String message;
 
   /**
    * The optional name of the entity associated with the error e.g. the name of the argument or
    * parameter.
    */
-  @JsonProperty private String name;
+  @JsonProperty
+  private String name;
 
-  /** The optional stack trace associated with the error. */
-  @JsonProperty private String stackTrace;
+  /**
+   * The optional stack trace associated with the error.
+   */
+  @JsonProperty
+  private String stackTrace;
 
-  /** The HTTP status-code for the error. */
-  @JsonProperty private int status;
+  /**
+   * The HTTP status-code for the error.
+   */
+  @JsonProperty
+  private int status;
 
-  /** The HTTP reason-phrase for the HTTP status-code for the error. */
-  @JsonProperty private String statusText;
+  /**
+   * The HTTP reason-phrase for the HTTP status-code for the error.
+   */
+  @JsonProperty
+  private String statusText;
 
-  /** The date and time the error occurred. */
-  @JsonProperty private LocalDateTime timestamp;
+  /**
+   * The date and time the error occurred.
+   */
+  @JsonProperty
+  private LocalDateTime timestamp;
 
-  /** The URI for the HTTP request that resulted in the error. */
-  @JsonProperty private String uri;
+  /**
+   * The URI for the HTTP request that resulted in the error.
+   */
+  @JsonProperty
+  private String uri;
 
-  /** The optional validation errors associated with the error. */
-  @JsonProperty private List<Object> validationErrors;
+  /**
+   * The optional validation errors associated with the error.
+   */
+  @JsonProperty
+  private List<Object> validationErrors;
 
   /**
    * Constructs a new <code>RestControllerError</code>.
    *
-   * @param request the HTTP servlet request
+   * @param request        the HTTP servlet request
    * @param responseStatus the HTTP response status
    */
   public RestControllerError(HttpServletRequest request, HttpStatus responseStatus) {
@@ -110,9 +141,9 @@ public class RestControllerError implements Serializable {
   /**
    * Constructs a new <code>RestControllerError</code>.
    *
-   * @param request the HTTP servlet request
+   * @param request        the HTTP servlet request
    * @param responseStatus the HTTP response status
-   * @param cause the exception
+   * @param cause          the exception
    */
   @SuppressWarnings("unchecked")
   public RestControllerError(

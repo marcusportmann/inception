@@ -34,6 +34,7 @@ public interface ICodesService {
    * Check whether the code category exists.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    */
   boolean codeCategoryExists(String codeCategoryId) throws CodesServiceException;
@@ -41,8 +42,10 @@ public interface ICodesService {
   /**
    * Check whether the code exists.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
   boolean codeExists(String codeCategoryId, String codeId) throws CodesServiceException;
@@ -59,7 +62,7 @@ public interface ICodesService {
    * Create the new code category.
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
-   *     new code category
+   *                     new code category
    */
   void createCodeCategory(CodeCategory codeCategory)
       throws DuplicateCodeCategoryException, CodesServiceException;
@@ -67,8 +70,9 @@ public interface ICodesService {
   /**
    * Delete the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
    */
   void deleteCode(String codeCategoryId, String codeId)
       throws CodeNotFoundException, CodesServiceException;
@@ -84,8 +88,10 @@ public interface ICodesService {
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return the code
    */
   Code getCode(String codeCategoryId, String codeId)
@@ -102,6 +108,7 @@ public interface ICodesService {
    * Retrieve the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the code category
    */
   CodeCategory getCodeCategory(String codeCategoryId)
@@ -115,6 +122,7 @@ public interface ICodesService {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the XML or JSON data for the code category
    */
   String getCodeCategoryData(String codeCategoryId)
@@ -128,7 +136,8 @@ public interface ICodesService {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
+   * @param parameters     the parameters
+   *
    * @return the XML or JSON data for the code category
    */
   String getCodeCategoryDataWithParameters(String codeCategoryId, Map<String, String> parameters)
@@ -138,6 +147,7 @@ public interface ICodesService {
    * Retrieve the name of the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the name of the code category
    */
   String getCodeCategoryName(String codeCategoryId)
@@ -154,6 +164,7 @@ public interface ICodesService {
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the date and time the code category was last updated
    */
   LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
@@ -162,8 +173,10 @@ public interface ICodesService {
   /**
    * Retrieve the name of the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return the name of the code
    */
   String getCodeName(String codeCategoryId, String codeId)
@@ -177,6 +190,7 @@ public interface ICodesService {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the codes for the code category
    */
   List<Code> getCodesForCodeCategory(String codeCategoryId)
@@ -190,7 +204,8 @@ public interface ICodesService {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
+   * @param parameters     the parameters
+   *
    * @return the codes for the code category
    */
   List<Code> getCodesForCodeCategoryWithParameters(
@@ -208,6 +223,7 @@ public interface ICodesService {
    * Returns the number of codes for the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the number of codes for the code category
    */
   long getNumberOfCodes(String codeCategoryId)
@@ -224,7 +240,7 @@ public interface ICodesService {
    * Update the existing code category.
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
-   *     for the code category
+   *                     for the code category
    */
   void updateCodeCategory(CodeCategory codeCategory)
       throws CodeCategoryNotFoundException, CodesServiceException;
@@ -233,7 +249,7 @@ public interface ICodesService {
    * Update the XML or JSON data for the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param data the updated XML or JSON data
+   * @param data           the updated XML or JSON data
    */
   void updateCodeCategoryData(String codeCategoryId, String data)
       throws CodeCategoryNotFoundException, CodesServiceException;

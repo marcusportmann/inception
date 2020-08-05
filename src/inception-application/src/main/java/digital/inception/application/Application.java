@@ -57,7 +57,9 @@ public abstract class Application extends ApplicationBase {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-  /** The distributed in-memory caches. */
+  /**
+   * The distributed in-memory caches.
+   */
   Map<String, Map<?, ?>> caches = new ConcurrentHashMap<>();
 
   /**

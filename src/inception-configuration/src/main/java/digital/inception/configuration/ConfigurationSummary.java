@@ -57,7 +57,9 @@ public class ConfigurationSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The description for the configuration. */
+  /**
+   * The description for the configuration.
+   */
   @Schema(description = "The description for the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -66,7 +68,9 @@ public class ConfigurationSummary implements Serializable {
   @Column(name = "description", nullable = false, length = 100)
   private String description;
 
-  /** The key uniquely identifying the configuration. */
+  /**
+   * The key uniquely identifying the configuration.
+   */
   @Schema(description = "The key uniquely identifying the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Key", required = true)
@@ -76,13 +80,16 @@ public class ConfigurationSummary implements Serializable {
   @Column(name = "key", nullable = false, length = 100)
   private String key;
 
-  /** Constructs a new <code>ConfigurationSummary</code>. */
-  public ConfigurationSummary() {}
+  /**
+   * Constructs a new <code>ConfigurationSummary</code>.
+   */
+  public ConfigurationSummary() {
+  }
 
   /**
    * Constructs a new <code>ConfigurationSummary</code>.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key         the key uniquely identifying the configuration
    * @param description the description for the configuration
    */
   ConfigurationSummary(String key, String description) {
@@ -94,8 +101,9 @@ public class ConfigurationSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {

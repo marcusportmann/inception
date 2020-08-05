@@ -63,13 +63,9 @@ public class Function implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The roles the user is associated with. */
-  @JsonIgnore
-  @XmlTransient
-  @ManyToMany(mappedBy = "functions")
-  private Set<Role> roles = new HashSet<>();
-
-  /** The code uniquely identifying the function. */
+  /**
+   * The code uniquely identifying the function.
+   */
   @Schema(description = "The code uniquely identifying the function", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -79,7 +75,9 @@ public class Function implements java.io.Serializable {
   @Column(name = "code", nullable = false, length = 100)
   private String code;
 
-  /** The description for the function. */
+  /**
+   * The description for the function.
+   */
   @Schema(description = "The description for the function")
   @JsonProperty
   @XmlElement(name = "Description")
@@ -87,7 +85,9 @@ public class Function implements java.io.Serializable {
   @Column(name = "description", length = 100)
   private String description;
 
-  /** The name of the function. */
+  /**
+   * The name of the function.
+   */
   @Schema(description = "The name of the function", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -96,14 +96,25 @@ public class Function implements java.io.Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** Constructs a new <code>Function</code>. */
-  public Function() {}
+  /**
+   * The roles the user is associated with.
+   */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(mappedBy = "functions")
+  private Set<Role> roles = new HashSet<>();
+
+  /**
+   * Constructs a new <code>Function</code>.
+   */
+  public Function() {
+  }
 
   /**
    * Constructs a new <code>Function</code>.
    *
-   * @param code the code uniquely identifying the function
-   * @param name the name of the function
+   * @param code        the code uniquely identifying the function
+   * @param name        the name of the function
    * @param description the description for the function
    */
   public Function(String code, String name, String description) {
@@ -116,8 +127,9 @@ public class Function implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {

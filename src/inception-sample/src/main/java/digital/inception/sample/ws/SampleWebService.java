@@ -91,7 +91,9 @@ public class SampleWebService {
     return data;
   }
 
-  /** Test the exception handling. */
+  /**
+   * Test the exception handling.
+   */
   @WebMethod(operationName = "TestExceptionHandling")
   public void testExceptionHandling() throws SampleServiceException {
     throw new SampleServiceException("Testing 1.. 2.. 3..");
@@ -133,7 +135,9 @@ public class SampleWebService {
     return zonedDateTime;
   }
 
-  /** Validate the data. */
+  /**
+   * Validate the data.
+   */
   @WebMethod(operationName = "Validate")
   @WebResult(name = "ValidationError")
   public List<ValidationError> validate(

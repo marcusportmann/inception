@@ -59,7 +59,9 @@ public class Code implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the code category the code is associated with. */
+  /**
+   * The ID uniquely identifying the code category the code is associated with.
+   */
   @Schema(
       description = "The ID uniquely identifying the code category the code is associated with",
       required = true)
@@ -71,7 +73,9 @@ public class Code implements Serializable {
   @Column(name = "code_category_id", nullable = false, length = 100)
   private String codeCategoryId;
 
-  /** The ID uniquely identifying the code. */
+  /**
+   * The ID uniquely identifying the code.
+   */
   @Schema(description = "The ID uniquely identifying the code", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -81,7 +85,9 @@ public class Code implements Serializable {
   @Column(name = "id", nullable = false, length = 100)
   private String id;
 
-  /** The name of the code. */
+  /**
+   * The name of the code.
+   */
   @Schema(description = "The name of the code", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -90,7 +96,9 @@ public class Code implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** The value for the code. */
+  /**
+   * The value for the code.
+   */
   @Schema(description = "The value for the code", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
@@ -99,13 +107,17 @@ public class Code implements Serializable {
   @Column(name = "value", nullable = false, length = 4000)
   private String value;
 
-  /** Constructs a new <code>Code</code>. */
-  public Code() {}
+  /**
+   * Constructs a new <code>Code</code>.
+   */
+  public Code() {
+  }
 
   /**
    * Constructs a new <code>Code</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
    */
   public Code(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
@@ -114,10 +126,11 @@ public class Code implements Serializable {
   /**
    * Constructs a new <code>Code</code>.
    *
-   * @param id the ID uniquely identifying the code
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param name the name of the code
-   * @param value the value for the code
+   * @param id             the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param name           the name of the code
+   * @param value          the value for the code
    */
   public Code(String id, String codeCategoryId, String name, String value) {
     this.id = id;
@@ -130,8 +143,9 @@ public class Code implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -164,7 +178,8 @@ public class Code implements Serializable {
   /**
    * Set the ID uniquely identifying the code category the code is associated with.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
    */
   public void setCodeCategoryId(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;

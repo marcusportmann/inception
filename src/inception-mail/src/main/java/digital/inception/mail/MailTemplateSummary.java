@@ -58,7 +58,9 @@ public class MailTemplateSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The content type for the mail template. */
+  /**
+   * The content type for the mail template.
+   */
   @Schema(description = "The content type for the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ContentType", required = true)
@@ -66,7 +68,9 @@ public class MailTemplateSummary implements Serializable {
   @Column(name = "content_type", nullable = false)
   private MailTemplateContentType contentType;
 
-  /** The ID uniquely identifying the mail template. */
+  /**
+   * The ID uniquely identifying the mail template.
+   */
   @Schema(description = "The ID uniquely identifying the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -76,7 +80,9 @@ public class MailTemplateSummary implements Serializable {
   @Column(name = "id", nullable = false)
   private String id;
 
-  /** The name of the mail template. */
+  /**
+   * The name of the mail template.
+   */
   @Schema(description = "The name of the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -85,14 +91,17 @@ public class MailTemplateSummary implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** Constructs a new <code>MailTemplateSummary</code>. */
-  public MailTemplateSummary() {}
+  /**
+   * Constructs a new <code>MailTemplateSummary</code>.
+   */
+  public MailTemplateSummary() {
+  }
 
   /**
    * Constructs a new <code>MailTemplateSummary</code>.
    *
-   * @param id the ID uniquely identifying the mail template
-   * @param name the name of the mail template
+   * @param id          the ID uniquely identifying the mail template
+   * @param name        the name of the mail template
    * @param contentType the content type for the mail template
    */
   public MailTemplateSummary(String id, String name, MailTemplateContentType contentType) {
@@ -105,8 +114,9 @@ public class MailTemplateSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {

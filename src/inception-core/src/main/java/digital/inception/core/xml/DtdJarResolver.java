@@ -30,14 +30,16 @@ import org.xml.sax.InputSource;
 public class DtdJarResolver implements EntityResolver {
 
   private String dtdPath;
+
   private String publicId;
+
   private String systemId;
 
   /**
    * Constructs a new <code>DTDJarResolver</code>.
    *
    * @param systemId the system ID for the DTD
-   * @param dtdPath the path on the classpath to the DTD
+   * @param dtdPath  the path on the classpath to the DTD
    */
   public DtdJarResolver(String systemId, String dtdPath) {
     this.systemId = systemId;
@@ -49,7 +51,7 @@ public class DtdJarResolver implements EntityResolver {
    *
    * @param publicId the public ID for the DTD
    * @param systemId the system ID for the DTD
-   * @param dtdPath the path on the classpath to the DTD
+   * @param dtdPath  the path on the classpath to the DTD
    */
   public DtdJarResolver(String publicId, String systemId, String dtdPath) {
     this.publicId = publicId;
@@ -81,6 +83,7 @@ public class DtdJarResolver implements EntityResolver {
    *
    * @param publicId the public ID for the DTD
    * @param systemId the system ID for the DTD
+   *
    * @return an InputSource that can be used to read the data for the DTD
    */
   public InputSource resolveEntity(String publicId, String systemId) {

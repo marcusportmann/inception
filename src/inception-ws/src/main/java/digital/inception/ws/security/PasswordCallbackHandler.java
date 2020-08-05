@@ -32,6 +32,7 @@ import org.apache.wss4j.common.ext.WSPasswordCallback;
 public class PasswordCallbackHandler implements CallbackHandler {
 
   private final String password;
+
   private final String username;
 
   /**

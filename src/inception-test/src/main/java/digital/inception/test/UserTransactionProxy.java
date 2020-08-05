@@ -46,20 +46,26 @@ public class UserTransactionProxy implements UserTransaction {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserTransactionProxy.class);
 
-  /** The stack traces for the active transactions associated with the current thread. */
+  /**
+   * The stack traces for the active transactions associated with the current thread.
+   */
   private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /** The JTA user transaction. */
-  private UserTransaction userTransaction;
-
-  /** The JTA transaction manager. */
+  /**
+   * The JTA transaction manager.
+   */
   private TransactionManager transactionManager;
+
+  /**
+   * The JTA user transaction.
+   */
+  private UserTransaction userTransaction;
 
   /**
    * Constructs a new <code>UserTransactionProxy</code>.
    *
-   * @param userTransaction the JTA user transaction
+   * @param userTransaction    the JTA user transaction
    * @param transactionManager the JTA transaction manager
    */
   public UserTransactionProxy(
@@ -94,7 +100,7 @@ public class UserTransactionProxy implements UserTransaction {
   @Override
   public void commit()
       throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-          SecurityException, IllegalStateException, SystemException {
+      SecurityException, IllegalStateException, SystemException {
     Transaction beforeTransaction = getCurrentTransaction();
 
     try {
@@ -105,21 +111,6 @@ public class UserTransactionProxy implements UserTransaction {
       if ((beforeTransaction != null) && (afterTransaction == null)) {
         getActiveTransactionStackTraces().remove(beforeTransaction);
       }
-    }
-  }
-
-  /**
-   * Returns the current transaction.
-   *
-   * @return the current transaction or <code>null</code> if there is no current transaction
-   */
-  private Transaction getCurrentTransaction() {
-    try {
-      return transactionManager.getTransaction();
-    } catch (Throwable e) {
-      logger.error("Failed to retrieve the current transaction", e);
-
-      return null;
     }
   }
 
@@ -151,5 +142,20 @@ public class UserTransactionProxy implements UserTransaction {
   @Override
   public void setTransactionTimeout(int i) throws SystemException {
     userTransaction.setTransactionTimeout(i);
+  }
+
+  /**
+   * Returns the current transaction.
+   *
+   * @return the current transaction or <code>null</code> if there is no current transaction
+   */
+  private Transaction getCurrentTransaction() {
+    try {
+      return transactionManager.getTransaction();
+    } catch (Throwable e) {
+      logger.error("Failed to retrieve the current transaction", e);
+
+      return null;
+    }
   }
 }

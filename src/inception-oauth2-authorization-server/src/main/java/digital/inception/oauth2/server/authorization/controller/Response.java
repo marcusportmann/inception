@@ -26,7 +26,9 @@ import org.springframework.http.HttpStatus;
  */
 public abstract class Response {
 
-  /** The HTTP status that should be returned for the OAuth2 response. */
+  /**
+   * The HTTP status that should be returned for the OAuth2 response.
+   */
   private final HttpStatus status;
 
   /**

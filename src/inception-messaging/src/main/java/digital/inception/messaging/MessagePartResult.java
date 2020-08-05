@@ -35,7 +35,9 @@ import java.io.PrintWriter;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class MessagePartResult {
 
-  /** The message part result code returned to indicate an invalid request. */
+  /**
+   * The message part result code returned to indicate an invalid request.
+   */
   public static final int ERROR_INVALID_REQUEST = -1;
 
   /**
@@ -50,7 +52,9 @@ public class MessagePartResult {
    */
   public static final int ERROR_UNRECOGNISED_TYPE = -2;
 
-  /** The message part result code returned to indicated successful uploading of a message part. */
+  /**
+   * The message part result code returned to indicated successful uploading of a message part.
+   */
   public static final int SUCCESS = 0;
 
   /**
@@ -67,7 +71,9 @@ public class MessagePartResult {
    */
   private String detail;
 
-  /** The flattened information for the exception that resulted from uploading the message part. */
+  /**
+   * The flattened information for the exception that resulted from uploading the message part.
+   */
   private String exception;
 
   /**
@@ -92,7 +98,7 @@ public class MessagePartResult {
   /**
    * Constructs a new <code>MessagePartResult</code>.
    *
-   * @param code the result code
+   * @param code   the result code
    * @param detail the text description of the result of uploading the message part
    */
   public MessagePartResult(long code, String detail) {
@@ -103,9 +109,9 @@ public class MessagePartResult {
   /**
    * Constructs a new <code>MessagePartResult</code>.
    *
-   * @param code the result code
+   * @param code   the result code
    * @param detail the text description of the result of uploading the message part
-   * @param cause the exception that resulted from uploading the message part
+   * @param cause  the exception that resulted from uploading the message part
    */
   public MessagePartResult(long code, String detail, Throwable cause) {
     this.code = code;
@@ -133,8 +139,9 @@ public class MessagePartResult {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
+   *
    * @return <code>true</code> if the WBXML document contains valid message received response
-   *     information or <code>false</code> otherwise
+   * information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -188,7 +195,7 @@ public class MessagePartResult {
    * part.
    *
    * @return the flattened information for the exception that resulted from uploading the message
-   *     part
+   * part
    */
   public String getException() {
     return exception;
@@ -198,7 +205,7 @@ public class MessagePartResult {
    * Set the flattened information for the exception that resulted from uploading the message part.
    *
    * @param exception the flattened information for the exception that resulted from uploading the
-   *     message part
+   *                  message part
    */
   public void setException(String exception) {
     this.exception = exception;

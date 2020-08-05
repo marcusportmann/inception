@@ -34,6 +34,7 @@ public interface IProcessService {
    * Create the new process definition(s).
    *
    * @param processDefinitionData the BPMN XML data for the process definition(s)
+   *
    * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
    */
   List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
@@ -78,6 +79,7 @@ public interface IProcessService {
    * Check whether the process definition exists.
    *
    * @param processDefinitionId the ID uniquely identifying the process definition
+   *
    * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
    */
   boolean processDefinitionExists(String processDefinitionId) throws ProcessServiceException;
@@ -104,7 +106,7 @@ public interface IProcessService {
    * Start a process instance.
    *
    * @param processDefinitionId the ID uniquely identifying the process definition
-   * @param parameters the parameters for the process instance
+   * @param parameters          the parameters for the process instance
    */
   void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)
       throws ProcessDefinitionNotFoundException, ProcessServiceException;
@@ -113,6 +115,7 @@ public interface IProcessService {
    * Update the process definition(s).
    *
    * @param processDefinitionData the BPMN XML data for the process definition(s)
+   *
    * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
    */
   List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
@@ -122,8 +125,9 @@ public interface IProcessService {
    * Validate the BPMN XML data.
    *
    * @param bpmnXml the BPMN XML data
+   *
    * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   *     successfully validated
+   * successfully validated
    */
   List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
       throws InvalidBPMNException, ProcessServiceException;
@@ -132,8 +136,9 @@ public interface IProcessService {
    * Validate the BPMN XML data.
    *
    * @param bpmnXml the BPMN XML data
+   *
    * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   *     successfully validated
+   * successfully validated
    */
   List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
       throws InvalidBPMNException, ProcessServiceException;

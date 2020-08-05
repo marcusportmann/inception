@@ -62,10 +62,10 @@ public class MessageReceivedRequest {
   /**
    * Constructs a new <code>MessageReceivedRequest</code>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *     message received request originated from
+   * @param deviceId  the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *                  message received request originated from
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message that
-   *     was successfully downloaded
+   *                  was successfully downloaded
    */
   public MessageReceivedRequest(UUID deviceId, UUID messageId) {
     this.deviceId = deviceId;
@@ -77,8 +77,9 @@ public class MessageReceivedRequest {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
+   *
    * @return <code>true</code> if the WBXML document contains valid message received request
-   *     information or <code>false</code> otherwise
+   * information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -94,7 +95,7 @@ public class MessageReceivedRequest {
    * received request originated from.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
-   *     received request originated from
+   * received request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -105,7 +106,7 @@ public class MessageReceivedRequest {
    * successfully downloaded.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the message that was
-   *     successfully downloaded
+   * successfully downloaded
    */
   public UUID getMessageId() {
     return messageId;

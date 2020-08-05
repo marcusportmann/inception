@@ -31,9 +31,11 @@ import java.nio.charset.StandardCharsets;
 public final class ResourceUtil {
 
   /**
-   * Retrieves the resource with the specified path on the classpath using the context class loader.
+   * Retrieves the resource with the specified path on the classpath using the context class
+   * loader.
    *
    * @param path the path to the resource on the classpath
+   *
    * @return the resource with the specified path on the classpath using the context class loader
    */
   public static byte[] getClasspathResource(String path) {
@@ -66,9 +68,11 @@ public final class ResourceUtil {
   }
 
   /**
-   * Retrieves the resource with the specified path on the classpath using the context class loader.
+   * Retrieves the resource with the specified path on the classpath using the context class
+   * loader.
    *
    * @param path the path to the resource on the classpath
+   *
    * @return the resource with the specified path on the classpath using the context class loader
    */
   public static String getStringClasspathResource(String path) {

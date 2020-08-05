@@ -67,7 +67,9 @@ public class Group implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The description for the group. */
+  /**
+   * The description for the group.
+   */
   @Schema(description = "The description for the group")
   @JsonProperty
   @XmlElement(name = "Description")
@@ -75,14 +77,18 @@ public class Group implements Serializable {
   @Column(name = "description", length = 100)
   private String description;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the group. */
+  /**
+   * The Universally Unique Identifier (UUID) uniquely identifying the group.
+   */
   @JsonIgnore
   @XmlTransient
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The name identifying the group. */
+  /**
+   * The name identifying the group.
+   */
   @Schema(description = "The name identifying the group", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -91,7 +97,9 @@ public class Group implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** The roles associated with the group. */
+  /**
+   * The roles associated with the group.
+   */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -117,7 +125,9 @@ public class Group implements Serializable {
   @Column(name = "user_directory_id", nullable = false)
   private UUID userDirectoryId;
 
-  /** The users associated with the group. */
+  /**
+   * The users associated with the group.
+   */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -128,8 +138,11 @@ public class Group implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private Set<User> users = new HashSet<>();
 
-  /** Constructs a new <code>Group</code>. */
-  public Group() {}
+  /**
+   * Constructs a new <code>Group</code>.
+   */
+  public Group() {
+  }
 
   /**
    * Constructs a new <code>Group</code>.
@@ -144,9 +157,9 @@ public class Group implements Serializable {
    * Constructs a new <code>Group</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the group is associated with
-   * @param name the name identifying the group
-   * @param description the description for the group
+   *                        directory the group is associated with
+   * @param name            the name identifying the group
+   * @param description     the description for the group
    */
   public Group(UUID userDirectoryId, String name, String description) {
     this.userDirectoryId = userDirectoryId;
@@ -178,8 +191,9 @@ public class Group implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -277,7 +291,7 @@ public class Group implements Serializable {
    * group is associated with.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   *     group is associated with
+   * group is associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
@@ -288,7 +302,7 @@ public class Group implements Serializable {
    * is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the group is associated with
+   *                        directory the group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

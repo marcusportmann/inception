@@ -34,9 +34,12 @@ import java.io.Serializable;
 public class CDATA implements Serializable, Content {
 
   private static final long serialVersionUID = 1000000;
+
   private String text;
 
-  /** Constructs a new empty <code>CDATA</code>. */
+  /**
+   * Constructs a new empty <code>CDATA</code>.
+   */
   public CDATA() {
     text = "";
   }
@@ -80,7 +83,7 @@ public class CDATA implements Serializable, Content {
   /**
    * Print the content to the specified <code>OutputStream</code> using the specified indent level.
    *
-   * @param out the <code>OuputStream</code> to output the content to
+   * @param out    the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {
@@ -96,6 +99,7 @@ public class CDATA implements Serializable, Content {
 
   /**
    * @return the string representation of the <code>CDATA</code> instance
+   *
    * @see Object#toString()
    */
   @Override

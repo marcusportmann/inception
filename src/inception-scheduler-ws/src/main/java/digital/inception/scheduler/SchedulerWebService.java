@@ -44,17 +44,21 @@ import javax.xml.bind.annotation.XmlElement;
 @SuppressWarnings({"unused", "WeakerAccess", "ValidExternallyBoundObject"})
 public class SchedulerWebService {
 
-  /** The Scheduler Service. */
+  /**
+   * The Scheduler Service.
+   */
   private final ISchedulerService schedulerService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>SchedulerWebService</code>.
    *
    * @param schedulerService the Scheduler Service
-   * @param validator the JSR-303 validator
+   * @param validator        the JSR-303 validator
    */
   public SchedulerWebService(ISchedulerService schedulerService, Validator validator) {
     this.schedulerService = schedulerService;
@@ -102,6 +106,7 @@ public class SchedulerWebService {
    * Retrieve the job.
    *
    * @param jobId the ID uniquely identifying the job
+   *
    * @return the job
    */
   @WebMethod(operationName = "GetJob")
@@ -119,6 +124,7 @@ public class SchedulerWebService {
    * Retrieve the name of the job.
    *
    * @param jobId the ID uniquely identifying the job
+   *
    * @return the name of the job
    */
   @WebMethod(operationName = "GetJobName")

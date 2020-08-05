@@ -36,16 +36,20 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class ConfigurationService implements IConfigurationService {
 
-  /** The Configuration Repository. */
+  /**
+   * The Configuration Repository.
+   */
   private final ConfigurationRepository configurationRepository;
 
-  /** The Configuration Summary Repository. */
+  /**
+   * The Configuration Summary Repository.
+   */
   private final ConfigurationSummaryRepository configurationSummaryRepository;
 
   /**
    * Constructs a new <code>ConfigurationService</code>.
    *
-   * @param configurationRepository the Configuration Repository
+   * @param configurationRepository        the Configuration Repository
    * @param configurationSummaryRepository the Configuration Summary Repository
    */
   public ConfigurationService(
@@ -82,6 +86,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the binary configuration.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the binary configuration
    */
   @Override
@@ -106,8 +111,9 @@ public class ConfigurationService implements IConfigurationService {
   /**
    * Retrieve the binary configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key          the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
+   *
    * @return the binary configuration or the default value if the configuration does not exist
    */
   @Override
@@ -126,6 +132,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the <code>Boolean</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the <code>Boolean</code> configuration
    */
   @Override
@@ -150,10 +157,11 @@ public class ConfigurationService implements IConfigurationService {
   /**
    * Retrieve the <code>Boolean</code> configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key          the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
+   *
    * @return the <code>Boolean</code> configuration or the default value if the configuration value
-   *     does not exist
+   * does not exist
    */
   @Override
   public boolean getBoolean(String key, boolean defaultValue) throws ConfigurationServiceException {
@@ -171,6 +179,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the configuration.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the configuration
    */
   @Override
@@ -226,6 +235,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the <code>Double</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the <code>Double</code> configuration
    */
   @Override
@@ -250,10 +260,11 @@ public class ConfigurationService implements IConfigurationService {
   /**
    * Retrieve the <code>Double</code> configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key          the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
+   *
    * @return the <code>Double</code> configuration or the default value if the configuration entry
-   *     does not exist
+   * does not exist
    */
   @Override
   public double getDouble(String key, double defaultValue) throws ConfigurationServiceException {
@@ -271,6 +282,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the filtered configuration summaries.
    *
    * @param filter the filter to apply to the keys for the configuration summaries
+   *
    * @return the filtered configuration summaries
    */
   @Override
@@ -292,6 +304,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the filtered configurations.
    *
    * @param filter the filter to apply to the keys for the configurations
+   *
    * @return the configurations
    */
   @Override
@@ -313,6 +326,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the <code>Integer</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the <code>Integer</code> configuration
    */
   @Override
@@ -337,10 +351,11 @@ public class ConfigurationService implements IConfigurationService {
   /**
    * Retrieve the <code>Integer</code> configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key          the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
+   *
    * @return the <code>Integer</code> configuration or the default value if the configuration entry
-   *     does not exist
+   * does not exist
    */
   @Override
   public int getInteger(String key, int defaultValue) throws ConfigurationServiceException {
@@ -358,6 +373,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the <code>Long</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the <code>Long</code> configuration
    */
   @Override
@@ -382,10 +398,11 @@ public class ConfigurationService implements IConfigurationService {
   /**
    * Retrieve the <code>Long</code> configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key          the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
+   *
    * @return the <code>Long</code> configuration or the default value if the configuration entry
-   *     does not exist
+   * does not exist
    */
   @Override
   public long getLong(String key, long defaultValue) throws ConfigurationServiceException {
@@ -403,6 +420,7 @@ public class ConfigurationService implements IConfigurationService {
    * Retrieve the value for the <code>String</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return the value for the <code>String</code> configuration
    */
   @Override
@@ -427,10 +445,11 @@ public class ConfigurationService implements IConfigurationService {
   /**
    * Retrieve the value for the <code>String</code> configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key          the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
+   *
    * @return the value for the <code>String</code> configuration or the default value if the
-   *     configuration does not exist
+   * configuration does not exist
    */
   @Override
   public String getString(String key, String defaultValue) throws ConfigurationServiceException {
@@ -448,8 +467,9 @@ public class ConfigurationService implements IConfigurationService {
    * Check if a configuration with the specified key exists.
    *
    * @param key the key uniquely identifying the configuration
+   *
    * @return <code>true</code> if a configuration with the specified key exists or <code>false
-   *     </code> otherwise
+   * </code> otherwise
    */
   @Override
   public boolean keyExists(String key) throws ConfigurationServiceException {
@@ -480,8 +500,8 @@ public class ConfigurationService implements IConfigurationService {
   /**
    * Set the configuration key to the specified value.
    *
-   * @param key the key uniquely identifying the configuration
-   * @param value the value for the configuration
+   * @param key         the key uniquely identifying the configuration
+   * @param value       the value for the configuration
    * @param description the description for the configuration
    */
   @Override

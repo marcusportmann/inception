@@ -45,15 +45,19 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 public class TestTransactionalServiceTest {
 
   private static int testDataCount;
-  @Autowired private PlatformTransactionManager platformTransactionManager;
-  @Autowired private ITestTransactionalService testTransactionalService;
+
+  @Autowired
+  private PlatformTransactionManager platformTransactionManager;
+
+  @Autowired
+  private ITestTransactionalService testTransactionalService;
 
   private static synchronized TestData getTestData() {
     testDataCount++;
@@ -64,7 +68,9 @@ public class TestTransactionalServiceTest {
         "Test Description " + testDataCount);
   }
 
-  /** testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback */
+  /**
+   * testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback
+   */
   @Test
   public void testFailedExecutionWithCheckedExceptionInExistingTransactionWithRollback()
       throws Exception {
@@ -116,7 +122,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testFailedExecutionWithCheckedExceptionInNewTransaction */
+  /**
+   * testFailedExecutionWithCheckedExceptionInNewTransaction
+   */
   @Test
   public void testFailedExecutionWithCheckedExceptionInNewTransaction() throws Exception {
     TestData testData = getTestData();
@@ -147,7 +155,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback */
+  /**
+   * testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback
+   */
   @Test
   public void testFailedExecutionWithRuntimeExceptionInExistingTransactionWithRollback()
       throws Exception {
@@ -179,7 +189,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testFailedExecutionWithRuntimeExceptionInNewTransaction */
+  /**
+   * testFailedExecutionWithRuntimeExceptionInNewTransaction
+   */
   @Test
   public void testFailedExecutionWithRuntimeExceptionInNewTransaction() throws Exception {
     TestData testData = getTestData();
@@ -210,7 +222,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testFailedExecutionWithoutTransaction */
+  /**
+   * testFailedExecutionWithoutTransaction
+   */
   @Test
   public void testFailedExecutionWithoutTransaction() throws Exception {
     TestData testData = getTestData();
@@ -229,7 +243,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testSuccessfulExecutionInExistingTransaction */
+  /**
+   * testSuccessfulExecutionInExistingTransaction
+   */
   @Test
   public void testSuccessfulExecutionInExistingTransaction() throws Exception {
     TestData testData = getTestData();
@@ -277,7 +293,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testSuccessfulExecutionInExistingTransactionWithRollback */
+  /**
+   * testSuccessfulExecutionInExistingTransactionWithRollback
+   */
   @Test
   public void testSuccessfulExecutionInExistingTransactionWithRollback() throws Exception {
     TestData testData = getTestData();
@@ -325,7 +343,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testSuccessfulExecutionInExistingTransaction */
+  /**
+   * testSuccessfulExecutionInExistingTransaction
+   */
   @Test
   public void testSuccessfulExecutionInNewTransaction() throws Exception {
     TestData testData = getTestData();
@@ -373,7 +393,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testSuccessfulExecutionInNewTransactionWithRollback */
+  /**
+   * testSuccessfulExecutionInNewTransactionWithRollback
+   */
   @Test
   public void testSuccessfulExecutionInNewTransactionWithRollback() throws Exception {
     TestData testData = getTestData();
@@ -421,7 +443,9 @@ public class TestTransactionalServiceTest {
     }
   }
 
-  /** testSuccessfulExecutionWithoutTransaction */
+  /**
+   * testSuccessfulExecutionWithoutTransaction
+   */
   @Test
   public void testSuccessfulExecutionWithoutTransaction() throws Exception {
     TestData testData = getTestData();

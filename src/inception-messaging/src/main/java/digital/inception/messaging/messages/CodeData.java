@@ -34,16 +34,24 @@ public class CodeData implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the category the code is associated with. */
+  /**
+   * The ID uniquely identifying the category the code is associated with.
+   */
   private String codeCategoryId;
 
-  /** The ID uniquely identifying the code. */
+  /**
+   * The ID uniquely identifying the code.
+   */
   private String id;
 
-  /** The name of the code. */
+  /**
+   * The name of the code.
+   */
   private String name;
 
-  /** The value for the code. */
+  /**
+   * The value for the code.
+   */
   private String value;
 
   /**

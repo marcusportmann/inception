@@ -39,17 +39,21 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SMSRestController extends SecureRestController {
 
-  /** The SMS Service. */
+  /**
+   * The SMS Service.
+   */
   private final ISMSService smsService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>SMSRestController</code>.
    *
    * @param smsService the SMS Service
-   * @param validator the JSR-303 validator
+   * @param validator  the JSR-303 validator
    */
   public SMSRestController(ISMSService smsService, Validator validator) {
     this.smsService = smsService;

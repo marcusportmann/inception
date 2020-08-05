@@ -81,7 +81,9 @@ public final class JNDIUtil {
     }
   }
 
-  /** Dump the contents of the JNDIUtil tree. */
+  /**
+   * Dump the contents of the JNDIUtil tree.
+   */
   public static void dumpJNDI() {
     dumpJNDI(new PrintWriter(System.out));
   }
@@ -272,25 +274,39 @@ public final class JNDIUtil {
 
   static class TreeDumpStatus {
 
-    /** foundCell */
+    /**
+     * foundCell
+     */
     boolean foundCell;
 
-    /** foundClusters */
+    /**
+     * foundClusters
+     */
     boolean foundClusters;
 
-    /** foundDomain */
+    /**
+     * foundDomain
+     */
     boolean foundDomain;
 
-    /** foundNode */
+    /**
+     * foundNode
+     */
     boolean foundNode;
 
-    /** foundNodes */
+    /**
+     * foundNodes
+     */
     boolean foundNodes;
 
-    /** foundPersistent */
+    /**
+     * foundPersistent
+     */
     boolean foundPersistent;
 
-    /** foundServers */
+    /**
+     * foundServers
+     */
     boolean foundServers;
   }
 }

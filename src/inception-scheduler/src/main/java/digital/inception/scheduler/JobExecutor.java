@@ -30,14 +30,16 @@ public class JobExecutor implements Runnable {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
+
   private Job job;
+
   private ISchedulerService schedulerService;
 
   /**
    * Constructs a new <code>JobExecutorThread</code>.
    *
    * @param schedulerService the Scheduler Service
-   * @param job the job
+   * @param job              the job
    */
   public JobExecutor(ISchedulerService schedulerService, Job job) {
     this.schedulerService = schedulerService;

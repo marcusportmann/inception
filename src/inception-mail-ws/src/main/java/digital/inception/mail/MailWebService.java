@@ -46,17 +46,21 @@ import javax.xml.bind.annotation.XmlElement;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class MailWebService {
 
-  /** The Mail Service. */
+  /**
+   * The Mail Service.
+   */
   private final IMailService mailService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>MailWebService</code>.
    *
    * @param mailService the Mail Service
-   * @param validator the JSR-303 validator
+   * @param validator   the JSR-303 validator
    */
   public MailWebService(IMailService mailService, Validator validator) {
     this.mailService = mailService;
@@ -106,6 +110,7 @@ public class MailWebService {
    * Retrieve the mail template.
    *
    * @param mailTemplateId the ID uniquely identifying the mail template
+   *
    * @return the mail template
    */
   @WebMethod(operationName = "GetMailTemplate")
@@ -124,6 +129,7 @@ public class MailWebService {
    * Retrieve the name of the mail template.
    *
    * @param mailTemplateId the ID uniquely identifying the mail template
+   *
    * @return the name of the mail template
    */
   @WebMethod(operationName = "GetMailTemplateName")

@@ -43,7 +43,9 @@ public class MessageDownloadRequest {
    */
   private UUID deviceId;
 
-  /** The username identifying the user whose messages should be downloaded. */
+  /**
+   * The username identifying the user whose messages should be downloaded.
+   */
   private String username;
 
   /**
@@ -63,7 +65,7 @@ public class MessageDownloadRequest {
    * Constructs a new <code>MessageDownloadRequest</code>.
    *
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *     message download request originated from
+   *                 message download request originated from
    * @param username the username identifying the user whose messages should be downloaded
    */
   public MessageDownloadRequest(UUID deviceId, String username) {
@@ -76,8 +78,9 @@ public class MessageDownloadRequest {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
+   *
    * @return <code>true</code> if the WBXML document contains valid message download request
-   *     information or <code>false</code> otherwise
+   * information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -93,7 +96,7 @@ public class MessageDownloadRequest {
    * download request originated from.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
-   *     download request originated from
+   * download request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -104,7 +107,7 @@ public class MessageDownloadRequest {
    * download request originated from.
    *
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *     message download request originated from
+   *                 message download request originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

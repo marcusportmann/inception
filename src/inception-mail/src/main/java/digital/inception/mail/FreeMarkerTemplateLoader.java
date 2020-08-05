@@ -28,13 +28,16 @@ import java.time.ZoneOffset;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>FreeMarkerTemplateLoader</code> class implements the Apache FreeMarker template loader.
+ * The <code>FreeMarkerTemplateLoader</code> class implements the Apache FreeMarker template
+ * loader.
  *
  * @author Marcus Portmann
  */
 public class FreeMarkerTemplateLoader implements TemplateLoader {
 
-  /** The Mail Service. */
+  /**
+   * The Mail Service.
+   */
   private IMailService mailService;
 
   /**
@@ -57,18 +60,20 @@ public class FreeMarkerTemplateLoader implements TemplateLoader {
    * @param templateSource the template source that should be closed.
    */
   @Override
-  public void closeTemplateSource(Object templateSource) throws IOException {}
+  public void closeTemplateSource(Object templateSource) throws IOException {
+  }
 
   /**
    * Finds the template in the backing storage and returns an object that identifies the storage
    * location where the template can be loaded from. See the return value for more information.
    *
    * @param name The name of the template, already localized and normalized by the {@link
-   *     freemarker.cache.TemplateCache cache}.
+   *             freemarker.cache.TemplateCache cache}.
+   *
    * @return An object representing the template source, which can be supplied in subsequent calls
-   *     to {@link #getLastModified(Object)} and {@link #getReader(Object, String)}, when those are
-   *     called on the same {@link TemplateLoader}. {@code null} must be returned if the source for
-   *     the template doesn't exist
+   * to {@link #getLastModified(Object)} and {@link #getReader(Object, String)}, when those are
+   * called on the same {@link TemplateLoader}. {@code null} must be returned if the source for the
+   * template doesn't exist
    */
   @Override
   public Object findTemplateSource(String name) throws IOException {
@@ -88,9 +93,10 @@ public class FreeMarkerTemplateLoader implements TemplateLoader {
    * after <code>findTemplateSource()</code>.
    *
    * @param templateSource an object representing a template source, obtained through a prior call
-   *     to {@link #findTemplateSource(String)}
+   *                       to {@link #findTemplateSource(String)}
+   *
    * @return the time of last modification of the specified template source, or -1 if the time is
-   *     not known.
+   * not known.
    */
   @Override
   public long getLastModified(Object templateSource) {
@@ -122,15 +128,17 @@ public class FreeMarkerTemplateLoader implements TemplateLoader {
    * encoding} parameter value.
    *
    * @param templateSource an object representing a template source, obtained through a prior call
-   *     to {@link #findTemplateSource(String)}. This must be an object on which {@link
-   *     TemplateLoader#closeTemplateSource(Object)} wasn't applied yet.
-   * @param encoding the character encoding used to translate source bytes to characters. Some
-   *     loaders may not have access to the byte representation of the template stream, and instead
-   *     directly obtain a character stream. These loaders should ignore the encoding parameter.
+   *                       to {@link #findTemplateSource(String)}. This must be an object on which
+   *                       {@link TemplateLoader#closeTemplateSource(Object)} wasn't applied yet.
+   * @param encoding       the character encoding used to translate source bytes to characters. Some
+   *                       loaders may not have access to the byte representation of the template
+   *                       stream, and instead directly obtain a character stream. These loaders
+   *                       should ignore the encoding parameter.
+   *
    * @return A {@link Reader} representing the template character stream. It's the responsibility of
-   *     the caller (which is {@link freemarker.cache.TemplateCache} usually) to {@code close()} it.
-   *     The {@link Reader} is not required to work after the {@code templateSource} was closed
-   *     ({@link #closeTemplateSource(Object)}).
+   * the caller (which is {@link freemarker.cache.TemplateCache} usually) to {@code close()} it. The
+   * {@link Reader} is not required to work after the {@code templateSource} was closed ({@link
+   * #closeTemplateSource(Object)}).
    */
   @Override
   public Reader getReader(Object templateSource, String encoding) throws IOException {

@@ -41,7 +41,9 @@ import org.springframework.util.StringUtils;
  */
 public class OAuth2AccessToken extends org.springframework.security.oauth2.core.OAuth2AccessToken {
 
-  /** The name of the functions claim that provides the functions assigned to the user. */
+  /**
+   * The name of the functions claim that provides the functions assigned to the user.
+   */
   public static final String FUNCTIONS_CLAIM = "functions";
 
   /**
@@ -50,10 +52,14 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
    */
   public static final String ORGANIZATIONS_CLAIM = "organizations";
 
-  /** The name of the roles claim that provides the roles assigned to the user. */
+  /**
+   * The name of the roles claim that provides the roles assigned to the user.
+   */
   public static final String ROLES_CLAIM = "roles";
 
-  /** The name of the scope claim. */
+  /**
+   * The name of the scope claim.
+   */
   public static final String SCOPE_CLAIM = "scope";
 
   /**
@@ -62,23 +68,27 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
    */
   public static final String USER_DIRECTORY_ID_CLAIM = "user_directory_id";
 
-  /** The name of the user full name claim that provides the full name of the user. */
+  /**
+   * The name of the user full name claim that provides the full name of the user.
+   */
   public static final String USER_FULL_NAME_CLAIM = "user_full_name";
 
   private static final long serialVersionUID = 1000000;
 
-  /** The subject for the token. */
+  /**
+   * The subject for the token.
+   */
   private final String subject;
 
   /**
    * Constructs a new <code>OAuth2AccessToken</code>.
    *
-   * @param tokenType the token type
+   * @param tokenType  the token type
    * @param tokenValue the token value
-   * @param subject the subject for the token
-   * @param issuedAt the time at which the token was issued
-   * @param expiresAt the expiration time on or after which the token MUST NOT be accepted
-   * @param scopes the scope(s) associated to the token
+   * @param subject    the subject for the token
+   * @param issuedAt   the time at which the token was issued
+   * @param expiresAt  the expiration time on or after which the token MUST NOT be accepted
+   * @param scopes     the scope(s) associated to the token
    */
   public OAuth2AccessToken(
       TokenType tokenType,
@@ -95,15 +105,15 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   /**
    * Build a new <code>OAuth2AccessToken</code>.
    *
-   * @param user the User the token is being issued for
-   * @param roleCodes the role codes for the user the token is being issued for
-   * @param functionCodes the function codes for the user the token is being issued for
+   * @param user            the User the token is being issued for
+   * @param roleCodes       the role codes for the user the token is being issued for
+   * @param functionCodes   the function codes for the user the token is being issued for
    * @param organizationIds the IDs identifying the organizations that the user the token is being
-   *     issued for is associated with
-   * @param scopes the optional scope(s) associated to the token
-   * @param issuer the optional issuer of the token, which can be <code>null</code>
-   * @param validFor the number of seconds the token should be valid for
-   * @param rsaPrivateKey the RSA private key used to sign the token
+   *                        issued for is associated with
+   * @param scopes          the optional scope(s) associated to the token
+   * @param issuer          the optional issuer of the token, which can be <code>null</code>
+   * @param validFor        the number of seconds the token should be valid for
+   * @param rsaPrivateKey   the RSA private key used to sign the token
    */
   public static OAuth2AccessToken build(
       User user,

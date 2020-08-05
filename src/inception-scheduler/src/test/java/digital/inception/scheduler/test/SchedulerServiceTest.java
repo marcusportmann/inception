@@ -50,16 +50,19 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 public class SchedulerServiceTest {
 
   private static int jobCount;
 
-  /** The Scheduler Service. */
-  @Autowired private ISchedulerService schedulerService;
+  /**
+   * The Scheduler Service.
+   */
+  @Autowired
+  private ISchedulerService schedulerService;
 
   private static synchronized Job getTestJobDetails() {
     jobCount++;
@@ -82,61 +85,9 @@ public class SchedulerServiceTest {
     return job;
   }
 
-  private void compareJobs(Job job1, Job job2) {
-    assertEquals("The ID values for the two jobs do not match", job1.getId(), job2.getId());
-    assertEquals("The name values for the two jobs do not match", job1.getName(), job2.getName());
-    assertEquals(
-        "The scheduling pattern values for the two jobs do not match",
-        job1.getSchedulingPattern(),
-        job2.getSchedulingPattern());
-    assertEquals(
-        "The job class values for the two jobs do not match",
-        job1.getJobClass(),
-        job2.getJobClass());
-    assertEquals(
-        "The is enabled values for the two jobs do not match", job1.isEnabled(), job2.isEnabled());
-    assertEquals(
-        "The status values for the two jobs do not match", job1.getStatus(), job2.getStatus());
-    assertEquals(
-        "The execution attempts values for the two jobs do not match",
-        job1.getExecutionAttempts(),
-        job2.getExecutionAttempts());
-    assertEquals(
-        "The lock name values for the two jobs do not match",
-        job1.getLockName(),
-        job2.getLockName());
-    assertEquals(
-        "The last executed values for the two jobs do not match",
-        job1.getLastExecuted(),
-        job2.getLastExecuted());
-    assertEquals(
-        "The number of parameters for the two jobs do not match",
-        job1.getParameters().size(),
-        job2.getParameters().size());
-
-    for (JobParameter job1Parameter : job1.getParameters()) {
-      boolean foundParameter = false;
-
-      for (JobParameter job2Parameter : job2.getParameters()) {
-        if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName())) {
-          assertEquals(
-              "The values for the two job parameters ("
-                  + job1Parameter.getName()
-                  + ") do not match",
-              job1Parameter.getValue(),
-              job2Parameter.getValue());
-
-          foundParameter = true;
-        }
-      }
-
-      if (!foundParameter) {
-        fail("Failed to find the job parameter (" + job1Parameter.getName() + ")");
-      }
-    }
-  }
-
-  /** Test the execute job functionality. */
+  /**
+   * Test the execute job functionality.
+   */
   @Test
   public void executeJobTest() throws Exception {
     Job job = getTestJobDetails();
@@ -144,7 +95,9 @@ public class SchedulerServiceTest {
     schedulerService.executeJob(job);
   }
 
-  /** Test the job parameters functionality. */
+  /**
+   * Test the job parameters functionality.
+   */
   @Test
   public void jobParametersTest() throws Exception {
     Job job = getTestJobDetails();
@@ -162,7 +115,9 @@ public class SchedulerServiceTest {
     compareJobs(job, retrievedJob);
   }
 
-  /** Test the job functionality. */
+  /**
+   * Test the job functionality.
+   */
   @Test
   public void jobTest() throws Exception {
     Job disabledJob = getTestJobDetails();
@@ -244,7 +199,8 @@ public class SchedulerServiceTest {
     }
 
     // noinspection StatementWithEmptyBody
-    while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
+    while (schedulerService.scheduleNextUnscheduledJobForExecution()) {
+    }
 
     unscheduledJobs = schedulerService.getUnscheduledJobs();
 
@@ -280,6 +236,60 @@ public class SchedulerServiceTest {
 
       fail("Retrieved the job (" + job.getId() + ") that should have been deleted");
     } catch (JobNotFoundException ignore) {
+    }
+  }
+
+  private void compareJobs(Job job1, Job job2) {
+    assertEquals("The ID values for the two jobs do not match", job1.getId(), job2.getId());
+    assertEquals("The name values for the two jobs do not match", job1.getName(), job2.getName());
+    assertEquals(
+        "The scheduling pattern values for the two jobs do not match",
+        job1.getSchedulingPattern(),
+        job2.getSchedulingPattern());
+    assertEquals(
+        "The job class values for the two jobs do not match",
+        job1.getJobClass(),
+        job2.getJobClass());
+    assertEquals(
+        "The is enabled values for the two jobs do not match", job1.isEnabled(), job2.isEnabled());
+    assertEquals(
+        "The status values for the two jobs do not match", job1.getStatus(), job2.getStatus());
+    assertEquals(
+        "The execution attempts values for the two jobs do not match",
+        job1.getExecutionAttempts(),
+        job2.getExecutionAttempts());
+    assertEquals(
+        "The lock name values for the two jobs do not match",
+        job1.getLockName(),
+        job2.getLockName());
+    assertEquals(
+        "The last executed values for the two jobs do not match",
+        job1.getLastExecuted(),
+        job2.getLastExecuted());
+    assertEquals(
+        "The number of parameters for the two jobs do not match",
+        job1.getParameters().size(),
+        job2.getParameters().size());
+
+    for (JobParameter job1Parameter : job1.getParameters()) {
+      boolean foundParameter = false;
+
+      for (JobParameter job2Parameter : job2.getParameters()) {
+        if (job1Parameter.getName().equalsIgnoreCase(job2Parameter.getName())) {
+          assertEquals(
+              "The values for the two job parameters ("
+                  + job1Parameter.getName()
+                  + ") do not match",
+              job1Parameter.getValue(),
+              job2Parameter.getValue());
+
+          foundParameter = true;
+        }
+      }
+
+      if (!foundParameter) {
+        fail("Failed to find the job parameter (" + job1Parameter.getName() + ")");
+      }
     }
   }
 }

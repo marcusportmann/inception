@@ -32,15 +32,22 @@ import java.time.LocalDateTime;
 public class RichRuntimeException extends RuntimeException {
 
   private static final String NO_ERROR_CODE = "NONE";
+
   private static final long serialVersionUID = 1000000;
 
-  /** The date and time the exception occurred. */
+  /**
+   * The date and time the exception occurred.
+   */
   private final LocalDateTime when;
 
-  /** The optional error code identifying the error. */
+  /**
+   * The optional error code identifying the error.
+   */
   private String code;
 
-  /** Constructs a new <code>RichRuntimeException</code> with <code>null</code> as its message. */
+  /**
+   * Constructs a new <code>RichRuntimeException</code> with <code>null</code> as its message.
+   */
   public RichRuntimeException() {
     super();
     this.when = LocalDateTime.now();
@@ -63,7 +70,7 @@ public class RichRuntimeException extends RuntimeException {
    * of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public RichRuntimeException(Throwable cause) {
     super(cause);
@@ -73,7 +80,7 @@ public class RichRuntimeException extends RuntimeException {
   /**
    * Constructs a new <code>RichRuntimeException</code> with the specified code and message.
    *
-   * @param code the error code identifying the error
+   * @param code    the error code identifying the error
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    */
   public RichRuntimeException(String code, String message) {
@@ -86,8 +93,8 @@ public class RichRuntimeException extends RuntimeException {
    * Constructs a new <code>RichRuntimeException</code> with the specified message and cause.
    *
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public RichRuntimeException(String message, Throwable cause) {
     super(message, cause);
@@ -97,10 +104,10 @@ public class RichRuntimeException extends RuntimeException {
   /**
    * Constructs a new <code>RichRuntimeException</code> with the specified code, message and cause.
    *
-   * @param code the error code identifying the error
+   * @param code    the error code identifying the error
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public RichRuntimeException(String code, String message, Throwable cause) {
     super(message, cause);

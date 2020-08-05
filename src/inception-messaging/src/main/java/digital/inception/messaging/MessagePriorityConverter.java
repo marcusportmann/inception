@@ -34,6 +34,7 @@ public class MessagePriorityConverter implements AttributeConverter<MessagePrior
    * the database.
    *
    * @param attribute the entity attribute value to be converted
+   *
    * @return the converted data to be stored in the database column
    */
   @Override
@@ -48,6 +49,7 @@ public class MessagePriorityConverter implements AttributeConverter<MessagePrior
    * providers are not expected to do such type conversion.
    *
    * @param dbData the data from the database column to be converted
+   *
    * @return the converted value to be stored in the entity attribute
    */
   @Override

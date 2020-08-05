@@ -62,7 +62,9 @@ public class MailTemplate implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The content type for the mail template. */
+  /**
+   * The content type for the mail template.
+   */
   @Schema(description = "The content type for the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ContentType", required = true)
@@ -70,7 +72,9 @@ public class MailTemplate implements Serializable {
   @Column(name = "content_type", nullable = false)
   private MailTemplateContentType contentType;
 
-  /** The ID uniquely identifying the mail template. */
+  /**
+   * The ID uniquely identifying the mail template.
+   */
   @Schema(description = "The ID uniquely identifying the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -80,7 +84,9 @@ public class MailTemplate implements Serializable {
   @Column(name = "id", nullable = false)
   private String id;
 
-  /** The name of the mail template. */
+  /**
+   * The name of the mail template.
+   */
   @Schema(description = "The name of the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -89,7 +95,9 @@ public class MailTemplate implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** The Apache FreeMarker template for the mail template. */
+  /**
+   * The Apache FreeMarker template for the mail template.
+   */
   @Schema(description = "The Apache FreeMarker template for the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Template", required = true)
@@ -98,7 +106,9 @@ public class MailTemplate implements Serializable {
   @Column(name = "template", nullable = false)
   private byte[] template;
 
-  /** The date and time the mail template was last updated. */
+  /**
+   * The date and time the mail template was last updated.
+   */
   @Schema(description = "The date and time the mail template was last updated")
   @JsonProperty
   @XmlElement(name = "Updated")
@@ -107,16 +117,19 @@ public class MailTemplate implements Serializable {
   @Column(name = "updated")
   private LocalDateTime updated;
 
-  /** Constructs a new <code>MailTemplate</code>. */
-  public MailTemplate() {}
+  /**
+   * Constructs a new <code>MailTemplate</code>.
+   */
+  public MailTemplate() {
+  }
 
   /**
    * Constructs a new <code>MailTemplate</code>.
    *
-   * @param id the ID uniquely identifying the mail template
-   * @param name the name of the mail template
+   * @param id          the ID uniquely identifying the mail template
+   * @param name        the name of the mail template
    * @param contentType the content type for the mail template
-   * @param template the Apache FreeMarker template for the mail template
+   * @param template    the Apache FreeMarker template for the mail template
    */
   public MailTemplate(
       String id, String name, MailTemplateContentType contentType, byte[] template) {
@@ -130,8 +143,9 @@ public class MailTemplate implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {

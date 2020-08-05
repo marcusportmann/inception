@@ -35,7 +35,17 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 public class MergedMessageSource extends ReloadableResourceBundleMessageSource {
 
   private static final String PROPERTIES_SUFFIX = ".properties";
+
   private PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
+  @Override
+  protected PropertiesHolder refreshProperties(String filename, PropertiesHolder propertiesHolder) {
+    if (filename.startsWith(PathMatchingResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX)) {
+      return refreshClassPathProperties(filename, propertiesHolder);
+    } else {
+      return super.refreshProperties(filename, propertiesHolder);
+    }
+  }
 
   private PropertiesHolder refreshClassPathProperties(
       String filename, PropertiesHolder propertiesHolder) {
@@ -62,14 +72,5 @@ public class MergedMessageSource extends ReloadableResourceBundleMessageSource {
     }
 
     return new PropertiesHolder(properties, lastModified);
-  }
-
-  @Override
-  protected PropertiesHolder refreshProperties(String filename, PropertiesHolder propertiesHolder) {
-    if (filename.startsWith(PathMatchingResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX)) {
-      return refreshClassPathProperties(filename, propertiesHolder);
-    } else {
-      return super.refreshProperties(filename, propertiesHolder);
-    }
   }
 }

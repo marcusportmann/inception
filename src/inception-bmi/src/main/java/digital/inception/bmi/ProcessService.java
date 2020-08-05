@@ -59,7 +59,9 @@ import org.xml.sax.SAXParseException;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ProcessService implements IProcessService {
 
-  /** The Camunda Process Engine. */
+  /**
+   * The Camunda Process Engine.
+   */
   private ProcessEngine processEngine;
 
   /**
@@ -75,6 +77,7 @@ public class ProcessService implements IProcessService {
    * Create the new process definition.
    *
    * @param processDefinitionData the BPMN XML data for the process definition(s)
+   *
    * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
    */
   @Override
@@ -143,6 +146,7 @@ public class ProcessService implements IProcessService {
    * Check whether the process definition exists.
    *
    * @param processDefinitionId the ID uniquely identifying the process definition
+   *
    * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
    */
   @Override
@@ -164,7 +168,7 @@ public class ProcessService implements IProcessService {
    * Start a process instance.
    *
    * @param processDefinitionId the ID uniquely identifying the process definition
-   * @param parameters the parameters for the process instance
+   * @param parameters          the parameters for the process instance
    */
   @Override
   @Transactional
@@ -191,6 +195,7 @@ public class ProcessService implements IProcessService {
    * Update the process definition(s).
    *
    * @param processDefinitionData the BPMN XML data for the process definition(s)
+   *
    * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
    */
   @Override
@@ -231,8 +236,9 @@ public class ProcessService implements IProcessService {
    * Validate the BPMN XML data.
    *
    * @param bpmnXml the BPMN XML data
+   *
    * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   *     successfully validated
+   * successfully validated
    */
   @Override
   public List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
@@ -244,8 +250,9 @@ public class ProcessService implements IProcessService {
    * Validate the BPMN XML data.
    *
    * @param bpmnXml the BPMN XML data
+   *
    * @return the process definition summaries for the BPMN processes if the BPMN XML data was
-   *     successfully validated
+   * successfully validated
    */
   @Override
   public List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
@@ -256,29 +263,25 @@ public class ProcessService implements IProcessService {
       schemaFactory.setResourceResolver(
           (type, namespaceURI, publicId, systemId, baseURI) -> {
             switch (systemId) {
-              case "BPMNDI.xsd":
-                {
-                  return new XmlSchemaClasspathInputSource(
-                      namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/BPMNDI.xsd");
-                }
+              case "BPMNDI.xsd": {
+                return new XmlSchemaClasspathInputSource(
+                    namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/BPMNDI.xsd");
+              }
 
-              case "DC.xsd":
-                {
-                  return new XmlSchemaClasspathInputSource(
-                      namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/DC.xsd");
-                }
+              case "DC.xsd": {
+                return new XmlSchemaClasspathInputSource(
+                    namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/DC.xsd");
+              }
 
-              case "DI.xsd":
-                {
-                  return new XmlSchemaClasspathInputSource(
-                      namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/DI.xsd");
-                }
+              case "DI.xsd": {
+                return new XmlSchemaClasspathInputSource(
+                    namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/DI.xsd");
+              }
 
-              case "Semantic.xsd":
-                {
-                  return new XmlSchemaClasspathInputSource(
-                      namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/Semantic.xsd");
-                }
+              case "Semantic.xsd": {
+                return new XmlSchemaClasspathInputSource(
+                    namespaceURI, publicId, systemId, baseURI, "META-INF/bpmn/Semantic.xsd");
+              }
             }
 
             throw new RuntimeException("Failed to resolve the resource (" + systemId + ")");
@@ -286,13 +289,13 @@ public class ProcessService implements IProcessService {
 
       Schema schema =
           schemaFactory.newSchema(
-              new StreamSource[] {
-                new StreamSource(
-                    new ByteArrayInputStream(
-                        ResourceUtil.getClasspathResource("META-INF/bpmn/BPMN20.xsd"))),
-                new StreamSource(
-                    new ByteArrayInputStream(
-                        ResourceUtil.getClasspathResource("META-INF/bpmn/BPMN20.xsd")))
+              new StreamSource[]{
+                  new StreamSource(
+                      new ByteArrayInputStream(
+                          ResourceUtil.getClasspathResource("META-INF/bpmn/BPMN20.xsd"))),
+                  new StreamSource(
+                      new ByteArrayInputStream(
+                          ResourceUtil.getClasspathResource("META-INF/bpmn/BPMN20.xsd")))
               });
 
       DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();

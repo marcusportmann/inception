@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlType;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>Configuration</code> class stores the key, value and description for the configuration.
+ * The <code>Configuration</code> class stores the key, value and description for the
+ * configuration.
  *
  * @author Marcus Portmann
  */
@@ -57,7 +58,9 @@ public class Configuration implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The description for the configuration. */
+  /**
+   * The description for the configuration.
+   */
   @Schema(description = "The description for the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
@@ -66,7 +69,9 @@ public class Configuration implements Serializable {
   @Column(name = "description", nullable = false, length = 100)
   private String description;
 
-  /** The key uniquely identifying the configuration. */
+  /**
+   * The key uniquely identifying the configuration.
+   */
   @Schema(description = "The key uniquely identifying the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Key", required = true)
@@ -76,7 +81,9 @@ public class Configuration implements Serializable {
   @Column(name = "key", nullable = false, length = 100)
   private String key;
 
-  /** The value for the configuration. */
+  /**
+   * The value for the configuration.
+   */
   @Schema(description = "The value for the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
@@ -85,14 +92,17 @@ public class Configuration implements Serializable {
   @Column(name = "value", nullable = false, length = 4000)
   private String value;
 
-  /** Constructs a new <code>Configuration</code>. */
-  public Configuration() {}
+  /**
+   * Constructs a new <code>Configuration</code>.
+   */
+  public Configuration() {
+  }
 
   /**
    * Constructs a new <code>Configuration</code>.
    *
-   * @param key the key uniquely identifying the configuration
-   * @param value the value for the configuration
+   * @param key         the key uniquely identifying the configuration
+   * @param value       the value for the configuration
    * @param description the description for the configuration
    */
   Configuration(String key, String value, String description) {
@@ -105,8 +115,9 @@ public class Configuration implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {

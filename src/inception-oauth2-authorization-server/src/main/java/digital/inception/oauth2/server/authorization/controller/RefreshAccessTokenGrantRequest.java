@@ -29,7 +29,9 @@ import org.springframework.util.StringUtils;
  */
 public class RefreshAccessTokenGrantRequest extends GrantRequest {
 
-  /** The grant type for the Refresh Access Token Grant. */
+  /**
+   * The grant type for the Refresh Access Token Grant.
+   */
   public static final String GRANT_TYPE = "refresh_token";
 
   /**
@@ -39,7 +41,9 @@ public class RefreshAccessTokenGrantRequest extends GrantRequest {
    */
   public static final String REFRESH_TOKEN_PARAMETER = "refresh_token";
 
-  /** The refresh token. */
+  /**
+   * The refresh token.
+   */
   private final String refreshToken;
 
   /**
@@ -58,8 +62,9 @@ public class RefreshAccessTokenGrantRequest extends GrantRequest {
    * provided as part of the HTTP servlet request.
    *
    * @param parameters the request parameters
+   *
    * @return <code>true</code> if the HTTP servlet request contains the required information for the
-   *     Resource Owner Password Credentials Grant or <code>false</code> otherwise
+   * Resource Owner Password Credentials Grant or <code>false</code> otherwise
    */
   public static boolean isValid(Map<String, String> parameters) {
 

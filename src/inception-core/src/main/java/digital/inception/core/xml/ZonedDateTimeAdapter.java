@@ -25,7 +25,8 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ZonedDateTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert between
+ * The <code>ZonedDateTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert
+ * between
  * <code>String</code> and <code>ZonedDateTime</code> types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
@@ -36,6 +37,7 @@ public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
    * Marshals the <code>java.time.ZonedDateTime</code> value as an ISO8601Util string.
    *
    * @param value the value to marshal
+   *
    * @return the <code>java.time.ZonedDateTime</code> value as an ISO8601Util string
    */
   @Override
@@ -51,6 +53,7 @@ public class ZonedDateTimeAdapter extends XmlAdapter<String, ZonedDateTime> {
    * Unmarshals the ISO8601Util string value as a <code>java.time.ZonedDateTime</code>.
    *
    * @param value the ISO8601Util string value
+   *
    * @return the ISO8601Util string value as a <code>java.time.ZonedDateTime</code>
    */
   @Override

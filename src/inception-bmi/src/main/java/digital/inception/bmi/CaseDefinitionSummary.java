@@ -34,7 +34,8 @@ import javax.xml.bind.annotation.XmlType;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>CaseDefinitionSummary</code> class holds the summary information for a case definition.
+ * The <code>CaseDefinitionSummary</code> class holds the summary information for a case
+ * definition.
  *
  * @author Marcus Portmann
  */
@@ -52,7 +53,9 @@ public class CaseDefinitionSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the case definition. */
+  /**
+   * The ID uniquely identifying the case definition.
+   */
   @Schema(description = "The ID uniquely identifying the case definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -60,7 +63,9 @@ public class CaseDefinitionSummary implements Serializable {
   @Size(min = 1, max = 100)
   private String id;
 
-  /** The name of the case definition. */
+  /**
+   * The name of the case definition.
+   */
   @Schema(description = "The name of the case definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -68,13 +73,16 @@ public class CaseDefinitionSummary implements Serializable {
   @Size(min = 1, max = 100)
   private String name;
 
-  /** Constructs a new <code>CaseDefinitionSummary</code>. */
-  public CaseDefinitionSummary() {}
+  /**
+   * Constructs a new <code>CaseDefinitionSummary</code>.
+   */
+  public CaseDefinitionSummary() {
+  }
 
   /**
    * Constructs a new <code>CaseDefinitionSummary</code>.
    *
-   * @param id the ID uniquely identifying the case definition
+   * @param id   the ID uniquely identifying the case definition
    * @param name the name of the case definition
    */
   public CaseDefinitionSummary(String id, String name) {
@@ -86,8 +94,9 @@ public class CaseDefinitionSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {

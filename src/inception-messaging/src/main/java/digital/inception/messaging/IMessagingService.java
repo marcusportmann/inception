@@ -33,10 +33,11 @@ public interface IMessagingService {
   /**
    * Have all the parts been queued for assembly for the message?
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId  the Universally Unique Identifier (UUID) uniquely identifying the message
    * @param totalParts the total number of parts for the message
+   *
    * @return <code>true</code> if all the parts for the message have been queued for assembly or
-   *     <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   boolean allMessagePartsForMessageQueuedForAssembly(UUID messageId, int totalParts)
       throws MessagingServiceException;
@@ -51,7 +52,7 @@ public interface IMessagingService {
   /**
    * Assemble the message from the message parts that have been queued for assembly.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId  the Universally Unique Identifier (UUID) uniquely identifying the message
    * @param totalParts the total number of parts for the message
    */
   void assembleMessage(UUID messageId, int totalParts) throws MessagingServiceException;
@@ -61,8 +62,9 @@ public interface IMessagingService {
    * message or <code>false</code> otherwise.
    *
    * @param message the message to process
+   *
    * @return <code>true</code> if the message processor is capable of processing the specified
-   *     message or <code>false</code> otherwise
+   * message or <code>false</code> otherwise
    */
   boolean canProcessMessage(Message message);
 
@@ -71,8 +73,9 @@ public interface IMessagingService {
    * part for assembly or <code>false</code> otherwise.
    *
    * @param messagePart the message part to queue for assembly
+   *
    * @return <code>true</code> if the message processor is capable of queueing the specified message
-   *     part for assembly or <code>false</code> otherwise
+   * part for assembly or <code>false</code> otherwise
    */
   boolean canQueueMessagePartForAssembly(MessagePart messagePart);
 
@@ -87,7 +90,7 @@ public interface IMessagingService {
    * Create the new message part.
    *
    * @param messagePart the <code>MessagePart</code> instance containing the information for the
-   *     message part
+   *                    message part
    */
   void createMessagePart(MessagePart messagePart) throws MessagingServiceException;
 
@@ -95,8 +98,9 @@ public interface IMessagingService {
    * Decrypt the message.
    *
    * @param message the message to decrypt
+   *
    * @return <code>true</code> if the message data was decrypted successfully or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   boolean decryptMessage(Message message) throws MessagingServiceException;
 
@@ -118,7 +122,7 @@ public interface IMessagingService {
    * Delete the message part.
    *
    * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
-   *     part
+   *                      part
    */
   void deleteMessagePart(UUID messagePartId)
       throws MessagePartNotFoundException, MessagingServiceException;
@@ -135,6 +139,7 @@ public interface IMessagingService {
    *
    * @param username the username uniquely identifying the user e.g. test1
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   *
    * @return the user-device encryption key
    */
   byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
@@ -144,8 +149,9 @@ public interface IMessagingService {
    * Encrypt the message.
    *
    * @param message the message to encrypt
+   *
    * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   boolean encryptMessage(Message message) throws MessagingServiceException;
 
@@ -160,6 +166,7 @@ public interface IMessagingService {
    * Retrieve the message.
    *
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   *
    * @return the message
    */
   Message getMessage(UUID messageId) throws MessageNotFoundException, MessagingServiceException;
@@ -168,8 +175,9 @@ public interface IMessagingService {
    * Retrieve the message parts queued for assembly for the message.
    *
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
-   * @param lockName the name of the lock that should be applied to the message parts queued for
-   *     assembly when they are retrieved
+   * @param lockName  the name of the lock that should be applied to the message parts queued for
+   *                  assembly when they are retrieved
+   *
    * @return the message parts queued for assembly for the message
    */
   List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
@@ -181,6 +189,7 @@ public interface IMessagingService {
    *
    * @param username the username identifying the user
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   *
    * @return the message parts that have been queued for download by a particular remote device
    */
   List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
@@ -191,8 +200,9 @@ public interface IMessagingService {
    *
    * @param username the username identifying the user
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   *
    * @return the messages for a user that have been queued for download by a particular remote
-   *     device
+   * device
    */
   List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
       throws MessagingServiceException;
@@ -203,7 +213,7 @@ public interface IMessagingService {
    * <p>The message will be locked to prevent duplicate processing.
    *
    * @return the next message that has been queued for processing or <code>null</code> if no
-   *     messages are currently queued for processing
+   * messages are currently queued for processing
    */
   Message getNextMessageQueuedForProcessing() throws MessagingServiceException;
 
@@ -211,6 +221,7 @@ public interface IMessagingService {
    * Should the specified message be archived?
    *
    * @param message the message
+   *
    * @return <code>true</code> if the message should be archived or <code>false</code> otherwise
    */
   boolean isArchivableMessage(Message message);
@@ -219,8 +230,9 @@ public interface IMessagingService {
    * Can the specified message be processed asynchronously?
    *
    * @param message the message
+   *
    * @return <code>true</code> if the message can be processed asynchronously or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   boolean isAsynchronousMessage(Message message);
 
@@ -228,8 +240,9 @@ public interface IMessagingService {
    * Has the message already been archived?
    *
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   *
    * @return <code>true</code> if the message has already been archived or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   boolean isMessageArchived(UUID messageId) throws MessagingServiceException;
 
@@ -237,9 +250,10 @@ public interface IMessagingService {
    * Has the message part already been queued for assembly?
    *
    * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
-   *     part
+   *                      part
+   *
    * @return <code>true</code> if the message part has already been queued for assembly or <code>
-   *     false</code> otherwise
+   * false</code> otherwise
    */
   boolean isMessagePartQueuedForAssembly(UUID messagePartId) throws MessagingServiceException;
 
@@ -247,6 +261,7 @@ public interface IMessagingService {
    * Should the specified message be be processed securely?
    *
    * @param message the message
+   *
    * @return <code>true</code> if the message is secure or <code>false</code> otherwise
    */
   boolean isSecureMessage(Message message);
@@ -255,8 +270,9 @@ public interface IMessagingService {
    * Can the specified message be processed synchronously?
    *
    * @param message the message
+   *
    * @return <code>true</code> if the message can be processed synchronously or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   boolean isSynchronousMessage(Message message);
 
@@ -264,6 +280,7 @@ public interface IMessagingService {
    * Process the message.
    *
    * @param message the message to process
+   *
    * @return the response message or <code>null</code> if no response message exists
    */
   Message processMessage(Message message) throws MessagingServiceException;
@@ -310,7 +327,7 @@ public interface IMessagingService {
   /**
    * Reset the locks for the messages.
    *
-   * @param status the current status of the messages that have been locked
+   * @param status    the current status of the messages that have been locked
    * @param newStatus the new status for the messages that have been unlocked
    */
   void resetMessageLocks(MessageStatus status, MessageStatus newStatus)
@@ -319,7 +336,7 @@ public interface IMessagingService {
   /**
    * Reset the locks for the message parts.
    *
-   * @param status the current status of the message parts that have been locked
+   * @param status    the current status of the message parts that have been locked
    * @param newStatus the new status for the message parts that have been unlocked
    */
   void resetMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus)
@@ -329,8 +346,8 @@ public interface IMessagingService {
    * Set the status for a message part.
    *
    * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
-   *     part
-   * @param status the new status
+   *                      part
+   * @param status        the new status
    */
   void setMessagePartStatus(UUID messagePartId, MessagePartStatus status)
       throws MessagingServiceException;
@@ -339,7 +356,7 @@ public interface IMessagingService {
    * Set the status for a message.
    *
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
-   * @param status the new status
+   * @param status    the new status
    */
   void setMessageStatus(UUID messageId, MessageStatus status) throws MessagingServiceException;
 
@@ -347,7 +364,7 @@ public interface IMessagingService {
    * Unlock the message.
    *
    * @param message the message to unlock
-   * @param status the new status for the unlocked message
+   * @param status  the new status for the unlocked message
    */
   void unlockMessage(Message message, MessageStatus status) throws MessagingServiceException;
 
@@ -355,8 +372,8 @@ public interface IMessagingService {
    * Unlock a locked message part.
    *
    * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
-   *     part
-   * @param status the new status for the unlocked message part
+   *                      part
+   * @param status        the new status for the unlocked message part
    */
   void unlockMessagePart(UUID messagePartId, MessagePartStatus status)
       throws MessagingServiceException;

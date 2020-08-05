@@ -56,7 +56,7 @@ public interface ISMSService {
    * <p>The SMS will be locked to prevent duplicate sending.
    *
    * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
-   *     currently queued for sending
+   * currently queued for sending
    */
   SMS getNextSMSQueuedForSending() throws SMSServiceException;
 
@@ -71,6 +71,7 @@ public interface ISMSService {
    * Retrieve the SMS.
    *
    * @param smsId the ID uniquely identifying the SMS
+   *
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   SMS getSMS(UUID smsId) throws SMSNotFoundException, SMSServiceException;
@@ -78,7 +79,7 @@ public interface ISMSService {
   /**
    * Reset the SMS locks.
    *
-   * @param status the current status of the SMSs that have been locked
+   * @param status    the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
    */
   void resetSMSLocks(SMSStatus status, SMSStatus newStatus) throws SMSServiceException;
@@ -89,7 +90,7 @@ public interface ISMSService {
    * <p>NOTE: This will queue the SMS for sending. The SMS will actually be sent asynchronously.
    *
    * @param mobileNumber the mobile number
-   * @param message the message
+   * @param message      the message
    */
   void sendSMS(String mobileNumber, String message) throws SMSServiceException;
 
@@ -98,9 +99,10 @@ public interface ISMSService {
    *
    * <p>NOTE: This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
    *
-   * @param smsId the ID of the SMS
+   * @param smsId        the ID of the SMS
    * @param mobileNumber the mobile number
-   * @param message the message
+   * @param message      the message
+   *
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
    */
   boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
@@ -109,7 +111,7 @@ public interface ISMSService {
   /**
    * Set the status for the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
   void setSMSStatus(UUID smsId, SMSStatus status) throws SMSNotFoundException, SMSServiceException;
@@ -117,7 +119,7 @@ public interface ISMSService {
   /**
    * Unlock the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId  the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
   void unlockSMS(UUID smsId, SMSStatus status) throws SMSNotFoundException, SMSServiceException;

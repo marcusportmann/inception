@@ -38,28 +38,28 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "GroupMembers")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "userDirectoryId",
-  "groupName",
-  "groupMembers",
-  "total",
-  "filter",
-  "sortDirection",
-  "pageIndex",
-  "pageSize"
+    "userDirectoryId",
+    "groupName",
+    "groupMembers",
+    "total",
+    "filter",
+    "sortDirection",
+    "pageIndex",
+    "pageSize"
 })
 @XmlRootElement(name = "GroupMembers", namespace = "http://security.inception.digital")
 @XmlType(
     name = "GroupMembers",
     namespace = "http://security.inception.digital",
     propOrder = {
-      "userDirectoryId",
-      "groupName",
-      "groupMembers",
-      "total",
-      "filter",
-      "sortDirection",
-      "pageIndex",
-      "pageSize"
+        "userDirectoryId",
+        "groupName",
+        "groupMembers",
+        "total",
+        "filter",
+        "sortDirection",
+        "pageIndex",
+        "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -67,19 +67,25 @@ public class GroupMembers implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the group members. */
+  /**
+   * The optional filter that was applied to the group members.
+   */
   @Schema(description = "The optional filter that was applied to the group members")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /** The group members. */
+  /**
+   * The group members.
+   */
   @Schema(description = "The group members", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "GroupMembers", required = true)
   private List<GroupMember> groupMembers;
 
-  /** The name identifying the group the group members are associated with. */
+  /**
+   * The name identifying the group the group members are associated with.
+   */
   @Schema(
       description = "The name identifying the group the group members are associated with",
       required = true)
@@ -87,25 +93,33 @@ public class GroupMembers implements Serializable {
   @XmlElement(name = "GroupName", required = true)
   private String groupName;
 
-  /** The optional page index. */
+  /**
+   * The optional page index.
+   */
   @Schema(description = "The optional page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
+  /**
+   * The optional page size.
+   */
   @Schema(description = "The optional page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /** The optional sort direction that was applied to the group members. */
+  /**
+   * The optional sort direction that was applied to the group members.
+   */
   @Schema(description = "The optional sort direction that was applied to the group members")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The total number of group members. */
+  /**
+   * The total number of group members.
+   */
   @Schema(description = "The total number of group members", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
@@ -123,21 +137,24 @@ public class GroupMembers implements Serializable {
   @XmlElement(name = "Total", required = true)
   private UUID userDirectoryId;
 
-  /** Constructs a new <code>GroupMembers</code>. */
-  public GroupMembers() {}
+  /**
+   * Constructs a new <code>GroupMembers</code>.
+   */
+  public GroupMembers() {
+  }
 
   /**
    * Constructs a new <code>GroupMembers</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the group members are associated with
-   * @param groupName the name identifying the group the group members are associated with
-   * @param groupMembers tbe group members
-   * @param total the total number of group members
-   * @param filter the optional filter that was applied to the group members
-   * @param sortDirection the optional sort direction that was applied to the group members
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   *                        directory the group members are associated with
+   * @param groupName       the name identifying the group the group members are associated with
+   * @param groupMembers    tbe group members
+   * @param total           the total number of group members
+   * @param filter          the optional filter that was applied to the group members
+   * @param sortDirection   the optional sort direction that was applied to the group members
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
    */
   public GroupMembers(
       UUID userDirectoryId,
@@ -226,7 +243,7 @@ public class GroupMembers implements Serializable {
    * group members are associated with.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   *     group members are associated with
+   * group members are associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;

@@ -36,7 +36,9 @@ import java.util.Date;
  */
 public class DateTimeModule extends SimpleModule {
 
-  /** Constructs a new <code>DateTimeModule</code>. */
+  /**
+   * Constructs a new <code>DateTimeModule</code>.
+   */
   public DateTimeModule() {
     super("DateTimeModule", new Version(1, 0, 0, null, null, null));
 

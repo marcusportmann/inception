@@ -37,7 +37,9 @@ public class BackgroundMessageProcessor implements InitializingBean {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundMessageProcessor.class);
 
-  /** The Messaging Service. */
+  /**
+   * The Messaging Service.
+   */
   private IMessagingService messagingService;
 
   /**
@@ -49,7 +51,9 @@ public class BackgroundMessageProcessor implements InitializingBean {
     this.messagingService = messagingService;
   }
 
-  /** Initialize the Background Message Processor. */
+  /**
+   * Initialize the Background Message Processor.
+   */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Background Message Processor");
@@ -74,7 +78,9 @@ public class BackgroundMessageProcessor implements InitializingBean {
     }
   }
 
-  /** Process the messages. */
+  /**
+   * Process the messages.
+   */
   @Scheduled(cron = "0 * * * * *")
   @Async
   public void processMessages() {

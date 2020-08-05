@@ -51,13 +51,17 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SchedulerService.class);
 
-  /** The Spring application context. */
+  /**
+   * The Spring application context.
+   */
   private final ApplicationContext applicationContext;
 
   /* The name of the Scheduler Service instance. */
   private final String instanceName = ServiceUtil.getServiceInstanceName("SchedulerService");
 
-  /** The Job Repository. */
+  /**
+   * The Job Repository.
+   */
   private final JobRepository jobRepository;
 
   /* Entity Manager */
@@ -80,14 +84,16 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * Constructs a new <code>SchedulerService</code>.
    *
    * @param applicationContext the Spring application context
-   * @param jobRepository the Job Repository
+   * @param jobRepository      the Job Repository
    */
   public SchedulerService(ApplicationContext applicationContext, JobRepository jobRepository) {
     this.applicationContext = applicationContext;
     this.jobRepository = jobRepository;
   }
 
-  /** Initialize the Scheduler Service. */
+  /**
+   * Initialize the Scheduler Service.
+   */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Scheduler Service (" + instanceName + ")");
@@ -207,6 +213,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * Retrieve the filtered jobs.
    *
    * @param filter the filter to apply to the jobs
+   *
    * @return the jobs
    */
   @Override
@@ -227,6 +234,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * Retrieve the job.
    *
    * @param jobId the ID uniquely identifying the job
+   *
    * @return the job
    */
   @Override
@@ -250,6 +258,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * Retrieve the name of the job.
    *
    * @param jobId the ID uniquely identifying the job
+   *
    * @return the name of the job
    */
   @Override
@@ -300,7 +309,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * <p>The job will be locked to prevent duplicate processing.
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
-   *     currently scheduled for execution
+   * currently scheduled for execution
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -370,9 +379,9 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId             the ID uniquely identifying the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
-   *     next execution time
+   *                          next execution time
    */
   @Override
   @Transactional
@@ -391,7 +400,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Reset the job locks.
    *
-   * @param status the current status of the jobs that have been locked
+   * @param status    the current status of the jobs that have been locked
    * @param newStatus the new status for the jobs that have been unlocked
    */
   @Override
@@ -415,7 +424,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * Schedule the next unscheduled job for execution.
    *
    * @return <code>true</code> if a job was successfully scheduled for execution or <code>false
-   *     </code> otherwise
+   * </code> otherwise
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -470,7 +479,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Set the status for the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId  the ID uniquely identifying the job
    * @param status the new status for the job
    */
   @Override
@@ -494,7 +503,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Unlock a locked job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId  the ID uniquely identifying the job
    * @param status the new status for the unlocked job
    */
   @Override

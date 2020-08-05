@@ -18,14 +18,14 @@
     namespace = "http://mail.inception.digital",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "core",
-          namespaceURI = "http://core.inception.digital"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "validation",
-          namespaceURI = "http://validation.inception.digital"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "mail",
-          namespaceURI = "http://mail.inception.digital"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "core",
+            namespaceURI = "http://core.inception.digital"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "validation",
+            namespaceURI = "http://validation.inception.digital"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "mail",
+            namespaceURI = "http://mail.inception.digital"),
     })
 package digital.inception.mail;

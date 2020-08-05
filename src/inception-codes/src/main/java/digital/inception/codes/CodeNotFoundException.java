@@ -49,8 +49,9 @@ public class CodeNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>CodeNotFoundException</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
    */
   public CodeNotFoundException(String codeCategoryId, String codeId) {
     super(

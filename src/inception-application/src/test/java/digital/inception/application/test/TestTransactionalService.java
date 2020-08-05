@@ -44,7 +44,9 @@ import org.springframework.transaction.annotation.Transactional;
 @SuppressWarnings("unused")
 public class TestTransactionalService implements ITestTransactionalService {
 
-  /** The data source used to provide connections to the application database. */
+  /**
+   * The data source used to provide connections to the application database.
+   */
   private final DataSource dataSource;
 
   /**
@@ -170,6 +172,7 @@ public class TestTransactionalService implements ITestTransactionalService {
    * Retrieve the test data.
    *
    * @param id the ID
+   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   public TestData getTestData(String id) throws TestTransactionalServiceException {

@@ -26,4 +26,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface CodeCategorySummaryRepository extends JpaRepository<CodeCategorySummary, String> {}
+public interface CodeCategorySummaryRepository extends JpaRepository<CodeCategorySummary, String> {
+
+}

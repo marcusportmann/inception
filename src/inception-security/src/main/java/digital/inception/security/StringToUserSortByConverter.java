@@ -31,8 +31,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class StringToUserSortByConverter implements Converter<String, UserSortBy> {
 
-  /** Constructs a new <code>StringToUserSortByConverter</code>. */
-  public StringToUserSortByConverter() {}
+  /**
+   * Constructs a new <code>StringToUserSortByConverter</code>.
+   */
+  public StringToUserSortByConverter() {
+  }
 
   @Override
   public UserSortBy convert(String source) {

@@ -45,25 +45,41 @@ import org.springframework.util.StringUtils;
  */
 public class AuthenticateResponseData extends WbxmlMessageData {
 
-  /** The error code returned when an unknown error occurs during authentication. */
+  /**
+   * The error code returned when an unknown error occurs during authentication.
+   */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
-  /** The UUID for the "Authenticate Response" message. */
+
+  /**
+   * The UUID for the "Authenticate Response" message.
+   */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("82223035-1726-407f-8703-3977708e792c");
-  /** The error code returned when authentication is successful. */
+
+  /**
+   * The error code returned when authentication is successful.
+   */
   private static final int ERROR_CODE_SUCCESS = 0;
-  /** The message returned when authentication was successful. */
+
+  /**
+   * The message returned when authentication was successful.
+   */
   private static final String ERROR_MESSAGE_SUCCESS = "Success";
+
   /**
    * The error code indicating the result of processing the authentication where a code of '0'
    * indicates success and a non-zero code indicates an error condition.
    */
   private int errorCode;
 
-  /** The error message describing the result of processing the authentication. */
+  /**
+   * The error message describing the result of processing the authentication.
+   */
   private String errorMessage;
 
-  /** The organizations the authenticated user is associated with. */
+  /**
+   * The organizations the authenticated user is associated with.
+   */
   private List<OrganizationData> organizations;
 
   /**
@@ -72,10 +88,14 @@ public class AuthenticateResponseData extends WbxmlMessageData {
    */
   private byte[] userEncryptionKey;
 
-  /** The properties returned for the authenticated user. */
+  /**
+   * The properties returned for the authenticated user.
+   */
   private Map<String, Object> userProperties;
 
-  /** Constructs a new <code>AuthenticateResponseData</code>. */
+  /**
+   * Constructs a new <code>AuthenticateResponseData</code>.
+   */
   public AuthenticateResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -83,7 +103,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    *
-   * @param errorCode the error code
+   * @param errorCode    the error code
    * @param errorMessage the error message
    */
   public AuthenticateResponseData(int errorCode, String errorMessage) {
@@ -99,10 +119,10 @@ public class AuthenticateResponseData extends WbxmlMessageData {
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    *
-   * @param organizations the organizations the authenticated user is associated with
+   * @param organizations     the organizations the authenticated user is associated with
    * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
-   *     data passed as part of a message
-   * @param userProperties the properties returned for the authenticated user
+   *                          data passed as part of a message
+   * @param userProperties    the properties returned for the authenticated user
    */
   public AuthenticateResponseData(
       List<Organization> organizations,
@@ -125,8 +145,9 @@ public class AuthenticateResponseData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
+   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -202,7 +223,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
    * indicates success and a non-zero code indicates an error condition.
    *
    * @return the error code indicating the result of processing the registration where a code of '0'
-   *     indicates success and a non-zero code indicates an error condition
+   * indicates success and a non-zero code indicates an error condition
    */
   public int getErrorCode() {
     return errorCode;
@@ -231,7 +252,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
    * part of a message.
    *
    * @return the encryption key used to encrypt data on the user's device and data passed as part of
-   *     a message
+   * a message
    */
   public byte[] getUserEncryptionKey() {
     return userEncryptionKey;
@@ -251,7 +272,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *     message
+   * message
    */
   @Override
   public byte[] toMessageData() {

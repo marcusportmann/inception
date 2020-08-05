@@ -26,10 +26,14 @@ import org.springframework.http.HttpStatus;
  */
 public class InvalidRequestErrorResponse extends ErrorResponse {
 
-  /** The error code for the OAuth2 invalid request error response. */
+  /**
+   * The error code for the OAuth2 invalid request error response.
+   */
   public static final String ERROR_CODE = "invalid_request";
 
-  /** Constructs a new <code>InvalidRequestErrorResponse</code>. */
+  /**
+   * Constructs a new <code>InvalidRequestErrorResponse</code>.
+   */
   public InvalidRequestErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }

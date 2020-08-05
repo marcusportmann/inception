@@ -54,8 +54,8 @@ public class TokenServiceException extends ServiceException {
    * Constructs a new <code>TokenServiceException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public TokenServiceException(String message, Throwable cause) {
     super("TokenServiceError", message, cause);

@@ -39,7 +39,9 @@ import org.springframework.util.StringUtils;
  */
 public class AuthenticateRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Authenticate Request" message. */
+  /**
+   * The UUID for the "Authenticate Request" message.
+   */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
 
@@ -49,13 +51,19 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    */
   private UUID deviceId;
 
-  /** The password used to authenticate the user. */
+  /**
+   * The password used to authenticate the user.
+   */
   private String password;
 
-  /** The username identifying the user associated with the message. */
+  /**
+   * The username identifying the user associated with the message.
+   */
   private String username;
 
-  /** Constructs a new <code>AuthenticateRequestData</code>. */
+  /**
+   * Constructs a new <code>AuthenticateRequestData</code>.
+   */
   public AuthenticateRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -66,7 +74,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    * @param username the username identifying the user associated with the message
    * @param password the password used to authenticate the user
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *     authentication request originated from
+   *                 authentication request originated from
    */
   public AuthenticateRequestData(String username, String password, UUID deviceId) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -80,8 +88,9 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
+   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -111,7 +120,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    * authentication request originated from.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *     authentication request originated from
+   * authentication request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -140,7 +149,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *     message
+   * message
    */
   @Override
   public byte[] toMessageData() {

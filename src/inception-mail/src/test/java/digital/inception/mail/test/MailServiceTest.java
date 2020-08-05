@@ -57,16 +57,19 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 public class MailServiceTest {
 
   private static int mailTemplateCount;
 
-  /** The Mail Service. */
-  @Autowired private IMailService mailService;
+  /**
+   * The Mail Service.
+   */
+  @Autowired
+  private IMailService mailService;
 
   private static synchronized MailTemplate getTestMailTemplateDetails() {
     mailTemplateCount++;
@@ -84,42 +87,9 @@ public class MailServiceTest {
     return mailTemplate;
   }
 
-  private void compareMailTemplateToMailTemplateSummary(
-      MailTemplate mailTemplate, MailTemplateSummary mailTemplateSummary) {
-    assertEquals(
-        "The ID values for the two mail template summaries do not match",
-        mailTemplate.getId(),
-        mailTemplateSummary.getId());
-    assertEquals(
-        "The name values for the two mail template summaries do not match",
-        mailTemplate.getName(),
-        mailTemplateSummary.getName());
-  }
-
-  private void compareMailTemplates(MailTemplate mailTemplate1, MailTemplate mailTemplate2) {
-    assertEquals(
-        "The ID values for the two mail templates do not match",
-        mailTemplate1.getId(),
-        mailTemplate2.getId());
-    assertEquals(
-        "The name values for the two mail templates do not match",
-        mailTemplate1.getName(),
-        mailTemplate2.getName());
-    assertEquals(
-        "The content type values for the two mail templates do not match",
-        mailTemplate1.getContentType(),
-        mailTemplate2.getContentType());
-    assertArrayEquals(
-        "The template values for the two mail templates do not match",
-        mailTemplate1.getTemplate(),
-        mailTemplate2.getTemplate());
-    assertEquals(
-        "The updated values for the two mail templates do not match",
-        mailTemplate1.getUpdated(),
-        mailTemplate2.getUpdated());
-  }
-
-  /** Test the mail template functionality. */
+  /**
+   * Test the mail template functionality.
+   */
   @Test
   public void mailTemplateTest() throws Exception {
     MailTemplate mailTemplate = getTestMailTemplateDetails();
@@ -208,7 +178,9 @@ public class MailServiceTest {
     }
   }
 
-  /** Test the send mail functionality. */
+  /**
+   * Test the send mail functionality.
+   */
   // @Test
   public void sendMailTest() throws Exception {
     MailTemplate mailTemplate = getTestMailTemplateDetails();
@@ -225,5 +197,40 @@ public class MailServiceTest {
         "Inception",
         mailTemplate.getId(),
         mapTemplateParameters);
+  }
+
+  private void compareMailTemplateToMailTemplateSummary(
+      MailTemplate mailTemplate, MailTemplateSummary mailTemplateSummary) {
+    assertEquals(
+        "The ID values for the two mail template summaries do not match",
+        mailTemplate.getId(),
+        mailTemplateSummary.getId());
+    assertEquals(
+        "The name values for the two mail template summaries do not match",
+        mailTemplate.getName(),
+        mailTemplateSummary.getName());
+  }
+
+  private void compareMailTemplates(MailTemplate mailTemplate1, MailTemplate mailTemplate2) {
+    assertEquals(
+        "The ID values for the two mail templates do not match",
+        mailTemplate1.getId(),
+        mailTemplate2.getId());
+    assertEquals(
+        "The name values for the two mail templates do not match",
+        mailTemplate1.getName(),
+        mailTemplate2.getName());
+    assertEquals(
+        "The content type values for the two mail templates do not match",
+        mailTemplate1.getContentType(),
+        mailTemplate2.getContentType());
+    assertArrayEquals(
+        "The template values for the two mail templates do not match",
+        mailTemplate1.getTemplate(),
+        mailTemplate2.getTemplate());
+    assertEquals(
+        "The updated values for the two mail templates do not match",
+        mailTemplate1.getUpdated(),
+        mailTemplate2.getUpdated());
   }
 }

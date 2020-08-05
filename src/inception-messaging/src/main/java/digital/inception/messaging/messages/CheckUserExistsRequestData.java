@@ -39,14 +39,20 @@ import org.springframework.util.StringUtils;
  */
 public class CheckUserExistsRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Check User Exists Request" message. */
+  /**
+   * The UUID for the "Check User Exists Request" message.
+   */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("cc005e6a-b01b-48eb-98a0-026297be69f3");
 
-  /** The username identifying the user. */
+  /**
+   * The username identifying the user.
+   */
   private String username;
 
-  /** Constructs a new <code>CheckUserExistsRequestData</code>. */
+  /**
+   * Constructs a new <code>CheckUserExistsRequestData</code>.
+   */
   public CheckUserExistsRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -66,8 +72,9 @@ public class CheckUserExistsRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
+   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -102,7 +109,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *     message
+   * message
    */
   @Override
   public byte[] toMessageData() {

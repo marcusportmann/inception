@@ -39,6 +39,7 @@ import java.util.Map;
 public class TestCodeProvider implements ICodeProvider {
 
   private CodeCategory codeCategory;
+
   private List<Code> codes;
 
   /**
@@ -65,8 +66,9 @@ public class TestCodeProvider implements ICodeProvider {
    * Returns whether the code provider supports the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return <code>true</code> if the code provider supports the code category or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean codeCategoryExists(String codeCategoryId) throws CodeProviderException {
@@ -85,7 +87,8 @@ public class TestCodeProvider implements ICodeProvider {
    * Check whether the code exists.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId the ID uniquely identifying the code
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
   @Override
@@ -113,7 +116,8 @@ public class TestCodeProvider implements ICodeProvider {
    * Retrieve the code.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId the ID uniquely identifying the code
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return the code
    */
   @Override
@@ -160,6 +164,7 @@ public class TestCodeProvider implements ICodeProvider {
    * Retrieve the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the code category
    */
   @Override
@@ -180,9 +185,58 @@ public class TestCodeProvider implements ICodeProvider {
   }
 
   /**
+   * Retrieve the XML or JSON data for the code category.
+   *
+   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
+   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   * configuration file.
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   *
+   * @return the XML or JSON data for the code category
+   */
+  @Override
+  public String getCodeCategoryData(String codeCategoryId)
+      throws CodeCategoryNotFoundException, CodeProviderException {
+    try {
+      if (codeCategory.getId().equals(codeCategoryId)) {
+        return "<codes><code name=\"name1\" value=\"value1\"/></codes>";
+      }
+
+      throw new CodeCategoryNotFoundException(codeCategoryId);
+    } catch (CodeCategoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new CodeProviderException(
+          String.format("Failed to retrieve the data for the code category (%s)", codeCategoryId),
+          e);
+    }
+  }
+
+  /**
+   * Retrieve the XML or JSON data for the code category using the specified parameters.
+   *
+   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
+   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
+   * configuration file.
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param parameters     the parameters
+   *
+   * @return the XML or JSON data for the code category
+   */
+  @Override
+  public String getCodeCategoryDataWithParameters(
+      String codeCategoryId, Map<String, String> parameters)
+      throws CodeCategoryNotFoundException, CodeProviderException {
+    return getCodeCategoryData(codeCategoryId);
+  }
+
+  /**
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the date and time the code category was last updated
    */
   @Override
@@ -209,6 +263,7 @@ public class TestCodeProvider implements ICodeProvider {
    * Retrieve the name of the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the name of the code category
    */
   @Override
@@ -232,7 +287,8 @@ public class TestCodeProvider implements ICodeProvider {
    * Retrieve the name of the code.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId the ID uniquely identifying the code
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return the name of code
    */
   @Override
@@ -265,6 +321,7 @@ public class TestCodeProvider implements ICodeProvider {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the codes for the code category
    */
   @Override
@@ -293,7 +350,8 @@ public class TestCodeProvider implements ICodeProvider {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
+   * @param parameters     the parameters
+   *
    * @return the codes for the code category
    */
   @Override
@@ -301,51 +359,5 @@ public class TestCodeProvider implements ICodeProvider {
       String codeCategoryId, Map<String, String> parameters)
       throws CodeCategoryNotFoundException, CodeProviderException {
     return getCodesForCodeCategory(codeCategoryId);
-  }
-
-  /**
-   * Retrieve the XML or JSON data for the code category.
-   *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   * @return the XML or JSON data for the code category
-   */
-  @Override
-  public String getCodeCategoryData(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodeProviderException {
-    try {
-      if (codeCategory.getId().equals(codeCategoryId)) {
-        return "<codes><code name=\"name1\" value=\"value1\"/></codes>";
-      }
-
-      throw new CodeCategoryNotFoundException(codeCategoryId);
-    } catch (CodeCategoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new CodeProviderException(
-          String.format("Failed to retrieve the data for the code category (%s)", codeCategoryId),
-          e);
-    }
-  }
-
-  /**
-   * Retrieve the XML or JSON data for the code category using the specified parameters.
-   *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
-   * @return the XML or JSON data for the code category
-   */
-  @Override
-  public String getCodeCategoryDataWithParameters(
-      String codeCategoryId, Map<String, String> parameters)
-      throws CodeCategoryNotFoundException, CodeProviderException {
-    return getCodeCategoryData(codeCategoryId);
   }
 }

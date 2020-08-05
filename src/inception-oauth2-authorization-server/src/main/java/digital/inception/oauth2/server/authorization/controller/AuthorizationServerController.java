@@ -63,7 +63,7 @@ public class AuthorizationServerController {
    * Constructs a new <code>AuthorizationServerController</code>.
    *
    * @param securityService the Security Service
-   * @param tokenService the Token Service
+   * @param tokenService    the Token Service
    */
   public AuthorizationServerController(
       ISecurityService securityService, ITokenService tokenService) {
@@ -75,6 +75,7 @@ public class AuthorizationServerController {
    * The "token" endpoint that supports the Resource Owner Password Grant.
    *
    * @param parameters the request parameters
+   *
    * @return the token response
    */
   @PostMapping(value = "/token", produces = "application/json")

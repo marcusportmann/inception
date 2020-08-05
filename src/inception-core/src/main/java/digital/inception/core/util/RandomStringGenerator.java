@@ -31,11 +31,17 @@ import java.util.Random;
 public class RandomStringGenerator {
 
   private static final String DIGITS = "0123456789";
+
   private static final String UPPER_CASE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
   private static final String LOWER_CASE_CHARACTERS = UPPER_CASE_CHARACTERS.toLowerCase();
+
   private static final String ALPHANUMERIC = UPPER_CASE_CHARACTERS + LOWER_CASE_CHARACTERS + DIGITS;
+
   private final char[] buf;
+
   private final Random random;
+
   private final char[] symbols;
 
   /**
@@ -68,8 +74,8 @@ public class RandomStringGenerator {
   /**
    * Constructs a new <code>RandomStringGenerator</code>.
    *
-   * @param length the length of the random strings that should be generated
-   * @param random the random number generator
+   * @param length  the length of the random strings that should be generated
+   * @param random  the random number generator
    * @param symbols the symbols to use when generating the random string
    */
   public RandomStringGenerator(int length, Random random, String symbols) {

@@ -72,6 +72,7 @@ public interface ITestJPAService {
    * Retrieve the test data.
    *
    * @param id the ID
+   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   TestData getTestData(String id) throws TestJPAServiceException;
@@ -80,6 +81,7 @@ public interface ITestJPAService {
    * Retrieve the test data without a transaction.
    *
    * @param id the ID
+   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   TestData getTestDataWithoutTransaction(String id) throws TestJPAServiceException;

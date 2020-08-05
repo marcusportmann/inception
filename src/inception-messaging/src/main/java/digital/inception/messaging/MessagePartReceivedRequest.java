@@ -62,10 +62,10 @@ public class MessagePartReceivedRequest {
   /**
    * Constructs a new <code>MessagePartReceivedRequest</code>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *     message part received request originated from
+   * @param deviceId      the Universally Unique Identifier (UUID) uniquely identifying the device
+   *                      the message part received request originated from
    * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
-   *     part that was successfully downloaded
+   *                      part that was successfully downloaded
    */
   public MessagePartReceivedRequest(UUID deviceId, UUID messagePartId) {
     this.deviceId = deviceId;
@@ -77,8 +77,9 @@ public class MessagePartReceivedRequest {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
+   *
    * @return <code>true</code> if the WBXML document contains valid message part received request
-   *     information or <code>false</code> otherwise
+   * information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -86,7 +87,7 @@ public class MessagePartReceivedRequest {
     return rootElement.getName().equals("MessagePartReceivedRequest")
         && (rootElement.getAttributes().size() == 2)
         && !((!rootElement.hasAttribute("deviceId"))
-            || (!rootElement.hasAttribute("messagePartId")));
+        || (!rootElement.hasAttribute("messagePartId")));
   }
 
   /**
@@ -94,7 +95,7 @@ public class MessagePartReceivedRequest {
    * part received request originated from.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
-   *     part received request originated from
+   * part received request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -105,7 +106,7 @@ public class MessagePartReceivedRequest {
    * successfully downloaded.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the message part that was
-   *     successfully downloaded
+   * successfully downloaded
    */
   public UUID getMessagePartId() {
     return messagePartId;

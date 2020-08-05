@@ -33,8 +33,11 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class StringToGroupMemberTypeConverter implements Converter<String, GroupMemberType> {
 
-  /** Constructs a new <code>StringToGroupMemberTypeConverter</code>. */
-  public StringToGroupMemberTypeConverter() {}
+  /**
+   * Constructs a new <code>StringToGroupMemberTypeConverter</code>.
+   */
+  public StringToGroupMemberTypeConverter() {
+  }
 
   @Override
   public GroupMemberType convert(String source) {

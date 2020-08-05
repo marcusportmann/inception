@@ -46,23 +46,35 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class GetCodeCategoryRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Get Code Category Request" message. */
+  /**
+   * The UUID for the "Get Code Category Request" message.
+   */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("94d60eb6-a062-492d-b5e7-9fb1f05cf088");
 
-  /** The ID uniquely identifying the code category to retrieve. */
+  /**
+   * The ID uniquely identifying the code category to retrieve.
+   */
   private String codeCategoryId;
 
-  /** The date and time the code category was last retrieved. */
+  /**
+   * The date and time the code category was last retrieved.
+   */
   private LocalDateTime lastRetrieved;
 
-  /** The parameters. */
+  /**
+   * The parameters.
+   */
   private Map<String, String> parameters;
 
-  /** Should the codes for the code category be returned if the code category is current? */
+  /**
+   * Should the codes for the code category be returned if the code category is current?
+   */
   private boolean returnCodesIfCurrent;
 
-  /** Constructs a new <code>GetCodeCategoryRequestData</code>. */
+  /**
+   * Constructs a new <code>GetCodeCategoryRequestData</code>.
+   */
   public GetCodeCategoryRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -70,10 +82,10 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>GetCodeCategoryRequestData</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category to retrieve
-   * @param lastRetrieved the date and time the code category was last retrieved
+   * @param codeCategoryId       the ID uniquely identifying the code category to retrieve
+   * @param lastRetrieved        the date and time the code category was last retrieved
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
-   *     category is current
+   *                             category is current
    */
   public GetCodeCategoryRequestData(
       String codeCategoryId, LocalDateTime lastRetrieved, boolean returnCodesIfCurrent) {
@@ -88,11 +100,11 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>GetCodeCategoryRequestData</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category to retrieve
-   * @param lastRetrieved the date and time the code category was last retrieved
-   * @param parameters the parameters
+   * @param codeCategoryId       the ID uniquely identifying the code category to retrieve
+   * @param lastRetrieved        the date and time the code category was last retrieved
+   * @param parameters           the parameters
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
-   *     category is current
+   *                             category is current
    */
   public GetCodeCategoryRequestData(
       String codeCategoryId,
@@ -111,8 +123,9 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
+   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -197,7 +210,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    * is current or <code>false</code> otherwise.
    *
    * @return <code>true</code> if the codes for the code category be returned if the code category
-   *     is current or <code>false</code> otherwise
+   * is current or <code>false</code> otherwise
    */
   public boolean getReturnCodesIfCurrent() {
     return returnCodesIfCurrent;
@@ -208,7 +221,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *     message
+   * message
    */
   @Override
   public byte[] toMessageData() {

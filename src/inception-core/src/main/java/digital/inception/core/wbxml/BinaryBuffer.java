@@ -31,9 +31,12 @@ import java.io.Serializable;
 public class BinaryBuffer implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
   private ByteArrayOutputStream stream = null;
 
-  /** Constructs a new empty <code>BinaryBuffer</code>. */
+  /**
+   * Constructs a new empty <code>BinaryBuffer</code>.
+   */
   public BinaryBuffer() {
     stream = new ByteArrayOutputStream();
   }
@@ -76,15 +79,8 @@ public class BinaryBuffer implements Serializable {
   }
 
   /**
-   * Append the specified byte to the binary data already stored in the <code>BinaryBuffer</code>.
-   *
-   * @param b the byte to append
+   * Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer.
    */
-  void append(int b) {
-    stream.write(b);
-  }
-
-  /** Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer. */
   public void empty() {
     stream.reset();
   }
@@ -105,5 +101,14 @@ public class BinaryBuffer implements Serializable {
    */
   public int getLength() {
     return stream.size();
+  }
+
+  /**
+   * Append the specified byte to the binary data already stored in the <code>BinaryBuffer</code>.
+   *
+   * @param b the byte to append
+   */
+  void append(int b) {
+    stream.write(b);
   }
 }

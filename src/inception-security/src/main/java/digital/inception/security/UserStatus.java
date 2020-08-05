@@ -46,6 +46,7 @@ public enum UserStatus {
   EXPIRED(3, "Expired");
 
   private int code;
+
   private String description;
 
   UserStatus(int code, String description) {
@@ -57,6 +58,7 @@ public enum UserStatus {
    * Returns the user status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the user status
+   *
    * @return the user status given by the specified numeric code value
    */
   @JsonCreator

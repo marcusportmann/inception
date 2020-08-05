@@ -53,7 +53,9 @@ public class GroupMember implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The name identifying the group. */
+  /**
+   * The name identifying the group.
+   */
   @Schema(description = "The name identifying the group", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "GroupName", required = true)
@@ -61,7 +63,9 @@ public class GroupMember implements Serializable {
   @Size(min = 1, max = 100)
   private String groupName;
 
-  /** The name identifying the group member. */
+  /**
+   * The name identifying the group member.
+   */
   @Schema(description = "The name identifying the group member", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MemberName", required = true)
@@ -69,7 +73,9 @@ public class GroupMember implements Serializable {
   @Size(min = 1, max = 100)
   private String memberName;
 
-  /** The group member type. */
+  /**
+   * The group member type.
+   */
   @Schema(description = "The group member type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MemberType", required = true)
@@ -90,17 +96,20 @@ public class GroupMember implements Serializable {
   @NotNull
   private UUID userDirectoryId;
 
-  /** Constructs a new <code>GroupMember</code>. */
-  public GroupMember() {}
+  /**
+   * Constructs a new <code>GroupMember</code>.
+   */
+  public GroupMember() {
+  }
 
   /**
    * Constructs a new <code>GroupMember</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the group is associated with
-   * @param groupName the name identifying the group
-   * @param memberType the group member type
-   * @param memberName the name identifying the group member
+   *                        directory the group is associated with
+   * @param groupName       the name identifying the group
+   * @param memberType      the group member type
+   * @param memberName      the name identifying the group member
    */
   public GroupMember(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName) {
@@ -169,7 +178,7 @@ public class GroupMember implements Serializable {
    * group is associated with.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   *     group is associated with
+   * group is associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
@@ -180,7 +189,7 @@ public class GroupMember implements Serializable {
    * is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the group is associated with
+   *                        directory the group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

@@ -28,4 +28,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {}
+public interface MailTemplateSummaryRepository extends JpaRepository<MailTemplateSummary, String> {
+
+}

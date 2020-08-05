@@ -49,30 +49,43 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"unused"})
 public class InvalidArgumentError {
 
-  /** The detail for the invalid argument error */
+  /**
+   * The detail for the invalid argument error
+   */
   @XmlElement(name = "Detail", required = true)
   private String detail;
 
-  /** The message for the invalid argument error. */
+  /**
+   * The message for the invalid argument error.
+   */
   @XmlElement(name = "Message", required = true)
   private String message;
 
-  /** The name of the argument associated with the invalid argument error */
+  /**
+   * The name of the argument associated with the invalid argument error
+   */
   @XmlElement(name = "Name", required = true)
   private String name;
 
-  /** The optional validation errors associated with the invalid argument error */
+  /**
+   * The optional validation errors associated with the invalid argument error
+   */
   @XmlElement(name = "ValidationErrors")
   private List<ValidationError> validationErrors;
 
-  /** The date and time the invalid argument error occurred. */
+  /**
+   * The date and time the invalid argument error occurred.
+   */
   @XmlElement(name = "When", required = true)
   @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
   @XmlSchemaType(name = "dateTime")
   private LocalDateTime when;
 
-  /** Constructs a new <code>InvalidArgumentError</code>. */
-  public InvalidArgumentError() {}
+  /**
+   * Constructs a new <code>InvalidArgumentError</code>.
+   */
+  public InvalidArgumentError() {
+  }
 
   /**
    * Constructs a new <code>InvalidArgumentError</code>.

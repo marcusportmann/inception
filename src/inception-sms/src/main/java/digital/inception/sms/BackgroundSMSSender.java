@@ -49,7 +49,9 @@ public class BackgroundSMSSender implements InitializingBean {
     this.smsService = smsService;
   }
 
-  /** Initialize the Background SMS Sender. */
+  /**
+   * Initialize the Background SMS Sender.
+   */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Background SMS Sender");
@@ -72,7 +74,9 @@ public class BackgroundSMSSender implements InitializingBean {
     }
   }
 
-  /** Send the SMSs. */
+  /**
+   * Send the SMSs.
+   */
   @Scheduled(cron = "0 * * * * *")
   @Async
   void sendSMSs() {

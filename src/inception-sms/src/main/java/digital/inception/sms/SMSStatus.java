@@ -50,6 +50,7 @@ public enum SMSStatus {
   ANY(-1, "Any");
 
   private int code;
+
   private String description;
 
   SMSStatus(int code, String description) {
@@ -61,6 +62,7 @@ public enum SMSStatus {
    * Returns the SMS status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the SMS status
+   *
    * @return the SMS status given by the specified numeric code value
    */
   @JsonCreator

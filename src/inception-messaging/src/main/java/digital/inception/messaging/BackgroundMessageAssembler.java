@@ -38,7 +38,9 @@ public class BackgroundMessageAssembler implements InitializingBean {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundMessageAssembler.class);
 
-  /** The Messaging Service. */
+  /**
+   * The Messaging Service.
+   */
   private IMessagingService messagingService;
 
   /**
@@ -50,7 +52,9 @@ public class BackgroundMessageAssembler implements InitializingBean {
     this.messagingService = messagingService;
   }
 
-  /** Initialize the Background Message Assembler. */
+  /**
+   * Initialize the Background Message Assembler.
+   */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Background Message Assembler");
@@ -79,7 +83,7 @@ public class BackgroundMessageAssembler implements InitializingBean {
   /**
    * Assemble the message from the message parts that have been queued for assembly.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId  the Universally Unique Identifier (UUID) uniquely identifying the message
    * @param totalParts the total number of parts for the message
    */
   @Async
@@ -96,7 +100,9 @@ public class BackgroundMessageAssembler implements InitializingBean {
     }
   }
 
-  /** Assemble the messages. */
+  /**
+   * Assemble the messages.
+   */
   @Scheduled(cron = "0 * * * * *")
   @Async
   public void assembleMessages() {

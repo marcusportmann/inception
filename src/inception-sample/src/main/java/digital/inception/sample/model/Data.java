@@ -64,7 +64,9 @@ public class Data implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The timestamp value for the data. */
+  /**
+   * The timestamp value for the data.
+   */
   @Schema(description = "The timestamp value for the data")
   @JsonProperty
   @XmlElement(name = "TimestampValue")
@@ -73,7 +75,9 @@ public class Data implements Serializable {
   @Column(name = "timestamp_value")
   public LocalDateTime timestampValue;
 
-  /** The date value for the data. */
+  /**
+   * The date value for the data.
+   */
   @Schema(description = "The date value for the data")
   @JsonProperty
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -83,7 +87,9 @@ public class Data implements Serializable {
   @Column(name = "date_value")
   private LocalDate dateValue;
 
-  /** The ID uniquely identifying the data. */
+  /**
+   * The ID uniquely identifying the data.
+   */
   @Schema(description = "The ID uniquely identifying the data", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -92,14 +98,18 @@ public class Data implements Serializable {
   @Column(name = "id", nullable = false)
   private long id;
 
-  /** The integer value for the data. */
+  /**
+   * The integer value for the data.
+   */
   @Schema(description = "The integer value for the data")
   @JsonProperty
   @XmlElement(name = "IntegerValue")
   @Column(name = "integer_value")
   private Integer integerValue;
 
-  /** The name for the data. */
+  /**
+   * The name for the data.
+   */
   @Schema(description = "The name for the data", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -107,24 +117,29 @@ public class Data implements Serializable {
   @Column(name = "name", nullable = false)
   private String name;
 
-  /** The string string value for the data. */
+  /**
+   * The string string value for the data.
+   */
   @Schema(description = "The string string value for the data")
   @JsonProperty
   @XmlElement(name = "StringValue")
   @Column(name = "string_value")
   private String stringValue;
 
-  /** Constructs a new <code>Data</code>. */
-  public Data() {}
+  /**
+   * Constructs a new <code>Data</code>.
+   */
+  public Data() {
+  }
 
   /**
    * Constructs a new <code>Data</code>.
    *
-   * @param id the ID uniquely identifying the data
-   * @param name the name for the data
-   * @param integerValue the integer value
-   * @param stringValue the string value for the data
-   * @param dateValue the date value for the data
+   * @param id             the ID uniquely identifying the data
+   * @param name           the name for the data
+   * @param integerValue   the integer value
+   * @param stringValue    the string value for the data
+   * @param dateValue      the date value for the data
    * @param timestampValue the timestamp value for the data
    */
   public Data(
@@ -146,8 +161,9 @@ public class Data implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {

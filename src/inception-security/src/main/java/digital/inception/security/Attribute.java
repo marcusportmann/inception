@@ -56,7 +56,9 @@ public class Attribute implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The name for the attribute. */
+  /**
+   * The name for the attribute.
+   */
   @Schema(description = "The name for the attribute", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -64,7 +66,9 @@ public class Attribute implements Serializable {
   @Size(min = 1, max = 100)
   private String name;
 
-  /** The value for the attribute. */
+  /**
+   * The value for the attribute.
+   */
   @Schema(description = "The value for the attribute", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
@@ -72,13 +76,16 @@ public class Attribute implements Serializable {
   @Size(max = 4000)
   private String value;
 
-  /** Constructs a new <code>Attribute</code>. */
-  public Attribute() {}
+  /**
+   * Constructs a new <code>Attribute</code>.
+   */
+  public Attribute() {
+  }
 
   /**
    * Constructs a new <code>Attribute</code>.
    *
-   * @param name the name for the attribute
+   * @param name  the name for the attribute
    * @param value the <code>BigDecimal</code> value for the attribute
    */
   public Attribute(String name, BigDecimal value) {
@@ -89,7 +96,7 @@ public class Attribute implements Serializable {
   /**
    * Constructs a new <code>Attribute</code>.
    *
-   * @param name the name for the attribute
+   * @param name  the name for the attribute
    * @param value the binary value for the attribute
    */
   public Attribute(String name, BinaryBuffer value) {
@@ -100,7 +107,7 @@ public class Attribute implements Serializable {
   /**
    * Constructs a new <code>Attribute</code>.
    *
-   * @param name the name for the attribute
+   * @param name  the name for the attribute
    * @param value the binary value for the attribute
    */
   public Attribute(String name, byte[] value) {
@@ -111,7 +118,7 @@ public class Attribute implements Serializable {
   /**
    * Constructs a new <code>Attribute</code>.
    *
-   * @param name the name for the attribute
+   * @param name  the name for the attribute
    * @param value the <code>double</code> value for the attribute
    */
   public Attribute(String name, double value) {
@@ -122,7 +129,7 @@ public class Attribute implements Serializable {
   /**
    * Constructs a new <code>Attribute</code>.
    *
-   * @param name the name for the attribute
+   * @param name  the name for the attribute
    * @param value the <code>long</code> value for the attribute
    */
   public Attribute(String name, long value) {
@@ -133,7 +140,7 @@ public class Attribute implements Serializable {
   /**
    * Constructs a new <code>Attribute</code>.
    *
-   * @param name the name for the attribute
+   * @param name  the name for the attribute
    * @param value the <code>String</code> value for the attribute
    */
   public Attribute(String name, String value) {
@@ -146,10 +153,11 @@ public class Attribute implements Serializable {
    * matches the specified name.
    *
    * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
+   *             the specified name
    * @param name the name for the attribute
+   *
    * @return <code>true</code> if the list of <code>Attribute</code> instances contains an instance
-   *     whose name matches the specified name or <code>false</code> otherwise
+   * whose name matches the specified name or <code>false</code> otherwise
    */
   public static boolean contains(List<Attribute> list, String name) {
     for (Attribute attribute : list) {
@@ -166,10 +174,11 @@ public class Attribute implements Serializable {
    * specified list.
    *
    * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
+   *             the specified name
    * @param name the name for the attribute
+   *
    * @return the binary value for the <code>Attribute</code> instance with the specified name in the
-   *     specified list
+   * specified list
    */
   public static byte[] getBinaryValue(List<Attribute> list, String name) throws AttributeException {
     for (Attribute attribute : list) {
@@ -196,10 +205,11 @@ public class Attribute implements Serializable {
    * specified name in the specified list.
    *
    * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
+   *             the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
-   *     specified name in the specified list
+   * specified name in the specified list
    */
   public static BigDecimal getDecimalValue(List<Attribute> list, String name)
       throws AttributeException {
@@ -227,10 +237,11 @@ public class Attribute implements Serializable {
    * specified name in the specified list.
    *
    * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
+   *             the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>double</code> value for the <code>Attribute</code> instance with the
-   *     specified name in the specified list
+   * specified name in the specified list
    */
   public static double getDoubleValue(List<Attribute> list, String name) throws AttributeException {
     for (Attribute attribute : list) {
@@ -257,10 +268,11 @@ public class Attribute implements Serializable {
    * name in the specified list.
    *
    * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
+   *             the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>int</code> value for the <code>Attribute</code> instance with the specified
-   *     name in the specified list
+   * name in the specified list
    */
   public static int getIntegerValue(List<Attribute> list, String name) throws AttributeException {
     for (Attribute attribute : list) {
@@ -287,10 +299,11 @@ public class Attribute implements Serializable {
    * name in the specified list.
    *
    * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
+   *             the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>long</code> value for the <code>Attribute</code> instance with the specified
-   *     name in the specified list
+   * name in the specified list
    */
   public static long getLongValue(List<Attribute> list, String name) throws AttributeException {
     for (Attribute attribute : list) {
@@ -317,10 +330,11 @@ public class Attribute implements Serializable {
    * specified name in the specified list.
    *
    * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
+   *             the specified name
    * @param name the name for the attribute
+   *
    * @return the <code>String</code> value for the <code>Attribute</code> instance with the
-   *     specified name in the specified list
+   * specified name in the specified list
    */
   public static String getStringValue(List<Attribute> list, String name) throws AttributeException {
     for (Attribute attribute : list) {
@@ -340,9 +354,9 @@ public class Attribute implements Serializable {
    * Set the binary value for the <code>Attribute</code> instance with the specified name in the
    * specified list.
    *
-   * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
-   * @param name the name for the attribute
+   * @param list  the <code>Attribute</code> instances to search for the <code>Attribute</code> with
+   *              the specified name
+   * @param name  the name for the attribute
    * @param value the binary value for the attribute
    */
   public static void setBinaryValue(List<Attribute> list, String name, BinaryBuffer value)
@@ -354,9 +368,9 @@ public class Attribute implements Serializable {
    * Set the binary value for the <code>Attribute</code> instance with the specified name in the
    * specified list.
    *
-   * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
-   * @param name the name for the attribute
+   * @param list  the <code>Attribute</code> instances to search for the <code>Attribute</code> with
+   *              the specified name
+   * @param name  the name for the attribute
    * @param value the binary value for the attribute
    */
   public static void setBinaryValue(List<Attribute> list, String name, byte[] value)
@@ -380,9 +394,9 @@ public class Attribute implements Serializable {
    * Set the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
    * specified name in the specified list.
    *
-   * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
-   * @param name the name for the attribute
+   * @param list  the <code>Attribute</code> instances to search for the <code>Attribute</code> with
+   *              the specified name
+   * @param name  the name for the attribute
    * @param value the <code>BigDecimal</code> value for the attribute
    */
   public static void setDecimalValue(List<Attribute> list, String name, BigDecimal value)
@@ -406,9 +420,9 @@ public class Attribute implements Serializable {
    * Set the <code>double</code> value for the <code>Attribute</code> instance with the specified
    * name in the specified list.
    *
-   * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
-   * @param name the name for the attribute
+   * @param list  the <code>Attribute</code> instances to search for the <code>Attribute</code> with
+   *              the specified name
+   * @param name  the name for the attribute
    * @param value the <code>double</code> value for the attribute
    */
   public static void setDoubleValue(List<Attribute> list, String name, double value)
@@ -432,9 +446,9 @@ public class Attribute implements Serializable {
    * Set the <code>int</code> value for the <code>Attribute</code> instance with the specified name
    * in the specified list.
    *
-   * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
-   * @param name the name for the attribute
+   * @param list  the <code>Attribute</code> instances to search for the <code>Attribute</code> with
+   *              the specified name
+   * @param name  the name for the attribute
    * @param value the <code>int</code> value for the attribute
    */
   public static void setIntegerValue(List<Attribute> list, String name, int value)
@@ -458,9 +472,9 @@ public class Attribute implements Serializable {
    * Set the <code>long</code> value for the <code>Attribute</code> instance with the specified name
    * in the specified list.
    *
-   * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
-   * @param name the name for the attribute
+   * @param list  the <code>Attribute</code> instances to search for the <code>Attribute</code> with
+   *              the specified name
+   * @param name  the name for the attribute
    * @param value the <code>long</code> value for the attribute
    */
   public static void setLongValue(List<Attribute> list, String name, long value)
@@ -484,9 +498,9 @@ public class Attribute implements Serializable {
    * Set the <code>String</code> value for the <code>Attribute</code> instance with the specified
    * name in the specified list.
    *
-   * @param list the <code>Attribute</code> instances to search for the <code>Attribute</code> with
-   *     the specified name
-   * @param name the name for the attribute
+   * @param list  the <code>Attribute</code> instances to search for the <code>Attribute</code> with
+   *              the specified name
+   * @param name  the name for the attribute
    * @param value the <code>String</code> value for the attribute
    */
   public static void setStringValue(List<Attribute> list, String name, String value)

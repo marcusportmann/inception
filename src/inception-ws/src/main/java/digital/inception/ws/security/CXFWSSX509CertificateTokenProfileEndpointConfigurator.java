@@ -44,14 +44,14 @@ public class CXFWSSX509CertificateTokenProfileEndpointConfigurator {
    * Configure the CXF web service endpoint to support authentication using the the Web Services
    * Security X.509 Certificate Token profile.
    *
-   * @param endpoint the web service endpoint to configure
-   * @param keyStore the key store containing the private key and certificate (public key) for the
-   *     web service
+   * @param endpoint         the web service endpoint to configure
+   * @param keyStore         the key store containing the private key and certificate (public key)
+   *                         for the web service
    * @param keyStorePassword the password for the key store containing the private key and
-   *     certificate (public key) for the web service
-   * @param keyStoreAlias the alias of the key-pair in the key store for the web service
-   * @param trustStore the key store containing the certificates that will be used to verify the web
-   *     service clients
+   *                         certificate (public key) for the web service
+   * @param keyStoreAlias    the alias of the key-pair in the key store for the web service
+   * @param trustStore       the key store containing the certificates that will be used to verify
+   *                         the web service clients
    */
   public static void configureEndpoint(
       Endpoint endpoint,

@@ -33,8 +33,11 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class IntegerToUserStatusConverter implements Converter<Integer, UserStatus> {
 
-  /** Constructs a new <code>IntegerToUserStatusConverter</code>. */
-  public IntegerToUserStatusConverter() {}
+  /**
+   * Constructs a new <code>IntegerToUserStatusConverter</code>.
+   */
+  public IntegerToUserStatusConverter() {
+  }
 
   @Override
   public UserStatus convert(Integer source) {

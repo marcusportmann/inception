@@ -38,14 +38,20 @@ import org.springframework.util.StringUtils;
  */
 public class TestResponseData extends WbxmlMessageData {
 
-  /** The UUID for the "Test Response" message. */
+  /**
+   * The UUID for the "Test Response" message.
+   */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("a3bad7ba-f9d4-4403-b54a-cb1f335ebbad");
 
-  /** The test value. */
+  /**
+   * The test value.
+   */
   private String testValue;
 
-  /** Constructs a new <code>TestResponseData</code>. */
+  /**
+   * Constructs a new <code>TestResponseData</code>.
+   */
   public TestResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -65,8 +71,9 @@ public class TestResponseData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
+   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -101,7 +108,7 @@ public class TestResponseData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *     message
+   * message
    */
   @Override
   public byte[] toMessageData() {

@@ -42,8 +42,11 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 public class TransactionConfiguration {
 
   private static Class<?> transactionManagerProxyClass;
-  private static Class<?> userTransactionProxyClass;
+
   private static Constructor<?> transactionManagerProxyConstructor;
+
+  private static Class<?> userTransactionProxyClass;
+
   private static Constructor<?> userTransactionProxyConstructor;
 
   static {

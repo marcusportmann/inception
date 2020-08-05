@@ -46,16 +46,24 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class CryptoUtil {
 
-  /** The AES block size. */
+  /**
+   * The AES block size.
+   */
   public static final int AES_BLOCK_SIZE = 16;
 
-  /** The AES key size. */
+  /**
+   * The AES key size.
+   */
   public static final int AES_KEY_SIZE = 32;
 
-  /** The AES key specification. */
+  /**
+   * The AES key specification.
+   */
   public static final String AES_KEY_SPEC = "AES";
 
-  /** The AES tranformation name. */
+  /**
+   * The AES tranformation name.
+   */
   public static final String AES_TRANSFORMATION_NAME = "AES/CFB8/NoPadding";
 
   private static SecureRandom secureRandom = new SecureRandom();
@@ -64,6 +72,7 @@ public class CryptoUtil {
    * Creates a random encryption initialization vector with the specified length.
    *
    * @param length the length of the random encryption initialization vector
+   *
    * @return the random encryption initialization vector
    */
   public static byte[] createRandomEncryptionIV(int length) {
@@ -78,8 +87,9 @@ public class CryptoUtil {
    * Retrieve the key pair with the specified alias from the key store.
    *
    * @param keyStore the key store
-   * @param alias the alias for the key pair
+   * @param alias    the alias for the key pair
    * @param password the password for the key
+   *
    * @return the key pair
    */
   public static KeyPair getKeyPair(KeyStore keyStore, String alias, String password)
@@ -110,9 +120,10 @@ public class CryptoUtil {
   /**
    * Load a key store.
    *
-   * @param type the type of key store e.g. JKS, PKCS12, etc
-   * @param path the path to the key store
+   * @param type     the type of key store e.g. JKS, PKCS12, etc
+   * @param path     the path to the key store
    * @param password the key store password
+   *
    * @return the key store that was loaded
    */
   public static KeyStore loadKeyStore(String type, String path, String password)
@@ -153,10 +164,11 @@ public class CryptoUtil {
   /**
    * Load a key store and query it to confirm a key pair with the specified alias is present.
    *
-   * @param type the type of key store e.g. JKS, PKCS12, etc
-   * @param path the path to the key store
+   * @param type     the type of key store e.g. JKS, PKCS12, etc
+   * @param path     the path to the key store
    * @param password the key store password
-   * @param alias the alias for the key pair in the key store that should be retrieved
+   * @param alias    the alias for the key pair in the key store that should be retrieved
+   *
    * @return the key store that was loaded
    */
   public static KeyStore loadKeyStore(String type, String path, String password, String alias)
@@ -229,9 +241,10 @@ public class CryptoUtil {
   /**
    * Load the trust store.
    *
-   * @param type the type of trust store e.g. JKS, PKCS12, etc
-   * @param path the path to the trust store
+   * @param type     the type of trust store e.g. JKS, PKCS12, etc
+   * @param path     the path to the trust store
    * @param password the trust store password
+   *
    * @return the trust store that was loaded
    */
   public static KeyStore loadTrustStore(String type, String path, String password)
@@ -276,6 +289,7 @@ public class CryptoUtil {
    * decrypt functions.
    *
    * @param password the password to convert to a 3DES key
+   *
    * @return the 3DES key
    */
   public static byte[] passwordTo3DESKey(String password) throws CryptoException {
@@ -289,6 +303,7 @@ public class CryptoUtil {
    * decrypt functions.
    *
    * @param password the password to convert to an AES key
+   *
    * @return the AES key
    */
   public static byte[] passwordToAESKey(String password) throws CryptoException {
@@ -302,7 +317,8 @@ public class CryptoUtil {
    * decrypt functions.
    *
    * @param password the password to convert to an AES key
-   * @param salt the salt to use when generating the AES key
+   * @param salt     the salt to use when generating the AES key
+   *
    * @return the AES key
    */
   public static byte[] passwordToAESKey(String password, byte[] salt) throws CryptoException {
@@ -314,7 +330,8 @@ public class CryptoUtil {
    * decrypt functions.
    *
    * @param password the password to convert to an AES key
-   * @param salt the salt to use when generating the AES key
+   * @param salt     the salt to use when generating the AES key
+   *
    * @return the AES key
    */
   public static byte[] passwordToAESKey(String password, String salt) throws CryptoException {

@@ -42,6 +42,7 @@ public enum GroupMemberType {
   GROUP(1, "Group");
 
   private int code;
+
   private String description;
 
   GroupMemberType(int code, String description) {
@@ -53,6 +54,7 @@ public enum GroupMemberType {
    * Returns the group member type given by the specified code value.
    *
    * @param code the code value identifying the group member type
+   *
    * @return the group member type given by the specified code value
    */
   @JsonCreator

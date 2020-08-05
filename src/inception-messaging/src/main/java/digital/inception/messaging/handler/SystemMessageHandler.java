@@ -68,16 +68,20 @@ public class SystemMessageHandler extends MessageHandler {
   private static final Logger logger = LoggerFactory.getLogger(SystemMessageHandler.class);
 
   /* Codes Service */
-  @Autowired private ICodesService codesService;
+  @Autowired
+  private ICodesService codesService;
 
   /* Error Service */
-  @Autowired private IErrorService errorService;
+  @Autowired
+  private IErrorService errorService;
 
   /* Messaging Service */
-  @Autowired private IMessagingService messagingService;
+  @Autowired
+  private IMessagingService messagingService;
 
   /* Security Service */
-  @Autowired private ISecurityService securityService;
+  @Autowired
+  private ISecurityService securityService;
 
   /**
    * Constructs a new <code>SystemMessageHandler</code>.
@@ -87,6 +91,52 @@ public class SystemMessageHandler extends MessageHandler {
   @SuppressWarnings("unused")
   public SystemMessageHandler(MessageHandlerConfig messageHandlerConfig) {
     super("System Message Handler", messageHandlerConfig);
+  }
+
+  /**
+   * Process the specified message.
+   *
+   * @param message the message to process
+   *
+   * @return the response message or <code>null</code> if no response message exists
+   */
+  @Override
+  public Message processMessage(Message message) throws MessageHandlerException {
+    // Process a "Authenticate Request" message
+    if (message.getTypeId().equals(AuthenticateRequestData.MESSAGE_TYPE_ID)) {
+      return processAuthenticateMessage(message);
+    }
+
+    // Process a "Check User Exists Request" message
+    else if (message.getTypeId().equals(CheckUserExistsRequestData.MESSAGE_TYPE_ID)) {
+      return processCheckUserExistsMessage(message);
+    }
+
+    // Process a "Test Request" message
+    else if (message.getTypeId().equals(TestRequestData.MESSAGE_TYPE_ID)) {
+      return processTestMessage(message);
+    }
+
+    // Process a "Another Test Request" message
+    else if (message.getTypeId().equals(AnotherTestRequestData.MESSAGE_TYPE_ID)) {
+      return processAnotherTestMessage(message);
+    }
+
+    // Process a "Submit Error Report Request" message
+    else if (message.getTypeId().equals(SubmitErrorReportRequestData.MESSAGE_TYPE_ID)) {
+      return processSubmitErrorReportRequestMessage(message);
+    }
+
+    // Process a "Get Code Category Request" message
+    else if (message.getTypeId().equals(GetCodeCategoryRequestData.MESSAGE_TYPE_ID)) {
+      return processGetCodeCategoryRequestMessage(message);
+    }
+
+    throw new MessageHandlerException(
+        String.format(
+            "Failed to process the unrecognised message (%s) with type (%s) from the user (%s) and "
+                + "device (%s)",
+            message.getId(), message.getTypeId(), message.getUsername(), message.getDeviceId()));
   }
 
   private Message processAnotherTestMessage(Message requestMessage) throws MessageHandlerException {
@@ -265,51 +315,6 @@ public class SystemMessageHandler extends MessageHandler {
       throw new MessageHandlerException(
           String.format("Failed to process the message (%s)", requestMessage.getTypeId()), e);
     }
-  }
-
-  /**
-   * Process the specified message.
-   *
-   * @param message the message to process
-   * @return the response message or <code>null</code> if no response message exists
-   */
-  @Override
-  public Message processMessage(Message message) throws MessageHandlerException {
-    // Process a "Authenticate Request" message
-    if (message.getTypeId().equals(AuthenticateRequestData.MESSAGE_TYPE_ID)) {
-      return processAuthenticateMessage(message);
-    }
-
-    // Process a "Check User Exists Request" message
-    else if (message.getTypeId().equals(CheckUserExistsRequestData.MESSAGE_TYPE_ID)) {
-      return processCheckUserExistsMessage(message);
-    }
-
-    // Process a "Test Request" message
-    else if (message.getTypeId().equals(TestRequestData.MESSAGE_TYPE_ID)) {
-      return processTestMessage(message);
-    }
-
-    // Process a "Another Test Request" message
-    else if (message.getTypeId().equals(AnotherTestRequestData.MESSAGE_TYPE_ID)) {
-      return processAnotherTestMessage(message);
-    }
-
-    // Process a "Submit Error Report Request" message
-    else if (message.getTypeId().equals(SubmitErrorReportRequestData.MESSAGE_TYPE_ID)) {
-      return processSubmitErrorReportRequestMessage(message);
-    }
-
-    // Process a "Get Code Category Request" message
-    else if (message.getTypeId().equals(GetCodeCategoryRequestData.MESSAGE_TYPE_ID)) {
-      return processGetCodeCategoryRequestMessage(message);
-    }
-
-    throw new MessageHandlerException(
-        String.format(
-            "Failed to process the unrecognised message (%s) with type (%s) from the user (%s) and "
-                + "device (%s)",
-            message.getId(), message.getTypeId(), message.getUsername(), message.getDeviceId()));
   }
 
   private Message processSubmitErrorReportRequestMessage(Message requestMessage)

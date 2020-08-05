@@ -43,6 +43,7 @@ public enum OrganizationStatus {
   ACTIVE(1, "Active");
 
   private int code;
+
   private String description;
 
   OrganizationStatus(int code, String description) {
@@ -54,6 +55,7 @@ public enum OrganizationStatus {
    * Returns the organization status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the organization status
+   *
    * @return the organization status given by the specified numeric code value
    */
   @JsonCreator

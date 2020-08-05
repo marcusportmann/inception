@@ -33,8 +33,11 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class GroupMemberTypeToIntegerConverter implements Converter<GroupMemberType, Integer> {
 
-  /** Constructs a new <code>GroupMemberTypeToIntegerConverter</code>. */
-  public GroupMemberTypeToIntegerConverter() {}
+  /**
+   * Constructs a new <code>GroupMemberTypeToIntegerConverter</code>.
+   */
+  public GroupMemberTypeToIntegerConverter() {
+  }
 
   @Override
   public Integer convert(GroupMemberType source) {

@@ -34,7 +34,8 @@ public class TestJob implements IJob {
   private static final Logger logger = LoggerFactory.getLogger(TestJob.class);
 
   /* Scheduler Service */
-  @Autowired private ISchedulerService schedulerService;
+  @Autowired
+  private ISchedulerService schedulerService;
 
   /**
    * Execute the job.

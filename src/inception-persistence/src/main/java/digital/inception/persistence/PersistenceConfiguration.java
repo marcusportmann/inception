@@ -53,10 +53,14 @@ import org.springframework.util.StringUtils;
 @EnableJpaRepositories
 public class PersistenceConfiguration {
 
-  /** The Spring application context. */
+  /**
+   * The Spring application context.
+   */
   private ApplicationContext applicationContext;
 
-  /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
+  /**
+   * The optional comma-delimited packages on the classpath to scan for JPA entities.
+   */
   @Value("${inception.persistence.entity-packages:#{null}}")
   private String packagesToScanForEntities;
 

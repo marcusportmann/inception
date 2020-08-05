@@ -58,34 +58,34 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Schema(description = "Job")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "id",
-  "name",
-  "schedulingPattern",
-  "jobClass",
-  "enabled",
-  "status",
-  "executionAttempts",
-  "lockName",
-  "lastExecuted",
-  "nextExecution",
-  "parameters"
+    "id",
+    "name",
+    "schedulingPattern",
+    "jobClass",
+    "enabled",
+    "status",
+    "executionAttempts",
+    "lockName",
+    "lastExecuted",
+    "nextExecution",
+    "parameters"
 })
 @XmlRootElement(name = "Job", namespace = "http://scheduler.inception.digital")
 @XmlType(
     name = "Job",
     namespace = "http://scheduler.inception.digital",
     propOrder = {
-      "id",
-      "name",
-      "schedulingPattern",
-      "jobClass",
-      "enabled",
-      "status",
-      "executionAttempts",
-      "lockName",
-      "lastExecuted",
-      "nextExecution",
-      "parameters"
+        "id",
+        "name",
+        "schedulingPattern",
+        "jobClass",
+        "enabled",
+        "status",
+        "executionAttempts",
+        "lockName",
+        "lastExecuted",
+        "nextExecution",
+        "parameters"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -95,7 +95,9 @@ public class Job implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** Is the job enabled for execution? */
+  /**
+   * Is the job enabled for execution?
+   */
   @Schema(description = "Is the job enabled for execution", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Enabled", required = true)
@@ -103,14 +105,18 @@ public class Job implements Serializable {
   @Column(name = "enabled", nullable = false)
   private boolean enabled;
 
-  /** The number of times the current execution of the job has been attempted. */
+  /**
+   * The number of times the current execution of the job has been attempted.
+   */
   @Schema(description = "The number of times the current execution of the job has been attempted")
   @JsonProperty
   @XmlElement(name = "ExecutionAttempts")
   @Column(name = "execution_attempts")
   private Integer executionAttempts;
 
-  /** The ID uniquely identifying the job. */
+  /**
+   * The ID uniquely identifying the job.
+   */
   @Schema(description = "The ID uniquely identifying the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -120,7 +126,9 @@ public class Job implements Serializable {
   @Column(name = "id", nullable = false)
   private String id;
 
-  /** The fully qualified name of the Java class that implements the job. */
+  /**
+   * The fully qualified name of the Java class that implements the job.
+   */
   @Schema(
       description = "The fully qualified name of the Java class that implements the job",
       required = true)
@@ -131,7 +139,9 @@ public class Job implements Serializable {
   @Column(name = "job_class", nullable = false, length = 1000)
   private String jobClass;
 
-  /** The date and time the job was last executed. */
+  /**
+   * The date and time the job was last executed.
+   */
   @Schema(description = "The date and time the job was last executed")
   @JsonProperty
   @XmlElement(name = "LastExecuted")
@@ -140,14 +150,18 @@ public class Job implements Serializable {
   @Column(name = "last_executed")
   private LocalDateTime lastExecuted;
 
-  /** The name of the entity that has locked the job for execution. */
+  /**
+   * The name of the entity that has locked the job for execution.
+   */
   @Schema(description = "The name of the entity that has locked the job for execution")
   @XmlElement(name = "LockName")
   @Size(min = 1, max = 100)
   @Column(name = "lock_name", length = 100)
   private String lockName;
 
-  /** The name of the job. */
+  /**
+   * The name of the job.
+   */
   @Schema(description = "The name of the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -156,7 +170,9 @@ public class Job implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** The date and time when the job will next be executed. */
+  /**
+   * The date and time when the job will next be executed.
+   */
   @Schema(description = "The date and time when the job will next be executed")
   @JsonProperty
   @XmlElement(name = "NextExecution")
@@ -165,7 +181,9 @@ public class Job implements Serializable {
   @Column(name = "next_execution")
   private LocalDateTime nextExecution;
 
-  /** The parameters for the job. */
+  /**
+   * The parameters for the job.
+   */
   @Schema(description = "The parameters for the job")
   @JsonProperty
   @JsonManagedReference
@@ -181,7 +199,9 @@ public class Job implements Serializable {
       nullable = false)
   private Set<JobParameter> parameters = new HashSet<>();
 
-  /** The cron-style scheduling pattern for the job. */
+  /**
+   * The cron-style scheduling pattern for the job.
+   */
   @Schema(description = "The cron-style scheduling pattern for the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SchedulingPattern", required = true)
@@ -190,7 +210,9 @@ public class Job implements Serializable {
   @Column(name = "scheduling_pattern", nullable = false, length = 100)
   private String schedulingPattern;
 
-  /** The status of the job. */
+  /**
+   * The status of the job.
+   */
   @Schema(description = "The status of the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
@@ -198,23 +220,26 @@ public class Job implements Serializable {
   @Column(name = "status", nullable = false)
   private JobStatus status;
 
-  /** Constructs a new <code>Job</code>. */
-  public Job() {}
+  /**
+   * Constructs a new <code>Job</code>.
+   */
+  public Job() {
+  }
 
   /**
    * Constructs a new <code>Job</code>.
    *
-   * @param id the ID uniquely identifying the job
-   * @param name the name of the job
+   * @param id                the ID uniquely identifying the job
+   * @param name              the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
-   * @param jobClass the fully qualified name of the Java class that implements the job
-   * @param enabled is the job enabled for execution
-   * @param status the status of the job
+   * @param jobClass          the fully qualified name of the Java class that implements the job
+   * @param enabled           is the job enabled for execution
+   * @param status            the status of the job
    * @param executionAttempts the number of times the current execution of the job has been
-   *     attempted
-   * @param lockName the name of the entity that has locked the job for execution
-   * @param lastExecuted the date and time the job was last executed
-   * @param nextExecution the date and time when the job will next be executed
+   *                          attempted
+   * @param lockName          the name of the entity that has locked the job for execution
+   * @param lastExecuted      the date and time the job was last executed
+   * @param nextExecution     the date and time when the job will next be executed
    */
   public Job(
       String id,
@@ -254,8 +279,9 @@ public class Job implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   *     false</code>
+   * false</code>
    */
   @Override
   public boolean equals(Object object) {
@@ -289,7 +315,7 @@ public class Job implements Serializable {
    * Set the number of times the current execution of the job has been attempted.
    *
    * @param executionAttempts the number of times the current execution of the job has been
-   *     attempted
+   *                          attempted
    */
   public void setExecutionAttempts(Integer executionAttempts) {
     this.executionAttempts = executionAttempts;
@@ -468,7 +494,9 @@ public class Job implements Serializable {
     return (id == null) ? 0 : id.hashCode();
   }
 
-  /** Increment the number of execution attempts for the job. */
+  /**
+   * Increment the number of execution attempts for the job.
+   */
   public void incrementExecutionAttempts() {
     if (executionAttempts == null) {
       executionAttempts = 1;
@@ -490,7 +518,7 @@ public class Job implements Serializable {
    * Set whether the job is enabled for execution.
    *
    * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>
-   *     otherwise
+   *                otherwise
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

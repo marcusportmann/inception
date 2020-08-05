@@ -27,7 +27,9 @@ import javax.xml.bind.annotation.XmlType;
 
 // ~--- JDK imports ------------------------------------------------------------
 
-/** The enumeration giving the possible priorities for a message. */
+/**
+ * The enumeration giving the possible priorities for a message.
+ */
 @Schema(description = "MessagePriority")
 @XmlEnum
 @XmlType(name = "MessagePriority", namespace = "http://messaging.inception.digital")
@@ -39,10 +41,14 @@ public enum MessagePriority {
   @XmlEnumValue("High")
   HIGH(10, "High");
 
-  /** The code identifying the message priority. */
+  /**
+   * The code identifying the message priority.
+   */
   private int code;
 
-  /** The description for the message priority. */
+  /**
+   * The description for the message priority.
+   */
   private String description;
 
   MessagePriority(int code, String description) {
@@ -54,6 +60,7 @@ public enum MessagePriority {
    * Returns the message priority given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the message priority
+   *
    * @return the message priority given by the specified numeric code value
    */
   @JsonCreator

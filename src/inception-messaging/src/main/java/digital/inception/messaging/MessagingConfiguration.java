@@ -33,4 +33,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.messaging"})
 @EnableScheduling
-public class MessagingConfiguration {}
+public class MessagingConfiguration {
+
+}

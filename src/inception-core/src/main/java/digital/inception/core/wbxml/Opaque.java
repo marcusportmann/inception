@@ -34,9 +34,12 @@ import java.io.Serializable;
 public class Opaque implements Serializable, Content {
 
   private static final long serialVersionUID = 1000000;
+
   private BinaryBuffer buffer = null;
 
-  /** Constructs a new empty <code>Opaque</code>. */
+  /**
+   * Constructs a new empty <code>Opaque</code>.
+   */
   public Opaque() {
     buffer = new BinaryBuffer();
   }
@@ -100,7 +103,7 @@ public class Opaque implements Serializable, Content {
   /**
    * Print the content to the specified <code>OutputStream</code> using the specified indent level.
    *
-   * @param out the <code>OuputStream</code> to output the content to
+   * @param out    the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {
@@ -114,6 +117,7 @@ public class Opaque implements Serializable, Content {
 
   /**
    * @return the string representation of the <code>Opaque</code> instance
+   *
    * @see Object#toString()
    */
   @Override

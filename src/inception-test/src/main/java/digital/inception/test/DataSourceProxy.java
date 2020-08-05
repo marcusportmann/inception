@@ -38,11 +38,15 @@ import javax.sql.DataSource;
  */
 public class DataSourceProxy implements DataSource {
 
-  /** The active database connections associated with the current thread. */
+  /**
+   * The active database connections associated with the current thread.
+   */
   private static ThreadLocal<Map<Connection, StackTraceElement[]>> activeDatabaseConnections =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /** The data source. */
+  /**
+   * The data source.
+   */
   private DataSource dataSource;
 
   /**

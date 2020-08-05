@@ -37,26 +37,26 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "Users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "userDirectoryId",
-  "users",
-  "total",
-  "filter",
-  "sortDirection",
-  "pageIndex",
-  "pageSize"
+    "userDirectoryId",
+    "users",
+    "total",
+    "filter",
+    "sortDirection",
+    "pageIndex",
+    "pageSize"
 })
 @XmlRootElement(name = "Users", namespace = "http://security.inception.digital")
 @XmlType(
     name = "Users",
     namespace = "http://security.inception.digital",
     propOrder = {
-      "userDirectoryId",
-      "users",
-      "total",
-      "filter",
-      "sortDirection",
-      "pageIndex",
-      "pageSize"
+        "userDirectoryId",
+        "users",
+        "total",
+        "filter",
+        "sortDirection",
+        "pageIndex",
+        "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -64,31 +64,41 @@ public class Users implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the users. */
+  /**
+   * The optional filter that was applied to the users.
+   */
   @Schema(description = "The optional filter that was applied to the users")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /** The optional page index. */
+  /**
+   * The optional page index.
+   */
   @Schema(description = "The optional page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
+  /**
+   * The optional page size.
+   */
   @Schema(description = "The optional page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /** The optional sort direction that was applied to the users. */
+  /**
+   * The optional sort direction that was applied to the users.
+   */
   @Schema(description = "The optional sort direction that was applied to the users")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The total number of users. */
+  /**
+   * The total number of users.
+   */
   @Schema(description = "The total number of users", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
@@ -106,26 +116,31 @@ public class Users implements Serializable {
   @XmlElement(name = "Total", required = true)
   private UUID userDirectoryId;
 
-  /** The users. */
+  /**
+   * The users.
+   */
   @Schema(description = "The users", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Users", required = true)
   private List<User> users;
 
-  /** Constructs a new <code>Users</code>. */
-  public Users() {}
+  /**
+   * Constructs a new <code>Users</code>.
+   */
+  public Users() {
+  }
 
   /**
    * Constructs a new <code>Users</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the users are associated with
-   * @param users tbe users
-   * @param total the total number of users
-   * @param filter the optional filter that was applied to the users
-   * @param sortDirection the optional sort direction that was applied to the users
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   *                        directory the users are associated with
+   * @param users           tbe users
+   * @param total           the total number of users
+   * @param filter          the optional filter that was applied to the users
+   * @param sortDirection   the optional sort direction that was applied to the users
+   * @param pageIndex       the optional page index
+   * @param pageSize        the optional page size
    */
   public Users(
       UUID userDirectoryId,
@@ -194,7 +209,7 @@ public class Users implements Serializable {
    * users are associated with.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   *     users are associated with
+   * users are associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;

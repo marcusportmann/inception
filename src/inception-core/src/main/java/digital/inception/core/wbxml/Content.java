@@ -38,7 +38,7 @@ public interface Content {
   /**
    * Print the content to the specified <code>OutputStream</code> using the specified indent level.
    *
-   * @param out the <code>OuputStream</code> to output the content to
+   * @param out    the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
   void print(OutputStream out, int indent);

@@ -52,8 +52,9 @@ public class DuplicateCodeException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateCodeException</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
    */
   public DuplicateCodeException(String codeCategoryId, String codeId) {
     super(

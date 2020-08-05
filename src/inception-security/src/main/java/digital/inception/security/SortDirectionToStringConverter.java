@@ -31,8 +31,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class SortDirectionToStringConverter implements Converter<SortDirection, String> {
 
-  /** Constructs a new <code>SortDirectionToStringConverter</code>. */
-  public SortDirectionToStringConverter() {}
+  /**
+   * Constructs a new <code>SortDirectionToStringConverter</code>.
+   */
+  public SortDirectionToStringConverter() {
+  }
 
   @Override
   public String convert(SortDirection source) {

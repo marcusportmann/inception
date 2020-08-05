@@ -34,23 +34,27 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
  */
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
-  /** The authorities granted to the user. */
+  /**
+   * The authorities granted to the user.
+   */
   private List<GrantedAuthority> authorities;
 
-  /** The user. */
+  /**
+   * The user.
+   */
   private User user;
 
   /**
    * Constructs a new <code>UserDetails</code>.
    *
-   * @param user the user
-   * @param roleCodes the codes for the roles that the user has been assigned
-   * @param functionCodes the function codes for the user
-   * @param organizationIds the Universally Unique Identifiers (UUIDs) uniquely identifying the
-   *     organizations the user is associated with
+   * @param user             the user
+   * @param roleCodes        the codes for the roles that the user has been assigned
+   * @param functionCodes    the function codes for the user
+   * @param organizationIds  the Universally Unique Identifiers (UUIDs) uniquely identifying the
+   *                         organizations the user is associated with
    * @param userDirectoryIds the list of Universally Unique Identifiers (UUIDs) used to uniquely
-   *     identify the user directories the user is associated with as a result of being associated
-   *     with one or more organizations
+   *                         identify the user directories the user is associated with as a result
+   *                         of being associated with one or more organizations
    */
   UserDetails(
       User user,
@@ -135,7 +139,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
    * Returns whether the user's credentials have expired.
    *
    * @return <code>true</code> if the user's credentials have NOT expired or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   @Override
   public boolean isCredentialsNonExpired() {

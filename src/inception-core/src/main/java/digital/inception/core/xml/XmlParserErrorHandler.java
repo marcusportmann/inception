@@ -32,8 +32,11 @@ public class XmlParserErrorHandler implements ErrorHandler {
 
   private Logger logger = null;
 
-  /** Constructs a new <code>XmlParserErrorHandler</code>. */
-  public XmlParserErrorHandler() {}
+  /**
+   * Constructs a new <code>XmlParserErrorHandler</code>.
+   */
+  public XmlParserErrorHandler() {
+  }
 
   /**
    * Constructs a new <code>XmlParserErrorHandler</code> using the specified <code>Logger</code>.
@@ -43,35 +46,6 @@ public class XmlParserErrorHandler implements ErrorHandler {
   @SuppressWarnings("unused")
   public XmlParserErrorHandler(Logger logger) {
     this.logger = logger;
-  }
-
-  private String buildLogMessage(SAXParseException e) {
-    StringBuilder buffer = new StringBuilder();
-
-    buffer.append(e.getMessage());
-    buffer.append("\n\tat line (");
-    buffer.append(e.getLineNumber());
-    buffer.append(") and column (");
-    buffer.append(e.getColumnNumber());
-    buffer.append(")\n");
-
-    if ((e.getSystemId() != null) && (e.getPublicId() != null)) {
-      buffer.append("\twith SystemID (");
-      buffer.append(e.getSystemId());
-      buffer.append(") and PublicID (");
-      buffer.append(e.getPublicId());
-      buffer.append(")");
-    } else if (e.getSystemId() != null) {
-      buffer.append("\twith SystemID (");
-      buffer.append(e.getSystemId());
-      buffer.append(")");
-    } else if (e.getPublicId() != null) {
-      buffer.append("\twith PublicID (");
-      buffer.append(e.getPublicId());
-      buffer.append(")");
-    }
-
-    return buffer.toString();
   }
 
   /**
@@ -109,5 +83,34 @@ public class XmlParserErrorHandler implements ErrorHandler {
     if (logger != null) {
       logger.warn(buildLogMessage(e));
     }
+  }
+
+  private String buildLogMessage(SAXParseException e) {
+    StringBuilder buffer = new StringBuilder();
+
+    buffer.append(e.getMessage());
+    buffer.append("\n\tat line (");
+    buffer.append(e.getLineNumber());
+    buffer.append(") and column (");
+    buffer.append(e.getColumnNumber());
+    buffer.append(")\n");
+
+    if ((e.getSystemId() != null) && (e.getPublicId() != null)) {
+      buffer.append("\twith SystemID (");
+      buffer.append(e.getSystemId());
+      buffer.append(") and PublicID (");
+      buffer.append(e.getPublicId());
+      buffer.append(")");
+    } else if (e.getSystemId() != null) {
+      buffer.append("\twith SystemID (");
+      buffer.append(e.getSystemId());
+      buffer.append(")");
+    } else if (e.getPublicId() != null) {
+      buffer.append("\twith PublicID (");
+      buffer.append(e.getPublicId());
+      buffer.append(")");
+    }
+
+    return buffer.toString();
   }
 }

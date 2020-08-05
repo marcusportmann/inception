@@ -39,17 +39,25 @@ import org.springframework.util.StringUtils;
  */
 public class AnotherTestRequestData extends WbxmlMessageData {
 
-  /** The UUID for the "Another Test Request" message. */
+  /**
+   * The UUID for the "Another Test Request" message.
+   */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("e9918051-8ebc-48f1-bad7-13c59b550e1a");
 
-  /** The test data. */
+  /**
+   * The test data.
+   */
   private byte[] testData;
 
-  /** The test value. */
+  /**
+   * The test value.
+   */
   private String testValue;
 
-  /** Constructs a new <code>AnotherTestRequestData</code>. */
+  /**
+   * Constructs a new <code>AnotherTestRequestData</code>.
+   */
   public AnotherTestRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -58,7 +66,7 @@ public class AnotherTestRequestData extends WbxmlMessageData {
    * Constructs a new <code>AnotherTestRequestData</code>.
    *
    * @param testValue the test value
-   * @param testData the test data
+   * @param testData  the test data
    */
   public AnotherTestRequestData(String testValue, byte[] testData) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -71,8 +79,9 @@ public class AnotherTestRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
+   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -117,7 +126,7 @@ public class AnotherTestRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   *     message
+   * message
    */
   @Override
   public byte[] toMessageData() {

@@ -56,17 +56,21 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused"})
 public class ErrorRestController extends SecureRestController {
 
-  /** The Error Service. */
+  /**
+   * The Error Service.
+   */
   private final IErrorService errorService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>ErrorRestController</code>.
    *
    * @param errorService the Error Service
-   * @param validator the JSR-303 validator
+   * @param validator    the JSR-303 validator
    */
   public ErrorRestController(IErrorService errorService, Validator validator) {
     this.errorService = errorService;
@@ -81,24 +85,24 @@ public class ErrorRestController extends SecureRestController {
   @Operation(summary = "Create the error report", description = "Create the error report")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The error report was created successfully"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
+          @ApiResponse(
+              responseCode = "204",
+              description = "The error report was created successfully"),
+          @ApiResponse(
+              responseCode = "400",
+              description = "Invalid argument",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class))),
+          @ApiResponse(
+              responseCode = "500",
+              description =
+                  "An error has occurred and the request could not be processed at this time",
+              content =
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/error-reports",
@@ -107,7 +111,7 @@ public class ErrorRestController extends SecureRestController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void createErrorReport(
       @Parameter(name = "errorReport", description = "The error report", required = true)
-          @RequestBody
+      @RequestBody
           ErrorReport errorReport)
       throws InvalidArgumentException, ErrorServiceException {
     if (errorReport == null) {

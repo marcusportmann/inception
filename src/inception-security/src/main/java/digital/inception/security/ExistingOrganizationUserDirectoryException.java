@@ -53,10 +53,10 @@ public class ExistingOrganizationUserDirectoryException extends ServiceException
   /**
    * Constructs a new <code>ExistingOrganizationUserDirectoryException</code>.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param organizationId  the Universally Unique Identifier (UUID) uniquely identifying the
+   *                        organization
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   *                        directory
    */
   public ExistingOrganizationUserDirectoryException(UUID organizationId, UUID userDirectoryId) {
     super(

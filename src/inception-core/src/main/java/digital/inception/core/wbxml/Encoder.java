@@ -30,9 +30,13 @@ import java.util.List;
 public class Encoder {
 
   private static final String ENCODING_UTF_8 = "UTF-8";
+
   private BinaryBuffer buffer;
+
   private byte[] data;
+
   private int length;
+
   private List<String> stringTable;
 
   /**
@@ -75,6 +79,24 @@ public class Encoder {
     generateWBXML(document.getRootElement());
     length = buffer.getLength();
     data = buffer.getData();
+  }
+
+  /**
+   * Returns the binary data which represents the WBXML encoded document
+   *
+   * @return the binary data which represents the WBXML encoded document
+   */
+  public byte[] getData() {
+    return data;
+  }
+
+  /**
+   * Returns the length of the binary data which represents the WBXML encoded document
+   *
+   * @return the length of the binary data which represents the WBXML encoded document
+   */
+  public int getLength() {
+    return length;
   }
 
   private void addToStringTable(String str) {
@@ -222,24 +244,6 @@ public class Encoder {
 
     // Append the end of element space token
     appendByte(WBXML.TOKEN_END);
-  }
-
-  /**
-   * Returns the binary data which represents the WBXML encoded document
-   *
-   * @return the binary data which represents the WBXML encoded document
-   */
-  public byte[] getData() {
-    return data;
-  }
-
-  /**
-   * Returns the length of the binary data which represents the WBXML encoded document
-   *
-   * @return the length of the binary data which represents the WBXML encoded document
-   */
-  public int getLength() {
-    return length;
   }
 
   private int getStringTableLength() {

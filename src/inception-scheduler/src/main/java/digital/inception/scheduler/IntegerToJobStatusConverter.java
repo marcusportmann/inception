@@ -33,8 +33,11 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class IntegerToJobStatusConverter implements Converter<Integer, JobStatus> {
 
-  /** Constructs a new <code>IntegerToJobStatusConverter</code>. */
-  public IntegerToJobStatusConverter() {}
+  /**
+   * Constructs a new <code>IntegerToJobStatusConverter</code>.
+   */
+  public IntegerToJobStatusConverter() {
+  }
 
   @Override
   public JobStatus convert(Integer source) {

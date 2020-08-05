@@ -45,6 +45,7 @@ public enum PasswordChangeReason {
   RESET(2, "Reset");
 
   private int code;
+
   private String description;
 
   PasswordChangeReason(int code, String description) {
@@ -56,6 +57,7 @@ public enum PasswordChangeReason {
    * Returns the password change reason given by the specified code value.
    *
    * @param code the code value identifying the password change reason
+   *
    * @return the password change reason given by the specified code value
    */
   @JsonCreator

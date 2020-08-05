@@ -40,7 +40,9 @@ public class MessagePartDownloadRequest {
    */
   private UUID deviceId;
 
-  /** The username identifying the user whose message parts should be downloaded. */
+  /**
+   * The username identifying the user whose message parts should be downloaded.
+   */
   private String username;
 
   /**
@@ -60,7 +62,7 @@ public class MessagePartDownloadRequest {
    * Constructs a new <code>MessagePartDownloadRequest</code>.
    *
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *     message part download request originated from
+   *                 message part download request originated from
    * @param username the username identifying the user whose message parts should be downloaded
    */
   public MessagePartDownloadRequest(UUID deviceId, String username) {
@@ -73,8 +75,9 @@ public class MessagePartDownloadRequest {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
+   *
    * @return <code>true</code> if the WBXML document contains valid message part download request
-   *     information or <code>false</code> otherwise
+   * information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -90,7 +93,7 @@ public class MessagePartDownloadRequest {
    * part download request originated from.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
-   *     part download request originated from
+   * part download request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -101,7 +104,7 @@ public class MessagePartDownloadRequest {
    * download request originated from.
    *
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *     message part download request originated from
+   *                 message part download request originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

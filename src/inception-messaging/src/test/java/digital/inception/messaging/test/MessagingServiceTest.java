@@ -43,17 +43,22 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class MessagingServiceTest {
 
-  /** The Messaging Service. */
-  @Autowired private IMessagingService messagingService;
+  /**
+   * The Messaging Service.
+   */
+  @Autowired
+  private IMessagingService messagingService;
 
-  /** Test. */
+  /**
+   * Test.
+   */
   @Test
   public void test() throws Exception {
     messagingService.getMaximumProcessingAttempts();
