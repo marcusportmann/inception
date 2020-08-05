@@ -71,7 +71,7 @@ front-end applications.
 1. Checkout the Inception Framework by executing the following command in a Terminal
    window.
    ```
-   git clone git@github.com:marcusportmann/inception.git
+   git clone https://github.com/marcusportmann/inception.git
    ```
 2. Build and install the Java components of the Inception Framework by executing the
    following commands in the *inception/src* directory in a Terminal window.
@@ -85,6 +85,78 @@ front-end applications.
    npm i
    ng build
    cd dist/ngx-inception
+   npm link
+   ```
+3. To launch the *inception-sample* back-end application, execute the following command
+   in the *src/inception-sample/target* directory in a Terminal window, after building
+   the Java components of the Inception Framework.
+   ```
+   java -jar inception-sample-1.0.0-SNAPSHOT.jar
+   ```
+4. To launch the *inception-sample* front-end application, execute the following command
+   in the *inception/src/inception-angular* directory in a Terminal window, after building
+   the Angular components of the Inception Framework.
+   ```
+   ng serve --host 0.0.0.0
+   ```
+
+## Quickstart for Windows
+
+### Setup a development environment on Windows
+
+1. Download the Git for Windows package from *https://git-scm.com/download/win* and
+   install it.
+
+   Select the following options when installing Git:
+   ```
+   Use the native Windows Secure Channel library
+   Checkout Windows-style, commit Unix-style line endings
+   Use MinTTY (the default terminal of MSYS2)
+   Default (fast-forward or merge)
+   Git Credential Manager
+   Enable file system caching
+   ```
+2. Download the OpenJDK 11 package from *https://adoptopenjdk.net* and install it.
+3. Download the Maven package from *https://maven.apache.org* and install it.
+
+   **NOTE:** Ensure that Maven is on the path.
+
+   **NOTE:** Add the proxy settings to the *~/.m2/settings.xml* file if required.
+4. Download the Node.js and npm package from *https://www.npmjs.com/get-npm* and install
+   it.
+
+   **NOTE:** Set the proxy for NPM if required.
+5. Install the Angular CLI 10 globally by executing the following command in a Git Bash
+   window.
+   ```
+   npm install -g @angular/cli@10
+   ```
+6. Execute the following command to change to the more conservative tilde (~) patch
+   update approach for dependencies for npm.
+   ```
+   npm config set save-prefix="~"
+   ```
+
+### Checkout and build the Inception Framework on Windows
+
+1. Checkout the Inception Framework by executing the following command in a Terminal
+   window.
+   ```
+   git clone https://github.com/marcusportmann/inception.git
+   ```
+2. Build and install the Java components of the Inception Framework by executing the
+   following commands in the *inception/src* directory in a Terminal window.
+   ```
+   mvn clean compile package install
+   ```
+2. Build the Angular components of the Inception Framework by executing the
+   following commands in the *inception/src/inception-angular* directory in a Terminal
+   window.
+   ```
+   npm i
+   ng build
+   cd dist/ngx-inception
+   npm link
    ```
 3. To launch the *inception-sample* back-end application, execute the following command
    in the *src/inception-sample/target* directory in a Terminal window, after building
