@@ -147,15 +147,15 @@ public class ReportingServiceTest {
 
     assertTrue("The updated report definition does not exist", reportDefinitionExists);
 
-    long numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
-
-    assertEquals(
-        "The correct number of report definitions was not retrieved", 1, numberOfReportDefinitions);
-
     List<ReportDefinition> reportDefinitions = reportingService.getReportDefinitions();
 
     assertEquals(
         "The correct number of report definitions was not retrieved", 1, reportDefinitions.size());
+
+    long numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
+
+    assertEquals(
+        "The correct number of report definitions was not retrieved", 1, numberOfReportDefinitions);
 
     compareReportDefinitions(reportDefinition, reportDefinitions.get(0));
 

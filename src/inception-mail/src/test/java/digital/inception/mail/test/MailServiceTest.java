@@ -18,6 +18,7 @@ package digital.inception.mail.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -100,7 +101,7 @@ public class MailServiceTest {
 
     compareMailTemplates(mailTemplate, retrievedMailTemplate);
 
-    assertEquals(
+    assertEqualsToMillisecond(
         "The correct updated time was not retrieved for the mail template",
         mailTemplate.getUpdated(),
         mailService.getMailTemplateUpdated(mailTemplate.getId()));
@@ -119,7 +120,7 @@ public class MailServiceTest {
     mailTemplate.setName("Updated " + mailTemplate.getName());
 
     mailService.updateMailTemplate(mailTemplate);
-    assertEquals(
+    assertEqualsToMillisecond(
         "The correct updated time was not retrieved for the mail template",
         mailTemplate.getUpdated(),
         mailService.getMailTemplateUpdated(mailTemplate.getId()));
@@ -128,7 +129,7 @@ public class MailServiceTest {
 
     compareMailTemplates(mailTemplate, retrievedMailTemplate);
 
-    assertEquals(
+    assertEqualsToMillisecond(
         "The correct updated time was not retrieved for the mail template",
         mailTemplate.getUpdated(),
         mailService.getMailTemplateUpdated(mailTemplate.getId()));
@@ -228,7 +229,7 @@ public class MailServiceTest {
         "The template values for the two mail templates do not match",
         mailTemplate1.getTemplate(),
         mailTemplate2.getTemplate());
-    assertEquals(
+    assertEqualsToMillisecond(
         "The updated values for the two mail templates do not match",
         mailTemplate1.getUpdated(),
         mailTemplate2.getUpdated());

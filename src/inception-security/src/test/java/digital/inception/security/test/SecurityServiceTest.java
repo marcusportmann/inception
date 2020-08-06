@@ -18,6 +18,7 @@ package digital.inception.security.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -1627,7 +1628,7 @@ public class SecurityServiceTest {
         user2.getUsername());
 
     if (checkPasswordExpiry) {
-      assertEquals(
+      assertEqualsToMillisecond(
           "The password expiry values for the two users do not match",
           user1.getPasswordExpiry(),
           user2.getPasswordExpiry());

@@ -18,6 +18,7 @@ package digital.inception.codes.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -350,7 +351,7 @@ public class CodesServiceTest {
         "The data values for the two code categories do not match",
         codeCategory1.getData(),
         codeCategory2.getData());
-    assertEquals(
+    assertEqualsToMillisecond(
         "The updated values for the two code categories do not match",
         codeCategory1.getUpdated(),
         codeCategory2.getUpdated());

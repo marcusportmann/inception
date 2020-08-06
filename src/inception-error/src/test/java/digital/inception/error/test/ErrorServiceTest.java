@@ -18,6 +18,7 @@ package digital.inception.error.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertEquals;
 
 import com.github.f4b6a3.uuid.UuidCreator;
@@ -156,7 +157,7 @@ public class ErrorServiceTest {
         "The description values for the two error reports do not match",
         errorReport.getDescription(),
         errorReportSummary.getDescription());
-    assertEquals(
+    assertEqualsToMillisecond(
         "The created values for the two error reports do not match",
         errorReport.getCreated(),
         errorReportSummary.getCreated());
@@ -191,7 +192,7 @@ public class ErrorServiceTest {
         "The detail values for the two error reports do not match",
         errorReport1.getDetail(),
         errorReport2.getDetail());
-    assertEquals(
+    assertEqualsToMillisecond(
         "The created values for the two error reports do not match",
         errorReport1.getCreated(),
         errorReport2.getCreated());
