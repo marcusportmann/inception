@@ -34,16 +34,14 @@ import org.w3c.dom.Document;
 @SuppressWarnings("unused")
 public interface IReportingService {
 
-  /**
-   * The username used to identify operations performed by the system.
-   */
+  /** The username used to identify operations performed by the system. */
   String SYSTEM_USERNAME = "SYSTEM";
 
   /**
    * Create the new report definition.
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
-   *                         for the new report definition
+   *     for the new report definition
    */
   void createReportDefinition(ReportDefinition reportDefinition)
       throws DuplicateReportDefinitionException, ReportingServiceException;
@@ -52,8 +50,7 @@ public interface IReportingService {
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   * @param parameters         the parameters for the report
-   *
+   * @param parameters the parameters for the report
    * @return the PDF data for the report
    */
   byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
@@ -63,9 +60,8 @@ public interface IReportingService {
    * Create the PDF for the report.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   * @param parameters         the parameters for the report
-   * @param connection         the database connection used to retrieve the report data
-   *
+   * @param parameters the parameters for the report
+   * @param connection the database connection used to retrieve the report data
    * @return the PDF data for the report
    */
   byte[] createReportPDF(
@@ -76,9 +72,8 @@ public interface IReportingService {
    * Create the PDF for the report.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   * @param parameters         the parameters for the report
-   * @param document           the XML document containing the report data
-   *
+   * @param parameters the parameters for the report
+   * @param document the XML document containing the report data
    * @return the PDF data for the report
    */
   byte[] createReportPDF(
@@ -104,22 +99,14 @@ public interface IReportingService {
    * Set the real path to the folder where the local Jasper reports are stored.
    *
    * @param localReportFolderPath the real path to the folder where the local Jasper reports are
-   *                              stored
+   *     stored
    */
   void setLocalReportFolderPath(String localReportFolderPath);
-
-  /**
-   * Returns the number of report definitions.
-   *
-   * @return the number of report definitions
-   */
-  long getNumberOfReportDefinitions() throws ReportingServiceException;
 
   /**
    * Retrieve the report definition.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return the report definition
    */
   ReportDefinition getReportDefinition(String reportDefinitionId)
@@ -129,7 +116,6 @@ public interface IReportingService {
    * Retrieve the name of the report definition.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return the name of the report definition
    */
   String getReportDefinitionName(String reportDefinitionId)
@@ -146,7 +132,6 @@ public interface IReportingService {
    * Retrieve the summary for the report definition.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return the summary for the report definition
    */
   ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
@@ -163,7 +148,6 @@ public interface IReportingService {
    * Check whether the report definition exists.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
   boolean reportDefinitionExists(String reportDefinitionId) throws ReportingServiceException;
@@ -172,7 +156,7 @@ public interface IReportingService {
    * Update the report definition.
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
-   *                         information for the report definition
+   *     information for the report definition
    */
   void updateReportDefinition(ReportDefinition reportDefinition)
       throws ReportDefinitionNotFoundException, ReportingServiceException;

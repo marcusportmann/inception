@@ -56,25 +56,19 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class ReportingServiceTest {
 
   private static int reportDefinitionCount;
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
-  @Autowired
-  private DataSource dataSource;
+  /** The data source used to provide connections to the application database. */
+  @Autowired private DataSource dataSource;
 
-  /**
-   * The Reporting Service.
-   */
-  @Autowired
-  private IReportingService reportingService;
+  /** The Reporting Service. */
+  @Autowired private IReportingService reportingService;
 
   private static synchronized ReportDefinition getTestReportDefinitionDetails() {
     reportDefinitionCount++;
@@ -90,9 +84,7 @@ public class ReportingServiceTest {
     return reportDefinition;
   }
 
-  /**
-   * Test the create report PDF functionality.
-   */
+  /** Test the create report PDF functionality. */
   @Test
   public void createReportPDFTest() throws Exception {
     ReportDefinition reportDefinition = getTestReportDefinitionDetails();
@@ -108,9 +100,7 @@ public class ReportingServiceTest {
     reportingService.deleteReportDefinition(reportDefinition.getId());
   }
 
-  /**
-   * Test the report definition functionality.
-   */
+  /** Test the report definition functionality. */
   @Test
   public void reportDefinitionTest() throws Exception {
     ReportDefinition reportDefinition = getTestReportDefinitionDetails();
@@ -151,11 +141,6 @@ public class ReportingServiceTest {
 
     assertEquals(
         "The correct number of report definitions was not retrieved", 1, reportDefinitions.size());
-
-    long numberOfReportDefinitions = reportingService.getNumberOfReportDefinitions();
-
-    assertEquals(
-        "The correct number of report definitions was not retrieved", 1, numberOfReportDefinitions);
 
     compareReportDefinitions(reportDefinition, reportDefinitions.get(0));
 

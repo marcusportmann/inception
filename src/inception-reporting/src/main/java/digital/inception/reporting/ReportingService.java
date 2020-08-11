@@ -53,19 +53,13 @@ public class ReportingService implements IReportingService {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReportingService.class);
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /** The data source used to provide connections to the application database. */
   private final DataSource dataSource;
 
-  /**
-   * The Report Definition Repository.
-   */
+  /** The Report Definition Repository. */
   private final ReportDefinitionRepository reportDefinitionRepository;
 
-  /**
-   * The Report Definition Summary Repository.
-   */
+  /** The Report Definition Summary Repository. */
   private final ReportDefinitionSummaryRepository reportDefinitionSummaryRepository;
 
   /* The real path to the folder where the local Jasper reports are stored. */
@@ -74,9 +68,8 @@ public class ReportingService implements IReportingService {
   /**
    * Constructs a new <code>ReportingService</code>.
    *
-   * @param dataSource                        the data source used to provide connections to the
-   *                                          application database
-   * @param reportDefinitionRepository        the Report Definition Repository
+   * @param dataSource the data source used to provide connections to the application database
+   * @param reportDefinitionRepository the Report Definition Repository
    * @param reportDefinitionSummaryRepository the Report Definition Summary Repository
    */
   public ReportingService(
@@ -92,7 +85,7 @@ public class ReportingService implements IReportingService {
    * Create the new report definition.
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
-   *                         for the new report definition
+   *     for the new report definition
    */
   @Override
   @Transactional
@@ -116,8 +109,7 @@ public class ReportingService implements IReportingService {
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   * @param parameters         the parameters for the report
-   *
+   * @param parameters the parameters for the report
    * @return the PDF data for the report
    */
   @Override
@@ -140,9 +132,8 @@ public class ReportingService implements IReportingService {
    * Create the PDF for the report.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   * @param parameters         the parameters for the report
-   * @param connection         the database connection used to retrieve the report data
-   *
+   * @param parameters the parameters for the report
+   * @param connection the database connection used to retrieve the report data
    * @return the PDF data for the report
    */
   @Override
@@ -189,9 +180,8 @@ public class ReportingService implements IReportingService {
    * Create the PDF for the report.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   * @param parameters         the parameters for the report
-   * @param document           the XML document containing the report data
-   *
+   * @param parameters the parameters for the report
+   * @param document the XML document containing the report data
    * @return the PDF data for the report
    */
   @Override
@@ -269,31 +259,16 @@ public class ReportingService implements IReportingService {
    * Set the real path to the folder where the local Jasper reports are stored.
    *
    * @param localReportFolderPath the real path to the folder where the local Jasper reports are
-   *                              stored
+   *     stored
    */
   public void setLocalReportFolderPath(String localReportFolderPath) {
     this.localReportFolderPath = localReportFolderPath;
   }
 
   /**
-   * Returns the number of report definitions.
-   *
-   * @return the number of report definitions
-   */
-  @Override
-  public long getNumberOfReportDefinitions() throws ReportingServiceException {
-    try {
-      return reportDefinitionRepository.count();
-    } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to retrieve the number of report definitions", e);
-    }
-  }
-
-  /**
    * Retrieve the report definition.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return the report definition
    */
   @Override
@@ -320,7 +295,6 @@ public class ReportingService implements IReportingService {
    * Retrieve the name of the report definition.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return the name of the report definition
    */
   @Override
@@ -362,7 +336,6 @@ public class ReportingService implements IReportingService {
    * Retrieve the summary for the report definition.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return the summary for the report definition
    */
   @Override
@@ -404,7 +377,6 @@ public class ReportingService implements IReportingService {
    * Check whether the report definition exists.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
   @Override
@@ -422,7 +394,7 @@ public class ReportingService implements IReportingService {
    * Update the report definition.
    *
    * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
-   *                         information for the report definition
+   *     information for the report definition
    */
   @Override
   @Transactional

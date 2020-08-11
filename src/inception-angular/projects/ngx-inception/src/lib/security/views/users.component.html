@@ -14,18 +14,18 @@
     <div></div>
     <table-filter></table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="firstName" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="fullName" matSortDirection="asc" matSortDisableClear>
 
-    <!-- First Name Column -->
-    <ng-container matColumnDef="firstName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_users_component_table_header_first_name">First Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.firstName}}</mat-cell>
+    <!-- Full Name Column -->
+    <ng-container matColumnDef="fullName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_users_component_table_header_full_name">Full Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.fullName}}</mat-cell>
     </ng-container>
 
-    <!-- Last Name Column -->
-    <ng-container matColumnDef="lastName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_users_component_table_header_last_name">Last Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.lastName}}</mat-cell>
+    <!-- Preferred Name Column -->
+    <ng-container matColumnDef="preferredName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_users_component_table_header_preferred_name">Preferred Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.preferredName}}</mat-cell>
     </ng-container>
 
     <!-- Username Column -->

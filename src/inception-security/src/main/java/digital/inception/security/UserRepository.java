@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -53,8 +54,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
 
   @Query(
       "select count(u.id) from User u where ((lower(u.username) like lower(:filter)) or "
-          + "(lower(u.firstName) like lower(:filter)) or (lower(u.lastName) like lower(:filter))) and "
-          + "u.userDirectoryId = :userDirectoryId")
+          + "(lower(u.fullName) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
   long countFiltered(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("filter") String filter);
 
@@ -76,21 +76,22 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
 
   List<User> findByUserDirectoryId(UUID userDirectoryId);
 
-  List<User> findByUserDirectoryId(UUID userDirectoryId, Pageable pageable);
+  Page<User> findByUserDirectoryId(UUID userDirectoryId, Pageable pageable);
 
   Optional<User> findByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
   @Query(
       "select u from User u where ((lower(u.username) like lower(:filter)) or "
-          + "(lower(u.firstName) like lower(:filter)) or (lower(u.lastName) like lower(:filter))) "
-          + "and u.userDirectoryId = :userDirectoryId")
-  List<User> findFiltered(
+          + "(lower(u.fullName) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
+  Page<User> findFiltered(
       @Param("userDirectoryId") UUID userDirectoryId,
       @Param("filter") String filter,
       Pageable pageable);
 
-  Optional<FirstNameAndLastName> getFirstNameAndLastNameByUserDirectoryIdAndUsernameIgnoreCase(
-      UUID userDirectoryId, String username);
+  @Query(
+      "select u.fullName from User u where ((lower(u.username) = lower(:username)) "
+          + "and u.userDirectoryId = :userDirectoryId)")
+  String getFullNameByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
   @Query(
       "select f.code from User u join u.groups as g join g.roles as r join r.functions as f "

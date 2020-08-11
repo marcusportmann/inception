@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2017 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,15 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.reference;
+
+// ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>FirstNameAndLastName</code> interface allows the first name and last name for a user to
- * be retrieved.
+ * The <code>IReferenceService</code> interface defines the functionality provided by a Reference
+ * Service implementation.
  *
  * @author Marcus Portmann
  */
-public interface FirstNameAndLastName {
-
-  /**
-   * Returns the first name for the user.
-   *
-   * @return the first name for the user
-   */
-  String getFirstName();
-
-  /**
-   * Returns the last name for the user.
-   *
-   * @return the last name for the user
-   */
-  String getLastName();
-}
+@SuppressWarnings("unused")
+public interface IReferenceService {}

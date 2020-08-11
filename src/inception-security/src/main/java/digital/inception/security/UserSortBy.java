@@ -37,27 +37,21 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "UserSortBy", namespace = "http://security.inception.digital")
 public enum UserSortBy {
-  /**
-   * Sort by first name.
-   */
-  @XmlEnumValue("FirstName")
-  FIRST_NAME(0, "Sort By First Name"),
+  /** Sort by full name. */
+  @XmlEnumValue("FullName")
+  FULL_NAME(0, "Sort By Full Name"),
 
-  /**
-   * Sort by last name.
-   */
-  @XmlEnumValue("LastName")
-  LAST_NAME(1, "Sort By Last Name"),
+  /** Sort by preferred name. */
+  @XmlEnumValue("PreferredName")
+  PREFERRED_NAME(1, "Sort By Preferred Name"),
 
-  /**
-   * Sort by username.
-   */
+  /** Sort by username. */
   @XmlEnumValue("Username")
   USERNAME(2, "Sort By Username");
 
-  private int code;
+  private final int code;
 
-  private String description;
+  private final String description;
 
   UserSortBy(int code, String description) {
     this.code = code;
@@ -68,17 +62,16 @@ public enum UserSortBy {
    * Returns the method used to sort a list of users given by the specified code value.
    *
    * @param code the code value identifying the method used to sort a list of users
-   *
    * @return the method used to sort a list of users given by the specified code value
    */
   @JsonCreator
   public static UserSortBy fromCode(int code) {
     switch (code) {
       case 0:
-        return UserSortBy.FIRST_NAME;
+        return UserSortBy.FULL_NAME;
 
       case 1:
-        return UserSortBy.LAST_NAME;
+        return UserSortBy.PREFERRED_NAME;
 
       default:
         return UserSortBy.USERNAME;
@@ -89,7 +82,6 @@ public enum UserSortBy {
    * Returns the method used to sort a list of users given by the specified code value.
    *
    * @param code the code value identifying the method used to sort a list of users
-   *
    * @return the method used to sort a list of users given by the specified code value
    */
   public static UserSortBy fromCode(String code) {

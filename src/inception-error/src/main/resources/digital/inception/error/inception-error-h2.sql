@@ -3,6 +3,7 @@
 -- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA error;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -46,6 +47,7 @@ COMMENT ON COLUMN error.error_reports.device_id IS 'The optional Universally Uni
 COMMENT ON COLUMN error.error_reports.feedback IS 'The optional feedback provided by the user for the error';
 
 COMMENT ON COLUMN error.error_reports.data IS 'The optional base-64 encoded data associated with the error report';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

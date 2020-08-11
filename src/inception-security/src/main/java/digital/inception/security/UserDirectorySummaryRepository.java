@@ -20,6 +20,7 @@ package digital.inception.security;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -35,17 +36,17 @@ import org.springframework.data.repository.query.Param;
  */
 public interface UserDirectorySummaryRepository extends JpaRepository<UserDirectorySummary, UUID> {
 
-  List<UserDirectorySummary> findAllByOrderByNameAsc(Pageable pageable);
+  Page<UserDirectorySummary> findAllByOrderByNameAsc(Pageable pageable);
 
-  List<UserDirectorySummary> findAllByOrderByNameDesc(Pageable pageable);
+  Page<UserDirectorySummary> findAllByOrderByNameDesc(Pageable pageable);
 
   @Query(
       "select uds from UserDirectorySummary uds join uds.organizations as o where o.id = :organizationId")
   List<UserDirectorySummary> findAllByOrganizationId(@Param("organizationId") UUID organizationId);
 
-  List<UserDirectorySummary> findByNameContainingIgnoreCaseOrderByNameAsc(
+  Page<UserDirectorySummary> findByNameContainingIgnoreCaseOrderByNameAsc(
       String name, Pageable pageable);
 
-  List<UserDirectorySummary> findByNameContainingIgnoreCaseOrderByNameDesc(
+  Page<UserDirectorySummary> findByNameContainingIgnoreCaseOrderByNameDesc(
       String name, Pageable pageable);
 }

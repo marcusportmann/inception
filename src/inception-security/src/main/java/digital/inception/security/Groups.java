@@ -26,6 +26,7 @@ import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -72,12 +73,11 @@ public class Groups implements Serializable {
   @XmlElement(name = "Filter")
   private String filter;
 
-  /**
-   * The groups.
-   */
+  /** The groups. */
   @Schema(description = "The groups", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Groups", required = true)
+  @XmlElementWrapper(name = "Groups", required = true)
+  @XmlElement(name = "Group", required = true)
   private List<Group> groups;
 
   /**
@@ -135,7 +135,7 @@ public class Groups implements Serializable {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory the groups are associated with
-   * @param groups          tbe groups
+   * @param groups          the groups
    * @param total           the total number of groups
    * @param filter          the optional filter that was applied to the groups
    * @param sortDirection   the optional sort direction that was applied to the groups

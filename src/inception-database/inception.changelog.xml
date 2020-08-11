@@ -510,8 +510,8 @@
       <column name="user_directory_id" type="uuid" remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory the user is associated with"/>
       <column name="username" type="nvarchar(100)" remarks="The username for the user"/>
       <column name="status" type="int" remarks="The status for the user"/>
-      <column name="first_name" type="nvarchar(100)" remarks="The first name for the user"/>
-      <column name="last_name" type="nvarchar(100)" remarks="The last name for the user'"/>
+      <column name="full_name" type="nvarchar(100)" remarks="The full name of the user"/>
+      <column name="preferred_name" type="nvarchar(100)" remarks="The preferred name for the user'"/>
       <column name="phone_number" type="nvarchar(100)" remarks="The phone number for the user"/>
       <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number for the user"/>
       <column name="email" type="nvarchar(100)" remarks="The e-mail address for the user"/>
@@ -524,8 +524,8 @@
     <addNotNullConstraint schemaName="security" tableName="users" columnName="user_directory_id"/>
     <addNotNullConstraint schemaName="security" tableName="users" columnName="username"/>
     <addNotNullConstraint schemaName="security" tableName="users" columnName="status"/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="first_name" defaultNullValue=""/>
-    <addNotNullConstraint schemaName="security" tableName="users" columnName="last_name" defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="full_name" defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="preferred_name" defaultNullValue=""/>
     <addNotNullConstraint schemaName="security" tableName="users" columnName="phone_number" defaultNullValue=""/>
     <addNotNullConstraint schemaName="security" tableName="users" columnName="mobile_number" defaultNullValue=""/>
     <addNotNullConstraint schemaName="security" tableName="users" columnName="email" defaultNullValue=""/>
@@ -536,8 +536,11 @@
     <createIndex indexName="users_user_directory_id_ix" schemaName="security" tableName="users">
       <column name="user_directory_id"/>
     </createIndex>
-    <createIndex indexName="" schemaName="security" tableName="users" unique="true">
+    <createIndex indexName="users_username_ix" schemaName="security" tableName="users" unique="true">
       <column name="username"/>
+    </createIndex>
+    <createIndex indexName="users_full_name_ix" schemaName="security" tableName="users" unique="false">
+      <column name="full_name"/>
     </createIndex>
 
     <createTable schemaName="security" tableName="users_password_history" remarks="User Password History">
@@ -692,8 +695,8 @@
       <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="username" value="administrator"/>
       <column name="status" value="1"/>
-      <column name="first_name" value="Administrator"/>
-      <column name="last_name" value=""/>
+      <column name="full_name" value="Administrator"/>
+      <column name="preferred_name" value=""/>
       <column name="phone_number" value=""/>
       <column name="mobile_number" value=""/>
       <column name="email" value=""/>

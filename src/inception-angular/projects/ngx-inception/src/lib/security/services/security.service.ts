@@ -1243,13 +1243,13 @@ export class SecurityService {
   }
 
   /**
-   * Retrieve the full name for the user.
+   * Retrieve the full name of the user.
    *
    * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory.
    * @param username        The username identifying the user.
    *
-   * @return The full name for the user.
+   * @return The full name of the user.
    */
   getUserFullName(userDirectoryId: string, username: string): Observable<string> {
     return this.httpClient.get<string>(
@@ -1266,7 +1266,7 @@ export class SecurityService {
         } else if (apiError.code === 'UserNotFoundError') {
           return throwError(new UserNotFoundError(apiError));
         } else {
-          return throwError(new SecurityServiceError('Failed to retrieve the full name for the user.', apiError));
+          return throwError(new SecurityServiceError('Failed to retrieve the full name of the user.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -1282,7 +1282,7 @@ export class SecurityService {
    * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory.
    * @param filter          The optional filter to apply to the users.
-   * @param sortBy          The optional method used to sort the users e.g. by last name.
+   * @param sortBy          The optional method used to sort the users e.g. by full name.
    * @param sortDirection   The optional sort direction to apply to the users.
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.

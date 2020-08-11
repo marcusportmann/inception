@@ -21,6 +21,7 @@ package digital.inception.security;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -95,14 +96,14 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
 
   List<Group> findByUserDirectoryId(UUID userDirectoryId);
 
-  List<Group> findByUserDirectoryId(UUID userDirectoryId, Pageable pageable);
+  Page<Group> findByUserDirectoryId(UUID userDirectoryId, Pageable pageable);
 
   Optional<Group> findByUserDirectoryIdAndNameIgnoreCase(UUID userDirectoryId, String name);
 
   @Query(
       "select g from Group g where (lower(g.name) like lower(:filter)) and "
           + "g.userDirectoryId = :userDirectoryId")
-  List<Group> findFiltered(
+  Page<Group> findFiltered(
       @Param("userDirectoryId") UUID userDirectoryId,
       @Param("filter") String filter,
       Pageable pageable);
@@ -110,7 +111,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
   @Query(
       "select u.username from Group g join g.users as u where g.userDirectoryId = "
           + ":userDirectoryId and g.id = :groupId and (lower(u.username) like lower(:filter))")
-  List<String> getFilteredUsernamesForGroup(
+  Page<String> getFilteredUsernamesForGroup(
       @Param("userDirectoryId") UUID userDirectoryId,
       @Param("groupId") UUID groupId,
       @Param("filter") String filter,
@@ -150,7 +151,7 @@ public interface GroupRepository extends JpaRepository<Group, UUID> {
   @Query(
       "select u.username from Group g join g.users as u "
           + "where g.userDirectoryId = :userDirectoryId and g.id = :groupId")
-  List<String> getUsernamesForGroup(
+  Page<String> getUsernamesForGroup(
       @Param("userDirectoryId") UUID userDirectoryId,
       @Param("groupId") UUID groupId,
       Pageable pageable);

@@ -78,7 +78,7 @@ export class Session {
   userDirectoryId: string;
 
   /**
-   * The full name for the user.
+   * The full name of the user.
    */
   userFullName: string;
 
@@ -88,7 +88,7 @@ export class Session {
    * @param username          The username for the user the user session is associated with.
    * @param userDirectoryId   The Universally Unique Identifier (UUID) uniquely identifying the
    *                          user directory the user is associated with.
-   * @param userFullName      The full name for the user.
+   * @param userFullName      The full name of the user.
    * @param scopes            The OAuth2 scopes for the user session.
    * @param roleCodes         The codes identifying the roles assigned to the user associated with
    *                          the user session.

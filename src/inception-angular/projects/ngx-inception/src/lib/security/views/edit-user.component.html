@@ -12,21 +12,21 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label i18n="@@security_edit_user_component_label_first_name">First Name</mat-label>
-            <input type="text" matInput formControlName="firstName">
-            <mat-error *ngIf="firstNameFormControl.errors && !firstNameFormControl.untouched">
-              <span *ngIf="firstNameFormControl.errors?.required" i18n="@@security_edit_user_component_error_first_name_required">A first name is required.</span>
-              <span *ngIf="firstNameFormControl.errors?.maxlength" i18n="@@security_edit_user_component_error_first_name_maxlength">First name must not exceed 100 characters.</span>
+            <mat-label i18n="@@security_edit_user_component_label_full_name">Full Name</mat-label>
+            <input type="text" matInput formControlName="fullName">
+            <mat-error *ngIf="fullNameFormControl.errors && !fullNameFormControl.untouched">
+              <span *ngIf="fullNameFormControl.errors?.required" i18n="@@security_edit_user_component_error_full_name_required">A full name is required.</span>
+              <span *ngIf="fullNameFormControl.errors?.maxlength" i18n="@@security_edit_user_component_error_full_name_maxlength">Full name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-sm">
           <mat-form-field>
-            <mat-label i18n="@@security_edit_user_component_label_last_name">Last Name</mat-label>
-            <input type="text" matInput formControlName="lastName">
-            <mat-error *ngIf="lastNameFormControl.errors && !lastNameFormControl.untouched">
-              <span *ngIf="lastNameFormControl.errors?.required" i18n="@@security_edit_user_component_error_last_name_required">A last name is required.</span>
-              <span *ngIf="lastNameFormControl.errors?.maxlength" i18n="@@security_edit_user_component_error_last_name_maxlength">Last name must not exceed 100 characters.</span>
+            <mat-label i18n="@@security_edit_user_component_label_preferred_name">Preferred Name</mat-label>
+            <input type="text" matInput formControlName="preferredName">
+            <mat-error *ngIf="preferredNameFormControl.errors && !preferredNameFormControl.untouched">
+              <span *ngIf="preferredNameFormControl.errors?.required" i18n="@@security_edit_user_component_error_preferred_name_required">A preferred name is required.</span>
+              <span *ngIf="preferredNameFormControl.errors?.maxlength" i18n="@@security_edit_user_component_error_preferred_name_maxlength">Preferred name must not exceed 100 characters.</span>
             </mat-error>
           </mat-form-field>
         </div>

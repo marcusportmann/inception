@@ -3,8 +3,8 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>inception-oauth2-resource-server </artifactId>
-  <name>inception-oauth2-resource-server </name>
+  <artifactId>inception-oauth2-resource-server</artifactId>
+  <name>inception-oauth2-resource-server</name>
 
   <parent>
     <groupId>digital.inception</groupId>

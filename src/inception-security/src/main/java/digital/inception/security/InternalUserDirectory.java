@@ -29,96 +29,69 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>InternalUserDirectory</code> class provides the internal user directory
- * implementation.
+ * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
  *
  * @author Marcus Portmann
  */
 public class InternalUserDirectory extends UserDirectoryBase {
 
-  /**
-   * The default maximum number of filtered groups.
-   */
+  /** The default maximum number of filtered groups. */
   private static final int DEFAULT_MAX_FILTERED_GROUPS = 100;
 
-  /**
-   * The default maximum number of filtered group members.
-   */
+  /** The default maximum number of filtered group members. */
   private static final int DEFAULT_MAX_FILTERED_GROUP_MEMBERS = 100;
 
-  /**
-   * The default maximum number of filtered users.
-   */
+  /** The default maximum number of filtered users. */
   private static final int DEFAULT_MAX_FILTERED_USERS = 100;
 
-  /**
-   * The default number of failed password attempts before the user is locked.
-   */
+  /** The default number of failed password attempts before the user is locked. */
   private static final int DEFAULT_MAX_PASSWORD_ATTEMPTS = 5;
 
-  /**
-   * The default number of months before a user's password expires.
-   */
+  /** The default number of months before a user's password expires. */
   private static final int DEFAULT_PASSWORD_EXPIRY_MONTHS = 3;
 
-  /**
-   * The default number of months to check password history against.
-   */
+  /** The default number of months to check password history against. */
   private static final int DEFAULT_PASSWORD_HISTORY_MONTHS = 12;
 
-  /**
-   * The user directory capabilities common to all internal user directory instances.
-   */
+  /** The user directory capabilities common to all internal user directory instances. */
   private static final UserDirectoryCapabilities INTERNAL_USER_DIRECTORY_CAPABILITIES =
       new UserDirectoryCapabilities(true, true, true, true, true, true, true, true);
 
-  /**
-   * The maximum number of filtered group members to return.
-   */
+  /** The maximum number of filtered group members to return. */
   private final int maxFilteredGroupMembers;
 
-  /**
-   * The maximum number of filtered groups to return.
-   */
+  /** The maximum number of filtered groups to return. */
   private final int maxFilteredGroups;
 
-  /**
-   * The maximum number of filtered users to return.
-   */
+  /** The maximum number of filtered users to return. */
   private final int maxFilteredUsers;
 
-  /**
-   * The maximum number of password attempts.
-   */
+  /** The maximum number of password attempts. */
   private final int maxPasswordAttempts;
 
-  /**
-   * The password expiry period in months.
-   */
+  /** The password expiry period in months. */
   private final int passwordExpiryMonths;
 
-  /**
-   * The password history period in months.
-   */
+  /** The password history period in months. */
   private final int passwordHistoryMonths;
 
   /**
    * Constructs a new <code>InternalUserDirectory</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory
-   * @param parameters      the parameters for the user directory
+   *     directory
+   * @param parameters the parameters for the user directory
    * @param groupRepository the Group Repository
-   * @param userRepository  the User Repository
-   * @param roleRepository  the Role Repository
+   * @param userRepository the User Repository
+   * @param roleRepository the Role Repository
    */
   public InternalUserDirectory(
       UUID userDirectoryId,
@@ -178,14 +151,14 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Add the group member to the group.
    *
-   * @param groupName  the name identifying the group
+   * @param groupName the name identifying the group
    * @param memberType the group member type
    * @param memberName the group member name
    */
   @Override
   public void addMemberToGroup(String groupName, GroupMemberType memberType, String memberName)
       throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
-      SecurityServiceException {
+          SecurityServiceException {
     if (memberType != GroupMemberType.USER) {
       throw new SecurityServiceException(
           "Unsupported group member type (" + memberType.description() + ")");
@@ -202,12 +175,12 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Add the role to the group.
    *
    * @param groupName the name identifying the group
-   * @param roleCode  the code uniquely identifying the role
+   * @param roleCode the code uniquely identifying the role
    */
   @Override
   public void addRoleToGroup(String groupName, String roleCode)
       throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
-      SecurityServiceException {
+          SecurityServiceException {
     try {
       Optional<UUID> groupIdOptional =
           getGroupRepository()
@@ -245,7 +218,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Add the user to the group.
    *
    * @param groupName the name identifying the group
-   * @param username  the username identifying the user
+   * @param username the username identifying the user
    */
   @Override
   public void addUserToGroup(String groupName, String username)
@@ -286,12 +259,12 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Administratively change the password for the user.
    *
-   * @param username             the username identifying the user
-   * @param newPassword          the new password
-   * @param expirePassword       expire the user's password
-   * @param lockUser             lock the user
+   * @param username the username identifying the user
+   * @param newPassword the new password
+   * @param expirePassword expire the user's password
+   * @param lockUser lock the user
    * @param resetPasswordHistory reset the user's password history
-   * @param reason               the reason for changing the password
+   * @param reason the reason for changing the password
    */
   @Override
   public void adminChangePassword(
@@ -359,7 +332,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
   @Override
   public void authenticate(String username, String password)
       throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, SecurityServiceException {
+          UserNotFoundException, SecurityServiceException {
     try {
       Optional<User> userOptional =
           getUserRepository()
@@ -409,14 +382,14 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Change the password for the user.
    *
-   * @param username    the username identifying the user
-   * @param password    the password for the user that is used to authorise the operation
+   * @param username the username identifying the user
+   * @param password the password for the user that is used to authorise the operation
    * @param newPassword the new password
    */
   @Override
   public void changePassword(String username, String password, String newPassword)
       throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-      ExistingPasswordException, SecurityServiceException {
+          ExistingPasswordException, SecurityServiceException {
     try {
       Optional<User> userOptional =
           getUserRepository()
@@ -502,9 +475,9 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Create the new user.
    *
-   * @param user            the user
+   * @param user the user
    * @param expiredPassword create the user with its password expired
-   * @param userLocked      create the user locked
+   * @param userLocked create the user locked
    */
   @Override
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
@@ -624,7 +597,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the users matching the attribute criteria.
    *
    * @param attributes the attribute criteria used to select the users
-   *
    * @return the users whose attributes match the attribute criteria
    */
   @Override
@@ -640,10 +612,10 @@ public class InternalUserDirectory extends UserDirectoryBase {
           userCriteria.setStatus(UserStatus.fromCode(attribute.getIntegerValue()));
         } else if (attribute.getName().equalsIgnoreCase("email")) {
           userCriteria.setEmail(attribute.getValue());
-        } else if (attribute.getName().equalsIgnoreCase("firstName")) {
-          userCriteria.setFirstName(attribute.getValue());
-        } else if (attribute.getName().equalsIgnoreCase("lastName")) {
-          userCriteria.setLastName(attribute.getValue());
+        } else if (attribute.getName().equalsIgnoreCase("fullName")) {
+          userCriteria.setFullName(attribute.getValue());
+        } else if (attribute.getName().equalsIgnoreCase("preferredName")) {
+          userCriteria.setPreferredName(attribute.getValue());
         } else if (attribute.getName().equalsIgnoreCase("phoneNumber")) {
           userCriteria.setPhoneNumber(attribute.getValue());
         } else if (attribute.getName().equalsIgnoreCase("mobileNumber")) {
@@ -684,7 +656,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the authorised function codes for the user.
    *
    * @param username the username identifying the user
-   *
    * @return the authorised function codes for the user
    */
   @Override
@@ -717,7 +688,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the group.
    *
    * @param groupName the name identifying the group
-   *
    * @return the group
    */
   @Override
@@ -767,7 +737,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the names identifying the groups the user is a member of.
    *
    * @param username the username identifying the user
-   *
    * @return the names identifying the groups the user is a member of
    */
   @Override
@@ -814,11 +783,10 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the groups.
    *
-   * @param filter        the optional filter to apply to the groups
+   * @param filter the optional filter to apply to the groups
    * @param sortDirection the optional sort direction to apply to the groups
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the groups
    */
   @Override
@@ -834,25 +802,26 @@ public class InternalUserDirectory extends UserDirectoryBase {
         pageSize = maxFilteredGroups;
       }
 
-      Pageable pageable =
+      PageRequest pageRequest =
           PageRequest.of(
               pageIndex,
               (pageSize > maxFilteredGroups) ? maxFilteredGroups : pageSize,
               (sortDirection == SortDirection.ASCENDING) ? Sort.Direction.ASC : Sort.Direction.DESC,
               "name");
 
-      List<Group> groups;
+      Page<Group> groupPage;
       if (StringUtils.isEmpty(filter)) {
-        groups = getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
+        groupPage = getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageRequest);
       } else {
-        groups =
-            getGroupRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageable);
+        groupPage =
+            getGroupRepository()
+                .findFiltered(getUserDirectoryId(), "%" + filter + "%", pageRequest);
       }
 
       return new Groups(
           getUserDirectoryId(),
-          groups,
-          getNumberOfGroups(filter),
+          groupPage.toList(),
+          groupPage.getTotalElements(),
           filter,
           sortDirection,
           pageIndex,
@@ -870,7 +839,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the groups the user is a member of.
    *
    * @param username the username identifying the user
-   *
    * @return the groups the user is a member of
    */
   @Override
@@ -903,7 +871,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the group members for the group.
    *
    * @param groupName the name identifying the group
-   *
    * @return the group members for the group
    */
   @Override
@@ -945,12 +912,11 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the group members for the group.
    *
-   * @param groupName     the name identifying the group
-   * @param filter        the optional filter to apply to the group members
+   * @param groupName the name identifying the group
+   * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the group members for the group
    */
   @Override
@@ -978,26 +944,26 @@ public class InternalUserDirectory extends UserDirectoryBase {
         pageSize = maxFilteredGroups;
       }
 
-      Pageable pageable =
+      PageRequest pageRequest =
           PageRequest.of(
               pageIndex, (pageSize > maxFilteredGroupMembers) ? maxFilteredGroupMembers : pageSize);
 
-      List<String> usernames;
+      Page<String> usernamesForGroupPage;
 
       if (StringUtils.isEmpty(filter)) {
-        usernames =
+        usernamesForGroupPage =
             getGroupRepository()
-                .getUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get(), pageable);
+                .getUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get(), pageRequest);
       } else {
-        usernames =
+        usernamesForGroupPage =
             getGroupRepository()
                 .getFilteredUsernamesForGroup(
-                    getUserDirectoryId(), groupIdOptional.get(), "%" + filter + "%", pageable);
+                    getUserDirectoryId(), groupIdOptional.get(), "%" + filter + "%", pageRequest);
       }
 
       List<GroupMember> groupMembers = new ArrayList<>();
 
-      for (String username : usernames) {
+      for (String username : usernamesForGroupPage) {
         groupMembers.add(
             new GroupMember(getUserDirectoryId(), groupName, GroupMemberType.USER, username));
       }
@@ -1012,7 +978,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
           getUserDirectoryId(),
           groupName,
           groupMembers,
-          getNumberOfMembersForGroup(groupName, filter),
+          usernamesForGroupPage.getTotalElements(),
           filter,
           sortDirection,
           pageIndex,
@@ -1031,98 +997,9 @@ public class InternalUserDirectory extends UserDirectoryBase {
   }
 
   /**
-   * Retrieve the number of groups.
-   *
-   * @param filter the optional filter to apply to the groups
-   *
-   * @return the number of groups
-   */
-  @Override
-  public long getNumberOfGroups(String filter) throws SecurityServiceException {
-    try {
-      if (StringUtils.isEmpty(filter)) {
-        return getGroupRepository().countByUserDirectoryId(getUserDirectoryId());
-      } else {
-        return getGroupRepository().countFiltered(getUserDirectoryId(), "%" + filter + "%");
-      }
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the number of groups for the user directory ("
-              + getUserDirectoryId()
-              + ")",
-          e);
-    }
-  }
-
-  /**
-   * Retrieve the number of group members for the group.
-   *
-   * @param groupName the name identifying the group
-   * @param filter    the optional filter to apply to the members
-   *
-   * @return the number of group members for the group
-   */
-  @Override
-  public long getNumberOfMembersForGroup(String groupName, String filter)
-      throws GroupNotFoundException, SecurityServiceException {
-    try {
-      Optional<UUID> groupIdOptional =
-          getGroupRepository()
-              .getIdByUserDirectoryIdAndNameIgnoreCase(getUserDirectoryId(), groupName);
-
-      if (groupIdOptional.isEmpty()) {
-        throw new GroupNotFoundException(groupName);
-      }
-
-      if (StringUtils.isEmpty(filter)) {
-        return getGroupRepository()
-            .countUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get());
-      } else {
-        return getGroupRepository()
-            .countFilteredUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get(), filter);
-      }
-    } catch (GroupNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the number of group members for the group ("
-              + groupName
-              + ") for the user directory ("
-              + getUserDirectoryId()
-              + ")",
-          e);
-    }
-  }
-
-  /**
-   * Retrieve the number of users.
-   *
-   * @param filter the optional filter to apply to the users
-   *
-   * @return the number of users
-   */
-  @Override
-  public long getNumberOfUsers(String filter) throws SecurityServiceException {
-    try {
-      if (StringUtils.isEmpty(filter)) {
-        return getUserRepository().countByUserDirectoryId(getUserDirectoryId());
-      } else {
-        return getUserRepository().countFiltered(getUserDirectoryId(), "%" + filter + "%");
-      }
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the number of users for the user directory ("
-              + getUserDirectoryId()
-              + ")",
-          e);
-    }
-  }
-
-  /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
    * @param groupName the name identifying the group
-   *
    * @return the codes for the roles that have been assigned to the group
    */
   @Override
@@ -1155,7 +1032,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param username the username identifying the user
-   *
    * @return the codes for the roles that the user has been assigned
    */
   @Override
@@ -1188,7 +1064,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the roles that have been assigned to the group.
    *
    * @param groupName the name identifying the group
-   *
    * @return the roles that have been assigned to the group
    */
   @Override
@@ -1227,7 +1102,6 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Retrieve the user.
    *
    * @param username the username identifying the user
-   *
    * @return the user
    */
   @Override
@@ -1256,41 +1130,29 @@ public class InternalUserDirectory extends UserDirectoryBase {
   }
 
   /**
-   * Retrieve the full name for the user.
+   * Retrieve the full name of the user.
    *
    * @param username the username identifying the user
-   *
-   * @return the full name for the user
+   * @return the full name of the user
    */
   @Override
   public String getUserFullName(String username)
       throws UserNotFoundException, SecurityServiceException {
     try {
-      Optional<FirstNameAndLastName> firstNameAndLastNameOptional =
+      String fullName =
           getUserRepository()
-              .getFirstNameAndLastNameByUserDirectoryIdAndUsernameIgnoreCase(
-                  getUserDirectoryId(), username);
+              .getFullNameByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
-      if (firstNameAndLastNameOptional.isPresent()) {
-        StringBuilder buffer = new StringBuilder(firstNameAndLastNameOptional.get().getFirstName());
-
-        if (!StringUtils.isEmpty(firstNameAndLastNameOptional.get().getLastName())) {
-          if (buffer.length() > 0) {
-            buffer.append(" ");
-          }
-
-          buffer.append(firstNameAndLastNameOptional.get().getLastName());
-        }
-
-        return buffer.toString();
-      } else {
+      if (StringUtils.isEmpty(fullName)) {
         throw new UserNotFoundException(username);
+      } else {
+        return fullName;
       }
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new SecurityServiceException(
-          "Failed to retrieve the full name for the user ("
+          "Failed to retrieve the full name of the user ("
               + username
               + ") for the user directory ("
               + getUserDirectoryId()
@@ -1317,12 +1179,11 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the users.
    *
-   * @param filter        the optional filter to apply to the users
-   * @param sortBy        the optional method used to sort the users e.g. by last name
+   * @param filter the optional filter to apply to the users
+   * @param sortBy the optional method used to sort the users e.g. by full name
    * @param sortDirection the optional sort direction to apply to the users
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the users
    */
   @Override
@@ -1334,7 +1195,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
       Integer pageSize)
       throws SecurityServiceException {
     try {
-      Pageable pageable = null;
+      PageRequest pageRequest = null;
 
       if (pageIndex == null) {
         pageIndex = 0;
@@ -1345,7 +1206,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
       }
 
       if (sortBy == UserSortBy.USERNAME) {
-        pageable =
+        pageRequest =
             PageRequest.of(
                 pageIndex,
                 (pageSize > maxFilteredUsers) ? maxFilteredUsers : pageSize,
@@ -1353,38 +1214,38 @@ public class InternalUserDirectory extends UserDirectoryBase {
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
                 "username");
-      } else if (sortBy == UserSortBy.FIRST_NAME) {
-        pageable =
+      } else if (sortBy == UserSortBy.FULL_NAME) {
+        pageRequest =
             PageRequest.of(
                 pageIndex,
                 (pageSize > maxFilteredUsers) ? maxFilteredUsers : pageSize,
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "firstName");
-      } else if (sortBy == UserSortBy.LAST_NAME) {
-        pageable =
+                "fullName");
+      } else if (sortBy == UserSortBy.PREFERRED_NAME) {
+        pageRequest =
             PageRequest.of(
                 pageIndex,
                 (pageSize > maxFilteredUsers) ? maxFilteredUsers : pageSize,
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "lastName");
+                "preferredName");
       }
 
-      List<User> users;
+      Page<User> userPage;
       if (StringUtils.isEmpty(filter)) {
-        users = getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageable);
+        userPage = getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageRequest);
       } else {
-        users =
-            getUserRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageable);
+        userPage =
+            getUserRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageRequest);
       }
 
       return new Users(
           getUserDirectoryId(),
-          users,
-          getNumberOfUsers(filter),
+          userPage.toList(),
+          userPage.getTotalElements(),
           filter,
           sortDirection,
           pageIndex,
@@ -1402,9 +1263,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Does the user with the specified username exist?
    *
    * @param username the username identifying the user
-   *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   * otherwise
+   *     otherwise
    */
   @Override
   public boolean isExistingUser(String username) throws SecurityServiceException {
@@ -1426,8 +1286,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Is the user in the group?
    *
    * @param groupName the name identifying the group
-   * @param username  the username identifying the user
-   *
+   * @param username the username identifying the user
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
    */
   @Override
@@ -1469,7 +1328,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Remove the group member from the group.
    *
-   * @param groupName  the name identifying the group
+   * @param groupName the name identifying the group
    * @param memberType the group member type
    * @param memberName the group member name
    */
@@ -1492,7 +1351,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Remove the role from the group.
    *
    * @param groupName the name identifying the group
-   * @param roleCode  the code uniquely identifying the role
+   * @param roleCode the code uniquely identifying the role
    */
   @Override
   public void removeRoleFromGroup(String groupName, String roleCode)
@@ -1528,7 +1387,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Remove the user from the group.
    *
    * @param groupName the name identifying the group
-   * @param username  the username identifying the user
+   * @param username the username identifying the user
    */
   @Override
   public void removeUserFromGroup(String groupName, String username)
@@ -1569,13 +1428,13 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Reset the password for the user.
    *
-   * @param username    the username identifying the user
+   * @param username the username identifying the user
    * @param newPassword the new password
    */
   @Override
   public void resetPassword(String username, String newPassword)
       throws UserNotFoundException, UserLockedException, ExistingPasswordException,
-      SecurityServiceException {
+          SecurityServiceException {
     try {
       Optional<User> userOptional =
           getUserRepository()
@@ -1654,9 +1513,9 @@ public class InternalUserDirectory extends UserDirectoryBase {
   /**
    * Update the user.
    *
-   * @param user           the user
+   * @param user the user
    * @param expirePassword expire the user's password as part of the update
-   * @param lockUser       lock the user as part of the update
+   * @param lockUser lock the user as part of the update
    */
   @Override
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
@@ -1673,12 +1532,12 @@ public class InternalUserDirectory extends UserDirectoryBase {
 
       User existingUser = userOptional.get();
 
-      if (user.getFirstName() != null) {
-        existingUser.setFirstName(user.getFirstName());
+      if (user.getFullName() != null) {
+        existingUser.setFullName(user.getFullName());
       }
 
-      if (user.getLastName() != null) {
-        existingUser.setLastName(user.getLastName());
+      if (user.getPreferredName() != null) {
+        existingUser.setPreferredName(user.getPreferredName());
       }
 
       if (user.getEmail() != null) {
@@ -1727,11 +1586,10 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Is the password, given by the specified password hash, a historical password that cannot be
    * reused for a period of time i.e. was the password used previously in the last X months.
    *
-   * @param userId       the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userId the Universally Unique Identifier (UUID) uniquely identifying the user
    * @param passwordHash the password hash
-   *
    * @return <code>true</code> if the password was previously used and cannot be reused for a period
-   * of time or <code>false</code> otherwise
+   *     of time or <code>false</code> otherwise
    */
   private boolean isPasswordInHistory(UUID userId, String passwordHash) {
     LocalDateTime after = LocalDateTime.now();

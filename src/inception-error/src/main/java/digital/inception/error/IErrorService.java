@@ -33,7 +33,7 @@ public interface IErrorService {
    * Create the new entry for the error report in the database.
    *
    * @param errorReport the <code>ErrorReport</code> instance containing the information for the
-   *                    error report
+   *     error report
    */
   void createErrorReport(ErrorReport errorReport) throws ErrorServiceException;
 
@@ -41,8 +41,7 @@ public interface IErrorService {
    * Retrieve the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
-   *                      report
-   *
+   *     report
    * @return the error report or <code>null</code> if the error report could not be found
    */
   ErrorReport getErrorReport(UUID errorReportId)
@@ -52,10 +51,9 @@ public interface IErrorService {
    * Retrieve the summary for the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
-   *                      report
-   *
+   *     report
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   * found
+   *     found
    */
   ErrorReportSummary getErrorReportSummary(UUID errorReportId)
       throws ErrorReportNotFoundException, ErrorServiceException;
@@ -64,17 +62,9 @@ public interface IErrorService {
    * Retrieve the summaries for the most recent error reports.
    *
    * @param maximumNumberOfEntries the maximum number of summaries for the most recent error reports
-   *                               to retrieve
-   *
+   *     to retrieve
    * @return the summaries for the most recent error reports
    */
   List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
       throws ErrorServiceException;
-
-  /**
-   * Returns the total number of error reports.
-   *
-   * @return the total number of error reports
-   */
-  long getNumberOfErrorReports() throws ErrorServiceException;
 }

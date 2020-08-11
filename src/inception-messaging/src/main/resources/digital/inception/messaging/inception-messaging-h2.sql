@@ -3,6 +3,7 @@
 -- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA messaging;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -204,6 +205,7 @@ COMMENT ON COLUMN messaging.archived_messages.created IS 'The date and time the 
 COMMENT ON COLUMN messaging.archived_messages.archived IS 'The date and time the message was archived';
 
 COMMENT ON COLUMN messaging.archived_messages.data IS 'The data for the message';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

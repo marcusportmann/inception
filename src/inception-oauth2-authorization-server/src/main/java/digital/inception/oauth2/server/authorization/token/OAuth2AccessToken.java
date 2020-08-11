@@ -138,12 +138,12 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
         jwtClaimsSetBuilder.issuer(issuer);
       }
 
-      if ((!StringUtils.isEmpty(user.getFirstName()))
-          && (!StringUtils.isEmpty(user.getFirstName()))) {
+      if ((!StringUtils.isEmpty(user.getFullName()))
+          && (!StringUtils.isEmpty(user.getFullName()))) {
         jwtClaimsSetBuilder.claim(
-            USER_FULL_NAME_CLAIM, user.getFirstName() + " " + user.getLastName());
-      } else if (!StringUtils.isEmpty(user.getFirstName())) {
-        jwtClaimsSetBuilder.claim(USER_FULL_NAME_CLAIM, user.getFirstName());
+            USER_FULL_NAME_CLAIM, user.getFullName() + " " + user.getPreferredName());
+      } else if (!StringUtils.isEmpty(user.getFullName())) {
+        jwtClaimsSetBuilder.claim(USER_FULL_NAME_CLAIM, user.getFullName());
       } else if (!StringUtils.isEmpty(user.getEmail())) {
         jwtClaimsSetBuilder.claim(USER_FULL_NAME_CLAIM, user.getEmail());
       } else {

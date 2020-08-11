@@ -3,6 +3,7 @@
 -- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA scheduler;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -60,6 +61,7 @@ COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The ID uniquely identifyin
 COMMENT ON COLUMN scheduler.job_parameters.name IS 'The name of the job parameter';
 
 COMMENT ON COLUMN scheduler.job_parameters.value IS 'The value of the job parameter';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

@@ -25,6 +25,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -37,24 +38,24 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "UserDirectorySummaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "userDirectorySummaries",
-    "total",
-    "filter",
-    "sortDirection",
-    "pageIndex",
-    "pageSize"
+  "userDirectorySummaries",
+  "total",
+  "filter",
+  "sortDirection",
+  "pageIndex",
+  "pageSize"
 })
 @XmlRootElement(name = "UserDirectorySummaries", namespace = "http://security.inception.digital")
 @XmlType(
     name = "UserDirectorySummaries",
     namespace = "http://security.inception.digital",
     propOrder = {
-        "userDirectorySummaries",
-        "total",
-        "filter",
-        "sortDirection",
-        "pageIndex",
-        "pageSize"
+      "userDirectorySummaries",
+      "total",
+      "filter",
+      "sortDirection",
+      "pageIndex",
+      "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -62,72 +63,57 @@ public class UserDirectorySummaries implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The optional filter that was applied to the user directory summaries.
-   */
+  /** The optional filter that was applied to the user directory summaries. */
   @Schema(description = "The optional filter that was applied to the user directory summaries")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /**
-   * The optional page index.
-   */
+  /** The optional page index. */
   @Schema(description = "The optional page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /**
-   * The optional page size.
-   */
+  /** The optional page size. */
   @Schema(description = "The optional page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /**
-   * The optional sort direction that was applied to the user directory summaries.
-   */
+  /** The optional sort direction that was applied to the user directory summaries. */
   @Schema(
       description = "The optional sort direction that was applied to the user directory summaries")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /**
-   * The total number of user directory summaries.
-   */
+  /** The total number of user directory summaries. */
   @Schema(description = "The total number of user directory summaries", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /**
-   * The user directory summaries.
-   */
+  /** The user directory summaries. */
   @Schema(description = "The user directory summaries", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "UserDirectorySummaries", required = true)
+  @XmlElementWrapper(name = "UserDirectorySummaries", required = true)
+  @XmlElement(name = "UserDirectorySummary", required = true)
   private List<UserDirectorySummary> userDirectorySummaries;
 
-  /**
-   * Constructs a new <code>UserDirectorySummaries</code>.
-   */
-  public UserDirectorySummaries() {
-  }
+  /** Constructs a new <code>UserDirectorySummaries</code>. */
+  public UserDirectorySummaries() {}
 
   /**
    * Constructs a new <code>UserDirectorySummaries</code>.
    *
-   * @param userDirectorySummaries tbe user directory summaries
-   * @param total                  the total number of user directory summaries
-   * @param filter                 the optional filter that was applied to the user directory
-   *                               summaries
-   * @param sortDirection          the optional sort direction that was applied to the user
-   *                               directory summaries
-   * @param pageIndex              the optional page index
-   * @param pageSize               the optional page size
+   * @param userDirectorySummaries the user directory summaries
+   * @param total the total number of user directory summaries
+   * @param filter the optional filter that was applied to the user directory summaries
+   * @param sortDirection the optional sort direction that was applied to the user directory
+   *     summaries
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    */
   public UserDirectorySummaries(
       List<UserDirectorySummary> userDirectorySummaries,

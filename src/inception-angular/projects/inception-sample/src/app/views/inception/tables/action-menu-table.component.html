@@ -5,16 +5,16 @@
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" matSort>
 
-    <!-- First Name(s) Column -->
-    <ng-container matColumnDef="firstNames">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>First&nbsp;Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.firstNames}}</mat-cell>
+    <!-- Full Name Column -->
+    <ng-container matColumnDef="fullName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Full&nbsp;Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.fullName}}</mat-cell>
     </ng-container>
 
-    <!-- Last Name Column -->
-    <ng-container matColumnDef="lastName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.lastName}}</mat-cell>
+    <!-- Preferred Name Column -->
+    <ng-container matColumnDef="preferredName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Preferred Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.preferredName}}</mat-cell>
     </ng-container>
 
     <!-- E-Mail Column -->

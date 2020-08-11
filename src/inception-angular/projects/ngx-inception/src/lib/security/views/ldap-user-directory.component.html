@@ -122,35 +122,23 @@
   <div class="row">
     <div class="col-sm">
       <mat-form-field>
-        <mat-label i18n="@@security_ldap_user_directory_component_label_user_first_name_attribute">User First Name Attribute</mat-label>
-        <input type="text" matInput formControlName="userFirstNameAttribute" required="true">
-        <mat-error *ngIf="userFirstNameAttributeFormControl.errors && !userFirstNameAttributeFormControl.untouched">
-          <span *ngIf="userFirstNameAttributeFormControl.errors?.required" i18n="@@security_ldap_user_directory_component_error_user_first_name_attribute_required">The user first name attribute is required.</span>
-          <span *ngIf="userFirstNameAttributeFormControl.errors?.maxlength" i18n="@@security_ldap_user_directory_component_error_user_first_name_attribute_maxlength">User first name attribute must not exceed 100 characters.</span>
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm">
-      <mat-form-field>
-        <mat-label i18n="@@security_ldap_user_directory_component_label_user_last_name_attribute">User Last Name Attribute</mat-label>
-        <input type="text" matInput formControlName="userLastNameAttribute" required="true">
-        <mat-error *ngIf="userLastNameAttributeFormControl.errors && !userLastNameAttributeFormControl.untouched">
-          <span *ngIf="userLastNameAttributeFormControl.errors?.required" i18n="@@security_ldap_user_directory_component_error_user_last_name_attribute_required">The user last name attribute is required.</span>
-          <span *ngIf="userLastNameAttributeFormControl.errors?.maxlength" i18n="@@security_ldap_user_directory_component_error_user_last_name_attribute_maxlength">User last name attribute must not exceed 100 characters.</span>
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm">
-      <mat-form-field>
         <mat-label i18n="@@security_ldap_user_directory_component_label_user_full_name_attribute">User Full Name Attribute</mat-label>
         <input type="text" matInput formControlName="userFullNameAttribute" required="true">
         <mat-error *ngIf="userFullNameAttributeFormControl.errors && !userFullNameAttributeFormControl.untouched">
           <span *ngIf="userFullNameAttributeFormControl.errors?.required" i18n="@@security_ldap_user_directory_component_error_user_full_name_attribute_required">The user full name attribute is required.</span>
           <span *ngIf="userFullNameAttributeFormControl.errors?.maxlength" i18n="@@security_ldap_user_directory_component_error_user_full_name_attribute_maxlength">User full name attribute must not exceed 100 characters.</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm">
+      <mat-form-field>
+        <mat-label i18n="@@security_ldap_user_directory_component_label_user_preferred_name_attribute">User Preferred Name Attribute</mat-label>
+        <input type="text" matInput formControlName="userPreferredNameAttribute" required="true">
+        <mat-error *ngIf="userPreferredNameAttributeFormControl.errors && !userPreferredNameAttributeFormControl.untouched">
+          <span *ngIf="userPreferredNameAttributeFormControl.errors?.required" i18n="@@security_ldap_user_directory_component_error_user_preferred_name_attribute_required">The user preferred name attribute is required.</span>
+          <span *ngIf="userPreferredNameAttributeFormControl.errors?.maxlength" i18n="@@security_ldap_user_directory_component_error_user_preferred_name_attribute_maxlength">User preferred name attribute must not exceed 100 characters.</span>
         </mat-error>
       </mat-form-field>
     </div>

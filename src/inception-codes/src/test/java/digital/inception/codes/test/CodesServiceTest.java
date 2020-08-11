@@ -224,11 +224,6 @@ public class CodesServiceTest {
 
     compareCodes(code, retrievedCode);
 
-    assertEquals(
-        "The correct number of codes was not retrieved",
-        1,
-        codesService.getNumberOfCodes(codeCategory.getId()));
-
     codesService.deleteCode(codeCategory.getId(), code.getId());
 
     if (codesService.codeExists(codeCategory.getId(), code.getId())) {
@@ -263,10 +258,6 @@ public class CodesServiceTest {
     for (Code code : codes) {
       codesService.createCode(code);
     }
-
-    long numberOfCodes = codesService.getNumberOfCodes(codeCategory.getId());
-
-    assertEquals("The correct number of codes was not retrieved", codes.size(), numberOfCodes);
 
     List<Code> retrievedCodes = codesService.getCodesForCodeCategory(codeCategory.getId());
 
@@ -331,11 +322,6 @@ public class CodesServiceTest {
         retrievedCodeCategories.size());
 
     compareCodeCategories(codeCategory, retrievedCodeCategories.get(0));
-
-    assertEquals(
-        "The correct number of code categories was not retrieved",
-        1,
-        codesService.getNumberOfCodeCategories());
   }
 
   private void compareCodeCategories(CodeCategory codeCategory1, CodeCategory codeCategory2) {

@@ -3,6 +3,7 @@
 -- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA configuration;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -19,6 +20,7 @@ COMMENT ON COLUMN configuration.configuration.key IS 'The key uniquely identifyi
 COMMENT ON COLUMN configuration.configuration.value IS 'The value for the configuration value';
 
 COMMENT ON COLUMN configuration.configuration.description IS 'The description for the configuration value';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

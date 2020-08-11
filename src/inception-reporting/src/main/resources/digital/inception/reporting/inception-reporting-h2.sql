@@ -3,6 +3,7 @@
 -- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA reporting;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -19,6 +20,7 @@ COMMENT ON COLUMN reporting.report_definitions.id IS 'The ID uniquely identifyin
 COMMENT ON COLUMN reporting.report_definitions.name IS 'The name of the report definition';
 
 COMMENT ON COLUMN reporting.report_definitions.template IS 'The JasperReports template for the report definition';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

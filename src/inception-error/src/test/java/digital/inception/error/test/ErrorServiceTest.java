@@ -96,8 +96,6 @@ public class ErrorServiceTest {
 
     compareErrorReportAndErrorReportSummary(errorReport, retrievedErrorReportSummary);
 
-    assertEquals(
-        "The number of error reports is incorrect", 1, errorService.getNumberOfErrorReports());
 
     List<ErrorReportSummary> errorReportSummaries =
         errorService.getMostRecentErrorReportSummaries(1000);

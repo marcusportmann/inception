@@ -22,14 +22,14 @@
 export enum UserSortBy {
 
   /**
-   * Sort by first name.
+   * Sort by full name.
    */
-  FirstName = 0,
+  FullName = 0,
 
   /**
-   * Sort by last name.
+   * Sort by preferred name.
    */
-  LastName = 1,
+  PreferredName = 1,
 
   /**
    * Sort by username.

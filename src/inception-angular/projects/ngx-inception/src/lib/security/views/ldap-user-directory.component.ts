@@ -90,11 +90,9 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
 
   userEmailAttributeFormControl: FormControl;
 
-  userFirstNameAttributeFormControl: FormControl;
-
   userFullNameAttributeFormControl: FormControl;
 
-  userLastNameAttributeFormControl: FormControl;
+  userPreferredNameAttributeFormControl: FormControl;
 
   userMobileNumberAttributeFormControl: FormControl;
 
@@ -132,9 +130,8 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     this.userBaseDNFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userObjectClassFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userEmailAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.userFirstNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userFullNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.userLastNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userPreferredNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userMobileNumberAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userPhoneNumberAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userUsernameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
@@ -163,9 +160,8 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       userBaseDN: this.userBaseDNFormControl,
       userObjectClass: this.userObjectClassFormControl,
       userEmailAttribute: this.userEmailAttributeFormControl,
-      userFirstNameAttribute: this.userFirstNameAttributeFormControl,
       userFullNameAttribute: this.userFullNameAttributeFormControl,
-      userLastNameAttribute: this.userLastNameAttributeFormControl,
+      userPreferredNameAttribute: this.userPreferredNameAttributeFormControl,
       userMobileNumberAttribute: this.userMobileNumberAttributeFormControl,
       userPhoneNumberAttribute: this.userPhoneNumberAttributeFormControl,
       userUsernameAttribute: this.userUsernameAttributeFormControl,
@@ -204,9 +200,8 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     UserDirectoryUtil.setParameter(parameters, 'UserBaseDN', this.userBaseDNFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserObjectClass', this.userObjectClassFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserEmailAttribute', this.userEmailAttributeFormControl.value);
-    UserDirectoryUtil.setParameter(parameters, 'UserFirstNameAttribute', this.userFirstNameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserFullNameAttribute', this.userFullNameAttributeFormControl.value);
-    UserDirectoryUtil.setParameter(parameters, 'UserLastNameAttribute', this.userLastNameAttributeFormControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'UserPreferredNameAttribute', this.userPreferredNameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserMobileNumberAttribute',
       this.userMobileNumberAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserPhoneNumberAttribute',
@@ -284,13 +279,10 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       UserDirectoryUtil.getParameter(parameters, 'UserObjectClass') : 'inetOrgPerson');
     this.userEmailAttributeFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'UserEmailAttribute') ?
       UserDirectoryUtil.getParameter(parameters, 'UserEmailAttribute') : 'mail');
-    this.userFirstNameAttributeFormControl.setValue(
-      UserDirectoryUtil.hasParameter(parameters, 'UserFirstNameAttribute') ?
-        UserDirectoryUtil.getParameter(parameters, 'UserFirstNameAttribute') : 'givenName');
     this.userFullNameAttributeFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'UserFullNameAttribute') ?
-      UserDirectoryUtil.getParameter(parameters, 'UserFullNameAttribute') : 'cn');
-    this.userLastNameAttributeFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'UserLastNameAttribute') ?
-      UserDirectoryUtil.getParameter(parameters, 'UserLastNameAttribute') : 'sn');
+      UserDirectoryUtil.getParameter(parameters, 'UserFullNameAttribute') : 'FullName');
+    this.userPreferredNameAttributeFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'UserPreferredNameAttribute') ?
+      UserDirectoryUtil.getParameter(parameters, 'UserPreferredNameAttribute') : 'nickName');
     this.userMobileNumberAttributeFormControl.setValue(
       UserDirectoryUtil.hasParameter(parameters, 'UserMobileNumberAttribute') ?
         UserDirectoryUtil.getParameter(parameters, 'UserMobileNumberAttribute') : 'mobile');

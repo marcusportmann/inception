@@ -63,8 +63,8 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
       // hideRequired: false,
       // floatLabel: 'auto',
       // tslint:disable-next-line
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      fullName: ['', Validators.required],
+      preferredName: ['', Validators.required],
       title: ['', Validators.required], // dateOfBirth: [moment(), Validators.required],
       dateOfBirth: ['', Validators.required],
       password: ['', Validators.required],

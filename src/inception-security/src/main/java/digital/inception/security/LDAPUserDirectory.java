@@ -56,24 +56,16 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"unused", "Duplicates", "SpringJavaAutowiredMembersInspection"})
 public class LDAPUserDirectory extends UserDirectoryBase {
 
-  /**
-   * The default maximum number of filtered groups.
-   */
+  /** The default maximum number of filtered groups. */
   private static final int DEFAULT_MAX_FILTERED_GROUPS = 100;
 
-  /**
-   * The default maximum number of filtered group members.
-   */
+  /** The default maximum number of filtered group members. */
   private static final int DEFAULT_MAX_FILTERED_GROUP_MEMBERS = 100;
 
-  /**
-   * The default maximum number of filtered users.
-   */
+  /** The default maximum number of filtered users. */
   private static final int DEFAULT_MAX_FILTERED_USERS = 100;
 
-  /**
-   * The empty attribute list.
-   */
+  /** The empty attribute list. */
   private static final String[] EMPTY_ATTRIBUTE_LIST = new String[0];
 
   /* Logger */
@@ -85,9 +77,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
   private final String bindPassword;
 
-  /**
-   * The user directory capabilities supported by this user directory instance.
-   */
+  /** The user directory capabilities supported by this user directory instance. */
   private final UserDirectoryCapabilities capabilities;
 
   private final LdapName groupBaseDN;
@@ -102,19 +92,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
   private final String host;
 
-  /**
-   * The maximum number of filtered group members to return.
-   */
+  /** The maximum number of filtered group members to return. */
   private final int maxFilteredGroupMembers;
 
-  /**
-   * The maximum number of filtered groups to return.
-   */
+  /** The maximum number of filtered groups to return. */
   private final int maxFilteredGroups;
 
-  /**
-   * The maximum number of filtered users to return.
-   */
+  /** The maximum number of filtered users to return. */
   private final int maxFilteredUsers;
 
   private final int port;
@@ -125,11 +109,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
   private final String userEmailAttribute;
 
-  private final String userFirstNameAttribute;
-
   private final String userFullNameAttribute;
-
-  private final String userLastNameAttribute;
 
   private final String userMobileNumberAttribute;
 
@@ -137,11 +117,11 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
   private final String userPhoneNumberAttribute;
 
+  private final String userPreferredNameAttribute;
+
   private final String userUsernameAttribute;
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /** The data source used to provide connections to the application database. */
   @Autowired
   @Qualifier("applicationDataSource")
   private DataSource dataSource;
@@ -152,11 +132,11 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Constructs a new <code>LDAPUserDirectory</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory
-   * @param parameters      the parameters for the user directory
+   *     directory
+   * @param parameters the parameters for the user directory
    * @param groupRepository the Group Repository
-   * @param userRepository  the User Repository
-   * @param roleRepository  the Role Repository
+   * @param userRepository the User Repository
+   * @param roleRepository the Role Repository
    */
   public LDAPUserDirectory(
       UUID userDirectoryId,
@@ -239,32 +219,22 @@ public class LDAPUserDirectory extends UserDirectoryBase {
                 + ")");
       }
 
-      if (UserDirectoryParameter.contains(parameters, "UserFirstNameAttribute")) {
-        userFirstNameAttribute =
-            UserDirectoryParameter.getStringValue(parameters, "UserFirstNameAttribute");
-      } else {
-        throw new SecurityServiceException(
-            "No UserFirstNameAttribute parameter found for the user directory ("
-                + userDirectoryId
-                + ")");
-      }
-
-      if (UserDirectoryParameter.contains(parameters, "UserLastNameAttribute")) {
-        userLastNameAttribute =
-            UserDirectoryParameter.getStringValue(parameters, "UserLastNameAttribute");
-      } else {
-        throw new SecurityServiceException(
-            "No UserLastNameAttribute parameter found for the user directory ("
-                + userDirectoryId
-                + ")");
-      }
-
       if (UserDirectoryParameter.contains(parameters, "UserFullNameAttribute")) {
         userFullNameAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserFullNameAttribute");
       } else {
         throw new SecurityServiceException(
             "No UserFullNameAttribute parameter found for the user directory ("
+                + userDirectoryId
+                + ")");
+      }
+
+      if (UserDirectoryParameter.contains(parameters, "UserPreferredNameAttribute")) {
+        userPreferredNameAttribute =
+            UserDirectoryParameter.getStringValue(parameters, "UserPreferredNameAttribute");
+      } else {
+        throw new SecurityServiceException(
+            "No UserPreferredNameAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
       }
@@ -320,7 +290,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         groupMemberAttribute =
             UserDirectoryParameter.getStringValue(parameters, "GroupMemberAttribute");
 
-        groupMemberAttributeArray = new String[]{groupMemberAttribute};
+        groupMemberAttributeArray = new String[] {groupMemberAttribute};
       } else {
         throw new SecurityServiceException(
             "No GroupMemberAttribute parameter found for the user directory ("
@@ -401,14 +371,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Add the group member to the group.
    *
-   * @param groupName  the name identifying the group
+   * @param groupName the name identifying the group
    * @param memberType the group member type
    * @param memberName the group member name
    */
   @Override
   public void addMemberToGroup(String groupName, GroupMemberType memberType, String memberName)
       throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
-      SecurityServiceException {
+          SecurityServiceException {
     if (!capabilities.getSupportsGroupMemberAdministration()) {
       throw new SecurityServiceException(
           "The group member administration capability is not supported for the user directory ("
@@ -432,12 +402,12 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Add the role to the group.
    *
    * @param groupName the name identifying the group
-   * @param roleCode  the code uniquely identifying the role
+   * @param roleCode the code uniquely identifying the role
    */
   @Override
   public void addRoleToGroup(String groupName, String roleCode)
       throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
-      SecurityServiceException {
+          SecurityServiceException {
     DirContext dirContext = null;
 
     try {
@@ -497,7 +467,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Add the user to the group.
    *
    * @param groupName the name identifying the group
-   * @param username  the username identifying the user
+   * @param username the username identifying the user
    */
   @Override
   public void addUserToGroup(String groupName, String username)
@@ -550,7 +520,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       dirContext.modifyAttributes(
           groupDN,
-          new ModificationItem[]{new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)});
+          new ModificationItem[] {new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)});
     } catch (UserNotFoundException | GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
@@ -571,12 +541,12 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Administratively change the password for the user.
    *
-   * @param username             the username identifying the user
-   * @param newPassword          the new password
-   * @param expirePassword       expire the user's password
-   * @param lockUser             lock the user
+   * @param username the username identifying the user
+   * @param newPassword the new password
+   * @param expirePassword expire the user's password
+   * @param lockUser lock the user
    * @param resetPasswordHistory reset the user's password history
-   * @param reason               the reason for changing the password
+   * @param reason the reason for changing the password
    */
   @Override
   public void adminChangePassword(
@@ -637,7 +607,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   @Override
   public void authenticate(String username, String password)
       throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-      UserNotFoundException, SecurityServiceException {
+          UserNotFoundException, SecurityServiceException {
     DirContext dirContext = null;
 
     try {
@@ -707,14 +677,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Change the password for the user.
    *
-   * @param username    the username identifying the user
-   * @param password    the password for the user that is used to authorise the operation
+   * @param username the username identifying the user
+   * @param password the password for the user that is used to authorise the operation
    * @param newPassword the new password
    */
   @Override
   public void changePassword(String username, String password, String newPassword)
       throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-      ExistingPasswordException, SecurityServiceException {
+          ExistingPasswordException, SecurityServiceException {
     if (!capabilities.getSupportsChangePassword()) {
       throw new SecurityServiceException(
           "The change password capability is not supported for the user directory ("
@@ -875,9 +845,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Create the new user.
    *
-   * @param user            the user
+   * @param user the user
    * @param expiredPassword create the user with its password expired
-   * @param userLocked      create the user locked
+   * @param userLocked create the user locked
    */
   @Override
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
@@ -907,28 +877,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       attributes.put(new BasicAttribute(userUsernameAttribute, user.getUsername()));
 
-      if ((!StringUtils.isEmpty(userFirstNameAttribute))
-          && (!StringUtils.isEmpty(user.getFirstName()))) {
-        attributes.put(new BasicAttribute(userFirstNameAttribute, user.getFirstName()));
-      }
-
-      if ((!StringUtils.isEmpty(userLastNameAttribute))
-          && (!StringUtils.isEmpty(user.getLastName()))) {
-        attributes.put(new BasicAttribute(userLastNameAttribute, user.getLastName()));
-      }
-
       if ((!StringUtils.isEmpty(userFullNameAttribute))
-          && ((!StringUtils.isEmpty(user.getFirstName()))
-          || (!StringUtils.isEmpty(user.getLastName())))) {
-        attributes.put(
-            new BasicAttribute(
-                userFullNameAttribute,
-                (StringUtils.isEmpty(user.getFirstName()) ? "" : user.getFirstName())
-                    + ((!StringUtils.isEmpty(user.getFirstName())
-                    && (!StringUtils.isEmpty(user.getLastName())))
-                    ? " "
-                    : "")
-                    + (StringUtils.isEmpty(user.getLastName()) ? "" : user.getLastName())));
+          && (!StringUtils.isEmpty(user.getFullName()))) {
+        attributes.put(new BasicAttribute(userFullNameAttribute, user.getFullName()));
+      }
+
+      if ((!StringUtils.isEmpty(userPreferredNameAttribute))
+          && (!StringUtils.isEmpty(user.getPreferredName()))) {
+        attributes.put(new BasicAttribute(userPreferredNameAttribute, user.getPreferredName()));
       }
 
       if ((!StringUtils.isEmpty(userEmailAttribute)) && (!StringUtils.isEmpty(user.getEmail()))) {
@@ -1096,14 +1052,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         if (attribute.size() > 0) {
           dirContext.modifyAttributes(
               new LdapName(searchResult.getNameInNamespace()),
-              new ModificationItem[]{
-                  new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)
+              new ModificationItem[] {
+                new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)
               });
         } else {
           dirContext.modifyAttributes(
               new LdapName(searchResult.getNameInNamespace()),
-              new ModificationItem[]{
-                  new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute)
+              new ModificationItem[] {
+                new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute)
               });
         }
       }
@@ -1129,7 +1085,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the users matching the attribute criteria.
    *
    * @param attributes the attribute criteria used to select the users
-   *
    * @return the users whose attributes match the attribute criteria
    */
   @Override
@@ -1202,7 +1157,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the authorised function codes for the user.
    *
    * @param username the username identifying the user
-   *
    * @return the authorised function codes for the user
    */
   @Override
@@ -1269,7 +1223,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the group.
    *
    * @param groupName the name identifying the group
-   *
    * @return the group
    */
   @Override
@@ -1330,7 +1283,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
       searchControls.setReturningObjFlag(false);
       searchControls.setCountLimit(maxFilteredGroups);
-      searchControls.setReturningAttributes(new String[]{groupNameAttribute});
+      searchControls.setReturningAttributes(new String[] {groupNameAttribute});
 
       searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
 
@@ -1361,7 +1314,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the names identifying the groups the user is a member of.
    *
    * @param username the username identifying the user
-   *
    * @return the names identifying the groups the user is a member of
    */
   @Override
@@ -1459,11 +1411,10 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the groups.
    *
-   * @param filter        the optional filter to apply to the groups
+   * @param filter the optional filter to apply to the groups
    * @param sortDirection the optional sort direction to apply to the groups
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the groups
    */
   @Override
@@ -1506,6 +1457,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         groups.sort((Group group1, Group group2) -> group2.getName().compareTo(group1.getName()));
       }
 
+      long totalGroups = groups.size();
+
       if ((pageIndex != null) && (pageSize != null)) {
         int toIndex = (pageIndex * pageSize) + pageSize;
 
@@ -1513,13 +1466,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       }
 
       return new Groups(
-          getUserDirectoryId(),
-          groups,
-          getNumberOfGroups(filter),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
+          getUserDirectoryId(), groups, totalGroups, filter, sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered groups for the user directory ("
@@ -1536,7 +1483,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the groups the user is a member of.
    *
    * @param username the username identifying the user
-   *
    * @return the groups the user is a member of
    */
   @Override
@@ -1592,7 +1538,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the group members for the group.
    *
    * @param groupName the name identifying the group
-   *
    * @return the group members for the group
    */
   @Override
@@ -1663,12 +1608,11 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the group members for the group.
    *
-   * @param groupName     the name identifying the group
-   * @param filter        the optional filter to apply to the group members
+   * @param groupName the name identifying the group
+   * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the group members for the group
    */
   @Override
@@ -1751,6 +1695,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
                   groupMember2.getMemberName().compareTo(groupMember1.getMemberName()));
         }
 
+        long totalGroupMembers = groupMembers.size();
+
         if ((pageIndex != null) && (pageSize != null)) {
           pageSize = Math.min(pageSize, maxFilteredGroupMembers);
 
@@ -1764,7 +1710,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
             getUserDirectoryId(),
             groupName,
             groupMembers,
-            getNumberOfMembersForGroup(groupName, filter),
+            totalGroupMembers,
             filter,
             sortDirection,
             pageIndex,
@@ -1789,211 +1735,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   }
 
   /**
-   * Retrieve the number of groups.
-   *
-   * @param filter the optional filter to apply to the groups
-   *
-   * @return the number of groups
-   */
-  @Override
-  public long getNumberOfGroups(String filter) throws SecurityServiceException {
-    DirContext dirContext = null;
-    NamingEnumeration<SearchResult> searchResults = null;
-
-    try {
-      dirContext = getDirContext(bindDN, bindPassword);
-
-      String searchFilter;
-
-      if (StringUtils.isEmpty(filter)) {
-        searchFilter = String.format("(objectClass=%s)", groupObjectClass);
-      } else {
-        searchFilter =
-            String.format(
-                "(&(objectClass=%s)(%s=*%s*))", groupObjectClass, groupNameAttribute, filter);
-      }
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-      searchControls.setCountLimit(maxFilteredGroups);
-      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
-
-      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
-
-      int numberOfGroups = 0;
-
-      while (searchResults.hasMore()) {
-        SearchResult searchResult = searchResults.next();
-
-        numberOfGroups++;
-      }
-
-      return numberOfGroups;
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the number of groups for the user directory ("
-              + getUserDirectoryId()
-              + ")",
-          e);
-    } finally {
-      JNDIUtil.close(searchResults);
-      JNDIUtil.close(dirContext);
-    }
-  }
-
-  /**
-   * Retrieve the number of group members for the group.
-   *
-   * @param groupName the name identifying the group
-   * @param filter    the optional filter to apply to the members
-   *
-   * @return the number of group members for the group
-   */
-  @Override
-  public long getNumberOfMembersForGroup(String groupName, String filter)
-      throws GroupNotFoundException, SecurityServiceException {
-    DirContext dirContext = null;
-    NamingEnumeration<SearchResult> searchResults = null;
-
-    try {
-      dirContext = getDirContext(bindDN, bindPassword);
-
-      if (!StringUtils.isEmpty(filter)) {
-        filter = filter.toLowerCase();
-      }
-
-      String searchFilter =
-          String.format(
-              "(&(objectClass=%s)(%s=%s))", groupObjectClass, groupNameAttribute, groupName);
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-
-      searchResults = dirContext.search(groupBaseDN, searchFilter, searchControls);
-
-      if (searchResults.hasMore()) {
-        SearchResult searchResult = searchResults.next();
-
-        long numberOfMembersForGroup = 0;
-
-        var attribute = searchResult.getAttributes().get(groupMemberAttribute);
-
-        if (attribute != null) {
-          for (int i = 0; i < attribute.size(); i++) {
-            LdapName groupMemberDn = new LdapName(String.valueOf(attribute.get(i)));
-
-            for (Rdn rdn : groupMemberDn.getRdns()) {
-              if (rdn.getType().equalsIgnoreCase(userUsernameAttribute)) {
-                if (StringUtils.isEmpty(filter)) {
-                  numberOfMembersForGroup++;
-                } else {
-                  /*
-                   * NOTE: We perform the filtering here as directory servers like OpenLDAP do not
-                   *       support substring case-insensitive matches for the member attribute on
-                   *       the groupOfNames objectclass.
-                   */
-                  String username = String.valueOf(rdn.getValue());
-
-                  if (username.contains(filter)) {
-                    numberOfMembersForGroup++;
-                  }
-                }
-
-                break;
-              }
-            }
-          }
-        }
-
-        return Math.min(numberOfMembersForGroup, maxFilteredGroupMembers);
-      } else {
-        throw new GroupNotFoundException(groupName);
-      }
-    } catch (GroupNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the number of filtered members for the group ("
-              + groupName
-              + ") for the user directory ("
-              + getUserDirectoryId()
-              + ")",
-          e);
-    } finally {
-      JNDIUtil.close(searchResults);
-      JNDIUtil.close(dirContext);
-    }
-  }
-
-  /**
-   * Retrieve the number of users.
-   *
-   * @param filter the optional filter to apply to the users
-   *
-   * @return the number of users
-   */
-  @Override
-  public long getNumberOfUsers(String filter) throws SecurityServiceException {
-    DirContext dirContext = null;
-    NamingEnumeration<SearchResult> searchResults = null;
-
-    try {
-      dirContext = getDirContext(bindDN, bindPassword);
-
-      String searchFilter;
-
-      if (StringUtils.isEmpty(filter)) {
-        searchFilter = "(objectClass=" + userObjectClass + ")";
-      } else {
-        searchFilter =
-            String.format(
-                "(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
-                userObjectClass,
-                userUsernameAttribute,
-                filter,
-                userFirstNameAttribute,
-                filter,
-                userLastNameAttribute,
-                filter);
-      }
-
-      SearchControls searchControls = new SearchControls();
-      searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-      searchControls.setReturningObjFlag(false);
-      searchControls.setReturningAttributes(EMPTY_ATTRIBUTE_LIST);
-      searchControls.setCountLimit(maxFilteredUsers);
-
-      int numberOfUsers = 0;
-
-      searchResults = dirContext.search(userBaseDN, searchFilter, searchControls);
-
-      while (searchResults.hasMore() && (numberOfUsers <= maxFilteredUsers)) {
-        searchResults.next();
-
-        numberOfUsers++;
-      }
-
-      return numberOfUsers;
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the number of users for the user directory ("
-              + getUserDirectoryId()
-              + "):"
-              + e.getMessage(),
-          e);
-    } finally {
-      JNDIUtil.close(searchResults);
-      JNDIUtil.close(dirContext);
-    }
-  }
-
-  /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
    * @param groupName the name identifying the group
-   *
    * @return the codes for the roles that have been assigned to the group
    */
   @Override
@@ -2038,7 +1782,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the codes for the roles that the user has been assigned.
    *
    * @param username the username identifying the user
-   *
    * @return the codes for the roles that the user has been assigned
    */
   @Override
@@ -2105,7 +1848,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the roles that have been assigned to the group.
    *
    * @param groupName the name identifying the group
-   *
    * @return the roles that have been assigned to the group
    */
   @Override
@@ -2154,7 +1896,6 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Retrieve the user.
    *
    * @param username the username identifying the user
-   *
    * @return the user
    */
   @Override
@@ -2187,11 +1928,10 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   }
 
   /**
-   * Retrieve the full name for the user.
+   * Retrieve the full name of the user.
    *
    * @param username the username identifying the user
-   *
-   * @return the full name for the user
+   * @return the full name of the user
    */
   @Override
   public String getUserFullName(String username)
@@ -2208,14 +1948,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         throw new UserNotFoundException(username);
       }
 
-      StringBuilder buffer = new StringBuilder(user.getFirstName());
+      StringBuilder buffer = new StringBuilder(user.getFullName());
 
-      if (!StringUtils.isEmpty(user.getLastName())) {
+      if (!StringUtils.isEmpty(user.getPreferredName())) {
         if (buffer.length() > 0) {
           buffer.append(" ");
         }
 
-        buffer.append(user.getLastName());
+        buffer.append(user.getPreferredName());
       }
 
       return buffer.toString();
@@ -2223,7 +1963,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       throw e;
     } catch (Throwable e) {
       throw new SecurityServiceException(
-          "Failed to retrieve the full name for the user ("
+          "Failed to retrieve the full name of the user ("
               + username
               + ") for the user directory ("
               + getUserDirectoryId()
@@ -2275,12 +2015,11 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the users.
    *
-   * @param filter        the optional filter to apply to the users
-   * @param sortBy        the optional method used to sort the users e.g. by last name
+   * @param filter the optional filter to apply to the users
+   * @param sortBy the optional method used to sort the users e.g. by full name
    * @param sortDirection the optional sort direction to apply to the users
-   * @param pageIndex     the optional page index
-   * @param pageSize      the optional page size
-   *
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    * @return the users
    */
   public Users getUsers(
@@ -2307,9 +2046,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
                 userObjectClass,
                 userUsernameAttribute,
                 filter,
-                userFirstNameAttribute,
+                userFullNameAttribute,
                 filter,
-                userLastNameAttribute,
+                userPreferredNameAttribute,
                 filter);
       }
 
@@ -2331,23 +2070,26 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (sortDirection == SortDirection.ASCENDING) {
         if (sortBy == UserSortBy.USERNAME) {
           users.sort(Comparator.comparing(User::getUsername));
-        } else if (sortBy == UserSortBy.FIRST_NAME) {
-          users.sort(Comparator.comparing(User::getFirstName));
-        } else if (sortBy == UserSortBy.LAST_NAME) {
-          users.sort(Comparator.comparing(User::getLastName));
+        } else if (sortBy == UserSortBy.FULL_NAME) {
+          users.sort(Comparator.comparing(User::getFullName));
+        } else if (sortBy == UserSortBy.PREFERRED_NAME) {
+          users.sort(Comparator.comparing(User::getPreferredName));
         }
       } else {
         if (sortBy == UserSortBy.USERNAME) {
           users.sort(
               (User user1, User user2) -> user2.getUsername().compareTo(user1.getUsername()));
-        } else if (sortBy == UserSortBy.FIRST_NAME) {
+        } else if (sortBy == UserSortBy.FULL_NAME) {
           users.sort(
-              (User user1, User user2) -> user2.getFirstName().compareTo(user1.getFirstName()));
-        } else if (sortBy == UserSortBy.LAST_NAME) {
+              (User user1, User user2) -> user2.getFullName().compareTo(user1.getFullName()));
+        } else if (sortBy == UserSortBy.PREFERRED_NAME) {
           users.sort(
-              (User user1, User user2) -> user2.getLastName().compareTo(user1.getLastName()));
+              (User user1, User user2) ->
+                  user2.getPreferredName().compareTo(user1.getPreferredName()));
         }
       }
+
+      long totalUsers = users.size();
 
       if ((pageIndex != null) && (pageSize != null)) {
         int toIndex = (pageIndex * pageSize) + pageSize;
@@ -2356,13 +2098,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       }
 
       return new Users(
-          getUserDirectoryId(),
-          users,
-          getNumberOfUsers(filter),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
+          getUserDirectoryId(), users, totalUsers, filter, sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered users for the user directory ("
@@ -2379,9 +2115,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Does the user with the specified username exist?
    *
    * @param username the username identifying the user
-   *
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
-   * otherwise
+   *     otherwise
    */
   @Override
   public boolean isExistingUser(String username) throws SecurityServiceException {
@@ -2420,8 +2155,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Is the user in the group?
    *
    * @param groupName the name identifying the group
-   * @param username  the username identifying the user
-   *
+   * @param username the username identifying the user
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
    */
   @Override
@@ -2479,7 +2213,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Remove the group member from the group.
    *
-   * @param groupName  the name identifying the group
+   * @param groupName the name identifying the group
    * @param memberType the group member type
    * @param memberName the group member name
    */
@@ -2509,7 +2243,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Remove the role from the group.
    *
    * @param groupName the name identifying the group
-   * @param roleCode  the code uniquely identifying the role
+   * @param roleCode the code uniquely identifying the role
    */
   @Override
   public void removeRoleFromGroup(String groupName, String roleCode)
@@ -2557,7 +2291,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Remove the user from the group.
    *
    * @param groupName the name identifying the group
-   * @param username  the username identifying the user
+   * @param username the username identifying the user
    */
   @Override
   public void removeUserFromGroup(String groupName, String username)
@@ -2600,11 +2334,11 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (attribute.size() > 0) {
         dirContext.modifyAttributes(
             groupDN,
-            new ModificationItem[]{new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)});
+            new ModificationItem[] {new ModificationItem(DirContext.REPLACE_ATTRIBUTE, attribute)});
       } else {
         dirContext.modifyAttributes(
             groupDN,
-            new ModificationItem[]{new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute)});
+            new ModificationItem[] {new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute)});
       }
     } catch (UserNotFoundException | GroupNotFoundException e) {
       throw e;
@@ -2626,13 +2360,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Reset the password for the user.
    *
-   * @param username    the username identifying the user
+   * @param username the username identifying the user
    * @param newPassword the new password
    */
   @Override
   public void resetPassword(String username, String newPassword)
       throws UserNotFoundException, UserLockedException, ExistingPasswordException,
-      SecurityServiceException {
+          SecurityServiceException {
     if (!capabilities.getSupportsChangePassword()) {
       throw new SecurityServiceException(
           "The change password capability is not supported for the user directory ("
@@ -2752,9 +2486,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Update the user.
    *
-   * @param user           the user
+   * @param user the user
    * @param expirePassword expire the user's password as part of the update
-   * @param lockUser       lock the user as part of the update
+   * @param lockUser lock the user as part of the update
    */
   @Override
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
@@ -2779,34 +2513,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (!StringUtils.isEmpty(userFirstNameAttribute)) {
-        if (StringUtils.isEmpty(user.getFirstName())) {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userFirstNameAttribute)));
-        } else {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE,
-                  new BasicAttribute(userFirstNameAttribute, user.getFirstName())));
-        }
-      }
-
-      if (!StringUtils.isEmpty(userLastNameAttribute)) {
-        if (StringUtils.isEmpty(user.getLastName())) {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userLastNameAttribute)));
-        } else {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE,
-                  new BasicAttribute(userLastNameAttribute, user.getLastName())));
-        }
-      }
-
       if (!StringUtils.isEmpty(userFullNameAttribute)) {
-        if (StringUtils.isEmpty(user.getFirstName()) && StringUtils.isEmpty(user.getLastName())) {
+        if (StringUtils.isEmpty(user.getFullName())) {
           modificationItems.add(
               new ModificationItem(
                   DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userFullNameAttribute)));
@@ -2814,14 +2522,20 @@ public class LDAPUserDirectory extends UserDirectoryBase {
           modificationItems.add(
               new ModificationItem(
                   DirContext.REPLACE_ATTRIBUTE,
-                  new BasicAttribute(
-                      userFullNameAttribute,
-                      (StringUtils.isEmpty(user.getFirstName()) ? "" : user.getFirstName())
-                          + ((!StringUtils.isEmpty(user.getFirstName())
-                          && (!StringUtils.isEmpty(user.getLastName())))
-                          ? " "
-                          : "")
-                          + (StringUtils.isEmpty(user.getLastName()) ? "" : user.getLastName()))));
+                  new BasicAttribute(userFullNameAttribute, user.getFullName())));
+        }
+      }
+
+      if (!StringUtils.isEmpty(userPreferredNameAttribute)) {
+        if (StringUtils.isEmpty(user.getPreferredName())) {
+          modificationItems.add(
+              new ModificationItem(
+                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userPreferredNameAttribute)));
+        } else {
+          modificationItems.add(
+              new ModificationItem(
+                  DirContext.REPLACE_ATTRIBUTE,
+                  new BasicAttribute(userPreferredNameAttribute, user.getPreferredName())));
         }
       }
 
@@ -2921,18 +2635,18 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     user.setStatus(UserStatus.ACTIVE);
     user.setPassword("");
 
-    if ((!StringUtils.isEmpty(userFirstNameAttribute))
-        && (attributes.get(userFirstNameAttribute) != null)) {
-      user.setFirstName(String.valueOf(attributes.get(userFirstNameAttribute).get()));
+    if ((!StringUtils.isEmpty(userFullNameAttribute))
+        && (attributes.get(userFullNameAttribute) != null)) {
+      user.setFullName(String.valueOf(attributes.get(userFullNameAttribute).get()));
     } else {
-      user.setFirstName("");
+      user.setFullName("");
     }
 
-    if ((!StringUtils.isEmpty(userLastNameAttribute))
-        && (attributes.get(userLastNameAttribute) != null)) {
-      user.setLastName(String.valueOf(attributes.get(userLastNameAttribute).get()));
+    if ((!StringUtils.isEmpty(userPreferredNameAttribute))
+        && (attributes.get(userPreferredNameAttribute) != null)) {
+      user.setPreferredName(String.valueOf(attributes.get(userPreferredNameAttribute).get()));
     } else {
-      user.setLastName("");
+      user.setPreferredName("");
     }
 
     if ((!StringUtils.isEmpty(userPhoneNumberAttribute))

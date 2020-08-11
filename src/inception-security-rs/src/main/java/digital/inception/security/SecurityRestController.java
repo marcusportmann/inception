@@ -2728,17 +2728,17 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the full name for the user.
+   * Retrieve the full name of the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory
    * @param username        the username identifying the user
    *
-   * @return the full name for the user
+   * @return the full name of the user
    */
   @Operation(
-      summary = "Retrieve the full name for the user",
-      description = "Retrieve the full name for the user")
+      summary = "Retrieve the full name of the user",
+      description = "Retrieve the full name of the user")
   @ApiResponses(
       value = {
           @ApiResponse(responseCode = "200", description = "OK"),
@@ -2812,7 +2812,7 @@ public class SecurityRestController extends SecureRestController {
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory
    * @param filter          the optional filter to apply to the users
-   * @param sortBy          The optional method used to sort the users e.g. by last name.
+   * @param sortBy          The optional method used to sort the users e.g. by full name.
    * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size
@@ -2866,7 +2866,7 @@ public class SecurityRestController extends SecureRestController {
           String filter,
       @Parameter(
           name = "sortBy",
-          description = "The optional method used to sort the users e.g. by last name")
+          description = "The optional method used to sort the users e.g. by full name")
       @RequestParam(value = "sortBy", required = false)
           UserSortBy sortBy,
       @Parameter(

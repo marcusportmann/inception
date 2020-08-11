@@ -901,13 +901,13 @@ public class SecurityWebService {
   }
 
   /**
-   * Retrieve the full name for the user.
+   * Retrieve the full name of the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory
    * @param username        the username identifying the user
    *
-   * @return the full name for the user
+   * @return the full name of the user
    */
   @WebMethod(operationName = "GetUserFullName")
   @WebResult(name = "UserFullName")
@@ -933,7 +933,7 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory
    * @param filter          the optional filter to apply to the users
-   * @param sortBy          The optional method used to sort the users e.g. by last name.
+   * @param sortBy          The optional method used to sort the users e.g. by full name.
    * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size

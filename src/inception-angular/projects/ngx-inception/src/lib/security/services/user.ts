@@ -29,14 +29,14 @@ export class User {
   email: string;
 
   /**
-   * The first name for the user.
+   * The full name of the user.
    */
-  firstName: string;
+  fullName: string;
 
   /**
-   * The last name for the user.
+   * The preferred name for the user.
    */
-  lastName: string;
+  preferredName: string;
 
   /**
    * The mobile number for the user.
@@ -85,8 +85,8 @@ export class User {
    * @param userDirectoryId   The Universally Unique Identifier (UUID) uniquely identifying the
    *                          user directory the user is associated with.
    * @param username          The username for the user.
-   * @param firstName         The first name for the user.
-   * @param lastName          The last name for the user.
+   * @param fullName          The full name of the user.
+   * @param preferredName     The preferred name for the user.
    * @param mobileNumber      The mobile number for the user.
    * @param phoneNumber       The phone number for the user.
    * @param email             The e-mail address for the user.
@@ -96,13 +96,13 @@ export class User {
    *                          incorrect password for the user.
    * @param passwordExpiry    The date and time the password for the user expires.
    */
-  constructor(userDirectoryId: string, username: string, firstName: string, lastName: string, mobileNumber: string,
+  constructor(userDirectoryId: string, username: string, fullName: string, preferredName: string, mobileNumber: string,
               phoneNumber: string, email: string, status: UserStatus, password: string, passwordAttempts?: number,
               passwordExpiry?: Date) {
     this.userDirectoryId = userDirectoryId;
     this.username = username;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.fullName = fullName;
+    this.preferredName = preferredName;
     this.mobileNumber = mobileNumber;
     this.phoneNumber = phoneNumber;
     this.email = email;

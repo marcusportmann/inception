@@ -3,6 +3,7 @@
 -- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA security;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -82,8 +83,8 @@ CREATE TABLE security.users (
   user_directory_id UUID         NOT NULL,
   username          VARCHAR(100) NOT NULL,
   status            INTEGER      NOT NULL,
-  first_name        VARCHAR(100) NOT NULL DEFAULT '',
-  last_name         VARCHAR(100) NOT NULL DEFAULT '',
+  full_name         VARCHAR(100) NOT NULL DEFAULT '',
+  preferred_name    VARCHAR(100) NOT NULL DEFAULT '',
   phone_number      VARCHAR(100) NOT NULL DEFAULT '',
   mobile_number     VARCHAR(100) NOT NULL DEFAULT '',
   email             VARCHAR(100) NOT NULL DEFAULT '',
@@ -99,6 +100,8 @@ CREATE INDEX users_user_directory_id_ix ON security.users(user_directory_id);
 
 CREATE UNIQUE INDEX users_username_ix ON security.users(username);
 
+CREATE UNIQUE INDEX users_full_name_ix ON security.users(full_name);
+
 COMMENT ON COLUMN security.users.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the user';
 
 COMMENT ON COLUMN security.users.user_directory_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the user directory the user is associated with';
@@ -107,9 +110,9 @@ COMMENT ON COLUMN security.users.username IS 'The username for the user';
 
 COMMENT ON COLUMN security.users.status IS 'The status for the user';
 
-COMMENT ON COLUMN security.users.first_name IS 'The first name for the user';
+COMMENT ON COLUMN security.users.full_name IS 'The full name of the user';
 
-COMMENT ON COLUMN security.users.last_name IS 'The last name for the user';
+COMMENT ON COLUMN security.users.preferred_name IS 'The preferred name for the user';
 
 COMMENT ON COLUMN security.users.phone_number IS 'The phone number for the user';
 
@@ -294,7 +297,7 @@ INSERT INTO security.user_directories (id, type, name, configuration)
 INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
 
-INSERT INTO security.users (id, user_directory_id, username, status, first_name, last_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
+INSERT INTO security.users (id, user_directory_id, username, status, full_name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 
 INSERT INTO security.groups (id, user_directory_id, name, description)
@@ -385,7 +388,7 @@ INSERT INTO security.role_to_group_map (role_code, group_id)
 --   VALUES ('11111111-1111-1111-1111-111111111111', 'Sample LDAP Organization', 1);
 --
 -- INSERT INTO security.user_directories (id, type, name, configuration)
---   VALUES ('11111111-1111-1111-1111-111111111111', 'LDAPUserDirectory', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>cn=root,o=sample</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserFirstNameAttribute</name><value>givenName</value></parameter><parameter><name>UserLastNameAttribute</name><value>sn</value></parameter><parameter><name>UserFullNameAttribute</name><value>cn</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
+--   VALUES ('11111111-1111-1111-1111-111111111111', 'LDAPUserDirectory', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>cn=root,o=sample</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserFullNameAttribute</name><value>FullName</value></parameter><parameter><name>UserPreferredNameAttribute</name><value>nickName</value></parameter><parameter><name>UserFullNameAttribute</name><value>cn</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
 --
 -- INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
 --   VALUES ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111');

@@ -3,6 +3,7 @@
 -- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA codes;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -43,6 +44,7 @@ COMMENT ON COLUMN codes.codes.code_category_id IS 'The ID uniquely identifying t
 COMMENT ON COLUMN codes.codes.name IS 'The name of the code';
 
 COMMENT ON COLUMN codes.codes.value IS 'The value for the code';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

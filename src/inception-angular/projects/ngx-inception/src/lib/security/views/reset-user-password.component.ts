@@ -46,9 +46,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
 
   expirePasswordFormControl: FormControl;
 
-  firstNameFormControl: FormControl;
-
-  lastNameFormControl: FormControl;
+  fullNameFormControl: FormControl;
 
   lockUserFormControl: FormControl;
 
@@ -90,11 +88,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     // Initialise the form controls
     this.confirmPasswordFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.expirePasswordFormControl = new FormControl(false);
-    this.firstNameFormControl = new FormControl({
-      value: '',
-      disabled: true
-    });
-    this.lastNameFormControl = new FormControl({
+    this.fullNameFormControl = new FormControl({
       value: '',
       disabled: true
     });
@@ -109,8 +103,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     // Initialise the form
     this.resetUserPasswordForm = new FormGroup({
       confirmPassword: this.confirmPasswordFormControl,
-      firstName: this.firstNameFormControl,
-      lastName: this.lastNameFormControl,
+      fullName: this.fullNameFormControl,
       password: this.passwordFormControl,
       username: this.usernameFormControl
     });
@@ -142,35 +135,34 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     combineLatest([this.securityService.getUserDirectoryCapabilities(this.userDirectoryId),
       this.securityService.getUser(this.userDirectoryId, this.username)
     ])
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((results: [UserDirectoryCapabilities, User]) => {
-        this.userDirectoryCapabilities = results[0];
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((results: [UserDirectoryCapabilities, User]) => {
+      this.userDirectoryCapabilities = results[0];
 
-        this.firstNameFormControl.setValue(results[1].firstName);
-        this.lastNameFormControl.setValue(results[1].lastName);
-        this.usernameFormControl.setValue(results[1].username);
+      this.fullNameFormControl.setValue(results[1].fullName);
+      this.usernameFormControl.setValue(results[1].username);
 
-        if (this.userDirectoryCapabilities.supportsPasswordExpiry) {
-          this.resetUserPasswordForm.addControl('expirePassword', this.expirePasswordFormControl);
-        }
+      if (this.userDirectoryCapabilities.supportsPasswordExpiry) {
+        this.resetUserPasswordForm.addControl('expirePassword', this.expirePasswordFormControl);
+      }
 
-        if (this.userDirectoryCapabilities.supportsUserLocks) {
-          this.resetUserPasswordForm.addControl('lockUser', this.lockUserFormControl);
-        }
+      if (this.userDirectoryCapabilities.supportsUserLocks) {
+        this.resetUserPasswordForm.addControl('lockUser', this.lockUserFormControl);
+      }
 
-        if (this.userDirectoryCapabilities.supportsPasswordHistory) {
-          this.resetUserPasswordForm.addControl('resetPasswordHistory', this.resetPasswordHistoryFormControl);
-        }
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      if (this.userDirectoryCapabilities.supportsPasswordHistory) {
+        this.resetUserPasswordForm.addControl('resetPasswordHistory', this.resetPasswordHistoryFormControl);
+      }
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ok(): void {
@@ -191,23 +183,23 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
         this.resetUserPasswordForm.contains('lockUser') ? this.lockUserFormControl.value : false,
         this.resetUserPasswordForm.contains('resetPasswordHistory') ? this.resetPasswordHistoryFormControl.value :
           false)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../../..'], {
-            relativeTo: this.activatedRoute,
-            state: {userDirectoryId: this.userDirectoryId}
-          });
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['../../..'], {
+          relativeTo: this.activatedRoute,
+          state: {userDirectoryId: this.userDirectoryId}
         });
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

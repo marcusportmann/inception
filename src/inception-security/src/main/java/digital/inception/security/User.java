@@ -56,34 +56,34 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Schema(description = "User")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "userDirectoryId",
-    "username",
-    "firstName",
-    "lastName",
-    "mobileNumber",
-    "phoneNumber",
-    "email",
-    "status",
-    "password",
-    "passwordAttempts",
-    "passwordExpiry"
+  "userDirectoryId",
+  "username",
+  "fullName",
+  "preferredName",
+  "mobileNumber",
+  "phoneNumber",
+  "email",
+  "status",
+  "password",
+  "passwordAttempts",
+  "passwordExpiry"
 })
 @XmlRootElement(name = "User", namespace = "http://security.inception.digital")
 @XmlType(
     name = "User",
     namespace = "http://security.inception.digital",
     propOrder = {
-        "userDirectoryId",
-        "username",
-        "firstName",
-        "lastName",
-        "mobileNumber",
-        "phoneNumber",
-        "email",
-        "status",
-        "password",
-        "passwordAttempts",
-        "passwordExpiry"
+      "userDirectoryId",
+      "username",
+      "fullName",
+      "preferredName",
+      "mobileNumber",
+      "phoneNumber",
+      "email",
+      "status",
+      "password",
+      "passwordAttempts",
+      "passwordExpiry"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -93,9 +93,7 @@ public class User implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The e-mail address for the user.
-   */
+  /** The e-mail address for the user. */
   @Schema(description = "The e-mail address for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Email", required = true)
@@ -114,48 +112,29 @@ public class User implements Serializable {
   @Column(name = "email", nullable = false, length = 100)
   private String email;
 
-  /**
-   * The first name for the user.
-   */
-  @Schema(description = "The first name for the user", required = true)
+  /** The full name of the user. */
+  @Schema(description = "The full name of the user", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "FirstName", required = true)
+  @XmlElement(name = "FullName", required = true)
   @NotNull
   @Size(max = 100)
-  @Column(name = "first_name", nullable = false, length = 100)
-  private String firstName;
+  @Column(name = "full_name", nullable = false, length = 100)
+  private String fullName;
 
-  /**
-   * The groups the user is associated with.
-   */
+  /** The groups the user is associated with. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "users")
   private Set<Group> groups = new HashSet<>();
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user. */
   @JsonIgnore
   @XmlTransient
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The last name for the user.
-   */
-  @Schema(description = "The last name for the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "LastName", required = true)
-  @NotNull
-  @Size(max = 100)
-  @Column(name = "last_name", nullable = false, length = 100)
-  private String lastName;
-
-  /**
-   * The mobile number for the user.
-   */
+  /** The mobile number for the user. */
   @Schema(description = "The mobile number for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MobileNumber", required = true)
@@ -194,8 +173,7 @@ public class User implements Serializable {
   private String password;
 
   /**
-   * The number of failed authentication attempts as a result of an incorrect password for the
-   * user.
+   * The number of failed authentication attempts as a result of an incorrect password for the user.
    */
   @Schema(
       description =
@@ -207,9 +185,7 @@ public class User implements Serializable {
   @Column(name = "password_attempts", nullable = false)
   private Integer passwordAttempts;
 
-  /**
-   * The date and time the password for the user expires.
-   */
+  /** The date and time the password for the user expires. */
   @Schema(description = "The date and time the password for the user expires")
   @JsonProperty
   @XmlElement(name = "PasswordExpiry")
@@ -218,9 +194,7 @@ public class User implements Serializable {
   @Column(name = "password_expiry", nullable = false)
   private LocalDateTime passwordExpiry;
 
-  /**
-   * The phone number for the user.
-   */
+  /** The phone number for the user. */
   @Schema(description = "The phone number for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PhoneNumber", required = true)
@@ -229,9 +203,16 @@ public class User implements Serializable {
   @Column(name = "phone_number", nullable = false, length = 100)
   private String phoneNumber;
 
-  /**
-   * The status for the user.
-   */
+  /** The preferred name for the user. */
+  @Schema(description = "The preferred name for the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PreferredName", required = true)
+  @NotNull
+  @Size(max = 100)
+  @Column(name = "preferred_name", nullable = false, length = 100)
+  private String preferredName;
+
+  /** The status for the user. */
   @Schema(
       description = "The status for the user",
       allowableValues = "0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired",
@@ -257,9 +238,7 @@ public class User implements Serializable {
   @Column(name = "user_directory_id", nullable = false)
   private UUID userDirectoryId;
 
-  /**
-   * The username for the user.
-   */
+  /** The username for the user. */
   @Schema(description = "The username for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
@@ -268,17 +247,13 @@ public class User implements Serializable {
   @Column(name = "username", nullable = false, length = 100)
   private String username;
 
-  /**
-   * Constructs a new <code>User</code>.
-   */
-  public User() {
-  }
+  /** Constructs a new <code>User</code>. */
+  public User() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */
@@ -320,21 +295,21 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the first name for the user
+   * Returns the full name of the user
    *
-   * @return the first name for the user
+   * @return the full name of the user
    */
-  public String getFirstName() {
-    return firstName;
+  public String getFullName() {
+    return fullName;
   }
 
   /**
-   * Set the first name for the user.
+   * Set the full name of the user.
    *
-   * @param firstName the first name for the user
+   * @param fullName the full name of the user
    */
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
   }
 
   /**
@@ -371,24 +346,6 @@ public class User implements Serializable {
    */
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   * Returns the last name for the user
-   *
-   * @return the last name for the user
-   */
-  public String getLastName() {
-    return lastName;
-  }
-
-  /**
-   * Set the last name for the user.
-   *
-   * @param lastName the last name for the user
-   */
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
   }
 
   /**
@@ -432,7 +389,7 @@ public class User implements Serializable {
    * the user
    *
    * @return the number of failed authentication attempts as a result of an incorrect password for
-   * the user
+   *     the user
    */
   public Integer getPasswordAttempts() {
     return passwordAttempts;
@@ -484,6 +441,24 @@ public class User implements Serializable {
   }
 
   /**
+   * Returns the preferred name for the user
+   *
+   * @return the preferred name for the user
+   */
+  public String getPreferredName() {
+    return preferredName;
+  }
+
+  /**
+   * Set the preferred name for the user.
+   *
+   * @param preferredName the preferred name for the user
+   */
+  public void setPreferredName(String preferredName) {
+    this.preferredName = preferredName;
+  }
+
+  /**
    * Returns the status for the user.
    *
    * @return the status for the user
@@ -506,7 +481,7 @@ public class User implements Serializable {
    * user is associated with.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   * user is associated with
+   *     user is associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
@@ -517,7 +492,7 @@ public class User implements Serializable {
    * is associated with.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory the user is associated with
+   *     directory the user is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;
@@ -549,7 +524,7 @@ public class User implements Serializable {
    * Has the password for the user expired?
    *
    * @return <code>true</code> if the password for the user has expired or <code>false</code>
-   * otherwise
+   *     otherwise
    */
   public boolean hasPasswordExpired() {
     if (passwordExpiry != null) {

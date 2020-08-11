@@ -213,23 +213,6 @@ public interface ICodesService {
       throws CodeCategoryNotFoundException, CodesServiceException;
 
   /**
-   * Returns the number of code categories.
-   *
-   * @return the number of code categories
-   */
-  long getNumberOfCodeCategories() throws CodesServiceException;
-
-  /**
-   * Returns the number of codes for the code category.
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   *
-   * @return the number of codes for the code category
-   */
-  long getNumberOfCodes(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodesServiceException;
-
-  /**
    * Update the existing code.
    *
    * @param code the <code>Code</code> instance containing the updated information for the code

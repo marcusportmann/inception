@@ -3,6 +3,7 @@
 -- -------------------------------------------------------------------------------------------------
 CREATE SCHEMA mail;
 
+
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
@@ -25,6 +26,7 @@ COMMENT ON COLUMN mail.mail_templates.content_type IS 'The content type for the 
 COMMENT ON COLUMN mail.mail_templates.template IS 'The Apache FreeMarker template for the mail template';
 
 COMMENT ON COLUMN mail.mail_templates.updated IS 'The date and time the mail template was last updated';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

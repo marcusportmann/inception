@@ -21,6 +21,7 @@ package digital.inception.security;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -62,16 +63,16 @@ public interface OrganizationRepository extends JpaRepository<Organization, UUID
 
   boolean existsByNameIgnoreCase(String name);
 
-  List<Organization> findAllByOrderByNameAsc(Pageable pageable);
+  Page<Organization> findAllByOrderByNameAsc(Pageable pageable);
 
-  List<Organization> findAllByOrderByNameDesc(Pageable pageable);
+  Page<Organization> findAllByOrderByNameDesc(Pageable pageable);
 
   @Query("select o from Organization o join o.userDirectories as ud where ud.id = :userDirectoryId")
   List<Organization> findAllByUserDirectoryId(@Param("userDirectoryId") UUID userDirectoryId);
 
-  List<Organization> findByNameContainingIgnoreCaseOrderByNameAsc(String name, Pageable pageable);
+  Page<Organization> findByNameContainingIgnoreCaseOrderByNameAsc(String name, Pageable pageable);
 
-  List<Organization> findByNameContainingIgnoreCaseOrderByNameDesc(String name, Pageable pageable);
+  Page<Organization> findByNameContainingIgnoreCaseOrderByNameDesc(String name, Pageable pageable);
 
   @Query("select o.name from Organization o where o.id = :organizationId")
   Optional<String> getNameById(@Param("organizationId") UUID organizationId);

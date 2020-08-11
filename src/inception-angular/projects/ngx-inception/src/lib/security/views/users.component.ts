@@ -56,7 +56,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
   dataSource: UserDatasource;
 
-  displayedColumns = ['firstName', 'lastName', 'username', 'actions'];
+  displayedColumns = ['fullName', 'preferredName', 'username', 'actions'];
 
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 
@@ -152,10 +152,10 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
     let sortDirection = SortDirection.Ascending;
 
     if (!!this.sort.active) {
-      if (this.sort.active === 'firstName') {
-        sortBy = UserSortBy.FirstName;
-      } else if (this.sort.active === 'lastName') {
-        sortBy = UserSortBy.LastName;
+      if (this.sort.active === 'fullName') {
+        sortBy = UserSortBy.FullName;
+      } else if (this.sort.active === 'preferredName') {
+        sortBy = UserSortBy.PreferredName;
       }
 
       if (this.sort.direction === 'desc') {
@@ -183,7 +183,7 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
 
         this.paginator.pageIndex = 0;
 
-        this.sort.active = 'firstName';
+        this.sort.active = 'fullName';
         this.sort.direction = 'asc' as SortDirection;
 
         this.spinnerService.showSpinner();

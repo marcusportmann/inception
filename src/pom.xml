@@ -369,7 +369,37 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
+        <artifactId>inception-party</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-party-rs</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-party-ws</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
         <artifactId>inception-persistence</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-reference</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-reference-rs</artifactId>
+        <version>${inception.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>digital.inception</groupId>
+        <artifactId>inception-reference-ws</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -493,7 +523,13 @@
     <module>inception-messaging</module>
     <module>inception-messaging-rs</module>
     <module>inception-messaging-ws</module>
+    <module>inception-party</module>
+    <module>inception-party-rs</module>
+    <module>inception-party-ws</module>
     <module>inception-persistence</module>
+    <module>inception-reference</module>
+    <module>inception-reference-rs</module>
+    <module>inception-reference-ws</module>
     <module>inception-reporting</module>
     <module>inception-reporting-rs</module>
     <module>inception-reporting-ws</module>
