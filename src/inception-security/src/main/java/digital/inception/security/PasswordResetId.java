@@ -96,30 +96,12 @@ public class PasswordResetId implements Serializable {
   }
 
   /**
-   * Set the date and time the password reset was requested.
-   *
-   * @param requested the date and time the password reset was requested
-   */
-  public void setRequested(LocalDateTime requested) {
-    this.requested = requested;
-  }
-
-  /**
    * Returns the username for the user associated with the password reset.
    *
    * @return the username for the user associated with the password reset
    */
   public String getUsername() {
     return username;
-  }
-
-  /**
-   * Set the username for the user associated with the password reset.
-   *
-   * @param username the username for the user associated with the password reset
-   */
-  public void setUsername(String username) {
-    this.username = username;
   }
 
   /**
@@ -131,5 +113,23 @@ public class PasswordResetId implements Serializable {
   public int hashCode() {
     return ((username == null) ? 0 : username.hashCode())
         + ((requested == null) ? 0 : requested.hashCode());
+  }
+
+  /**
+   * Set the date and time the password reset was requested.
+   *
+   * @param requested the date and time the password reset was requested
+   */
+  public void setRequested(LocalDateTime requested) {
+    this.requested = requested;
+  }
+
+  /**
+   * Set the username for the user associated with the password reset.
+   *
+   * @param username the username for the user associated with the password reset
+   */
+  public void setUsername(String username) {
+    this.username = username;
   }
 }

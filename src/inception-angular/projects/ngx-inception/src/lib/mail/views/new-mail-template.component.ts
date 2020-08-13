@@ -118,20 +118,20 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
           this.spinnerService.showSpinner();
 
           this.mailService.createMailTemplate(this.mailTemplate)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
+          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+          .subscribe(() => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+          }, (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
+              (error instanceof SystemUnavailableError)) {
               // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
+              this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
         } else {
           console.log('Failed to read the template file for the report definition (' + fileReader.result + ')');
         }

@@ -90,7 +90,7 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
 
   userEmailAttributeFormControl: FormControl;
 
-  userFullNameAttributeFormControl: FormControl;
+  userNameAttributeFormControl: FormControl;
 
   userPreferredNameAttributeFormControl: FormControl;
 
@@ -130,7 +130,7 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     this.userBaseDNFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userObjectClassFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userEmailAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
-    this.userFullNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.userNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userPreferredNameAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userMobileNumberAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.userPhoneNumberAttributeFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
@@ -160,7 +160,7 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       userBaseDN: this.userBaseDNFormControl,
       userObjectClass: this.userObjectClassFormControl,
       userEmailAttribute: this.userEmailAttributeFormControl,
-      userFullNameAttribute: this.userFullNameAttributeFormControl,
+      userNameAttribute: this.userNameAttributeFormControl,
       userPreferredNameAttribute: this.userPreferredNameAttributeFormControl,
       userMobileNumberAttribute: this.userMobileNumberAttributeFormControl,
       userPhoneNumberAttribute: this.userPhoneNumberAttributeFormControl,
@@ -200,7 +200,7 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
     UserDirectoryUtil.setParameter(parameters, 'UserBaseDN', this.userBaseDNFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserObjectClass', this.userObjectClassFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserEmailAttribute', this.userEmailAttributeFormControl.value);
-    UserDirectoryUtil.setParameter(parameters, 'UserFullNameAttribute', this.userFullNameAttributeFormControl.value);
+    UserDirectoryUtil.setParameter(parameters, 'UserNameAttribute', this.userNameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserPreferredNameAttribute', this.userPreferredNameAttributeFormControl.value);
     UserDirectoryUtil.setParameter(parameters, 'UserMobileNumberAttribute',
       this.userMobileNumberAttributeFormControl.value);
@@ -279,8 +279,8 @@ export class LdapUserDirectoryComponent implements ControlValueAccessor, Validat
       UserDirectoryUtil.getParameter(parameters, 'UserObjectClass') : 'inetOrgPerson');
     this.userEmailAttributeFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'UserEmailAttribute') ?
       UserDirectoryUtil.getParameter(parameters, 'UserEmailAttribute') : 'mail');
-    this.userFullNameAttributeFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'UserFullNameAttribute') ?
-      UserDirectoryUtil.getParameter(parameters, 'UserFullNameAttribute') : 'FullName');
+    this.userNameAttributeFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'UserNameAttribute') ?
+      UserDirectoryUtil.getParameter(parameters, 'UserNameAttribute') : 'Name');
     this.userPreferredNameAttributeFormControl.setValue(UserDirectoryUtil.hasParameter(parameters, 'UserPreferredNameAttribute') ?
       UserDirectoryUtil.getParameter(parameters, 'UserPreferredNameAttribute') : 'nickName');
     this.userMobileNumberAttributeFormControl.setValue(

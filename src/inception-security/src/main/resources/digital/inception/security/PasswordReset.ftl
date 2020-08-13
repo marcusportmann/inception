@@ -722,7 +722,7 @@
                                           </tr>
                                           <tr>
                                             <td class="esd-block-text es-p40r es-p40l" align="left">
-                                              <p style="text-align: center;">HI,&nbsp;${name}</p>
+                                              <p style="text-align: center;">HI,&nbsp;${preferredName}</p>
                                             </td>
                                           </tr>
                                           <tr>
@@ -732,7 +732,8 @@
                                           </tr>
                                           <tr>
                                             <td class="esd-block-text es-p25t es-p40r es-p40l" align="center">
-                                              <p>If did not make this request, just ignore this email. Otherwise, please click the button below to change your password:</p>
+                                              <p>If you did not make this request, just ignore this email.</p>
+                                              <p>Otherwise, please click the button below to change your password:</p>
                                             </td>
                                           </tr>
                                           <tr>
@@ -756,7 +757,7 @@
                                         <tbody>
                                           <tr>
                                             <td class="esd-block-text" esd-links-color="#666666" align="center">
-                                              <p style="font-size: 14px;">Contact us: 1-800-123-45-67 | <a target="_blank" href="mailto:info@name.com" style="font-size: 14px; color: rgb(102, 102, 102);">info@name.com</a></p>
+                                              <p style="font-size: 14px;">Contact us: 27-11-555-1234 | <a target="_blank" href="mailto:info@inception.digital" style="font-size: 14px; color: rgb(102, 102, 102);">info@inception.digital</a></p>
                                             </td>
                                           </tr>
                                         </tbody>

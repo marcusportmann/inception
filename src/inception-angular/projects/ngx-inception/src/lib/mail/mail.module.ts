@@ -18,7 +18,6 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
-import {MailService} from './services/mail.service';
 
 /**
  * The MailViewsModule class implements the Inception Mail Module.

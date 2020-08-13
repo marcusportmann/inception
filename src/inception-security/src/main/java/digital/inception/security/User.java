@@ -56,34 +56,34 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Schema(description = "User")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "userDirectoryId",
-  "username",
-  "fullName",
-  "preferredName",
-  "mobileNumber",
-  "phoneNumber",
-  "email",
-  "status",
-  "password",
-  "passwordAttempts",
-  "passwordExpiry"
+    "userDirectoryId",
+    "username",
+    "name",
+    "preferredName",
+    "mobileNumber",
+    "phoneNumber",
+    "email",
+    "status",
+    "password",
+    "passwordAttempts",
+    "passwordExpiry"
 })
 @XmlRootElement(name = "User", namespace = "http://security.inception.digital")
 @XmlType(
     name = "User",
     namespace = "http://security.inception.digital",
     propOrder = {
-      "userDirectoryId",
-      "username",
-      "fullName",
-      "preferredName",
-      "mobileNumber",
-      "phoneNumber",
-      "email",
-      "status",
-      "password",
-      "passwordAttempts",
-      "passwordExpiry"
+        "userDirectoryId",
+        "username",
+        "name",
+        "preferredName",
+        "mobileNumber",
+        "phoneNumber",
+        "email",
+        "status",
+        "password",
+        "passwordAttempts",
+        "passwordExpiry"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -93,7 +93,9 @@ public class User implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The e-mail address for the user. */
+  /**
+   * The e-mail address for the user.
+   */
   @Schema(description = "The e-mail address for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Email", required = true)
@@ -112,29 +114,26 @@ public class User implements Serializable {
   @Column(name = "email", nullable = false, length = 100)
   private String email;
 
-  /** The full name of the user. */
-  @Schema(description = "The full name of the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "FullName", required = true)
-  @NotNull
-  @Size(max = 100)
-  @Column(name = "full_name", nullable = false, length = 100)
-  private String fullName;
-
-  /** The groups the user is associated with. */
+  /**
+   * The groups the user is associated with.
+   */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "users")
   private Set<Group> groups = new HashSet<>();
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the user. */
+  /**
+   * The Universally Unique Identifier (UUID) uniquely identifying the user.
+   */
   @JsonIgnore
   @XmlTransient
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The mobile number for the user. */
+  /**
+   * The mobile number for the user.
+   */
   @Schema(description = "The mobile number for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MobileNumber", required = true)
@@ -160,6 +159,17 @@ public class User implements Serializable {
   private String mobileNumber;
 
   /**
+   * The name of the user.
+   */
+  @Schema(description = "The name of the user", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(max = 100)
+  @Column(name = "name", nullable = false, length = 100)
+  private String name;
+
+  /**
    * The password or password hash for the user.
    *
    * <p>NOTE: The password is not required as part of the JSON or XML representation of the user,
@@ -173,7 +183,8 @@ public class User implements Serializable {
   private String password;
 
   /**
-   * The number of failed authentication attempts as a result of an incorrect password for the user.
+   * The number of failed authentication attempts as a result of an incorrect password for the
+   * user.
    */
   @Schema(
       description =
@@ -185,7 +196,9 @@ public class User implements Serializable {
   @Column(name = "password_attempts", nullable = false)
   private Integer passwordAttempts;
 
-  /** The date and time the password for the user expires. */
+  /**
+   * The date and time the password for the user expires.
+   */
   @Schema(description = "The date and time the password for the user expires")
   @JsonProperty
   @XmlElement(name = "PasswordExpiry")
@@ -194,7 +207,9 @@ public class User implements Serializable {
   @Column(name = "password_expiry", nullable = false)
   private LocalDateTime passwordExpiry;
 
-  /** The phone number for the user. */
+  /**
+   * The phone number for the user.
+   */
   @Schema(description = "The phone number for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PhoneNumber", required = true)
@@ -203,7 +218,9 @@ public class User implements Serializable {
   @Column(name = "phone_number", nullable = false, length = 100)
   private String phoneNumber;
 
-  /** The preferred name for the user. */
+  /**
+   * The preferred name for the user.
+   */
   @Schema(description = "The preferred name for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PreferredName", required = true)
@@ -212,7 +229,9 @@ public class User implements Serializable {
   @Column(name = "preferred_name", nullable = false, length = 100)
   private String preferredName;
 
-  /** The status for the user. */
+  /**
+   * The status for the user.
+   */
   @Schema(
       description = "The status for the user",
       allowableValues = "0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired",
@@ -238,7 +257,9 @@ public class User implements Serializable {
   @Column(name = "user_directory_id", nullable = false)
   private UUID userDirectoryId;
 
-  /** The username for the user. */
+  /**
+   * The username for the user.
+   */
   @Schema(description = "The username for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
@@ -247,13 +268,17 @@ public class User implements Serializable {
   @Column(name = "username", nullable = false, length = 100)
   private String username;
 
-  /** Constructs a new <code>User</code>. */
-  public User() {}
+  /**
+   * Constructs a new <code>User</code>.
+   */
+  public User() {
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
+   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */
@@ -286,48 +311,12 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the e-mail address for the user.
-   *
-   * @param email the e-mail address for the user
-   */
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  /**
-   * Returns the full name of the user
-   *
-   * @return the full name of the user
-   */
-  public String getFullName() {
-    return fullName;
-  }
-
-  /**
-   * Set the full name of the user.
-   *
-   * @param fullName the full name of the user
-   */
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
-  }
-
-  /**
    * Returns the groups the user is associated with.
    *
    * @return the groups the user is associated with
    */
   public Set<Group> getGroups() {
     return groups;
-  }
-
-  /**
-   * Set the groups the user is associated with.
-   *
-   * @param groups the groups the user is associated with
-   */
-  public void setGroups(Set<Group> groups) {
-    this.groups = groups;
   }
 
   /**
@@ -340,15 +329,6 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the user
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
    * Returns the mobile number for the user
    *
    * @return the mobile number for the user
@@ -358,12 +338,12 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the mobile number for the user.
+   * Returns the name of the user
    *
-   * @param mobileNumber the mobile number for the user
+   * @return the name of the user
    */
-  public void setMobileNumber(String mobileNumber) {
-    this.mobileNumber = mobileNumber;
+  public String getName() {
+    return name;
   }
 
   /**
@@ -376,32 +356,14 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the password or password hash for the user.
-   *
-   * @param password the password or password hash for the user
-   */
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  /**
    * Returns the number of failed authentication attempts as a result of an incorrect password for
    * the user
    *
    * @return the number of failed authentication attempts as a result of an incorrect password for
-   *     the user
+   * the user
    */
   public Integer getPasswordAttempts() {
     return passwordAttempts;
-  }
-
-  /**
-   * Set the password attempts for the user.
-   *
-   * @param passwordAttempts the password attempts for the user
-   */
-  public void setPasswordAttempts(Integer passwordAttempts) {
-    this.passwordAttempts = passwordAttempts;
   }
 
   /**
@@ -414,30 +376,12 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the date and time the password for the user expires.
-   *
-   * @param passwordExpiry the date and time the password for the user expires
-   */
-  public void setPasswordExpiry(LocalDateTime passwordExpiry) {
-    this.passwordExpiry = passwordExpiry;
-  }
-
-  /**
    * Returns the phone number for the user.
    *
    * @return the phone number for the user
    */
   public String getPhoneNumber() {
     return phoneNumber;
-  }
-
-  /**
-   * Set the phone number for the user.
-   *
-   * @param phoneNumber the phone number for the user
-   */
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
   }
 
   /**
@@ -450,15 +394,6 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the preferred name for the user.
-   *
-   * @param preferredName the preferred name for the user
-   */
-  public void setPreferredName(String preferredName) {
-    this.preferredName = preferredName;
-  }
-
-  /**
    * Returns the status for the user.
    *
    * @return the status for the user
@@ -468,34 +403,14 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the status for the user.
-   *
-   * @param status the status for the user
-   */
-  public void setStatus(UserStatus status) {
-    this.status = status;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
    * user is associated with.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   *     user is associated with
+   * user is associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the user
-   * is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the user is associated with
-   */
-  public void setUserDirectoryId(UUID userDirectoryId) {
-    this.userDirectoryId = userDirectoryId;
   }
 
   /**
@@ -512,19 +427,10 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the username for the user.
-   *
-   * @param username the username for the user
-   */
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  /**
    * Has the password for the user expired?
    *
    * @return <code>true</code> if the password for the user has expired or <code>false</code>
-   *     otherwise
+   * otherwise
    */
   public boolean hasPasswordExpired() {
     if (passwordExpiry != null) {
@@ -575,5 +481,124 @@ public class User implements Serializable {
   @XmlTransient
   public boolean isLocked() {
     return (status == UserStatus.LOCKED);
+  }
+
+  /**
+   * Set the e-mail address for the user.
+   *
+   * @param email the e-mail address for the user
+   */
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  /**
+   * Set the groups the user is associated with.
+   *
+   * @param groups the groups the user is associated with
+   */
+  public void setGroups(Set<Group> groups) {
+    this.groups = groups;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the user
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the mobile number for the user.
+   *
+   * @param mobileNumber the mobile number for the user
+   */
+  public void setMobileNumber(String mobileNumber) {
+    this.mobileNumber = mobileNumber;
+  }
+
+  /**
+   * Set the name of the user.
+   *
+   * @param name the name of the user
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the password or password hash for the user.
+   *
+   * @param password the password or password hash for the user
+   */
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  /**
+   * Set the password attempts for the user.
+   *
+   * @param passwordAttempts the password attempts for the user
+   */
+  public void setPasswordAttempts(Integer passwordAttempts) {
+    this.passwordAttempts = passwordAttempts;
+  }
+
+  /**
+   * Set the date and time the password for the user expires.
+   *
+   * @param passwordExpiry the date and time the password for the user expires
+   */
+  public void setPasswordExpiry(LocalDateTime passwordExpiry) {
+    this.passwordExpiry = passwordExpiry;
+  }
+
+  /**
+   * Set the phone number for the user.
+   *
+   * @param phoneNumber the phone number for the user
+   */
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  /**
+   * Set the preferred name for the user.
+   *
+   * @param preferredName the preferred name for the user
+   */
+  public void setPreferredName(String preferredName) {
+    this.preferredName = preferredName;
+  }
+
+  /**
+   * Set the status for the user.
+   *
+   * @param status the status for the user
+   */
+  public void setStatus(UserStatus status) {
+    this.status = status;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the user
+   * is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *                        directory the user is associated with
+   */
+  public void setUserDirectoryId(UUID userDirectoryId) {
+    this.userDirectoryId = userDirectoryId;
+  }
+
+  /**
+   * Set the username for the user.
+   *
+   * @param username the username for the user
+   */
+  public void setUsername(String username) {
+    this.username = username;
   }
 }

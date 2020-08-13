@@ -148,30 +148,12 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the report definition.
-   *
-   * @param id the ID uniquely identifying the report definition
-   */
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  /**
    * Returns the name of the report definition.
    *
    * @return the name of the report definition
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Set the name of the report definition.
-   *
-   * @param name the name of the report definition
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**
@@ -184,15 +166,6 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
-   * Set the JasperReports template for the report definition.
-   *
-   * @param template the JasperReports template for the report definition
-   */
-  public void setTemplate(byte[] template) {
-    this.template = template;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -200,6 +173,33 @@ public class ReportDefinition implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Set the ID uniquely identifying the report definition.
+   *
+   * @param id the ID uniquely identifying the report definition
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the name of the report definition.
+   *
+   * @param name the name of the report definition
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the JasperReports template for the report definition.
+   *
+   * @param template the JasperReports template for the report definition
+   */
+  public void setTemplate(byte[] template) {
+    this.template = template;
   }
 
   /**

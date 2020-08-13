@@ -114,22 +114,22 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
     this.spinnerService.showSpinner();
 
     this.mailService.getMailTemplate(this.mailTemplateId)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((mailTemplate: MailTemplate) => {
-        this.mailTemplate = mailTemplate;
-        this.idFormControl.setValue(mailTemplate.id);
-        this.nameFormControl.setValue(mailTemplate.name);
-        this.contentTypeFormControl.setValue(mailTemplate.contentType);
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((mailTemplate: MailTemplate) => {
+      this.mailTemplate = mailTemplate;
+      this.idFormControl.setValue(mailTemplate.id);
+      this.nameFormControl.setValue(mailTemplate.name);
+      this.contentTypeFormControl.setValue(mailTemplate.contentType);
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ok(): void {
@@ -151,20 +151,20 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
           this.spinnerService.showSpinner();
 
           this.mailService.updateMailTemplate(this.mailTemplate)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
+          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+          .subscribe(() => {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+          }, (error: Error) => {
+            // noinspection SuspiciousTypeOfGuard
+            if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
+              (error instanceof SystemUnavailableError)) {
               // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
+              this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+            } else {
+              this.dialogService.showErrorDialog(error);
+            }
+          });
         } else {
           console.log('Failed to read the template file for the report definition (' + fileReader.result + ')');
         }

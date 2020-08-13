@@ -1243,20 +1243,20 @@ export class SecurityService {
   }
 
   /**
-   * Retrieve the full name of the user.
+   * Retrieve the name of the user.
    *
    * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory.
    * @param username        The username identifying the user.
    *
-   * @return The full name of the user.
+   * @return The name of the user.
    */
-  getUserFullName(userDirectoryId: string, username: string): Observable<string> {
+  getUserName(userDirectoryId: string, username: string): Observable<string> {
     return this.httpClient.get<string>(
       this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/users/' +
-      encodeURIComponent(username) + '/full-name', {reportProgress: true})
-    .pipe(map((userFullName: string) => {
-      return userFullName;
+      encodeURIComponent(username) + '/name', {reportProgress: true})
+    .pipe(map((userName: string) => {
+      return userName;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
@@ -1266,7 +1266,7 @@ export class SecurityService {
         } else if (apiError.code === 'UserNotFoundError') {
           return throwError(new UserNotFoundError(apiError));
         } else {
-          return throwError(new SecurityServiceError('Failed to retrieve the full name of the user.', apiError));
+          return throwError(new SecurityServiceError('Failed to retrieve the name of the user.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -1282,7 +1282,7 @@ export class SecurityService {
    * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory.
    * @param filter          The optional filter to apply to the users.
-   * @param sortBy          The optional method used to sort the users e.g. by full name.
+   * @param sortBy          The optional method used to sort the users e.g. by name.
    * @param sortDirection   The optional sort direction to apply to the users.
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.
@@ -1772,7 +1772,7 @@ export class SecurityService {
 
     const session = new Session((!!token.sub) ? token.sub : '',
       (!!token.user_directory_id) ? token.user_directory_id : '',
-      (!!token.user_full_name) ? token.user_full_name : '',
+      (!!token.name) ? token.name : '',
       (!!token.scope) ? token.scope.split(' ') : [],
       (!!token.roles) ? token.roles : [],
       (!!token.functions) ? token.functions : [],

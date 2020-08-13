@@ -29,8 +29,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>DuplicatePersonException</code> exception is thrown to indicate an error condition as
- * a result of an attempt to create a duplicate person.
+ * The <code>DuplicatePersonException</code> exception is thrown to indicate an error condition as a
+ * result of an attempt to create a duplicate person.
  *
  * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
  * transaction.

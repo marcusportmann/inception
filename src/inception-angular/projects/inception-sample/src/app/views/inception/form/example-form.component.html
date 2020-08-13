@@ -38,11 +38,11 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Full name</mat-label>
-            <input type="text" matInput formControlName="fullName" required="true" autofocus>
-            <mat-hint>The full name.</mat-hint>
-            <mat-error *ngIf="exampleForm.controls['fullName'].errors && !exampleForm.controls['fullName'].untouched">
-              <span *ngIf="exampleForm.controls['fullName'].errors?.required">A full name is required.</span>
+            <mat-label>Name</mat-label>
+            <input type="text" matInput formControlName="name" required="true" autofocus>
+            <mat-hint>The name.</mat-hint>
+            <mat-error *ngIf="exampleForm.controls['name'].errors && !exampleForm.controls['name'].untouched">
+              <span *ngIf="exampleForm.controls['name'].errors?.required">A name is required.</span>
             </mat-error>
           </mat-form-field>
         </div>

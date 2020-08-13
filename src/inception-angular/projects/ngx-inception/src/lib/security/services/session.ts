@@ -41,6 +41,11 @@ export class Session {
   functionCodes: string[];
 
   /**
+   * The name of the user.
+   */
+  name: string;
+
+  /**
    * The selected organization for the user session.
    */
   organization?: Organization;
@@ -78,17 +83,12 @@ export class Session {
   userDirectoryId: string;
 
   /**
-   * The full name of the user.
-   */
-  userFullName: string;
-
-  /**
    * Constructs a new Session.
    *
    * @param username          The username for the user the user session is associated with.
    * @param userDirectoryId   The Universally Unique Identifier (UUID) uniquely identifying the
    *                          user directory the user is associated with.
-   * @param userFullName      The full name of the user.
+   * @param name              The name of the user.
    * @param scopes            The OAuth2 scopes for the user session.
    * @param roleCodes         The codes identifying the roles assigned to the user associated with
    *                          the user session.
@@ -101,12 +101,12 @@ export class Session {
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
-  constructor(username: string, userDirectoryId: string, userFullName: string, scopes: string[],
+  constructor(username: string, userDirectoryId: string, name: string, scopes: string[],
               roleCodes: string[], functionCodes: string[], organizationIds: string[],
               accessToken: string, accessTokenExpiry?: Date, refreshToken?: string) {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
-    this.userFullName = userFullName;
+    this.name = name;
     this.scopes = scopes;
     this.roleCodes = roleCodes;
     this.functionCodes = functionCodes;

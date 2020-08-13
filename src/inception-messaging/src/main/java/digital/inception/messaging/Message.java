@@ -588,30 +588,12 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the message.
-   *
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   */
-  public void setCorrelationId(UUID correlationId) {
-    this.correlationId = correlationId;
-  }
-
-  /**
    * Returns the date and time the message was created.
    *
    * @return the date and time the message was created
    */
   public LocalDateTime getCreated() {
     return created;
-  }
-
-  /**
-   * Set the date and time the message was created.
-   *
-   * @param created the date and time the message was created
-   */
-  public void setCreated(LocalDateTime created) {
-    this.created = created;
   }
 
   /**
@@ -624,30 +606,12 @@ public class Message {
   }
 
   /**
-   * Set the data for the message which may be encrypted.
-   *
-   * @param data the data for the message which may be encrypted
-   */
-  public void setData(byte[] data) {
-    this.data = data;
-  }
-
-  /**
    * Returns the hash of the unencrypted data for the message if the message is encrypted.
    *
    * @return the hash of the unencrypted data for the message if the message is encrypted
    */
   public String getDataHash() {
     return dataHash;
-  }
-
-  /**
-   * Set the hash of the unencrypted data for the message if the message is encrypted.
-   *
-   * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
-   */
-  public void setDataHash(String dataHash) {
-    this.dataHash = dataHash;
   }
 
   /**
@@ -662,32 +626,12 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the device the message
-   * originated from.
-   *
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *                 message originated from
-   */
-  public void setDeviceId(UUID deviceId) {
-    this.deviceId = deviceId;
-  }
-
-  /**
    * Returns the number of times that downloading of the message was attempted.
    *
    * @return the number of times that downloading of the message was attempted
    */
   public Integer getDownloadAttempts() {
     return downloadAttempts;
-  }
-
-  /**
-   * Set the number of times that downloading of the message was attempted.
-   *
-   * @param downloadAttempts the number of times that downloading of the message was attempted
-   */
-  public void setDownloadAttempts(Integer downloadAttempts) {
-    this.downloadAttempts = downloadAttempts;
   }
 
   /**
@@ -700,31 +644,12 @@ public class Message {
   }
 
   /**
-   * Set the base-64 encoded initialization vector for the encryption scheme for the message.
-   *
-   * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme for the
-   *                     message
-   */
-  public void setEncryptionIV(String encryptionIV) {
-    this.encryptionIV = encryptionIV;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the message.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the message
    */
   public UUID getId() {
     return id;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the message.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the message
-   */
-  public void setId(UUID id) {
-    this.id = id;
   }
 
   /**
@@ -737,15 +662,6 @@ public class Message {
   }
 
   /**
-   * Set the date and time the last attempt was made to process the message.
-   *
-   * @param lastProcessed the date and time the last attempt was made to process the message
-   */
-  public void setLastProcessed(LocalDateTime lastProcessed) {
-    this.lastProcessed = lastProcessed;
-  }
-
-  /**
    * Returns the name of the entity that has locked this message for processing or <code>null</code>
    * if the message is not being processed.
    *
@@ -754,17 +670,6 @@ public class Message {
    */
   public String getLockName() {
     return lockName;
-  }
-
-  /**
-   * Set the name of the entity that has locked this message for processing or <code>null</code> if
-   * the message is not being processed.
-   *
-   * @param lockName the name of the entity that has locked this message for processing or <code>
-   *                 null</code> if the message is not being processed
-   */
-  public void setLockName(String lockName) {
-    this.lockName = lockName;
   }
 
   /**
@@ -780,32 +685,12 @@ public class Message {
   }
 
   /**
-   * Set the message priority. Messages with a higher priority value are processed before messages
-   * with a lower priority value.
-   *
-   * @param priority the message priority. Messages with a higher priority value are processed
-   *                 before messages with a lower priority value
-   */
-  public void setPriority(MessagePriority priority) {
-    this.priority = priority;
-  }
-
-  /**
    * Returns the number of times that the processing of the message was attempted.
    *
    * @return the number of times that the processing of the message was attempted
    */
   public Integer getProcessAttempts() {
     return processAttempts;
-  }
-
-  /**
-   * Set the number of times that the processing of the message was attempted.
-   *
-   * @param processAttempts the number of times that the processing of the message was attempted
-   */
-  public void setProcessAttempts(Integer processAttempts) {
-    this.processAttempts = processAttempts;
   }
 
   /**
@@ -818,30 +703,12 @@ public class Message {
   }
 
   /**
-   * Set the number of times that the sending of the message was attempted.
-   *
-   * @param sendAttempts the number of times that the sending of the message was attempted
-   */
-  public void setSendAttempts(Integer sendAttempts) {
-    this.sendAttempts = sendAttempts;
-  }
-
-  /**
    * Returns the message status e.g. Initialized, Sending, etc.
    *
    * @return the message status e.g. Initialized, Sending, etc
    */
   public MessageStatus getStatus() {
     return status;
-  }
-
-  /**
-   * Set the message status e.g. Initialized, Sending, etc.
-   *
-   * @param status the message status e.g. Initialized, Sending, etc
-   */
-  public void setStatus(MessageStatus status) {
-    this.status = status;
   }
 
   /**
@@ -854,31 +721,12 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the type of message.
-   *
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *               message
-   */
-  public void setTypeId(UUID typeId) {
-    this.typeId = typeId;
-  }
-
-  /**
    * Returns the username identifying the user associated with the message.
    *
    * @return the username identifying the user associated with the message
    */
   public String getUsername() {
     return username;
-  }
-
-  /**
-   * Set the username identifying the user associated with the message.
-   *
-   * @param username the username identifying the user associated with the message
-   */
-  public void setUsername(String username) {
-    this.username = username;
   }
 
   /**
@@ -922,6 +770,158 @@ public class Message {
    */
   public boolean isEncrypted() {
     return (!StringUtils.isEmpty(dataHash));
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to correlate the message.
+   *
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   */
+  public void setCorrelationId(UUID correlationId) {
+    this.correlationId = correlationId;
+  }
+
+  /**
+   * Set the date and time the message was created.
+   *
+   * @param created the date and time the message was created
+   */
+  public void setCreated(LocalDateTime created) {
+    this.created = created;
+  }
+
+  /**
+   * Set the data for the message which may be encrypted.
+   *
+   * @param data the data for the message which may be encrypted
+   */
+  public void setData(byte[] data) {
+    this.data = data;
+  }
+
+  /**
+   * Set the hash of the unencrypted data for the message if the message is encrypted.
+   *
+   * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
+   */
+  public void setDataHash(String dataHash) {
+    this.dataHash = dataHash;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * originated from.
+   *
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *                 message originated from
+   */
+  public void setDeviceId(UUID deviceId) {
+    this.deviceId = deviceId;
+  }
+
+  /**
+   * Set the number of times that downloading of the message was attempted.
+   *
+   * @param downloadAttempts the number of times that downloading of the message was attempted
+   */
+  public void setDownloadAttempts(Integer downloadAttempts) {
+    this.downloadAttempts = downloadAttempts;
+  }
+
+  /**
+   * Set the base-64 encoded initialization vector for the encryption scheme for the message.
+   *
+   * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme for the
+   *                     message
+   */
+  public void setEncryptionIV(String encryptionIV) {
+    this.encryptionIV = encryptionIV;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the message.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the message
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the date and time the last attempt was made to process the message.
+   *
+   * @param lastProcessed the date and time the last attempt was made to process the message
+   */
+  public void setLastProcessed(LocalDateTime lastProcessed) {
+    this.lastProcessed = lastProcessed;
+  }
+
+  /**
+   * Set the name of the entity that has locked this message for processing or <code>null</code> if
+   * the message is not being processed.
+   *
+   * @param lockName the name of the entity that has locked this message for processing or <code>
+   *                 null</code> if the message is not being processed
+   */
+  public void setLockName(String lockName) {
+    this.lockName = lockName;
+  }
+
+  /**
+   * Set the message priority. Messages with a higher priority value are processed before messages
+   * with a lower priority value.
+   *
+   * @param priority the message priority. Messages with a higher priority value are processed
+   *                 before messages with a lower priority value
+   */
+  public void setPriority(MessagePriority priority) {
+    this.priority = priority;
+  }
+
+  /**
+   * Set the number of times that the processing of the message was attempted.
+   *
+   * @param processAttempts the number of times that the processing of the message was attempted
+   */
+  public void setProcessAttempts(Integer processAttempts) {
+    this.processAttempts = processAttempts;
+  }
+
+  /**
+   * Set the number of times that the sending of the message was attempted.
+   *
+   * @param sendAttempts the number of times that the sending of the message was attempted
+   */
+  public void setSendAttempts(Integer sendAttempts) {
+    this.sendAttempts = sendAttempts;
+  }
+
+  /**
+   * Set the message status e.g. Initialized, Sending, etc.
+   *
+   * @param status the message status e.g. Initialized, Sending, etc
+   */
+  public void setStatus(MessageStatus status) {
+    this.status = status;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the type of message.
+   *
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of
+   *               message
+   */
+  public void setTypeId(UUID typeId) {
+    this.typeId = typeId;
+  }
+
+  /**
+   * Set the username identifying the user associated with the message.
+   *
+   * @param username the username identifying the user associated with the message
+   */
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   /**

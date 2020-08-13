@@ -46,7 +46,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
   emailFormControl: FormControl;
 
-  fullNameFormControl: FormControl;
+  nameFormControl: FormControl;
 
   preferredNameFormControl: FormControl;
 
@@ -90,7 +90,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     this.emailFormControl = new FormControl('', [Validators.maxLength(100), Validators.pattern(// tslint:disable-next-line:max-line-length
       '(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\\])')
     ]);
-    this.fullNameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
+    this.nameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.preferredNameFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     // tslint:disable-next-line:max-line-length
     this.mobileNumberFormControl = new FormControl('', [Validators.maxLength(100), Validators.pattern(// tslint:disable-next-line:max-line-length
@@ -105,7 +105,7 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     // Initialise the form
     this.editUserForm = new FormGroup({
       email: this.emailFormControl,
-      fullName: this.fullNameFormControl,
+      name: this.nameFormControl,
       preferredName: this.preferredNameFormControl,
       mobileNumber: this.mobileNumberFormControl,
       phoneNumber: this.phoneNumberFormControl,
@@ -139,41 +139,41 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
     combineLatest([this.securityService.getUserDirectoryCapabilities(this.userDirectoryId),
       this.securityService.getUser(this.userDirectoryId, this.username)
     ])
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((results: [UserDirectoryCapabilities, User]) => {
-        this.userDirectoryCapabilities = results[0];
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((results: [UserDirectoryCapabilities, User]) => {
+      this.userDirectoryCapabilities = results[0];
 
-        this.user = results[1];
+      this.user = results[1];
 
-        this.emailFormControl.setValue(results[1].email);
-        this.fullNameFormControl.setValue(results[1].fullName);
-        this.preferredNameFormControl.setValue(results[1].preferredName);
-        this.mobileNumberFormControl.setValue(results[1].mobileNumber);
-        this.phoneNumberFormControl.setValue(results[1].phoneNumber);
-        this.usernameFormControl.setValue(results[1].username);
+      this.emailFormControl.setValue(results[1].email);
+      this.nameFormControl.setValue(results[1].name);
+      this.preferredNameFormControl.setValue(results[1].preferredName);
+      this.mobileNumberFormControl.setValue(results[1].mobileNumber);
+      this.phoneNumberFormControl.setValue(results[1].phoneNumber);
+      this.usernameFormControl.setValue(results[1].username);
 
-        if (results[0].supportsPasswordExpiry) {
-          this.editUserForm.addControl('expirePassword', new FormControl(false));
-        }
+      if (results[0].supportsPasswordExpiry) {
+        this.editUserForm.addControl('expirePassword', new FormControl(false));
+      }
 
-        if (results[0].supportsUserLocks) {
-          this.editUserForm.addControl('lockUser', new FormControl(false));
-        }
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      if (results[0].supportsUserLocks) {
+        this.editUserForm.addControl('lockUser', new FormControl(false));
+      }
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ok(): void {
     if (this.user && this.editUserForm.valid) {
-      this.user.fullName = this.fullNameFormControl.value;
+      this.user.name = this.nameFormControl.value;
       this.user.preferredName = this.preferredNameFormControl.value;
       this.user.mobileNumber = this.mobileNumberFormControl.value;
       this.user.phoneNumber = this.phoneNumberFormControl.value;
@@ -186,23 +186,23 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
 
       this.securityService.updateUser(this.user, expirePasswordFormControl ? expirePasswordFormControl.value : false,
         lockUserFormControl ? lockUserFormControl.value : false)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../../..'], {
-            relativeTo: this.activatedRoute,
-            state: {userDirectoryId: this.userDirectoryId}
-          });
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['../../..'], {
+          relativeTo: this.activatedRoute,
+          state: {userDirectoryId: this.userDirectoryId}
         });
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

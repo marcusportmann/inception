@@ -80,21 +80,21 @@ public class OrganizationData implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the organization.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the organization
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
    * Returns the name of the organization.
    *
    * @return the name of the organization
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the organization.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the organization
+   */
+  public void setId(UUID id) {
+    this.id = id;
   }
 
   /**

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,12 +45,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "Person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "fullName"})
+@JsonPropertyOrder({"id", "name"})
 @XmlRootElement(name = "Person", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Person",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "fullName"})
+    propOrder = {"id", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "party")
@@ -59,23 +60,38 @@ import javax.xml.bind.annotation.XmlType;
     pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")})
 public class Person {
 
-  /** The type of party for the person. */
+  /**
+   * The type of party for the person.
+   */
   @JsonIgnore
   @XmlTransient
   @NotNull
   @Column(name = "type", nullable = false)
   private final PartyType type = PartyType.PERSON;
 
-  /** The full name of the person. */
-  @Schema(description = "The full name of the person", required = true)
+  /**
+   * The date of birth for the person.
+   */
+  @Schema(description = "The date of birth for the person", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "FullName", required = true)
+  @XmlElement(name = "DateOfBirth", required = true)
   @NotNull
-  @Size(max = 100)
-  @Column(name = "name", nullable = false, length = 100)
-  private String fullName;
+  @Column(table = "person", name = "date_of_birth", nullable = false)
+  private LocalDate dateOfBirth;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the person. */
+  /**
+   * The code identifying the gender for the person.
+   */
+  @Schema(description = "The code identifying the gender for the person", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Gender", required = true)
+  @NotNull
+  @Column(table = "person", name = "gender", nullable = false)
+  private String gender;
+
+  /**
+   * The Universally Unique Identifier (UUID) uniquely identifying the person.
+   */
   @Schema(
       description = "The Universally Unique Identifier (UUID) uniquely identifying the person",
       required = true)
@@ -86,25 +102,39 @@ public class Person {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** Constructs a new <code>Person</code>. */
-  public Person() {}
+  /**
+   * The name of the person.
+   */
+  @Schema(description = "The name of the person", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(max = 100)
+  @Column(name = "name", nullable = false, length = 100)
+  private String name;
 
   /**
-   * Returns the full name of the person.
-   *
-   * @return the full name of the person
+   * Constructs a new <code>Person</code>.
    */
-  public String getFullName() {
-    return fullName;
+  public Person() {
   }
 
   /**
-   * Set the full name of the person.
+   * Returns the date of birth for the person.
    *
-   * @param fullName the full name of the person
+   * @return the date of birth for the person
    */
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
+  public LocalDate getDateOfBirth() {
+    return dateOfBirth;
+  }
+
+  /**
+   * Returns the code identifying the gender for the person.
+   *
+   * @return the code identifying the gender for the person
+   */
+  public String getGender() {
+    return gender;
   }
 
   /**
@@ -117,11 +147,47 @@ public class Person {
   }
 
   /**
+   * Returns the name of the person.
+   *
+   * @return the name of the person
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Set the date of birth for the person.
+   *
+   * @param dateOfBirth the date of birth for the person
+   */
+  public void setDateOfBirth(LocalDate dateOfBirth) {
+    this.dateOfBirth = dateOfBirth;
+  }
+
+  /**
+   * Set the code identifying the gender for the person.
+   *
+   * @param gender the code identifying the gender for the person
+   */
+  public void setGender(String gender) {
+    this.gender = gender;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) uniquely identifying the person.
    *
    * @param id the Universally Unique Identifier (UUID) uniquely identifying the person
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set the name of the person.
+   *
+   * @param name the name of the person
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 }

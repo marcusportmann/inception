@@ -31,7 +31,8 @@ import {TitleBarService} from '../services/title-bar.service';
   selector: 'title-bar',
   template: `
     <div *ngIf="title | async as title; else noTitle" class="title-bar">
-      <div *ngIf="backNavigation | async as backNavigation" class="back" (click)="navigateBack(backNavigation)">
+      <div *ngIf="backNavigation | async as backNavigation" class="back"
+           (click)="navigateBack(backNavigation)">
         <span class="fa fa-chevron-left"></span> {{backNavigation.title}}</div>
       <div class="title">{{title}}</div>
     </div>

@@ -248,30 +248,12 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the SMS.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the SMS
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
    * Returns the date and time the last attempt was made to send the SMS.
    *
    * @return the date and time the last attempt was made to send the SMS
    */
   public LocalDateTime getLastProcessed() {
     return lastProcessed;
-  }
-
-  /**
-   * Set the date and time the last attempt was made to send the SMS.
-   *
-   * @param lastProcessed the date and time the last attempt was made to send the SMS
-   */
-  public void setLastProcessed(LocalDateTime lastProcessed) {
-    this.lastProcessed = lastProcessed;
   }
 
   /**
@@ -284,30 +266,12 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the name of the entity that has locked the SMS for sending.
-   *
-   * @param lockName the name of the entity that has locked the SMS for sending
-   */
-  public void setLockName(String lockName) {
-    this.lockName = lockName;
-  }
-
-  /**
    * Returns the message to send.
    *
    * @return the message to send
    */
   public String getMessage() {
     return message;
-  }
-
-  /**
-   * Set the message to send.
-   *
-   * @param message the message to send
-   */
-  public void setMessage(String message) {
-    this.message = message;
   }
 
   /**
@@ -320,15 +284,6 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the mobile number to send the SMS to.
-   *
-   * @param mobileNumber the mobile number to send the SMS to
-   */
-  public void setMobileNumber(String mobileNumber) {
-    this.mobileNumber = mobileNumber;
-  }
-
-  /**
    * Returns the number of times that the sending of the SMS was attempted.
    *
    * @return the number of times that the sending of the SMS was attempted
@@ -338,30 +293,12 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the number of times that the sending of the SMS was attempted.
-   *
-   * @param sendAttempts the number of times that the sending of the SMS was attempted
-   */
-  public void setSendAttempts(Integer sendAttempts) {
-    this.sendAttempts = sendAttempts;
-  }
-
-  /**
    * Returns the status of the SMS.
    *
    * @return the status of the SMS
    */
   public SMSStatus getStatus() {
     return status;
-  }
-
-  /**
-   * Set the status of the SMS.
-   *
-   * @param status the status of the SMS
-   */
-  public void setStatus(SMSStatus status) {
-    this.status = status;
   }
 
   /**
@@ -383,5 +320,68 @@ public class SMS implements Serializable {
     } else {
       sendAttempts++;
     }
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the SMS.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the SMS
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the date and time the last attempt was made to send the SMS.
+   *
+   * @param lastProcessed the date and time the last attempt was made to send the SMS
+   */
+  public void setLastProcessed(LocalDateTime lastProcessed) {
+    this.lastProcessed = lastProcessed;
+  }
+
+  /**
+   * Set the name of the entity that has locked the SMS for sending.
+   *
+   * @param lockName the name of the entity that has locked the SMS for sending
+   */
+  public void setLockName(String lockName) {
+    this.lockName = lockName;
+  }
+
+  /**
+   * Set the message to send.
+   *
+   * @param message the message to send
+   */
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  /**
+   * Set the mobile number to send the SMS to.
+   *
+   * @param mobileNumber the mobile number to send the SMS to
+   */
+  public void setMobileNumber(String mobileNumber) {
+    this.mobileNumber = mobileNumber;
+  }
+
+  /**
+   * Set the number of times that the sending of the SMS was attempted.
+   *
+   * @param sendAttempts the number of times that the sending of the SMS was attempted
+   */
+  public void setSendAttempts(Integer sendAttempts) {
+    this.sendAttempts = sendAttempts;
+  }
+
+  /**
+   * Set the status of the SMS.
+   *
+   * @param status the status of the SMS
+   */
+  public void setStatus(SMSStatus status) {
+    this.status = status;
   }
 }

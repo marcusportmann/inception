@@ -39,17 +39,21 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ReferenceRestController extends SecureRestController {
 
-  /** The Reference Service. */
+  /**
+   * The Reference Service.
+   */
   private final IReferenceService referenceService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>ReferenceRestController</code>.
    *
    * @param referenceService the Reference Service
-   * @param validator the JSR-303 validator
+   * @param validator        the JSR-303 validator
    */
   public ReferenceRestController(IReferenceService referenceService, Validator validator) {
     this.referenceService = referenceService;

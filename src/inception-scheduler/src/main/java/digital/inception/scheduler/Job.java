@@ -312,31 +312,12 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the number of times the current execution of the job has been attempted.
-   *
-   * @param executionAttempts the number of times the current execution of the job has been
-   *                          attempted
-   */
-  public void setExecutionAttempts(Integer executionAttempts) {
-    this.executionAttempts = executionAttempts;
-  }
-
-  /**
    * Returns the ID uniquely identifying the job.
    *
    * @return the ID uniquely identifying the job
    */
   public String getId() {
     return id;
-  }
-
-  /**
-   * Set the ID uniquely identifying the job.
-   *
-   * @param id the ID uniquely identifying the scheduled job
-   */
-  public void setId(String id) {
-    this.id = id;
   }
 
   /**
@@ -349,30 +330,12 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the fully qualified name of the Java class that implements the job.
-   *
-   * @param jobClass the fully qualified name of the Java class that implements the job
-   */
-  public void setJobClass(String jobClass) {
-    this.jobClass = jobClass;
-  }
-
-  /**
    * Returns date and time the job was last executed.
    *
    * @return the date and time the job was last executed
    */
   public LocalDateTime getLastExecuted() {
     return lastExecuted;
-  }
-
-  /**
-   * Set the date and time the job was last executed.
-   *
-   * @param lastExecuted the date and time the job was last executed
-   */
-  public void setLastExecuted(LocalDateTime lastExecuted) {
-    this.lastExecuted = lastExecuted;
   }
 
   /**
@@ -385,30 +348,12 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the name of the entity that has locked the job for execution.
-   *
-   * @param lockName the name of the entity that has locked the job for execution
-   */
-  public void setLockName(String lockName) {
-    this.lockName = lockName;
-  }
-
-  /**
    * Returns the name of the job.
    *
    * @return the name of the job
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Set the name of the job.
-   *
-   * @param name the name of the job
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**
@@ -421,31 +366,12 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the date and time when the job will next be executed.
-   *
-   * @param nextExecution the date and time when the job will next be executed
-   */
-  public void setNextExecution(LocalDateTime nextExecution) {
-    this.nextExecution = nextExecution;
-  }
-
-  /**
    * Returns the parameters for the job.
    *
    * @return the parameters for the job
    */
   public Set<JobParameter> getParameters() {
     return parameters;
-  }
-
-  /**
-   * Set the parameters for the job.
-   *
-   * @param parameters the parameters for the job
-   */
-  public void setParameters(Set<JobParameter> parameters) {
-    this.parameters.clear();
-    this.parameters.addAll(parameters);
   }
 
   /**
@@ -458,30 +384,12 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the cron-style scheduling pattern for the job.
-   *
-   * @param schedulingPattern the cron-style scheduling pattern for the job
-   */
-  public void setSchedulingPattern(String schedulingPattern) {
-    this.schedulingPattern = schedulingPattern;
-  }
-
-  /**
    * Returns the status of the job.
    *
    * @return the status of the job
    */
   public JobStatus getStatus() {
     return status;
-  }
-
-  /**
-   * Set the status of the job.
-   *
-   * @param status the status of the job
-   */
-  public void setStatus(JobStatus status) {
-    this.status = status;
   }
 
   /**
@@ -515,16 +423,6 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set whether the job is enabled for execution.
-   *
-   * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>
-   *                otherwise
-   */
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  /**
    * Remove the parameter for the job.
    *
    * @param parameterName the name of the parameter
@@ -537,5 +435,107 @@ public class Job implements Serializable {
         return;
       }
     }
+  }
+
+  /**
+   * Set whether the job is enabled for execution.
+   *
+   * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>
+   *                otherwise
+   */
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  /**
+   * Set the number of times the current execution of the job has been attempted.
+   *
+   * @param executionAttempts the number of times the current execution of the job has been
+   *                          attempted
+   */
+  public void setExecutionAttempts(Integer executionAttempts) {
+    this.executionAttempts = executionAttempts;
+  }
+
+  /**
+   * Set the ID uniquely identifying the job.
+   *
+   * @param id the ID uniquely identifying the scheduled job
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the fully qualified name of the Java class that implements the job.
+   *
+   * @param jobClass the fully qualified name of the Java class that implements the job
+   */
+  public void setJobClass(String jobClass) {
+    this.jobClass = jobClass;
+  }
+
+  /**
+   * Set the date and time the job was last executed.
+   *
+   * @param lastExecuted the date and time the job was last executed
+   */
+  public void setLastExecuted(LocalDateTime lastExecuted) {
+    this.lastExecuted = lastExecuted;
+  }
+
+  /**
+   * Set the name of the entity that has locked the job for execution.
+   *
+   * @param lockName the name of the entity that has locked the job for execution
+   */
+  public void setLockName(String lockName) {
+    this.lockName = lockName;
+  }
+
+  /**
+   * Set the name of the job.
+   *
+   * @param name the name of the job
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the date and time when the job will next be executed.
+   *
+   * @param nextExecution the date and time when the job will next be executed
+   */
+  public void setNextExecution(LocalDateTime nextExecution) {
+    this.nextExecution = nextExecution;
+  }
+
+  /**
+   * Set the parameters for the job.
+   *
+   * @param parameters the parameters for the job
+   */
+  public void setParameters(Set<JobParameter> parameters) {
+    this.parameters.clear();
+    this.parameters.addAll(parameters);
+  }
+
+  /**
+   * Set the cron-style scheduling pattern for the job.
+   *
+   * @param schedulingPattern the cron-style scheduling pattern for the job
+   */
+  public void setSchedulingPattern(String schedulingPattern) {
+    this.schedulingPattern = schedulingPattern;
+  }
+
+  /**
+   * Set the status of the job.
+   *
+   * @param status the status of the job
+   */
+  public void setStatus(JobStatus status) {
+    this.status = status;
   }
 }

@@ -156,15 +156,6 @@ public class MessageReceivedResponse {
   }
 
   /**
-   * Set the result code.
-   *
-   * @param code the result code
-   */
-  public void setCode(long code) {
-    this.code = code;
-  }
-
-  /**
    * Return the user-friendly text description of the result of processing the message received
    * request.
    *
@@ -176,17 +167,6 @@ public class MessageReceivedResponse {
   }
 
   /**
-   * Set the user-friendly text description of the result of processing the message download
-   * request.
-   *
-   * @param detail the user-friendly text description of the result of processing the message
-   *               download request
-   */
-  public void setDetail(String detail) {
-    this.detail = detail;
-  }
-
-  /**
    * Return the flattened information for the exception that resulted from processing the message
    * received request.
    *
@@ -195,6 +175,26 @@ public class MessageReceivedResponse {
    */
   public String getException() {
     return exception;
+  }
+
+  /**
+   * Set the result code.
+   *
+   * @param code the result code
+   */
+  public void setCode(long code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the user-friendly text description of the result of processing the message download
+   * request.
+   *
+   * @param detail the user-friendly text description of the result of processing the message
+   *               download request
+   */
+  public void setDetail(String detail) {
+    this.detail = detail;
   }
 
   /**

@@ -194,11 +194,10 @@ public class SecurityWebService {
         userDirectoryId,
         username,
         passwordChange.getNewPassword(),
-        (passwordChange.getExpirePassword() == null) ? false : passwordChange.getExpirePassword(),
-        (passwordChange.getLockUser() == null) ? false : passwordChange.getLockUser(),
-        (passwordChange.getResetPasswordHistory() == null)
-            ? false
-            : passwordChange.getResetPasswordHistory(),
+        passwordChange.getExpirePassword() != null && passwordChange.getExpirePassword(),
+        passwordChange.getLockUser() != null && passwordChange.getLockUser(),
+        passwordChange.getResetPasswordHistory() != null && passwordChange
+            .getResetPasswordHistory(),
         passwordChange.getReason());
   }
 
@@ -242,11 +241,10 @@ public class SecurityWebService {
           userDirectoryId,
           username,
           passwordChange.getNewPassword(),
-          (passwordChange.getExpirePassword() == null) ? false : passwordChange.getExpirePassword(),
-          (passwordChange.getLockUser() == null) ? false : passwordChange.getLockUser(),
-          (passwordChange.getResetPasswordHistory() == null)
-              ? false
-              : passwordChange.getResetPasswordHistory(),
+          passwordChange.getExpirePassword() != null && passwordChange.getExpirePassword(),
+          passwordChange.getLockUser() != null && passwordChange.getLockUser(),
+          passwordChange.getResetPasswordHistory() != null && passwordChange
+              .getResetPasswordHistory(),
           passwordChange.getReason());
     } else if (passwordChange.getReason() == PasswordChangeReason.USER) {
       if (StringUtils.isEmpty(passwordChange.getPassword())) {
@@ -901,17 +899,17 @@ public class SecurityWebService {
   }
 
   /**
-   * Retrieve the full name of the user.
+   * Retrieve the name of the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory
    * @param username        the username identifying the user
    *
-   * @return the full name of the user
+   * @return the name of the user
    */
-  @WebMethod(operationName = "GetUserFullName")
-  @WebResult(name = "UserFullName")
-  public String getUserFullName(
+  @WebMethod(operationName = "GetUserName")
+  @WebResult(name = "UserName")
+  public String getUserName(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
@@ -924,7 +922,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("username");
     }
 
-    return securityService.getUserFullName(userDirectoryId, username);
+    return securityService.getUserName(userDirectoryId, username);
   }
 
   /**
@@ -933,7 +931,7 @@ public class SecurityWebService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory
    * @param filter          the optional filter to apply to the users
-   * @param sortBy          The optional method used to sort the users e.g. by full name.
+   * @param sortBy          The optional method used to sort the users e.g. by name.
    * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size

@@ -15,10 +15,20 @@
  */
 
 import {
-  Component, DoCheck, ElementRef, HostBinding, HostListener, Input, OnDestroy, OnInit, Optional, Renderer2, Self
+  Component,
+  DoCheck,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Renderer2,
+  Self
 } from '@angular/core';
 import {ControlValueAccessor, FormGroupDirective, NgControl, NgForm} from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import {ErrorStateMatcher} from '@angular/material/core';
 import {MatFormFieldControl} from '@angular/material/form-field';
 import {FocusMonitor} from '@angular/cdk/a11y';
 import {coerceBooleanProperty} from '@angular/cdk/coercion';
@@ -71,14 +81,10 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
   controlType = 'file-input';
 
   @Input() autofilled = false;
-
-  private _required = false;
-
   @Input() placeholder = '';
   @Input() multiple = false;
   @Input() accept?: string;
   @Input() errorStateMatcher: ErrorStateMatcher;
-
   @HostBinding() id = `ngx-mat-file-input-${FileUploadComponent.nextId++}`;
   @HostBinding('attr.aria-describedby') describedBy = '';
 
@@ -101,9 +107,15 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     });
   }
 
+  private _required = false;
 
-  setDescribedByIds(ids: string[]) {
-    this.describedBy = ids.join(' ');
+  @Input() get required() {
+    return this._required;
+  }
+
+  set required(req: boolean) {
+    this._required = coerceBooleanProperty(req);
+    this.stateChanges.next();
   }
 
   @Input() get value(): File[] | null {
@@ -128,15 +140,6 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     return this.focused || !this.empty || this.placeholder !== undefined;
   }
 
-  @Input() get required() {
-    return this._required;
-  }
-
-  set required(req: boolean) {
-    this._required = coerceBooleanProperty(req);
-    this.stateChanges.next();
-  }
-
   @HostBinding('class.file-input-disabled') get isDisabled() {
     return this.disabled;
   }
@@ -150,24 +153,23 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
     this.stateChanges.next();
   }
 
-  onContainerClick(event: MouseEvent) {
-    if ((event.target as Element).tagName.toLowerCase() !== 'input' && !this.disabled) {
-      this._elementRef.nativeElement.querySelector('input').focus();
-      this.focused = true;
-      this.open();
-    }
-  }
-
-  private _onChange = (_: any) => {
-  };
-  private _onTouched = () => {
-  };
-
   get fileNames() {
     if (this.value) {
       return this.value.map((f: File) => f.name).join(',');
     } else {
       return this.placeholder;
+    }
+  }
+
+  setDescribedByIds(ids: string[]) {
+    this.describedBy = ids.join(' ');
+  }
+
+  onContainerClick(event: MouseEvent) {
+    if ((event.target as Element).tagName.toLowerCase() !== 'input' && !this.disabled) {
+      this._elementRef.nativeElement.querySelector('input').focus();
+      this.focused = true;
+      this.open();
     }
   }
 
@@ -242,4 +244,10 @@ export class FileUploadComponent extends FileUploadMixinBase implements MatFormF
       this.updateErrorState();
     }
   }
+
+  private _onChange = (_: any) => {
+  };
+
+  private _onTouched = () => {
+  };
 }

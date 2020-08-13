@@ -64,31 +64,31 @@ export class SendErrorReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(first(), map(() => window.history.state))
-      .subscribe((state) => {
-        if (state.error) {
-          this.error = state.error;
+    .pipe(first(), map(() => window.history.state))
+    .subscribe((state) => {
+      if (state.error) {
+        this.error = state.error;
 
-          this.messageFormControl.setValue(state.error.message);
+        this.messageFormControl.setValue(state.error.message);
 
-          if (this.error) {
-            console.log('Error: ', this.error);
+        if (this.error) {
+          console.log('Error: ', this.error);
 
-            if (this.error.cause) {
-              console.log('Cause: ', this.error.cause);
+          if (this.error.cause) {
+            console.log('Cause: ', this.error.cause);
 
-              if ((this.error.cause as ApiError).stackTrace) {
-                console.log('StackTrace: ', (this.error.cause as ApiError).stackTrace);
-              }
+            if ((this.error.cause as ApiError).stackTrace) {
+              console.log('StackTrace: ', (this.error.cause as ApiError).stackTrace);
             }
           }
-        } else {
-          console.log('No error found, redirecting to the application root');
-
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
         }
-      });
+      } else {
+        console.log('No error found, redirecting to the application root');
+
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   sendErrorReport(): void {
@@ -96,26 +96,26 @@ export class SendErrorReportComponent implements OnInit {
       this.spinnerService.showSpinner();
 
       this.errorService.sendErrorReport(this.error, this.emailFormControl.value, this.feedbackFormControl.value)
+      .pipe(first())
+      .subscribe(() => {
+        this.spinnerService.hideSpinner();
+
+        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
+          {
+            message: 'Your error report was submitted.'
+          });
+
+        dialogRef.afterClosed()
         .pipe(first())
         .subscribe(() => {
-          this.spinnerService.hideSpinner();
-
-          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-            {
-              message: 'Your error report was submitted.'
-            });
-
-          dialogRef.afterClosed()
-            .pipe(first())
-            .subscribe(() => {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['/']);
-            });
-        }, (error: Error) => {
-          this.spinnerService.hideSpinner();
-
-          this.dialogService.showErrorDialog(error);
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['/']);
         });
+      }, (error: Error) => {
+        this.spinnerService.hideSpinner();
+
+        this.dialogService.showErrorDialog(error);
+      });
     }
   }
 }

@@ -111,15 +111,6 @@ public class MessageHandlerConfig {
   }
 
   /**
-   * Set the name of the message handler.
-   *
-   * @param name the name of the message handler
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns whether the messages of the specified message type should be archived.
    *
    * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the message
@@ -155,6 +146,15 @@ public class MessageHandlerConfig {
     }
 
     return false;
+  }
+
+  /**
+   * Set the name of the message handler.
+   *
+   * @param name the name of the message handler
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

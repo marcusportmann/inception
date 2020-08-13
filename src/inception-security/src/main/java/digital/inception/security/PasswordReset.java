@@ -162,30 +162,12 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the date and time the password reset was completed.
-   *
-   * @param completed the date and time the password reset was completed
-   */
-  public void setCompleted(LocalDateTime completed) {
-    this.completed = completed;
-  }
-
-  /**
    * Returns the date and time the password reset expired.
    *
    * @return the date and time the password reset expired
    */
   public LocalDateTime getExpired() {
     return expired;
-  }
-
-  /**
-   * Set the date and time the password reset expired.
-   *
-   * @param expired the date and time the password reset expired
-   */
-  public void setExpired(LocalDateTime expired) {
-    this.expired = expired;
   }
 
   /**
@@ -198,30 +180,12 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the date and time the password reset was requested.
-   *
-   * @param requested the date and time the password reset was requested
-   */
-  public void setRequested(LocalDateTime requested) {
-    this.requested = requested;
-  }
-
-  /**
    * Returns the security code hash.
    *
    * @return the security code hash
    */
   public String getSecurityCodeHash() {
     return securityCodeHash;
-  }
-
-  /**
-   * Set the security code hash.
-   *
-   * @param securityCodeHash the security code hash
-   */
-  public void setSecurityCodeHash(String securityCodeHash) {
-    this.securityCodeHash = securityCodeHash;
   }
 
   /**
@@ -234,21 +198,57 @@ public class PasswordReset implements Serializable {
   }
 
   /**
-   * Set the status of the password reset.
-   *
-   * @param status the status of the password reset
-   */
-  public void setStatus(PasswordResetStatus status) {
-    this.status = status;
-  }
-
-  /**
    * Returns the username for the user associated with the password reset.
    *
    * @return the username for the user associated with the password reset
    */
   public String getUsername() {
     return username;
+  }
+
+  /**
+   * Set the date and time the password reset was completed.
+   *
+   * @param completed the date and time the password reset was completed
+   */
+  public void setCompleted(LocalDateTime completed) {
+    this.completed = completed;
+  }
+
+  /**
+   * Set the date and time the password reset expired.
+   *
+   * @param expired the date and time the password reset expired
+   */
+  public void setExpired(LocalDateTime expired) {
+    this.expired = expired;
+  }
+
+  /**
+   * Set the date and time the password reset was requested.
+   *
+   * @param requested the date and time the password reset was requested
+   */
+  public void setRequested(LocalDateTime requested) {
+    this.requested = requested;
+  }
+
+  /**
+   * Set the security code hash.
+   *
+   * @param securityCodeHash the security code hash
+   */
+  public void setSecurityCodeHash(String securityCodeHash) {
+    this.securityCodeHash = securityCodeHash;
+  }
+
+  /**
+   * Set the status of the password reset.
+   *
+   * @param status the status of the password reset
+   */
+  public void setStatus(PasswordResetStatus status) {
+    this.status = status;
   }
 
   /**

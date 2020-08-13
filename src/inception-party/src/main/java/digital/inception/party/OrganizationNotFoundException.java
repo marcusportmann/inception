@@ -52,7 +52,7 @@ public class OrganizationNotFoundException extends ServiceException {
    * Constructs a new <code>OrganizationNotFoundException</code>.
    *
    * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   *                       organization
    */
   public OrganizationNotFoundException(UUID organizationId) {
     super(

@@ -35,17 +35,21 @@ import javax.validation.Validator;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class PartyWebService {
 
-  /** The Party Service. */
+  /**
+   * The Party Service.
+   */
   private final IPartyService partyService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>PartyWebService</code>.
    *
    * @param partyService the Party Service
-   * @param validator the JSR-303 validator
+   * @param validator    the JSR-303 validator
    */
   public PartyWebService(IPartyService partyService, Validator validator) {
     this.partyService = partyService;

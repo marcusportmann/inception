@@ -41,14 +41,14 @@ export class SidebarComponent implements OnInit {
 
   @Input() offCanvas?: boolean;
 
-  @HostBinding('class.sidebar') get sidebar() {
-    return true;
-  }
-
   /**
    * Constructs a new SidebarComponent.
    */
   constructor() {
+  }
+
+  @HostBinding('class.sidebar') get sidebar() {
+    return true;
   }
 
   ngOnInit(): void {

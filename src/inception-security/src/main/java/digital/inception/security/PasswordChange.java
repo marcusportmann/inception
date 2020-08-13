@@ -184,17 +184,6 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Set whether the user's password should be expired when performing an administrative password
-   * change.
-   *
-   * @param expirePassword expire the user's password when performing an administrative password
-   *                       change
-   */
-  public void setExpirePassword(Boolean expirePassword) {
-    this.expirePassword = expirePassword;
-  }
-
-  /**
    * Returns whether the user should be locked when performing an administrative password change.
    *
    * @return <code>true</code> if the user should be locked when performing an administrative
@@ -205,30 +194,12 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Set whether the user should be locked when performing an administrative password change.
-   *
-   * @param lockUser lock the user when performing an administrative password change
-   */
-  public void setLockUser(Boolean lockUser) {
-    this.lockUser = lockUser;
-  }
-
-  /**
    * Returns the new password.
    *
    * @return the new password
    */
   public String getNewPassword() {
     return newPassword;
-  }
-
-  /**
-   * Set the new password when performing a user password change.
-   *
-   * @param newPassword the new password when performing a new password change
-   */
-  public void setNewPassword(String newPassword) {
-    this.newPassword = newPassword;
   }
 
   /**
@@ -243,32 +214,12 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Set the password for the user that is used to authorise the operation when performing a user
-   * password change.
-   *
-   * @param password the password for the user that is used to authorise the operation when
-   *                 performing a user password change
-   */
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  /**
    * Returns the reason for changing the password.
    *
    * @return the reason for changing the password
    */
   public PasswordChangeReason getReason() {
     return reason;
-  }
-
-  /**
-   * Set the reason for changing the password.
-   *
-   * @param reason the reason for changing the password
-   */
-  public void setReason(PasswordChangeReason reason) {
-    this.reason = reason;
   }
 
   /**
@@ -283,6 +234,64 @@ public class PasswordChange implements Serializable {
   }
 
   /**
+   * Returns the security code when performing a forgotten password change.
+   *
+   * @return the security code when performing a forgotten password change
+   */
+  public String getSecurityCode() {
+    return securityCode;
+  }
+
+  /**
+   * Set whether the user's password should be expired when performing an administrative password
+   * change.
+   *
+   * @param expirePassword expire the user's password when performing an administrative password
+   *                       change
+   */
+  public void setExpirePassword(Boolean expirePassword) {
+    this.expirePassword = expirePassword;
+  }
+
+  /**
+   * Set whether the user should be locked when performing an administrative password change.
+   *
+   * @param lockUser lock the user when performing an administrative password change
+   */
+  public void setLockUser(Boolean lockUser) {
+    this.lockUser = lockUser;
+  }
+
+  /**
+   * Set the new password when performing a user password change.
+   *
+   * @param newPassword the new password when performing a new password change
+   */
+  public void setNewPassword(String newPassword) {
+    this.newPassword = newPassword;
+  }
+
+  /**
+   * Set the password for the user that is used to authorise the operation when performing a user
+   * password change.
+   *
+   * @param password the password for the user that is used to authorise the operation when
+   *                 performing a user password change
+   */
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  /**
+   * Set the reason for changing the password.
+   *
+   * @param reason the reason for changing the password
+   */
+  public void setReason(PasswordChangeReason reason) {
+    this.reason = reason;
+  }
+
+  /**
    * Set whether the user's password history should be reset when performing an administrative
    * password change.
    *
@@ -291,15 +300,6 @@ public class PasswordChange implements Serializable {
    */
   public void setResetPasswordHistory(Boolean resetPasswordHistory) {
     this.resetPasswordHistory = resetPasswordHistory;
-  }
-
-  /**
-   * Returns the security code when performing a forgotten password change.
-   *
-   * @return the security code when performing a forgotten password change
-   */
-  public String getSecurityCode() {
-    return securityCode;
   }
 
   /**

@@ -93,18 +93,8 @@ public class XADataSourceProxy implements XADataSource {
   }
 
   @Override
-  public void setLogWriter(PrintWriter out) throws SQLException {
-    xaDataSource.setLogWriter(out);
-  }
-
-  @Override
   public int getLoginTimeout() throws SQLException {
     return xaDataSource.getLoginTimeout();
-  }
-
-  @Override
-  public void setLoginTimeout(int seconds) throws SQLException {
-    xaDataSource.setLoginTimeout(seconds);
   }
 
   @Override
@@ -128,5 +118,15 @@ public class XADataSourceProxy implements XADataSource {
     addActiveXADatabaseConnection(xaConnection);
 
     return xaConnection;
+  }
+
+  @Override
+  public void setLogWriter(PrintWriter out) throws SQLException {
+    xaDataSource.setLogWriter(out);
+  }
+
+  @Override
+  public void setLoginTimeout(int seconds) throws SQLException {
+    xaDataSource.setLoginTimeout(seconds);
   }
 }

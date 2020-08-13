@@ -63,15 +63,6 @@ public class AuthenticationResponse {
   }
 
   /**
-   * Set the expiry time in minutes for the token.
-   *
-   * @param expiresInMinutes the expiry time in minutes for the token
-   */
-  public void setExpiresInMinutes(int expiresInMinutes) {
-    this.expiresInMinutes = expiresInMinutes;
-  }
-
-  /**
    * Returns the token schema.
    *
    * @return the token schema
@@ -81,21 +72,30 @@ public class AuthenticationResponse {
   }
 
   /**
-   * Set the token schema.
-   *
-   * @param schema the token schema
-   */
-  public void setSchema(String schema) {
-    this.schema = schema;
-  }
-
-  /**
    * Returns the token.
    *
    * @return the token
    */
   public String getToken() {
     return token;
+  }
+
+  /**
+   * Set the expiry time in minutes for the token.
+   *
+   * @param expiresInMinutes the expiry time in minutes for the token
+   */
+  public void setExpiresInMinutes(int expiresInMinutes) {
+    this.expiresInMinutes = expiresInMinutes;
+  }
+
+  /**
+   * Set the token schema.
+   *
+   * @param schema the token schema
+   */
+  public void setSchema(String schema) {
+    this.schema = schema;
   }
 
   /**

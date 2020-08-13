@@ -94,27 +94,27 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.codesService.deleteCode(this.codeCategoryId, codeId)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.loadCodes();
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+        this.codesService.deleteCode(this.codeCategoryId, codeId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadCodes();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
   }
 
   editCode(codeId: string): void {
@@ -126,18 +126,18 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
     this.spinnerService.showSpinner();
 
     this.codesService.getCodesForCodeCategory(this.codeCategoryId)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((codes: Code[]) => {
-        this.dataSource.data = codes;
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((codes: Code[]) => {
+      this.dataSource.data = codes;
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   newCode(): void {

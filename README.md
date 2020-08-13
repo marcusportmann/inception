@@ -8,6 +8,8 @@ front-end applications.
 
 ### Setup a development environment on MacOS
 
+Complete the following steps to setup a development environment on MacOS.
+
 1. Install the Xcode Command Line Tools by executing the following command in a Terminal
    window.
    ```
@@ -51,22 +53,50 @@ front-end applications.
    ```
    brew install postgres
    ```
-10. Install npm by executing the following commands in a Terminal window.
+10. Install liquibase by executing the following commands in a Terminal window.
+    ```
+    brew install liquibase
+    ```
+11. Install npm by executing the following commands in a Terminal window.
     ```
     brew install npm
     ```
-11. Install the Angular CLI 10 globally by executing the following command in a Terminal
+12. Install the Angular CLI 10 globally by executing the following command in a Terminal
     window.
     ```
     npm install -g @angular/cli@10
     ```
-12. Execute the following command to change to the more conservative tilde (~) patch
+13. Execute the following command to change to the more conservative tilde (~) patch
     update approach for dependencies for npm.
     ```
     npm config set save-prefix="~"
     ```
 
+### Setup MailSlurper on MacOS
+
+MailSlurper is a handy SMTP mail server useful for local and team application development.
+Mails sent by an application running locally on a developer's machine can be viewed using
+a web interface. This is useful when developing and testing an application locally.
+
+Complete the following steps to setup MailSlurper on MacOS.
+
+1. Download the MailSlurper package from *https://github.com/mailslurper/mailslurper/releases*.
+2. Extract the MailSlurper package.
+3. Edit the *config.json* file and set the *wwwPort* value to *8090*.
+4. Launch the *createcredentials* binary in a Terminal window and enter the username as
+   *inception* and password as *inception* when prompted.
+
+   NOTE: You may need to enable the execution of the *mailslurper* binary under
+   **System Preferences > Security & Privacy > General**
+5. Launch the *mailslurper* binary in a Terminal window.
+
+   NOTE: You may need to enable the execution of the *mailslurper* binary under
+   **System Preferences > Security & Privacy > General**
+
+
 ### Checkout and build the Inception Framework on MacOS
+
+Complete the following steps to checkout and build the Inception Framework on MacOS.
 
 1. Checkout the Inception Framework by executing the following command in a Terminal
    window.
@@ -139,6 +169,8 @@ front-end applications.
 
 ### Checkout and build the Inception Framework on Windows
 
+Complete the following steps to setup a development environment on Windows.
+
 1. Checkout the Inception Framework by executing the following command in a Terminal
    window.
    ```
@@ -172,6 +204,8 @@ front-end applications.
    ```
 
 ## Creating a new application based on the Inception Framework
+
+Complete the following steps to create a new application based on the Inception Framework.
 
 1. Select a name for the new application, e.g. demo, and create the top-level directory
    for the application with the same name. The directory **MUST** be created under the
@@ -1152,7 +1186,7 @@ front-end applications.
 
        span.copyright-name:before
        {
-         content: "Absa";
+         content: "Marcus Portmann";
        }
        ```
 

@@ -96,7 +96,6 @@ public class ErrorServiceTest {
 
     compareErrorReportAndErrorReportSummary(errorReport, retrievedErrorReportSummary);
 
-
     List<ErrorReportSummary> errorReportSummaries =
         errorService.getMostRecentErrorReportSummaries(1000);
 

@@ -54,7 +54,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
 
   @Query(
       "select count(u.id) from User u where ((lower(u.username) like lower(:filter)) or "
-          + "(lower(u.fullName) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
+          + "(lower(u.name) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
   long countFiltered(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("filter") String filter);
 
@@ -82,16 +82,11 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
 
   @Query(
       "select u from User u where ((lower(u.username) like lower(:filter)) or "
-          + "(lower(u.fullName) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
+          + "(lower(u.name) like lower(:filter))) and u.userDirectoryId = :userDirectoryId")
   Page<User> findFiltered(
       @Param("userDirectoryId") UUID userDirectoryId,
       @Param("filter") String filter,
       Pageable pageable);
-
-  @Query(
-      "select u.fullName from User u where ((lower(u.username) = lower(:username)) "
-          + "and u.userDirectoryId = :userDirectoryId)")
-  String getFullNameByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
   @Query(
       "select f.code from User u join u.groups as g join g.roles as r join r.functions as f "
@@ -109,6 +104,11 @@ public interface UserRepository extends JpaRepository<User, UUID>, QueryByExampl
           + "like lower(:username)")
   Optional<UUID> getIdByUserDirectoryIdAndUsernameIgnoreCase(
       @Param("userDirectoryId") UUID userDirectoryId, @Param("username") String username);
+
+  @Query(
+      "select u.name from User u where ((lower(u.username) = lower(:username)) "
+          + "and u.userDirectoryId = :userDirectoryId)")
+  String getNameByUserDirectoryIdAndUsernameIgnoreCase(UUID userDirectoryId, String username);
 
   @Query("select r.code from User u join u.groups as g join g.roles as r where u.id = :userId")
   List<String> getRoleCodesByUserId(@Param("userId") UUID userId);

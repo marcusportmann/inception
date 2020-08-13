@@ -519,11 +519,10 @@ public class SecurityRestController extends SecureRestController {
         userDirectoryId,
         username,
         passwordChange.getNewPassword(),
-        (passwordChange.getExpirePassword() == null) ? false : passwordChange.getExpirePassword(),
-        (passwordChange.getLockUser() == null) ? false : passwordChange.getLockUser(),
-        (passwordChange.getResetPasswordHistory() == null)
-            ? false
-            : passwordChange.getResetPasswordHistory(),
+        passwordChange.getExpirePassword() != null && passwordChange.getExpirePassword(),
+        passwordChange.getLockUser() != null && passwordChange.getLockUser(),
+        passwordChange.getResetPasswordHistory() != null && passwordChange
+            .getResetPasswordHistory(),
         passwordChange.getReason());
   }
 
@@ -642,13 +641,10 @@ public class SecurityRestController extends SecureRestController {
             userDirectoryId,
             username,
             passwordChange.getNewPassword(),
-            (passwordChange.getExpirePassword() == null)
-                ? false
-                : passwordChange.getExpirePassword(),
-            (passwordChange.getLockUser() == null) ? false : passwordChange.getLockUser(),
-            (passwordChange.getResetPasswordHistory() == null)
-                ? false
-                : passwordChange.getResetPasswordHistory(),
+            passwordChange.getExpirePassword() != null && passwordChange.getExpirePassword(),
+            passwordChange.getLockUser() != null && passwordChange.getLockUser(),
+            passwordChange.getResetPasswordHistory() != null && passwordChange
+                .getResetPasswordHistory(),
             passwordChange.getReason());
       } else {
         throw new AccessDeniedException(
@@ -2728,17 +2724,17 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the full name of the user.
+   * Retrieve the name of the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory
    * @param username        the username identifying the user
    *
-   * @return the full name of the user
+   * @return the name of the user
    */
   @Operation(
-      summary = "Retrieve the full name of the user",
-      description = "Retrieve the full name of the user")
+      summary = "Retrieve the name of the user",
+      description = "Retrieve the name of the user")
   @ApiResponses(
       value = {
           @ApiResponse(responseCode = "200", description = "OK"),
@@ -2766,13 +2762,13 @@ public class SecurityRestController extends SecureRestController {
                   schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
-      value = "/user-directories/{userDirectoryId}/users/{username}/full-name",
+      value = "/user-directories/{userDirectoryId}/users/{username}/name",
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
-  public String getUserFullName(
+  public String getUserName(
       @Parameter(
           name = "userDirectoryId",
           description =
@@ -2803,7 +2799,7 @@ public class SecurityRestController extends SecureRestController {
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
-    return RestUtil.quote(securityService.getUserFullName(userDirectoryId, username));
+    return RestUtil.quote(securityService.getUserName(userDirectoryId, username));
   }
 
   /**
@@ -2812,7 +2808,7 @@ public class SecurityRestController extends SecureRestController {
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *                        directory
    * @param filter          the optional filter to apply to the users
-   * @param sortBy          The optional method used to sort the users e.g. by full name.
+   * @param sortBy          The optional method used to sort the users e.g. by name.
    * @param sortDirection   the optional sort direction to apply to the users
    * @param pageIndex       the optional page index
    * @param pageSize        the optional page size
@@ -2866,7 +2862,7 @@ public class SecurityRestController extends SecureRestController {
           String filter,
       @Parameter(
           name = "sortBy",
-          description = "The optional method used to sort the users e.g. by full name")
+          description = "The optional method used to sort the users e.g. by name")
       @RequestParam(value = "sortBy", required = false)
           UserSortBy sortBy,
       @Parameter(

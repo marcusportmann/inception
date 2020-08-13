@@ -18,14 +18,14 @@
     namespace = "http://reference.inception.digital",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "core",
-          namespaceURI = "http://core.inception.digital"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "validation",
-          namespaceURI = "http://validation.inception.digital"),
-      @javax.xml.bind.annotation.XmlNs(
-          prefix = "reference",
-          namespaceURI = "http://reference.inception.digital"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "core",
+            namespaceURI = "http://core.inception.digital"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "validation",
+            namespaceURI = "http://validation.inception.digital"),
+        @javax.xml.bind.annotation.XmlNs(
+            prefix = "reference",
+            namespaceURI = "http://reference.inception.digital"),
     })
 package digital.inception.reference;

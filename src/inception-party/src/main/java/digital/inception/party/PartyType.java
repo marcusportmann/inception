@@ -52,6 +52,7 @@ public enum PartyType {
    * Returns the party type given by the specified code value.
    *
    * @param code the code value identifying the party type
+   *
    * @return the party type given by the specified code value
    */
   @JsonCreator

@@ -224,30 +224,12 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the description for the group.
-   *
-   * @param description the description for the group
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the group.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the group
    */
   public UUID getId() {
     return id;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the group.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the group
-   */
-  public void setId(UUID id) {
-    this.id = id;
   }
 
   /**
@@ -260,30 +242,12 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the name identifying the group.
-   *
-   * @param name the name identifying the group
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns the roles associated with the group.
    *
    * @return the roles associated with the group
    */
   public Set<Role> getRoles() {
     return roles;
-  }
-
-  /**
-   * Set the roles associated with the group.
-   *
-   * @param roles the roles associated with the group
-   */
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
   }
 
   /**
@@ -298,32 +262,12 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the group
-   * is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory the group is associated with
-   */
-  public void setUserDirectoryId(UUID userDirectoryId) {
-    this.userDirectoryId = userDirectoryId;
-  }
-
-  /**
    * Returns the users associated with the group.
    *
    * @return the users associated with the group
    */
   public Set<User> getUsers() {
     return users;
-  }
-
-  /**
-   * Set the users associated with the group.
-   *
-   * @param users the users associated with the group
-   */
-  public void setUsers(Set<User> users) {
-    this.users = users;
   }
 
   /**
@@ -354,5 +298,61 @@ public class Group implements Serializable {
   public void removeUser(User user) {
     users.remove(user);
     user.getGroups().remove(this);
+  }
+
+  /**
+   * Set the description for the group.
+   *
+   * @param description the description for the group
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the group.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the group
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the name identifying the group.
+   *
+   * @param name the name identifying the group
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the roles associated with the group.
+   *
+   * @param roles the roles associated with the group
+   */
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *                        directory the group is associated with
+   */
+  public void setUserDirectoryId(UUID userDirectoryId) {
+    this.userDirectoryId = userDirectoryId;
+  }
+
+  /**
+   * Set the users associated with the group.
+   *
+   * @param users the users associated with the group
+   */
+  public void setUsers(Set<User> users) {
+    this.users = users;
   }
 }

@@ -148,30 +148,12 @@ public class Configuration implements Serializable {
   }
 
   /**
-   * Set the description for the configuration.
-   *
-   * @param description the description for the configuration
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /**
    * Returns the key uniquely identifying the configuration.
    *
    * @return the key uniquely identifying the configuration
    */
   public String getKey() {
     return key;
-  }
-
-  /**
-   * Set the key uniquely identifying the configuration.
-   *
-   * @param key the key uniquely identifying the configuration
-   */
-  public void setKey(String key) {
-    this.key = key;
   }
 
   /**
@@ -184,15 +166,6 @@ public class Configuration implements Serializable {
   }
 
   /**
-   * Set the value for the configuration.
-   *
-   * @param value the value for the configuration
-   */
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -200,5 +173,32 @@ public class Configuration implements Serializable {
   @Override
   public int hashCode() {
     return (key == null) ? 0 : key.hashCode();
+  }
+
+  /**
+   * Set the description for the configuration.
+   *
+   * @param description the description for the configuration
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the key uniquely identifying the configuration.
+   *
+   * @param key the key uniquely identifying the configuration
+   */
+  public void setKey(String key) {
+    this.key = key;
+  }
+
+  /**
+   * Set the value for the configuration.
+   *
+   * @param value the value for the configuration
+   */
+  public void setValue(String value) {
+    this.value = value;
   }
 }

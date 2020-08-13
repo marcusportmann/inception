@@ -176,31 +176,12 @@ public class Code implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the code category the code is associated with.
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
-   *                       with
-   */
-  public void setCodeCategoryId(String codeCategoryId) {
-    this.codeCategoryId = codeCategoryId;
-  }
-
-  /**
    * Returns the ID uniquely identifying the code.
    *
    * @return the ID uniquely identifying the code
    */
   public String getId() {
     return id;
-  }
-
-  /**
-   * Set the ID uniquely identifying the code.
-   *
-   * @param id the ID uniquely identifying the code
-   */
-  public void setId(String id) {
-    this.id = id;
   }
 
   /**
@@ -213,30 +194,12 @@ public class Code implements Serializable {
   }
 
   /**
-   * Set the name of the code.
-   *
-   * @param name the name of the code
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns the value for the code.
    *
    * @return the value for the code
    */
   public String getValue() {
     return this.value;
-  }
-
-  /**
-   * Set the value for the code.
-   *
-   * @param value the value for the code
-   */
-  public void setValue(String value) {
-    this.value = value;
   }
 
   /**
@@ -247,5 +210,42 @@ public class Code implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Set the ID uniquely identifying the code category the code is associated with.
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   */
+  public void setCodeCategoryId(String codeCategoryId) {
+    this.codeCategoryId = codeCategoryId;
+  }
+
+  /**
+   * Set the ID uniquely identifying the code.
+   *
+   * @param id the ID uniquely identifying the code
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the name of the code.
+   *
+   * @param name the name of the code
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the value for the code.
+   *
+   * @param value the value for the code
+   */
+  public void setValue(String value) {
+    this.value = value;
   }
 }

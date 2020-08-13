@@ -186,30 +186,12 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Set the optional code data for the code category.
-   *
-   * @param data the optional code data for the code category
-   */
-  public void setData(String data) {
-    this.data = data;
-  }
-
-  /**
    * Returns the ID uniquely identifying the code category.
    *
    * @return the ID uniquely identifying the code category
    */
   public String getId() {
     return id;
-  }
-
-  /**
-   * Set the ID uniquely identifying the code category.
-   *
-   * @param id the ID uniquely identifying the code category
-   */
-  public void setId(String id) {
-    this.id = id;
   }
 
   /**
@@ -222,30 +204,12 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Set the name of the code category.
-   *
-   * @param name the name of the code category
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns the date and time the code category was last updated.
    *
    * @return the date and time the code category was last updated
    */
   public LocalDateTime getUpdated() {
     return updated;
-  }
-
-  /**
-   * Set the date and time the code category was last updated.
-   *
-   * @param updated the date and time the code category was last updated
-   */
-  public void setUpdated(LocalDateTime updated) {
-    this.updated = updated;
   }
 
   /**
@@ -256,5 +220,41 @@ public class CodeCategory implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Set the optional code data for the code category.
+   *
+   * @param data the optional code data for the code category
+   */
+  public void setData(String data) {
+    this.data = data;
+  }
+
+  /**
+   * Set the ID uniquely identifying the code category.
+   *
+   * @param id the ID uniquely identifying the code category
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the name of the code category.
+   *
+   * @param name the name of the code category
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the date and time the code category was last updated.
+   *
+   * @param updated the date and time the code category was last updated
+   */
+  public void setUpdated(LocalDateTime updated) {
+    this.updated = updated;
   }
 }

@@ -45,35 +45,35 @@ export class BreadcrumbsService {
     console.log('Initializing the Breadcrumbs Service');
 
     this.router.events.pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        const breadcrumbs: Breadcrumb[] = [];
-        let currentRoute: ActivatedRoute | null = this.activatedRoute.root;
-        let url = '';
+    .subscribe(() => {
+      const breadcrumbs: Breadcrumb[] = [];
+      let currentRoute: ActivatedRoute | null = this.activatedRoute.root;
+      let url = '';
 
-        do {
-          const childrenRoutes = currentRoute.children;
-          currentRoute = null;
-          // tslint:disable-next-line:no-shadowed-variable
-          childrenRoutes.forEach(route => {
-            if (route.outlet === 'primary') {
-              const routeSnapshot = route.snapshot;
+      do {
+        const childrenRoutes = currentRoute.children;
+        currentRoute = null;
+        // tslint:disable-next-line:no-shadowed-variable
+        childrenRoutes.forEach(route => {
+          if (route.outlet === 'primary') {
+            const routeSnapshot = route.snapshot;
 
-              if (routeSnapshot.url.length > 0) {
-                url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
+            if (routeSnapshot.url.length > 0) {
+              url += '/' + routeSnapshot.url.map(segment => segment.path).join('/');
 
-                if (routeSnapshot.data.title) {
-                  breadcrumbs.push(new Breadcrumb(format(routeSnapshot.data.title, routeSnapshot.params), url));
-                }
+              if (routeSnapshot.data.title) {
+                breadcrumbs.push(new Breadcrumb(format(routeSnapshot.data.title, routeSnapshot.params), url));
               }
-              currentRoute = route;
             }
-          });
-        } while (currentRoute);
+            currentRoute = route;
+          }
+        });
+      } while (currentRoute);
 
-        this.breadcrumbs$.next(breadcrumbs);
+      this.breadcrumbs$.next(breadcrumbs);
 
-        return breadcrumbs;
-      });
+      return breadcrumbs;
+    });
   }
 }
 

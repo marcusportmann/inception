@@ -185,30 +185,12 @@ public class Organization implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the organization.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the organization
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
    * Returns the name of the organization.
    *
    * @return the name of the organization
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Set the name of the organization.
-   *
-   * @param name the name of the organization
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**
@@ -221,30 +203,12 @@ public class Organization implements Serializable {
   }
 
   /**
-   * Set the status for the organization.
-   *
-   * @param status the status for the organization
-   */
-  public void setStatus(OrganizationStatus status) {
-    this.status = status;
-  }
-
-  /**
    * Returns the user directories associated with the organization.
    *
    * @return the user directories associated with the organization
    */
   public Set<UserDirectory> getUserDirectories() {
     return userDirectories;
-  }
-
-  /**
-   * Set the user directories associated with the organization.
-   *
-   * @param userDirectories the user directories associated with the organization
-   */
-  public void setUserDirectories(Set<UserDirectory> userDirectories) {
-    this.userDirectories = userDirectories;
   }
 
   /**
@@ -265,6 +229,42 @@ public class Organization implements Serializable {
   public void linkUserDirectory(UserDirectory userDirectory) {
     userDirectories.add(userDirectory);
     userDirectory.getOrganizations().add(this);
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the organization.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the organization
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the name of the organization.
+   *
+   * @param name the name of the organization
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the status for the organization.
+   *
+   * @param status the status for the organization
+   */
+  public void setStatus(OrganizationStatus status) {
+    this.status = status;
+  }
+
+  /**
+   * Set the user directories associated with the organization.
+   *
+   * @param userDirectories the user directories associated with the organization
+   */
+  public void setUserDirectories(Set<UserDirectory> userDirectories) {
+    this.userDirectories = userDirectories;
   }
 
   /**

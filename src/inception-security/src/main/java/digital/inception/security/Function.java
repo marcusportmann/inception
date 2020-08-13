@@ -160,30 +160,12 @@ public class Function implements java.io.Serializable {
   }
 
   /**
-   * Set the code uniquely identifying the function.
-   *
-   * @param code the code uniquely identifying the function
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
    * Returns the description for the function.
    *
    * @return the description for the function
    */
   public String getDescription() {
     return description;
-  }
-
-  /**
-   * Set the description for the function.
-   *
-   * @param description the description for the function
-   */
-  public void setDescription(String description) {
-    this.description = description;
   }
 
   /**
@@ -196,30 +178,12 @@ public class Function implements java.io.Serializable {
   }
 
   /**
-   * Set the name of the function.
-   *
-   * @param name the name of the function
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns the roles the user is associated with.
    *
    * @return the roles the user is associated with
    */
   public Set<Role> getRoles() {
     return roles;
-  }
-
-  /**
-   * Set the roles the user is associated with.
-   *
-   * @param roles the roles the user is associated with
-   */
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
   }
 
   /**
@@ -230,5 +194,41 @@ public class Function implements java.io.Serializable {
   @Override
   public int hashCode() {
     return (code == null) ? 0 : code.hashCode();
+  }
+
+  /**
+   * Set the code uniquely identifying the function.
+   *
+   * @param code the code uniquely identifying the function
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the description for the function.
+   *
+   * @param description the description for the function
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the name of the function.
+   *
+   * @param name the name of the function
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the roles the user is associated with.
+   *
+   * @param roles the roles the user is associated with
+   */
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
   }
 }

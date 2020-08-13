@@ -51,10 +51,11 @@ import {SecurityService} from '../../security/services/security.service';
           <a href="#" class="nav-link"><i class="icon-bell"></i><span class="badge badge-danger">5</span></a>
         </li>
         -->
-        <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item" [matMenuTriggerFor]="userMenu">
+        <li *ngIf="isLoggedIn() | async; else login_link" class="nav-item"
+            [matMenuTriggerFor]="userMenu">
           <a href="#" class="nav-link" (click)="false">
             <span class="user-icon"></span>
-            <span class="user-full-name d-md-down-none">{{ userFullName() | async }}</span>
+            <span class="user-name d-md-down-none">{{ userName() | async }}</span>
           </a>
         </li>
 
@@ -77,7 +78,8 @@ import {SecurityService} from '../../security/services/security.service';
           <li class="nav-item">
             <a class="nav-link" (click)="login()">
               <span class="login-icon"></span>
-              <span class="login d-md-down-none" i18n="@@admin_header_component_link_login">Login</span>
+              <span class="login d-md-down-none"
+                    i18n="@@admin_header_component_link_login">Login</span>
             </a>
           </li>
         </ng-template>
@@ -138,10 +140,10 @@ export class AdminHeaderComponent implements OnInit {
     this.securityService.logout();
   }
 
-  userFullName(): Observable<string> {
+  userName(): Observable<string> {
     return this.securityService.session$.pipe(map((session: Session | null) => {
       if (!!session) {
-        return session.userFullName;
+        return session.name;
       } else {
         return '';
       }

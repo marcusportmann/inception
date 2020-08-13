@@ -39,17 +39,21 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class PartyRestController extends SecureRestController {
 
-  /** The Party Service. */
+  /**
+   * The Party Service.
+   */
   private final IPartyService partyService;
 
-  /** The JSR-303 validator. */
+  /**
+   * The JSR-303 validator.
+   */
   private final Validator validator;
 
   /**
    * Constructs a new <code>PartyRestController</code>.
    *
    * @param partyService the Party Service
-   * @param validator the JSR-303 validator
+   * @param validator    the JSR-303 validator
    */
   public PartyRestController(IPartyService partyService, Validator validator) {
     this.partyService = partyService;

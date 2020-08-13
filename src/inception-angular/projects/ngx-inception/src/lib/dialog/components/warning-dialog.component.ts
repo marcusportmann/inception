@@ -36,10 +36,13 @@ import {DialogData} from '../dialog-data';
       </span>
     </div>
     <div class="button">
-      <button mat-flat-button color="warn" *ngIf="data.buttonText; else defaultButton" mat-flat-button (click)="ok()"
+      <button mat-flat-button color="warn" *ngIf="data.buttonText; else defaultButton"
+              mat-flat-button (click)="ok()"
               tabindex="-1">{{ data.buttonText }}</button>
       <ng-template #defaultButton>
-        <button mat-flat-button color="warn" (click)="ok()" tabindex="-1" i18n="@@warning_dialog_button_ok">OK</button>
+        <button mat-flat-button color="warn" (click)="ok()" tabindex="-1"
+                i18n="@@warning_dialog_button_ok">OK
+        </button>
       </ng-template>
     </div>
   `

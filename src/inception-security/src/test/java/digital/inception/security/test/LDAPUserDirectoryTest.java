@@ -101,7 +101,7 @@
 //    user.setUsername("Test User Username " + userCount);
 //    user.setStatus(UserStatus.ACTIVE);
 //    user.setEmail("Test User E-Mail " + userCount);
-//    user.setFullName("Test User Full Name " + userCount);
+//    user.setName("Test User Name " + userCount);
 //    user.setPreferredName("Test User Preferred Name " + userCount);
 //    user.setPhoneNumber("Test User Phone Number " + userCount);
 //    user.setMobileNumber("Test User Mobile Number " + userCount);
@@ -119,7 +119,7 @@
 //    user.setUsername(username);
 //    user.setStatus(UserStatus.ACTIVE);
 //    user.setEmail(username + "@test.com");
-//    user.setFullName("Full Name");
+//    user.setName("Name");
 //    user.setPreferredName("PreferredName");
 //    user.setPhoneNumber("+27 (11) 555-1234");
 //    user.setMobileNumber("+27 (83) 555-1234");
@@ -249,13 +249,13 @@
 //
 //        compareUsers(user, retrievedUser);
 //
-//        String retrievedUserFullName =
-//            securityService.getUserFullName(SAMPLE_LDAP_USER_DIRECTORY_ID, user.getUsername());
+//        String retrievedUserName =
+//            securityService.getUserName(SAMPLE_LDAP_USER_DIRECTORY_ID, user.getUsername());
 //
 //        assertEquals(
-//            "The correct full name was not retrieved for the user (" + user.getUsername() + ")",
-//            user.getFullName(),
-//            retrievedUserFullName);
+//            "The correct name was not retrieved for the user (" + user.getUsername() + ")",
+//            user.getName(),
+//            retrievedUserName);
 //
 //        assertTrue(
 //            "Failed to confirm that the user exists",
@@ -289,7 +289,7 @@
 //
 //        List<Attribute> findAttributes = new ArrayList<>();
 //
-//        findAttributes.add(new Attribute("cn", user.getFullName()));
+//        findAttributes.add(new Attribute("cn", user.getName()));
 //        findAttributes.add(new Attribute("givenname", user.getPreferredName()));
 //        findAttributes.add(new Attribute("mobile", user.getMobileNumber()));
 //        findAttributes.add(new Attribute("telephoneNumber", user.getPhoneNumber()));
@@ -304,7 +304,7 @@
 //
 //        user.setPassword("Test Updated Password");
 //        user.setEmail("Test Updated E-Mail");
-//        user.setFullName("Test Updated Full Name");
+//        user.setName("Test Updated Name");
 //        user.setPreferredName("Test Updated Preferred Name");
 //        user.setPhoneNumber("Test Updated Phone Number");
 //        user.setMobileNumber("Test Updated Mobile Number");
@@ -516,9 +516,9 @@
 //    assertEquals(
 //        "The e-mail values for the two users do not match", user1.getEmail(), user2.getEmail());
 //    assertEquals(
-//        "The full name values for the two users do not match",
-//        user1.getFullName(),
-//        user2.getFullName());
+//        "The name values for the two users do not match",
+//        user1.getName(),
+//        user2.getName());
 //    assertEquals(
 //        "The phone number values for the two users do not match",
 //        user1.getPhoneNumber(),

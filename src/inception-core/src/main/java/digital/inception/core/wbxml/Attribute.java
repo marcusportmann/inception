@@ -62,21 +62,21 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Set the name of the attribute.
-   *
-   * @param name the name of the attribute
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns the value of the attribute.
    *
    * @return the value of the attribute
    */
   public String getValue() {
     return value;
+  }
+
+  /**
+   * Set the name of the attribute.
+   *
+   * @param name the name of the attribute
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

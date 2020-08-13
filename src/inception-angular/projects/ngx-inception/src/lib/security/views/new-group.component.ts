@@ -101,21 +101,21 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
     this.spinnerService.showSpinner();
 
     this.securityService.getUserDirectoryCapabilities(this.userDirectoryId)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
-        this.userDirectoryCapabilities = userDirectoryCapabilities;
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
+      this.userDirectoryCapabilities = userDirectoryCapabilities;
 
-        this.group = new Group(this.userDirectoryId, '', '');
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.group = new Group(this.userDirectoryId, '', '');
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ok(): void {
@@ -127,23 +127,23 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
       this.spinnerService.showSpinner();
 
       this.securityService.createGroup(this.group)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {
-            relativeTo: this.activatedRoute,
-            state: {userDirectoryId: this.userDirectoryId}
-          });
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['../..'], {
+          relativeTo: this.activatedRoute,
+          state: {userDirectoryId: this.userDirectoryId}
         });
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

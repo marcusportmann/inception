@@ -17,8 +17,8 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {CoreModule} from '../core/core.module';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule} from '@angular/material/dialog';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog.component';
 import {ErrorDialogComponent} from './components/error-dialog.component';
 import {InformationDialogComponent} from './components/information-dialog.component';

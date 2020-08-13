@@ -154,30 +154,12 @@ public class JobParameter implements Serializable {
   }
 
   /**
-   * Set the job the job parameter is associated with.
-   *
-   * @param job the job the job parameter is associated with
-   */
-  public void setJob(Job job) {
-    this.job = job;
-  }
-
-  /**
    * Returns the name of the job parameter.
    *
    * @return the name of the job parameter
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Set the name of the job parameter.
-   *
-   * @param name the name of the job parameter
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**
@@ -190,15 +172,6 @@ public class JobParameter implements Serializable {
   }
 
   /**
-   * Set the value of the job parameter.
-   *
-   * @param value the value of the job parameter
-   */
-  public void setValue(String value) {
-    this.value = value;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -207,5 +180,32 @@ public class JobParameter implements Serializable {
   public int hashCode() {
     return (((job == null) || (job.getId() == null)) ? 0 : job.getId().hashCode())
         + ((name == null) ? 0 : name.hashCode());
+  }
+
+  /**
+   * Set the job the job parameter is associated with.
+   *
+   * @param job the job the job parameter is associated with
+   */
+  public void setJob(Job job) {
+    this.job = job;
+  }
+
+  /**
+   * Set the name of the job parameter.
+   *
+   * @param name the name of the job parameter
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the value of the job parameter.
+   *
+   * @param value the value of the job parameter
+   */
+  public void setValue(String value) {
+    this.value = value;
   }
 }

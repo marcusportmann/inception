@@ -17,7 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {SecurityService} from '../services/security.service';
-import { Inject, Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 
 /**
  * The UserTitleResolver class provides the route data resolver that resolves the
@@ -60,6 +60,6 @@ export class UserTitleResolver implements Resolve<string> {
 
     username = decodeURIComponent(username);
 
-    return this.securityService.getUserFullName(userDirectoryId, username);
+    return this.securityService.getUserName(userDirectoryId, username);
   }
 }

@@ -19,7 +19,6 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 // Import Inception module
-
 import {RouterModule, Routes} from '@angular/router';
 
 import {CodeCategoriesComponent} from './code-categories.component';

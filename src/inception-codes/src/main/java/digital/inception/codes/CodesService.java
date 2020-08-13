@@ -62,16 +62,24 @@ public class CodesService implements ICodesService, InitializingBean {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CodesService.class);
 
-  /** The Spring application context. */
+  /**
+   * The Spring application context.
+   */
   private final ApplicationContext applicationContext;
 
-  /** The Code Category Repository. */
+  /**
+   * The Code Category Repository.
+   */
   private final CodeCategoryRepository codeCategoryRepository;
 
-  /** The Code Category Summary Repository. */
+  /**
+   * The Code Category Summary Repository.
+   */
   private final CodeCategorySummaryRepository codeCategorySummaryRepository;
 
-  /** The Code Repository. */
+  /**
+   * The Code Repository.
+   */
   private final CodeRepository codeRepository;
 
   /**
@@ -86,10 +94,10 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Constructs a new <code>CodesService</code>.
    *
-   * @param applicationContext the Spring application context
-   * @param codeCategoryRepository the Code Category Repository
+   * @param applicationContext            the Spring application context
+   * @param codeCategoryRepository        the Code Category Repository
    * @param codeCategorySummaryRepository the Code Category Summary Repository
-   * @param codeRepository the Code Repository
+   * @param codeRepository                the Code Repository
    */
   public CodesService(
       ApplicationContext applicationContext,
@@ -102,7 +110,9 @@ public class CodesService implements ICodesService, InitializingBean {
     this.codeRepository = codeRepository;
   }
 
-  /** Initialize the Codes Service. */
+  /**
+   * Initialize the Codes Service.
+   */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Codes Service");
@@ -124,6 +134,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Check whether the code category exists.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    */
   @Override
@@ -139,8 +150,10 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Check whether the code exists.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
   @Override
@@ -194,7 +207,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Create the new code category.
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
-   *     new code category
+   *                     new code category
    */
   @Override
   @Transactional
@@ -221,8 +234,9 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Delete the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
    */
   @Override
   @Transactional
@@ -275,8 +289,10 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return the code
    */
   @Override
@@ -328,6 +344,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Retrieve the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the code category
    */
   @Override
@@ -364,6 +381,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the XML or JSON data for the code category
    */
   @Override
@@ -402,7 +420,8 @@ public class CodesService implements ICodesService, InitializingBean {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
+   * @param parameters     the parameters
+   *
    * @return the XML or JSON data for the code category
    */
   @Override
@@ -439,6 +458,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Retrieve the name of the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the name of the code category
    */
   @Override
@@ -486,6 +506,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the date and time the code category was last updated
    */
   @Override
@@ -521,8 +542,10 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Retrieve the name of the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   * @param codeId         the ID uniquely identifying the code
+   *
    * @return the name of the code
    */
   @Override
@@ -564,6 +587,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
+   *
    * @return the codes for the code category
    */
   @Override
@@ -598,7 +622,8 @@ public class CodesService implements ICodesService, InitializingBean {
    * configuration file.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param parameters the parameters
+   * @param parameters     the parameters
+   *
    * @return the codes for the code category
    */
   @Override
@@ -650,7 +675,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Update the existing code category.
    *
    * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
-   *     for the code category
+   *                     for the code category
    */
   @Override
   public void updateCodeCategory(CodeCategory codeCategory)
@@ -675,7 +700,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Update the XML or JSON data for the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param data the updated XML or JSON data
+   * @param data           the updated XML or JSON data
    */
   @Override
   @Transactional
@@ -695,7 +720,9 @@ public class CodesService implements ICodesService, InitializingBean {
     }
   }
 
-  /** Initialize the code providers. */
+  /**
+   * Initialize the code providers.
+   */
   private void initCodeProviders() {
     // Initialize each code provider
     for (CodeProviderConfig codeProviderConfig : codeProviderConfigs) {

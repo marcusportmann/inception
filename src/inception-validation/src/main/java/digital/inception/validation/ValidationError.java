@@ -240,15 +240,6 @@ public class ValidationError implements Serializable, Cloneable {
   }
 
   /**
-   * Set the attributes associated with the validation error.
-   *
-   * @param attributes the attributes associated with the validation error
-   */
-  public void setAttributes(List<ValidationErrorAttribute> attributes) {
-    this.attributes = attributes;
-  }
-
-  /**
    * Returns the error message for the validation error.
    *
    * @return the error message for the validation error
@@ -258,21 +249,30 @@ public class ValidationError implements Serializable, Cloneable {
   }
 
   /**
-   * Set the error message for the validation error.
-   *
-   * @param message the error message for the validation error
-   */
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  /**
    * Returns the path for the property that resulted in the validation error.
    *
    * @return the path for the property that resulted in the validation error
    */
   public String getProperty() {
     return property;
+  }
+
+  /**
+   * Set the attributes associated with the validation error.
+   *
+   * @param attributes the attributes associated with the validation error
+   */
+  public void setAttributes(List<ValidationErrorAttribute> attributes) {
+    this.attributes = attributes;
+  }
+
+  /**
+   * Set the error message for the validation error.
+   *
+   * @param message the error message for the validation error
+   */
+  public void setMessage(String message) {
+    this.message = message;
   }
 
   /**

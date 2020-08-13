@@ -30,12 +30,14 @@ import {NavigationItem} from '../services/navigation-item';
       <a class="nav-link nav-dropdown-toggle" sidebarNavDropdownToggler>
         <i *ngIf="this.navItem.icon && !!this.navItem.icon" class="nav-icon {{ navItem.icon }}"></i>
         {{ navItem.name }}
-        <span *ngIf="this.navItem.badge && !!this.navItem.badge" [ngClass]="'badge badge-' + navItem.badge.variant">
+        <span *ngIf="this.navItem.badge && !!this.navItem.badge"
+              [ngClass]="'badge badge-' + navItem.badge.variant">
           {{ navItem.badge.text }}
         </span>
       </a>
       <ul class="nav-dropdown-items">
-        <sidebar-nav-item *ngFor="let child of navItem.children" [navItem]='child'></sidebar-nav-item>
+        <sidebar-nav-item *ngFor="let child of navItem.children"
+                          [navItem]='child'></sidebar-nav-item>
       </ul>
     </ng-container>
   `,

@@ -117,24 +117,24 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
     combineLatest([this.securityService.getUserDirectoryCapabilities(this.userDirectoryId),
       this.securityService.getGroup(this.userDirectoryId, this.groupName)
     ])
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((results: [UserDirectoryCapabilities, Group]) => {
-        this.userDirectoryCapabilities = results[0];
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((results: [UserDirectoryCapabilities, Group]) => {
+      this.userDirectoryCapabilities = results[0];
 
-        this.group = results[1];
+      this.group = results[1];
 
-        this.descriptionFormControl.setValue(results[1].description);
-        this.nameFormControl.setValue(results[1].name);
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof
-          SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.descriptionFormControl.setValue(results[1].description);
+      this.nameFormControl.setValue(results[1].name);
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) || (error instanceof
+        SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ok(): void {
@@ -144,23 +144,23 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
       this.spinnerService.showSpinner();
 
       this.securityService.updateGroup(this.group)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../../..'], {
-            relativeTo: this.activatedRoute,
-            state: {userDirectoryId: this.userDirectoryId}
-          });
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['../../..'], {
+          relativeTo: this.activatedRoute,
+          state: {userDirectoryId: this.userDirectoryId}
         });
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

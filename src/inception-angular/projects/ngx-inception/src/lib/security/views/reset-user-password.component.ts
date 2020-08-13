@@ -46,9 +46,9 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
 
   expirePasswordFormControl: FormControl;
 
-  fullNameFormControl: FormControl;
-
   lockUserFormControl: FormControl;
+
+  nameFormControl: FormControl;
 
   passwordFormControl: FormControl;
 
@@ -88,7 +88,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     // Initialise the form controls
     this.confirmPasswordFormControl = new FormControl('', [Validators.required, Validators.maxLength(100)]);
     this.expirePasswordFormControl = new FormControl(false);
-    this.fullNameFormControl = new FormControl({
+    this.nameFormControl = new FormControl({
       value: '',
       disabled: true
     });
@@ -103,7 +103,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     // Initialise the form
     this.resetUserPasswordForm = new FormGroup({
       confirmPassword: this.confirmPasswordFormControl,
-      fullName: this.fullNameFormControl,
+      name: this.nameFormControl,
       password: this.passwordFormControl,
       username: this.usernameFormControl
     });
@@ -139,7 +139,7 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
     .subscribe((results: [UserDirectoryCapabilities, User]) => {
       this.userDirectoryCapabilities = results[0];
 
-      this.fullNameFormControl.setValue(results[1].fullName);
+      this.nameFormControl.setValue(results[1].name);
       this.usernameFormControl.setValue(results[1].username);
 
       if (this.userDirectoryCapabilities.supportsPasswordExpiry) {

@@ -268,8 +268,7 @@ export class GroupFormFieldComponent extends _GroupFormFieldMixinBase
         this._radioGroupChild._radios.forEach((radioButton: MatRadioButton) => {
           radioButton.ariaLabelledby = this._labelId;
         });
-      }
-      else if (this._checkboxChildren && (this._checkboxChildren.length > 0)) {
+      } else if (this._checkboxChildren && (this._checkboxChildren.length > 0)) {
         this._checkboxChildren.forEach((checkbox: MatCheckbox) => {
           checkbox.ariaLabelledby = this._labelId;
         });

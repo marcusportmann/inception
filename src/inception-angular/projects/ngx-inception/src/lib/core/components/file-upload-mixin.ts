@@ -15,7 +15,7 @@
  */
 
 import {FormGroupDirective, NgControl, NgForm} from '@angular/forms';
-import { CanUpdateErrorStateCtor, ErrorStateMatcher, mixinErrorState } from '@angular/material/core';
+import {CanUpdateErrorStateCtor, ErrorStateMatcher, mixinErrorState} from '@angular/material/core';
 
 /**
  * See https://github.com/merlosy/ngx-material-file-input.

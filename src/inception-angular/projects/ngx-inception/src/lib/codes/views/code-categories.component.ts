@@ -83,27 +83,27 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
     });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.codesService.deleteCodeCategory(codeCategoryId)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.loadCodeCategorySummaries();
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+        this.codesService.deleteCodeCategory(codeCategoryId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadCodeCategorySummaries();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
   }
 
   editCodeCategory(codeCategoryId: string): void {
@@ -115,19 +115,19 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
     this.spinnerService.showSpinner();
 
     this.codesService.getCodeCategorySummaries()
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((codeCategorySummaries: CodeCategorySummary[]) => {
-        this.dataSource.data = codeCategorySummaries;
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((codeCategorySummaries: CodeCategorySummary[]) => {
+      this.dataSource.data = codeCategorySummaries;
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   newCodeCategory(): void {

@@ -49,55 +49,70 @@ public class Organizations implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The optional filter that was applied to the organizations. */
+  /**
+   * The optional filter that was applied to the organizations.
+   */
   @Schema(description = "The optional filter that was applied to the organizations")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /** The organizations. */
+  /**
+   * The organizations.
+   */
   @Schema(description = "The organizations", required = true)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Organizations", required = true)
   @XmlElement(name = "Organization", required = true)
   private List<Organization> organizations;
 
-  /** The optional page index. */
+  /**
+   * The optional page index.
+   */
   @Schema(description = "The optional page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /** The optional page size. */
+  /**
+   * The optional page size.
+   */
   @Schema(description = "The optional page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /** The optional sort direction that was applied to the organizations. */
+  /**
+   * The optional sort direction that was applied to the organizations.
+   */
   @Schema(description = "The optional sort direction that was applied to the organizations")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /** The total number of organizations. */
+  /**
+   * The total number of organizations.
+   */
   @Schema(description = "The total number of organizations", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <code>Organizations</code>. */
-  public Organizations() {}
+  /**
+   * Constructs a new <code>Organizations</code>.
+   */
+  public Organizations() {
+  }
 
   /**
    * Constructs a new <code>Organizations</code>.
    *
    * @param organizations the organizations
-   * @param total the total number of organizations
-   * @param filter the optional filter that was applied to the organizations
+   * @param total         the total number of organizations
+   * @param filter        the optional filter that was applied to the organizations
    * @param sortDirection the optional sort direction that was applied to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
    */
   public Organizations(
       List<Organization> organizations,

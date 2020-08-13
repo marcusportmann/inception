@@ -21,7 +21,11 @@ import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http'
 import {Code} from './code';
 import {CodeCategory} from './code-category';
 import {
-  CodeCategoryNotFoundError, CodeNotFoundError, CodesServiceError, DuplicateCodeCategoryError, DuplicateCodeError
+  CodeCategoryNotFoundError,
+  CodeNotFoundError,
+  CodesServiceError,
+  DuplicateCodeCategoryError,
+  DuplicateCodeError
 } from './codes.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {ApiError} from '../../core/errors/api-error';
@@ -62,25 +66,25 @@ export class CodesService {
     return this.httpClient.post<boolean>(
       this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(code.codeCategoryId) + '/codes', code,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'CodeCategoryNotFoundError') {
-            return throwError(new CodeCategoryNotFoundError(apiError));
-          } else if (apiError.code === 'DuplicateCodeError') {
-            return throwError(new DuplicateCodeError(apiError));
-          } else {
-            return throwError(new CodesServiceError('Failed to create the code.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'CodeCategoryNotFoundError') {
+          return throwError(new CodeCategoryNotFoundError(apiError));
+        } else if (apiError.code === 'DuplicateCodeError') {
+          return throwError(new DuplicateCodeError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new CodesServiceError('Failed to create the code.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -93,23 +97,23 @@ export class CodesService {
   createCodeCategory(codeCategory: CodeCategory): Observable<boolean> {
     return this.httpClient.post<boolean>(this.config.codesApiUrlPrefix + '/code-categories', codeCategory,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'DuplicateCodeCategoryError') {
-            return throwError(new DuplicateCodeCategoryError(apiError));
-          } else {
-            return throwError(new CodesServiceError('Failed to create the code category.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'DuplicateCodeCategoryError') {
+          return throwError(new DuplicateCodeCategoryError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new CodesServiceError('Failed to create the code category.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -125,23 +129,23 @@ export class CodesService {
     return this.httpClient.delete<boolean>(
       this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId) + '/codes/' +
       encodeURIComponent(codeId), {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'CodeNotFoundError') {
-            return throwError(new CodeNotFoundError(apiError));
-          } else {
-            return throwError(new CodesServiceError('Failed to delete the code.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'CodeNotFoundError') {
+          return throwError(new CodeNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new CodesServiceError('Failed to delete the code.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -154,23 +158,23 @@ export class CodesService {
   deleteCodeCategory(codeCategoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId), {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'CodeCategoryNotFoundError') {
-            return throwError(new CodeCategoryNotFoundError(apiError));
-          } else {
-            return throwError(new CodesServiceError('Failed to delete the code category.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'CodeCategoryNotFoundError') {
+          return throwError(new CodeCategoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new CodesServiceError('Failed to delete the code category.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -212,19 +216,19 @@ export class CodesService {
   getCodeCategories(): Observable<CodeCategory[]> {
     return this.httpClient.get<CodeCategory[]>(this.config.codesApiUrlPrefix + '/code-categories',
       {reportProgress: true})
-      .pipe(map((codeCategories: CodeCategory[]) => {
-        return codeCategories;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((codeCategories: CodeCategory[]) => {
+      return codeCategories;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new CodesServiceError('Failed to retrieve the code categories.', apiError));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
-        }
-      }));
+        return throwError(new CodesServiceError('Failed to retrieve the code categories.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -237,23 +241,23 @@ export class CodesService {
   getCodeCategory(codeCategoryId: string): Observable<CodeCategory> {
     return this.httpClient.get<CodeCategory>(
       this.config.codesApiUrlPrefix + '/code-categories/' + encodeURIComponent(codeCategoryId), {reportProgress: true})
-      .pipe(map((codeCategory: CodeCategory) => {
-        return codeCategory;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((codeCategory: CodeCategory) => {
+      return codeCategory;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'CodeCategoryNotFoundError') {
-            return throwError(new CodeCategoryNotFoundError(apiError));
-          } else {
-            return throwError(new CodesServiceError('Failed to retrieve the code category.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'CodeCategoryNotFoundError') {
+          return throwError(new CodeCategoryNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new CodesServiceError('Failed to retrieve the code category.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -356,22 +360,22 @@ export class CodesService {
   getCodeCategorySummaries(): Observable<CodeCategorySummary[]> {
     return this.httpClient.get<CodeCategory[]>(this.config.codesApiUrlPrefix + '/code-category-summaries',
       {reportProgress: true})
-      .pipe(map((codeCategorySummaries: CodeCategorySummary[]) => {
-        return codeCategorySummaries;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
-          return throwError(new AccessDeniedError(httpErrorResponse));
-        } else if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((codeCategorySummaries: CodeCategorySummary[]) => {
+      return codeCategorySummaries;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (AccessDeniedError.isAccessDeniedError(httpErrorResponse)) {
+        return throwError(new AccessDeniedError(httpErrorResponse));
+      } else if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(
-            new CodesServiceError('Failed to retrieve the summaries for the code categories.', apiError));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
-        }
-      }));
+        return throwError(
+          new CodesServiceError('Failed to retrieve the summaries for the code categories.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**

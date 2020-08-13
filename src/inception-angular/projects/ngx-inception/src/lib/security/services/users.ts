@@ -46,7 +46,7 @@ export class Users {
   users: User[];
 
   /**
-   * The optional method used to sort the users e.g. by full name.
+   * The optional method used to sort the users e.g. by name.
    */
   sortBy?: UserSortBy;
 
@@ -74,7 +74,7 @@ export class Users {
    * @param users           The users.
    * @param total           The total number of users.
    * @param filter          The optional filter that was applied to the users.
-   * @param sortBy          The optional method used to sort the users e.g. by full name.
+   * @param sortBy          The optional method used to sort the users e.g. by name.
    * @param sortDirection   The optional sort direction that was applied to the users.
    * @param pageIndex       The optional page index.
    * @param pageSize        The optional page size.

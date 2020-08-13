@@ -95,20 +95,20 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
       this.spinnerService.showSpinner();
 
       this.codesService.createCodeCategory(this.codeCategory)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

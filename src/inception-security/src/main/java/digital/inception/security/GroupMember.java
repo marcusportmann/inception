@@ -129,30 +129,12 @@ public class GroupMember implements Serializable {
   }
 
   /**
-   * Set the name identifying the group.
-   *
-   * @param groupName the name identifying the group
-   */
-  public void setGroupName(String groupName) {
-    this.groupName = groupName;
-  }
-
-  /**
    * Returns the name identifying the group member.
    *
    * @return the name identifying the group member
    */
   public String getMemberName() {
     return memberName;
-  }
-
-  /**
-   * Set the name identifying the group member.
-   *
-   * @param memberName the name identifying the group member
-   */
-  public void setMemberName(String memberName) {
-    this.memberName = memberName;
   }
 
   /**
@@ -165,15 +147,6 @@ public class GroupMember implements Serializable {
   }
 
   /**
-   * Set the group member type.
-   *
-   * @param memberType the group member type
-   */
-  public void setMemberType(GroupMemberType memberType) {
-    this.memberType = memberType;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
    * group is associated with.
    *
@@ -182,6 +155,33 @@ public class GroupMember implements Serializable {
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
+  }
+
+  /**
+   * Set the name identifying the group.
+   *
+   * @param groupName the name identifying the group
+   */
+  public void setGroupName(String groupName) {
+    this.groupName = groupName;
+  }
+
+  /**
+   * Set the name identifying the group member.
+   *
+   * @param memberName the name identifying the group member
+   */
+  public void setMemberName(String memberName) {
+    this.memberName = memberName;
+  }
+
+  /**
+   * Set the group member type.
+   *
+   * @param memberType the group member type
+   */
+  public void setMemberType(GroupMemberType memberType) {
+    this.memberType = memberType;
   }
 
   /**

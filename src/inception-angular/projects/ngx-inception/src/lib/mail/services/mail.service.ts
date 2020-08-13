@@ -19,7 +19,11 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {ApiError} from '../../core/errors/api-error';
-import {DuplicateMailTemplateError, MailServiceError, MailTemplateNotFoundError} from './mail.service.errors';
+import {
+  DuplicateMailTemplateError,
+  MailServiceError,
+  MailTemplateNotFoundError
+} from './mail.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
 import {MailTemplate} from './mail-template';
@@ -58,25 +62,25 @@ export class MailService {
   createMailTemplate(mailTemplate: MailTemplate): Observable<boolean> {
     return this.httpClient.post<boolean>(this.config.mailApiUrlPrefix + '/mail-templates', mailTemplate,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'MailTemplateNotFoundError') {
-            return throwError(new MailTemplateNotFoundError(apiError));
-          } else if (apiError.code === 'DuplicateMailTemplateError') {
-            return throwError(new DuplicateMailTemplateError(apiError));
-          } else {
-            return throwError(new MailServiceError('Failed to create the mail template.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'MailTemplateNotFoundError') {
+          return throwError(new MailTemplateNotFoundError(apiError));
+        } else if (apiError.code === 'DuplicateMailTemplateError') {
+          return throwError(new DuplicateMailTemplateError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new MailServiceError('Failed to create the mail template.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -89,23 +93,23 @@ export class MailService {
   deleteMailTemplate(mailTemplateId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
       this.config.mailApiUrlPrefix + '/mail-templates/' + encodeURIComponent(mailTemplateId), {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'MailTemplateNotFoundError') {
-            return throwError(new MailTemplateNotFoundError(apiError));
-          } else {
-            return throwError(new MailServiceError('Failed to delete the mail template.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'MailTemplateNotFoundError') {
+          return throwError(new MailTemplateNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new MailServiceError('Failed to delete the mail template.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -118,23 +122,23 @@ export class MailService {
   getMailTemplate(mailTemplateId: string): Observable<MailTemplate> {
     return this.httpClient.get<MailTemplate>(
       this.config.mailApiUrlPrefix + '/mail-templates/' + encodeURIComponent(mailTemplateId), {reportProgress: true})
-      .pipe(map((mailTemplate: MailTemplate) => {
-        return mailTemplate;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((mailTemplate: MailTemplate) => {
+      return mailTemplate;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'MailTemplateNotFoundError') {
-            return throwError(new MailTemplateNotFoundError(apiError));
-          } else {
-            return throwError(new MailServiceError('Failed to retrieve the mail template.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'MailTemplateNotFoundError') {
+          return throwError(new MailTemplateNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new MailServiceError('Failed to retrieve the mail template.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -175,19 +179,19 @@ export class MailService {
   getMailTemplateSummaries(): Observable<MailTemplateSummary[]> {
     return this.httpClient.get<MailTemplateSummary[]>(this.config.mailApiUrlPrefix + '/mail-template-summaries',
       {reportProgress: true})
-      .pipe(map((mailTemplateSummaries: MailTemplateSummary[]) => {
-        return mailTemplateSummaries;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((mailTemplateSummaries: MailTemplateSummary[]) => {
+      return mailTemplateSummaries;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new MailServiceError('Failed to retrieve the summaries for the mail templates.', apiError));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
-        }
-      }));
+        return throwError(new MailServiceError('Failed to retrieve the summaries for the mail templates.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -197,19 +201,19 @@ export class MailService {
    */
   getMailTemplates(): Observable<MailTemplate[]> {
     return this.httpClient.get<MailTemplate[]>(this.config.mailApiUrlPrefix + '/mail-templates', {reportProgress: true})
-      .pipe(map((mailTemplates: MailTemplate[]) => {
-        return mailTemplates;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((mailTemplates: MailTemplate[]) => {
+      return mailTemplates;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new MailServiceError('Failed to retrieve the mail templates.', apiError));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
-        }
-      }));
+        return throwError(new MailServiceError('Failed to retrieve the mail templates.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**
@@ -223,22 +227,22 @@ export class MailService {
     return this.httpClient.put<boolean>(
       this.config.mailApiUrlPrefix + '/mail-templates/' + encodeURIComponent(mailTemplate.id), mailTemplate,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          if (apiError.code === 'MailTemplateNotFoundError') {
-            return throwError(new MailTemplateNotFoundError(apiError));
-          } else {
-            return throwError(new MailServiceError('Failed to update the mail template.', apiError));
-          }
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
+        if (apiError.code === 'MailTemplateNotFoundError') {
+          return throwError(new MailTemplateNotFoundError(apiError));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new MailServiceError('Failed to update the mail template.', apiError));
         }
-      }));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 }

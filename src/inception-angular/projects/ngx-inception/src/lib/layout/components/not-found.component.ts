@@ -30,7 +30,8 @@ import {Component} from '@angular/core';
             <div class="clearfix">
               <h1 class="float-left display-3 mr-4">404</h1>
               <h4 class="pt-3" i18n="@@not_found_component_heading">Oops! You're lost.</h4>
-              <p class="text-muted" i18n="@@not_found_component_message">The page you are looking for was not found.</p>
+              <p class="text-muted" i18n="@@not_found_component_message">The page you are looking
+                for was not found.</p>
             </div>
           </div>
         </div>

@@ -172,30 +172,12 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the code uniquely identifying the role.
-   *
-   * @param code the code uniquely identifying the role
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
    * Returns the description for the role.
    *
    * @return the description for the role
    */
   public String getDescription() {
     return description;
-  }
-
-  /**
-   * Set the description for the role.
-   *
-   * @param description the description for the role
-   */
-  public void setDescription(String description) {
-    this.description = description;
   }
 
   /**
@@ -208,15 +190,6 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the functions associated with the role.
-   *
-   * @param functions the functions associated with the role
-   */
-  public void setFunctions(Set<Function> functions) {
-    this.functions = functions;
-  }
-
-  /**
    * Returns the groups the role is associated with.
    *
    * @return the groups the role is associated with
@@ -226,30 +199,12 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the groups the role is associated with.
-   *
-   * @param groups the groups the role is associated with
-   */
-  public void setGroups(Set<Group> groups) {
-    this.groups = groups;
-  }
-
-  /**
    * Returns the name of the role.
    *
    * @return the name of the role
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Set the name of the role.
-   *
-   * @param name the name of the role
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**
@@ -270,5 +225,50 @@ public class Role implements java.io.Serializable {
   public void removeFunction(Function function) {
     functions.remove(function);
     function.getRoles().remove(this);
+  }
+
+  /**
+   * Set the code uniquely identifying the role.
+   *
+   * @param code the code uniquely identifying the role
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the description for the role.
+   *
+   * @param description the description for the role
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the functions associated with the role.
+   *
+   * @param functions the functions associated with the role
+   */
+  public void setFunctions(Set<Function> functions) {
+    this.functions = functions;
+  }
+
+  /**
+   * Set the groups the role is associated with.
+   *
+   * @param groups the groups the role is associated with
+   */
+  public void setGroups(Set<Group> groups) {
+    this.groups = groups;
+  }
+
+  /**
+   * Set the name of the role.
+   *
+   * @param name the name of the role
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 }

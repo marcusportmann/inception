@@ -33,7 +33,8 @@ import {Observable} from 'rxjs';
         <li class="breadcrumb-item"
             *ngIf="(breadcrumb.label)"
             [ngClass]="{active: last}">
-          <a *ngIf="!last && (!!breadcrumb.url)" [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
+          <a *ngIf="!last && (!!breadcrumb.url)"
+             [routerLink]="breadcrumb.url">{{breadcrumb.label}}</a>
           <span *ngIf="last || (!breadcrumb.url)">{{breadcrumb.label}}</span>
         </li>
       </ng-template>

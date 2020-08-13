@@ -5,10 +5,10 @@
   </div>
   <mat-table [dataSource]="dataSource" class="flex-fill" matSort>
 
-    <!-- Full Name Column -->
-    <ng-container matColumnDef="fullName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Full&nbsp;Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.fullName}}</mat-cell>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
     </ng-container>
 
     <!-- Preferred Name Column -->

@@ -42,16 +42,22 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 public class ReferenceServiceTest {
 
-  /** The Reference Service. */
-  @Autowired private IReferenceService referenceService;
+  /**
+   * The Reference Service.
+   */
+  @Autowired
+  private IReferenceService referenceService;
 
-  /** Test the reference functionality. */
+  /**
+   * Test the reference functionality.
+   */
   @Test
-  public void referenceTest() throws Exception {}
+  public void referenceTest() throws Exception {
+  }
 }

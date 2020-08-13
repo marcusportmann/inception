@@ -62,18 +62,18 @@ export class ErrorService {
 
     return this.httpClient.post<boolean>(this.config.errorApiUrlPrefix + '/error-reports', errorReport,
       {observe: 'response'})
-      .pipe(map((httpResponse: HttpResponse<boolean>) => {
-        return httpResponse.status === 204;
-      }), catchError((httpErrorResponse: HttpErrorResponse) => {
-        if (ApiError.isApiError(httpErrorResponse)) {
-          const apiError: ApiError = new ApiError(httpErrorResponse);
+    .pipe(map((httpResponse: HttpResponse<boolean>) => {
+      return httpResponse.status === 204;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new ErrorServiceError('Failed to send the error report.', apiError));
-        } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-          return throwError(new CommunicationError(httpErrorResponse));
-        } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
-        }
-      }));
+        return throwError(new ErrorServiceError('Failed to send the error report.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 }

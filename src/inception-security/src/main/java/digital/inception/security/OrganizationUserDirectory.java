@@ -94,6 +94,15 @@ public class OrganizationUserDirectory implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   *
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
+   */
+  public UUID getUserDirectoryId() {
+    return userDirectoryId;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) uniquely identifying the organization.
    *
    * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
@@ -101,15 +110,6 @@ public class OrganizationUserDirectory implements Serializable {
    */
   public void setOrganizationId(UUID organizationId) {
     this.organizationId = organizationId;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
-   *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
-   */
-  public UUID getUserDirectoryId() {
-    return userDirectoryId;
   }
 
   /**

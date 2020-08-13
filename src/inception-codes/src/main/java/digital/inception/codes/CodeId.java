@@ -95,31 +95,12 @@ public class CodeId implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the code category the code is associated with.
-   *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
-   *                       with
-   */
-  public void setCodeCategoryId(String codeCategoryId) {
-    this.codeCategoryId = codeCategoryId;
-  }
-
-  /**
    * Returns the ID uniquely identifying the code.
    *
    * @return the ID uniquely identifying the code
    */
   public String getId() {
     return id;
-  }
-
-  /**
-   * Set the ID uniquely identifying the code.
-   *
-   * @param id the ID uniquely identifying the code
-   */
-  public void setId(String id) {
-    this.id = id;
   }
 
   /**
@@ -131,5 +112,24 @@ public class CodeId implements Serializable {
   public int hashCode() {
     return ((codeCategoryId == null) ? 0 : codeCategoryId.hashCode())
         + ((id == null) ? 0 : id.hashCode());
+  }
+
+  /**
+   * Set the ID uniquely identifying the code category the code is associated with.
+   *
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
+   *                       with
+   */
+  public void setCodeCategoryId(String codeCategoryId) {
+    this.codeCategoryId = codeCategoryId;
+  }
+
+  /**
+   * Set the ID uniquely identifying the code.
+   *
+   * @param id the ID uniquely identifying the code
+   */
+  public void setId(String id) {
+    this.id = id;
   }
 }

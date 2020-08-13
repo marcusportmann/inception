@@ -14,18 +14,12 @@
     <div></div>
     <table-filter></table-filter>
   </div>
-  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="fullName" matSortDirection="asc" matSortDisableClear>
+  <mat-table [dataSource]="dataSource" class="flex-fill" style="min-height: 550px;" matSort matSortActive="name" matSortDirection="asc" matSortDisableClear>
 
-    <!-- Full Name Column -->
-    <ng-container matColumnDef="fullName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_users_component_table_header_full_name">Full Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.fullName}}</mat-cell>
-    </ng-container>
-
-    <!-- Preferred Name Column -->
-    <ng-container matColumnDef="preferredName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_users_component_table_header_preferred_name">Preferred Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.preferredName}}</mat-cell>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@security_users_component_table_header_name">Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
     </ng-container>
 
     <!-- Username Column -->

@@ -242,31 +242,12 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the application that generated the error report.
-   *
-   * @param applicationId the ID uniquely identifying the application that generated the error
-   *                      report
-   */
-  public void setApplicationId(String applicationId) {
-    this.applicationId = applicationId;
-  }
-
-  /**
    * Returns the version of the application that generated the error report.
    *
    * @return the version of the application that generated the error report
    */
   public String getApplicationVersion() {
     return applicationVersion;
-  }
-
-  /**
-   * Set the version of the application that generated the error report.
-   *
-   * @param applicationVersion the version of the application that generated the error report
-   */
-  public void setApplicationVersion(String applicationVersion) {
-    this.applicationVersion = applicationVersion;
   }
 
   /**
@@ -279,30 +260,12 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Set the date and time the error report was created.
-   *
-   * @param created the date and time the error report was created
-   */
-  public void setCreated(LocalDateTime created) {
-    this.created = created;
-  }
-
-  /**
    * Returns the description of the error.
    *
    * @return the description of the error
    */
   public String getDescription() {
     return description;
-  }
-
-  /**
-   * Set the description of the error.
-   *
-   * @param description the description of the error
-   */
-  public void setDescription(String description) {
-    this.description = description;
   }
 
   /**
@@ -317,32 +280,12 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Set the optional Universally Unique Identifier (UUID) uniquely identifying the device the error
-   * report originated from.
-   *
-   * @param deviceId the optional Universally Unique Identifier (UUID) uniquely identifying the
-   *                 device the error report originated from
-   */
-  public void setDeviceId(UUID deviceId) {
-    this.deviceId = deviceId;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the error report.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the error report
    */
   public UUID getId() {
     return id;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the error report.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
-   */
-  public void setId(UUID id) {
-    this.id = id;
   }
 
   /**
@@ -355,15 +298,6 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Set the optional username identifying the user associated with the error report.
-   *
-   * @param who the optional username identifying the user associated with the error report
-   */
-  public void setWho(String who) {
-    this.who = who;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -371,5 +305,71 @@ public class ErrorReportSummary implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Set the ID uniquely identifying the application that generated the error report.
+   *
+   * @param applicationId the ID uniquely identifying the application that generated the error
+   *                      report
+   */
+  public void setApplicationId(String applicationId) {
+    this.applicationId = applicationId;
+  }
+
+  /**
+   * Set the version of the application that generated the error report.
+   *
+   * @param applicationVersion the version of the application that generated the error report
+   */
+  public void setApplicationVersion(String applicationVersion) {
+    this.applicationVersion = applicationVersion;
+  }
+
+  /**
+   * Set the date and time the error report was created.
+   *
+   * @param created the date and time the error report was created
+   */
+  public void setCreated(LocalDateTime created) {
+    this.created = created;
+  }
+
+  /**
+   * Set the description of the error.
+   *
+   * @param description the description of the error
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the optional Universally Unique Identifier (UUID) uniquely identifying the device the error
+   * report originated from.
+   *
+   * @param deviceId the optional Universally Unique Identifier (UUID) uniquely identifying the
+   *                 device the error report originated from
+   */
+  public void setDeviceId(UUID deviceId) {
+    this.deviceId = deviceId;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the error report.
+   *
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the optional username identifying the user associated with the error report.
+   *
+   * @param who the optional username identifying the user associated with the error report
+   */
+  public void setWho(String who) {
+    this.who = who;
   }
 }

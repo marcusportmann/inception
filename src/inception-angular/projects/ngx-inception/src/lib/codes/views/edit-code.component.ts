@@ -109,22 +109,22 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
     this.spinnerService.showSpinner();
 
     this.codesService.getCode(this.codeCategoryId, this.codeId)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((code: Code) => {
-        this.code = code;
-        this.idFormControl.setValue(code.id);
-        this.nameFormControl.setValue(code.name);
-        this.valueFormControl.setValue(code.value);
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((code: Code) => {
+      this.code = code;
+      this.idFormControl.setValue(code.id);
+      this.nameFormControl.setValue(code.name);
+      this.valueFormControl.setValue(code.value);
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ok(): void {
@@ -135,20 +135,20 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
       this.spinnerService.showSpinner();
 
       this.codesService.updateCode(this.code)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

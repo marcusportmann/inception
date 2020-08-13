@@ -17,7 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {MailService} from '../services/mail.service';
-import { Inject, Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 
 /**
  * The MailTemplateTitleResolver class provides the route data resolver that resolves the

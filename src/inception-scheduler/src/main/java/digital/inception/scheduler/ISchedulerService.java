@@ -54,6 +54,7 @@ public interface ISchedulerService {
    * Retrieve the filtered jobs.
    *
    * @param filter the filter to apply to the jobs
+   *
    * @return the jobs
    */
   List<Job> getFilteredJobs(String filter) throws SchedulerServiceException;
@@ -62,6 +63,7 @@ public interface ISchedulerService {
    * Retrieve the job.
    *
    * @param jobId the ID uniquely identifying the job
+   *
    * @return the job
    */
   Job getJob(String jobId) throws JobNotFoundException, SchedulerServiceException;
@@ -70,6 +72,7 @@ public interface ISchedulerService {
    * Retrieve the name of the job.
    *
    * @param jobId the ID uniquely identifying the job
+   *
    * @return the name of the job
    */
   String getJobName(String jobId) throws JobNotFoundException, SchedulerServiceException;
@@ -94,7 +97,7 @@ public interface ISchedulerService {
    * <p>The job will be locked to prevent duplicate processing.
    *
    * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
-   *     currently scheduled for execution
+   * currently scheduled for execution
    */
   Job getNextJobScheduledForExecution() throws SchedulerServiceException;
 
@@ -108,9 +111,9 @@ public interface ISchedulerService {
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId             the ID uniquely identifying the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
-   *     next execution time
+   *                          next execution time
    */
   void rescheduleJob(String jobId, String schedulingPattern)
       throws JobNotFoundException, SchedulerServiceException;
@@ -118,7 +121,7 @@ public interface ISchedulerService {
   /**
    * Reset the job locks.
    *
-   * @param status the current status of the jobs that have been locked
+   * @param status    the current status of the jobs that have been locked
    * @param newStatus the new status for the jobs that have been unlocked
    */
   void resetJobLocks(JobStatus status, JobStatus newStatus) throws SchedulerServiceException;
@@ -134,7 +137,7 @@ public interface ISchedulerService {
   /**
    * Set the status for the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId  the ID uniquely identifying the job
    * @param status the new status for the job
    */
   void setJobStatus(String jobId, JobStatus status)
@@ -143,7 +146,7 @@ public interface ISchedulerService {
   /**
    * Unlock a locked job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId  the ID uniquely identifying the job
    * @param status the new status for the unlocked job
    */
   void unlockJob(String jobId, JobStatus status)

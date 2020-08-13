@@ -98,21 +98,21 @@ public class ReportParameter implements Serializable {
   }
 
   /**
-   * Set the name of the report parameter.
-   *
-   * @param name the name of the report parameter
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns the value for the report parameter.
    *
    * @return the value for the report parameter
    */
   public String getValue() {
     return value;
+  }
+
+  /**
+   * Set the name of the report parameter.
+   *
+   * @param name the name of the report parameter
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

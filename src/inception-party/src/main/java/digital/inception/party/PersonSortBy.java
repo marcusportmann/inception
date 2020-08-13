@@ -37,10 +37,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "PersonSortBy", namespace = "http://party.inception.digital")
 public enum PersonSortBy {
-  /** Sort by full name. */
-  @XmlEnumValue("FullName")
-  FULL_NAME(0, "Sort By Full Name"),
-  /** Sort by preferred name. */
+  /**
+   * Sort by name.
+   */
+  @XmlEnumValue("Name")
+  NAME(0, "Sort By Name"),
+  /**
+   * Sort by preferred name.
+   */
   @XmlEnumValue("PreferredName")
   PREFERRED_NAME(1, "Sort By Preferred Name");
 
@@ -57,19 +61,20 @@ public enum PersonSortBy {
    * Returns the method used to sort a list of persons given by the specified code value.
    *
    * @param code the code value identifying the method used to sort a list of persons
+   *
    * @return the method used to sort a list of persons given by the specified code value
    */
   @JsonCreator
   public static PersonSortBy fromCode(int code) {
     switch (code) {
       case 0:
-        return PersonSortBy.FULL_NAME;
+        return PersonSortBy.NAME;
 
       case 1:
         return PersonSortBy.PREFERRED_NAME;
 
       default:
-        return PersonSortBy.FULL_NAME;
+        return PersonSortBy.NAME;
     }
   }
 
@@ -77,6 +82,7 @@ public enum PersonSortBy {
    * Returns the method used to sort a list of persons given by the specified code value.
    *
    * @param code the code value identifying the method used to sort a list of persons
+   *
    * @return the method used to sort a list of persons given by the specified code value
    */
   public static PersonSortBy fromCode(String code) {
@@ -107,7 +113,7 @@ public enum PersonSortBy {
    * value.
    *
    * @return the string representation of the method used to sort a list of persons enumeration
-   *     value
+   * value
    */
   public String toString() {
     return description;

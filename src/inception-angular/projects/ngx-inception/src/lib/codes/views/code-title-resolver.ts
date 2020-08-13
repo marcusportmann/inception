@@ -17,7 +17,7 @@
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {CodesService} from '../services/codes.service';
-import { Inject, Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 
 /**
  * The CodeTitleResolver class provides the route data resolver that resolves the

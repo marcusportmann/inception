@@ -38,10 +38,11 @@ import {Router} from '@angular/router';
       </ng-template>
       <ng-template #checkForDropdown>
         <ng-container *ngIf="isDropdown(); else sidebarNavLink">
-          <li [ngClass]="!!this.navItem.cssClass ? 'nav-item nav-dropdown ' + navItem.cssClass : 'nav-item nav-dropdown'"
-              [class.open]="isActive()"
-              routerLinkActive="open"
-              sidebarNavDropdown>
+          <li
+            [ngClass]="!!this.navItem.cssClass ? 'nav-item nav-dropdown ' + navItem.cssClass : 'nav-item nav-dropdown'"
+            [class.open]="isActive()"
+            routerLinkActive="open"
+            sidebarNavDropdown>
             <sidebar-nav-dropdown [navItem]='navItem'></sidebar-nav-dropdown>
           </li>
         </ng-container>
@@ -55,15 +56,19 @@ import {Router} from '@angular/router';
              (click)="hideMobile()">
             <i *ngIf="!!this.navItem.icon;" class="nav-icon {{ navItem.icon }}"></i>
             {{ navItem.name }}
-            <span *ngIf="this.navItem.badge && !!this.navItem.badge" [ngClass]="'badge badge-' + navItem.badge.variant">
+            <span *ngIf="this.navItem.badge && !!this.navItem.badge"
+                  [ngClass]="'badge badge-' + navItem.badge.variant">
             {{ navItem.badge.text }}
           </span>
           </a>
           <ng-template #externalLink>
-            <a [ngClass]="!!this.navItem.variant ? 'nav-link nav-link-' + navItem.variant : 'nav-link'" href="{{navItem.url}}">
+            <a
+              [ngClass]="!!this.navItem.variant ? 'nav-link nav-link-' + navItem.variant : 'nav-link'"
+              href="{{navItem.url}}">
               <i *ngIf="!!this.navItem.icon;" class="nav-icon {{ navItem.icon }}"></i>
               {{ navItem.name }}
-              <span *ngIf="this.navItem.badge && !!this.navItem.badge" [ngClass]="'badge badge-' + navItem.badge.variant">
+              <span *ngIf="this.navItem.badge && !!this.navItem.badge"
+                    [ngClass]="'badge badge-' + navItem.badge.variant">
               {{ navItem.badge.text }}
             </span>
             </a>

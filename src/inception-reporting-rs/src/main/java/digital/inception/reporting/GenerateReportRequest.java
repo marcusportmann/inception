@@ -82,21 +82,21 @@ public class GenerateReportRequest implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the report definition.
-   *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
-   */
-  public void setReportDefinitionId(String reportDefinitionId) {
-    this.reportDefinitionId = reportDefinitionId;
-  }
-
-  /**
    * Returns the report parameters.
    *
    * @return the report parameters
    */
   public List<ReportParameter> getReportParameters() {
     return reportParameters;
+  }
+
+  /**
+   * Set the ID uniquely identifying the report definition.
+   *
+   * @param reportDefinitionId the ID uniquely identifying the report definition
+   */
+  public void setReportDefinitionId(String reportDefinitionId) {
+    this.reportDefinitionId = reportDefinitionId;
   }
 
   /**

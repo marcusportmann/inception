@@ -28,6 +28,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("unused")
 public interface IPartyService {
+
   /**
    * Create the new organization.
    *
@@ -54,7 +55,7 @@ public interface IPartyService {
    * Delete the organization.
    *
    * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   *                       organization
    */
   void deleteOrganization(UUID organizationId)
       throws OrganizationNotFoundException, PartyServiceException;
@@ -76,10 +77,11 @@ public interface IPartyService {
   /**
    * Retrieve the organizations.
    *
-   * @param filter the optional filter to apply to the organizations
+   * @param filter        the optional filter to apply to the organizations
    * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the organizations
    */
   Organizations getOrganizations(
@@ -89,10 +91,11 @@ public interface IPartyService {
   /**
    * Retrieve the parties.
    *
-   * @param filter the optional filter to apply to the parties
+   * @param filter        the optional filter to apply to the parties
    * @param sortDirection the optional sort direction to apply to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the parties
    */
   Parties getParties(
@@ -102,11 +105,12 @@ public interface IPartyService {
   /**
    * Retrieve the persons.
    *
-   * @param filter the optional filter to apply to the persons
-   * @param sortBy the optional method used to sort the persons e.g. by full name
+   * @param filter        the optional filter to apply to the persons
+   * @param sortBy        the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the persons
    */
   Persons getPersons(

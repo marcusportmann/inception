@@ -80,27 +80,27 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
     });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.mailService.deleteMailTemplate(mailTemplateId)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.loadMailTemplates();
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+        this.mailService.deleteMailTemplate(mailTemplateId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadMailTemplates();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
   }
 
   editMailTemplate(mailTemplateId: string): void {
@@ -112,19 +112,19 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
     this.spinnerService.showSpinner();
 
     this.mailService.getMailTemplateSummaries()
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((mailTemplateSummaries: MailTemplateSummary[]) => {
-        this.dataSource.data = mailTemplateSummaries;
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof MailService) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((mailTemplateSummaries: MailTemplateSummary[]) => {
+      this.dataSource.data = mailTemplateSummaries;
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof MailService) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   newMailTemplate(): void {

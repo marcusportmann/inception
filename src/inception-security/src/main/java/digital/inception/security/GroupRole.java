@@ -117,30 +117,12 @@ public class GroupRole implements Serializable {
   }
 
   /**
-   * Set the name identifying the group.
-   *
-   * @param groupName the name identifying the group
-   */
-  public void setGroupName(String groupName) {
-    this.groupName = groupName;
-  }
-
-  /**
    * Returns the code uniquely identifying the role.
    *
    * @return the code uniquely identifying the role
    */
   public String getRoleCode() {
     return roleCode;
-  }
-
-  /**
-   * Set the code uniquely identifying the role.
-   *
-   * @param roleCode the code uniquely identifying the role
-   */
-  public void setRoleCode(String roleCode) {
-    this.roleCode = roleCode;
   }
 
   /**
@@ -152,6 +134,24 @@ public class GroupRole implements Serializable {
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
+  }
+
+  /**
+   * Set the name identifying the group.
+   *
+   * @param groupName the name identifying the group
+   */
+  public void setGroupName(String groupName) {
+    this.groupName = groupName;
+  }
+
+  /**
+   * Set the code uniquely identifying the role.
+   *
+   * @param roleCode the code uniquely identifying the role
+   */
+  public void setRoleCode(String roleCode) {
+    this.roleCode = roleCode;
   }
 
   /**

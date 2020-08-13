@@ -147,30 +147,12 @@ public class MailTemplateSummary implements Serializable {
   }
 
   /**
-   * Set the content type for the mail template.
-   *
-   * @param contentType the content type for the mail template
-   */
-  public void setContentType(MailTemplateContentType contentType) {
-    this.contentType = contentType;
-  }
-
-  /**
    * Returns the ID uniquely identifying the mail template.
    *
    * @return the ID uniquely identifying the mail template
    */
   public String getId() {
     return id;
-  }
-
-  /**
-   * Set the ID uniquely identifying the mail template.
-   *
-   * @param id the ID uniquely identifying the mail template
-   */
-  public void setId(String id) {
-    this.id = id;
   }
 
   /**
@@ -183,15 +165,6 @@ public class MailTemplateSummary implements Serializable {
   }
 
   /**
-   * Set the name of the mail template.
-   *
-   * @param name the name of the mail template
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -199,6 +172,33 @@ public class MailTemplateSummary implements Serializable {
   @Override
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Set the content type for the mail template.
+   *
+   * @param contentType the content type for the mail template
+   */
+  public void setContentType(MailTemplateContentType contentType) {
+    this.contentType = contentType;
+  }
+
+  /**
+   * Set the ID uniquely identifying the mail template.
+   *
+   * @param id the ID uniquely identifying the mail template
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the name of the mail template.
+   *
+   * @param name the name of the mail template
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

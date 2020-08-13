@@ -98,8 +98,8 @@
   <xs:element name="GetUserDirectoryTypeForUserDirectoryResponse" type="security:GetUserDirectoryTypeForUserDirectoryResponse"/>
   <xs:element name="GetUserDirectoryTypes" type="security:GetUserDirectoryTypes"/>
   <xs:element name="GetUserDirectoryTypesResponse" type="security:GetUserDirectoryTypesResponse"/>
-  <xs:element name="GetUserFullName" type="security:GetUserFullName"/>
-  <xs:element name="GetUserFullNameResponse" type="security:GetUserFullNameResponse"/>
+  <xs:element name="GetUserName" type="security:GetUserName"/>
+  <xs:element name="GetUserNameResponse" type="security:GetUserNameResponse"/>
   <xs:element name="GetUserResponse" type="security:GetUserResponse"/>
   <xs:element name="GetUsers" type="security:GetUsers"/>
   <xs:element name="GetUsersResponse" type="security:GetUsersResponse"/>
@@ -697,15 +697,15 @@
   <xs:complexType name="CreateUserResponse">
     <xs:sequence/>
   </xs:complexType>
-  <xs:complexType name="GetUserFullName">
+  <xs:complexType name="GetUserName">
     <xs:sequence>
       <xs:element name="UserDirectoryId" type="xs:string"/>
       <xs:element name="Username" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="GetUserFullNameResponse">
+  <xs:complexType name="GetUserNameResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="UserFullName" type="xs:string"/>
+      <xs:element minOccurs="0" name="UserName" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="AddRoleToGroup">
@@ -1139,8 +1139,8 @@
     <wsdl:part element="tns:UserDirectoryTypeNotFoundException" name="UserDirectoryTypeNotFoundException">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetUserFullNameResponse">
-    <wsdl:part element="tns:GetUserFullNameResponse" name="parameters">
+  <wsdl:message name="GetUserNameResponse">
+    <wsdl:part element="tns:GetUserNameResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="GetOrganizationsForUserDirectoryResponse">
@@ -1275,8 +1275,8 @@
     <wsdl:part element="tns:GetUserDirectoriesResponse" name="parameters">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:message name="GetUserFullName">
-    <wsdl:part element="tns:GetUserFullName" name="parameters">
+  <wsdl:message name="GetUserName">
+    <wsdl:part element="tns:GetUserName" name="parameters">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="AddRoleToGroup">
@@ -1786,10 +1786,10 @@
       <wsdl:fault message="tns:DuplicateUserException" name="DuplicateUserException">
     </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="GetUserFullName">
-      <wsdl:input message="tns:GetUserFullName" name="GetUserFullName">
+    <wsdl:operation name="GetUserName">
+      <wsdl:input message="tns:GetUserName" name="GetUserName">
     </wsdl:input>
-      <wsdl:output message="tns:GetUserFullNameResponse" name="GetUserFullNameResponse">
+      <wsdl:output message="tns:GetUserNameResponse" name="GetUserNameResponse">
     </wsdl:output>
       <wsdl:fault message="tns:UserNotFoundException" name="UserNotFoundException">
     </wsdl:fault>
@@ -2620,12 +2620,12 @@
         <soap:fault name="DuplicateUserException" use="literal"/>
       </wsdl:fault>
     </wsdl:operation>
-    <wsdl:operation name="GetUserFullName">
+    <wsdl:operation name="GetUserName">
       <soap:operation soapAction="" style="document"/>
-      <wsdl:input name="GetUserFullName">
+      <wsdl:input name="GetUserName">
         <soap:body use="literal"/>
       </wsdl:input>
-      <wsdl:output name="GetUserFullNameResponse">
+      <wsdl:output name="GetUserNameResponse">
         <soap:body use="literal"/>
       </wsdl:output>
       <wsdl:fault name="UserNotFoundException">

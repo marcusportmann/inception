@@ -21,7 +21,7 @@ import {MatSort} from '@angular/material/sort';
 import {finalize, first, map, tap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, merge, Observable, ReplaySubject, Subject, Subscription} from 'rxjs';
-import { MatSelect, MatSelectChange } from '@angular/material/select';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
 import {Error} from '../../core/errors/error';
 import {AdminContainerView} from '../../layout/components/admin-container-view';
 import {GroupDatasource} from '../services/group.datasource';
@@ -50,26 +50,16 @@ import {Session} from '../services/session';
 export class GroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  private subscriptions: Subscription = new Subscription();
-
   dataSource: GroupDatasource;
-
   displayedColumns = ['name', 'actions'];
-
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
-
   @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
-
   userDirectoryCapabilities$: Subject<UserDirectoryCapabilities> = new ReplaySubject<UserDirectoryCapabilities>();
-
   userDirectoryId$: BehaviorSubject<string> = new BehaviorSubject<string>('');
-
   userDirectories: UserDirectorySummary[] = [];
-
   @ViewChild('userDirectorySelect', {static: true}) userDirectorySelect!: MatSelect;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
@@ -102,33 +92,33 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
     });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.securityService.deleteGroup(this.userDirectoryId$.value, groupName)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.tableFilter.reset(false);
+        this.securityService.deleteGroup(this.userDirectoryId$.value, groupName)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.tableFilter.reset(false);
 
-              this.paginator.pageIndex = 0;
+          this.paginator.pageIndex = 0;
 
-              this.sort.active = '';
-              this.sort.direction = 'asc' as SortDirection;
+          this.sort.active = '';
+          this.sort.direction = 'asc' as SortDirection;
 
-              this.loadGroups();
-            }, (error: Error) => {
-              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+          this.loadGroups();
+        }, (error: Error) => {
+          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
   }
 
   editGroup(groupName: string): void {
@@ -186,21 +176,21 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
         this.spinnerService.showSpinner();
 
         this.securityService.getUserDirectoryCapabilities(userDirectoryId)
-          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-          .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
-            this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe((userDirectoryCapabilities: UserDirectoryCapabilities) => {
+          this.userDirectoryCapabilities$.next(userDirectoryCapabilities);
 
-            this.loadGroups();
-          }, (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-              (error instanceof SystemUnavailableError)) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          });
+          this.loadGroups();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
       }
     }));
 
@@ -238,51 +228,51 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
     }));
 
     this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(tap(() => {
-        this.loadGroups();
-      })).subscribe());
+    .pipe(tap(() => {
+      this.loadGroups();
+    })).subscribe());
 
     this.securityService.session$.pipe(first()).subscribe((session: Session | null) => {
       if (session && session.organization) {
         this.spinnerService.showSpinner();
 
         this.securityService.getUserDirectorySummariesForOrganization(session.organization.id)
-          .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-          .subscribe((userDirectories: UserDirectorySummary[]) => {
-            this.userDirectories = userDirectories;
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe((userDirectories: UserDirectorySummary[]) => {
+          this.userDirectories = userDirectories;
 
-            // If we only have one user directory then select it
-            if (this.userDirectories.length === 1) {
-              this.userDirectoryId$.next(this.userDirectories[0].id);
-            } else {
-              /*
-               * If a user directory ID has been passed in then select the appropriate user
-               * directory if it exists.
-               */
-              this.activatedRoute.paramMap
-                .pipe(first(), map(() => window.history.state))
-                .subscribe((state) => {
-                  if (state.userDirectoryId) {
-                    for (const userDirectory of userDirectories) {
-                      if (userDirectory.id === state.userDirectoryId) {
-                        this.userDirectorySelect.value = userDirectory.id;
-                        this.userDirectoryId$.next(userDirectory.id);
-                        break;
-                      }
-                    }
+          // If we only have one user directory then select it
+          if (this.userDirectories.length === 1) {
+            this.userDirectoryId$.next(this.userDirectories[0].id);
+          } else {
+            /*
+             * If a user directory ID has been passed in then select the appropriate user
+             * directory if it exists.
+             */
+            this.activatedRoute.paramMap
+            .pipe(first(), map(() => window.history.state))
+            .subscribe((state) => {
+              if (state.userDirectoryId) {
+                for (const userDirectory of userDirectories) {
+                  if (userDirectory.id === state.userDirectoryId) {
+                    this.userDirectorySelect.value = userDirectory.id;
+                    this.userDirectoryId$.next(userDirectory.id);
+                    break;
                   }
-                });
-            }
-          }, (error: Error) => {
-            // noinspection SuspiciousTypeOfGuard
-            if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-              (error instanceof SystemUnavailableError)) {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-            } else {
-              this.dialogService.showErrorDialog(error);
-            }
-          });
+                }
+              }
+            });
+          }
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
       }
     });
   }

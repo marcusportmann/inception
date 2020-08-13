@@ -23,8 +23,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToPartyTypeConverter</code> class implements the Spring converter that
- * converts an <code>Integer</code> type into a <code>PartyType</code> type.
+ * The <code>IntegerToPartyTypeConverter</code> class implements the Spring converter that converts
+ * an <code>Integer</code> type into a <code>PartyType</code> type.
  *
  * @author Marcus Portmann
  */

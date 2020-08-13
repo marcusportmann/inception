@@ -14,7 +14,15 @@
  * limitations under the License.
  */
 
-import {Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {fromEvent, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 
@@ -26,8 +34,10 @@ import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
       <div class="table-filter-icon">
         <i class="fa fa-search"></i>
       </div>
-      <input class="table-filter-input" matInput #tableFilterInput placeholder="Search..." autocomplete="off">
-      <button class="table-filter-reset" mat-icon-button *ngIf="changed | async" (click)="reset(true)">
+      <input class="table-filter-input" matInput #tableFilterInput placeholder="Search..."
+             autocomplete="off">
+      <button class="table-filter-reset" mat-icon-button *ngIf="changed | async"
+              (click)="reset(true)">
         <i class="fa fa-times"></i>
       </button>
     </div>
@@ -77,13 +87,10 @@ import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
 }) // tslint:disable-next-line
 export class TableFilterComponent implements OnInit, OnDestroy {
 
-  private tableFilterInputSubscription?: Subscription;
-
   @Output() changed: EventEmitter<string> = new EventEmitter<string>();
-
   filter = '';
-
   @ViewChild('tableFilterInput', {static: true}) tableFilterInput!: ElementRef;
+  private tableFilterInputSubscription?: Subscription;
 
   ngOnDestroy(): void {
     if (this.tableFilterInputSubscription) {
@@ -93,11 +100,11 @@ export class TableFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.tableFilterInputSubscription = fromEvent(this.tableFilterInput.nativeElement, 'keyup')
-      .pipe(debounceTime(250), distinctUntilChanged(), tap(() => {
-        this.filter = this.tableFilterInput.nativeElement.value;
-        this.changed.emit(this.filter);
-      }))
-      .subscribe();
+    .pipe(debounceTime(250), distinctUntilChanged(), tap(() => {
+      this.filter = this.tableFilterInput.nativeElement.value;
+      this.changed.emit(this.filter);
+    }))
+    .subscribe();
   }
 
   reset(emitEvent: boolean): void {

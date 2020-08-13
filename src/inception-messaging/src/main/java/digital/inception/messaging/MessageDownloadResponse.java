@@ -192,15 +192,6 @@ public class MessageDownloadResponse {
   }
 
   /**
-   * Set the result code.
-   *
-   * @param code the result code
-   */
-  public void setCode(long code) {
-    this.code = code;
-  }
-
-  /**
    * Return the user-friendly text description of the result of processing the message download
    * request.
    *
@@ -209,17 +200,6 @@ public class MessageDownloadResponse {
    */
   public String getDetail() {
     return detail;
-  }
-
-  /**
-   * Set the user-friendly text description of the result of processing the message download
-   * request.
-   *
-   * @param detail the user-friendly text description of the result of processing the message
-   *               download request
-   */
-  public void setDetail(String detail) {
-    this.detail = detail;
   }
 
   /**
@@ -234,6 +214,44 @@ public class MessageDownloadResponse {
   }
 
   /**
+   * Returns the messages being downloaded.
+   *
+   * @return the messages being downloaded
+   */
+  public List<Message> getMessages() {
+    return messages;
+  }
+
+  /**
+   * Returns the number of messages being downloaded.
+   *
+   * @return the number of messages being downloaded
+   */
+  public int getNumberOfMessages() {
+    return (messages != null) ? messages.size() : 0;
+  }
+
+  /**
+   * Set the result code.
+   *
+   * @param code the result code
+   */
+  public void setCode(long code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the user-friendly text description of the result of processing the message download
+   * request.
+   *
+   * @param detail the user-friendly text description of the result of processing the message
+   *               download request
+   */
+  public void setDetail(String detail) {
+    this.detail = detail;
+  }
+
+  /**
    * Set the flattened information for the exception that resulted from processing the message
    * download request.
    *
@@ -245,30 +263,12 @@ public class MessageDownloadResponse {
   }
 
   /**
-   * Returns the messages being downloaded.
-   *
-   * @return the messages being downloaded
-   */
-  public List<Message> getMessages() {
-    return messages;
-  }
-
-  /**
    * Set the messages being downloaded.
    *
    * @param messages the messages being downloaded
    */
   public void setMessages(List<Message> messages) {
     this.messages = messages;
-  }
-
-  /**
-   * Returns the number of messages being downloaded.
-   *
-   * @return the number of messages being downloaded
-   */
-  public int getNumberOfMessages() {
-    return (messages != null) ? messages.size() : 0;
   }
 
   /**

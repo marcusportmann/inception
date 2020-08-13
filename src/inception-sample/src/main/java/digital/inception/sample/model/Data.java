@@ -194,30 +194,12 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the date value for the data.
-   *
-   * @param dateValue the date value for the data
-   */
-  public void setDateValue(LocalDate dateValue) {
-    this.dateValue = dateValue;
-  }
-
-  /**
    * Returns the ID uniquely identifying the data.
    *
    * @return the ID uniquely identifying the data
    */
   public long getId() {
     return id;
-  }
-
-  /**
-   * Set the ID uniquely identifying the data.
-   *
-   * @param id the ID uniquely identifying the data
-   */
-  public void setId(long id) {
-    this.id = id;
   }
 
   /**
@@ -230,30 +212,12 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the integer value for the data.
-   *
-   * @param integerValue the integer value for the data
-   */
-  public void setIntegerValue(Integer integerValue) {
-    this.integerValue = integerValue;
-  }
-
-  /**
    * Returns the name for the data.
    *
    * @return the name for the data
    */
   public String getName() {
     return name;
-  }
-
-  /**
-   * Set the name for the data.
-   *
-   * @param name the name for the data
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**
@@ -266,30 +230,12 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the string value for the data.
-   *
-   * @param stringValue the string value for the data
-   */
-  public void setStringValue(String stringValue) {
-    this.stringValue = stringValue;
-  }
-
-  /**
    * Returns the timestamp value for the data.
    *
    * @return the timestamp value for the data
    */
   public LocalDateTime getTimestampValue() {
     return timestampValue;
-  }
-
-  /**
-   * Set the timestamp value for the data.
-   *
-   * @param timestampValue the timestamp value for the data
-   */
-  public void setTimestampValue(LocalDateTime timestampValue) {
-    this.timestampValue = timestampValue;
   }
 
   /**
@@ -300,6 +246,60 @@ public class Data implements Serializable {
   @Override
   public int hashCode() {
     return (int) (id ^ (id >>> 32));
+  }
+
+  /**
+   * Set the date value for the data.
+   *
+   * @param dateValue the date value for the data
+   */
+  public void setDateValue(LocalDate dateValue) {
+    this.dateValue = dateValue;
+  }
+
+  /**
+   * Set the ID uniquely identifying the data.
+   *
+   * @param id the ID uniquely identifying the data
+   */
+  public void setId(long id) {
+    this.id = id;
+  }
+
+  /**
+   * Set the integer value for the data.
+   *
+   * @param integerValue the integer value for the data
+   */
+  public void setIntegerValue(Integer integerValue) {
+    this.integerValue = integerValue;
+  }
+
+  /**
+   * Set the name for the data.
+   *
+   * @param name the name for the data
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the string value for the data.
+   *
+   * @param stringValue the string value for the data
+   */
+  public void setStringValue(String stringValue) {
+    this.stringValue = stringValue;
+  }
+
+  /**
+   * Set the timestamp value for the data.
+   *
+   * @param timestampValue the timestamp value for the data
+   */
+  public void setTimestampValue(LocalDateTime timestampValue) {
+    this.timestampValue = timestampValue;
   }
 
   /**

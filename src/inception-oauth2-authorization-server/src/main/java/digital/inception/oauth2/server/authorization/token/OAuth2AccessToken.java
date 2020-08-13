@@ -47,6 +47,11 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   public static final String FUNCTIONS_CLAIM = "functions";
 
   /**
+   * The name of the claim that provides the name of the user.
+   */
+  public static final String NAME_CLAIM = "name";
+
+  /**
    * The name of the organizations claim that provides the Universally Unique Identifiers (UUIDs)
    * uniquely identifying the organizations the user is associated with.
    */
@@ -67,11 +72,6 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
    * uniquely identifying the user directory the user is associated with.
    */
   public static final String USER_DIRECTORY_ID_CLAIM = "user_directory_id";
-
-  /**
-   * The name of the user full name claim that provides the full name of the user.
-   */
-  public static final String USER_FULL_NAME_CLAIM = "user_full_name";
 
   private static final long serialVersionUID = 1000000;
 
@@ -138,16 +138,12 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
         jwtClaimsSetBuilder.issuer(issuer);
       }
 
-      if ((!StringUtils.isEmpty(user.getFullName()))
-          && (!StringUtils.isEmpty(user.getFullName()))) {
-        jwtClaimsSetBuilder.claim(
-            USER_FULL_NAME_CLAIM, user.getFullName() + " " + user.getPreferredName());
-      } else if (!StringUtils.isEmpty(user.getFullName())) {
-        jwtClaimsSetBuilder.claim(USER_FULL_NAME_CLAIM, user.getFullName());
+      if (!StringUtils.isEmpty(user.getName())) {
+        jwtClaimsSetBuilder.claim(NAME_CLAIM, user.getName());
       } else if (!StringUtils.isEmpty(user.getEmail())) {
-        jwtClaimsSetBuilder.claim(USER_FULL_NAME_CLAIM, user.getEmail());
+        jwtClaimsSetBuilder.claim(NAME_CLAIM, user.getEmail());
       } else {
-        jwtClaimsSetBuilder.claim(USER_FULL_NAME_CLAIM, user.getUsername());
+        jwtClaimsSetBuilder.claim(NAME_CLAIM, user.getUsername());
       }
 
       jwtClaimsSetBuilder.claim(USER_DIRECTORY_ID_CLAIM, user.getUserDirectoryId().toString());

@@ -25,4 +25,6 @@ package digital.inception.reference;
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public interface IReferenceService {}
+public interface IReferenceService {
+
+}

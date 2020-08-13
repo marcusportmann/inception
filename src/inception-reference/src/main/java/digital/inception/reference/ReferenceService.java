@@ -36,6 +36,9 @@ public class ReferenceService implements IReferenceService {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReferenceService.class);
 
-  /** Constructs a new <code>ReferenceService</code>. */
-  public ReferenceService() {}
+  /**
+   * Constructs a new <code>ReferenceService</code>.
+   */
+  public ReferenceService() {
+  }
 }

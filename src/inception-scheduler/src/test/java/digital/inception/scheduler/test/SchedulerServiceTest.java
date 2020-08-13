@@ -50,16 +50,19 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-      DependencyInjectionTestExecutionListener.class,
-      DirtiesContextTestExecutionListener.class,
-      TransactionalTestExecutionListener.class
+        DependencyInjectionTestExecutionListener.class,
+        DirtiesContextTestExecutionListener.class,
+        TransactionalTestExecutionListener.class
     })
 public class SchedulerServiceTest {
 
   private static int jobCount;
 
-  /** The Scheduler Service. */
-  @Autowired private ISchedulerService schedulerService;
+  /**
+   * The Scheduler Service.
+   */
+  @Autowired
+  private ISchedulerService schedulerService;
 
   private static synchronized Job getTestJobDetails() {
     jobCount++;
@@ -82,7 +85,9 @@ public class SchedulerServiceTest {
     return job;
   }
 
-  /** Test the execute job functionality. */
+  /**
+   * Test the execute job functionality.
+   */
   @Test
   public void executeJobTest() throws Exception {
     Job job = getTestJobDetails();
@@ -90,7 +95,9 @@ public class SchedulerServiceTest {
     schedulerService.executeJob(job);
   }
 
-  /** Test the job parameters functionality. */
+  /**
+   * Test the job parameters functionality.
+   */
   @Test
   public void jobParametersTest() throws Exception {
     Job job = getTestJobDetails();
@@ -108,7 +115,9 @@ public class SchedulerServiceTest {
     compareJobs(job, retrievedJob);
   }
 
-  /** Test the job functionality. */
+  /**
+   * Test the job functionality.
+   */
   @Test
   public void jobTest() throws Exception {
     Job disabledJob = getTestJobDetails();
@@ -183,7 +192,8 @@ public class SchedulerServiceTest {
     }
 
     // noinspection StatementWithEmptyBody
-    while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
+    while (schedulerService.scheduleNextUnscheduledJobForExecution()) {
+    }
 
     unscheduledJobs = schedulerService.getUnscheduledJobs();
 

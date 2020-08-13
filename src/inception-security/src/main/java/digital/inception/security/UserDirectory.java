@@ -202,6 +202,61 @@ public class UserDirectory implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   *
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
+   */
+  public UUID getId() {
+    return id;
+  }
+
+  /**
+   * Returns the name of the user directory.
+   *
+   * @return the name of the user directory
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the organizations the user directory is associated with.
+   *
+   * @return the organizations the user directory is associated with
+   */
+  public Set<Organization> getOrganizations() {
+    return organizations;
+  }
+
+  /**
+   * Returns the parameters for the user directory.
+   *
+   * @return the parameters for the user directory
+   */
+  public List<UserDirectoryParameter> getParameters() {
+    return parameters;
+  }
+
+  /**
+   * Returns the code uniquely identifying the user directory type.
+   *
+   * @return the code uniquely identifying the user directory type
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
    * Set the XML configuration data for the user directory.
    *
    * @param configuration the XML configuration data for the user directory
@@ -245,30 +300,12 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
-   *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
-   */
-  public UUID getId() {
-    return id;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory.
    *
    * @param id the Universally Unique Identifier (UUID) uniquely identifying the user directory
    */
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   * Returns the name of the user directory.
-   *
-   * @return the name of the user directory
-   */
-  public String getName() {
-    return name;
   }
 
   /**
@@ -281,30 +318,12 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Returns the organizations the user directory is associated with.
-   *
-   * @return the organizations the user directory is associated with
-   */
-  public Set<Organization> getOrganizations() {
-    return organizations;
-  }
-
-  /**
    * Set the organizations the user directory is associated with.
    *
    * @param organizations the organizations the user directory is associated with
    */
   public void setOrganizations(Set<Organization> organizations) {
     this.organizations = organizations;
-  }
-
-  /**
-   * Returns the parameters for the user directory.
-   *
-   * @return the parameters for the user directory
-   */
-  public List<UserDirectoryParameter> getParameters() {
-    return parameters;
   }
 
   /**
@@ -317,30 +336,11 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Returns the code uniquely identifying the user directory type.
-   *
-   * @return the code uniquely identifying the user directory type
-   */
-  public String getType() {
-    return type;
-  }
-
-  /**
    * Set the code uniquely identifying the user directory type.
    *
    * @param type the code uniquely identifying the user directory type
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode() {
-    return (id == null) ? 0 : id.hashCode();
   }
 }

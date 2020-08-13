@@ -73,7 +73,9 @@ public class Groups implements Serializable {
   @XmlElement(name = "Filter")
   private String filter;
 
-  /** The groups. */
+  /**
+   * The groups.
+   */
   @Schema(description = "The groups", required = true)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Groups", required = true)

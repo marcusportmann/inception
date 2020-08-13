@@ -270,30 +270,12 @@ public class ArchivedMessage {
   }
 
   /**
-   * Set the date and time the message was archived.
-   *
-   * @param archived the date and time the message was archived
-   */
-  public void setArchived(LocalDateTime archived) {
-    this.archived = archived;
-  }
-
-  /**
    * Returns the Universally Unique Identifier (UUID) used to correlate the message.
    *
    * @return the Universally Unique Identifier (UUID) used to correlate the message
    */
   public UUID getCorrelationId() {
     return correlationId;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) used to correlate the message.
-   *
-   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   */
-  public void setCorrelationId(UUID correlationId) {
-    this.correlationId = correlationId;
   }
 
   /**
@@ -306,30 +288,12 @@ public class ArchivedMessage {
   }
 
   /**
-   * Set the date and time the message was created.
-   *
-   * @param created the date and time the message was created
-   */
-  public void setCreated(LocalDateTime created) {
-    this.created = created;
-  }
-
-  /**
    * Returns the data for the message which may be encrypted.
    *
    * @return the data for the message which may be encrypted
    */
   public byte[] getData() {
     return data;
-  }
-
-  /**
-   * Set the data for the message which may be encrypted.
-   *
-   * @param data the data for the message which may be encrypted
-   */
-  public void setData(byte[] data) {
-    this.data = data;
   }
 
   /**
@@ -344,6 +308,79 @@ public class ArchivedMessage {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the message.
+   *
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the message
+   */
+  public UUID getId() {
+    return id;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the type of message.
+   *
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   */
+  public UUID getTypeId() {
+    return typeId;
+  }
+
+  /**
+   * Returns the username identifying the user associated with the message.
+   *
+   * @return the username identifying the user associated with the message
+   */
+  public String getUsername() {
+    return username;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return (id == null) ? 0 : id.hashCode();
+  }
+
+  /**
+   * Set the date and time the message was archived.
+   *
+   * @param archived the date and time the message was archived
+   */
+  public void setArchived(LocalDateTime archived) {
+    this.archived = archived;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) used to correlate the message.
+   *
+   * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
+   */
+  public void setCorrelationId(UUID correlationId) {
+    this.correlationId = correlationId;
+  }
+
+  /**
+   * Set the date and time the message was created.
+   *
+   * @param created the date and time the message was created
+   */
+  public void setCreated(LocalDateTime created) {
+    this.created = created;
+  }
+
+  /**
+   * Set the data for the message which may be encrypted.
+   *
+   * @param data the data for the message which may be encrypted
+   */
+  public void setData(byte[] data) {
+    this.data = data;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) uniquely identifying the device the message
    * originated from.
    *
@@ -355,30 +392,12 @@ public class ArchivedMessage {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the message.
-   *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the message
-   */
-  public UUID getId() {
-    return id;
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) uniquely identifying the message.
    *
    * @param id the Universally Unique Identifier (UUID) uniquely identifying the message
    */
   public void setId(UUID id) {
     this.id = id;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the type of message.
-   *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the type of message
-   */
-  public UUID getTypeId() {
-    return typeId;
   }
 
   /**
@@ -392,31 +411,12 @@ public class ArchivedMessage {
   }
 
   /**
-   * Returns the username identifying the user associated with the message.
-   *
-   * @return the username identifying the user associated with the message
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
    * Set the username identifying the user associated with the message.
    *
    * @param username the username identifying the user associated with the message
    */
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  /**
-   * Returns a hash code value for the object.
-   *
-   * @return a hash code value for the object
-   */
-  @Override
-  public int hashCode() {
-    return (id == null) ? 0 : id.hashCode();
   }
 
   /**

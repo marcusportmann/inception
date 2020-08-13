@@ -588,6 +588,99 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
+   * Returns the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code>
+   * instance.
+   *
+   * @return the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public BigDecimal getDecimalValue() throws UserDirectoryParameterException {
+    try {
+      return new BigDecimal(value);
+    } catch (Throwable e) {
+      throw new UserDirectoryParameterException(
+          String.format(
+              "Failed to retrieve the decimal value for the user directory parameter (%s)", name));
+    }
+  }
+
+  /**
+   * Returns the <code>double</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>double</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public double getDoubleValue() throws UserDirectoryParameterException {
+    try {
+      return Double.parseDouble(value);
+    } catch (Throwable e) {
+      throw new UserDirectoryParameterException(
+          String.format(
+              "Failed to retrieve the double value for the user directory parameter (%s)", name));
+    }
+  }
+
+  /**
+   * Returns the <code>int</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>int</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public int getIntegerValue() throws UserDirectoryParameterException {
+    try {
+      return Integer.parseInt(value);
+    } catch (Throwable e) {
+      throw new UserDirectoryParameterException(
+          String.format(
+              "Failed to retrieve the integer value for the user directory parameter (%s)", name));
+    }
+  }
+
+  /**
+   * Returns the <code>long</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>long</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public long getLongValue() throws UserDirectoryParameterException {
+    try {
+      return Long.parseLong(value);
+    } catch (Throwable e) {
+      throw new UserDirectoryParameterException(
+          String.format(
+              "Failed to retrieve the long value for the user directory parameter (%s)", name));
+    }
+  }
+
+  /**
+   * Returns the name for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the name for the <code>UserDirectoryParameter</code> instance
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  @JsonIgnore
+  public String getStringValue() {
+    return value;
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>UserDirectoryParameter</code> instance.
+   *
+   * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
+   */
+  public String getValue() {
+    return value;
+  }
+
+  /**
    * Set the binary value for the user directory parameter.
    *
    * @param value the binary value for the user directory parameter
@@ -608,20 +701,13 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code>
-   * instance.
+   * Set the <code>boolean</code> value for the user directory parameter.
    *
-   * @return the <code>BigDecimal</code> value for the <code>UserDirectoryParameter</code> instance
+   * @param value the <code>boolean</code> value for the user directory parameter
    */
   @JsonIgnore
-  public BigDecimal getDecimalValue() throws UserDirectoryParameterException {
-    try {
-      return new BigDecimal(value);
-    } catch (Throwable e) {
-      throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the decimal value for the user directory parameter (%s)", name));
-    }
+  public void setBooleanValue(boolean value) {
+    this.value = String.valueOf(value);
   }
 
   /**
@@ -635,22 +721,6 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>double</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>double</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public double getDoubleValue() throws UserDirectoryParameterException {
-    try {
-      return Double.parseDouble(value);
-    } catch (Throwable e) {
-      throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the double value for the user directory parameter (%s)", name));
-    }
-  }
-
-  /**
    * Set the <code>double</code> value for the user directory parameter.
    *
    * @param value the <code>double</code> value for the user directory parameter
@@ -658,22 +728,6 @@ public class UserDirectoryParameter implements Serializable {
   @JsonIgnore
   public void setDoubleValue(double value) {
     this.value = String.valueOf(value);
-  }
-
-  /**
-   * Returns the <code>int</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>int</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public int getIntegerValue() throws UserDirectoryParameterException {
-    try {
-      return Integer.parseInt(value);
-    } catch (Throwable e) {
-      throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the integer value for the user directory parameter (%s)", name));
-    }
   }
 
   /**
@@ -687,22 +741,6 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>long</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>long</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public long getLongValue() throws UserDirectoryParameterException {
-    try {
-      return Long.parseLong(value);
-    } catch (Throwable e) {
-      throw new UserDirectoryParameterException(
-          String.format(
-              "Failed to retrieve the long value for the user directory parameter (%s)", name));
-    }
-  }
-
-  /**
    * Set the <code>long</code> value for the user directory parameter.
    *
    * @param value the <code>long</code> value for the user directory parameter
@@ -713,31 +751,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the name for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the name for the <code>UserDirectoryParameter</code> instance
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
    * Set the name for the user directory parameter.
    *
    * @param name the name for the user directory parameter
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Returns the <code>String</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  @JsonIgnore
-  public String getStringValue() {
-    return value;
   }
 
   /**
@@ -751,30 +770,11 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>String</code> value for the <code>UserDirectoryParameter</code> instance.
-   *
-   * @return the <code>String</code> value for the <code>UserDirectoryParameter</code> instance
-   */
-  public String getValue() {
-    return value;
-  }
-
-  /**
    * Set the <code>String</code> value for the user directory parameter.
    *
    * @param value the <code>String</code> value for the user directory parameter
    */
   public void setValue(String value) {
     this.value = value;
-  }
-
-  /**
-   * Set the <code>boolean</code> value for the user directory parameter.
-   *
-   * @param value the <code>boolean</code> value for the user directory parameter
-   */
-  @JsonIgnore
-  public void setBooleanValue(boolean value) {
-    this.value = String.valueOf(value);
   }
 }

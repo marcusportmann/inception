@@ -535,6 +535,89 @@ public class Attribute implements Serializable {
   }
 
   /**
+   * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance
+   */
+  public BigDecimal getDecimalValue() throws AttributeException {
+    try {
+      return new BigDecimal(value);
+    } catch (Throwable e) {
+      throw new AttributeException(
+          String.format("Failed to retrieve the decimal value for the attribute (%s)", name));
+    }
+  }
+
+  /**
+   * Returns the <code>double</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>double</code> value for the <code>Attribute</code> instance
+   */
+  public double getDoubleValue() throws AttributeException {
+    try {
+      return Double.parseDouble(value);
+    } catch (Throwable e) {
+      throw new AttributeException(
+          String.format("Failed to retrieve the double value for the attribute (%s)", name));
+    }
+  }
+
+  /**
+   * Returns the <code>int</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>int</code> value for the <code>Attribute</code> instance
+   */
+  public int getIntegerValue() throws AttributeException {
+    try {
+      return Integer.parseInt(value);
+    } catch (Throwable e) {
+      throw new AttributeException(
+          String.format("Failed to retrieve the integer value for the attribute (%s)", name));
+    }
+  }
+
+  /**
+   * Returns the <code>long</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>long</code> value for the <code>Attribute</code> instance
+   */
+  public long getLongValue() throws AttributeException {
+    try {
+      return Long.parseLong(value);
+    } catch (Throwable e) {
+      throw new AttributeException(
+          String.format("Failed to retrieve the long value for the attribute (%s)", name));
+    }
+  }
+
+  /**
+   * Returns the name for the <code>Attribute</code> instance.
+   *
+   * @return the name for the <code>Attribute</code> instance
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>String</code> value for the <code>Attribute</code> instance
+   */
+  public String getStringValue() {
+    return value;
+  }
+
+  /**
+   * Returns the <code>String</code> value for the <code>Attribute</code> instance.
+   *
+   * @return the <code>String</code> value for the <code>Attribute</code> instance
+   */
+  public String getValue() {
+    return value;
+  }
+
+  /**
    * Set the binary value for the attribute.
    *
    * @param value the binary value for the attribute
@@ -553,40 +636,12 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Returns the <code>BigDecimal</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance
-   */
-  public BigDecimal getDecimalValue() throws AttributeException {
-    try {
-      return new BigDecimal(value);
-    } catch (Throwable e) {
-      throw new AttributeException(
-          String.format("Failed to retrieve the decimal value for the attribute (%s)", name));
-    }
-  }
-
-  /**
    * Set the <code>BigDecimal</code> value for the attribute.
    *
    * @param value the <code>BigDecimal</code> value for the attribute
    */
   public void setDecimalValue(BigDecimal value) {
     this.value = String.valueOf(value);
-  }
-
-  /**
-   * Returns the <code>double</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>double</code> value for the <code>Attribute</code> instance
-   */
-  public double getDoubleValue() throws AttributeException {
-    try {
-      return Double.parseDouble(value);
-    } catch (Throwable e) {
-      throw new AttributeException(
-          String.format("Failed to retrieve the double value for the attribute (%s)", name));
-    }
   }
 
   /**
@@ -599,40 +654,12 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Returns the <code>int</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>int</code> value for the <code>Attribute</code> instance
-   */
-  public int getIntegerValue() throws AttributeException {
-    try {
-      return Integer.parseInt(value);
-    } catch (Throwable e) {
-      throw new AttributeException(
-          String.format("Failed to retrieve the integer value for the attribute (%s)", name));
-    }
-  }
-
-  /**
    * Set the <code>int</code> value for the attribute.
    *
    * @param value the <code>int</code> value for the attribute
    */
   public void setIntegerValue(int value) {
     this.value = String.valueOf(value);
-  }
-
-  /**
-   * Returns the <code>long</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>long</code> value for the <code>Attribute</code> instance
-   */
-  public long getLongValue() throws AttributeException {
-    try {
-      return Long.parseLong(value);
-    } catch (Throwable e) {
-      throw new AttributeException(
-          String.format("Failed to retrieve the long value for the attribute (%s)", name));
-    }
   }
 
   /**
@@ -645,15 +672,6 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Returns the name for the <code>Attribute</code> instance.
-   *
-   * @return the name for the <code>Attribute</code> instance
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
    * Set the name for the attribute.
    *
    * @param name the name for the attribute
@@ -663,29 +681,11 @@ public class Attribute implements Serializable {
   }
 
   /**
-   * Returns the <code>String</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>String</code> value for the <code>Attribute</code> instance
-   */
-  public String getStringValue() {
-    return value;
-  }
-
-  /**
    * Set the <code>String</code> value for the attribute.
    *
    * @param value the <code>String</code> value for the attribute
    */
   public void setStringValue(String value) {
     this.value = value;
-  }
-
-  /**
-   * Returns the <code>String</code> value for the <code>Attribute</code> instance.
-   *
-   * @return the <code>String</code> value for the <code>Attribute</code> instance
-   */
-  public String getValue() {
-    return value;
   }
 }

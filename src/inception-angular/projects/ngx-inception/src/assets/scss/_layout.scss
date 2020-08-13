@@ -151,7 +151,7 @@ admin-root {
           background-image: $admin-header-user-icon;
         }
 
-        .user-full-name {
+        .user-name {
           display: inline-block;
           color: $admin-header-color;
           padding-left: 6px;
@@ -164,7 +164,7 @@ admin-root {
           cursor: pointer;
         }
 
-        &:hover .user-full-name {
+        &:hover .user-name {
           color: $admin-header-hover-color;
           cursor: pointer;
         }

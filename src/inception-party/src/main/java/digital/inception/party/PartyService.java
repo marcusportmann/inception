@@ -40,36 +40,50 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class PartyService implements IPartyService {
 
-  /** The maximum number of filtered organizations. */
+  /**
+   * The maximum number of filtered organizations.
+   */
   private static final int MAX_FILTERED_ORGANISATIONS = 100;
 
-  /** The maximum number of filtered parties. */
+  /**
+   * The maximum number of filtered parties.
+   */
   private static final int MAX_FILTERED_PARTIES = 100;
 
-  /** The maximum number of filtered persons. */
+  /**
+   * The maximum number of filtered persons.
+   */
   private static final int MAX_FILTERED_PERSONS = 100;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(PartyService.class);
 
-  /** The Spring application context. */
+  /**
+   * The Spring application context.
+   */
   private final ApplicationContext applicationContext;
 
-  /** The Organization Repository. */
+  /**
+   * The Organization Repository.
+   */
   private final OrganizationRepository organizationRepository;
 
-  /** The Party Repository. */
+  /**
+   * The Party Repository.
+   */
   private final PartyRepository partyRepository;
 
-  /** The Person Repository. */
+  /**
+   * The Person Repository.
+   */
   private final PersonRepository personRepository;
 
   /**
    * Constructs a new <code>PartyService</code>.
    *
-   * @param applicationContext the Spring application context
-   * @param partyRepository the Party Repository
-   * @param personRepository the Person Repository
+   * @param applicationContext     the Spring application context
+   * @param partyRepository        the Party Repository
+   * @param personRepository       the Person Repository
    * @param organizationRepository the Organization Repository
    */
   public PartyService(
@@ -152,7 +166,7 @@ public class PartyService implements IPartyService {
    * Delete the organization.
    *
    * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   *                       organization
    */
   @Override
   public void deleteOrganization(UUID organizationId)
@@ -214,10 +228,11 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the organizations.
    *
-   * @param filter the optional filter to apply to the organizations
+   * @param filter        the optional filter to apply to the organizations
    * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the organizations
    */
   @Override
@@ -259,10 +274,11 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the parties.
    *
-   * @param filter the optional filter to apply to the parties
+   * @param filter        the optional filter to apply to the parties
    * @param sortDirection the optional sort direction to apply to the parties
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the parties
    */
   @Override
@@ -304,11 +320,12 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the persons.
    *
-   * @param filter the optional filter to apply to the persons
-   * @param sortBy the optional method used to sort the persons e.g. by full name
+   * @param filter        the optional filter to apply to the persons
+   * @param sortBy        the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction to apply to the persons
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
+   * @param pageIndex     the optional page index
+   * @param pageSize      the optional page size
+   *
    * @return the persons
    */
   @Override
@@ -331,7 +348,7 @@ public class PartyService implements IPartyService {
         pageSize = MAX_FILTERED_PERSONS;
       }
 
-      if (sortBy == PersonSortBy.FULL_NAME) {
+      if (sortBy == PersonSortBy.NAME) {
         pageRequest =
             PageRequest.of(
                 pageIndex,
@@ -339,7 +356,7 @@ public class PartyService implements IPartyService {
                 (sortDirection == SortDirection.ASCENDING)
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
-                "fullName");
+                "name");
       } else if (sortBy == PersonSortBy.PREFERRED_NAME) {
         pageRequest =
             PageRequest.of(
