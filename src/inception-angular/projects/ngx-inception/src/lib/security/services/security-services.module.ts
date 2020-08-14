@@ -16,59 +16,36 @@
 
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoreModule} from '../core/core.module';
-import {CanActivateFunctionGuard} from './routing/can-activate-function-guard';
-import {DisabledFunctionGuard} from './routing/disabled-function-guard';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {SecurityInterceptor} from './services/security.interceptor';
-import {HasAuthorityDirective} from './directives/has-authority.directive';
+import {SecurityInterceptor} from './security.interceptor';
+import {SecurityService} from "./security.service";
 
 /**
- * The SecurityViewsModule class implements the Inception Security Module.
+ * The SecurityServicesModule class implements the Inception Security Services Module.
  *
  * @author Marcus Portmann
  */
 @NgModule({
-  declarations: [
-
-    // Directives
-    HasAuthorityDirective
-  ],
+  declarations: [],
   imports: [
-
     // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule.forRoot()
+    CommonModule, HttpClientModule
   ],
-  exports: [
-
-    // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule,
-
-    // Directives
-    HasAuthorityDirective
-  ]
+  exports: []
 })
-export class SecurityModule {
+export class SecurityServicesModule {
   constructor() {
   }
 
-  static forRoot(): ModuleWithProviders<SecurityModule> {
+  static forRoot(): ModuleWithProviders<SecurityServicesModule> {
     return {
-      ngModule: SecurityModule,
+      ngModule: SecurityServicesModule,
       providers: [{
         provide: HTTP_INTERCEPTORS,
         useClass: SecurityInterceptor,
         multi: true
       },
-
-        // Function Guards
-        CanActivateFunctionGuard, DisabledFunctionGuard
+        SecurityService
       ]
     };
   }

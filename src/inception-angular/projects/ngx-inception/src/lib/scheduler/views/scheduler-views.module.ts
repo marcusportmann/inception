@@ -27,10 +27,7 @@ import {EditJobComponent} from './edit-job.component';
 import {NewJobComponent} from './new-job.component';
 import {JobParameterDialogComponent} from './job-parameter-dialog.component';
 import {CanActivateFunctionGuard} from '../../security/routing/can-activate-function-guard';
-import {ConfigurationModule} from '../../configuration/configuration.module';
 import {CoreModule} from '../../core/core.module';
-import {DialogModule} from '../../dialog/dialog.module';
-import {LayoutModule} from '../../layout/layout.module';
 
 const routes: Routes = [{
   path: 'jobs',
@@ -89,25 +86,21 @@ const routes: Routes = [{
 
 @NgModule({
   declarations: [
-
     // Components
     EditJobComponent, JobParameterDialogComponent, JobsComponent, NewJobComponent
   ],
   entryComponents: [
-
     // Components
     JobParameterDialogComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    ConfigurationModule.forRoot(), CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot()
+    CoreModule
   ],
   providers: [
-
     // Resolvers
     JobsTitleResolver, JobTitleResolver, EditJobTitleResolver, NewJobTitleResolver
   ]

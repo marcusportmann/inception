@@ -21,34 +21,8 @@ import {
   PerfectScrollbarModule
 } from 'ngx-perfect-scrollbar';
 import {CommonModule} from '@angular/common';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatButtonModule} from '@angular/material/button';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatCardModule} from '@angular/material/card';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatListModule} from '@angular/material/list';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatSelectModule} from '@angular/material/select';
-import {MatSliderModule} from '@angular/material/slider';
-import {MatSortModule} from '@angular/material/sort';
-import {MatTableModule} from '@angular/material/table';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatTooltipModule} from '@angular/material/tooltip';
 import {CoreModule} from '../core/core.module';
-import {DialogModule} from '../dialog/dialog.module';
 import {RouterModule} from '@angular/router';
-import {SecurityModule} from '../security/security.module';
 import {AdminContainerComponent} from './components/admin-container.component';
 import {AdminFooterComponent} from './components/admin-footer.component';
 import {AdminHeaderComponent} from './components/admin-header.component';
@@ -72,6 +46,10 @@ import {SidebarNavDropdownDirective} from './directives/sidebar-nav-dropdown.dir
 import {SidebarNavDropdownTogglerDirective} from './directives/sidebar-nav-dropdown-toggler.directive';
 import {SidebarOffCanvasCloseDirective} from './directives/sidebar-off-canvas-close.directive';
 import {SidebarTogglerDirective} from './directives/sidebar-toggler.directive';
+import {BreadcrumbsService} from "./services/breadcrumbs.service";
+import {NavigationService} from "./services/navigation.service";
+import {SpinnerService} from "./services/spinner.service";
+import {TitleBarService} from "./services/title-bar.service";
 
 const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -84,19 +62,19 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
  */
 @NgModule({
   declarations: [
-
     // Components
-    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent, NotFoundComponent,
-    SidebarComponent, SidebarFooterComponent, SidebarFormComponent, SidebarHeaderComponent, SidebarMinimizerComponent,
-    SidebarNavComponent, SidebarNavDropdownComponent, SidebarNavItemComponent, SimpleContainerComponent,
+    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
+    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
+    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
+    SidebarNavDropdownComponent, SidebarNavItemComponent, SimpleContainerComponent,
     SpinnerComponent, TitleBarComponent,
 
     // Directives
-    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective, SidebarNavDropdownDirective,
-    SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective, SidebarTogglerDirective
+    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
+    SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
+    SidebarTogglerDirective
   ],
   imports: [
-
     // Angular modules
     CommonModule, RouterModule,
 
@@ -104,17 +82,10 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // ChartsModule,
     PerfectScrollbarModule,
 
-    // Material modules
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule,
-    MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatRadioModule,
-    MatSelectModule, MatSliderModule, MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
-
     // Inception modules
-    CoreModule.forRoot(), DialogModule.forRoot(), SecurityModule.forRoot()
+    CoreModule
   ],
   exports: [
-
     // Angular modules
     CommonModule, RouterModule,
 
@@ -122,24 +93,20 @@ const INCEPTION_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // ChartsModule,
     PerfectScrollbarModule,
 
-    // Material modules
-    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
-    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule, MatIconModule,
-    MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatRadioModule,
-    MatSelectModule, MatSliderModule, MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
-
     // Inception modules
-    CoreModule, DialogModule, SecurityModule,
+    CoreModule,
 
     // Components
-    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent, NotFoundComponent,
-    SidebarComponent, SidebarFooterComponent, SidebarFormComponent, SidebarHeaderComponent, SidebarMinimizerComponent,
-    SidebarNavComponent, SidebarNavDropdownComponent, SidebarNavItemComponent, SimpleContainerComponent,
+    AdminContainerComponent, AdminFooterComponent, AdminHeaderComponent, BreadcrumbsComponent,
+    NotFoundComponent, SidebarComponent, SidebarFooterComponent, SidebarFormComponent,
+    SidebarHeaderComponent, SidebarMinimizerComponent, SidebarNavComponent,
+    SidebarNavDropdownComponent, SidebarNavItemComponent, SimpleContainerComponent,
     SpinnerComponent, TitleBarComponent,
 
     // Directives
-    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective, SidebarNavDropdownDirective,
-    SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective, SidebarTogglerDirective
+    BrandMinimizerDirective, MobileSidebarTogglerDirective, SidebarMinimizerDirective,
+    SidebarNavDropdownDirective, SidebarNavDropdownTogglerDirective, SidebarOffCanvasCloseDirective,
+    SidebarTogglerDirective
   ],
   entryComponents: [SpinnerComponent]
 })
@@ -153,7 +120,11 @@ export class LayoutModule {
       providers: [{
         provide: PERFECT_SCROLLBAR_CONFIG,
         useValue: INCEPTION_PERFECT_SCROLLBAR_CONFIG
-      }
+      },
+        BreadcrumbsService,
+        NavigationService,
+        SpinnerService,
+        TitleBarService
       ]
     };
   }

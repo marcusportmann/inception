@@ -99,42 +99,42 @@ export class ResetPasswordComponent implements OnInit {
       this.spinnerService.showSpinner();
 
       this.securityService.resetPassword(username, newPassword, this.securityCode)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+
+        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
+          {
+            message: 'Your password was successfully changed.'
+          });
+
+        dialogRef.afterClosed()
+        .pipe(first())
         .subscribe(() => {
-
-          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-            {
-              message: 'Your password was successfully changed.'
-            });
-
-          dialogRef.afterClosed()
-            .pipe(first())
-            .subscribe(() => {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['..'], {
-                relativeTo: this.activatedRoute,
-                state: {username}
-              });
-            });
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['..'], {
+            relativeTo: this.activatedRoute,
+            state: {username}
+          });
         });
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 
   ngOnInit(): void {
     this.activatedRoute.queryParams
-      .pipe(first())
-      .subscribe((params: Params) => {
-        this.usernameFormControl.setValue(params.username);
-        this.securityCode = params.securityCode;
-      });
+    .pipe(first())
+    .subscribe((params: Params) => {
+      this.usernameFormControl.setValue(params.username);
+      this.securityCode = params.securityCode;
+    });
   }
 }

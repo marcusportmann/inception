@@ -25,12 +25,8 @@ import {EditReportDefinitionTitleResolver} from './edit-report-definition-title-
 import {ReportDefinitionsTitleResolver} from './report-definitions-title-resolver';
 import {NewReportDefinitionTitleResolver} from './new-report-definition-title-resolver';
 import {ReportDefinitionTitleResolver} from './report-definition-title-resolver';
-import {ConfigurationModule} from '../../configuration/configuration.module';
 import {CoreModule} from '../../core/core.module';
-import {DialogModule} from '../../dialog/dialog.module';
-import {LayoutModule} from '../../layout/layout.module';
 import {CanActivateFunctionGuard} from '../../security/routing/can-activate-function-guard';
-import {ReportingTitleResolver} from './reporting-title-resolver';
 
 const routes: Routes = [{
   path: 'report-definitions',
@@ -91,23 +87,20 @@ const routes: Routes = [{
 
 @NgModule({
   declarations: [
-
     // Components
     EditReportDefinitionComponent, ReportDefinitionsComponent, NewReportDefinitionComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    ConfigurationModule.forRoot(), CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot()
+    CoreModule
   ],
   providers: [
-
     // Resolvers
-    EditReportDefinitionTitleResolver, NewReportDefinitionTitleResolver, ReportDefinitionsTitleResolver,
-    ReportDefinitionTitleResolver
+    EditReportDefinitionTitleResolver, NewReportDefinitionTitleResolver,
+    ReportDefinitionsTitleResolver, ReportDefinitionTitleResolver
   ]
 })
 export class ReportingViewsModule {

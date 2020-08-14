@@ -49,22 +49,14 @@ import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-
 export class GroupMembersComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  private subscriptions: Subscription = new Subscription();
-
   dataSource: GroupMemberDatasource;
-
   displayedColumns = ['memberName', 'memberType', 'actions'];
-
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
-
   @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
-
   userDirectoryId: string;
-
   groupName: string;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
@@ -162,9 +154,9 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     }));
 
     this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(tap(() => {
-        this.loadGroupMembers();
-      })).subscribe());
+    .pipe(tap(() => {
+      this.loadGroupMembers();
+    })).subscribe());
 
     this.loadGroupMembers();
   }
@@ -179,29 +171,29 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
     });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.securityService.removeMemberFromGroup(this.userDirectoryId, this.groupName, groupMember.memberType,
-            groupMember.memberName)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.loadGroupMembers();
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
+        this.securityService.removeMemberFromGroup(this.userDirectoryId, this.groupName, groupMember.memberType,
+          groupMember.memberName)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadGroupMembers();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
 
-        }
-      });
+      }
+    });
   }
 }
 

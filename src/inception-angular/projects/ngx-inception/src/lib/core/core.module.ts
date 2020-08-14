@@ -14,36 +14,39 @@
  * limitations under the License.
  */
 
-import {Injector, ModuleWithProviders, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {ObserversModule} from '@angular/cdk/observers';
-import {CommonModule, HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/material/form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatRadioModule} from '@angular/material/radio';
-import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {setInceptionInjector} from './inception-injector';
 import {FormsModule} from '@angular/forms';
 import {FileUploadComponent} from './components/file-upload.component';
 import {TableFilterComponent} from './components/table-filter.component';
 import {AutofocusDirective} from './directives/autofocus.directive';
 import {ValidatedFormDirective} from './directives/validated-form.directive';
 import {GroupFormFieldComponent} from "./components/group-form-field.component";
-
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
-export const INCEPTION_DATE_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'LL',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
+import {MatCardModule} from "@angular/material/card";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatTableModule} from "@angular/material/table";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatGridListModule} from "@angular/material/grid-list";
+import {MatIconModule} from "@angular/material/icon";
+import {MatInputModule} from "@angular/material/input";
+import {MatListModule} from "@angular/material/list";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatSelectModule} from "@angular/material/select";
+import {MatSliderModule} from "@angular/material/slider";
+import {MatSortModule} from "@angular/material/sort";
+import {MatTabsModule} from "@angular/material/tabs";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -52,7 +55,6 @@ export const INCEPTION_DATE_FORMATS = {
  */
 @NgModule({
   declarations: [
-
     // Components
     FileUploadComponent, GroupFormFieldComponent, TableFilterComponent,
 
@@ -60,7 +62,6 @@ export const INCEPTION_DATE_FORMATS = {
     AutofocusDirective, ValidatedFormDirective
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule,
 
@@ -68,15 +69,22 @@ export const INCEPTION_DATE_FORMATS = {
     ObserversModule,
 
     // Material modules
-    MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatRadioModule
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
+    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule,
+    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule,
+    MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule,
+    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule
   ],
   exports: [
-
     // Angular modules
     CommonModule, FormsModule,
 
     // Material modules
-    MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatRadioModule,
+    MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule,
+    MatDatepickerModule, MatDialogModule, MatExpansionModule, MatFormFieldModule, MatGridListModule,
+    MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatPaginatorModule,
+    MatProgressBarModule, MatRadioModule, MatSelectModule, MatSliderModule, MatSortModule,
+    MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule,
 
     // Components
     FileUploadComponent, GroupFormFieldComponent, TableFilterComponent,
@@ -86,31 +94,6 @@ export const INCEPTION_DATE_FORMATS = {
   ]
 })
 export class CoreModule {
-  constructor(injector: Injector) {
-    setInceptionInjector(injector);
-  }
-
-  static forRoot(): ModuleWithProviders<CoreModule> {
-    return {
-      ngModule: CoreModule,
-      providers: [{
-        provide: LocationStrategy,
-        useClass: HashLocationStrategy,
-      }, {
-        provide: DateAdapter,
-        useClass: MomentDateAdapter,
-        deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-      }, {
-        provide: MAT_DATE_FORMATS,
-        useValue: INCEPTION_DATE_FORMATS
-      }, {
-        provide: MAT_DATE_LOCALE,
-        useValue: 'en-GB'
-      }, {
-        provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-        useValue: {appearance: 'standard'}
-      }
-      ]
-    };
+  constructor() {
   }
 }

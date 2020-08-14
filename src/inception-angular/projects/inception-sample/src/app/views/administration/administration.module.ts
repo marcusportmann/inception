@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
@@ -87,14 +86,16 @@ const routes: Routes = [{
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes)
+  imports: [
+    // Angular modules
+    CommonModule, RouterModule.forChild(routes)
   ],
   declarations: [AdministrationComponent],
   providers: [
 
     // Resolvers
-    CodeCategoriesTitleResolver, ConfigurationsTitleResolver, MailTitleResolver, ReportingTitleResolver,
-    SchedulerTitleResolver, SecurityTitleResolver, SystemTitleResolver
+    CodeCategoriesTitleResolver, ConfigurationsTitleResolver, MailTitleResolver,
+    ReportingTitleResolver, SchedulerTitleResolver, SecurityTitleResolver, SystemTitleResolver
   ]
 })
 export class AdministrationModule {

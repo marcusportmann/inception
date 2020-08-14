@@ -16,40 +16,32 @@
 
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
+import {ErrorService} from "./error.service";
 
 /**
- * The MailViewsModule class implements the Inception Mail Module.
+ * The ErrorServicesModule class implements the Inception Error Services Module.
  *
  * @author Marcus Portmann
  */
 @NgModule({
   declarations: [],
   imports: [
-
     // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule.forRoot()
+    CommonModule, HttpClientModule
   ],
-  exports: [
-
-    // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule
-  ]
+  exports: []
 })
-export class MailModule {
+export class ErrorServicesModule {
   constructor() {
   }
 
-  static forRoot(): ModuleWithProviders<MailModule> {
+  static forRoot(): ModuleWithProviders<ErrorServicesModule> {
     return {
-      ngModule: MailModule
+      ngModule: ErrorServicesModule,
+      providers: [
+        ErrorService
+      ]
     };
   }
 }

@@ -122,20 +122,20 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView imp
 
       this.securityService.addUserDirectoryToOrganization(this.organizationId,
         this.newUserDirectoryFormControl.value.id)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          this.loadUserDirectoriesForOrganization();
-          this.newUserDirectoryFormControl.setValue('');
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        this.loadUserDirectoriesForOrganization();
+        this.newUserDirectoryFormControl.setValue('');
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 
@@ -164,28 +164,28 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView imp
     this.spinnerService.showSpinner();
 
     this.securityService.getUserDirectorySummariesForOrganization(this.organizationId)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((userDirectorySummaries: UserDirectorySummary[]) => {
-        this.dataSource.data = userDirectorySummaries;
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((userDirectorySummaries: UserDirectorySummary[]) => {
+      this.dataSource.data = userDirectorySummaries;
 
-        const availableUserDirectories = OrganizationUserDirectoriesComponent.calculateAvailableUserDirectories(
-          this.allUserDirectories, this.dataSource.data);
+      const availableUserDirectories = OrganizationUserDirectoriesComponent.calculateAvailableUserDirectories(
+        this.allUserDirectories, this.dataSource.data);
 
-        this.subscriptions.add(this.newUserDirectoryFormControl.valueChanges.pipe(startWith(''), map((value) => {
-          this.filteredUserDirectories$.next(this.filterUserDirectories(availableUserDirectories, value));
-        })).subscribe());
+      this.subscriptions.add(this.newUserDirectoryFormControl.valueChanges.pipe(startWith(''), map((value) => {
+        this.filteredUserDirectories$.next(this.filterUserDirectories(availableUserDirectories, value));
+      })).subscribe());
 
-        this.availableUserDirectories$.next(availableUserDirectories);
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.availableUserDirectories$.next(availableUserDirectories);
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -195,21 +195,21 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView imp
     this.spinnerService.showSpinner();
 
     this.securityService.getUserDirectorySummaries()
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((userDirectorySummaries: UserDirectorySummaries) => {
-        this.allUserDirectories = userDirectorySummaries.userDirectorySummaries;
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((userDirectorySummaries: UserDirectorySummaries) => {
+      this.allUserDirectories = userDirectorySummaries.userDirectorySummaries;
 
-        this.loadUserDirectoriesForOrganization();
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+      this.loadUserDirectoriesForOrganization();
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -222,28 +222,28 @@ export class OrganizationUserDirectoriesComponent extends AdminContainerView imp
     });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.securityService.removeUserDirectoryFromOrganization(this.organizationId, userDirectoryId)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.loadUserDirectoriesForOrganization();
-              this.newUserDirectoryFormControl.setValue('');
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+        this.securityService.removeUserDirectoryFromOrganization(this.organizationId, userDirectoryId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadUserDirectoriesForOrganization();
+          this.newUserDirectoryFormControl.setValue('');
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
   }
 
   private filterUserDirectories(userDirectories: UserDirectorySummary[],

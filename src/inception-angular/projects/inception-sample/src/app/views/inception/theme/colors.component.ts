@@ -55,7 +55,7 @@ export class ColorsComponent implements OnInit {
 
     cssText = cssText.substring(cssText.lastIndexOf('{') + 1, cssText.lastIndexOf('}'));
     // tslint:disable-next-line
-    cssText.split(';').forEach(function(property) {
+    cssText.split(';').forEach(function (property) {
       if (property) {
         const name = property.split(': ')[0];
         const value = property.split(': ')[1];

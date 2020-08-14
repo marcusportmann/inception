@@ -61,10 +61,8 @@ import {GroupRolesTitleResolver} from './group-roles-title-resolver';
 import {OrganizationUserDirectoriesComponent} from './organization-user-directories.component';
 import {OrganizationUserDirectoriesTitleResolver} from './organization-user-directories-title-resolver';
 import {CanActivateFunctionGuard} from '../routing/can-activate-function-guard';
-import {ConfigurationModule} from '../../configuration/configuration.module';
 import {CoreModule} from '../../core/core.module';
-import {DialogModule} from '../../dialog/dialog.module';
-import {LayoutModule} from '../../layout/layout.module';
+import {SecurityDirectivesModule} from "../directives/security-directives.module";
 
 const routes: Routes = [{
   path: '',
@@ -335,24 +333,22 @@ const routes: Routes = [{
 
 @NgModule({
   declarations: [
-
     // Components
-    EditGroupComponent, EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent, GroupMembersComponent,
-    GroupRolesComponent, GroupsComponent, InternalUserDirectoryComponent, LdapUserDirectoryComponent, NewGroupComponent,
-    NewOrganizationComponent, NewUserComponent, NewUserDirectoryComponent, OrganizationsComponent,
-    OrganizationUserDirectoriesComponent, ResetUserPasswordComponent, SecurityOverviewComponent,
-    UserDirectoriesComponent, UserGroupsComponent, UsersComponent
+    EditGroupComponent, EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent,
+    GroupMembersComponent, GroupRolesComponent, GroupsComponent, InternalUserDirectoryComponent,
+    LdapUserDirectoryComponent, NewGroupComponent, NewOrganizationComponent, NewUserComponent,
+    NewUserDirectoryComponent, OrganizationsComponent, OrganizationUserDirectoriesComponent,
+    ResetUserPasswordComponent, SecurityOverviewComponent, UserDirectoriesComponent,
+    UserGroupsComponent, UsersComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    ConfigurationModule.forRoot(), CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot()
+    CoreModule, SecurityDirectivesModule
   ],
   providers: [
-
     // Resolvers
     EditGroupTitleResolver, EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver,
     GroupMembersTitleResolver, GroupRolesTitleResolver, GroupTitleResolver, GroupsTitleResolver, NewGroupTitleResolver,

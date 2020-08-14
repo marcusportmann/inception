@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-
 import {DashboardComponent} from './dashboard.component';
 
 // Import 3rd party modules
@@ -31,11 +29,11 @@ const routes: Routes = [{
 ];
 
 @NgModule({
-  imports: [CommonModule,
+  imports: [
+    // Angular modules
+    CommonModule, RouterModule.forChild(routes),
 
-    // ChartsModule,
-
-    RouterModule.forChild(routes)
+    // Inception modules
   ],
   declarations: [DashboardComponent]
 })

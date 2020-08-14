@@ -26,9 +26,6 @@ import {EditMailTemplateComponent} from './edit-mail-template.component';
 import {EditMailTemplateTitleResolver} from './edit-mail-template-title-resolver';
 import {MailTemplatesTitleResolver} from './mail-templates-title-resolver';
 import {CoreModule} from '../../core/core.module';
-import {DialogModule} from '../../dialog/dialog.module';
-import {LayoutModule} from '../../layout/layout.module';
-import {MailModule} from '../mail.module';
 import {CanActivateFunctionGuard} from '../../security/routing/can-activate-function-guard';
 
 const routes: Routes = [{
@@ -86,22 +83,20 @@ const routes: Routes = [{
 
 @NgModule({
   declarations: [
-
     // Components
     EditMailTemplateComponent, MailTemplatesComponent, NewMailTemplateComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot(), MailModule.forRoot()
+    CoreModule
   ],
   providers: [
-
     // Resolvers
-    MailTemplatesTitleResolver, MailTemplateTitleResolver, EditMailTemplateTitleResolver, NewMailTemplateTitleResolver
+    MailTemplatesTitleResolver, MailTemplateTitleResolver, EditMailTemplateTitleResolver,
+    NewMailTemplateTitleResolver
   ]
 })
 export class MailViewsModule {

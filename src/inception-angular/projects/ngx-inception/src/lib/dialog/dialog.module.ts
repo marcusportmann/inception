@@ -23,6 +23,7 @@ import {ConfirmationDialogComponent} from './components/confirmation-dialog.comp
 import {ErrorDialogComponent} from './components/error-dialog.component';
 import {InformationDialogComponent} from './components/information-dialog.component';
 import {WarningDialogComponent} from './components/warning-dialog.component';
+import {DialogService} from "./services/dialog.service";
 
 /**
  * The DialogModule class implements the Inception Dialog Module.
@@ -31,36 +32,20 @@ import {WarningDialogComponent} from './components/warning-dialog.component';
  */
 @NgModule({
   declarations: [
-
     // Components
     ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule,
 
-    // Material modules
-    MatButtonModule, MatDialogModule,
-
     // Inception modules
-    CoreModule.forRoot()
+    CoreModule
   ],
-  exports: [
-
-    // Angular modules
-    CommonModule,
-
-    // Material modules
-    MatButtonModule, MatDialogModule,
-
-    // Inception modules
-    CoreModule,
-
+  exports: [],
+  entryComponents: [
     // Components
-    ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent, WarningDialogComponent
-  ],
-  entryComponents: [ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
+    ConfirmationDialogComponent, ErrorDialogComponent, InformationDialogComponent,
     WarningDialogComponent
   ]
 })
@@ -70,7 +55,10 @@ export class DialogModule {
 
   static forRoot(): ModuleWithProviders<DialogModule> {
     return {
-      ngModule: DialogModule
+      ngModule: DialogModule,
+      providers: [
+        DialogService
+      ]
     };
   }
 }

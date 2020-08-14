@@ -80,31 +80,31 @@ export class ForgottenPasswordComponent {
       this.spinnerService.showSpinner();
 
       this.securityService.initiatePasswordReset(username, resetPasswordUrl)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
-            {
-              message: 'The password reset process was initiated. Please check your e-mail to proceed.'
-            });
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        const dialogRef: MatDialogRef<InformationDialogComponent, boolean> = this.dialogService.showInformationDialog(
+          {
+            message: 'The password reset process was initiated. Please check your e-mail to proceed.'
+          });
 
-          dialogRef.afterClosed()
-            .pipe(first())
-            .subscribe((confirmation: boolean | undefined) => {
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['..'], {
-                relativeTo: this.activatedRoute
-              });
-            });
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
+        dialogRef.afterClosed()
+        .pipe(first())
+        .subscribe((confirmation: boolean | undefined) => {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigate(['..'], {
+            relativeTo: this.activatedRoute
+          });
         });
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 }

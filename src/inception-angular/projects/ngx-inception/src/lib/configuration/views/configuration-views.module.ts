@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-// Import Inception module
-
 import {RouterModule, Routes} from '@angular/router';
-
 import {ConfigurationsComponent} from './configurations.component';
 import {EditConfigurationComponent} from './edit-configuration.component';
 import {NewConfigurationComponent} from './new-configuration.component';
@@ -30,9 +26,6 @@ import {NewConfigurationTitleResolver} from './new-configuration-title-resolver'
 import {EditConfigurationTitleResolver} from './edit-configuration-title-resolver';
 import {ConfigurationTitleResolver} from './configuration-title-resolver';
 import {CoreModule} from '../../core/core.module';
-import {DialogModule} from '../../dialog/dialog.module';
-import {LayoutModule} from '../../layout/layout.module';
-import {ConfigurationModule} from '../configuration.module';
 import {CanActivateFunctionGuard} from '../../security/routing/can-activate-function-guard';
 
 const routes: Routes = [{
@@ -80,20 +73,17 @@ const routes: Routes = [{
 
 @NgModule({
   declarations: [
-
     // Components
     ConfigurationsComponent, EditConfigurationComponent, NewConfigurationComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    ConfigurationModule.forRoot(), CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot()
+    CoreModule
   ],
   providers: [
-
     // Resolvers
     ConfigurationTitleResolver, ConfigurationsTitleResolver, EditConfigurationTitleResolver,
     NewConfigurationTitleResolver

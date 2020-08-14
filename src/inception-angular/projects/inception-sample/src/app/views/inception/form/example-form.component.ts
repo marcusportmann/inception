@@ -46,16 +46,11 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
   static readonly MIN_DATE = new Date(1900, 1, 1);
 
   static readonly MAX_DATE = Date.now();
-
-  private subscriptions: Subscription = new Subscription();
-
   exampleForm: FormGroup;
-
   titles: Array<Title> = [new Title('Mr', 'Mr'), new Title('Mrs', 'Mrs'), new Title('Ms', 'Ms')];
-
   countryOptions = ['Botswana', 'Namibia', 'Mozambique', 'South Africa', 'Swaziland', 'Zimbabwe'];
-
   filteredCountryOptions$: Subject<string[]> = new ReplaySubject<string[]>();
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) {
 
@@ -84,9 +79,9 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
 
     if (favoriteCountryControl) {
       this.subscriptions.add(favoriteCountryControl.valueChanges
-        .pipe(startWith(''), map(value => {
-          this.filteredCountryOptions$.next(this.filter(value));
-        })).subscribe());
+      .pipe(startWith(''), map(value => {
+        this.filteredCountryOptions$.next(this.filter(value));
+      })).subscribe());
     }
   }
 

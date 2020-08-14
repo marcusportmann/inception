@@ -8,12 +8,12 @@ export * from './lib/inception-app.module';
 export * from './lib/inception-config';
 
 // Codes
-export * from './lib/codes/codes.module';
+export * from './lib/codes/services/codes-services.module';
 export * from './lib/codes/views/code-categories-title-resolver';
 export * from './lib/codes/views/codes-views.module';
 
 // Configuration
-export * from './lib/configuration/configuration.module';
+export * from './lib/configuration/services/configuration-services.module';
 export * from './lib/configuration/views/configurations-title-resolver';
 export * from './lib/configuration/views/configuration-views.module';
 
@@ -35,7 +35,7 @@ export * from './lib/core/errors/validation-error';
 
 // Dialog
 export * from './lib/dialog/dialog.module';
-export * from './lib/dialog/dialog-data';
+export * from './lib/dialog/services/dialog-data';
 export * from './lib/dialog/components/confirmation-dialog.component';
 export * from './lib/dialog/components/error-dialog.component';
 export * from './lib/dialog/components/information-dialog.component';
@@ -43,7 +43,7 @@ export * from './lib/dialog/components/warning-dialog.component';
 export * from './lib/dialog/services/dialog.service';
 
 // Error
-export * from './lib/error/error.module';
+export * from './lib/error/services/error-services.module';
 export * from './lib/error/views/error-views.module';
 
 // Layout
@@ -80,22 +80,22 @@ export * from './lib/layout/services/spinner.service';
 export * from './lib/layout/services/title-bar.service';
 
 // Mail
-export * from './lib/mail/mail.module';
+export * from './lib/mail/services/mail-services.module';
 export * from './lib/mail/views/mail-title-resolver';
 export * from './lib/mail/views/mail-views.module';
 
 // Reporting
-export * from './lib/reporting/reporting.module';
+export * from './lib/reporting/services/reporting-services.module';
 export * from './lib/reporting/views/reporting-title-resolver';
 export * from './lib/reporting/views/reporting-views.module';
 
 // Scheduler
-export * from './lib/scheduler/scheduler.module';
+export * from './lib/scheduler/services/scheduler-services.module';
 export * from './lib/scheduler/views/scheduler-title-resolver';
 export * from './lib/scheduler/views/scheduler-views.module';
 
 // Security
-export * from './lib/security/security.module';
+export * from './lib/security/services/security-services.module';
 export * from './lib/security/directives/has-authority.directive';
 export * from './lib/security/routing/can-activate-function-guard';
 export * from './lib/security/routing/disabled-function-guard';

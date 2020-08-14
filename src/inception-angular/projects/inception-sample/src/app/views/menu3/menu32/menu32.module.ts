@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception classes
 import {Menu321Component} from './menu321.component';
 import {Menu322Component} from './menu322.component';
 import {Menu321TitleResolver} from './menu321-title-resolver';

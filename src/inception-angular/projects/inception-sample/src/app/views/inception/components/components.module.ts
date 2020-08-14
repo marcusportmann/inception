@@ -14,36 +14,22 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception module
-import {InceptionModule} from 'ngx-inception';
-// Buttons component
+import {CoreModule} from 'ngx-inception';
 import {ButtonsComponent} from './buttons.component';
-// Cards component
 import {CardsComponent} from './cards.component';
-// Charts Component
 import {ChartsComponent} from './charts.component';
-// Expansion Panels Component
 import {ExpansionPanelsComponent} from './expansion-panels.component';
-// Grid List Component
 import {GridListComponent} from './grid-list.component';
-// List Component
 import {ListsComponent} from './lists.component';
-// Progress Component
 import {ProgressComponent} from './progress.component';
-// Switches Component
 import {SwitchesComponent} from './switches.component';
-// Tabs Component
 import {TabsComponent} from './tabs.component';
-// Tooltips Component
 import {TooltipsComponent} from './tooltips.component';
 import {DialogsComponent} from './dialogs.component';
-
 
 const routes: Routes = [{
   path: '',
@@ -118,21 +104,16 @@ const routes: Routes = [{
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule,
+  imports: [
+    // Angular modules
+    CommonModule, FormsModule, RouterModule.forChild(routes),
 
-    // CollapseModule.forRoot(),
-    // PaginationModule.forRoot(),
-    // PopoverModule.forRoot(),
-    // ProgressbarModule.forRoot(),
-    // TabsModule.forRoot(),
-    // TooltipModule.forRoot(),
-
-    InceptionModule,
-
-    RouterModule.forChild(routes)
+    // Inception modules
+    CoreModule
   ],
-  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, DialogsComponent, ExpansionPanelsComponent,
-    GridListComponent, ListsComponent, ProgressComponent, SwitchesComponent, TabsComponent, TooltipsComponent
+  declarations: [ButtonsComponent, CardsComponent, ChartsComponent, DialogsComponent,
+    ExpansionPanelsComponent, GridListComponent, ListsComponent, ProgressComponent,
+    SwitchesComponent, TabsComponent, TooltipsComponent
   ]
 })
 export class ComponentsModule {

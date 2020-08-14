@@ -15,9 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {DialogService} from 'ngx-inception';
-import {Error} from 'ngx-inception';
-import {ConfirmationDialogComponent} from 'ngx-inception';
+import {ConfirmationDialogComponent, DialogService, Error} from 'ngx-inception';
 import {MatDialogRef} from '@angular/material/dialog';
 import {first} from 'rxjs/operators';
 
@@ -44,9 +42,9 @@ export class DialogsComponent {
       {message: 'Perform the action?'});
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-      });
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+    });
   }
 
   error(): void {

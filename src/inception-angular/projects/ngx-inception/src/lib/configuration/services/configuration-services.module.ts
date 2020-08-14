@@ -16,41 +16,33 @@
 
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
-import {ReportingService} from './services/reporting.service';
+
+import {ConfigurationService} from "./configuration.service";
 
 /**
- * The ReportingViewsModule class implements the Inception Reporting Module.
+ * The ConfigurationServicesModule class implements the Inception Configuration Service Module.
  *
  * @author Marcus Portmann
  */
 @NgModule({
   declarations: [],
   imports: [
-
     // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule.forRoot()
+    CommonModule, HttpClientModule
   ],
-  exports: [
-
-    // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule
-  ]
+  exports: []
 })
-export class ReportingModule {
+export class ConfigurationServicesModule {
   constructor() {
   }
 
-  static forRoot(): ModuleWithProviders<ReportingModule> {
+  static forRoot(): ModuleWithProviders<ConfigurationServicesModule> {
     return {
-      ngModule: ReportingModule
+      ngModule: ConfigurationServicesModule,
+      providers: [
+        ConfigurationService
+      ]
     };
   }
 }

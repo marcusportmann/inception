@@ -45,21 +45,14 @@ import {v4 as uuid} from 'uuid';
 })
 export class NewUserDirectoryComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
-  private subscriptions: Subscription = new Subscription();
-
   nameFormControl: FormControl;
-
   newUserDirectoryForm: FormGroup;
-
   @ViewChild(InternalUserDirectoryComponent) internalUserDirectory?: InternalUserDirectoryComponent;
-
   @ViewChild(LdapUserDirectoryComponent) ldapUserDirectory?: LdapUserDirectoryComponent;
-
   userDirectory?: UserDirectory;
-
   userDirectoryTypeFormControl: FormControl;
-
   userDirectoryTypes: UserDirectoryType[] = [];
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private router: Router,
               private activatedRoute: ActivatedRoute, private securityService: SecurityService,
@@ -77,10 +70,10 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
     });
 
     this.subscriptions.add(this.userDirectoryTypeFormControl.valueChanges
-      .pipe(startWith(null), pairwise())
-      .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
-        this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
-      }));
+    .pipe(startWith(null), pairwise())
+    .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
+      this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
+    }));
   }
 
   get backNavigation(): BackNavigation {
@@ -100,20 +93,20 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
     this.spinnerService.showSpinner();
 
     this.securityService.getUserDirectoryTypes()
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((userDirectoryTypes: UserDirectoryType[]) => {
-        this.userDirectoryTypes = userDirectoryTypes;
-        this.userDirectory = new UserDirectory(uuid(), '', '', []);
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((userDirectoryTypes: UserDirectoryType[]) => {
+      this.userDirectoryTypes = userDirectoryTypes;
+      this.userDirectory = new UserDirectory(uuid(), '', '', []);
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -132,20 +125,20 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
       this.spinnerService.showSpinner();
 
       this.securityService.createUserDirectory(this.userDirectory)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['..'], {relativeTo: this.activatedRoute});
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
     }
   }
 

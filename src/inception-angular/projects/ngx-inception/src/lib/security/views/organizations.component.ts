@@ -46,18 +46,12 @@ import {Error} from '../../core/errors/error';
 export class OrganizationsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  private subscriptions: Subscription = new Subscription();
-
   dataSource: OrganizationDatasource;
-
   displayedColumns = ['name', 'actions'];
-
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
-
   @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
@@ -76,27 +70,27 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
     });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.securityService.deleteOrganization(organizationId)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.loadOrganizations();
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+        this.securityService.deleteOrganization(organizationId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadOrganizations();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
   }
 
   editOrganization(organizationId: string): void {
@@ -154,9 +148,9 @@ export class OrganizationsComponent extends AdminContainerView implements AfterV
     }));
 
     this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(tap(() => {
-        this.loadOrganizations();
-      })).subscribe());
+    .pipe(tap(() => {
+      this.loadOrganizations();
+    })).subscribe());
 
     this.loadOrganizations();
   }

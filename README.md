@@ -545,7 +545,7 @@ Complete the following steps to create a new application based on the Inception 
       npm install --save bootstrap@4
       npm install --save jquery@3
       npm install --save moment@2
-      npm install --save ngx-perfect-scrollbar@9
+      npm install --save ngx-perfect-scrollbar@10
       npm install --save string-template@1
       npm install --save uuid@8
 

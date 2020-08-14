@@ -14,30 +14,21 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-
 import {RouterModule, Routes} from '@angular/router';
-
 import {CoreModule} from '../../core/core.module';
-import {LayoutModule} from '../../layout/layout.module';
-
 import {LoginComponent} from './login.component';
 import {SelectOrganizationComponent} from './select-organization.component';
 import {ExpiredPasswordComponent} from './expired-password.component';
 import {ForgottenPasswordComponent} from './forgotten-password.component';
 import {ResetPasswordComponent} from './reset-password.component';
-// Import Inception resolvers
 import {ExpiredPasswordTitleResolver} from './expired-password-title-resolver';
 import {ForgottenPasswordTitleResolver} from './forgotten-password-title-resolver';
 import {LoginTitleResolver} from './login-title-resolver';
 import {ResetPasswordTitleResolver} from './reset-password-title-resolver';
 import {SelectOrganizationTitleResolver} from './select-organization-title-resolver';
-import {DialogModule} from '../../dialog/dialog.module';
-import {SecurityModule} from '../security.module';
-
 
 const routes: Routes = [{
   path: '',
@@ -74,21 +65,18 @@ const routes: Routes = [{
 
 @NgModule({
   declarations: [
-
     // Components
     ExpiredPasswordComponent, ForgottenPasswordComponent, LoginComponent, ResetPasswordComponent,
     SelectOrganizationComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot(), SecurityModule.forRoot()
+    CoreModule
   ],
   providers: [
-
     // Resolvers
     ExpiredPasswordTitleResolver, ForgottenPasswordTitleResolver, LoginTitleResolver, ResetPasswordTitleResolver,
     SelectOrganizationTitleResolver

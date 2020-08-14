@@ -16,41 +16,32 @@
 
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
-import {SchedulerService} from './services/scheduler.service';
+import {ReportingService} from "./reporting.service";
 
 /**
- * The SchedulerViewsModule class implements the Inception Scheduler Module.
+ * The ReportingServicesModule class implements the Inception Reporting Services Module.
  *
  * @author Marcus Portmann
  */
 @NgModule({
   declarations: [],
   imports: [
-
     // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule.forRoot()
+    CommonModule, HttpClientModule
   ],
-  exports: [
-
-    // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule
-  ]
+  exports: []
 })
-export class SchedulerModule {
+export class ReportingServicesModule {
   constructor() {
   }
 
-  static forRoot(): ModuleWithProviders<SchedulerModule> {
+  static forRoot(): ModuleWithProviders<ReportingServicesModule> {
     return {
-      ngModule: SchedulerModule
+      ngModule: ReportingServicesModule,
+      providers: [
+        ReportingService
+      ]
     };
   }
 }

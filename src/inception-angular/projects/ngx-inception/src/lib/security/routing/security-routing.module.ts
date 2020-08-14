@@ -16,40 +16,33 @@
 
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoreModule} from '../core/core.module';
-import {HttpClientModule} from '@angular/common/http';
+import {DisabledFunctionGuard} from "./disabled-function-guard";
+import {CanActivateFunctionGuard} from "./can-activate-function-guard";
 
 /**
- * The ConfigurationViewsModule class implements the Inception Configuration Module.
+ * The SecurityRoutingModule class implements the Inception Security Routing Module.
  *
  * @author Marcus Portmann
  */
 @NgModule({
   declarations: [],
   imports: [
-
     // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule.forRoot()
+    CommonModule,
   ],
-  exports: [
-
-    // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule
-  ]
+  exports: []
 })
-export class ConfigurationModule {
+export class SecurityRoutingModule {
   constructor() {
   }
 
-  static forRoot(): ModuleWithProviders<ConfigurationModule> {
+  static forRoot(): ModuleWithProviders<SecurityRoutingModule> {
     return {
-      ngModule: ConfigurationModule
+      ngModule: SecurityRoutingModule,
+      providers: [
+        // Function Guards
+        CanActivateFunctionGuard, DisabledFunctionGuard
+      ]
     };
   }
 }

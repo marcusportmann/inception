@@ -15,10 +15,8 @@
  */
 
 import {Component} from '@angular/core';
-import {Error} from 'ngx-inception';
+import {Error, SpinnerService} from 'ngx-inception';
 import {Router} from '@angular/router';
-import {DialogService} from "../../../../../ngx-inception/src/lib/dialog/services/dialog.service";
-import {SpinnerService} from 'ngx-inception';
 
 /**
  * The Menu21Component class implements the menu 2.1 component.
@@ -27,20 +25,22 @@ import {SpinnerService} from 'ngx-inception';
  */
 @Component({
   template: `
-  <mat-card class="flex-grow-1">
-    <mat-card-content>
-      <div class="row">
-        <div class="col m-1">
-          <button mat-flat-button color="primary" (click)="testErrorReporting()">Test Error Reporting</button>
+    <mat-card class="flex-grow-1">
+      <mat-card-content>
+        <div class="row">
+          <div class="col m-1">
+            <button mat-flat-button color="primary" (click)="testErrorReporting()">Test Error
+              Reporting
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col m-1">
-          <button mat-flat-button color="primary" (click)="testSpinner()">Test Spinner</button>
+        <div class="row">
+          <div class="col m-1">
+            <button mat-flat-button color="primary" (click)="testSpinner()">Test Spinner</button>
+          </div>
         </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+      </mat-card-content>
+    </mat-card>
   `
 })
 export class Menu21Component {
@@ -55,7 +55,7 @@ export class Menu21Component {
     this.router.navigateByUrl('/error/send-error-report', {state: {error}});
   }
 
-  testSpinner():  void {
+  testSpinner(): void {
     this.spinnerService.showSpinner();
 
     setTimeout(() => {

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 
@@ -22,8 +21,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {Menu21Component} from './menu21.component';
 import {Menu22Component} from './menu22.component';
 import {CoreModule} from 'ngx-inception';
-import {LayoutModule} from 'ngx-inception';
-import {InceptionModule} from 'ngx-inception';
 
 const routes: Routes = [{
   path: '',
@@ -51,13 +48,11 @@ const routes: Routes = [{
  */
 @NgModule({
   imports: [
-
     // Angular modules
     CommonModule, RouterModule.forChild(routes),
 
     // Inception modules
-    //CoreModule.forRoot(), LayoutModule.forRoot()
-    InceptionModule
+    CoreModule
   ],
   declarations: [Menu21Component, Menu22Component]
 })

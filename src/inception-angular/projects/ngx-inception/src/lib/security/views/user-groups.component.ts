@@ -44,23 +44,15 @@ import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-
 })
 export class UserGroupsComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
-  private subscriptions: Subscription = new Subscription();
-
   allGroupNames: string[] = [];
-
   availableGroupNames$: Subject<string[]> = new ReplaySubject<string[]>();
-
   dataSource = new MatTableDataSource<string>([]);
-
   displayedColumns = ['existingGroupName', 'actions'];
-
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-
   selectedGroupName = '';
-
   userDirectoryId: string;
-
   username: string;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
@@ -101,6 +93,85 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
       this.securityService.addMemberToGroup(this.userDirectoryId, this.selectedGroupName, GroupMemberType.User,
         this.username)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        this.loadGroupNamesForUser();
+        this.selectedGroupName = '';
+      }, (error: Error) => {
+        // noinspection SuspiciousTypeOfGuard
+        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+          (error instanceof SystemUnavailableError)) {
+          // noinspection JSIgnoredPromiseFromCall
+          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+        } else {
+          this.dialogService.showErrorDialog(error);
+        }
+      });
+    }
+  }
+
+  loadGroupNamesForUser(): void {
+    this.spinnerService.showSpinner();
+
+    this.securityService.getGroupNamesForUser(this.userDirectoryId, this.username)
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((groupNamesForUser: string[]) => {
+      this.dataSource.data = groupNamesForUser;
+
+      this.availableGroupNames$.next(this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data));
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+
+    // Retrieve the existing user and initialise the form fields
+    this.spinnerService.showSpinner();
+
+    this.securityService.getGroupNames(this.userDirectoryId)
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((groupNames: string[]) => {
+      this.allGroupNames = groupNames;
+
+      this.loadGroupNamesForUser();
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  removeUserFromGroup(groupName: string) {
+    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
+      message: 'Are you sure you want to remove the user from the group?'
+    });
+
+    dialogRef.afterClosed()
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
+
+        this.securityService.removeMemberFromGroup(this.userDirectoryId, groupName, GroupMemberType.User,
+          this.username)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe(() => {
           this.loadGroupNamesForUser();
@@ -115,87 +186,8 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
             this.dialogService.showErrorDialog(error);
           }
         });
-    }
-  }
-
-  loadGroupNamesForUser(): void {
-    this.spinnerService.showSpinner();
-
-    this.securityService.getGroupNamesForUser(this.userDirectoryId, this.username)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((groupNamesForUser: string[]) => {
-        this.dataSource.data = groupNamesForUser;
-
-        this.availableGroupNames$.next(this.calculateAvailableGroupNames(this.allGroupNames, this.dataSource.data));
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
-  }
-
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-
-    // Retrieve the existing user and initialise the form fields
-    this.spinnerService.showSpinner();
-
-    this.securityService.getGroupNames(this.userDirectoryId)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((groupNames: string[]) => {
-        this.allGroupNames = groupNames;
-
-        this.loadGroupNamesForUser();
-      }, (error: Error) => {
-        // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-        } else {
-          this.dialogService.showErrorDialog(error);
-        }
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
-  }
-
-  removeUserFromGroup(groupName: string) {
-    const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to remove the user from the group?'
+      }
     });
-
-    dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
-
-          this.securityService.removeMemberFromGroup(this.userDirectoryId, groupName, GroupMemberType.User,
-            this.username)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.loadGroupNamesForUser();
-              this.selectedGroupName = '';
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
   }
 
   private calculateAvailableGroupNames(allGroupNames: string[], existingGroupNames: string[]): string[] {

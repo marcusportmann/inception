@@ -16,7 +16,7 @@
 
 import {Component, HostBinding, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {DialogData} from '../dialog-data';
+import {DialogData} from '../services/dialog-data';
 
 /**
  * The InformationDialogComponent class implements the information dialog component.

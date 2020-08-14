@@ -16,40 +16,32 @@
 
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoreModule} from '../core/core.module';
 import {HttpClientModule} from '@angular/common/http';
+import {MailService} from "./mail.service";
 
 /**
- * The CodesViewsModule class implements the Inception Codes Module.
+ * The MailServicesModule class implements the Inception Mail Services Module.
  *
  * @author Marcus Portmann
  */
 @NgModule({
   declarations: [],
   imports: [
-
     // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule.forRoot()
+    CommonModule, HttpClientModule
   ],
-  exports: [
-
-    // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule
-  ]
+  exports: []
 })
-export class CodesModule {
+export class MailServicesModule {
   constructor() {
   }
 
-  static forRoot(): ModuleWithProviders<CodesModule> {
+  static forRoot(): ModuleWithProviders<MailServicesModule> {
     return {
-      ngModule: CodesModule
+      ngModule: MailServicesModule,
+      providers: [
+        MailService
+      ]
     };
   }
 }

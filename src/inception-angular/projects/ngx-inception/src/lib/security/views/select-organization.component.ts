@@ -33,13 +33,10 @@ import {Session} from '../services/session';
 })
 export class SelectOrganizationComponent implements OnInit, OnDestroy {
 
-  private subscriptions: Subscription = new Subscription();
-
   organizationFormControl: FormControl;
-
   selectOrganizationForm: FormGroup;
-
   filteredOrganizations$: Subject<Organization[]> = new ReplaySubject<Organization[]>();
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute,
               private securityService: SecurityService) {
@@ -76,37 +73,37 @@ export class SelectOrganizationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap
-      .pipe(first(), map(() => window.history.state))
-      .subscribe((state) => {
-        if (state.organizations) {
-          this.subscriptions.add(this.organizationFormControl.valueChanges.pipe(startWith(''), map((value) => {
-            this.filteredOrganizations$.next(this.filterOrganizations(state.organizations, value));
-          })).subscribe());
-        } else {
-          console.log('No organizations found, invalidating session and redirecting to the application root');
+    .pipe(first(), map(() => window.history.state))
+    .subscribe((state) => {
+      if (state.organizations) {
+        this.subscriptions.add(this.organizationFormControl.valueChanges.pipe(startWith(''), map((value) => {
+          this.filteredOrganizations$.next(this.filterOrganizations(state.organizations, value));
+        })).subscribe());
+      } else {
+        console.log('No organizations found, invalidating session and redirecting to the application root');
 
-          // TODO: Invalidate session -- MARCUS
+        // TODO: Invalidate session -- MARCUS
 
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['/']);
-        }
-      });
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   ok(): void {
     if (this.selectOrganizationForm.valid) {
       this.securityService.session$
-        .pipe(first())
-        .subscribe((session: Session | null) => {
-          if (session) {
-            if (typeof this.organizationFormControl.value === 'object') {
-              session.organization = (this.organizationFormControl.value as Organization);
+      .pipe(first())
+      .subscribe((session: Session | null) => {
+        if (session) {
+          if (typeof this.organizationFormControl.value === 'object') {
+            session.organization = (this.organizationFormControl.value as Organization);
 
-              // noinspection JSIgnoredPromiseFromCall
-              this.router.navigate(['/']);
-            }
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['/']);
           }
-        });
+        }
+      });
     }
   }
 

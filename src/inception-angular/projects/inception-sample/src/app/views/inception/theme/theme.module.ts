@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception module
-import {InceptionModule} from 'ngx-inception';
-// Colors component
+import {CoreModule} from 'ngx-inception';
 import {ColorsComponent} from '../theme/colors.component';
-// Typography Component
 import {TypographyComponent} from '../theme/typography.component';
 
 const routes: Routes = [{
@@ -46,11 +41,12 @@ const routes: Routes = [{
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule,
+  imports: [
+    // Angular modules
+    CommonModule, FormsModule, RouterModule.forChild(routes),
 
-    InceptionModule,
-
-    RouterModule.forChild(routes)
+    // Inception modules
+    CoreModule
   ],
   declarations: [ColorsComponent, TypographyComponent]
 })

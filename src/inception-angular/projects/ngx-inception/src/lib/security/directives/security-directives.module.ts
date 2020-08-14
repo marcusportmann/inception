@@ -14,42 +14,30 @@
  * limitations under the License.
  */
 
-import {ModuleWithProviders, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CoreModule} from '../core/core.module';
-import {HttpClientModule} from '@angular/common/http';
+import {HasAuthorityDirective} from "./has-authority.directive";
 
 /**
- * The ErrorViewsModule class implements the Inception Error Module.
+ * The SecurityDirectivesModule class implements the Inception Security Directives Module.
  *
  * @author Marcus Portmann
  */
 @NgModule({
-  declarations: [],
+  declarations: [
+    // Directives
+    HasAuthorityDirective
+  ],
   imports: [
-
     // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule.forRoot()
+    CommonModule
   ],
   exports: [
-
-    // Angular modules
-    CommonModule, HttpClientModule,
-
-    // Inception modules
-    CoreModule
+    // Directives
+    HasAuthorityDirective
   ]
 })
-export class ErrorModule {
+export class SecurityDirectivesModule {
   constructor() {
-  }
-
-  static forRoot(): ModuleWithProviders<ErrorModule> {
-    return {
-      ngModule: ErrorModule
-    };
   }
 }

@@ -88,11 +88,34 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
     this.spinnerService.showSpinner();
 
     this.securityService.getOrganization(this.organizationId)
-      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-      .subscribe((organization: Organization) => {
-        this.organization = organization;
+    .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+    .subscribe((organization: Organization) => {
+      this.organization = organization;
 
-        this.nameFormControl.setValue(organization.name);
+      this.nameFormControl.setValue(organization.name);
+    }, (error: Error) => {
+      // noinspection SuspiciousTypeOfGuard
+      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+        (error instanceof SystemUnavailableError)) {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+      } else {
+        this.dialogService.showErrorDialog(error);
+      }
+    });
+  }
+
+  ok(): void {
+    if (this.organization && this.editOrganizationForm.valid) {
+      this.organization.name = this.nameFormControl.value;
+
+      this.spinnerService.showSpinner();
+
+      this.securityService.updateOrganization(this.organization)
+      .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+      .subscribe(() => {
+        // noinspection JSIgnoredPromiseFromCall
+        this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
@@ -103,29 +126,6 @@ export class EditOrganizationComponent extends AdminContainerView implements Aft
           this.dialogService.showErrorDialog(error);
         }
       });
-  }
-
-  ok(): void {
-    if (this.organization && this.editOrganizationForm.valid) {
-      this.organization.name = this.nameFormControl.value;
-
-      this.spinnerService.showSpinner();
-
-      this.securityService.updateOrganization(this.organization)
-        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-        .subscribe(() => {
-          // noinspection JSIgnoredPromiseFromCall
-          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
-        }, (error: Error) => {
-          // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
-            // noinspection JSIgnoredPromiseFromCall
-            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-          } else {
-            this.dialogService.showErrorDialog(error);
-          }
-        });
     }
   }
 }

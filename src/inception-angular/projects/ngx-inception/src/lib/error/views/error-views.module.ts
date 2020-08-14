@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-
 import {RouterModule, Routes} from '@angular/router';
-
 import {SendErrorReportComponent} from './send-error-report.component';
 import {CoreModule} from '../../core/core.module';
-import {DialogModule} from '../../dialog/dialog.module';
-import {LayoutModule} from '../../layout/layout.module';
-import {ErrorModule} from '../error.module';
 
 const routes: Routes = [{
   path: 'send-error-report',
@@ -38,17 +32,15 @@ const routes: Routes = [{
 
 @NgModule({
   declarations: [
-
     // Components
     SendErrorReportComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    CoreModule.forRoot(), DialogModule.forRoot(), ErrorModule.forRoot(), LayoutModule.forRoot()
+    CoreModule
   ]
 })
 export class ErrorViewsModule {

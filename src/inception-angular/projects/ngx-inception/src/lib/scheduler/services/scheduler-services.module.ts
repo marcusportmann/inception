@@ -14,35 +14,34 @@
  * limitations under the License.
  */
 
+import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {ExampleFormComponent} from './example-form.component';
-import {CoreModule} from 'ngx-inception';
+import {HttpClientModule} from '@angular/common/http';
+import {SchedulerService} from "./scheduler.service";
 
-const routes: Routes = [{
-  path: '',
-  redirectTo: 'example-form'
-}, {
-  path: 'example-form',
-  component: ExampleFormComponent,
-  data: {
-    title: 'Example Form',
-  }
-}
-];
-
+/**
+ * The SchedulerServicesModule class implements the Inception Scheduler Services Module.
+ *
+ * @author Marcus Portmann
+ */
 @NgModule({
+  declarations: [],
   imports: [
     // Angular modules
-    CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
-
-    // Inception modules
-    CoreModule
+    CommonModule, HttpClientModule
   ],
-  declarations: [ExampleFormComponent],
-  providers: []
+  exports: []
 })
-export class FormModule {
+export class SchedulerServicesModule {
+  constructor() {
+  }
+
+  static forRoot(): ModuleWithProviders<SchedulerServicesModule> {
+    return {
+      ngModule: SchedulerServicesModule,
+      providers: [
+        SchedulerService
+      ]
+    };
+  }
 }

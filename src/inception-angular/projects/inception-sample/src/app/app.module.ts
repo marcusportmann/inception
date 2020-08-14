@@ -22,7 +22,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 
 import {
-  InceptionAppModule, InceptionConfig, InceptionModule, NavigationBadge, NavigationItem, NavigationTitle
+  InceptionAppModule,
+  InceptionConfig,
+  InceptionModule,
+  NavigationBadge,
+  NavigationItem,
+  NavigationTitle
 } from 'ngx-inception';
 
 const ngxInceptionConfig: InceptionConfig = {

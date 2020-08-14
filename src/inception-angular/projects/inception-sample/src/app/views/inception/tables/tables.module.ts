@@ -14,25 +14,16 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-
 import {RouterModule, Routes} from '@angular/router';
-// Import Inception module
-import {InceptionModule} from 'ngx-inception';
-// Action List Table component
+import {CoreModule} from 'ngx-inception';
 import {ActionListTableComponent} from './action-list-table.component';
-// Action Menu Table component
 import {ActionMenuTableComponent} from './action-menu-table.component';
-// Basic Table component
 import {BasicTableComponent} from './basic-table.component';
-// Filterable Table component
 import {FilterableTableComponent} from './filterable-table.component';
-// Pagination Table component
 import {PaginationTableComponent} from './pagination-table.component';
-// Sortable Table component
 import {SortableTableComponent} from './sortable-table.component';
 
 const routes: Routes = [{
@@ -78,14 +69,15 @@ const routes: Routes = [{
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule,
+  imports: [
+    // Angular modules
+    CommonModule, FormsModule, RouterModule.forChild(routes),
 
-    InceptionModule,
-
-    RouterModule.forChild(routes)
+    // Inception modules
+    CoreModule
   ],
-  declarations: [ActionListTableComponent, ActionMenuTableComponent, BasicTableComponent, FilterableTableComponent,
-    PaginationTableComponent, SortableTableComponent
+  declarations: [ActionListTableComponent, ActionMenuTableComponent, BasicTableComponent,
+    FilterableTableComponent, PaginationTableComponent, SortableTableComponent
   ],
   providers: []
 })

@@ -46,18 +46,12 @@ import {SortDirection} from '../services/sort-direction';
 export class UserDirectoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
-
-  private subscriptions: Subscription = new Subscription();
-
   dataSource: UserDirectorySummaryDatasource;
-
   displayedColumns = ['name', 'actions'];
-
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-
   @ViewChild(MatSort, {static: true}) sort!: MatSort;
-
   @ViewChild(TableFilterComponent, {static: true}) tableFilter!: TableFilterComponent;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
@@ -76,27 +70,27 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
     });
 
     dialogRef.afterClosed()
-      .pipe(first())
-      .subscribe((confirmation: boolean | undefined) => {
-        if (confirmation === true) {
-          this.spinnerService.showSpinner();
+    .pipe(first())
+    .subscribe((confirmation: boolean | undefined) => {
+      if (confirmation === true) {
+        this.spinnerService.showSpinner();
 
-          this.securityService.deleteUserDirectory(userDirectoryId)
-            .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe(() => {
-              this.loadUserDirectorySummaries();
-            }, (error: Error) => {
-              // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
-                // noinspection JSIgnoredPromiseFromCall
-                this.router.navigateByUrl('/error/send-error-report', {state: {error}});
-              } else {
-                this.dialogService.showErrorDialog(error);
-              }
-            });
-        }
-      });
+        this.securityService.deleteUserDirectory(userDirectoryId)
+        .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
+        .subscribe(() => {
+          this.loadUserDirectorySummaries();
+        }, (error: Error) => {
+          // noinspection SuspiciousTypeOfGuard
+          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
+            (error instanceof SystemUnavailableError)) {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigateByUrl('/error/send-error-report', {state: {error}});
+          } else {
+            this.dialogService.showErrorDialog(error);
+          }
+        });
+      }
+    });
   }
 
   editUserDirectory(userDirectoryId: string): void {
@@ -150,9 +144,9 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
     }));
 
     this.subscriptions.add(merge(this.sort.sortChange, this.tableFilter.changed, this.paginator.page)
-      .pipe(tap(() => {
-        this.loadUserDirectorySummaries();
-      })).subscribe());
+    .pipe(tap(() => {
+      this.loadUserDirectorySummaries();
+    })).subscribe());
 
     this.loadUserDirectorySummaries();
   }

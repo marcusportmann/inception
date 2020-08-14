@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-
 import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
-// Import Inception module
 import {RouterModule, Routes} from '@angular/router';
-
 import {CodeCategoriesComponent} from './code-categories.component';
 import {CodesComponent} from './codes.component';
 import {EditCodeCategoryComponent} from './edit-code-category.component';
@@ -36,11 +33,7 @@ import {NewCodeTitleResolver} from './new-code-title-resolver';
 import {CodeTitleResolver} from './code-title-resolver';
 import {EditCodeTitleResolver} from './edit-code-title-resolver';
 import {CoreModule} from '../../core/core.module';
-import {DialogModule} from '../../dialog/dialog.module';
-import {LayoutModule} from '../../layout/layout.module';
-import {CodesModule} from '../codes.module';
 import {CanActivateFunctionGuard} from '../../security/routing/can-activate-function-guard';
-
 
 const routes: Routes = [{
   path: '',
@@ -133,24 +126,22 @@ const routes: Routes = [{
 
 @NgModule({
   declarations: [
-
     // Components
-    CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, EditCodeComponent, NewCodeCategoryComponent,
-    NewCodeComponent
+    CodeCategoriesComponent, CodesComponent, EditCodeCategoryComponent, EditCodeComponent,
+    NewCodeCategoryComponent, NewCodeComponent
   ],
   imports: [
-
     // Angular modules
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule.forChild(routes),
 
     // Inception modules
-    CodesModule.forRoot(), CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot()
+    CoreModule
   ],
   providers: [
-
     // Resolvers
     CodeCategoriesTitleResolver, CodeCategoryTitleResolver, CodesTitleResolver, CodeTitleResolver,
-    EditCodeCategoryTitleResolver, EditCodeTitleResolver, NewCodeCategoryTitleResolver, NewCodeTitleResolver
+    EditCodeCategoryTitleResolver, EditCodeTitleResolver, NewCodeCategoryTitleResolver,
+    NewCodeTitleResolver
   ]
 })
 export class CodesViewsModule {
