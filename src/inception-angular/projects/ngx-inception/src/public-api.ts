@@ -35,6 +35,7 @@ export * from './lib/core/errors/validation-error';
 
 // Dialog
 export * from './lib/dialog/dialog.module';
+export * from './lib/dialog/dialog-data';
 export * from './lib/dialog/components/confirmation-dialog.component';
 export * from './lib/dialog/components/error-dialog.component';
 export * from './lib/dialog/components/information-dialog.component';

@@ -30,6 +30,7 @@ import {MailModule} from './mail/mail.module';
 import {ReportingModule} from './reporting/reporting.module';
 import {SchedulerModule} from './scheduler/scheduler.module';
 import {SecurityModule} from './security/security.module';
+import {DialogModule} from "./dialog/dialog.module";
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -44,7 +45,7 @@ import {SecurityModule} from './security/security.module';
     CommonModule, FormsModule, ReactiveFormsModule, RouterModule,
 
     // Inception modules
-    CoreModule.forRoot(), LayoutModule.forRoot(),
+    CoreModule.forRoot(), DialogModule.forRoot(), LayoutModule.forRoot(),
 
     // TODO: DECIDE IF THE APPLICATION MODULE SHOULD IMPORT THESE -- MARCUS
     CodesModule.forRoot(), ConfigurationModule.forRoot(), ErrorModule.forRoot(), MailModule.forRoot(),
@@ -56,7 +57,7 @@ import {SecurityModule} from './security/security.module';
     CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule, RouterModule,
 
     // Inception modules
-    CoreModule, LayoutModule,
+    CoreModule, DialogModule, LayoutModule,
 
     // TODO: DECIDE IF THE APPLICATION MODULE SHOULD IMPORT THESE -- MARCUS
     CodesModule, ConfigurationModule, ErrorModule, MailModule, ReportingModule, SchedulerModule, SecurityModule,
