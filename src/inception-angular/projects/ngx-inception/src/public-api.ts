@@ -96,7 +96,9 @@ export * from './lib/scheduler/views/scheduler-views.module';
 
 // Security
 export * from './lib/security/services/security-services.module';
+export * from './lib/security/directives/security-directives.module';
 export * from './lib/security/directives/has-authority.directive';
+export * from './lib/security/routing/security-routing.module';
 export * from './lib/security/routing/can-activate-function-guard';
 export * from './lib/security/routing/disabled-function-guard';
 export * from './lib/security/views/login-views.module';

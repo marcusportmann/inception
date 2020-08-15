@@ -33,7 +33,8 @@ export class AuthenticationFailedError extends Error {
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('Authentication failed.', cause);
+    super($localize`:@@security_authentication_failed_error:Authentication failed.`, cause);
+    //super('Authentication failed.', cause);
   }
 }
 
@@ -286,7 +287,7 @@ export class LoginError extends Error {
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('Incorrect username or password.', cause);
+    super($localize`:@@security_login_error:Incorrect username or password.`, cause);
   }
 }
 
