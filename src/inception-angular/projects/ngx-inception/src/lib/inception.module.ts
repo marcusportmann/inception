@@ -38,6 +38,9 @@ import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from "@angular/mater
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from "@angular/material/form-field";
 import {setInceptionInjector} from "./inception-injector";
 import '@angular/localize/init'
+import {ReferenceServicesModule} from "./reference/services/reference-services.module";
+import {PartyServicesModule} from "./party/services/party-services.module";
+import {ReferenceService} from "./reference/services/reference.service";
 
 // See the Moment.js docs for the meaning of these formats:
 // https://momentjs.com/docs/#/displaying/format/
@@ -46,7 +49,7 @@ export const INCEPTION_DATE_FORMATS = {
     dateInput: 'LL',
   },
   display: {
-    dateInput: 'LL',
+    dateInput: 'YYYY-MM-DD',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -74,7 +77,8 @@ export const INCEPTION_DATE_FORMATS = {
      * framework module or application module.
      */
     CodesServicesModule.forRoot(), ConfigurationServicesModule.forRoot(),
-    ErrorServicesModule.forRoot(), MailServicesModule.forRoot(), ReportingServicesModule.forRoot(),
+    ErrorServicesModule.forRoot(), MailServicesModule.forRoot(), PartyServicesModule.forRoot(),
+    ReferenceServicesModule.forRoot(), ReportingServicesModule.forRoot(),
     SchedulerServicesModule.forRoot(), SecurityServicesModule.forRoot()
   ],
   exports: [
@@ -86,7 +90,8 @@ export const INCEPTION_DATE_FORMATS = {
 
     // Inception services modules
     CodesServicesModule, ConfigurationServicesModule, ErrorServicesModule, MailServicesModule,
-    ReportingServicesModule, SchedulerServicesModule, SecurityServicesModule,
+    PartyServicesModule, ReferenceServicesModule, ReportingServicesModule, SchedulerServicesModule,
+    SecurityServicesModule,
 
     // Components
     NgxInceptionComponent
@@ -114,9 +119,6 @@ export class InceptionModule {
       }, {
         provide: MAT_DATE_FORMATS,
         useValue: INCEPTION_DATE_FORMATS
-      }, {
-        provide: MAT_DATE_LOCALE,
-        useValue: 'en-GB'
       }, {
         provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
         useValue: {appearance: 'standard'}

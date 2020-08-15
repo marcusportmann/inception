@@ -53,30 +53,23 @@ import org.springframework.util.StringUtils;
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 @BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class SMSServiceTest {
 
-  /**
-   * The client ID to use for the SMS Portal API.
-   */
+  /** The client ID to use for the SMS Portal API. */
   @Value("${inception.sms.providers.sms-portal.client-id:#{null}}")
   private String smsPortalClientId;
 
-  /**
-   * The client secret to use for the SMS Portal API.
-   */
+  /** The client secret to use for the SMS Portal API. */
   @Value("${inception.sms.providers.sms-portal.client-secret:#{null}}")
   private String smsPortalClientSecret;
 
-  /**
-   * The SMS Service.
-   */
-  @Autowired
-  private ISMSService smsService;
+  /** The SMS Service. */
+  @Autowired private ISMSService smsService;
 
   private static synchronized SMS getTestSMSDetails() {
     SMS sms = new SMS();
@@ -87,9 +80,7 @@ public class SMSServiceTest {
     return sms;
   }
 
-  /**
-   * Test the get number of SMS credits remaining functionality.
-   */
+  /** Test the get number of SMS credits remaining functionality. */
   @Test
   public void getNumberOfSMSCreditsRemainingTest() throws Exception {
     if ((!StringUtils.isEmpty(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
@@ -97,16 +88,12 @@ public class SMSServiceTest {
     }
   }
 
-  /**
-   * Test the send SMS synchronously functionality
-   */
+  /** Test the send SMS synchronously functionality */
   public void sendSMSSynchronouslyTest() {
     // smsService.sendSMSSynchronously(1, "0832763107", "Testing at 23:02...");
   }
 
-  /**
-   * Test the send SMS functionality.
-   */
+  /** Test the send SMS functionality. */
   @Test
   public void sendSMSTest() throws Exception {
     if ((!StringUtils.isEmpty(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
@@ -116,9 +103,7 @@ public class SMSServiceTest {
     }
   }
 
-  /**
-   * Test the SMS functionality.
-   */
+  /** Test the SMS functionality. */
   @Test
   public void smsTest() throws Exception {
     SMS sms = getTestSMSDetails();

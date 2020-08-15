@@ -41,31 +41,24 @@ public class GenerateReportRequest implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID uniquely identifying the report definition.
-   */
+  /** The ID uniquely identifying the report definition. */
   @Schema(description = "The ID uniquely identifying the report definition", required = true)
   @JsonProperty(required = true)
   private String reportDefinitionId;
 
-  /**
-   * The report parameters.
-   */
+  /** The report parameters. */
   @Schema(description = "The report parameters", required = true)
   @JsonProperty(required = true)
   private List<ReportParameter> reportParameters;
 
-  /**
-   * Constructs a new <code>GenerateReportRequest</code>.
-   */
-  public GenerateReportRequest() {
-  }
+  /** Constructs a new <code>GenerateReportRequest</code>. */
+  public GenerateReportRequest() {}
 
   /**
    * Constructs a new <code>GenerateReportRequest</code>.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   * @param reportParameters   the report parameters
+   * @param reportParameters the report parameters
    */
   public GenerateReportRequest(String reportDefinitionId, List<ReportParameter> reportParameters) {
     this.reportDefinitionId = reportDefinitionId;

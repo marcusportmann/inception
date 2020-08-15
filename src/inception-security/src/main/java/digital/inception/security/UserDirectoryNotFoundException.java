@@ -52,7 +52,7 @@ public class UserDirectoryNotFoundException extends ServiceException {
    * Constructs a new <code>UserDirectoryNotFoundException</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory
+   *     directory
    */
   public UserDirectoryNotFoundException(UUID userDirectoryId) {
     super(

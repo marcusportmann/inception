@@ -36,11 +36,8 @@ import org.springframework.stereotype.Component;
 @Component
 public final class LocalDateTimeToDateConverter implements Converter<LocalDateTime, Date> {
 
-  /**
-   * Constructs a new <code>LocalDateTimeToDateConverter</code>.
-   */
-  public LocalDateTimeToDateConverter() {
-  }
+  /** Constructs a new <code>LocalDateTimeToDateConverter</code>. */
+  public LocalDateTimeToDateConverter() {}
 
   @Override
   public Date convert(LocalDateTime source) {

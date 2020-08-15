@@ -32,16 +32,14 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class IntArrayValueMatcher implements ValueMatcher {
 
-  /**
-   * The accepted values.
-   */
+  /** The accepted values. */
   private int[] values;
 
   /**
    * Builds the ValueMatcher.
    *
    * @param integers The Integer elements, one for every value accepted by the matcher. The match()
-   *                 method will return true only if its parameter will be one of this list.
+   *     method will return true only if its parameter will be one of this list.
    */
   IntArrayValueMatcher(List<Integer> integers) {
     int size = integers.size();
@@ -63,9 +61,8 @@ public class IntArrayValueMatcher implements ValueMatcher {
    * <p>Returns <code>true</code> if the given value is included in the matcher list.
    *
    * @param value the value
-   *
    * @return <code>true</code> if the given value matches the rules of the <code>ValueMatcher</code>
-   * , <code>false</code> otherwise
+   *     , <code>false</code> otherwise
    */
   public boolean match(int value) {
     for (int value1 : values) {

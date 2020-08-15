@@ -35,21 +35,17 @@ import javax.validation.Validator;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ReferenceWebService {
 
-  /**
-   * The Reference Service.
-   */
+  /** The Reference Service. */
   private final IReferenceService referenceService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private final Validator validator;
 
   /**
    * Constructs a new <code>ReferenceWebService</code>.
    *
    * @param referenceService the Reference Service
-   * @param validator        the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public ReferenceWebService(IReferenceService referenceService, Validator validator) {
     this.referenceService = referenceService;

@@ -58,19 +58,16 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class MailServiceTest {
 
   private static int mailTemplateCount;
 
-  /**
-   * The Mail Service.
-   */
-  @Autowired
-  private IMailService mailService;
+  /** The Mail Service. */
+  @Autowired private IMailService mailService;
 
   private static synchronized MailTemplate getTestMailTemplateDetails() {
     mailTemplateCount++;
@@ -88,9 +85,7 @@ public class MailServiceTest {
     return mailTemplate;
   }
 
-  /**
-   * Test the mail template functionality.
-   */
+  /** Test the mail template functionality. */
   @Test
   public void mailTemplateTest() throws Exception {
     MailTemplate mailTemplate = getTestMailTemplateDetails();
@@ -174,9 +169,7 @@ public class MailServiceTest {
     }
   }
 
-  /**
-   * Test the send mail functionality.
-   */
+  /** Test the send mail functionality. */
   // @Test
   public void sendMailTest() throws Exception {
     MailTemplate mailTemplate = getTestMailTemplateDetails();

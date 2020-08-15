@@ -22,8 +22,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>PartyTypeConverter</code> class implements the custom JPA converter for the
- * <code>PartyType</code> enumeration.
+ * The <code>PartyTypeConverter</code> class implements the custom JPA converter for the <code>
+ * PartyType</code> enumeration.
  *
  * @author Marcus Portmann
  */
@@ -36,7 +36,6 @@ public class PartyTypeConverter implements AttributeConverter<PartyType, Integer
    * the database.
    *
    * @param attribute the entity attribute value to be converted
-   *
    * @return the converted data to be stored in the database column
    */
   @Override
@@ -51,7 +50,6 @@ public class PartyTypeConverter implements AttributeConverter<PartyType, Integer
    * providers are not expected to do such type conversion.
    *
    * @param dbData the data from the database column to be converted
-   *
    * @return the converted value to be stored in the entity attribute
    */
   @Override

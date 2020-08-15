@@ -64,17 +64,13 @@ public class JobParameter implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The job the job parameter is associated with.
-   */
+  /** The job the job parameter is associated with. */
   @JsonBackReference
   @XmlTransient
   @ManyToOne(fetch = FetchType.LAZY)
   private Job job;
 
-  /**
-   * The name of the job parameter.
-   */
+  /** The name of the job parameter. */
   @Schema(description = "The name of the job parameter", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -84,9 +80,7 @@ public class JobParameter implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The value of the job parameter.
-   */
+  /** The value of the job parameter. */
   @Schema(description = "The value of the job parameter", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
@@ -95,16 +89,13 @@ public class JobParameter implements Serializable {
   @Column(name = "value", nullable = false, length = 4000)
   private String value;
 
-  /**
-   * Constructs a new <code>JobParameter</code>.
-   */
-  public JobParameter() {
-  }
+  /** Constructs a new <code>JobParameter</code>. */
+  public JobParameter() {}
 
   /**
    * Constructs a new <code>JobParameter</code>.
    *
-   * @param name  the name of the job parameter
+   * @param name the name of the job parameter
    * @param value the value of the job parameter
    */
   public JobParameter(String name, String value) {
@@ -116,7 +107,6 @@ public class JobParameter implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */
@@ -137,10 +127,10 @@ public class JobParameter implements Serializable {
     JobParameter other = (JobParameter) object;
 
     return ((job != null)
-        && (job.getId() != null)
-        && (other.job != null)
-        && (other.job.getId() != null)
-        && job.getId().equals(other.job.getId()))
+            && (job.getId() != null)
+            && (other.job != null)
+            && (other.job.getId() != null)
+            && job.getId().equals(other.job.getId()))
         && ((name != null) && name.equals(other.name));
   }
 

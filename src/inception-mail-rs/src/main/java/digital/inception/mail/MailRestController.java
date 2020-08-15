@@ -64,21 +64,17 @@ public class MailRestController extends SecureRestController {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(MailRestController.class);
 
-  /**
-   * The Mail Service.
-   */
+  /** The Mail Service. */
   private final IMailService mailService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private final Validator validator;
 
   /**
    * Constructs a new <code>MailRestController</code>.
    *
    * @param mailService the Mail Service
-   * @param validator   the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public MailRestController(IMailService mailService, Validator validator) {
     this.mailService = mailService;
@@ -93,31 +89,31 @@ public class MailRestController extends SecureRestController {
   @Operation(summary = "Create the mail template", description = "Create the mail template")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The mail template was created successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "A mail template with the specified ID already exists",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The mail template was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A mail template with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/mail-templates",
@@ -128,7 +124,7 @@ public class MailRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void createMailTemplate(
       @Parameter(name = "mailTemplate", description = "The mail template", required = true)
-      @RequestBody
+          @RequestBody
           MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, MailServiceException {
     if (mailTemplate == null) {
@@ -153,31 +149,31 @@ public class MailRestController extends SecureRestController {
   @Operation(summary = "Delete the mail template", description = "Delete the mail template")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The mail template was deleted successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The mail template could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The mail template was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The mail template could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/mail-templates/{mailTemplateId}",
@@ -188,10 +184,10 @@ public class MailRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void deleteMailTemplate(
       @Parameter(
-          name = "mailTemplateId",
-          description = "The ID uniquely identifying the mail template",
-          required = true)
-      @PathVariable
+              name = "mailTemplateId",
+              description = "The ID uniquely identifying the mail template",
+              required = true)
+          @PathVariable
           String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
     if (mailTemplateId == null) {
@@ -209,29 +205,29 @@ public class MailRestController extends SecureRestController {
   @Operation(summary = "Retrieve the mail template", description = "Retrieve the mail template")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The mail template could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The mail template could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/mail-templates/{mailTemplateId}",
@@ -242,10 +238,10 @@ public class MailRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public MailTemplate getMailTemplate(
       @Parameter(
-          name = "mailTemplateId",
-          description = "The ID uniquely identifying the mail template",
-          required = true)
-      @PathVariable
+              name = "mailTemplateId",
+              description = "The ID uniquely identifying the mail template",
+              required = true)
+          @PathVariable
           String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
     if (mailTemplateId == null) {
@@ -259,7 +255,6 @@ public class MailRestController extends SecureRestController {
    * Retrieve the name of the mail template.
    *
    * @param mailTemplateId the ID uniquely identifying the mail template
-   *
    * @return the name of the mail template
    */
   @Operation(
@@ -267,29 +262,29 @@ public class MailRestController extends SecureRestController {
       description = "Retrieve the name of the mail template")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The mail template could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The mail template could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/mail-templates/{mailTemplateId}/name",
@@ -300,10 +295,10 @@ public class MailRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public String getMailTemplateName(
       @Parameter(
-          name = "mailTemplateId",
-          description = "The ID uniquely identifying the mail template",
-          required = true)
-      @PathVariable
+              name = "mailTemplateId",
+              description = "The ID uniquely identifying the mail template",
+              required = true)
+          @PathVariable
           String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
     if (StringUtils.isEmpty(mailTemplateId)) {
@@ -323,15 +318,15 @@ public class MailRestController extends SecureRestController {
       description = "Retrieve the mail template summaries")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/mail-template-summaries",
@@ -352,15 +347,15 @@ public class MailRestController extends SecureRestController {
   @Operation(summary = "Retrieve the mail templates", description = "Retrieve the mail templates")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/mail-templates",
@@ -373,42 +368,40 @@ public class MailRestController extends SecureRestController {
     return mailService.getMailTemplates();
   }
 
-  /**
-   * Send a test mail.
-   */
+  /** Send a test mail. */
   @Operation(summary = "Send a test mail", description = "Send a test mail")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The mail was sent successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The mail template could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "A mail template with the specified ID already exists",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "204", description = "The mail was sent successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The mail template could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A mail template with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/send-test-mail",
@@ -441,36 +434,36 @@ public class MailRestController extends SecureRestController {
    * Update the mail template.
    *
    * @param mailTemplateId the ID uniquely identifying the mail template
-   * @param mailTemplate   the mail template
+   * @param mailTemplate the mail template
    */
   @Operation(summary = "Update the mail template", description = "Update the mail template")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The mail template was updated successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The mail template could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The mail template was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The mail template could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/mail-templates/{mailTemplateId}",
@@ -481,13 +474,13 @@ public class MailRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void updateMailTemplate(
       @Parameter(
-          name = "mailTemplateId",
-          description = "The ID uniquely identifying the mailTemplate",
-          required = true)
-      @PathVariable
+              name = "mailTemplateId",
+              description = "The ID uniquely identifying the mailTemplate",
+              required = true)
+          @PathVariable
           String mailTemplateId,
       @Parameter(name = "mailTemplate", description = "The mail template", required = true)
-      @RequestBody
+          @RequestBody
           MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
     if (mailTemplate == null) {

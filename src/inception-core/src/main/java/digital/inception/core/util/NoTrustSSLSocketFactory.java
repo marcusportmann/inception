@@ -39,31 +39,29 @@ import javax.net.ssl.X509TrustManager;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class NoTrustSSLSocketFactory extends SSLSocketFactory {
 
-  private SSLSocketFactory socketFactory;
+  private final SSLSocketFactory socketFactory;
 
-  /**
-   * Constructs a new <code>NoTrustSSLSocketFactory</code>
-   */
+  /** Constructs a new <code>NoTrustSSLSocketFactory</code> */
   public NoTrustSSLSocketFactory() {
     try {
       // Create a trust manager that does not validate certificate chains
       TrustManager[] trustAllCerts =
-          new TrustManager[]{
-              new X509TrustManager() {
-                public void checkClientTrusted(X509Certificate[] chain, String authType)
-                    throws CertificateException {
-                  // Skip client verification step
-                }
-
-                public void checkServerTrusted(X509Certificate[] chain, String authType)
-                    throws CertificateException {
-                  // Skip server verification step
-                }
-
-                public X509Certificate[] getAcceptedIssuers() {
-                  return new X509Certificate[0];
-                }
+          new TrustManager[] {
+            new X509TrustManager() {
+              public void checkClientTrusted(X509Certificate[] chain, String authType)
+                  throws CertificateException {
+                // Skip client verification step
               }
+
+              public void checkServerTrusted(X509Certificate[] chain, String authType)
+                  throws CertificateException {
+                // Skip server verification step
+              }
+
+              public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+              }
+            }
           };
 
       // Setup the SSL contxt
@@ -86,13 +84,12 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
   /**
    * Creates a socket and connects it to the specified port number at the specified address.
    *
-   * <p>This socket is configured using the socket options established for this factory. If there
-   * is a security manager, its <code>checkConnect</code> method is called with the host address and
+   * <p>This socket is configured using the socket options established for this factory. If there is
+   * a security manager, its <code>checkConnect</code> method is called with the host address and
    * port as its arguments. This could result in a <code>SecurityException</code>.
    *
    * @param host the address of the server host
    * @param port the server port
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
@@ -103,13 +100,12 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
   /**
    * Creates a socket and connects it to the specified remote host at the specified remote port.
    *
-   * <p>This socket is configured using the socket options established for this factory. If there
-   * is a security manager, its <code>checkConnect</code> method is called with the host address and
+   * <p>This socket is configured using the socket options established for this factory. If there is
+   * a security manager, its <code>checkConnect</code> method is called with the host address and
    * port as its arguments. This could result in a <code>SecurityException</code>.
    *
    * @param host the server host
    * @param port the server port
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
@@ -121,15 +117,14 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
    * Creates a socket and connects it to the specified port number at the specified address. The
    * socket will also be bound to the local address and port supplied.
    *
-   * <p>This socket is configured using the socket options established for this factory. If there
-   * is a security manager, its <code>checkConnect</code> method is called with the host address and
+   * <p>This socket is configured using the socket options established for this factory. If there is
+   * a security manager, its <code>checkConnect</code> method is called with the host address and
    * port as its arguments. This could result in a <code>SecurityException</code>.
    *
-   * @param host      the address of the server host
-   * @param port      the server port
+   * @param host the address of the server host
+   * @param port the server port
    * @param localHost the local address
    * @param localPort the local port
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
@@ -146,11 +141,10 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
    * of SSL over an existing socket. The host and port refer to the logical peer destination. This
    * socket is configured using the socket options established for this factory.
    *
-   * @param s         the existing socket
-   * @param host      the server host
-   * @param port      the server port
+   * @param s the existing socket
+   * @param host the server host
+   * @param port the server port
    * @param autoClose close the underlying socket when this socket is closed
-   *
    * @return a socket connected to the specified host and port
    */
   @Override
@@ -163,15 +157,14 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
    * Creates a socket and connects it to the specified remote host at the specified remote port. The
    * socket will also be bound to the local address and port supplied.
    *
-   * <p>This socket is configured using the socket options established for this factory. If there
-   * is a security manager, its <code>checkConnect</code> method is called with the host address and
+   * <p>This socket is configured using the socket options established for this factory. If there is
+   * a security manager, its <code>checkConnect</code> method is called with the host address and
    * port as its arguments. This could result in a <code>SecurityException</code>.
    *
-   * @param host      the server host
-   * @param port      the server port
+   * @param host the server host
+   * @param port the server port
    * @param localHost the local address
    * @param localPort the local port
-   *
    * @return a socket connected to the specified host and port
    */
   @Override

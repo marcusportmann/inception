@@ -86,7 +86,6 @@ public final class ISO8601Util {
    * Transform the <code>Date</code> instance into an ISO 8601 string.
    *
    * @param date the <code>Date</code> instance to transform into an ISO 8601 string
-   *
    * @return the ISO 8601 string for the <code>Date</code> instance
    */
   public static String fromDate(Date date) {
@@ -97,7 +96,6 @@ public final class ISO8601Util {
    * Transform the <code>Date</code> instance into an ISO 8601 string.
    *
    * @param date the <code>Date</code> instance to transform into an ISO 8601 string
-   *
    * @return the ISO 8601 string for the <code>Date</code> instance
    */
   public static String fromDateTime(Date date) {
@@ -108,7 +106,6 @@ public final class ISO8601Util {
    * Transform the <code>LocalDate</code> instance into an ISO 8601 string.
    *
    * @param localDate the <code>LocalDate</code> instance to transform into an ISO 8601 string
-   *
    * @return the ISO 8601 string for the <code>LocalDate</code> instance
    */
   public static String fromLocalDate(LocalDate localDate) {
@@ -119,8 +116,7 @@ public final class ISO8601Util {
    * Transform the <code>LocalDateTime</code> instance into an ISO 8601 string.
    *
    * @param localDateTime the <code>LocalDateTime</code> instance to transform into an ISO 8601
-   *                      string
-   *
+   *     string
    * @return the ISO 8601 string for the <code>LocalDateTime</code> instance
    */
   public static String fromLocalDateTime(LocalDateTime localDateTime) {
@@ -132,7 +128,6 @@ public final class ISO8601Util {
    * Transform the <code>LocalTime</code> instance into an ISO 8601 string.
    *
    * @param localTime the <code>LocalTime</code> instance to transform into an ISO 8601 string
-   *
    * @return the ISO 8601 string for the <code>LocalTime</code> instance
    */
   public static String fromLocalTime(LocalTime localTime) {
@@ -143,8 +138,7 @@ public final class ISO8601Util {
    * Transform the <code>ZonedDateTime</code> instance into an ISO 8601 string.
    *
    * @param zonedDateTime the <code>ZonedDateTime</code> instance to transform into an ISO 8601
-   *                      string
-   *
+   *     string
    * @return the ISO 8601 string for the <code>ZonedDateTime</code> instance
    */
   public static String fromZonedDateTime(ZonedDateTime zonedDateTime) {
@@ -222,7 +216,6 @@ public final class ISO8601Util {
    * Transform ISO 8601 string into a <code>LocalDate</code> instance.
    *
    * @param iso8601string the ISO 8601 string to transform
-   *
    * @return the <code>LocalDate</code> instance for the ISO 8601 string
    */
   public static Date toDate(String iso8601string) {
@@ -250,7 +243,6 @@ public final class ISO8601Util {
    * Transform ISO 8601 string into a <code>LocalDate</code> instance.
    *
    * @param iso8601string the ISO 8601 string to transform
-   *
    * @return the <code>LocalDate</code> instance for the ISO 8601 string
    */
   public static LocalDate toLocalDate(String iso8601string) {
@@ -261,7 +253,6 @@ public final class ISO8601Util {
    * Transform ISO 8601 string into a <code>LocalDateTime</code> instance.
    *
    * @param iso8601string the ISO 8601 string to transform
-   *
    * @return the <code>LocalDateTime</code> instance for the ISO 8601 string
    */
   public static LocalDateTime toLocalDateTime(String iso8601string) {
@@ -280,7 +271,6 @@ public final class ISO8601Util {
    * Transform ISO 8601 string into a <code>LocalTime</code> instance.
    *
    * @param iso8601string the ISO 8601 string to transform
-   *
    * @return the <code>LocalTime</code> instance for the ISO 8601 string
    */
   public static LocalTime toLocalTime(String iso8601string) {
@@ -291,7 +281,6 @@ public final class ISO8601Util {
    * Transform ISO 8601 string into a <code>ZonedDateTime</code> instance.
    *
    * @param iso8601string the ISO 8601 string to transform
-   *
    * @return the <code>ZonedDateTime</code> instance for the ISO 8601 string
    */
   public static ZonedDateTime toZonedDateTime(String iso8601string) {

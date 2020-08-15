@@ -56,14 +56,10 @@ public class MessageTranslator {
    */
   private UUID deviceId;
 
-  /**
-   * The encryption key used to encrypt or decrypt the message data.
-   */
+  /** The encryption key used to encrypt or decrypt the message data. */
   private byte[] encryptionKey;
 
-  /**
-   * The username uniquely identifying the username responsible for the message.
-   */
+  /** The username uniquely identifying the username responsible for the message. */
   private String username;
 
   /**
@@ -71,7 +67,7 @@ public class MessageTranslator {
    *
    * @param username the username uniquely identifying the username responsible for the message
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *                 message originated from
+   *     message originated from
    */
   public MessageTranslator(String username, UUID deviceId) {
     this.username = username;
@@ -82,10 +78,9 @@ public class MessageTranslator {
   /**
    * Constructs a new <code>MessageTranslator</code>.
    *
-   * @param username      the username uniquely identifying the username responsible for the
-   *                      message
-   * @param deviceId      the Universally Unique Identifier (UUID) uniquely identifying the device
-   *                      the message originated from
+   * @param username the username uniquely identifying the username responsible for the message
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message originated from
    * @param encryptionKey the key used to encrypt or decrypt the message data
    */
   public MessageTranslator(String username, UUID deviceId, byte[] encryptionKey) {
@@ -98,9 +93,8 @@ public class MessageTranslator {
    * Decrypt the message data.
    *
    * @param encryptionKey the encryption key to use to decrypt the message data
-   * @param encryptionIV  the encryption initialization vector
-   * @param data          the message data to decrypt
-   *
+   * @param encryptionIV the encryption initialization vector
+   * @param data the message data to decrypt
    * @return the decrypted message data
    */
   public static byte[] decryptMessageData(byte[] encryptionKey, byte[] encryptionIV, byte[] data)
@@ -127,9 +121,8 @@ public class MessageTranslator {
    * Encrypt the message data.
    *
    * @param encryptionKey the encryption key to use to encrypt the message data
-   * @param encryptionIV  the encryption initialization vector
-   * @param data          the message data to encrypt
-   *
+   * @param encryptionIV the encryption initialization vector
+   * @param data the message data to encrypt
    * @return the encrypted message data
    */
   public static byte[] encryptMessageData(byte[] encryptionKey, byte[] encryptionIV, byte[] data)
@@ -155,10 +148,9 @@ public class MessageTranslator {
   /**
    * Retrieve the WBXML-based message data from the message.
    *
-   * @param message     the message
+   * @param message the message
    * @param messageData the WBXML-based message data object to populate
-   * @param <T>         the message data type for the WBXML-based message data
-   *
+   * @param <T> the message data type for the WBXML-based message data
    * @return the WBXML-based message data
    */
   public <T extends WbxmlMessageData> T fromMessage(Message message, T messageData)
@@ -214,9 +206,8 @@ public class MessageTranslator {
   /**
    * Returns the message containing the WBXML-based message data.
    *
-   * @param messageData   the WBXML-based message data
+   * @param messageData the WBXML-based message data
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   *
    * @return the message that can be sent via the messaging infrastructure
    */
   public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
@@ -270,7 +261,6 @@ public class MessageTranslator {
    * Returns the message containing the WBXML-based message data.
    *
    * @param messageData the WBXML-based message data
-   *
    * @return the message that can be sent via the messaging infrastructure
    */
   public Message toMessage(WbxmlMessageData messageData) throws MessagingServiceException {
@@ -281,7 +271,6 @@ public class MessageTranslator {
    * Generate the SHA-256 hash for the message data.
    *
    * @param data the message data to return the SHA-256 hash for
-   *
    * @return the SHA-256 hash for the message data
    */
   private String getMessageDataHash(byte[] data) throws MessagingServiceException {

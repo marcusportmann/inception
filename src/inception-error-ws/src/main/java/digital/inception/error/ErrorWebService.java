@@ -44,21 +44,17 @@ import javax.xml.bind.annotation.XmlElement;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ErrorWebService {
 
-  /**
-   * The Error Service.
-   */
+  /** The Error Service. */
   private final IErrorService errorService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private final Validator validator;
 
   /**
    * Constructs a new <code>ErrorWebService</code>.
    *
    * @param errorService the Error Service
-   * @param validator    the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public ErrorWebService(IErrorService errorService, Validator validator) {
     this.errorService = errorService;

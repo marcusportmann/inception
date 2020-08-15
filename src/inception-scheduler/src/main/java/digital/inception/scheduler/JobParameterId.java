@@ -29,27 +29,19 @@ import java.io.Serializable;
 @SuppressWarnings({"unused"})
 public class JobParameterId implements Serializable {
 
-  /**
-   * The job the job parameter is associated with.
-   */
+  /** The job the job parameter is associated with. */
   private Job job;
 
-  /**
-   * The name of the job parameter.
-   */
+  /** The name of the job parameter. */
   private String name;
 
-  /**
-   * Constructs a new <code>JobParameterId</code>.
-   */
-  public JobParameterId() {
-  }
+  /** Constructs a new <code>JobParameterId</code>. */
+  public JobParameterId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

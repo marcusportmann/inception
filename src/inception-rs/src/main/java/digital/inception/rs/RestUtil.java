@@ -37,7 +37,6 @@ public class RestUtil {
    * JSON text, a string cannot contain a control character or an unescaped quote or backslash.
    *
    * @param string a String
-   *
    * @return a String correctly formatted for insertion in a JSON text
    */
   public static String quote(String string) {

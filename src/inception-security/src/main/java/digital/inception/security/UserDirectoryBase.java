@@ -32,40 +32,30 @@ import java.util.UUID;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class UserDirectoryBase implements IUserDirectory {
 
-  /**
-   * The Group Repository.
-   */
+  /** The Group Repository. */
   private GroupRepository groupRepository;
 
-  /**
-   * The parameters for the user directory.
-   */
+  /** The parameters for the user directory. */
   private List<UserDirectoryParameter> parameters;
 
-  /**
-   * The Role Repository.
-   */
+  /** The Role Repository. */
   private RoleRepository roleRepository;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
   private UUID userDirectoryId;
 
-  /**
-   * The User Repository.
-   */
+  /** The User Repository. */
   private UserRepository userRepository;
 
   /**
    * Constructs a new <code>UserDirectoryBase</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory
-   * @param parameters      the parameters for the user directory
+   *     directory
+   * @param parameters the parameters for the user directory
    * @param groupRepository the Group Repository
-   * @param userRepository  the User Repository
-   * @param roleRepository  the Role Repository
+   * @param userRepository the User Repository
+   * @param roleRepository the Role Repository
    */
   public UserDirectoryBase(
       UUID userDirectoryId,
@@ -129,7 +119,6 @@ public abstract class UserDirectoryBase implements IUserDirectory {
    * Checks whether the specified value is <code>null</code> or blank.
    *
    * @param value the value to check
-   *
    * @return true if the value is <code>null</code> or blank
    */
   protected boolean isNullOrEmpty(Object value) {

@@ -63,29 +63,19 @@ public abstract class GrantRequest {
    */
   public static final String STATE_PARAMETER = "state";
 
-  /**
-   * The client identifier issued to the client.
-   */
+  /** The client identifier issued to the client. */
   private final String clientId;
 
-  /**
-   * The client secret.
-   */
+  /** The client secret. */
   private final String clientSecret;
 
-  /**
-   * The grant type.
-   */
+  /** The grant type. */
   private final String grantType;
 
-  /**
-   * The requested scope(s) for the access request.
-   */
+  /** The requested scope(s) for the access request. */
   private final String scope;
 
-  /**
-   * The state received from the client.
-   */
+  /** The state received from the client. */
   private final String state;
 
   /**

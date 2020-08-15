@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {SortDirection} from './sort-direction';
+import {SortDirection} from '../../core/sorting/sort-direction';
 import {UserDirectorySummary} from './user-directory-summary';
 
 /**

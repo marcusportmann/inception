@@ -58,9 +58,7 @@ public class ReportDefinition implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID uniquely identifying the report definition.
-   */
+  /** The ID uniquely identifying the report definition. */
   @Schema(description = "The ID uniquely identifying the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -70,9 +68,7 @@ public class ReportDefinition implements Serializable {
   @Column(name = "id", nullable = false)
   private String id;
 
-  /**
-   * The name of the report definition.
-   */
+  /** The name of the report definition. */
   @Schema(description = "The name of the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -81,9 +77,7 @@ public class ReportDefinition implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The JasperReports template for the report definition.
-   */
+  /** The JasperReports template for the report definition. */
   @Schema(description = "The JasperReports template for the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Template", required = true)
@@ -92,17 +86,14 @@ public class ReportDefinition implements Serializable {
   @Column(name = "template", nullable = false)
   private byte[] template;
 
-  /**
-   * Constructs a new <code>ReportDefinition</code>.
-   */
-  public ReportDefinition() {
-  }
+  /** Constructs a new <code>ReportDefinition</code>. */
+  public ReportDefinition() {}
 
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * @param id       the ID uniquely identifying the report definition
-   * @param name     the name of the report definition
+   * @param id the ID uniquely identifying the report definition
+   * @param name the name of the report definition
    * @param template the JasperReports template for the report definition
    */
   public ReportDefinition(String id, String name, byte[] template) {
@@ -115,7 +106,6 @@ public class ReportDefinition implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

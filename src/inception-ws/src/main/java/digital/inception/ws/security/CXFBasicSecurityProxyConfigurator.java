@@ -39,7 +39,7 @@ public class CXFBasicSecurityProxyConfigurator {
   /**
    * Configure the CXF web service proxy to support basic authentication.
    *
-   * @param proxy    the web service proxy to configure
+   * @param proxy the web service proxy to configure
    * @param username the username to use when authenticating using basic authentication
    * @param password the password to use when authenticating using basic authentication
    */

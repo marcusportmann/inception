@@ -29,9 +29,7 @@ import org.springframework.util.StringUtils;
  */
 public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
 
-  /**
-   * The grant type for the Resource Owner Password Credentials Grant.
-   */
+  /** The grant type for the Resource Owner Password Credentials Grant. */
   public static final String GRANT_TYPE = "password";
 
   /**
@@ -48,14 +46,10 @@ public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
    */
   public static final String USERNAME_PARAMETER = "username";
 
-  /**
-   * The resource owner password.
-   */
+  /** The resource owner password. */
   private final String password;
 
-  /**
-   * The resource owner username.
-   */
+  /** The resource owner username. */
   private final String username;
 
   /**
@@ -75,9 +69,8 @@ public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
    * provided as part of the HTTP servlet request.
    *
    * @param parameters the request parameters
-   *
    * @return <code>true</code> if the HTTP servlet request contains the required information for the
-   * Resource Owner Password Credentials Grant or <code>false</code> otherwise
+   *     Resource Owner Password Credentials Grant or <code>false</code> otherwise
    */
   public static boolean isValid(Map<String, String> parameters) {
 

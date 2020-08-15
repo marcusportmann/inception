@@ -29,6 +29,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface ArchivedMessageRepository extends JpaRepository<ArchivedMessage, UUID> {
-
-}
+public interface ArchivedMessageRepository extends JpaRepository<ArchivedMessage, UUID> {}

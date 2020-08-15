@@ -32,9 +32,7 @@ import org.junit.Test;
  */
 public class MessageTranslatorTest {
 
-  /**
-   * Test the encryption and decryption functionality.
-   */
+  /** Test the encryption and decryption functionality. */
   @Test
   public void encryptionTest() throws Exception {
     byte[] encryptionIV = CryptoUtil.createRandomEncryptionIV(CryptoUtil.AES_BLOCK_SIZE);

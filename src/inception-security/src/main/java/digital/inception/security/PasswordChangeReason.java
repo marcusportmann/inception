@@ -57,7 +57,6 @@ public enum PasswordChangeReason {
    * Returns the password change reason given by the specified code value.
    *
    * @param code the code value identifying the password change reason
-   *
    * @return the password change reason given by the specified code value
    */
   @JsonCreator

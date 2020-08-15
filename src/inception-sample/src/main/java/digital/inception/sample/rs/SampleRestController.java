@@ -66,7 +66,7 @@ public class SampleRestController {
    * Constructs a new <code>SampleServiceController</code>.
    *
    * @param webClientBuilder the web client builder
-   * @param sampleService    the Sample Service
+   * @param sampleService the Sample Service
    */
   public SampleRestController(WebClient.Builder webClientBuilder, ISampleService sampleService) {
     this.webClientBuilder = webClientBuilder;
@@ -103,9 +103,7 @@ public class SampleRestController {
     return data;
   }
 
-  /**
-   * Test the exception handling.
-   */
+  /** Test the exception handling. */
   @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
   public void testExceptionHandling() throws SampleServiceException {
     throw new SampleServiceException("Testing 1.. 2.. 3..");
@@ -126,7 +124,7 @@ public class SampleRestController {
       produces = "application/json")
   public LocalDateTime testLocalDateTime(
       @Parameter(name = "localDateTime", description = "The local date time", required = true)
-      @RequestParam("localDateTime")
+          @RequestParam("localDateTime")
           LocalDateTime localDateTime)
       throws SampleServiceException {
     if (true) {
@@ -187,7 +185,7 @@ public class SampleRestController {
       produces = "application/json")
   public ZonedDateTime testZonedDateTime(
       @Parameter(name = "zonedDateTime", description = "The zoned date time", required = true)
-      @RequestParam("zonedDateTime")
+          @RequestParam("zonedDateTime")
           ZonedDateTime zonedDateTime)
       throws SampleServiceException {
     if (false) {
@@ -199,19 +197,17 @@ public class SampleRestController {
     return zonedDateTime;
   }
 
-  /**
-   * Validate the data.
-   */
+  /** Validate the data. */
   @Operation(summary = "Validate the data", description = "Validate the data")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "200",
-              description = "OK",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  array = @ArraySchema(schema = @Schema(implementation = ValidationError.class))))
+        @ApiResponse(
+            responseCode = "200",
+            description = "OK",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ValidationError.class))))
       })
   @RequestMapping(value = "/validate", method = RequestMethod.POST, produces = "application/json")
   public List<ValidationError> validate(

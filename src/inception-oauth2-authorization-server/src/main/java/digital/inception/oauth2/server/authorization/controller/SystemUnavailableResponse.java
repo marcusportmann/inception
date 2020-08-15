@@ -35,36 +35,23 @@ import org.springframework.util.StringUtils;
  */
 public class SystemUnavailableResponse extends Response {
 
-  /**
-   * The optional detail.
-   */
+  /** The optional detail. */
   private String detail;
 
-  /**
-   * The optional fully qualified name of the exception associated with the error.
-   */
+  /** The optional fully qualified name of the exception associated with the error. */
   private String exception;
 
-  /**
-   * The message.
-   */
+  /** The message. */
   private String message;
 
-  /**
-   * The optional stack trace associated with the error.
-   */
+  /** The optional stack trace associated with the error. */
   private String stackTrace;
 
-  /**
-   * The date and time the error occurred.
-   */
+  /** The date and time the error occurred. */
   private LocalDateTime timestamp;
 
-  /**
-   * The URI for the HTTP request that resulted in the error.
-   */
-  @JsonProperty
-  private String uri;
+  /** The URI for the HTTP request that resulted in the error. */
+  @JsonProperty private String uri;
 
   /**
    * Constructs a new <code>SystemUnavailableResponse</code>.
@@ -79,7 +66,7 @@ public class SystemUnavailableResponse extends Response {
    * Constructs a new <code>SystemUnavailableResponse</code>.
    *
    * @param message the message
-   * @param cause   the cause
+   * @param cause the cause
    */
   public SystemUnavailableResponse(String message, Throwable cause) {
     super(HttpStatus.INTERNAL_SERVER_ERROR);

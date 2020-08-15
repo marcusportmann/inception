@@ -21,6 +21,7 @@ package digital.inception.party.test;
 import static org.junit.Assert.assertEquals;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.sorting.SortDirection;
 import digital.inception.party.IPartyService;
 import digital.inception.party.Organization;
 import digital.inception.party.Organizations;
@@ -30,7 +31,6 @@ import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PersonSortBy;
 import digital.inception.party.Persons;
-import digital.inception.party.SortDirection;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.security.SecureRandom;
@@ -56,9 +56,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class PartyServiceTest {
 
@@ -70,11 +70,8 @@ public class PartyServiceTest {
 
   private static int personCount;
 
-  /**
-   * The Party Service.
-   */
-  @Autowired
-  private IPartyService partyService;
+  /** The Party Service. */
+  @Autowired private IPartyService partyService;
 
   private static synchronized Organization getTestOrganizationDetails() {
     organizationCount++;
@@ -112,9 +109,7 @@ public class PartyServiceTest {
     return person;
   }
 
-  /**
-   * Test the organization functionality.
-   */
+  /** Test the organization functionality. */
   @Test
   public void organizationTest() throws Exception {
     Organization organization = getTestOrganizationDetails();
@@ -141,9 +136,7 @@ public class PartyServiceTest {
     partyService.deleteOrganization(organization.getId());
   }
 
-  /**
-   * Test the party functionality.
-   */
+  /** Test the party functionality. */
   @Test
   public void partyTest() throws Exception {
     Party party = getTestPartyDetails();
@@ -162,9 +155,7 @@ public class PartyServiceTest {
     partyService.deleteParty(party.getId());
   }
 
-  /**
-   * Test the person functionality.
-   */
+  /** Test the person functionality. */
   @Test
   public void personTest() throws Exception {
     Person person = getTestPersonDetails();
@@ -193,16 +184,17 @@ public class PartyServiceTest {
 
   private void compareOrganizations(Organization organization1, Organization organization2) {
     assertEquals(
-        "The ID values for the two organizations do not match", organization1.getId(),
+        "The ID values for the two organizations do not match",
+        organization1.getId(),
         organization2.getId());
     assertEquals(
-        "The name values for the two organizations do not match", organization1.getName(),
+        "The name values for the two organizations do not match",
+        organization1.getName(),
         organization2.getName());
   }
 
   private void compareParties(Party party1, Party party2) {
-    assertEquals(
-        "The ID values for the two parties do not match", party1.getId(), party2.getId());
+    assertEquals("The ID values for the two parties do not match", party1.getId(), party2.getId());
     assertEquals(
         "The name values for the two parties do not match", party1.getName(), party2.getName());
   }
@@ -213,12 +205,12 @@ public class PartyServiceTest {
     assertEquals(
         "The name values for the two persons do not match", person1.getName(), person2.getName());
     assertEquals(
-        "The date of birth values for the two persons do not match", person1.getDateOfBirth(),
+        "The date of birth values for the two persons do not match",
+        person1.getDateOfBirth(),
         person2.getDateOfBirth());
     assertEquals(
-        "The gender values for the two persons do not match", person1.getGender(),
+        "The gender values for the two persons do not match",
+        person1.getGender(),
         person2.getGender());
   }
-
-
 }

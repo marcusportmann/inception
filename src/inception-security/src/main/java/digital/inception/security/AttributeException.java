@@ -28,8 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * An <code>AttributeException</code> is thrown to indicate an invalid operation was performed on
- * an
+ * An <code>AttributeException</code> is thrown to indicate an invalid operation was performed on an
  * <code>Attribute</code> instance.
  *
  * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current

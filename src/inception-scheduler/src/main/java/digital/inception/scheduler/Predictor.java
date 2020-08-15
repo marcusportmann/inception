@@ -52,19 +52,13 @@ import java.util.TimeZone;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Predictor {
 
-  /**
-   * The scheduling pattern on which the predictor works.
-   */
+  /** The scheduling pattern on which the predictor works. */
   private SchedulingPattern schedulingPattern;
 
-  /**
-   * The start time for the next prediction.
-   */
+  /** The start time for the next prediction. */
   private long time;
 
-  /**
-   * The time zone for the prediction.
-   */
+  /** The time zone for the prediction. */
   private TimeZone timeZone = TimeZone.getDefault();
 
   /**
@@ -89,7 +83,7 @@ public class Predictor {
    * Constructs a new <code>SchedulingPattern</code>.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
-   * @param start             the start time of the prediction
+   * @param start the start time of the prediction
    */
   public Predictor(SchedulingPattern schedulingPattern, Date start) {
     this(schedulingPattern, start.getTime());
@@ -99,7 +93,7 @@ public class Predictor {
    * It builds a predictor with the given scheduling pattern and start time.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
-   * @param start             the start time of the prediction as a milliseconds value
+   * @param start the start time of the prediction as a milliseconds value
    */
   public Predictor(SchedulingPattern schedulingPattern, long start) {
     this.schedulingPattern = schedulingPattern;
@@ -110,7 +104,7 @@ public class Predictor {
    * It builds a predictor with the given scheduling pattern and start time.
    *
    * @param schedulingPattern the pattern on which the prediction will be based
-   * @param start             the start time of the prediction
+   * @param start the start time of the prediction
    */
   public Predictor(String schedulingPattern, Date start) throws InvalidSchedulingPatternException {
     this(schedulingPattern, start.getTime());
@@ -120,7 +114,7 @@ public class Predictor {
    * It builds a predictor with the given scheduling pattern and start time.
    *
    * @param schedulingPattern the pattern on which the prediction will be based
-   * @param start             the start time of the prediction
+   * @param start the start time of the prediction
    */
   public Predictor(String schedulingPattern, long start) throws InvalidSchedulingPatternException {
     this.schedulingPattern = new SchedulingPattern(schedulingPattern);

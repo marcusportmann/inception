@@ -73,43 +73,30 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class ProcessServiceTest {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ProcessServiceTest.class);
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /** The data source used to provide connections to the application database. */
   @Autowired
   @Qualifier("applicationDataSource")
   DataSource dataSource;
 
-  /**
-   * The Case Service.
-   */
-  @Autowired
-  private ICaseService caseService;
+  /** The Case Service. */
+  @Autowired private ICaseService caseService;
 
-  /**
-   * The Camunda Process Engine.
-   */
-  @Autowired
-  private ProcessEngine processEngine;
+  /** The Camunda Process Engine. */
+  @Autowired private ProcessEngine processEngine;
 
-  /**
-   * The Process Service.
-   */
-  @Autowired
-  private IProcessService processService;
+  /** The Process Service. */
+  @Autowired private IProcessService processService;
 
-  /**
-   * Test the case definition functionality.
-   */
+  /** Test the case definition functionality. */
   @Test
   public void caseDefinitionTest() throws Exception {
     byte[] testCaseData = ResourceUtil.getClasspathResource("digital/inception/bmi/test/Test.cmmn");
@@ -123,9 +110,7 @@ public class ProcessServiceTest {
     xxx++;
   }
 
-  /**
-   * Check database test.
-   */
+  /** Check database test. */
   // @Test
   public void checkDatabaseTest() throws Exception {
     try (Connection connection = dataSource.getConnection()) {
@@ -148,9 +133,7 @@ public class ProcessServiceTest {
     }
   }
 
-  /**
-   * Test the process definition functionality.
-   */
+  /** Test the process definition functionality. */
   @Test
   public void processDefinitionTest() throws Exception {
     byte[] testProcessV1Data =
@@ -207,9 +190,7 @@ public class ProcessServiceTest {
 
   }
 
-  /**
-   * Test the process engine.
-   */
+  /** Test the process engine. */
 
   // @Test
   public void processEngineTest() throws Exception {
@@ -346,9 +327,7 @@ public class ProcessServiceTest {
     processEngine.getTaskService().complete(taskId);
   }
 
-  /**
-   * Test the process with case functionality.
-   */
+  /** Test the process with case functionality. */
   // @Test
   public void processWithCaseTest() throws Exception {
     byte[] testEmbeddedProcessData =

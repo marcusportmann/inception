@@ -49,9 +49,7 @@ public class SampleService implements ISampleService {
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private Validator validator;
 
   /**
@@ -63,9 +61,7 @@ public class SampleService implements ISampleService {
     this.validator = validator;
   }
 
-  /**
-   * Add the data.
-   */
+  /** Add the data. */
   @Override
   @Transactional
   public void addData() throws SampleServiceException {
@@ -119,7 +115,6 @@ public class SampleService implements ISampleService {
    * Returns the data.
    *
    * @param id the ID uniquely identifying the data
-   *
    * @return the data
    */
   @Override
@@ -143,9 +138,7 @@ public class SampleService implements ISampleService {
     }
   }
 
-  /**
-   * The test method.
-   */
+  /** The test method. */
   @Override
   public void testMethod() {
     System.out.println("[DEBUG] Hello world from the test method!!!");

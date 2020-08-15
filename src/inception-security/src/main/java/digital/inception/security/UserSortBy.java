@@ -37,21 +37,15 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "UserSortBy", namespace = "http://security.inception.digital")
 public enum UserSortBy {
-  /**
-   * Sort by name.
-   */
+  /** Sort by name. */
   @XmlEnumValue("Name")
   NAME(0, "Sort By Name"),
 
-  /**
-   * Sort by preferred name.
-   */
+  /** Sort by preferred name. */
   @XmlEnumValue("PreferredName")
   PREFERRED_NAME(1, "Sort By Preferred Name"),
 
-  /**
-   * Sort by username.
-   */
+  /** Sort by username. */
   @XmlEnumValue("Username")
   USERNAME(2, "Sort By Username");
 
@@ -68,7 +62,6 @@ public enum UserSortBy {
    * Returns the method used to sort a list of users given by the specified code value.
    *
    * @param code the code value identifying the method used to sort a list of users
-   *
    * @return the method used to sort a list of users given by the specified code value
    */
   @JsonCreator
@@ -89,7 +82,6 @@ public enum UserSortBy {
    * Returns the method used to sort a list of users given by the specified code value.
    *
    * @param code the code value identifying the method used to sort a list of users
-   *
    * @return the method used to sort a list of users given by the specified code value
    */
   public static UserSortBy fromCode(String code) {

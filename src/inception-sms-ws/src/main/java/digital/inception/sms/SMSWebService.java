@@ -35,21 +35,17 @@ import javax.validation.Validator;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class SMSWebService {
 
-  /**
-   * The SMS Service.
-   */
+  /** The SMS Service. */
   private final ISMSService smsService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private final Validator validator;
 
   /**
    * Constructs a new <code>SMSWebService</code>.
    *
    * @param smsService the SMS Service
-   * @param validator  the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public SMSWebService(ISMSService smsService, Validator validator) {
     this.smsService = smsService;

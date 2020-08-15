@@ -47,9 +47,7 @@ public class InvalidBPMNException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <code>InvalidBPMNException</code>.
-   */
+  /** Constructs a new <code>InvalidBPMNException</code>. */
   public InvalidBPMNException() {
     super("InvalidBPMNError", "The BPMN 2.0 XML data is invalid");
   }
@@ -67,7 +65,7 @@ public class InvalidBPMNException extends ServiceException {
    * Constructs a new <code>InvalidBPMNException</code>.
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidBPMNException(Throwable cause) {
     super("InvalidBPMNError", "The BPMN 2.0 XML data is invalid", cause);

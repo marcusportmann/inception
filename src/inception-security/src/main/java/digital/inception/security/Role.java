@@ -65,9 +65,7 @@ public class Role implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code uniquely identifying the role.
-   */
+  /** The code uniquely identifying the role. */
   @Schema(description = "The code uniquely identifying the role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -77,9 +75,7 @@ public class Role implements java.io.Serializable {
   @Column(name = "code", nullable = false, length = 100)
   private String code;
 
-  /**
-   * The description for the role.
-   */
+  /** The description for the role. */
   @Schema(description = "The description for the role")
   @JsonProperty
   @XmlElement(name = "Description")
@@ -87,9 +83,7 @@ public class Role implements java.io.Serializable {
   @Column(name = "description", length = 100)
   private String description;
 
-  /**
-   * The functions associated with the role.
-   */
+  /** The functions associated with the role. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -100,17 +94,13 @@ public class Role implements java.io.Serializable {
       inverseJoinColumns = @JoinColumn(name = "function_code", referencedColumnName = "code"))
   private Set<Function> functions = new HashSet<>();
 
-  /**
-   * The groups the role is associated with.
-   */
+  /** The groups the role is associated with. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "roles")
   private Set<Group> groups = new HashSet<>();
 
-  /**
-   * The name of the role.
-   */
+  /** The name of the role. */
   @Schema(description = "The name of the role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -119,11 +109,8 @@ public class Role implements java.io.Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * Constructs a new <code>Role</code>.
-   */
-  public Role() {
-  }
+  /** Constructs a new <code>Role</code>. */
+  public Role() {}
 
   /**
    * Add the function to the role.
@@ -139,7 +126,6 @@ public class Role implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

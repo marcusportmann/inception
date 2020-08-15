@@ -31,6 +31,4 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(
     entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.reporting"})
-public class ReportingConfiguration {
-
-}
+public class ReportingConfiguration {}

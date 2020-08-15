@@ -45,15 +45,13 @@ public class CXFMutualSSLSecurityProxyConfigurator {
   /**
    * Configure the CXF web service proxy to support mutual SSL authentication.
    *
-   * @param proxy                      the web service proxy to configure
-   * @param keyStore                   the key store containing the private key and certificate
-   *                                   (public key) to use when authenticating using mutual SSL
-   *                                   authentication
-   * @param keyStorePassword           the password for the key store that will be used when
-   *                                   authenticating using mutual SSL authentication
-   * @param trustStore                 the key store containing the certificates that will be used
-   *                                   to verify the remote server when authenticating using mutual
-   *                                   SSL authentication
+   * @param proxy the web service proxy to configure
+   * @param keyStore the key store containing the private key and certificate (public key) to use
+   *     when authenticating using mutual SSL authentication
+   * @param keyStorePassword the password for the key store that will be used when authenticating
+   *     using mutual SSL authentication
+   * @param trustStore the key store containing the certificates that will be used to verify the
+   *     remote server when authenticating using mutual SSL authentication
    * @param disableServerTrustChecking disable trust checking of the remote server certificate
    */
   public static void configureProxy(
@@ -86,22 +84,22 @@ public class CXFMutualSSLSecurityProxyConfigurator {
         if (disableServerTrustChecking) {
           // Create a trust manager that does not validate certificate chains
           TrustManager[] trustAllCerts =
-              new TrustManager[]{
-                  new X509TrustManager() {
-                    public void checkClientTrusted(X509Certificate[] chain, String authType)
-                        throws CertificateException {
-                      // Skip client verification
-                    }
-
-                    public void checkServerTrusted(X509Certificate[] chain, String authType)
-                        throws CertificateException {
-                      // Skip server verification
-                    }
-
-                    public X509Certificate[] getAcceptedIssuers() {
-                      return new X509Certificate[0];
-                    }
+              new TrustManager[] {
+                new X509TrustManager() {
+                  public void checkClientTrusted(X509Certificate[] chain, String authType)
+                      throws CertificateException {
+                    // Skip client verification
                   }
+
+                  public void checkServerTrusted(X509Certificate[] chain, String authType)
+                      throws CertificateException {
+                    // Skip server verification
+                  }
+
+                  public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                  }
+                }
               };
 
           tlsClientParameters.setTrustManagers(trustAllCerts);

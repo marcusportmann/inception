@@ -46,26 +46,20 @@ public class UserTransactionProxy implements UserTransaction {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(UserTransactionProxy.class);
 
-  /**
-   * The stack traces for the active transactions associated with the current thread.
-   */
+  /** The stack traces for the active transactions associated with the current thread. */
   private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /**
-   * The JTA transaction manager.
-   */
+  /** The JTA transaction manager. */
   private TransactionManager transactionManager;
 
-  /**
-   * The JTA user transaction.
-   */
+  /** The JTA user transaction. */
   private UserTransaction userTransaction;
 
   /**
    * Constructs a new <code>UserTransactionProxy</code>.
    *
-   * @param userTransaction    the JTA user transaction
+   * @param userTransaction the JTA user transaction
    * @param transactionManager the JTA transaction manager
    */
   public UserTransactionProxy(
@@ -100,7 +94,7 @@ public class UserTransactionProxy implements UserTransaction {
   @Override
   public void commit()
       throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-      SecurityException, IllegalStateException, SystemException {
+          SecurityException, IllegalStateException, SystemException {
     Transaction beforeTransaction = getCurrentTransaction();
 
     try {

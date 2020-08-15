@@ -39,8 +39,8 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
    * Constructs a new <code>DayOfMonthValueMatcher</code>.
    *
    * @param integers The Integer elements, one for every value accepted by the matcher. The match()
-   *                 method will return <code>true</code> only if its parameter will be one of this
-   *                 list or the last-day-of-month setting applies.
+   *     method will return <code>true</code> only if its parameter will be one of this list or the
+   *     last-day-of-month setting applies.
    */
   public DayOfMonthValueMatcher(List<Integer> integers) {
     super(integers);
@@ -50,12 +50,11 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
    * Returns <code>true</code> if the given value is included in the matcher list or the
    * last-day-of-month setting applies otherwise <code>false</code>.
    *
-   * @param value      the value
-   * @param month      the month
+   * @param value the value
+   * @param month the month
    * @param isLeapYear <code>true</code> if this is a leap year <code>false</code> otherwise
-   *
    * @return <code>true</code> if the given value matches the rules of the <code>ValueMatcher</code>
-   * , <code>false</code> otherwise
+   *     , <code>false</code> otherwise
    */
   public boolean match(int value, int month, boolean isLeapYear) {
     return (super.match(value)

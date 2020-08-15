@@ -45,11 +45,8 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class JDBCUtil {
 
-  /**
-   * Private default constructor to enforce utility pattern.
-   */
-  private JDBCUtil() {
-  }
+  /** Private default constructor to enforce utility pattern. */
+  private JDBCUtil() {}
 
   /**
    * Close the connection.
@@ -100,8 +97,7 @@ public class JDBCUtil {
    * Execute the SQL statement using the database connection.
    *
    * @param connection the database connection to use
-   * @param sql        the SQL statement to execute
-   *
+   * @param sql the SQL statement to execute
    * @return the row count
    */
   public static int executeStatement(Connection connection, String sql) throws SQLException {
@@ -116,9 +112,8 @@ public class JDBCUtil {
    * Execute the SQL statements in the file with the specified resource path using the database
    * connection.
    *
-   * @param connection   the database connection to use
+   * @param connection the database connection to use
    * @param resourcePath the resource path to the file containing the SQL statements
-   *
    * @return the number of SQL statements successfully executed
    */
   public static int executeStatements(Connection connection, String resourcePath)
@@ -147,7 +142,6 @@ public class JDBCUtil {
    * Retrieve the schema separator for the database associated with the specified data source.
    *
    * @param dataSource the data source
-   *
    * @return the schema separator for the database associated with the specified data source
    */
   public static String getSchemaSeparator(DataSource dataSource) throws SQLException {
@@ -169,9 +163,8 @@ public class JDBCUtil {
    * Is the database associated with the specified data source an in-memory H2 database.
    *
    * @param dataSource the data source
-   *
    * @return <code>true</code> if the database associated with the specified data source is an
-   * in-memory H2 database or <code>false</code> otherwise
+   *     in-memory H2 database or <code>false</code> otherwise
    */
   public static boolean isInMemoryH2Database(DataSource dataSource) throws SQLException {
     try (Connection connection = dataSource.getConnection()) {
@@ -191,7 +184,6 @@ public class JDBCUtil {
    * Load the SQL statements from the specified URL.
    *
    * @param url the URL
-   *
    * @return the SQL statements loaded from the specified URL
    */
   public static List<String> loadSQL(URL url) throws IOException {
@@ -294,9 +286,8 @@ public class JDBCUtil {
    * Read the blob associated with the column with the specified index from the specified result
    * set.
    *
-   * @param rs    the result set
+   * @param rs the result set
    * @param index the index of the column containing the blob
-   *
    * @return the binary data for the BLOB
    */
   public static byte[] readBlob(ResultSet rs, int index) throws SQLException {
@@ -336,9 +327,8 @@ public class JDBCUtil {
    * connection.
    *
    * @param connection the database connection to use
-   * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
-   * @param schema     the schema name
-   *
+   * @param catalog the catalog name or <code>null</code> if a catalog should not be used
+   * @param schema the schema name
    * @return true if the schema exists or false otherwise
    */
   @SuppressWarnings("resource")
@@ -373,9 +363,8 @@ public class JDBCUtil {
    * data source.
    *
    * @param dataSource the data source to use
-   * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
-   * @param schema     the schema name
-   *
+   * @param catalog the catalog name or <code>null</code> if a catalog should not be used
+   * @param schema the schema name
    * @return true if the schema exists or false otherwise
    */
   @SuppressWarnings("resource")
@@ -410,10 +399,9 @@ public class JDBCUtil {
    * database referenced by the data source.
    *
    * @param connection the database connection to use
-   * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
-   * @param schema     the schema name or <code>null</code> if a schema should not be used
-   * @param table      the name of the table
-   *
+   * @param catalog the catalog name or <code>null</code> if a catalog should not be used
+   * @param schema the schema name or <code>null</code> if a schema should not be used
+   * @param table the name of the table
    * @return true if the table exists or false otherwise
    */
   @SuppressWarnings("resource")
@@ -430,7 +418,7 @@ public class JDBCUtil {
 
     DatabaseMetaData metaData = connection.getMetaData();
 
-    try (ResultSet rs = metaData.getTables(catalog, schema, table, new String[]{"TABLE"})) {
+    try (ResultSet rs = metaData.getTables(catalog, schema, table, new String[] {"TABLE"})) {
       while (rs.next()) {
         String tmpTable =
             StringUtils.isEmpty(rs.getString("TABLE_NAME")) ? "" : rs.getString("TABLE_NAME");
@@ -449,10 +437,9 @@ public class JDBCUtil {
    * database referenced by the data source.
    *
    * @param dataSource the data source to use
-   * @param catalog    the catalog name or <code>null</code> if a catalog should not be used
-   * @param schema     the schema name or <code>null</code> if a schema should not be used
-   * @param table      the name of the table
-   *
+   * @param catalog the catalog name or <code>null</code> if a catalog should not be used
+   * @param schema the schema name or <code>null</code> if a schema should not be used
+   * @param table the name of the table
    * @return true if the table exists or false otherwise
    */
   @SuppressWarnings("resource")

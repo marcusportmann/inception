@@ -51,9 +51,7 @@ import javax.xml.bind.annotation.XmlType;
 @Table(schema = "party", name = "party")
 public class Party {
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the party.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the party. */
   @Schema(
       description = "The Universally Unique Identifier (UUID) uniquely identifying the party",
       required = true)
@@ -64,9 +62,7 @@ public class Party {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name of the party.
-   */
+  /** The name of the party. */
   @Schema(description = "The name of the party", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -75,9 +71,7 @@ public class Party {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The type of party.
-   */
+  /** The type of party. */
   @Schema(
       description = "The type of party",
       allowableValues = "1 = Organization, 2 = Person",
@@ -88,11 +82,8 @@ public class Party {
   @Column(name = "type", nullable = false)
   private PartyType type;
 
-  /**
-   * Constructs a new <code>Party</code>.
-   */
-  public Party() {
-  }
+  /** Constructs a new <code>Party</code>. */
+  public Party() {}
 
   /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the party.

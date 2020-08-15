@@ -55,7 +55,6 @@ public enum OrganizationStatus {
    * Returns the organization status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the organization status
-   *
    * @return the organization status given by the specified numeric code value
    */
   @JsonCreator

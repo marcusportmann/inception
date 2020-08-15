@@ -61,9 +61,7 @@ public class CodeCategorySummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID uniquely identifying the code category.
-   */
+  /** The ID uniquely identifying the code category. */
   @Schema(description = "The ID uniquely identifying the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -73,9 +71,7 @@ public class CodeCategorySummary implements Serializable {
   @Column(name = "id", nullable = false, length = 100)
   private String id;
 
-  /**
-   * The name of the code category.
-   */
+  /** The name of the code category. */
   @Schema(description = "The name of the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -84,9 +80,7 @@ public class CodeCategorySummary implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The date and time the code category was last updated.
-   */
+  /** The date and time the code category was last updated. */
   @Schema(description = "The date and time the code category was last updated")
   @JsonProperty
   @XmlElement(name = "Updated")
@@ -95,17 +89,14 @@ public class CodeCategorySummary implements Serializable {
   @Column(name = "updated")
   private LocalDateTime updated;
 
-  /**
-   * Constructs a new <code>CodeCategorySummary</code>.
-   */
-  public CodeCategorySummary() {
-  }
+  /** Constructs a new <code>CodeCategorySummary</code>. */
+  public CodeCategorySummary() {}
 
   /**
    * Constructs a new <code>CodeCategorySummary</code>.
    *
-   * @param id      the ID uniquely identifying the code category
-   * @param name    the name of the code category
+   * @param id the ID uniquely identifying the code category
+   * @param name the name of the code category
    * @param updated the date and time the code category was last updated
    */
   public CodeCategorySummary(String id, String name, LocalDateTime updated) {
@@ -118,7 +109,6 @@ public class CodeCategorySummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

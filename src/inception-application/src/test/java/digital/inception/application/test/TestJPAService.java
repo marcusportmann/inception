@@ -42,9 +42,7 @@ public class TestJPAService implements ITestJPAService {
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
 
-  /**
-   * The Spring platform transaction manager.
-   */
+  /** The Spring platform transaction manager. */
   private PlatformTransactionManager transactionManager;
 
   /**
@@ -148,7 +146,6 @@ public class TestJPAService implements ITestJPAService {
    * Retrieve the test data.
    *
    * @param id the ID
-   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   @Transactional
@@ -176,7 +173,6 @@ public class TestJPAService implements ITestJPAService {
    * Retrieve the test data without a transaction.
    *
    * @param id the ID
-   *
    * @return the test data or <code>null</code> if the test data cannot be found
    */
   public TestData getTestDataWithoutTransaction(String id) throws TestJPAServiceException {

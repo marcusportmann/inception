@@ -78,19 +78,19 @@ import org.springframework.util.StringUtils;
     basePackages = {"digital.inception"},
     lazyInit = true,
     excludeFilters = {
-        @ComponentScan.Filter(value = SpringBootApplication.class, type = FilterType.ANNOTATION),
-        @ComponentScan.Filter(
-            pattern = "digital\\.inception\\.application\\.ApplicationDataSourceConfiguration",
-            type = FilterType.REGEX),
-        @ComponentScan.Filter(
-            pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
-            type = FilterType.REGEX),
-        @ComponentScan.Filter(
-            pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
-            type = FilterType.REGEX),
-        @ComponentScan.Filter(
-            pattern = "digital\\.inception\\.process\\.ProcessConfiguration",
-            type = FilterType.REGEX)
+      @ComponentScan.Filter(value = SpringBootApplication.class, type = FilterType.ANNOTATION),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.application\\.ApplicationDataSourceConfiguration",
+          type = FilterType.REGEX),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.application\\.ApplicationTransactionManager",
+          type = FilterType.REGEX),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
+          type = FilterType.REGEX),
+      @ComponentScan.Filter(
+          pattern = "digital\\.inception\\.process\\.ProcessConfiguration",
+          type = FilterType.REGEX)
     })
 @SuppressWarnings("WeakerAccess")
 public class TestConfiguration {

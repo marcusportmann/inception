@@ -39,45 +39,29 @@ import org.springframework.util.StringUtils;
  */
 public class CheckUserExistsResponseData extends WbxmlMessageData {
 
-  /**
-   * The error code returned when an unknown error occurred.
-   */
+  /** The error code returned when an unknown error occurred. */
   public static final int ERROR_CODE_UNKNOWN_ERROR = -1;
 
-  /**
-   * The UUID for the "Check User Exists Response" message.
-   */
+  /** The UUID for the "Check User Exists Response" message. */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("a38bd55e-3470-46f1-a96a-a6b08a9adc63");
 
-  /**
-   * The error code returned to indicate success.
-   */
+  /** The error code returned to indicate success. */
   private static final int ERROR_CODE_SUCCESS = 0;
 
-  /**
-   * The message returned to indicate success.
-   */
+  /** The message returned to indicate success. */
   private static final String ERROR_MESSAGE_SUCCESS = "Success";
 
-  /**
-   * The error code;
-   */
+  /** The error code; */
   private int errorCode;
 
-  /**
-   * The error message.
-   */
+  /** The error message. */
   private String errorMessage;
 
-  /**
-   * <code>true</code> if the user exists or <code>false</code> otherwise.
-   */
+  /** <code>true</code> if the user exists or <code>false</code> otherwise. */
   private boolean userExists;
 
-  /**
-   * Constructs a new <code>CheckUserExistsResponseData</code>.
-   */
+  /** Constructs a new <code>CheckUserExistsResponseData</code>. */
   public CheckUserExistsResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -98,7 +82,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
   /**
    * Constructs a new <code>CheckUserExistsResponseData</code>.
    *
-   * @param errorCode    the error code
+   * @param errorCode the error code
    * @param errorMessage the error message
    */
   public CheckUserExistsResponseData(int errorCode, String errorMessage) {
@@ -112,9 +96,8 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -181,7 +164,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   @Override
   public byte[] toMessageData() {

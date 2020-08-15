@@ -33,6 +33,4 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.scheduler"})
 @EnableScheduling
-public class SchedulerConfiguration {
-
-}
+public class SchedulerConfiguration {}

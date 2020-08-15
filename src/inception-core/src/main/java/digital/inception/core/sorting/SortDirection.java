@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.core.sorting;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -35,23 +35,19 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "SortDirection")
 @XmlEnum
-@XmlType(name = "SortDirection", namespace = "http://security.inception.digital")
+@XmlType(name = "SortDirection", namespace = "http://core.inception.digital")
 public enum SortDirection {
-  /**
-   * Sort ascending.
-   */
+  /** Sort ascending. */
   @XmlEnumValue("Ascending")
   ASCENDING("asc", "Ascending"),
 
-  /**
-   * Sort descending.
-   */
+  /** Sort descending. */
   @XmlEnumValue("Descending")
   DESCENDING("desc", "Descending");
 
-  private String code;
+  private final String code;
 
-  private String name;
+  private final String name;
 
   SortDirection(String code, String name) {
     this.code = code;
@@ -62,7 +58,6 @@ public enum SortDirection {
    * Returns the sort direction given by the specified code value.
    *
    * @param code the code value identifying the sort direction
-   *
    * @return the sort direction given by the specified code value
    */
   @JsonCreator

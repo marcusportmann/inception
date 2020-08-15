@@ -41,26 +41,26 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "PasswordChange")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "expirePassword",
-    "lockUser",
-    "newPassword",
-    "password",
-    "reason",
-    "resetPasswordHistory",
-    "securityCode"
+  "expirePassword",
+  "lockUser",
+  "newPassword",
+  "password",
+  "reason",
+  "resetPasswordHistory",
+  "securityCode"
 })
 @XmlRootElement(name = "PasswordChange", namespace = "http://security.inception.digital")
 @XmlType(
     name = "PasswordChange",
     namespace = "http://security.inception.digital",
     propOrder = {
-        "expirePassword",
-        "lockUser",
-        "newPassword",
-        "password",
-        "reason",
-        "resetPasswordHistory",
-        "securityCode"
+      "expirePassword",
+      "lockUser",
+      "newPassword",
+      "password",
+      "reason",
+      "resetPasswordHistory",
+      "securityCode"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -68,26 +68,20 @@ public class PasswordChange implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Expire the user's password when performing an administrative password change.
-   */
+  /** Expire the user's password when performing an administrative password change. */
   @Schema(
       description = "Expire the user's password when performing an administrative password change")
   @JsonProperty
   @XmlElement(name = "ExpirePassword")
   private Boolean expirePassword;
 
-  /**
-   * Lock the user when performing an administrative password change.
-   */
+  /** Lock the user when performing an administrative password change. */
   @Schema(description = "Lock the user when performing an administrative password change")
   @JsonProperty
   @XmlElement(name = "LockUser")
   private Boolean lockUser;
 
-  /**
-   * The new password.
-   */
+  /** The new password. */
   @Schema(description = "The new password", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "NewPassword", required = true)
@@ -107,18 +101,14 @@ public class PasswordChange implements Serializable {
   @Size(min = 1, max = 100)
   private String password;
 
-  /**
-   * The reason for changing the password.
-   */
+  /** The reason for changing the password. */
   @Schema(description = "The reason for changing the password", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Reason", required = true)
   @NotNull
   private PasswordChangeReason reason;
 
-  /**
-   * Reset the user's password history when performing an administrative password change.
-   */
+  /** Reset the user's password history when performing an administrative password change. */
   @Schema(
       description =
           "Reset the user's password history when performing an administrative password change")
@@ -126,26 +116,21 @@ public class PasswordChange implements Serializable {
   @XmlElement(name = "ResetPasswordHistory")
   private Boolean resetPasswordHistory;
 
-  /**
-   * The security code when performing a forgotten password change.
-   */
+  /** The security code when performing a forgotten password change. */
   @Schema(description = "The security code when performing a forgotten password change.")
   @JsonProperty
   @XmlElement(name = "SecurityCode")
   private String securityCode;
 
-  /**
-   * Constructs a new <code>PasswordChange</code>.
-   */
-  public PasswordChange() {
-  }
+  /** Constructs a new <code>PasswordChange</code>. */
+  public PasswordChange() {}
 
   /**
    * Constructs a new <code>PasswordChange</code> for a USER password change.
    *
    * @param newPassword the new password
-   * @param password    the password for the user that is used to authorise the operation when
-   *                    performing a user password change
+   * @param password the password for the user that is used to authorise the operation when
+   *     performing a user password change
    */
   public PasswordChange(String newPassword, String password) {
     this.newPassword = newPassword;
@@ -156,12 +141,12 @@ public class PasswordChange implements Serializable {
   /**
    * Constructs a new <code>PasswordChange</code> for an ADMINISTRATIVE password change.
    *
-   * @param newPassword          the new password
-   * @param expirePassword       expire the user's password when performing the administrative
-   *                             password change
-   * @param lockUser             lock the user when performing the administrative password change
+   * @param newPassword the new password
+   * @param expirePassword expire the user's password when performing the administrative password
+   *     change
+   * @param lockUser lock the user when performing the administrative password change
    * @param resetPasswordHistory reset the user's password history when performing the
-   *                             administrative password change
+   *     administrative password change
    */
   public PasswordChange(
       String newPassword, Boolean expirePassword, Boolean lockUser, Boolean resetPasswordHistory) {
@@ -177,7 +162,7 @@ public class PasswordChange implements Serializable {
    * password change.
    *
    * @return <code>true</code> if the user's password should be expired when performing an
-   * administrative password changeor <code>false</code> otherwise
+   *     administrative password changeor <code>false</code> otherwise
    */
   public Boolean getExpirePassword() {
     return expirePassword;
@@ -187,7 +172,7 @@ public class PasswordChange implements Serializable {
    * Returns whether the user should be locked when performing an administrative password change.
    *
    * @return <code>true</code> if the user should be locked when performing an administrative
-   * password change or <code>false</code> otherwise
+   *     password change or <code>false</code> otherwise
    */
   public Boolean getLockUser() {
     return lockUser;
@@ -207,7 +192,7 @@ public class PasswordChange implements Serializable {
    * user password change.
    *
    * @return the password for the user that is used to authorise the operation when performing a
-   * user password change
+   *     user password change
    */
   public String getPassword() {
     return password;
@@ -227,7 +212,7 @@ public class PasswordChange implements Serializable {
    * password change.
    *
    * @return <code>true</code> if the user's password history should be reset when performing an
-   * administrative password changeor <code>false</code> otherwise
+   *     administrative password changeor <code>false</code> otherwise
    */
   public Boolean getResetPasswordHistory() {
     return resetPasswordHistory;
@@ -247,7 +232,7 @@ public class PasswordChange implements Serializable {
    * change.
    *
    * @param expirePassword expire the user's password when performing an administrative password
-   *                       change
+   *     change
    */
   public void setExpirePassword(Boolean expirePassword) {
     this.expirePassword = expirePassword;
@@ -276,7 +261,7 @@ public class PasswordChange implements Serializable {
    * password change.
    *
    * @param password the password for the user that is used to authorise the operation when
-   *                 performing a user password change
+   *     performing a user password change
    */
   public void setPassword(String password) {
     this.password = password;
@@ -296,7 +281,7 @@ public class PasswordChange implements Serializable {
    * password change.
    *
    * @param resetPasswordHistory reset the user's password history when performing an administrative
-   *                             password change
+   *     password change
    */
   public void setResetPasswordHistory(Boolean resetPasswordHistory) {
     this.resetPasswordHistory = resetPasswordHistory;

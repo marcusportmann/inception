@@ -46,9 +46,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SuppressWarnings("SpringJavaAutowiredMembersInspection")
 public class MessagingServlet extends HttpServlet {
 
-  /**
-   * The HTTP content-type used when receiving and sending WBXML.
-   */
+  /** The HTTP content-type used when receiving and sending WBXML. */
   private static final String WBXML_CONTENT_TYPE = "application/wbxml";
 
   /* Logger */
@@ -56,20 +54,14 @@ public class MessagingServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Is the messaging servlet initialized?
-   */
+  /** Is the messaging servlet initialized? */
   private boolean isInitialized;
 
   /* Messaging Service */
-  @Autowired
-  private IMessagingService messagingService;
+  @Autowired private IMessagingService messagingService;
 
-  /**
-   * Constructs a new <code>MessagingServlet</code>.
-   */
-  public MessagingServlet() {
-  }
+  /** Constructs a new <code>MessagingServlet</code>. */
+  public MessagingServlet() {}
 
   /**
    * Initialize the servlet.
@@ -117,7 +109,7 @@ public class MessagingServlet extends HttpServlet {
       }
 
       switch (document.getRootElement().getName()) {
-        // We are processing a Message...
+          // We are processing a Message...
         case "Message":
           if (!processMessage(document, response)) {
             if (Debug.inDebugMode()) {
@@ -127,7 +119,7 @@ public class MessagingServlet extends HttpServlet {
 
           break;
 
-        // We are processing a MessagePart...
+          // We are processing a MessagePart...
         case "MessagePart":
           if (!processMessagePart(document, response)) {
             if (Debug.inDebugMode()) {
@@ -137,7 +129,7 @@ public class MessagingServlet extends HttpServlet {
 
           break;
 
-        // We are processing a request to download messages queued for a device
+          // We are processing a request to download messages queued for a device
         case "MessageDownloadRequest":
           if (!processMessageDownloadRequest(document, response)) {
             if (Debug.inDebugMode()) {
@@ -148,7 +140,7 @@ public class MessagingServlet extends HttpServlet {
 
           break;
 
-        // We are processing an acknowledgement that a message has been downloaded successfully
+          // We are processing an acknowledgement that a message has been downloaded successfully
         case "MessageReceivedRequest":
           if (!processMessageReceivedRequest(document, response)) {
             if (Debug.inDebugMode()) {
@@ -159,7 +151,7 @@ public class MessagingServlet extends HttpServlet {
 
           break;
 
-        // We are processing a request to download message parts queued for a device
+          // We are processing a request to download message parts queued for a device
         case "MessagePartDownloadRequest":
           if (!processMessagePartDownloadRequest(document, response)) {
             if (Debug.inDebugMode()) {
@@ -170,8 +162,8 @@ public class MessagingServlet extends HttpServlet {
 
           break;
 
-        // We are processing an acknowledgement that a message part has been downloaded
-        // successfully
+          // We are processing an acknowledgement that a message part has been downloaded
+          // successfully
         case "MessagePartReceivedRequest":
           if (!processMessagePartReceivedRequest(document, response)) {
             if (Debug.inDebugMode()) {
@@ -807,7 +799,6 @@ public class MessagingServlet extends HttpServlet {
    * Read the WBXML request document from the HTTP servlet request.
    *
    * @param request the HTTP servlet request to read the WBXML request document from
-   *
    * @return the WBXML request document
    */
   private Document readRequestDocument(HttpServletRequest request) throws ServletException {
@@ -840,9 +831,9 @@ public class MessagingServlet extends HttpServlet {
   /**
    * Write the specified error information to the HTTP response.
    *
-   * @param message   the error message
+   * @param message the error message
    * @param exception the exception containing the error information which may be <code>null</code>
-   * @param response  the HTTP servlet response to write the error information to
+   * @param response the HTTP servlet response to write the error information to
    */
   private void writeErrorResponse(
       String message, Throwable exception, HttpServletResponse response) {
@@ -878,9 +869,9 @@ public class MessagingServlet extends HttpServlet {
   /**
    * Write the binary data for the WBXML response document to the HTTP servlet response.
    *
-   * @param data     the binary data for the WBXML response document
+   * @param data the binary data for the WBXML response document
    * @param response the HTTP servlet response to write the binary data for the WBXML response
-   *                 document to
+   *     document to
    */
   private void writeResponseDocument(byte[] data, HttpServletResponse response) {
     try {

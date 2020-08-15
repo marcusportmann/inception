@@ -32,7 +32,7 @@ import {SecurityService} from '../services/security.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
-import {SortDirection} from '../services/sort-direction';
+import {SortDirection} from '../../core/sorting/sort-direction';
 import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';

@@ -526,60 +526,50 @@
 
     <createTable schemaName="reference" tableName="gender" remarks="Genders">
       <column name="code" type="nvarchar(10)" remarks="The code for the gender"/>
-      <column name="language" type="nvarchar(3)" remarks="The ISO 639 alpha-2 or alpha-3 language code"/>
-      <column name="country" type="nvarchar(3)" remarks="The ISO 3166-1 alpha-2 country code or UN M.49 numeric-3 area code for the language variant"/>
+      <column name="local_id" type="nvarchar(10)" remarks="The Unicode locale identifier"/>
       <column name="name" type="nvarchar(20)" remarks="The name of the gender"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the gender"/>
     </createTable>
-    <addPrimaryKey schemaName="reference" tableName="gender" columnNames="code,language,country"/>
+    <addPrimaryKey schemaName="reference" tableName="gender" columnNames="code,local_id"/>
     <addNotNullConstraint schemaName="reference" tableName="gender" columnName="code"/>
-    <addNotNullConstraint schemaName="reference" tableName="gender" columnName="language"/>
-    <addNotNullConstraint schemaName="reference" tableName="gender" columnName="country"/>
+    <addNotNullConstraint schemaName="reference" tableName="gender" columnName="local_id"/>
     <addNotNullConstraint schemaName="reference" tableName="gender" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="gender" columnName="description"/>
-    <addDefaultValue schemaName="reference" tableName="gender" columnName="language" defaultValue=""/>
-    <addDefaultValue schemaName="reference" tableName="gender" columnName="country" defaultValue=""/>
     <addDefaultValue schemaName="reference" tableName="gender" columnName="description" defaultValue=""/>
 
     <insert schemaName="reference" tableName="gender">
       <column name="code" value="0"/>
-      <column name="language" value="en"/>
-      <column name="country" value=""/>
+      <column name="local_id" value="en-US"/>
       <column name="name" value="Not known"/>
       <column name="description" value="Not known"/>
     </insert>
     <insert schemaName="reference" tableName="gender">
       <column name="code" value="1"/>
-      <column name="language" value="en"/>
-      <column name="country" value=""/>
+      <column name="local_id" value="en-US"/>
       <column name="name" value="Male"/>
       <column name="description" value="Male"/>
     </insert>
     <insert schemaName="reference" tableName="gender">
       <column name="code" value="2"/>
-      <column name="language" value="en"/>
-      <column name="country" value=""/>
+      <column name="local_id" value="en-US"/>
       <column name="name" value="Female"/>
       <column name="description" value="Female"/>
     </insert>
     <insert schemaName="reference" tableName="gender">
       <column name="code" value="3"/>
-      <column name="language" value="en"/>
-      <column name="country" value=""/>
+      <column name="local_id" value="en-US"/>
       <column name="name" value="Transgender"/>
       <column name="description" value="Transgender"/>
     </insert>
     <insert schemaName="reference" tableName="gender">
       <column name="code" value="4"/>
-      <column name="language" value="en"/>
-      <column name="country" value=""/>
+      <column name="local_id" value="en-US"/>
       <column name="name" value="Non-binary"/>
       <column name="description" value="Non-binary"/>
     </insert>
     <insert schemaName="reference" tableName="gender">
       <column name="code" value="9"/>
-      <column name="language" value="en"/>
-      <column name="country" value=""/>
+      <column name="local_id" value="en-US"/>
       <column name="name" value="Not applicable"/>
       <column name="description" value="Not applicable"/>
     </insert>

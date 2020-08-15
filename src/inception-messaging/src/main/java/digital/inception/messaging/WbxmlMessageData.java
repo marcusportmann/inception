@@ -32,23 +32,19 @@ import java.util.UUID;
  */
 public abstract class WbxmlMessageData {
 
-  /**
-   * The UUID identifying the type of message the message data is associated with.
-   */
+  /** The UUID identifying the type of message the message data is associated with. */
   private UUID messageTypeId;
 
-  /**
-   * The priority for the message type the message data is associated with.
-   */
+  /** The priority for the message type the message data is associated with. */
   private MessagePriority messageTypePriority;
 
   /**
    * Constructs a new <code>WbxmlMessageData</code>.
    *
-   * @param messageTypeId       the UUID identifying the type of message the message data is
-   *                            associated with
+   * @param messageTypeId the UUID identifying the type of message the message data is associated
+   *     with
    * @param messageTypePriority the priority for the message type the message data is associated
-   *                            with
+   *     with
    */
   public WbxmlMessageData(UUID messageTypeId, MessagePriority messageTypePriority) {
     this.messageTypeId = messageTypeId;
@@ -59,9 +55,8 @@ public abstract class WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   public abstract boolean fromMessageData(byte[] messageData) throws MessagingServiceException;
 
@@ -88,7 +83,7 @@ public abstract class WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   public abstract byte[] toMessageData() throws MessagingServiceException;
 
@@ -96,7 +91,6 @@ public abstract class WbxmlMessageData {
    * Parse the WBXML data representation of the message data.
    *
    * @param data the WBXML data representation of the message data
-   *
    * @return the WBXML document representing the message data
    */
   protected Document parseWBXML(byte[] data) throws MessagingServiceException {

@@ -27,9 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 
 // ~--- JDK imports ------------------------------------------------------------
 
-/**
- * The enumeration giving the possible statuses for a message.
- */
+/** The enumeration giving the possible statuses for a message. */
 @Schema(description = "MessageStatus")
 @XmlEnum
 @XmlType(name = "MessageStatus", namespace = "http://messaging.inception.digital")
@@ -70,7 +68,6 @@ public enum MessageStatus {
    * Returns the message status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the message status
-   *
    * @return the message status given by the specified numeric code value
    */
   @JsonCreator

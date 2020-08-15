@@ -36,7 +36,6 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
    * Marshals the <code>java.time.LocalDate</code> value as an ISO8601Util string.
    *
    * @param value the value to marshal
-   *
    * @return the <code>java.time.LocalDate</code> value as an ISO8601Util string
    */
   @Override
@@ -52,7 +51,6 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
    * Unmarshals the ISO8601Util string value as a <code>java.time.LocalDate</code>.
    *
    * @param value the ISO8601Util string value
-   *
    * @return the ISO8601Util string value as a <code>java.time.LocalDate</code>
    */
   @Override

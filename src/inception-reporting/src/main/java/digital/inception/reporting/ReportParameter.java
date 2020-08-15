@@ -52,9 +52,7 @@ public class ReportParameter implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The name of the report parameter.
-   */
+  /** The name of the report parameter. */
   @Schema(description = "The name of the report parameter", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -62,25 +60,20 @@ public class ReportParameter implements Serializable {
   @Size(min = 1, max = 100)
   private String name;
 
-  /**
-   * The value for the report parameter.
-   */
+  /** The value for the report parameter. */
   @Schema(description = "The value for the report parameter", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Value", required = true)
   @NotNull
   private String value;
 
-  /**
-   * Constructs a new <code>ReportParameter</code>.
-   */
-  public ReportParameter() {
-  }
+  /** Constructs a new <code>ReportParameter</code>. */
+  public ReportParameter() {}
 
   /**
    * Constructs a new <code>ReportParameter</code>.
    *
-   * @param name  the name of the report parameter
+   * @param name the name of the report parameter
    * @param value the value for the report parameter
    */
   public ReportParameter(String name, String value) {

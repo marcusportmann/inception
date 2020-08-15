@@ -59,18 +59,14 @@ import javax.xml.bind.annotation.XmlType;
     pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")})
 public class Organization {
 
-  /**
-   * The type of party for the organization.
-   */
+  /** The type of party for the organization. */
   @JsonIgnore
   @XmlTransient
   @NotNull
   @Column(name = "type", nullable = false)
   private final PartyType type = PartyType.ORGANIZATION;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the organization.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the organization. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the organization",
@@ -82,9 +78,7 @@ public class Organization {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name of the organization.
-   */
+  /** The name of the organization. */
   @Schema(description = "The name of the organization", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -93,11 +87,8 @@ public class Organization {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * Constructs a new <code>Organization</code>.
-   */
-  public Organization() {
-  }
+  /** Constructs a new <code>Organization</code>. */
+  public Organization() {}
 
   /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the organization.

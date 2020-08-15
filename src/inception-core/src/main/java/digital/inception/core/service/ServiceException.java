@@ -27,15 +27,13 @@ public abstract class ServiceException extends Exception {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The service error information.
-   */
-  private ServiceError serviceError;
+  /** The service error information. */
+  private final ServiceError serviceError;
 
   /**
    * Constructs a new <code>ServiceException</code> with the specified message.
    *
-   * @param code    The code identifying the error.
+   * @param code The code identifying the error.
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
   public ServiceException(String code, String message) {
@@ -49,9 +47,9 @@ public abstract class ServiceException extends Exception {
    * (cause==null ? null : cause.toString())</code> (which typically contains the class and message
    * of cause).
    *
-   * @param code  The code identifying the service error.
+   * @param code The code identifying the service error.
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ServiceException(String code, Throwable cause) {
     super(cause);
@@ -62,10 +60,10 @@ public abstract class ServiceException extends Exception {
   /**
    * Constructs a new <code>ServiceException</code> with the specified message and cause.
    *
-   * @param code    The code identifying the service error.
+   * @param code The code identifying the service error.
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ServiceException(String code, String message, Throwable cause) {
     super(message, cause);

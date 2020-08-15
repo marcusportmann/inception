@@ -27,6 +27,4 @@ import org.springframework.context.annotation.Configuration;
  * @author Marcus Portmann
  */
 @Configuration
-public class InceptionRestServiceConfiguration {
-
-}
+public class InceptionRestServiceConfiguration {}

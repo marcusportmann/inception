@@ -66,7 +66,6 @@ public enum JobStatus {
    * Returns the status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the status
-   *
    * @return the status given by the specified numeric code value
    */
   @JsonCreator

@@ -29,7 +29,7 @@ public class Debug {
    * <code>null</code> if the root directory cannot be determined.
    *
    * @return the root directory for the JEE application server the application is running under or
-   * <code>null</code> if the root directory cannot be determined
+   *     <code>null</code> if the root directory cannot be determined
    */
   public static String getApplicationServerRootDirectory() {
     String wasInstallRoot = System.getProperty("was.install.root");
@@ -58,11 +58,7 @@ public class Debug {
 
     String wlpUserDir = System.getProperty("wlp.user.dir");
 
-    if (wlpUserDir != null) {
-      return wlpUserDir;
-    }
-
-    return null;
+    return wlpUserDir;
   }
 
   /**

@@ -31,9 +31,7 @@ public class ApplicationException extends RichRuntimeException {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <code>ApplicationException</code> with <code>null</code> as its message.
-   */
+  /** Constructs a new <code>ApplicationException</code> with <code>null</code> as its message. */
   public ApplicationException() {
     super();
   }
@@ -53,7 +51,7 @@ public class ApplicationException extends RichRuntimeException {
    * message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ApplicationException(Throwable cause) {
     super(cause);
@@ -62,7 +60,7 @@ public class ApplicationException extends RichRuntimeException {
   /**
    * Constructs a new <code>ApplicationException</code> with the specified code and message.
    *
-   * @param code    the error code identifying the error
+   * @param code the error code identifying the error
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    */
   public ApplicationException(String code, String message) {
@@ -73,8 +71,8 @@ public class ApplicationException extends RichRuntimeException {
    * Constructs a new <code>ApplicationException</code> with the specified message and cause.
    *
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ApplicationException(String message, Throwable cause) {
     super(message, cause);
@@ -83,10 +81,10 @@ public class ApplicationException extends RichRuntimeException {
   /**
    * Constructs a new <code>ApplicationException</code> with the specified code, message and cause.
    *
-   * @param code    the error code identifying the error
+   * @param code the error code identifying the error
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public ApplicationException(String code, String message, Throwable cause) {
     super(code, message, cause);

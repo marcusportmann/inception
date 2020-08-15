@@ -60,18 +60,14 @@ import javax.xml.bind.annotation.XmlType;
     pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")})
 public class Person {
 
-  /**
-   * The type of party for the person.
-   */
+  /** The type of party for the person. */
   @JsonIgnore
   @XmlTransient
   @NotNull
   @Column(name = "type", nullable = false)
   private final PartyType type = PartyType.PERSON;
 
-  /**
-   * The date of birth for the person.
-   */
+  /** The date of birth for the person. */
   @Schema(description = "The date of birth for the person", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DateOfBirth", required = true)
@@ -79,9 +75,7 @@ public class Person {
   @Column(table = "person", name = "date_of_birth", nullable = false)
   private LocalDate dateOfBirth;
 
-  /**
-   * The code identifying the gender for the person.
-   */
+  /** The code identifying the gender for the person. */
   @Schema(description = "The code identifying the gender for the person", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Gender", required = true)
@@ -89,9 +83,7 @@ public class Person {
   @Column(table = "person", name = "gender", nullable = false)
   private String gender;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the person.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the person. */
   @Schema(
       description = "The Universally Unique Identifier (UUID) uniquely identifying the person",
       required = true)
@@ -102,9 +94,7 @@ public class Person {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name of the person.
-   */
+  /** The name of the person. */
   @Schema(description = "The name of the person", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -113,11 +103,8 @@ public class Person {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * Constructs a new <code>Person</code>.
-   */
-  public Person() {
-  }
+  /** Constructs a new <code>Person</code>. */
+  public Person() {}
 
   /**
    * Returns the date of birth for the person.

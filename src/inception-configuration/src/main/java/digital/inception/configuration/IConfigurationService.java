@@ -41,7 +41,6 @@ public interface IConfigurationService {
    * Retrieve the binary configuration.
    *
    * @param key the key uniquely identifying the configuration
-   *
    * @return the binary configuration
    */
   byte[] getBinary(String key) throws ConfigurationNotFoundException, ConfigurationServiceException;
@@ -49,9 +48,8 @@ public interface IConfigurationService {
   /**
    * Retrieve the binary configuration.
    *
-   * @param key          the key uniquely identifying the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the binary configuration or the default value if the configuration does not exist
    */
   byte[] getBinary(String key, byte[] defaultValue) throws ConfigurationServiceException;
@@ -60,7 +58,6 @@ public interface IConfigurationService {
    * Retrieve the <code>Boolean</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
-   *
    * @return the <code>Boolean</code> configuration
    */
   boolean getBoolean(String key)
@@ -69,11 +66,10 @@ public interface IConfigurationService {
   /**
    * Retrieve the <code>Boolean</code> configuration.
    *
-   * @param key          the key uniquely identifying the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the <code>Boolean</code> configuration or the default value if the configuration value
-   * does not exist
+   *     does not exist
    */
   boolean getBoolean(String key, boolean defaultValue) throws ConfigurationServiceException;
 
@@ -81,7 +77,6 @@ public interface IConfigurationService {
    * Retrieve the configuration.
    *
    * @param key the key uniquely identifying the configuration
-   *
    * @return the configuration
    */
   Configuration getConfiguration(String key)
@@ -105,7 +100,6 @@ public interface IConfigurationService {
    * Retrieve the <code>Double</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
-   *
    * @return the <code>Double</code> configuration
    */
   Double getDouble(String key) throws ConfigurationNotFoundException, ConfigurationServiceException;
@@ -113,11 +107,10 @@ public interface IConfigurationService {
   /**
    * Retrieve the <code>Double</code> configuration.
    *
-   * @param key          the key uniquely identifying the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the <code>Double</code> configuration or the default value if the configuration entry
-   * does not exist
+   *     does not exist
    */
   double getDouble(String key, double defaultValue) throws ConfigurationServiceException;
 
@@ -125,7 +118,6 @@ public interface IConfigurationService {
    * Retrieve the filtered configuration summaries.
    *
    * @param filter the filter to apply to the keys for the configuration summaries
-   *
    * @return the configuration summaries
    */
   List<ConfigurationSummary> getFilteredConfigurationSummaries(String filter)
@@ -135,7 +127,6 @@ public interface IConfigurationService {
    * Retrieve the filtered configurations.
    *
    * @param filter the filter to apply to the keys for the configuration
-   *
    * @return the configurations
    */
   List<Configuration> getFilteredConfigurations(String filter) throws ConfigurationServiceException;
@@ -144,7 +135,6 @@ public interface IConfigurationService {
    * Retrieve the <code>Integer</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
-   *
    * @return the <code>Integer</code> configuration
    */
   Integer getInteger(String key)
@@ -153,11 +143,10 @@ public interface IConfigurationService {
   /**
    * Retrieve the <code>Integer</code> configuration.
    *
-   * @param key          the key uniquely identifying the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the <code>Integer</code> configuration or the default value if the configuration entry
-   * does not exist
+   *     does not exist
    */
   int getInteger(String key, int defaultValue) throws ConfigurationServiceException;
 
@@ -165,7 +154,6 @@ public interface IConfigurationService {
    * Retrieve the <code>Long</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
-   *
    * @return the <code>Long</code> configuration
    */
   Long getLong(String key) throws ConfigurationNotFoundException, ConfigurationServiceException;
@@ -173,11 +161,10 @@ public interface IConfigurationService {
   /**
    * Retrieve the <code>Long</code> configuration.
    *
-   * @param key          the key uniquely identifying the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the <code>Long</code> configuration or the default value if the configuration entry
-   * does not exist
+   *     does not exist
    */
   long getLong(String key, long defaultValue) throws ConfigurationServiceException;
 
@@ -185,7 +172,6 @@ public interface IConfigurationService {
    * Retrieve the value for the <code>String</code> configuration.
    *
    * @param key the key uniquely identifying the configuration
-   *
    * @return the value for the <code>String</code> configuration
    */
   String getString(String key) throws ConfigurationNotFoundException, ConfigurationServiceException;
@@ -193,11 +179,10 @@ public interface IConfigurationService {
   /**
    * Retrieve the value for the <code>String</code> configuration.
    *
-   * @param key          the key uniquely identifying the configuration
+   * @param key the key uniquely identifying the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   *
    * @return the value for the <code>String</code> configuration or the default value if the
-   * configuration does not exist
+   *     configuration does not exist
    */
   String getString(String key, String defaultValue) throws ConfigurationServiceException;
 
@@ -205,7 +190,6 @@ public interface IConfigurationService {
    * Check if a configuration with the specified key exists.
    *
    * @param key the key uniquely identifying the configuration
-   *
    * @return <code>true</code> if the configuration with the specified key exists or <code>false
    * </code> otherwise
    */
@@ -221,8 +205,8 @@ public interface IConfigurationService {
   /**
    * Set the configuration key to the specified value.
    *
-   * @param key         the key uniquely identifying the configuration
-   * @param value       the value for the configuration
+   * @param key the key uniquely identifying the configuration
+   * @param value the value for the configuration
    * @param description the description for the configuration
    */
   void setConfiguration(String key, Object value, String description)

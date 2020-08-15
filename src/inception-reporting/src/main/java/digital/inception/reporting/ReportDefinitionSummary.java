@@ -59,9 +59,7 @@ public class ReportDefinitionSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID uniquely identifying the report definition.
-   */
+  /** The ID uniquely identifying the report definition. */
   @Schema(description = "The ID uniquely identifying the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -70,9 +68,7 @@ public class ReportDefinitionSummary implements Serializable {
   @Column(name = "id", nullable = false)
   private String id;
 
-  /**
-   * The name of the report definition.
-   */
+  /** The name of the report definition. */
   @Schema(description = "The name of the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -81,17 +77,14 @@ public class ReportDefinitionSummary implements Serializable {
   @Column(name = "name", nullable = false)
   private String name;
 
-  /**
-   * Constructs a new <code>ReportDefinitionSummary</code>.
-   */
+  /** Constructs a new <code>ReportDefinitionSummary</code>. */
   @SuppressWarnings("unused")
-  public ReportDefinitionSummary() {
-  }
+  public ReportDefinitionSummary() {}
 
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    *
-   * @param id   the ID uniquely identifying the report definition
+   * @param id the ID uniquely identifying the report definition
    * @param name the name of the report definition
    */
   ReportDefinitionSummary(String id, String name) {
@@ -103,7 +96,6 @@ public class ReportDefinitionSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

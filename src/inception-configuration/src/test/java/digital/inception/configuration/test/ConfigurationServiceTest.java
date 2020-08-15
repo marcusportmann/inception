@@ -51,9 +51,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class ConfigurationServiceTest {
 
@@ -91,15 +91,10 @@ public class ConfigurationServiceTest {
 
   private static final String TEST_STRING_VALUE = "TestStringValue";
 
-  /**
-   * The Configuration Service.
-   */
-  @Autowired
-  private IConfigurationService configurationService;
+  /** The Configuration Service. */
+  @Autowired private IConfigurationService configurationService;
 
-  /**
-   * Test the <code>Binary</code> configuration.
-   */
+  /** Test the <code>Binary</code> configuration. */
   @Test
   public void binaryConfigurationTest()
       throws ConfigurationServiceException, ConfigurationNotFoundException {
@@ -148,9 +143,7 @@ public class ConfigurationServiceTest {
         value);
   }
 
-  /**
-   * Test the <code>Boolean</code> configuration.
-   */
+  /** Test the <code>Boolean</code> configuration. */
   @Test
   public void booleanConfigurationTest()
       throws ConfigurationServiceException, ConfigurationNotFoundException {
@@ -199,9 +192,7 @@ public class ConfigurationServiceTest {
         value);
   }
 
-  /**
-   * Test the <code>Configuration</code> configuration.
-   */
+  /** Test the <code>Configuration</code> configuration. */
   @Test
   public void configurationConfigurationTest()
       throws ConfigurationServiceException, ConfigurationNotFoundException {
@@ -224,17 +215,13 @@ public class ConfigurationServiceTest {
     compareConfiguration(configuration, retrievedConfiguration);
   }
 
-  /**
-   * Test the configurations.
-   */
+  /** Test the configurations. */
   @Test
   public void configurationsTest() throws ConfigurationServiceException {
     List<Configuration> configurations = configurationService.getConfigurations();
   }
 
-  /**
-   * Test the <code>Double</code> configuration.
-   */
+  /** Test the <code>Double</code> configuration. */
   @Test
   public void doubleConfigurationTest()
       throws ConfigurationServiceException, ConfigurationNotFoundException {
@@ -286,9 +273,7 @@ public class ConfigurationServiceTest {
         0.0);
   }
 
-  /**
-   * Test the filtered configurations.
-   */
+  /** Test the filtered configurations. */
   @Test
   public void filteredConfigurationsTest() throws ConfigurationServiceException {
     configurationService.setConfiguration(TEST_FILTERED_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
@@ -311,9 +296,7 @@ public class ConfigurationServiceTest {
         filteredConfigurations.get(0).getValue());
   }
 
-  /**
-   * Test the <code>Integer</code> configuration.
-   */
+  /** Test the <code>Integer</code> configuration. */
   @Test
   public void integerConfigurationTest()
       throws ConfigurationServiceException, ConfigurationNotFoundException {
@@ -364,9 +347,7 @@ public class ConfigurationServiceTest {
         value.intValue());
   }
 
-  /**
-   * Test the <code>Long</code> configuration.
-   */
+  /** Test the <code>Long</code> configuration. */
   @Test
   public void longConfigurationTest()
       throws ConfigurationServiceException, ConfigurationNotFoundException {
@@ -415,9 +396,7 @@ public class ConfigurationServiceTest {
         value.longValue());
   }
 
-  /**
-   * Test the <code>String</code> configuration.
-   */
+  /** Test the <code>String</code> configuration. */
   @Test
   public void stringConfigurationTest()
       throws ConfigurationServiceException, ConfigurationNotFoundException {

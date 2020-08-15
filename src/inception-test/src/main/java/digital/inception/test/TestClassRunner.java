@@ -60,7 +60,7 @@ public class TestClassRunner extends SpringJUnit4ClassRunner {
   /**
    * Run the child test for this runner.
    *
-   * @param method   the test method being run
+   * @param method the test method being run
    * @param notifier the run notifier that will be notified of events while tests are being run
    */
   @Override

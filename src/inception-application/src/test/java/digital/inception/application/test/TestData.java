@@ -32,37 +32,28 @@ import javax.persistence.Table;
 @Table(schema = "TEST", name = "TEST_DATA")
 public class TestData {
 
-  /**
-   * The ID.
-   */
+  /** The ID. */
   @Id
   @Column(name = "id", nullable = false)
   private String id;
 
-  /**
-   * The name.
-   */
+  /** The name. */
   @Column(name = "name", nullable = false)
   private String name;
 
-  /**
-   * The value.
-   */
+  /** The value. */
   @Column(name = "value", nullable = false)
   private String value;
 
-  /**
-   * Constructs a new <code>TestData</code>.
-   */
+  /** Constructs a new <code>TestData</code>. */
   @SuppressWarnings("unused")
-  TestData() {
-  }
+  TestData() {}
 
   /**
    * Constructs a new <code>TestData</code>.
    *
-   * @param id    the ID
-   * @param name  the name
+   * @param id the ID
+   * @param name the name
    * @param value the value
    */
   TestData(String id, String name, String value) {
@@ -75,7 +66,6 @@ public class TestData {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

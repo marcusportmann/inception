@@ -59,9 +59,7 @@ public class UserDirectoryType implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The code uniquely identifying the user directory type.
-   */
+  /** The code uniquely identifying the user directory type. */
   @Schema(description = "The code uniquely identifying the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
@@ -71,9 +69,7 @@ public class UserDirectoryType implements java.io.Serializable {
   @Column(name = "code", nullable = false, length = 100)
   private String code;
 
-  /**
-   * The name of the user directory type.
-   */
+  /** The name of the user directory type. */
   @Schema(description = "The name of the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -82,16 +78,10 @@ public class UserDirectoryType implements java.io.Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The Java class that implements the user directory type.
-   */
-  @JsonIgnore
-  @Transient
-  private transient Class userDirectoryClass;
+  /** The Java class that implements the user directory type. */
+  @JsonIgnore @Transient private transient Class userDirectoryClass;
 
-  /**
-   * The fully qualified name of the Java class that implements the user directory type.
-   */
+  /** The fully qualified name of the Java class that implements the user directory type. */
   @Schema(
       description =
           "The fully qualified name of the Java class that implements the user directory type",
@@ -103,19 +93,16 @@ public class UserDirectoryType implements java.io.Serializable {
   @Column(name = "user_directory_class", nullable = false, length = 1000)
   private String userDirectoryClassName;
 
-  /**
-   * Constructs a new <code>UserDirectoryType</code>.
-   */
-  public UserDirectoryType() {
-  }
+  /** Constructs a new <code>UserDirectoryType</code>. */
+  public UserDirectoryType() {}
 
   /**
    * Constructs a new <code>UserDirectoryType</code>.
    *
-   * @param code                   the code uniquely identifying the user directory type
-   * @param name                   the name of the user directory type
+   * @param code the code uniquely identifying the user directory type
+   * @param name the name of the user directory type
    * @param userDirectoryClassName the fully qualified name of the Java class that implements the
-   *                               user directory type
+   *     user directory type
    */
   UserDirectoryType(String code, String name, String userDirectoryClassName) {
     this.code = code;
@@ -127,7 +114,6 @@ public class UserDirectoryType implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

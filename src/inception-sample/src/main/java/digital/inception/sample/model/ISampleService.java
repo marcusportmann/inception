@@ -32,9 +32,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface ISampleService {
 
-  /**
-   * Add the data.
-   */
+  /** Add the data. */
   void addData() throws SampleServiceException;
 
   /**
@@ -55,14 +53,11 @@ public interface ISampleService {
    * Returns the data.
    *
    * @param id the ID uniquely identifying the data
-   *
    * @return the data
    */
   Data getData(long id) throws SampleServiceException;
 
-  /**
-   * The test method.
-   */
+  /** The test method. */
   void testMethod();
 
   /**

@@ -53,10 +53,10 @@ public class OrganizationUserDirectoryNotFoundException extends ServiceException
   /**
    * Constructs a new <code>OrganizationUserDirectoryNotFoundException</code>.
    *
-   * @param organizationId  the Universally Unique Identifier (UUID) uniquely identifying the
-   *                        organization
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory
+   *     directory
    */
   public OrganizationUserDirectoryNotFoundException(UUID organizationId, UUID userDirectoryId) {
     super(

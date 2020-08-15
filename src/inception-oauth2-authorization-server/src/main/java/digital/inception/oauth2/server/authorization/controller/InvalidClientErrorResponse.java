@@ -28,16 +28,14 @@ import org.springframework.http.HttpStatus;
  */
 public class InvalidClientErrorResponse extends ErrorResponse {
 
-  /**
-   * The error code for the OAuth2 invalid client error response.
-   */
+  /** The error code for the OAuth2 invalid client error response. */
   public static final String ERROR_CODE = "invalid_client";
 
   /**
    * Constructs a new <code>InvalidClientErrorResponse</code>.
    *
    * @param status the HTTP status that should be returned for the OAuth2 invalid client error
-   *               response
+   *     response
    */
   public InvalidClientErrorResponse(HttpStatus status) {
     super(status, ERROR_CODE);
@@ -46,8 +44,8 @@ public class InvalidClientErrorResponse extends ErrorResponse {
   /**
    * Constructs a new <code>InvalidClientErrorResponse</code>.
    *
-   * @param status           the HTTP status that should be returned for the OAuth2 invalid client
-   *                         error response
+   * @param status the HTTP status that should be returned for the OAuth2 invalid client error
+   *     response
    * @param errorDescription the optional human-readable ASCII text description of the error
    */
   public InvalidClientErrorResponse(HttpStatus status, String error, String errorDescription) {

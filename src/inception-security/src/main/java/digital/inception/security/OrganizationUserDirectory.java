@@ -37,9 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 @SuppressWarnings({"unused"})
 public class OrganizationUserDirectory implements Serializable {
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the organization.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the organization. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the organization",
@@ -51,9 +49,7 @@ public class OrganizationUserDirectory implements Serializable {
   @Column(name = "organizationId", nullable = false)
   private UUID organizationId;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
@@ -65,19 +61,16 @@ public class OrganizationUserDirectory implements Serializable {
   @Column(name = "userDirectoryId", nullable = false)
   private UUID userDirectoryId;
 
-  /**
-   * Constructs a new <code>OrganizationUserDirectory</code>.
-   */
-  public OrganizationUserDirectory() {
-  }
+  /** Constructs a new <code>OrganizationUserDirectory</code>. */
+  public OrganizationUserDirectory() {}
 
   /**
    * Constructs a new <code>OrganizationUserDirectory</code>.
    *
-   * @param organizationId  the Universally Unique Identifier (UUID) uniquely identifying the
-   *                        organization
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory
+   *     directory
    */
   public OrganizationUserDirectory(UUID organizationId, UUID userDirectoryId) {
     this.organizationId = organizationId;
@@ -106,7 +99,7 @@ public class OrganizationUserDirectory implements Serializable {
    * Set the Universally Unique Identifier (UUID) uniquely identifying the organization.
    *
    * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *                       organization
+   *     organization
    */
   public void setOrganizationId(UUID organizationId) {
     this.organizationId = organizationId;
@@ -116,7 +109,7 @@ public class OrganizationUserDirectory implements Serializable {
    * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory
+   *     directory
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

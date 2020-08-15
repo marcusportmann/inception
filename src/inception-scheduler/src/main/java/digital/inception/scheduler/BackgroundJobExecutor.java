@@ -39,14 +39,10 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings("unused")
 public class BackgroundJobExecutor implements InitializingBean {
 
-  /**
-   * The default number of minutes an idle processing thread should be kept alive.
-   */
+  /** The default number of minutes an idle processing thread should be kept alive. */
   private static final int DEFAULT_IDLE_PROCESSING_THREADS_KEEP_ALIVE_TIME = 5;
 
-  /**
-   * The default number of threads to start initially to process jobs.
-   */
+  /** The default number of threads to start initially to process jobs. */
   private static final int DEFAULT_INITIAL_PROCESSING_THREADS = 1;
 
   /**
@@ -55,22 +51,16 @@ public class BackgroundJobExecutor implements InitializingBean {
    */
   private static final int DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH = 100;
 
-  /**
-   * The default maximum number of threads to create to process jobs.
-   */
+  /** The default maximum number of threads to create to process jobs. */
   private static final int DEFAULT_MAXIMUM_PROCESSING_THREADS = 10;
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
-  /**
-   * The executor responsible for processing jobs.
-   */
+  /** The executor responsible for processing jobs. */
   private Executor jobProcessor;
 
-  /**
-   * The Scheduler Service.
-   */
+  /** The Scheduler Service. */
   private ISchedulerService schedulerService;
 
   /**
@@ -82,9 +72,7 @@ public class BackgroundJobExecutor implements InitializingBean {
     this.schedulerService = schedulerService;
   }
 
-  /**
-   * Initialize the Background Job Executor.
-   */
+  /** Initialize the Background Job Executor. */
   @Override
   public void afterPropertiesSet() {
     logger.info("Initializing the Background Job Executor");
@@ -116,9 +104,7 @@ public class BackgroundJobExecutor implements InitializingBean {
     }
   }
 
-  /**
-   * Execute the jobs.
-   */
+  /** Execute the jobs. */
   @SuppressWarnings("StatementWithEmptyBody")
   @Scheduled(cron = "0 * * * * *")
   public void executeJobs() {
@@ -139,8 +125,7 @@ public class BackgroundJobExecutor implements InitializingBean {
           }
 
           // Schedule any unscheduled jobs
-          while (schedulerService.scheduleNextUnscheduledJobForExecution()) {
-          }
+          while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
 
           return;
         }

@@ -34,9 +34,7 @@ public class BinaryBuffer implements Serializable {
 
   private ByteArrayOutputStream stream = null;
 
-  /**
-   * Constructs a new empty <code>BinaryBuffer</code>.
-   */
+  /** Constructs a new empty <code>BinaryBuffer</code>. */
   public BinaryBuffer() {
     stream = new ByteArrayOutputStream();
   }
@@ -78,9 +76,7 @@ public class BinaryBuffer implements Serializable {
     }
   }
 
-  /**
-   * Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer.
-   */
+  /** Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer. */
   public void empty() {
     stream.reset();
   }

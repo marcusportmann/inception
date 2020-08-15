@@ -39,20 +39,16 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"unused"})
 public class ErrorService implements IErrorService {
 
-  /**
-   * The Error Report Repository.
-   */
+  /** The Error Report Repository. */
   private final ErrorReportRepository errorReportRepository;
 
-  /**
-   * The Error Report Summary Repository.
-   */
+  /** The Error Report Summary Repository. */
   private final ErrorReportSummaryRepository errorReportSummaryRepository;
 
   /**
    * Constructs a new <code>ErrorService</code>.
    *
-   * @param errorReportRepository        the Error Report Repository
+   * @param errorReportRepository the Error Report Repository
    * @param errorReportSummaryRepository the Error Report Summary Repository
    */
   public ErrorService(
@@ -66,7 +62,7 @@ public class ErrorService implements IErrorService {
    * Create the new error report.
    *
    * @param errorReport the <code>ErrorReport</code> instance containing the information for the
-   *                    error report
+   *     error report
    */
   @Override
   @Transactional
@@ -115,8 +111,7 @@ public class ErrorService implements IErrorService {
    * Retrieve the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
-   *                      report
-   *
+   *     report
    * @return the error report or <code>null</code> if the error report could not be found
    */
   @Override
@@ -142,10 +137,9 @@ public class ErrorService implements IErrorService {
    * Retrieve the summary for the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
-   *                      report
-   *
+   *     report
    * @return the summary for the error report or <code>null</code> if the error report could not be
-   * found
+   *     found
    */
   @Override
   public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
@@ -171,8 +165,7 @@ public class ErrorService implements IErrorService {
    * Retrieve the summaries for the most recent error reports.
    *
    * @param maximumNumberOfEntries the maximum number of summaries for the most recent error reports
-   *                               to retrieve
-   *
+   *     to retrieve
    * @return the summaries for the most recent error reports
    */
   @Override

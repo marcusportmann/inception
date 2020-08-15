@@ -28,7 +28,6 @@ public final class ExceptionUtil {
    * Returns the nested messages for an exception.
    *
    * @param e the exception
-   *
    * @return the nested messages for the exception
    */
   public static String getNestedMessages(Throwable e) {

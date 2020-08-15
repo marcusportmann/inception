@@ -19,6 +19,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
+import {ReferenceService} from "ngx-inception";
 
 /**
  * The Title class holds title information for the example form component.
@@ -52,7 +53,8 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
   filteredCountryOptions$: Subject<string[]> = new ReplaySubject<string[]>();
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute,
+              private formBuilder: FormBuilder, private referenceService: ReferenceService) {
 
     this.exampleForm = this.formBuilder.group({
       // hideRequired: false,

@@ -33,7 +33,6 @@ public interface ICaseService {
    * Check whether the case definition exists.
    *
    * @param caseDefinitionId the ID uniquely identifying the case definition
-   *
    * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
    */
   boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException;
@@ -70,7 +69,6 @@ public interface ICaseService {
    * Create the new case definition(s).
    *
    * @param caseDefinitionData the CMMN XML data for the case definition(s)
-   *
    * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
   List<CaseDefinitionSummary> createCaseDefinition(byte[] caseDefinitionData)
@@ -105,7 +103,6 @@ public interface ICaseService {
    * Update the case definition(s).
    *
    * @param caseDefinitionData the CMMN XML data for the case definition(s)
-   *
    * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
   List<CaseDefinitionSummary> updateCaseDefinition(byte[] caseDefinitionData)
@@ -115,9 +112,8 @@ public interface ICaseService {
    * Validate the CMMN XML data.
    *
    * @param cmmnXml the CMMN XML data
-   *
    * @return the case definition summaries for the CMMN cases if the CMMN XML data was successfully
-   * validated
+   *     validated
    */
   List<CaseDefinitionSummary> validateCMMN(byte[] cmmnXml)
       throws InvalidCMMNException, CaseServiceException;
@@ -126,9 +122,8 @@ public interface ICaseService {
    * Validate the CMMN XML data.
    *
    * @param cmmnXml the CMMN XML data
-   *
    * @return the case definition summaries for the CMMN cases if the CMMN XML data was successfully
-   * validated
+   *     validated
    */
   List<CaseDefinitionSummary> validateCMMN(String cmmnXml)
       throws InvalidCMMNException, CaseServiceException;

@@ -63,9 +63,7 @@ public class ApplicationDataSourceConfiguration {
   private static final Logger logger =
       LoggerFactory.getLogger(ApplicationDataSourceConfiguration.class);
 
-  /**
-   * The Spring application context.
-   */
+  /** The Spring application context. */
   private final ApplicationContext applicationContext;
 
   /**
@@ -74,9 +72,7 @@ public class ApplicationDataSourceConfiguration {
   @Value("${inception.application.data-source.class-name:#{null}}")
   private String className;
 
-  /**
-   * The application data source.
-   */
+  /** The application data source. */
   private DataSource dataSource;
 
   /**
@@ -98,39 +94,27 @@ public class ApplicationDataSourceConfiguration {
   @Value("${inception.application.data-source.min-pool-size:1}")
   private int minPoolSize;
 
-  /**
-   * The password for the application database.
-   */
+  /** The password for the application database. */
   @Value("${inception.application.data-source.password:#{null}}")
   private String password;
 
-  /**
-   * Is transaction recovery enabled for the application database.
-   */
+  /** Is transaction recovery enabled for the application database. */
   @Value("${inception.application.data-source.recovery.enabled:#{false}}")
   private boolean recoveryEnabled;
 
-  /**
-   * The recovery password for the application database.
-   */
+  /** The recovery password for the application database. */
   @Value("${inception.application.data-source.recovery.password:#{null}}")
   private String recoveryPassword;
 
-  /**
-   * The recovery username for the application database.
-   */
+  /** The recovery username for the application database. */
   @Value("${inception.application.data-source.recovery.username:#{null}}")
   private String recoveryUsername;
 
-  /**
-   * The URL used to connect to the application database.
-   */
+  /** The URL used to connect to the application database. */
   @Value("${inception.application.data-source.url:#{null}}")
   private String url;
 
-  /**
-   * The username for the application database.
-   */
+  /** The username for the application database. */
   @Value("${inception.application.data-source.username:#{null}}")
   private String username;
 

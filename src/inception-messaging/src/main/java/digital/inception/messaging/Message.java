@@ -57,42 +57,42 @@ import org.springframework.util.StringUtils;
 @Schema(description = "Message")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "id",
-    "username",
-    "deviceId",
-    "typeId",
-    "correlationId",
-    "priority",
-    "status",
-    "created",
-    "sendAttempts",
-    "processAttempts",
-    "downloadAttempts",
-    "lastProcessed",
-    "lockName",
-    "encryptionIV",
-    "dataHash"
+  "id",
+  "username",
+  "deviceId",
+  "typeId",
+  "correlationId",
+  "priority",
+  "status",
+  "created",
+  "sendAttempts",
+  "processAttempts",
+  "downloadAttempts",
+  "lastProcessed",
+  "lockName",
+  "encryptionIV",
+  "dataHash"
 })
 @XmlRootElement(name = "Message", namespace = "http://messaging.inception.digital")
 @XmlType(
     name = "Message",
     namespace = "http://messaging.inception.digital",
     propOrder = {
-        "id",
-        "username",
-        "deviceId",
-        "typeId",
-        "correlationId",
-        "priority",
-        "status",
-        "created",
-        "sendAttempts",
-        "processAttempts",
-        "downloadAttempts",
-        "lastProcessed",
-        "lockName",
-        "encryptionIV",
-        "dataHash"
+      "id",
+      "username",
+      "deviceId",
+      "typeId",
+      "correlationId",
+      "priority",
+      "status",
+      "created",
+      "sendAttempts",
+      "processAttempts",
+      "downloadAttempts",
+      "lastProcessed",
+      "lockName",
+      "encryptionIV",
+      "dataHash"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -106,9 +106,7 @@ public class Message {
    */
   public static final int MAX_ASYNC_MESSAGE_SIZE = 40000;
 
-  /**
-   * The optional Universally Unique Identifier (UUID) used to correlate the message.
-   */
+  /** The optional Universally Unique Identifier (UUID) used to correlate the message. */
   @Schema(
       description =
           "The optional Universally Unique Identifier (UUID) used to correlate the message")
@@ -117,9 +115,7 @@ public class Message {
   @Column(name = "correlation_id")
   private UUID correlationId;
 
-  /**
-   * The date and time the message was created.
-   */
+  /** The date and time the message was created. */
   @Schema(description = "The date and time the message was created", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Created", required = true)
@@ -129,9 +125,7 @@ public class Message {
   @Column(name = "created", nullable = false)
   private LocalDateTime created;
 
-  /**
-   * The data for the message.
-   */
+  /** The data for the message. */
   @Schema(description = "The data for the message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
@@ -168,18 +162,14 @@ public class Message {
   @Column(name = "device_id", nullable = false)
   private UUID deviceId;
 
-  /**
-   * The number of times that downloading of the message was attempted.
-   */
+  /** The number of times that downloading of the message was attempted. */
   @Schema(description = "The number of times that downloading of the message was attempted")
   @JsonProperty
   @XmlElement(name = "DownloadAttempts")
   @Column(name = "download_attempts")
   private Integer downloadAttempts;
 
-  /**
-   * The base-64 encoded initialization vector for the encryption scheme for the message.
-   */
+  /** The base-64 encoded initialization vector for the encryption scheme for the message. */
   @Schema(
       description =
           "The base-64 encoded initialization vector for the encryption scheme for the message")
@@ -189,9 +179,7 @@ public class Message {
   @Column(name = "encryption_iv", length = 100)
   private String encryptionIV;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the message.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the message. */
   @Schema(
       description = "The Universally Unique Identifier (UUID) uniquely identifying the message",
       required = true)
@@ -202,9 +190,7 @@ public class Message {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The date and time the last attempt was made to process the message.
-   */
+  /** The date and time the last attempt was made to process the message. */
   @Schema(description = "The date and time the last attempt was made to process the message")
   @JsonProperty
   @XmlElement(name = "LastProcessed")
@@ -213,9 +199,7 @@ public class Message {
   @Column(name = "last_processed")
   private LocalDateTime lastProcessed;
 
-  /**
-   * The name of the entity that has locked this message for processing.
-   */
+  /** The name of the entity that has locked this message for processing. */
   @Schema(description = "The name of the entity that has locked this message for processing")
   @JsonProperty
   @XmlElement(name = "LockName")
@@ -236,27 +220,21 @@ public class Message {
   @Column(name = "priority", nullable = false)
   private MessagePriority priority;
 
-  /**
-   * The number of times that the processing of the message was attempted.
-   */
+  /** The number of times that the processing of the message was attempted. */
   @Schema(description = "The number of times that the processing of the message was attempted")
   @JsonProperty
   @XmlElement(name = "ProcessAttempts")
   @Column(name = "process_attempts")
   private Integer processAttempts;
 
-  /**
-   * The number of times that the sending of the message was attempted.
-   */
+  /** The number of times that the sending of the message was attempted. */
   @Schema(description = "The number of times that the sending of the message was attempted")
   @JsonProperty
   @XmlElement(name = "SendAttempts")
   @Column(name = "send_attempts")
   private Integer sendAttempts;
 
-  /**
-   * The message status e.g. Initialized, Sending, etc.
-   */
+  /** The message status e.g. Initialized, Sending, etc. */
   @Schema(description = "The message status")
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
@@ -264,9 +242,7 @@ public class Message {
   @Column(name = "status", nullable = false)
   private MessageStatus status;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the type of message.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the type of message. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the type of message",
@@ -277,9 +253,7 @@ public class Message {
   @Column(name = "type_id", nullable = false)
   private UUID typeId;
 
-  /**
-   * The username identifying the user associated with the message.
-   */
+  /** The username identifying the user associated with the message. */
   @Schema(
       description = "The username identifying the user associated with the message",
       required = true)
@@ -290,11 +264,8 @@ public class Message {
   @Column(name = "username", nullable = false, length = 100)
   private String username;
 
-  /**
-   * Constructs a new <code>Message</code>.
-   */
-  public Message() {
-  }
+  /** Constructs a new <code>Message</code>. */
+  public Message() {}
 
   /**
    * Constructs a new <code>Message</code> and populates it from the message information stored in
@@ -358,11 +329,10 @@ public class Message {
    *
    * @param username the username identifying the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *                 message originated from
-   * @param typeId   the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *                 message
+   *     message originated from
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
    * @param priority the message priority
-   * @param data     the data for the message which is NOT encrypted
+   * @param data the data for the message which is NOT encrypted
    */
   public Message(
       String username, UUID deviceId, UUID typeId, MessagePriority priority, byte[] data) {
@@ -379,14 +349,13 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username      the username identifying the user associated with the message
-   * @param deviceId      the Universally Unique Identifier (UUID) uniquely identifying the device
-   *                      the message originated from
-   * @param typeId        the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *                      message
+   * @param username the username identifying the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message originated from
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   * @param priority      the message priority
-   * @param data          the data for the message which is NOT encrypted
+   * @param priority the message priority
+   * @param data the data for the message which is NOT encrypted
    */
   public Message(
       String username,
@@ -409,15 +378,13 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username     the username identifying the user associated with the message
-   * @param deviceId     the Universally Unique Identifier (UUID) uniquely identifying the device
-   *                     the message originated from
-   * @param typeId       the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *                     message
-   * @param priority     the message priority
-   * @param data         the data for the message which may be encrypted
-   * @param dataHash     the hash of the unencrypted data for the message if the message is
-   *                     encrypted
+   * @param username the username identifying the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message originated from
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   * @param priority the message priority
+   * @param data the data for the message which may be encrypted
+   * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
    * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(
@@ -449,17 +416,15 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username      the username identifying the user associated with the message
-   * @param deviceId      the Universally Unique Identifier (UUID) uniquely identifying the device
-   *                      the message originated from
-   * @param typeId        the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *                      message
+   * @param username the username identifying the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message originated from
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   * @param priority      the message priority
-   * @param data          the data for the message which may be encrypted
-   * @param dataHash      the hash of the unencrypted data for the message if the message is
-   *                      encrypted
-   * @param encryptionIV  the base-64 encoded initialization vector for the encryption scheme
+   * @param priority the message priority
+   * @param data the data for the message which may be encrypted
+   * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
+   * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(
       String username,
@@ -492,19 +457,17 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param id            the Universally Unique Identifier (UUID) uniquely identifying the message
-   * @param username      the username identifying the user associated with the message
-   * @param deviceId      the Universally Unique Identifier (UUID) uniquely identifying the device
-   *                      the message originated from
-   * @param typeId        the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *                      message
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param username the username identifying the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message originated from
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
-   * @param priority      the message priority
-   * @param created       the date and time the message was created
-   * @param data          the data for the message which may be encrypted
-   * @param dataHash      the hash of the unencrypted data for the message if the message is
-   *                      encrypted
-   * @param encryptionIV  the base-64 encoded initialization vector for the encryption scheme
+   * @param priority the message priority
+   * @param created the date and time the message was created
+   * @param data the data for the message which may be encrypted
+   * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
+   * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme
    */
   public Message(
       UUID id,
@@ -535,7 +498,6 @@ public class Message {
    * false</code> otherwise.
    *
    * @param document the WBXML document to validate
-   *
    * @return <code>true</code> if the WBXML document contains valid message information or <code>
    * false</code> otherwise
    */
@@ -544,18 +506,17 @@ public class Message {
 
     return rootElement.getName().equals("Message")
         && !((!rootElement.hasAttribute("id"))
-        || (!rootElement.hasAttribute("username"))
-        || (!rootElement.hasAttribute("deviceId"))
-        || (!rootElement.hasAttribute("priority"))
-        || (!rootElement.hasAttribute("typeId"))
-        || (!rootElement.hasAttribute("created")));
+            || (!rootElement.hasAttribute("username"))
+            || (!rootElement.hasAttribute("deviceId"))
+            || (!rootElement.hasAttribute("priority"))
+            || (!rootElement.hasAttribute("typeId"))
+            || (!rootElement.hasAttribute("created")));
   }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */
@@ -619,7 +580,7 @@ public class Message {
    * from.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
-   * originated from
+   *     originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -666,7 +627,7 @@ public class Message {
    * if the message is not being processed.
    *
    * @return the name of the entity that has locked this message for processing or <code>null</code>
-   * if the message is not being processed
+   *     if the message is not being processed
    */
   public String getLockName() {
     return lockName;
@@ -739,9 +700,7 @@ public class Message {
     return (id == null) ? 0 : id.hashCode();
   }
 
-  /**
-   * Increment the download attempts.
-   */
+  /** Increment the download attempts. */
   public void incrementDownloadAttempts() {
     if (downloadAttempts == null) {
       downloadAttempts = 1;
@@ -750,9 +709,7 @@ public class Message {
     }
   }
 
-  /**
-   * Increment the processing attempts.
-   */
+  /** Increment the processing attempts. */
   public void incrementProcessAttempts() {
     if (processAttempts == null) {
       processAttempts = 1;
@@ -766,7 +723,7 @@ public class Message {
    * otherwise.
    *
    * @return <code>true</code> if the data for the message is encrypted or <code>false</code>
-   * otherwise
+   *     otherwise
    */
   public boolean isEncrypted() {
     return (!StringUtils.isEmpty(dataHash));
@@ -813,7 +770,7 @@ public class Message {
    * originated from.
    *
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *                 message originated from
+   *     message originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
@@ -832,7 +789,7 @@ public class Message {
    * Set the base-64 encoded initialization vector for the encryption scheme for the message.
    *
    * @param encryptionIV the base-64 encoded initialization vector for the encryption scheme for the
-   *                     message
+   *     message
    */
   public void setEncryptionIV(String encryptionIV) {
     this.encryptionIV = encryptionIV;
@@ -872,7 +829,7 @@ public class Message {
    * with a lower priority value.
    *
    * @param priority the message priority. Messages with a higher priority value are processed
-   *                 before messages with a lower priority value
+   *     before messages with a lower priority value
    */
   public void setPriority(MessagePriority priority) {
     this.priority = priority;
@@ -908,8 +865,7 @@ public class Message {
   /**
    * Set the Universally Unique Identifier (UUID) uniquely identifying the type of message.
    *
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *               message
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
    */
   public void setTypeId(UUID typeId) {
     this.typeId = typeId;

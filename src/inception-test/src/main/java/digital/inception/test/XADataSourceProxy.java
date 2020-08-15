@@ -38,15 +38,11 @@ import javax.sql.XADataSource;
  */
 public class XADataSourceProxy implements XADataSource {
 
-  /**
-   * The active XA database connections associated with the current thread.
-   */
+  /** The active XA database connections associated with the current thread. */
   private static ThreadLocal<Map<XAConnection, StackTraceElement[]>> activeXADatabaseConnections =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /**
-   * The XA data source.
-   */
+  /** The XA data source. */
   private XADataSource xaDataSource;
 
   /**

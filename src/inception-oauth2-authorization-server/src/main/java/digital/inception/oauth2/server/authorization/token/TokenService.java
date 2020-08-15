@@ -39,9 +39,7 @@ import org.springframework.stereotype.Service;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class TokenService implements ITokenService {
 
-  /**
-   * The access token validity in seconds.
-   */
+  /** The access token validity in seconds. */
   public static final int ACCESS_TOKEN_VALIDITY = 5 * 60;
 
   /**
@@ -50,9 +48,7 @@ public class TokenService implements ITokenService {
    */
   public static final int REFRESH_TOKEN_REISSUE_INTERVAL = 90 * 24 * 60 * 60;
 
-  /**
-   * The refresh token validity in seconds.
-   */
+  /** The refresh token validity in seconds. */
   public static final int REFRESH_TOKEN_VALIDITY = 365 * 24 * 60 * 60;
 
   /* Security Service */
@@ -83,8 +79,7 @@ public class TokenService implements ITokenService {
    * Issue an OAuth2 access token for the specified user.
    *
    * @param username the username identifying the user
-   * @param scopes   the optional scope(s) associated to the access token
-   *
+   * @param scopes the optional scope(s) associated to the access token
    * @return the OAuth2 access token
    */
   public OAuth2AccessToken issueOAuth2AccessToken(String username, Set<String> scopes)
@@ -101,8 +96,7 @@ public class TokenService implements ITokenService {
    * Issue an OAuth2 refresh token for the specified user.
    *
    * @param username the username identifying the user
-   * @param scopes   the optional scope(s) associated to the refresh token
-   *
+   * @param scopes the optional scope(s) associated to the refresh token
    * @return the OAuth2 refresh token
    */
   public OAuth2RefreshToken issueOAuth2RefreshToken(String username, Set<String> scopes)
@@ -119,7 +113,6 @@ public class TokenService implements ITokenService {
    * Refresh an OAuth2 access token and if required the OAuth2 refresh token.
    *
    * @param encodedOAuth2RefreshToken the encoded OAuth2 refresh token
-   *
    * @return the refreshed tokens
    */
   public RefreshedOAuth2Tokens refreshOAuth2Tokens(String encodedOAuth2RefreshToken)

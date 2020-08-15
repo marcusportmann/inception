@@ -26,14 +26,10 @@ import org.springframework.http.HttpStatus;
  */
 public class InvalidGrantErrorResponse extends ErrorResponse {
 
-  /**
-   * The error code for the OAuth2 invalid grant error response.
-   */
+  /** The error code for the OAuth2 invalid grant error response. */
   public static final String ERROR_CODE = "invalid_grant";
 
-  /**
-   * Constructs a new <code>InvalidGrantErrorResponse</code>.
-   */
+  /** Constructs a new <code>InvalidGrantErrorResponse</code>. */
   public InvalidGrantErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }

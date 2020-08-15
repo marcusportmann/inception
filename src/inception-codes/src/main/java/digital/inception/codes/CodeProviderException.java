@@ -40,8 +40,8 @@ public class CodeProviderException extends Exception {
    * Constructs a new <code>CodeProviderException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public CodeProviderException(String message, Throwable cause) {
     super(message, cause);

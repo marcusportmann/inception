@@ -19,6 +19,7 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.List;
@@ -38,26 +39,26 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "Groups")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "userDirectoryId",
-    "groups",
-    "total",
-    "filter",
-    "sortDirection",
-    "pageIndex",
-    "pageSize"
+  "userDirectoryId",
+  "groups",
+  "total",
+  "filter",
+  "sortDirection",
+  "pageIndex",
+  "pageSize"
 })
 @XmlRootElement(name = "Groups", namespace = "http://security.inception.digital")
 @XmlType(
     name = "Groups",
     namespace = "http://security.inception.digital",
     propOrder = {
-        "userDirectoryId",
-        "groups",
-        "total",
-        "filter",
-        "sortDirection",
-        "pageIndex",
-        "pageSize"
+      "userDirectoryId",
+      "groups",
+      "total",
+      "filter",
+      "sortDirection",
+      "pageIndex",
+      "pageSize"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
@@ -65,50 +66,38 @@ public class Groups implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The optional filter that was applied to the groups.
-   */
+  /** The optional filter that was applied to the groups. */
   @Schema(description = "The optional filter that was applied to the groups")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /**
-   * The groups.
-   */
+  /** The groups. */
   @Schema(description = "The groups", required = true)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Groups", required = true)
   @XmlElement(name = "Group", required = true)
   private List<Group> groups;
 
-  /**
-   * The optional page index.
-   */
+  /** The optional page index. */
   @Schema(description = "The optional page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /**
-   * The optional page size.
-   */
+  /** The optional page size. */
   @Schema(description = "The optional page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /**
-   * The optional sort direction that was applied to the groups.
-   */
+  /** The optional sort direction that was applied to the groups. */
   @Schema(description = "The optional sort direction that was applied to the groups")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /**
-   * The total number of groups.
-   */
+  /** The total number of groups. */
   @Schema(description = "The total number of groups", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
@@ -126,23 +115,20 @@ public class Groups implements Serializable {
   @XmlElement(name = "Total", required = true)
   private UUID userDirectoryId;
 
-  /**
-   * Constructs a new <code>Groups</code>.
-   */
-  public Groups() {
-  }
+  /** Constructs a new <code>Groups</code>. */
+  public Groups() {}
 
   /**
    * Constructs a new <code>Groups</code>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *                        directory the groups are associated with
-   * @param groups          the groups
-   * @param total           the total number of groups
-   * @param filter          the optional filter that was applied to the groups
-   * @param sortDirection   the optional sort direction that was applied to the groups
-   * @param pageIndex       the optional page index
-   * @param pageSize        the optional page size
+   *     directory the groups are associated with
+   * @param groups the groups
+   * @param total the total number of groups
+   * @param filter the optional filter that was applied to the groups
+   * @param sortDirection the optional sort direction that was applied to the groups
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    */
   public Groups(
       UUID userDirectoryId,
@@ -220,7 +206,7 @@ public class Groups implements Serializable {
    * groups are associated with.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   * groups are associated with
+   *     groups are associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;

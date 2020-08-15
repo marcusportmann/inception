@@ -38,8 +38,7 @@ public class AssignedIdentityGenerator extends IdentityGenerator {
    * Generate a new identifier.
    *
    * @param session the session from which the request originates
-   * @param object  the entity or collection for which the ID is being generated
-   *
+   * @param object the entity or collection for which the ID is being generated
    * @return a new identifier
    */
   @Override

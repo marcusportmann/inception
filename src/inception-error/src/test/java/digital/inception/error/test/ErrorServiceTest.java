@@ -52,17 +52,14 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class ErrorServiceTest {
 
-  /**
-   * The Error Service.
-   */
-  @Autowired
-  private IErrorService errorService;
+  /** The Error Service. */
+  @Autowired private IErrorService errorService;
 
   private static synchronized ErrorReport getTestErrorReport() {
     return new ErrorReport(
@@ -78,9 +75,7 @@ public class ErrorServiceTest {
         Base64Util.encodeBytes("Data".getBytes()));
   }
 
-  /**
-   * Test the error report functionality.
-   */
+  /** Test the error report functionality. */
   @Test
   public void errorReportTest() throws Exception {
     ErrorReport errorReport = getTestErrorReport();
@@ -105,9 +100,7 @@ public class ErrorServiceTest {
     compareErrorReportAndErrorReportSummary(errorReport, errorReportSummaries.get(0));
   }
 
-  /**
-   * Test the functionality to retrieve the most recent error report summaries.
-   */
+  /** Test the functionality to retrieve the most recent error report summaries. */
   @Test
   public void getMostRecentErrorReportSummariesTest() throws Exception {
     List<ErrorReport> errorReports = new ArrayList<>();

@@ -30,9 +30,8 @@ public interface Credential {
    * The equals method checks if the specified object is the same credential as this object.
    *
    * @param another the credential to compare with
-   *
    * @return true if the object passed in matches the credential represented by the implementation
-   * of this interface
+   *     of this interface
    */
   @Override
   boolean equals(Object another);

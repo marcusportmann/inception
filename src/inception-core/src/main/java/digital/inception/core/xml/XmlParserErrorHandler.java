@@ -32,11 +32,8 @@ public class XmlParserErrorHandler implements ErrorHandler {
 
   private Logger logger = null;
 
-  /**
-   * Constructs a new <code>XmlParserErrorHandler</code>.
-   */
-  public XmlParserErrorHandler() {
-  }
+  /** Constructs a new <code>XmlParserErrorHandler</code>. */
+  public XmlParserErrorHandler() {}
 
   /**
    * Constructs a new <code>XmlParserErrorHandler</code> using the specified <code>Logger</code>.

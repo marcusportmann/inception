@@ -41,45 +41,31 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("unused")
 public class ApplicationSecurityConfiguration {
 
-  /**
-   * The application key store alias.
-   */
+  /** The application key store alias. */
   @Value("${application.security.keyStore.alias:#{null}}")
   private String keyStoreAlias;
 
-  /**
-   * The application key store password.
-   */
+  /** The application key store password. */
   @Value("${application.security.keyStore.password:#{null}}")
   private String keyStorePassword;
 
-  /**
-   * The application key store path.
-   */
+  /** The application key store path. */
   @Value("${application.security.keyStore.path:#{null}}")
   private String keyStorePath;
 
-  /**
-   * The application key store type.
-   */
+  /** The application key store type. */
   @Value("${application.security.keyStore.type:#{null}}")
   private String keyStoreType;
 
-  /**
-   * The optional application trust store password.
-   */
+  /** The optional application trust store password. */
   @Value("${application.security.trustStore.password:#{null}}")
   private String trustStorePassword;
 
-  /**
-   * The optional application trust store path.
-   */
+  /** The optional application trust store path. */
   @Value("${application.security.trustStore.path:#{null}}")
   private String trustStorePath;
 
-  /**
-   * The optional application trust store type.
-   */
+  /** The optional application trust store type. */
   @Value("${application.security.trustStore.type:#{null}}")
   private String trustStoreType;
 

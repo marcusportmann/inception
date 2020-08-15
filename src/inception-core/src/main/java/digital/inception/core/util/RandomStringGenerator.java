@@ -74,8 +74,8 @@ public class RandomStringGenerator {
   /**
    * Constructs a new <code>RandomStringGenerator</code>.
    *
-   * @param length  the length of the random strings that should be generated
-   * @param random  the random number generator
+   * @param length the length of the random strings that should be generated
+   * @param random the random number generator
    * @param symbols the symbols to use when generating the random string
    */
   public RandomStringGenerator(int length, Random random, String symbols) {

@@ -40,8 +40,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @author Marcus Portmann
  */
 @SpringBootApplication
-@ComponentScan(
-    basePackages = {"digital.inception"})
+@ComponentScan(basePackages = {"digital.inception"})
 @EnableJpaRepositories(
     entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"digital.inception.sample"})
@@ -50,20 +49,17 @@ public class SampleApplication extends Application implements InitializingBean {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(SampleApplication.class);
 
-  /**
-   * The Reporting Service.
-   */
+  /** The Reporting Service. */
   private final IReportingService reportingService;
 
   /**
    * Constructs a new <code>SampleApplication</code>.
    *
    * @param applicationContext the Spring application context
-   * @param reportingService   the Reporting Service
+   * @param reportingService the Reporting Service
    */
   public SampleApplication(
-      ApplicationContext applicationContext,
-      IReportingService reportingService) {
+      ApplicationContext applicationContext, IReportingService reportingService) {
     super(applicationContext);
 
     this.reportingService = reportingService;
@@ -78,9 +74,7 @@ public class SampleApplication extends Application implements InitializingBean {
     SpringApplication.run(SampleApplication.class, args);
   }
 
-  /**
-   * Initialize the sample application.
-   */
+  /** Initialize the sample application. */
   @Override
   public void afterPropertiesSet() {
     try {

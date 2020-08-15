@@ -62,7 +62,6 @@ public enum SMSStatus {
    * Returns the SMS status given by the specified numeric code value.
    *
    * @param code the numeric code value identifying the SMS status
-   *
    * @return the SMS status given by the specified numeric code value
    */
   @JsonCreator

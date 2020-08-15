@@ -96,9 +96,7 @@ public class PojoTest {
 
   private static final String USERNAME = "Administrator";
 
-  /**
-   * Test the <code>MessagePart</code> POJO.
-   */
+  /** Test the <code>MessagePart</code> POJO. */
   @Test
   public void messagePartTest() {
     MessagePart messagePart =
@@ -184,9 +182,7 @@ public class PojoTest {
     assertEquals(true, anotherMessagePart.messageIsEncrypted());
   }
 
-  /**
-   * Test the <code>Message</code> POJO.
-   */
+  /** Test the <code>Message</code> POJO. */
   @Test
   public void messageTest() {
     Message message =

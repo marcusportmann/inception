@@ -39,7 +39,7 @@ public class JobExecutor implements Runnable {
    * Constructs a new <code>JobExecutorThread</code>.
    *
    * @param schedulerService the Scheduler Service
-   * @param job              the job
+   * @param job the job
    */
   public JobExecutor(ISchedulerService schedulerService, Job job) {
     this.schedulerService = schedulerService;

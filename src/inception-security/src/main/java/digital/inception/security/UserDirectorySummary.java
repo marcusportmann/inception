@@ -66,9 +66,7 @@ public class UserDirectorySummary implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
@@ -80,9 +78,7 @@ public class UserDirectorySummary implements java.io.Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name of the user directory.
-   */
+  /** The name of the user directory. */
   @Schema(description = "The name of the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -91,9 +87,7 @@ public class UserDirectorySummary implements java.io.Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The user directories associated with the organization.
-   */
+  /** The user directories associated with the organization. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.REFRESH})
@@ -104,9 +98,7 @@ public class UserDirectorySummary implements java.io.Serializable {
       inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
   private Set<Organization> organizations = new HashSet<>();
 
-  /**
-   * The code uniquely identifying the user directory type.
-   */
+  /** The code uniquely identifying the user directory type. */
   @Schema(description = "The code uniquely identifying the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -115,17 +107,13 @@ public class UserDirectorySummary implements java.io.Serializable {
   @Column(name = "type", nullable = false, length = 100)
   private String type;
 
-  /**
-   * Constructs a new <code>UserDirectorySummary</code>.
-   */
-  public UserDirectorySummary() {
-  }
+  /** Constructs a new <code>UserDirectorySummary</code>. */
+  public UserDirectorySummary() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

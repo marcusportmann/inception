@@ -36,11 +36,8 @@ import org.springframework.util.StringUtils;
 @Component
 public final class StringToLocalDateTimeConverter implements Converter<String, LocalDateTime> {
 
-  /**
-   * Constructs a new <code>StringToLocalDateTimeConverter</code>.
-   */
-  public StringToLocalDateTimeConverter() {
-  }
+  /** Constructs a new <code>StringToLocalDateTimeConverter</code>. */
+  public StringToLocalDateTimeConverter() {}
 
   @Override
   public LocalDateTime convert(String source) {

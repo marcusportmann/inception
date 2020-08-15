@@ -53,9 +53,7 @@ public class ProcessDefinitionSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID uniquely identifying the process definition.
-   */
+  /** The ID uniquely identifying the process definition. */
   @Schema(description = "The ID uniquely identifying the process definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -63,9 +61,7 @@ public class ProcessDefinitionSummary implements Serializable {
   @Size(min = 1, max = 100)
   private String id;
 
-  /**
-   * The name of the process definition.
-   */
+  /** The name of the process definition. */
   @Schema(description = "The name of the process definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -73,9 +69,7 @@ public class ProcessDefinitionSummary implements Serializable {
   @Size(min = 1, max = 100)
   private String name;
 
-  /**
-   * The version of the process definition given by the custom Camunda versionTag.
-   */
+  /** The version of the process definition given by the custom Camunda versionTag. */
   @Schema(description = "The version of the process definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Version", required = true)
@@ -83,17 +77,14 @@ public class ProcessDefinitionSummary implements Serializable {
   @Size(min = 1, max = 100)
   private String version;
 
-  /**
-   * Constructs a new <code>ProcessDefinitionSummary</code>.
-   */
-  public ProcessDefinitionSummary() {
-  }
+  /** Constructs a new <code>ProcessDefinitionSummary</code>. */
+  public ProcessDefinitionSummary() {}
 
   /**
    * Constructs a new <code>ProcessDefinitionSummary</code>.
    *
-   * @param id      the ID uniquely identifying the process definition
-   * @param name    the name of the process definition
+   * @param id the ID uniquely identifying the process definition
+   * @param name the name of the process definition
    * @param version the version of the process definition
    */
   public ProcessDefinitionSummary(String id, String name, String version) {
@@ -106,7 +97,6 @@ public class ProcessDefinitionSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

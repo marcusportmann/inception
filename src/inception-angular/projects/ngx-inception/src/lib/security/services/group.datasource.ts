@@ -17,7 +17,7 @@
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {SecurityService} from './security.service';
-import {SortDirection} from './sort-direction';
+import {SortDirection} from '../../core/sorting/sort-direction';
 
 import {first} from 'rxjs/operators';
 import {Group} from './group';

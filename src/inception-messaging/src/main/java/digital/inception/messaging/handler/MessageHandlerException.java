@@ -45,8 +45,8 @@ public class MessageHandlerException extends Exception {
    *
    * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet
    *                ()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public MessageHandlerException(String message, Throwable cause) {
     super(message, cause);

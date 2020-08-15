@@ -35,14 +35,10 @@ public class OrganizationData implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the organization.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the organization. */
   private UUID id;
 
-  /**
-   * The name of the organization.
-   */
+  /** The name of the organization. */
   private String name;
 
   /**

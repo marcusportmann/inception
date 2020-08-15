@@ -40,20 +40,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("unused")
 public class SecurityServiceAuthenticationManager implements AuthenticationManager {
 
-  /**
-   * The Security Service.
-   */
+  /** The Security Service. */
   private ISecurityService securityService;
 
-  /**
-   * The User Details Service.
-   */
+  /** The User Details Service. */
   private UserDetailsService userDetailsService;
 
   /**
    * Constructs a new <code>SecurityServiceAuthenticationManager</code>.
    *
-   * @param securityService    the Security Service
+   * @param securityService the Security Service
    * @param userDetailsService the User Details Service
    */
   public SecurityServiceAuthenticationManager(
@@ -78,14 +74,13 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
    *       Whilst the above exceptions are optional, an <code>AuthenticationManager</code> must
    *       <B>always</B> test credentials.
    * </ul>
-   * <p>
-   * Exceptions should be tested for and if applicable thrown in the order expressed above (i.e. if
-   * an account is disabled or locked, the authentication request is immediately rejected and the
+   *
+   * <p>Exceptions should be tested for and if applicable thrown in the order expressed above (i.e.
+   * if an account is disabled or locked, the authentication request is immediately rejected and the
    * credentials testing process is not performed). This prevents credentials being tested against
    * disabled or locked accounts.
    *
    * @param authentication the authentication request object
-   *
    * @return a fully authenticated object including credentials
    */
   @Override

@@ -54,9 +54,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class CodesServiceTest {
 
@@ -64,11 +64,8 @@ public class CodesServiceTest {
 
   private static int codeCount;
 
-  /**
-   * The Codes Service.
-   */
-  @Autowired
-  private ICodesService codesService;
+  /** The Codes Service. */
+  @Autowired private ICodesService codesService;
 
   private static synchronized CodeCategory getTestCodeCategoryDetails() {
     codeCategoryCount++;
@@ -107,9 +104,7 @@ public class CodesServiceTest {
     return code;
   }
 
-  /**
-   * Test the local custom code category functionality.
-   */
+  /** Test the local custom code category functionality. */
   @Test
   public void codeCategoryTest() throws Exception {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
@@ -178,9 +173,7 @@ public class CodesServiceTest {
     }
   }
 
-  /**
-   * Test the code provider functionality.
-   */
+  /** Test the code provider functionality. */
   @Test
   public void codeProviderTest() throws Exception {
     CodeCategory retrievedCodeCategory = codesService.getCodeCategory("TestCodeCategory");
@@ -188,9 +181,7 @@ public class CodesServiceTest {
     assertNotNull("The code category is null", retrievedCodeCategory);
   }
 
-  /**
-   * Test the code functionality.
-   */
+  /** Test the code functionality. */
   @Test
   public void codeTest() throws Exception {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
@@ -236,9 +227,7 @@ public class CodesServiceTest {
     }
   }
 
-  /**
-   * Test the codes functionality.
-   */
+  /** Test the codes functionality. */
   @Test
   public void codesTest() throws Exception {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
@@ -263,15 +252,13 @@ public class CodesServiceTest {
 
     compareCodes(codes, retrievedCodes);
 
-    retrievedCodes = codesService
-        .getCodesForCodeCategoryWithParameters(codeCategory.getId(), new HashMap<>());
+    retrievedCodes =
+        codesService.getCodesForCodeCategoryWithParameters(codeCategory.getId(), new HashMap<>());
 
     compareCodes(codes, retrievedCodes);
   }
 
-  /**
-   * Test the code category and code constructors.
-   */
+  /** Test the code category and code constructors. */
   @Test
   public void constructorTest() {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
@@ -296,9 +283,7 @@ public class CodesServiceTest {
     compareCodes(code, code2);
   }
 
-  /**
-   * Test the retrieve code categories functionality.
-   */
+  /** Test the retrieve code categories functionality. */
   @Test
   public void getCodeCategoriesTest() throws Exception {
     CodeCategory codeCategory = getTestCodeCategoryDetails();

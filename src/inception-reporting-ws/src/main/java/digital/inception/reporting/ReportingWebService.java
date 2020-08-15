@@ -51,28 +51,21 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class ReportingWebService {
 
-  /**
-   * The data source used to provide connections to the application database.
-   */
+  /** The data source used to provide connections to the application database. */
   private final DataSource dataSource;
 
-  /**
-   * The Reporting Service.
-   */
+  /** The Reporting Service. */
   private final IReportingService reportingService;
 
-  /**
-   * The JSR-303 validator.
-   */
+  /** The JSR-303 validator. */
   private final Validator validator;
 
   /**
    * Constructs a new <code>ReportingWebService</code>.
    *
-   * @param dataSource       the data source used to provide connections to the application
-   *                         database
+   * @param dataSource the data source used to provide connections to the application database
    * @param reportingService the Reporting Service
-   * @param validator        the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public ReportingWebService(
       @Qualifier("applicationDataSource") DataSource dataSource,
@@ -93,7 +86,7 @@ public class ReportingWebService {
       @WebParam(name = "ReportDefinition") @XmlElement(required = true)
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, DuplicateReportDefinitionException,
-      ReportingServiceException {
+          ReportingServiceException {
     if (reportDefinition == null) {
       throw new InvalidArgumentException("reportDefinition");
     }
@@ -118,7 +111,7 @@ public class ReportingWebService {
   public void deleteReportDefinition(
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-      ReportingServiceException {
+          ReportingServiceException {
     if (reportDefinitionId == null) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -130,8 +123,7 @@ public class ReportingWebService {
    * Generate the PDF report.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   * @param reportParameters   the report parameters
-   *
+   * @param reportParameters the report parameters
    * @return the PDF report
    */
   @WebMethod(operationName = "GenerateReport")
@@ -141,7 +133,7 @@ public class ReportingWebService {
       @WebParam(name = "ReportParameters") @XmlElement(required = true)
           List<ReportParameter> reportParameters)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-      ReportingServiceException {
+          ReportingServiceException {
     if (reportDefinitionId == null) {
       throw new InvalidArgumentException("reportDefinition");
     }
@@ -165,7 +157,6 @@ public class ReportingWebService {
    * Get the report definition.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return the report definition
    */
   @WebMethod(operationName = "GetReportDefinition")
@@ -173,7 +164,7 @@ public class ReportingWebService {
   public ReportDefinition getReportDefinition(
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-      ReportingServiceException {
+          ReportingServiceException {
     if (reportDefinitionId == null) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -185,7 +176,6 @@ public class ReportingWebService {
    * Retrieve the name of the report definition.
    *
    * @param reportDefinitionId the ID uniquely identifying the report definition
-   *
    * @return the name of report definition
    */
   @WebMethod(operationName = "GetReportDefinitionName")
@@ -193,7 +183,7 @@ public class ReportingWebService {
   public String getReportDefinitionName(
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-      ReportingServiceException {
+          ReportingServiceException {
     if (reportDefinitionId == null) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -234,7 +224,7 @@ public class ReportingWebService {
       @WebParam(name = "ReportDefinition") @XmlElement(required = true)
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-      ReportingServiceException {
+          ReportingServiceException {
     if (reportDefinition == null) {
       throw new InvalidArgumentException("reportDefinition");
     }

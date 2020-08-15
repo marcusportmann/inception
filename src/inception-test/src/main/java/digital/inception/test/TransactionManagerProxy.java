@@ -46,15 +46,11 @@ public class TransactionManagerProxy implements TransactionManager {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TransactionManagerProxy.class);
 
-  /**
-   * The stack traces for the active transactions associated with the current thread.
-   */
+  /** The stack traces for the active transactions associated with the current thread. */
   private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
-  /**
-   * The JTA transaction manager.
-   */
+  /** The JTA transaction manager. */
   private TransactionManager transactionManager;
 
   /**
@@ -92,7 +88,7 @@ public class TransactionManagerProxy implements TransactionManager {
   @Override
   public void commit()
       throws RollbackException, HeuristicMixedException, HeuristicRollbackException,
-      SecurityException, IllegalStateException, SystemException {
+          SecurityException, IllegalStateException, SystemException {
     Transaction beforeTransaction = getTransaction();
 
     try {

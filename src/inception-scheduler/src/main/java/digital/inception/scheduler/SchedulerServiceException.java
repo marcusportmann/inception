@@ -70,7 +70,7 @@ public class SchedulerServiceException extends Exception {
    * message of cause).
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public SchedulerServiceException(Throwable cause) {
     super(cause);
@@ -80,8 +80,8 @@ public class SchedulerServiceException extends Exception {
    * Constructs a new <code>SchedulerServiceException</code> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public SchedulerServiceException(String message, Throwable cause) {
     super(message, cause);

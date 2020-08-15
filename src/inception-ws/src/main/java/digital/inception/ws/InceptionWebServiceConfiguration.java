@@ -49,56 +49,38 @@ import org.springframework.util.StringUtils;
 @Configuration
 public class InceptionWebServiceConfiguration {
 
-  /**
-   * The Spring application context
-   */
+  /** The Spring application context */
   private final ApplicationContext applicationContext;
 
-  /**
-   * Is the Web Services Security X.509 Certificate Token Profile enabled?
-   */
+  /** Is the Web Services Security X.509 Certificate Token Profile enabled? */
   @Value("${inception.ws.security.x509-certificate-token-profile.enabled:#{false}}")
   private boolean isWSSX509CertificateTokenProfileEnabled;
 
-  /**
-   * The Web Services Security X.509 Certificate Token Profile key store alias.
-   */
+  /** The Web Services Security X.509 Certificate Token Profile key store alias. */
   @Value("${inception.ws.security.x509-certificate-token-profile.key-alias:#{null}}")
   private String wssX509CertificateTokenProfileKeyStoreAlias;
 
-  /**
-   * The Web Services Security X.509 Certificate Token Profile key store password.
-   */
+  /** The Web Services Security X.509 Certificate Token Profile key store password. */
   @Value("${inception.ws.security.x509-certificate-token-profile.key-store-password:#{null}}")
   private String wssX509CertificateTokenProfileKeyStorePassword;
 
-  /**
-   * The Web Services Security X.509 Certificate Token Profile key store path.
-   */
+  /** The Web Services Security X.509 Certificate Token Profile key store path. */
   @Value("${inception.ws.security.x509-certificate-token-profile.key-store:#{null}}")
   private String wssX509CertificateTokenProfileKeyStorePath;
 
-  /**
-   * The Web Services Security X.509 Certificate Token Profile key store type.
-   */
+  /** The Web Services Security X.509 Certificate Token Profile key store type. */
   @Value("${inception.ws.security.x509-certificate-token-profile.key-store-type:#{null}}")
   private String wssX509CertificateTokenProfileKeyStoreType;
 
-  /**
-   * The optional Web Services Security X.509 Certificate Token Profile trust store password.
-   */
+  /** The optional Web Services Security X.509 Certificate Token Profile trust store password. */
   @Value("${inception.ws.security.x509-certificate-token-profile.trust-store-password:#{null}}")
   private String wssX509CertificateTokenProfileTrustStorePassword;
 
-  /**
-   * The optional Web Services Security X.509 Certificate Token Profile trust store path.
-   */
+  /** The optional Web Services Security X.509 Certificate Token Profile trust store path. */
   @Value("${inception.ws.security.x509-certificate-token-profile.trust-store:#{null}}")
   private String wssX509CertificateTokenProfileTrustStorePath;
 
-  /**
-   * The optional Web Services Security X.509 Certificate Token Profile trust store type.
-   */
+  /** The optional Web Services Security X.509 Certificate Token Profile trust store type. */
   @Value("${inception.ws.security.x509-certificate-token-profile.trust-store-type:#{null}}")
   private String wssX509CertificateTokenProfileTrustStoreType;
 
@@ -136,7 +118,7 @@ public class InceptionWebServiceConfiguration {
   /**
    * Create the web service endpoint.
    *
-   * @param name           the web service name
+   * @param name the web service name
    * @param implementation the web service implementation
    */
   protected void createWebServiceEndpoint(String name, Object implementation) {
@@ -229,9 +211,7 @@ public class InceptionWebServiceConfiguration {
     }
   }
 
-  /**
-   * Initialize the web services.
-   */
+  /** Initialize the web services. */
   @PostConstruct
   private void initializeWebServices() {
     ClassPathScanningCandidateComponentProvider scanner =

@@ -64,9 +64,7 @@ public class PasswordReset implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The date and time the password reset was completed.
-   */
+  /** The date and time the password reset was completed. */
   @Schema(description = "The date and time the password reset was completed")
   @JsonProperty
   @XmlElement(name = "Completed")
@@ -75,9 +73,7 @@ public class PasswordReset implements Serializable {
   @Column(name = "completed")
   private LocalDateTime completed;
 
-  /**
-   * The date and time the password reset expired.
-   */
+  /** The date and time the password reset expired. */
   @Schema(description = "The date and time the password reset expired")
   @JsonProperty
   @XmlElement(name = "Expired")
@@ -86,9 +82,7 @@ public class PasswordReset implements Serializable {
   @Column(name = "expired")
   private LocalDateTime expired;
 
-  /**
-   * The date and time the password reset was requested.
-   */
+  /** The date and time the password reset was requested. */
   @Schema(description = "The date and time the password reset was requested")
   @JsonProperty
   @XmlElement(name = "Requested")
@@ -98,9 +92,7 @@ public class PasswordReset implements Serializable {
   @Column(name = "requested", nullable = false)
   private LocalDateTime requested;
 
-  /**
-   * The security code hash.
-   */
+  /** The security code hash. */
   @Schema(description = "The security code hash", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SecurityCodeHash", required = true)
@@ -109,9 +101,7 @@ public class PasswordReset implements Serializable {
   @Column(name = "security_code_hash", nullable = false, length = 100)
   private String securityCodeHash;
 
-  /**
-   * The status of the password reset.
-   */
+  /** The status of the password reset. */
   @Schema(description = "The status of the password reset", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Reason", required = true)
@@ -119,9 +109,7 @@ public class PasswordReset implements Serializable {
   @Column(name = "status", nullable = false)
   private PasswordResetStatus status;
 
-  /**
-   * The username for the user associated with the password reset.
-   */
+  /** The username for the user associated with the password reset. */
   @Schema(
       description = "The username for the user associated with the password reset",
       required = true)
@@ -133,16 +121,13 @@ public class PasswordReset implements Serializable {
   @Column(name = "username", nullable = false, length = 100)
   private String username;
 
-  /**
-   * Constructs a new <code>PasswordReset</code>.
-   */
-  public PasswordReset() {
-  }
+  /** Constructs a new <code>PasswordReset</code>. */
+  public PasswordReset() {}
 
   /**
    * Constructs a new <code>PasswordReset</code>.
    *
-   * @param username         the username for the user associated with the password reset
+   * @param username the username for the user associated with the password reset
    * @param securityCodeHash the security code hash
    */
   public PasswordReset(String username, String securityCodeHash) {

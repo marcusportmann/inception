@@ -65,7 +65,7 @@ public class DuplicateOrganizationException extends ServiceException {
    * Constructs a new <code>DuplicateOrganizationException</code>.
    *
    * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *                       organization
+   *     organization
    */
   public DuplicateOrganizationException(UUID organizationId) {
     super(

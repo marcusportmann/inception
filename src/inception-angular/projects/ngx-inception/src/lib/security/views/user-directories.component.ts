@@ -32,7 +32,7 @@ import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-
 import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
-import {SortDirection} from '../services/sort-direction';
+import {SortDirection} from '../../core/sorting/sort-direction';
 
 /**
  * The UserDirectoriesComponent class implements the user directories component.

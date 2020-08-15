@@ -67,9 +67,7 @@ public class Organization implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the organization.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the organization. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the organization",
@@ -81,9 +79,7 @@ public class Organization implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name of the organization.
-   */
+  /** The name of the organization. */
   @Schema(description = "The name of the organization", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -92,9 +88,7 @@ public class Organization implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The status for the organization.
-   */
+  /** The status for the organization. */
   @Schema(
       description = "The status for the organization",
       allowableValues = "0 = Inactive, 1 = Active",
@@ -105,9 +99,7 @@ public class Organization implements Serializable {
   @Column(name = "status", nullable = false)
   private OrganizationStatus status;
 
-  /**
-   * The user directories associated with the organization.
-   */
+  /** The user directories associated with the organization. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -118,16 +110,13 @@ public class Organization implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
   private Set<UserDirectory> userDirectories = new HashSet<>();
 
-  /**
-   * Constructs a new <code>Organization</code>.
-   */
-  public Organization() {
-  }
+  /** Constructs a new <code>Organization</code>. */
+  public Organization() {}
 
   /**
    * Constructs a new <code>Organization</code>.
    *
-   * @param name   the name of the organization
+   * @param name the name of the organization
    * @param status the status for the organization
    */
   public Organization(String name, OrganizationStatus status) {
@@ -138,8 +127,8 @@ public class Organization implements Serializable {
   /**
    * Constructs a new <code>Organization</code>.
    *
-   * @param id     the Universally Unique Identifier (UUID) uniquely identifying the organization
-   * @param name   the name of the organization
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the organization
+   * @param name the name of the organization
    * @param status the status for the organization
    */
   public Organization(UUID id, String name, OrganizationStatus status) {
@@ -152,7 +141,6 @@ public class Organization implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

@@ -52,7 +52,7 @@ public class MessagePartNotFoundException extends ServiceException {
    * Constructs a new <code>MessagePartNotFoundException</code>.
    *
    * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
-   *                      part
+   *     part
    */
   public MessagePartNotFoundException(UUID messagePartId) {
     super(

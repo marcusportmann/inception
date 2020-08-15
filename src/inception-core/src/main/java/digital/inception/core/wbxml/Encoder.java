@@ -18,6 +18,7 @@ package digital.inception.core.wbxml;
 
 // ~--- JDK imports ------------------------------------------------------------
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +32,13 @@ public class Encoder {
 
   private static final String ENCODING_UTF_8 = "UTF-8";
 
-  private BinaryBuffer buffer;
+  private final BinaryBuffer buffer;
 
-  private byte[] data;
+  private final byte[] data;
 
-  private int length;
+  private final int length;
 
-  private List<String> stringTable;
+  private final List<String> stringTable;
 
   /**
    * Constructs a new <code>Encoder</code> to WBXML encode the specified document.
@@ -137,7 +138,7 @@ public class Encoder {
 
   private void appendString(String str) {
     try {
-      buffer.append(str.getBytes(ENCODING_UTF_8));
+      buffer.append(str.getBytes(StandardCharsets.UTF_8));
     } catch (Throwable e) {
       throw new RuntimeException(
           "Failed to encode the string of length " + str.length() + " for the WBXML document", e);
@@ -251,7 +252,7 @@ public class Encoder {
 
     for (String tmpStr : stringTable) {
       try {
-        byte[] bytes = tmpStr.getBytes(ENCODING_UTF_8);
+        byte[] bytes = tmpStr.getBytes(StandardCharsets.UTF_8);
 
         stringTablelength += bytes.length;
         stringTablelength += 1;
@@ -272,7 +273,7 @@ public class Encoder {
         return offset;
       } else {
         try {
-          byte[] bytes = tmpStr.getBytes(ENCODING_UTF_8);
+          byte[] bytes = tmpStr.getBytes(StandardCharsets.UTF_8);
 
           offset += bytes.length;
           offset += 1;

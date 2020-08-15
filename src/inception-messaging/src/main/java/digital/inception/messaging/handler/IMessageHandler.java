@@ -39,7 +39,6 @@ public interface IMessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   *
    * @return the response message or <code>null</code> if no response message exists
    */
   Message processMessage(Message message) throws MessageHandlerException;

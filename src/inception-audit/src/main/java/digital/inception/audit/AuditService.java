@@ -29,6 +29,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class AuditService implements IAuditService {
-
-}
+public class AuditService implements IAuditService {}

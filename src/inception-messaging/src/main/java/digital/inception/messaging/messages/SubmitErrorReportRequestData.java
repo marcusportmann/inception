@@ -43,40 +43,26 @@ import org.springframework.util.StringUtils;
  */
 public class SubmitErrorReportRequestData extends WbxmlMessageData {
 
-  /**
-   * The UUID for the "Submit Error Report Request" message.
-   */
+  /** The UUID for the "Submit Error Report Request" message. */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("ff638c33-b4f1-4e79-804c-9560da2543d6");
 
-  /**
-   * The ID uniquely identifying the application that generated the error report.
-   */
+  /** The ID uniquely identifying the application that generated the error report. */
   private String applicationId;
 
-  /**
-   * The version of the application that generated the error report.
-   */
+  /** The version of the application that generated the error report. */
   private String applicationVersion;
 
-  /**
-   * The date and time the error report was created.
-   */
+  /** The date and time the error report was created. */
   private LocalDateTime created;
 
-  /**
-   * The optional base-64 encoded data associated with the error report.
-   */
+  /** The optional base-64 encoded data associated with the error report. */
   private String data;
 
-  /**
-   * The description of the error.
-   */
+  /** The description of the error. */
   private String description;
 
-  /**
-   * The error detail.
-   */
+  /** The error detail. */
   private String detail;
 
   /**
@@ -85,24 +71,16 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
    */
   private UUID deviceId;
 
-  /**
-   * The feedback provided by the user for the error.
-   */
+  /** The feedback provided by the user for the error. */
   private String feedback;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the error report.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the error report. */
   private UUID id;
 
-  /**
-   * The username identifying the user associated with the error report.
-   */
+  /** The username identifying the user associated with the error report. */
   private String who;
 
-  /**
-   * Constructs a new <code>SubmitErrorReportRequestData</code>.
-   */
+  /** Constructs a new <code>SubmitErrorReportRequestData</code>. */
   public SubmitErrorReportRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -110,19 +88,18 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>SubmitErrorReportRequestData</code>.
    *
-   * @param id                 the Universally Unique Identifier (UUID) uniquely identifying the
-   *                           error report
-   * @param applicationId      the ID uniquely identifying the application that generated the error
-   *                           report
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
+   * @param applicationId the ID uniquely identifying the application that generated the error
+   *     report
    * @param applicationVersion the version of the application that generated the error report
-   * @param description        the description of the error
-   * @param detail             the error detail
-   * @param feedback           the feedback provided by the user for the error
-   * @param created            the date and time the error report was created
-   * @param who                the username identifying the user associated with the error report
-   * @param deviceId           the Universally Unique Identifier (UUID) uniquely identifying the
-   *                           device the error report originated from
-   * @param data               the optional Base-64 encoded data associated with the error report
+   * @param description the description of the error
+   * @param detail the error detail
+   * @param feedback the feedback provided by the user for the error
+   * @param created the date and time the error report was created
+   * @param who the username identifying the user associated with the error report
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     error report originated from
+   * @param data the optional Base-64 encoded data associated with the error report
    */
   public SubmitErrorReportRequestData(
       UUID id,
@@ -153,9 +130,8 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -273,7 +249,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
    * report originated from.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the device the error
-   * report originated from
+   *     report originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -311,7 +287,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   @Override
   public byte[] toMessageData() {

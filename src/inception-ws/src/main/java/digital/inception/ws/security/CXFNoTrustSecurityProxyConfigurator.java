@@ -61,22 +61,22 @@ public class CXFNoTrustSecurityProxyConfigurator {
 
         // Create a trust manager that does not validate certificate chains
         TrustManager[] trustAllCerts =
-            new TrustManager[]{
-                new X509TrustManager() {
-                  public void checkClientTrusted(X509Certificate[] chain, String authType)
-                      throws CertificateException {
-                    // Skip client verification
-                  }
-
-                  public void checkServerTrusted(X509Certificate[] chain, String authType)
-                      throws CertificateException {
-                    // Skip server verification
-                  }
-
-                  public X509Certificate[] getAcceptedIssuers() {
-                    return new X509Certificate[0];
-                  }
+            new TrustManager[] {
+              new X509TrustManager() {
+                public void checkClientTrusted(X509Certificate[] chain, String authType)
+                    throws CertificateException {
+                  // Skip client verification
                 }
+
+                public void checkServerTrusted(X509Certificate[] chain, String authType)
+                    throws CertificateException {
+                  // Skip server verification
+                }
+
+                public X509Certificate[] getAcceptedIssuers() {
+                  return new X509Certificate[0];
+                }
+              }
             };
 
         tlsClientParameters.setTrustManagers(trustAllCerts);

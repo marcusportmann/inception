@@ -82,9 +82,7 @@ public class UserDirectory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
@@ -96,9 +94,7 @@ public class UserDirectory implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The name of the user directory.
-   */
+  /** The name of the user directory. */
   @Schema(description = "The name of the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -107,17 +103,13 @@ public class UserDirectory implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The organizations the user directory is associated with.
-   */
+  /** The organizations the user directory is associated with. */
   @JsonIgnore
   @XmlTransient
   @ManyToMany(mappedBy = "userDirectories")
   private Set<Organization> organizations = new HashSet<>();
 
-  /**
-   * The parameters for the user directory.
-   */
+  /** The parameters for the user directory. */
   @Schema(description = "The parameters for the user directory", required = true)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Parameters", required = true)
@@ -126,9 +118,7 @@ public class UserDirectory implements Serializable {
   @Transient
   private List<UserDirectoryParameter> parameters = new ArrayList<>();
 
-  /**
-   * The code uniquely identifying the user directory type.
-   */
+  /** The code uniquely identifying the user directory type. */
   @Schema(description = "The code uniquely identifying the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -137,17 +127,13 @@ public class UserDirectory implements Serializable {
   @Column(name = "type", nullable = false, length = 100)
   private String type;
 
-  /**
-   * Constructs a new <code>UserDirectory</code>.
-   */
-  public UserDirectory() {
-  }
+  /** Constructs a new <code>UserDirectory</code>. */
+  public UserDirectory() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */

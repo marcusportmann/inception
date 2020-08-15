@@ -35,46 +35,29 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SpringBootSampleClient {
 
-  /**
-   * The Codes Service endpoint.
-   */
+  /** The Codes Service endpoint. */
   public static final String CODES_SERVICE_ENDPOINT = "http://localhost:8080/service/CodesService";
 
-  /**
-   * The path to the classpath resource containing the WSDL for the Codes Service.
-   */
+  /** The path to the classpath resource containing the WSDL for the Codes Service. */
   public static final String CODES_SERVICE_WSDL = "META-INF/wsdl/CodesService.wsdl";
 
-  /**
-   * Enable the web services security X509 certificate token profile for the sample client.
-   */
+  /** Enable the web services security X509 certificate token profile for the sample client. */
   private static final boolean SAMPLE_CLIENT_ENABLE_X509_CERTIFICATE_TOKEN_PROFILE = false;
 
-  /**
-   * The keystore alias for the sample client.
-   */
+  /** The keystore alias for the sample client. */
   private static final String SAMPLE_CLIENT_KEYSTORE_ALIAS = "sample-client";
 
-  /**
-   * The keystore password for the sample client.
-   */
+  /** The keystore password for the sample client. */
   private static final String SAMPLE_CLIENT_KEYSTORE_PASSWORD = "sample-client";
 
-  /**
-   * The keystore path for the sample client.
-   */
+  /** The keystore path for the sample client. */
   private static final String SAMPLE_CLIENT_KEYSTORE_PATH = "META-INF/sample-client.p12";
 
-  /**
-   * The keystore type for the sample client.
-   */
+  /** The keystore type for the sample client. */
   private static final String SAMPLE_CLIENT_KEYSTORE_TYPE = "pkcs12";
 
-  /**
-   * Constructs a new <code>SampleClient</code>.
-   */
-  public SpringBootSampleClient() {
-  }
+  /** Constructs a new <code>SampleClient</code>. */
+  public SpringBootSampleClient() {}
 
   /**
    * The main method.
@@ -85,9 +68,7 @@ public class SpringBootSampleClient {
     SpringApplication.run(SpringBootSampleClient.class, args);
   }
 
-  /**
-   * Test the Codes Service.
-   */
+  /** Test the Codes Service. */
   @PostConstruct
   protected void testCodesService() {
     try {

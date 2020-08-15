@@ -33,11 +33,8 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class IntegerToPartyTypeConverter implements Converter<Integer, PartyType> {
 
-  /**
-   * Constructs a new <code>IntegerToPartyTypeConverter</code>.
-   */
-  public IntegerToPartyTypeConverter() {
-  }
+  /** Constructs a new <code>IntegerToPartyTypeConverter</code>. */
+  public IntegerToPartyTypeConverter() {}
 
   @Override
   public PartyType convert(Integer source) {

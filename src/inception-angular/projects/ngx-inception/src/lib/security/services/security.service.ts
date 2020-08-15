@@ -46,7 +46,7 @@ import {
 import {CommunicationError} from '../../core/errors/communication-error';
 import {ApiError} from '../../core/errors/api-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
-import {SortDirection} from './sort-direction';
+import {SortDirection} from '../../core/sorting/sort-direction';
 import {Organizations} from './organizations';
 import {Users} from './users';
 import {User} from './user';

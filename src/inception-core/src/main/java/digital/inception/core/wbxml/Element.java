@@ -38,17 +38,14 @@ public class Element implements Serializable, Content {
 
   private static final long serialVersionUID = 1000000;
 
-  private List<Attribute> attributes = new ArrayList<>();
+  private final List<Attribute> attributes = new ArrayList<>();
 
-  private List<Content> content = new ArrayList<>();
+  private final List<Content> content = new ArrayList<>();
 
   private String name = null;
 
-  /**
-   * Hidden default constructor.
-   */
-  protected Element() {
-  }
+  /** Hidden default constructor. */
+  protected Element() {}
 
   /**
    * Constructs an <code>Element</code> with the specified name.
@@ -62,7 +59,7 @@ public class Element implements Serializable, Content {
   /**
    * Constructs an <code>Element</code> with the specified name and content.
    *
-   * @param name    the name of the element
+   * @param name the name of the element
    * @param content the content for the element
    */
   public Element(String name, byte[] content) {
@@ -73,7 +70,7 @@ public class Element implements Serializable, Content {
   /**
    * Constructs an <code>Element</code> with the specified name and content.
    *
-   * @param name    the name of the element
+   * @param name the name of the element
    * @param content the content for the element
    */
   public Element(String name, String content) {
@@ -112,9 +109,8 @@ public class Element implements Serializable, Content {
    * Returns the attribute with the specified name.
    *
    * @param name the name of the attribute
-   *
    * @return the attribute with the specified name or <code>null</code> if no matching attribute
-   * could be found
+   *     could be found
    */
   public Attribute getAttribute(String name) {
     for (Attribute attribute : attributes) {
@@ -130,9 +126,8 @@ public class Element implements Serializable, Content {
    * Returns the value for the attribute with the specified name.
    *
    * @param name the name of the attribute
-   *
    * @return the value for the attribute with the specified name or <code>null</code> if no matching
-   * attribute could be found
+   *     attribute could be found
    */
   public String getAttributeValue(String name) {
     for (Attribute attribute : attributes) {
@@ -157,9 +152,8 @@ public class Element implements Serializable, Content {
    * Returns the child element with the specified name.
    *
    * @param name the name of the child element
-   *
    * @return the child element or <code>null</code> if an element with the specified name could not
-   * be found
+   *     be found
    */
   public Element getChild(String name) {
     for (Content tmpContent : content) {
@@ -179,9 +173,8 @@ public class Element implements Serializable, Content {
    * Get the binary data content for the child element with the specified name.
    *
    * @param name the name of the child element
-   *
    * @return the binary data content for the child element or <code>null</code> if an element with
-   * the specified name could not be found
+   *     the specified name could not be found
    */
   public byte[] getChildOpaque(String name) {
     for (Content tmpContent : content) {
@@ -201,9 +194,8 @@ public class Element implements Serializable, Content {
    * Get the text content for the child element with the specified name.
    *
    * @param name the name of the child element
-   *
    * @return the text content for the child element or <code>null</code> if an element with the
-   * specified name could not be found
+   *     specified name could not be found
    */
   public String getChildText(String name) {
     for (Content tmpContent : content) {
@@ -240,7 +232,6 @@ public class Element implements Serializable, Content {
    * Returns the child elements with the specified name for this element.
    *
    * @param name the name of the child elements to return
-   *
    * @return the child elements with the specified name
    */
   public List<Element> getChildren(String name) {
@@ -320,7 +311,6 @@ public class Element implements Serializable, Content {
    * false</code> otherwise.
    *
    * @param name the name of the attribute
-   *
    * @return <code>true</code> if the element has an attribute with the specified name or <code>
    * false</code> otherwise
    */
@@ -348,7 +338,6 @@ public class Element implements Serializable, Content {
    * false</code> otherwise.
    *
    * @param name the name of the child element
-   *
    * @return <code>true</code> if the element has a child element with the specified name or <code>
    * false</code> otherwise
    */
@@ -400,7 +389,7 @@ public class Element implements Serializable, Content {
   /**
    * Print the content to the specified <code>OutputStream</code> using the specified indent level.
    *
-   * @param out    the <code>OuputStream</code> to output the content to
+   * @param out the <code>OuputStream</code> to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {
@@ -448,7 +437,7 @@ public class Element implements Serializable, Content {
   /**
    * Set the value of the attribute with the specified name for the element.
    *
-   * @param name  the name of the attribute
+   * @param name the name of the attribute
    * @param value the value for the attribute
    */
   public void setAttribute(String name, String value) {

@@ -60,21 +60,17 @@ import org.springframework.web.bind.annotation.RestController;
 @SuppressWarnings({"unused"})
 public class CodesRestController extends SecureRestController {
 
-  /**
-   * The Codes Service.
-   */
+  /** The Codes Service. */
   private final ICodesService codesService;
 
-  /**
-   * The JSR-303 Validator.
-   */
+  /** The JSR-303 Validator. */
   private final Validator validator;
 
   /**
    * Constructs a new <code>CodesRestController</code>.
    *
    * @param codesService the Codes Service
-   * @param validator    the JSR-303 validator
+   * @param validator the JSR-303 validator
    */
   public CodesRestController(ICodesService codesService, Validator validator) {
     this.codesService = codesService;
@@ -85,41 +81,41 @@ public class CodesRestController extends SecureRestController {
    * Create the new code.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param code           the code to create
+   * @param code the code to create
    */
   @Operation(summary = "Create the code", description = "Create the code")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The code was created successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "A code with the specified ID already exists",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "204", description = "The code was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A code with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes",
@@ -129,14 +125,14 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void createCode(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId,
       @Parameter(name = "code", description = "The code", required = true) @RequestBody Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
-      CodesServiceException {
+          CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -167,31 +163,31 @@ public class CodesRestController extends SecureRestController {
   @Operation(summary = "Create the code category", description = "Create the code category")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The code category was created successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "A code category with the specified ID already exists",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The code category was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A code category with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories",
@@ -201,7 +197,7 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void createCodeCategory(
       @Parameter(name = "codeCategory", description = "The code category", required = true)
-      @RequestBody
+          @RequestBody
           CodeCategory codeCategory)
       throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException {
     if (codeCategory == null) {
@@ -222,34 +218,34 @@ public class CodesRestController extends SecureRestController {
    * Delete the code.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId         the ID uniquely identifying the code
+   * @param codeId the ID uniquely identifying the code
    */
   @Operation(summary = "Delete the code", description = "Delete the code")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The code was deleted successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "204", description = "The code was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes/{codeId}",
@@ -259,16 +255,16 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void deleteCode(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId,
       @Parameter(
-          name = "codeId",
-          description = "The ID uniquely identifying the code",
-          required = true)
-      @PathVariable
+              name = "codeId",
+              description = "The ID uniquely identifying the code",
+              required = true)
+          @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -290,31 +286,31 @@ public class CodesRestController extends SecureRestController {
   @Operation(summary = "Delete the code category", description = "Delete the code category")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The code category was deleted successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The code category was deleted successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}",
@@ -324,10 +320,10 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void deleteCodeCategory(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -340,38 +336,36 @@ public class CodesRestController extends SecureRestController {
   /**
    * Retrieve the code
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
-   *                       with
-   * @param codeId         the ID uniquely identifying the code
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param codeId the ID uniquely identifying the code
    * @return the code
    */
   @Operation(summary = "Retrieve the code", description = "Retrieve the code")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes/{codeId}",
@@ -381,17 +375,17 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public Code getCode(
       @Parameter(
-          name = "codeCategoryId",
-          description =
-              "The ID uniquely identifying the code category the code is associated with",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description =
+                  "The ID uniquely identifying the code category the code is associated with",
+              required = true)
+          @PathVariable
           String codeCategoryId,
       @Parameter(
-          name = "codeId",
-          description = "The ID uniquely identifying the code",
-          required = true)
-      @PathVariable
+              name = "codeId",
+              description = "The ID uniquely identifying the code",
+              required = true)
+          @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -413,15 +407,15 @@ public class CodesRestController extends SecureRestController {
   @Operation(summary = "Retrieve the code categories", description = "Retrieve the code categories")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories",
@@ -437,35 +431,34 @@ public class CodesRestController extends SecureRestController {
    * Retrieve the code category
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   *
    * @return the code category
    */
   @Operation(summary = "Retrieve the code category", description = "Retrieve the code category")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}",
@@ -475,10 +468,10 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public CodeCategory getCodeCategory(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -492,7 +485,6 @@ public class CodesRestController extends SecureRestController {
    * Retrieve the XML or JSON data for a code category
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   *
    * @return the XML or JSON data for the code category
    */
   @Operation(
@@ -500,29 +492,29 @@ public class CodesRestController extends SecureRestController {
       description = "Retrieve the XML or JSON data for a code category")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/data",
@@ -532,10 +524,10 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeCategoryData(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -551,7 +543,6 @@ public class CodesRestController extends SecureRestController {
    * Retrieve the name of the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   *
    * @return the name of the code category
    */
   @Operation(
@@ -559,29 +550,29 @@ public class CodesRestController extends SecureRestController {
       description = "Retrieve the name of the code category")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/name",
@@ -591,10 +582,10 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeCategoryName(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -614,15 +605,15 @@ public class CodesRestController extends SecureRestController {
       description = "Retrieve the code category summaries")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-category-summaries",
@@ -638,7 +629,6 @@ public class CodesRestController extends SecureRestController {
    * Returns the date and time the code category was last updated.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   *
    * @return the date and time the code category was last updated
    */
   @Operation(
@@ -646,29 +636,29 @@ public class CodesRestController extends SecureRestController {
       description = "Retrieve the date and time the code category was last updated")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/updated",
@@ -678,10 +668,10 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeCategoryUpdated(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -695,10 +685,8 @@ public class CodesRestController extends SecureRestController {
   /**
    * Retrieve the name of the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
-   *                       with
-   * @param codeId         the ID uniquely identifying the code
-   *
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param codeId the ID uniquely identifying the code
    * @return the name of the code
    */
   @Operation(
@@ -706,29 +694,29 @@ public class CodesRestController extends SecureRestController {
       description = "Retrieve the name of the code")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes/{codeId}/name",
@@ -738,17 +726,17 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public String getCodeName(
       @Parameter(
-          name = "codeCategoryId",
-          description =
-              "The ID uniquely identifying the code category the code is associated with",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description =
+                  "The ID uniquely identifying the code category the code is associated with",
+              required = true)
+          @PathVariable
           String codeCategoryId,
       @Parameter(
-          name = "codeId",
-          description = "The ID uniquely identifying the code",
-          required = true)
-      @PathVariable
+              name = "codeId",
+              description = "The ID uniquely identifying the code",
+              required = true)
+          @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -766,7 +754,6 @@ public class CodesRestController extends SecureRestController {
    * Retrieve the codes for a code category
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   *
    * @return the codes for the code category
    */
   @Operation(
@@ -774,29 +761,29 @@ public class CodesRestController extends SecureRestController {
       description = "Retrieve the codes for a code category")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes",
@@ -806,10 +793,10 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public List<Code> getCodesForCodeCategory(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -823,35 +810,35 @@ public class CodesRestController extends SecureRestController {
    * Update the code.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId         the ID uniquely identifying the code
-   * @param code           the code to create
+   * @param codeId the ID uniquely identifying the code
+   * @param code the code to create
    */
   @Operation(summary = "Update the code", description = "Update the code")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204", description = "The code was updated successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "204", description = "The code was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}/codes/{codeId}",
@@ -861,16 +848,16 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void updateCode(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId,
       @Parameter(
-          name = "codeId",
-          description = "The ID uniquely identifying the code",
-          required = true)
-      @PathVariable
+              name = "codeId",
+              description = "The ID uniquely identifying the code",
+              required = true)
+          @PathVariable
           String codeId,
       @Parameter(name = "code", description = "The code", required = true) @RequestBody Code code)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
@@ -908,36 +895,36 @@ public class CodesRestController extends SecureRestController {
    * Update the code category.
    *
    * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeCategory   the code category
+   * @param codeCategory the code category
    */
   @Operation(summary = "Update the code category", description = "Update the code category")
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "204",
-              description = "The code category was updated successfully"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The code category could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(
+            responseCode = "204",
+            description = "The code category was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The code category could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
       value = "/code-categories/{codeCategoryId}",
@@ -947,13 +934,13 @@ public class CodesRestController extends SecureRestController {
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void updateCodeCategory(
       @Parameter(
-          name = "codeCategoryId",
-          description = "The ID uniquely identifying the code category",
-          required = true)
-      @PathVariable
+              name = "codeCategoryId",
+              description = "The ID uniquely identifying the code category",
+              required = true)
+          @PathVariable
           String codeCategoryId,
       @Parameter(name = "codeCategory", description = "The code category", required = true)
-      @RequestBody
+          @RequestBody
           CodeCategory codeCategory)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {

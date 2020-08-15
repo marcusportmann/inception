@@ -14,35 +14,33 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.core.converters;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.sorting.SortDirection;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>SortDirectionToStringConverter</code> class implements the Spring converter that
- * converts a <code>SortDirection</code> type into a <code>String</code> type.
+ * The <code>StringToSortDirectionConverter</code> class implements the Spring converter that
+ * converts a <code>String</code> type into a <code>SortDirection</code> type.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 @Component
-public class SortDirectionToStringConverter implements Converter<SortDirection, String> {
+public class StringToSortDirectionConverter implements Converter<String, SortDirection> {
 
-  /**
-   * Constructs a new <code>SortDirectionToStringConverter</code>.
-   */
-  public SortDirectionToStringConverter() {
-  }
+  /** Constructs a new <code>StringToSortDirectionConverter</code>. */
+  public StringToSortDirectionConverter() {}
 
   @Override
-  public String convert(SortDirection source) {
+  public SortDirection convert(String source) {
     if (source == null) {
       return null;
     }
 
-    return source.getCode();
+    return SortDirection.fromCode(source);
   }
 }

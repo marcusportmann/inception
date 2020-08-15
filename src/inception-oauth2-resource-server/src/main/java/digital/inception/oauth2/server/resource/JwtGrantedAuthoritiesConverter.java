@@ -32,9 +32,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 public class JwtGrantedAuthoritiesConverter
     implements Converter<Jwt, Collection<GrantedAuthority>> {
 
-  /**
-   * The name of the functions claim that provides the functions assigned to the user.
-   */
+  /** The name of the functions claim that provides the functions assigned to the user. */
   public static final String FUNCTIONS_CLAIM = "functions";
 
   /**
@@ -43,16 +41,13 @@ public class JwtGrantedAuthoritiesConverter
    */
   public static final String ORGANIZATIONS_CLAIM = "organizations";
 
-  /**
-   * The name of the roles claim that provides the roles assigned to the user.
-   */
+  /** The name of the roles claim that provides the roles assigned to the user. */
   private static final String ROLES_CLAIM = "roles";
 
   /**
    * Extract {@link GrantedAuthority}s from the given {@link Jwt}.
    *
    * @param jwt the {@link Jwt} token
-   *
    * @return the {@link GrantedAuthority authorities} read from the token scopes
    */
   @Override

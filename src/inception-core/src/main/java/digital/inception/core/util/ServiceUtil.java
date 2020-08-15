@@ -37,7 +37,6 @@ public class ServiceUtil {
    * Retrieve the service instance name for the service with the specified name.
    *
    * @param serviceName the service name
-   *
    * @return the service instance name for the service with the specified name
    */
   public static String getServiceInstanceName(String serviceName) {

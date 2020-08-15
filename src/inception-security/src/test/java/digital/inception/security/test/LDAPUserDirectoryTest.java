@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2020 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,60 +14,61 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.security.test;
+// package digital.inception.security.test;
 //
 //// ~--- non-JDK imports --------------------------------------------------------
 //
-//import static org.junit.Assert.assertEquals;
-//import static org.junit.Assert.assertFalse;
-//import static org.junit.Assert.assertTrue;
-//import static org.junit.Assert.fail;
+// import static org.junit.Assert.assertEquals;
+// import static org.junit.Assert.assertFalse;
+// import static org.junit.Assert.assertTrue;
+// import static org.junit.Assert.fail;
 //
-//import digital.inception.security.Attribute;
-//import digital.inception.security.AuthenticationFailedException;
-//import digital.inception.security.Group;
-//import digital.inception.security.GroupMember;
-//import digital.inception.security.GroupMemberType;
-//import digital.inception.security.GroupMembers;
-//import digital.inception.security.GroupRole;
-//import digital.inception.security.Groups;
-//import digital.inception.security.ISecurityService;
-//import digital.inception.security.PasswordChangeReason;
-//import digital.inception.security.SecurityService;
-//import digital.inception.security.SortDirection;
-//import digital.inception.security.User;
-//import digital.inception.security.UserSortBy;
-//import digital.inception.security.UserStatus;
-//import digital.inception.security.Users;
-//import digital.inception.test.TestClassRunner;
-//import digital.inception.test.TestConfiguration;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.UUID;
-//import org.junit.Test;
-//import org.junit.runner.RunWith;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.TestExecutionListeners;
-//import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-//import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-//import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+// import digital.inception.security.Attribute;
+// import digital.inception.security.AuthenticationFailedException;
+// import digital.inception.security.Group;
+// import digital.inception.security.GroupMember;
+// import digital.inception.security.GroupMemberType;
+// import digital.inception.security.GroupMembers;
+// import digital.inception.security.GroupRole;
+// import digital.inception.security.Groups;
+// import digital.inception.security.ISecurityService;
+// import digital.inception.security.PasswordChangeReason;
+// import digital.inception.security.SecurityService;
+// import digital.inception.security.SortDirection;
+// import digital.inception.security.User;
+// import digital.inception.security.UserSortBy;
+// import digital.inception.security.UserStatus;
+// import digital.inception.security.Users;
+// import digital.inception.test.TestClassRunner;
+// import digital.inception.test.TestConfiguration;
+// import java.util.ArrayList;
+// import java.util.List;
+// import java.util.UUID;
+// import org.junit.Test;
+// import org.junit.runner.RunWith;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.test.context.ContextConfiguration;
+// import org.springframework.test.context.TestExecutionListeners;
+// import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+// import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+// import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 //
-///**
-// * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit tests for the
+/// **
+// * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit tests for
+// the
 // * <code>SecurityService</code> class.
 // *
 // * @author Marcus Portmann
 // */
-//@RunWith(TestClassRunner.class)
-//@ContextConfiguration(classes = {TestConfiguration.class})
-//@TestExecutionListeners(
+// @RunWith(TestClassRunner.class)
+// @ContextConfiguration(classes = {TestConfiguration.class})
+// @TestExecutionListeners(
 //    listeners = {
 //      DependencyInjectionTestExecutionListener.class,
 //      DirtiesContextTestExecutionListener.class,
 //      TransactionalTestExecutionListener.class
 //    })
-//public class LDAPUserDirectoryTest {
+// public class LDAPUserDirectoryTest {
 //  /**
 //   * The Universally Unique Identifier (UUID) uniquely identifying the Sample LDAP user directory.
 //   */
@@ -352,7 +353,8 @@
 //                SAMPLE_LDAP_USER_DIRECTORY_ID, group.getName(), user.getUsername()));
 //
 //        retrivedGroupNames =
-//            securityService.getGroupNamesForUser(SAMPLE_LDAP_USER_DIRECTORY_ID, user.getUsername());
+//            securityService.getGroupNamesForUser(SAMPLE_LDAP_USER_DIRECTORY_ID,
+// user.getUsername());
 //
 //        assertEquals(
 //            "The correct number of group names was not retrieved for the user ("
@@ -431,7 +433,8 @@
 //            retrievedFunctionCodes.size());
 //
 //        retrievedRoleCodes =
-//            securityService.getRoleCodesForUser(SAMPLE_LDAP_USER_DIRECTORY_ID, user.getUsername());
+//            securityService.getRoleCodesForUser(SAMPLE_LDAP_USER_DIRECTORY_ID,
+// user.getUsername());
 //
 //        assertEquals(
 //            "The correct number of role codes was not retrieved", 1, retrievedRoleCodes.size());
@@ -536,4 +539,4 @@
 //        user1.getUsername(),
 //        user2.getUsername());
 //  }
-//}
+// }

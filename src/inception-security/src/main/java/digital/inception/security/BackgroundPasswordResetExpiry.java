@@ -39,15 +39,11 @@ public class BackgroundPasswordResetExpiry {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundPasswordResetExpiry.class);
 
-  /**
-   * The password reset expiry in seconds
-   */
+  /** The password reset expiry in seconds */
   @Value("${application.security.passwordResetExpiry:900}")
   private int passwordResetExpiry;
 
-  /**
-   * The Password Reset Repository.
-   */
+  /** The Password Reset Repository. */
   private PasswordResetRepository passwordResetRepository;
 
   /**
@@ -59,9 +55,7 @@ public class BackgroundPasswordResetExpiry {
     this.passwordResetRepository = passwordResetRepository;
   }
 
-  /**
-   * Expire the password resets.
-   */
+  /** Expire the password resets. */
   @Scheduled(cron = "0 * * * * *")
   @Transactional
   public void expirePasswordResets() {

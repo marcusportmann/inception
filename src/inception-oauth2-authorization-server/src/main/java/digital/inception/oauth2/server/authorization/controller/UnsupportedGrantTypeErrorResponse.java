@@ -26,9 +26,7 @@ import org.springframework.http.HttpStatus;
  */
 public class UnsupportedGrantTypeErrorResponse extends ErrorResponse {
 
-  /**
-   * The error code for the OAuth2 unsupported grant type error response.
-   */
+  /** The error code for the OAuth2 unsupported grant type error response. */
   public static final String ERROR_CODE = "unsupported_grant_type";
 
   /**

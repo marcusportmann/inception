@@ -19,6 +19,7 @@ package digital.inception.security;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.core.sorting.SortDirection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.List;
@@ -49,70 +50,55 @@ public class UserDirectories implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The optional filter that was applied to the user directories.
-   */
+  /** The optional filter that was applied to the user directories. */
   @Schema(description = "The optional filter that was applied to the user directories")
   @JsonProperty
   @XmlElement(name = "Filter")
   private String filter;
 
-  /**
-   * The optional page index.
-   */
+  /** The optional page index. */
   @Schema(description = "The optional page index")
   @JsonProperty
   @XmlElement(name = "PageIndex")
   private Integer pageIndex;
 
-  /**
-   * The optional page size.
-   */
+  /** The optional page size. */
   @Schema(description = "The optional page size")
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
 
-  /**
-   * The optional sort direction that was applied to the user directories.
-   */
+  /** The optional sort direction that was applied to the user directories. */
   @Schema(description = "The optional sort direction that was applied to the user directories")
   @JsonProperty
   @XmlElement(name = "SortDirection")
   private SortDirection sortDirection;
 
-  /**
-   * The total number of user directories.
-   */
+  /** The total number of user directories. */
   @Schema(description = "The total number of user directories", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /**
-   * The user directories.
-   */
+  /** The user directories. */
   @Schema(description = "The user directories", required = true)
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "UserDirectories", required = true)
   @XmlElement(name = "UserDirectory", required = true)
   private List<UserDirectory> userDirectories;
 
-  /**
-   * Constructs a new <code>UserDirectories</code>.
-   */
-  public UserDirectories() {
-  }
+  /** Constructs a new <code>UserDirectories</code>. */
+  public UserDirectories() {}
 
   /**
    * Constructs a new <code>UserDirectories</code>.
    *
    * @param userDirectories the user directories
-   * @param total           the total number of user directories
-   * @param filter          the optional filter that was applied to the user directories
-   * @param sortDirection   the optional sort direction that was applied to the user directories
-   * @param pageIndex       the optional page index
-   * @param pageSize        the optional page size
+   * @param total the total number of user directories
+   * @param filter the optional filter that was applied to the user directories
+   * @param sortDirection the optional sort direction that was applied to the user directories
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
    */
   public UserDirectories(
       List<UserDirectory> userDirectories,

@@ -36,19 +36,15 @@ import java.io.PrintWriter;
 public class MessageResult {
 
   /**
-   * The message result code returned to indicate that an error occurred while decrypting a
-   * message.
+   * The message result code returned to indicate that an error occurred while decrypting a message.
    */
   public static final int ERROR_DECRYPTION_FAILED = -3;
 
-  /**
-   * The message result code returned to indicate an invalid request.
-   */
+  /** The message result code returned to indicate an invalid request. */
   public static final int ERROR_INVALID_REQUEST = -1;
 
   /**
-   * The message result code returned to indicate that an error occurred while processing a
-   * message.
+   * The message result code returned to indicate that an error occurred while processing a message.
    */
   public static final int ERROR_PROCESSING_FAILED = -4;
 
@@ -63,9 +59,7 @@ public class MessageResult {
    */
   public static final int ERROR_UNRECOGNISED_TYPE = -2;
 
-  /**
-   * The message result code returned to indicated successful processing of a message.
-   */
+  /** The message result code returned to indicated successful processing of a message. */
   public static final int SUCCESS = 0;
 
   /**
@@ -80,14 +74,10 @@ public class MessageResult {
    */
   private String detail;
 
-  /**
-   * The flattened information for the exception that resulted from processing the message.
-   */
+  /** The flattened information for the exception that resulted from processing the message. */
   private String exception;
 
-  /**
-   * The message associated with the message result e.g. a response message.
-   */
+  /** The message associated with the message result e.g. a response message. */
   private Message message;
 
   /**
@@ -126,7 +116,7 @@ public class MessageResult {
   /**
    * Constructs a new <code>MessageResult</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of processing the message
    */
   public MessageResult(long code, String detail) {
@@ -137,8 +127,8 @@ public class MessageResult {
   /**
    * Constructs a new <code>MessageResult</code>.
    *
-   * @param code    the result code
-   * @param detail  the text description of the result of processing the message
+   * @param code the result code
+   * @param detail the text description of the result of processing the message
    * @param message the message associated with the <code>MessageResult</code>
    */
   public MessageResult(long code, String detail, Message message) {
@@ -150,9 +140,9 @@ public class MessageResult {
   /**
    * Constructs a new <code>MessageResult</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of processing the message
-   * @param cause  the exception that resulted from processing the message
+   * @param cause the exception that resulted from processing the message
    */
   public MessageResult(long code, String detail, Throwable cause) {
     this.code = code;
@@ -178,9 +168,8 @@ public class MessageResult {
    * <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
-   *
    * @return <code>true</code> if the WBXML document contains valid message result information or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element messageResultElement = document.getRootElement();
@@ -188,7 +177,7 @@ public class MessageResult {
     return messageResultElement.getName().equals("MessageResult")
         && (messageResultElement.getAttributes().size() == 2)
         && !((!messageResultElement.hasAttribute("code"))
-        || (!messageResultElement.hasAttribute("detail")));
+            || (!messageResultElement.hasAttribute("detail")));
   }
 
   /**
@@ -249,7 +238,7 @@ public class MessageResult {
    * Set the flattened information for the exception that resulted from processing the message.
    *
    * @param exception the flattened information for the exception that resulted from processing the
-   *                  message
+   *     message
    */
   public void setException(String exception) {
     this.exception = exception;

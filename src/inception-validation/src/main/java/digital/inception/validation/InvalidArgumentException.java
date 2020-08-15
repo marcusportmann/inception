@@ -47,19 +47,13 @@ public class InvalidArgumentException extends Exception {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The invalid argument error information.
-   */
+  /** The invalid argument error information. */
   private InvalidArgumentError invalidArgumentError;
 
-  /**
-   * The name of the invalid argument.
-   */
+  /** The name of the invalid argument. */
   private String name;
 
-  /**
-   * The validation errors associated with the invalid argument.
-   */
+  /** The validation errors associated with the invalid argument. */
   private List<ValidationError> validationErrors;
 
   /**
@@ -77,7 +71,7 @@ public class InvalidArgumentException extends Exception {
   /**
    * Constructs a new <code>InvalidArgumentException</code> with <code>null</code> as its message.
    *
-   * @param name             the name of the invalid argument
+   * @param name the name of the invalid argument
    * @param validationErrors the validation errors associated with the invalid argument
    */
   public InvalidArgumentException(String name, List<ValidationError> validationErrors) {
@@ -91,7 +85,7 @@ public class InvalidArgumentException extends Exception {
   /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message.
    *
-   * @param name    the name of the invalid argument
+   * @param name the name of the invalid argument
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
   public InvalidArgumentException(String name, String message) {
@@ -106,9 +100,9 @@ public class InvalidArgumentException extends Exception {
    * of <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
    * message of cause).
    *
-   * @param name  the name of the invalid argument
+   * @param name the name of the invalid argument
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidArgumentException(String name, Throwable cause) {
     super(cause);
@@ -120,9 +114,8 @@ public class InvalidArgumentException extends Exception {
   /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message.
    *
-   * @param name             the name of the invalid argument
-   * @param message          The message saved for later retrieval by the <code>getMessage()</code>
-   *                         method.
+   * @param name the name of the invalid argument
+   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param validationErrors the validation errors associated with the invalid argument
    */
   public InvalidArgumentException(
@@ -137,10 +130,10 @@ public class InvalidArgumentException extends Exception {
   /**
    * Constructs a new <code>InvalidArgumentException</code> with the specified message and cause.
    *
-   * @param name    the name of the invalid argument
+   * @param name the name of the invalid argument
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause   The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *                <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidArgumentException(String name, String message, Throwable cause) {
     super(message, cause);

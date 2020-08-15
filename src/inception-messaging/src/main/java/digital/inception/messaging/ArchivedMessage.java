@@ -50,28 +50,28 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Schema(description = "ArchivedMessage")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "id",
-    "username",
-    "deviceId",
-    "typeId",
-    "correlationId",
-    "created",
-    "archived",
-    "data"
+  "id",
+  "username",
+  "deviceId",
+  "typeId",
+  "correlationId",
+  "created",
+  "archived",
+  "data"
 })
 @XmlRootElement(name = "ArchivedMessage", namespace = "http://messaging.inception.digital")
 @XmlType(
     name = "ArchivedMessage",
     namespace = "http://messaging.inception.digital",
     propOrder = {
-        "id",
-        "username",
-        "deviceId",
-        "typeId",
-        "correlationId",
-        "created",
-        "archived",
-        "data"
+      "id",
+      "username",
+      "deviceId",
+      "typeId",
+      "correlationId",
+      "created",
+      "archived",
+      "data"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
@@ -79,9 +79,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @SuppressWarnings({"WeakerAccess"})
 public class ArchivedMessage {
 
-  /**
-   * The date and time the message was archived.
-   */
+  /** The date and time the message was archived. */
   @Schema(description = "The date and time the message was archived", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Archived", required = true)
@@ -90,9 +88,7 @@ public class ArchivedMessage {
   @Column(name = "archived", nullable = false)
   private LocalDateTime archived;
 
-  /**
-   * The optional Universally Unique Identifier (UUID) used to correlate the message.
-   */
+  /** The optional Universally Unique Identifier (UUID) used to correlate the message. */
   @Schema(
       description =
           "The optional Universally Unique Identifier (UUID) used to correlate the message")
@@ -101,9 +97,7 @@ public class ArchivedMessage {
   @Column(name = "correlation_id")
   private UUID correlationId;
 
-  /**
-   * The date and time the message was created.
-   */
+  /** The date and time the message was created. */
   @Schema(description = "The date and time the message was created", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Created", required = true)
@@ -113,9 +107,7 @@ public class ArchivedMessage {
   @Column(name = "created", nullable = false)
   private LocalDateTime created;
 
-  /**
-   * The data for the message.
-   */
+  /** The data for the message. */
   @Schema(description = "The data for the message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Data", required = true)
@@ -138,9 +130,7 @@ public class ArchivedMessage {
   @Column(name = "device_id", nullable = false)
   private UUID deviceId;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the message.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the message. */
   @Schema(
       description = "The Universally Unique Identifier (UUID) uniquely identifying the message",
       required = true)
@@ -151,9 +141,7 @@ public class ArchivedMessage {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the type of message.
-   */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the type of message. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the type of message",
@@ -164,9 +152,7 @@ public class ArchivedMessage {
   @Column(name = "type_id", nullable = false)
   private UUID typeId;
 
-  /**
-   * The username identifying the user associated with the message.
-   */
+  /** The username identifying the user associated with the message. */
   @Schema(
       description = "The username identifying the user associated with the message",
       required = true)
@@ -177,11 +163,8 @@ public class ArchivedMessage {
   @Column(name = "username", nullable = false, length = 100)
   private String username;
 
-  /**
-   * Constructs a new <code>ArchivedMessage</code>.
-   */
-  public ArchivedMessage() {
-  }
+  /** Constructs a new <code>ArchivedMessage</code>. */
+  public ArchivedMessage() {}
 
   /**
    * Constructs a new <code>ArchivedMessage</code>.
@@ -202,17 +185,16 @@ public class ArchivedMessage {
   /**
    * Constructs a new <code>ArchivedMessage</code>.
    *
-   * @param id            the Universally Unique Identifier (UUID) uniquely identifying the message
-   * @param username      the username identifying the user associated with the message
-   * @param deviceId      the Universally Unique Identifier (UUID) uniquely identifying the device
-   *                      the message originated from
-   * @param typeId        the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *                      message
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param username the username identifying the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   *     message originated from
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
    * @param correlationId the optional Universally Unique Identifier (UUID) used to correlate the
-   *                      message
-   * @param created       the date and time the message was created
-   * @param archived      the date and time the message was archived
-   * @param data          the data for the message which is NOT encrypted
+   *     message
+   * @param created the date and time the message was created
+   * @param archived the date and time the message was archived
+   * @param data the data for the message which is NOT encrypted
    */
   public ArchivedMessage(
       UUID id,
@@ -237,7 +219,6 @@ public class ArchivedMessage {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */
@@ -301,7 +282,7 @@ public class ArchivedMessage {
    * from.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
-   * originated from
+   *     originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -385,7 +366,7 @@ public class ArchivedMessage {
    * originated from.
    *
    * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
-   *                 message originated from
+   *     message originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
@@ -403,8 +384,7 @@ public class ArchivedMessage {
   /**
    * Set the Universally Unique Identifier (UUID) uniquely identifying the type of message.
    *
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *               message
+   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
    */
   public void setTypeId(UUID typeId) {
     this.typeId = typeId;

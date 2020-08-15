@@ -43,9 +43,9 @@ public class CXFWSSUsernameTokenProfileProxyConfigurator {
    * Configure the CXF web service proxy to support authentication using the the Web Services
    * Security Username Token profile.
    *
-   * @param proxy                the web service proxy to configure
-   * @param username             the username to use when authenticating
-   * @param password             the password to use when authenticating
+   * @param proxy the web service proxy to configure
+   * @param username the username to use when authenticating
+   * @param password the password to use when authenticating
    * @param usePlainTextPassword should a plain text password be used
    */
   public static void configureProxy(

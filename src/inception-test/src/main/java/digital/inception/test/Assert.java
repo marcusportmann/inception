@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-
 /**
  * The <code>Assert</code> class provides additional assertions for JUnit tests.
  *
@@ -32,15 +31,15 @@ public class Assert {
   /**
    * Asserts that two LocalDateTime values are equal.
    *
-   * @param message  the identifying message for the AssertionError
+   * @param message the identifying message for the AssertionError
    * @param expected the expected value
-   * @param actual   the value to check
+   * @param actual the value to check
    */
-  public static void assertEqualsToMillisecond(String message, LocalDateTime expected,
-      LocalDateTime actual) {
+  public static void assertEqualsToMillisecond(
+      String message, LocalDateTime expected, LocalDateTime actual) {
     if ((expected != null) && (actual != null)) {
-      assertEquals(message, expected.truncatedTo(ChronoUnit.MILLIS),
-          actual.truncatedTo(ChronoUnit.MILLIS));
+      assertEquals(
+          message, expected.truncatedTo(ChronoUnit.MILLIS), actual.truncatedTo(ChronoUnit.MILLIS));
     } else {
       assertEquals(message, expected, actual);
     }

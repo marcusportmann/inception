@@ -68,20 +68,16 @@ public class SystemMessageHandler extends MessageHandler {
   private static final Logger logger = LoggerFactory.getLogger(SystemMessageHandler.class);
 
   /* Codes Service */
-  @Autowired
-  private ICodesService codesService;
+  @Autowired private ICodesService codesService;
 
   /* Error Service */
-  @Autowired
-  private IErrorService errorService;
+  @Autowired private IErrorService errorService;
 
   /* Messaging Service */
-  @Autowired
-  private IMessagingService messagingService;
+  @Autowired private IMessagingService messagingService;
 
   /* Security Service */
-  @Autowired
-  private ISecurityService securityService;
+  @Autowired private ISecurityService securityService;
 
   /**
    * Constructs a new <code>SystemMessageHandler</code>.
@@ -97,7 +93,6 @@ public class SystemMessageHandler extends MessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   *
    * @return the response message or <code>null</code> if no response message exists
    */
   @Override

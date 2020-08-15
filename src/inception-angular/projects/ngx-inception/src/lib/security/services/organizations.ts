@@ -15,7 +15,7 @@
  */
 
 import {Organization} from './organization';
-import {SortDirection} from './sort-direction';
+import {SortDirection} from '../../core/sorting/sort-direction';
 
 /**
  * The Organizations class holds the results of a request to retrieve a list of organizations.

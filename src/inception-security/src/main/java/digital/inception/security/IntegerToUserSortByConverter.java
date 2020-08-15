@@ -31,11 +31,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class IntegerToUserSortByConverter implements Converter<Integer, UserSortBy> {
 
-  /**
-   * Constructs a new <code>IntegerToUserSortByConverter</code>.
-   */
-  public IntegerToUserSortByConverter() {
-  }
+  /** Constructs a new <code>IntegerToUserSortByConverter</code>. */
+  public IntegerToUserSortByConverter() {}
 
   @Override
   public UserSortBy convert(Integer source) {

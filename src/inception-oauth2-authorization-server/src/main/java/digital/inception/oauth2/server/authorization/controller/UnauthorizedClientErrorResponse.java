@@ -26,14 +26,10 @@ import org.springframework.http.HttpStatus;
  */
 public class UnauthorizedClientErrorResponse extends ErrorResponse {
 
-  /**
-   * The error code for the OAuth2 unauthorized client error response.
-   */
+  /** The error code for the OAuth2 unauthorized client error response. */
   public static final String ERROR_CODE = "unauthorized_client";
 
-  /**
-   * Constructs a new <code>UnauthorizedClientErrorResponse</code>.
-   */
+  /** Constructs a new <code>UnauthorizedClientErrorResponse</code>. */
   public UnauthorizedClientErrorResponse() {
     super(HttpStatus.BAD_REQUEST, ERROR_CODE);
   }

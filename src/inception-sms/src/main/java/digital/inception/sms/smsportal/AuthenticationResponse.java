@@ -29,29 +29,20 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({"token", "schema", "expiresInMinutes"})
 public class AuthenticationResponse {
 
-  /**
-   * The expiry time in minutes for the token.
-   */
+  /** The expiry time in minutes for the token. */
   @JsonProperty(required = true)
   private int expiresInMinutes;
 
-  /**
-   * The token schema.
-   */
+  /** The token schema. */
   @JsonProperty(required = true)
   private String schema;
 
-  /**
-   * The token.
-   */
+  /** The token. */
   @JsonProperty(required = true)
   private String token;
 
-  /**
-   * Constructs a new <code>AuthenticationResponse</code>.
-   */
-  public AuthenticationResponse() {
-  }
+  /** Constructs a new <code>AuthenticationResponse</code>. */
+  public AuthenticationResponse() {}
 
   /**
    * Returns the expiry time in minutes for the token.

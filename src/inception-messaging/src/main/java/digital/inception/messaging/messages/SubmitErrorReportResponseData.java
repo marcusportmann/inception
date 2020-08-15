@@ -39,14 +39,10 @@ import org.springframework.util.StringUtils;
  */
 public class SubmitErrorReportResponseData extends WbxmlMessageData {
 
-  /**
-   * The message returned when a submitted error report is successfully processed.
-   */
+  /** The message returned when a submitted error report is successfully processed. */
   public static final String ERROR_MESSAGE_SUCCESS = "Success";
 
-  /**
-   * The UUID for the "Submit Error Report Response" message.
-   */
+  /** The UUID for the "Submit Error Report Response" message. */
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("8be50cfa-2fb1-4634-9bfa-d01e77eaf766");
 
@@ -56,9 +52,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    */
   private int errorCode;
 
-  /**
-   * The error message describing the result of processing the submitted error report.
-   */
+  /** The error message describing the result of processing the submitted error report. */
   private String errorMessage;
 
   /**
@@ -67,9 +61,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    */
   private UUID errorReportId;
 
-  /**
-   * Constructs a new <code>SubmitErrorReportResponseData</code>.
-   */
+  /** Constructs a new <code>SubmitErrorReportResponseData</code>. */
   public SubmitErrorReportResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
@@ -77,12 +69,11 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
   /**
    * Constructs a new <code>SubmitErrorReportResponseData</code>.
    *
-   * @param errorCode     the error code indicating the result of processing the submitted error
-   *                      report
-   * @param errorMessage  the error message describing the result of processing the submitted error
-   *                      report
+   * @param errorCode the error code indicating the result of processing the submitted error report
+   * @param errorMessage the error message describing the result of processing the submitted error
+   *     report
    * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
-   *                      report that was submitted for processing
+   *     report that was submitted for processing
    */
   public SubmitErrorReportResponseData(int errorCode, String errorMessage, UUID errorReportId) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -96,9 +87,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   *
    * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   * <code>false</code> otherwise
+   *     <code>false</code> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -128,7 +118,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    * code of '0' indicates success and a non-zero code indicates an error condition.
    *
    * @return the error code indicating the result of processing the submitted error report where a
-   * code of '0' indicates success and a non-zero code indicates an error condition
+   *     code of '0' indicates success and a non-zero code indicates an error condition
    */
   public int getErrorCode() {
     return errorCode;
@@ -148,7 +138,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    * submitted for processing.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the error report that was
-   * submitted for processing
+   *     submitted for processing
    */
   public UUID getErrorReportId() {
     return errorReportId;
@@ -159,7 +149,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    * message.
    *
    * @return the WBXML data representation of the message data that will be sent as part of a
-   * message
+   *     message
    */
   @Override
   public byte[] toMessageData() {

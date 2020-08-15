@@ -37,8 +37,7 @@ public class UserDetailsService
     implements org.springframework.security.core.userdetails.UserDetailsService {
 
   /* Security Service */
-  @Autowired
-  private ISecurityService securityService;
+  @Autowired private ISecurityService securityService;
 
   /**
    * Locates the user based on the username. In the actual implementation, the search may possibly
@@ -47,7 +46,6 @@ public class UserDetailsService
    * username that is of a different case than what was actually requested.
    *
    * @param username the username identifying the user whose data is required.
-   *
    * @return a fully populated user record (never <code>null</code>)
    */
   @Override

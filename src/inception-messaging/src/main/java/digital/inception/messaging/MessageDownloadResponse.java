@@ -38,14 +38,10 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class MessageDownloadResponse {
 
-  /**
-   * The error code returned to indicate an invalid request.
-   */
+  /** The error code returned to indicate an invalid request. */
   public static final int ERROR_INVALID_REQUEST = -1;
 
-  /**
-   * The error code returned to indicate an unknown error.
-   */
+  /** The error code returned to indicate an unknown error. */
   public static final int ERROR_UNKNOWN = -2;
 
   /**
@@ -73,9 +69,7 @@ public class MessageDownloadResponse {
    */
   private String exception;
 
-  /**
-   * The messages being downloaded.
-   */
+  /** The messages being downloaded. */
   private List<Message> messages;
 
   /**
@@ -130,7 +124,7 @@ public class MessageDownloadResponse {
   /**
    * Constructs a new <code>MessageDownloadResponse</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of processing the message download request
    */
   MessageDownloadResponse(long code, String detail) {
@@ -141,9 +135,9 @@ public class MessageDownloadResponse {
   /**
    * Constructs a new <code>MessageDownloadResponse</code>.
    *
-   * @param code   the result code
+   * @param code the result code
    * @param detail the text description of the result of processing the message download request
-   * @param cause  the exception that resulted from processing the message download request
+   * @param cause the exception that resulted from processing the message download request
    */
   public MessageDownloadResponse(long code, String detail, Throwable cause) {
     this.code = code;
@@ -169,9 +163,8 @@ public class MessageDownloadResponse {
    * information or <code>false</code> otherwise.
    *
    * @param document the WBXML document to validate
-   *
    * @return <code>true</code> if the WBXML document contains valid message download response
-   * information or <code>false</code> otherwise
+   *     information or <code>false</code> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -196,7 +189,7 @@ public class MessageDownloadResponse {
    * request.
    *
    * @return the user-friendly text description of the result of processing the message download
-   * request
+   *     request
    */
   public String getDetail() {
     return detail;
@@ -207,7 +200,7 @@ public class MessageDownloadResponse {
    * download request.
    *
    * @return the flattened information for the exception that resulted from processing the message
-   * download request
+   *     download request
    */
   public String getException() {
     return exception;
@@ -245,7 +238,7 @@ public class MessageDownloadResponse {
    * request.
    *
    * @param detail the user-friendly text description of the result of processing the message
-   *               download request
+   *     download request
    */
   public void setDetail(String detail) {
     this.detail = detail;
@@ -256,7 +249,7 @@ public class MessageDownloadResponse {
    * download request.
    *
    * @param exception the flattened information for the exception that resulted from processing the
-   *                  message download request
+   *     message download request
    */
   public void setException(String exception) {
     this.exception = exception;

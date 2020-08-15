@@ -39,7 +39,7 @@ public class CXFDigestSecurityProxyConfigurator {
   /**
    * Configure the CXF web service proxy to support digest authentication.
    *
-   * @param proxy    the web service proxy to configure
+   * @param proxy the web service proxy to configure
    * @param username the username to use when authenticating using digest authentication
    * @param password the password to use when authenticating using digest authentication
    */

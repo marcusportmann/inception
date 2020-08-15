@@ -30,28 +30,20 @@ public class CodeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The ID uniquely identifying the code category the code is associated with.
-   */
+  /** The ID uniquely identifying the code category the code is associated with. */
   private String codeCategoryId;
 
-  /**
-   * The ID uniquely identifying the code.
-   */
+  /** The ID uniquely identifying the code. */
   private String id;
 
-  /**
-   * Constructs a new <code>CodeId</code>.
-   */
-  public CodeId() {
-  }
+  /** Constructs a new <code>CodeId</code>. */
+  public CodeId() {}
 
   /**
    * Constructs a new <code>CodeId</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
-   *                       with
-   * @param id             the ID uniquely identifying the code
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param id the ID uniquely identifying the code
    */
   public CodeId(String codeCategoryId, String id) {
     this.codeCategoryId = codeCategoryId;
@@ -62,7 +54,6 @@ public class CodeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   *
    * @return <code>true</code> if this object is the same as the object argument otherwise <code>
    * false</code>
    */
@@ -117,8 +108,7 @@ public class CodeId implements Serializable {
   /**
    * Set the ID uniquely identifying the code category the code is associated with.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated
-   *                       with
+   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
    */
   public void setCodeCategoryId(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;

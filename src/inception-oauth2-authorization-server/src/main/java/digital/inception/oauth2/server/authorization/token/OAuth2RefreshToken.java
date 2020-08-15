@@ -37,9 +37,7 @@ import org.springframework.util.StringUtils;
 public class OAuth2RefreshToken
     extends org.springframework.security.oauth2.core.OAuth2RefreshToken {
 
-  /**
-   * The name of the scope claim.
-   */
+  /** The name of the scope claim. */
   public static final String SCOPE_CLAIM = "scope";
 
   private static final long serialVersionUID = 1000000;
@@ -48,7 +46,7 @@ public class OAuth2RefreshToken
    * Constructs a new <code>OAuth2RefreshToken</code>.
    *
    * @param tokenValue the token value
-   * @param issuedAt   the time at which the token was issued
+   * @param issuedAt the time at which the token was issued
    */
   public OAuth2RefreshToken(String tokenValue, Instant issuedAt) {
     super(tokenValue, issuedAt);
@@ -58,7 +56,7 @@ public class OAuth2RefreshToken
    * Build a new <code>OAuthRefreshToken</code>.
    *
    * @param username the username for the user the token is being issued for
-   * @param scopes   the optional scope(s) associated to the token
+   * @param scopes the optional scope(s) associated to the token
    */
   public static OAuth2RefreshToken build(
       String username, Set<String> scopes, int validFor, RSAPrivateKey rsaPrivateKey) {

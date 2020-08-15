@@ -25,20 +25,16 @@ package digital.inception.messaging.handler;
 @SuppressWarnings("WeakerAccess")
 public abstract class MessageHandler implements IMessageHandler {
 
-  /**
-   * The configuration information for the message handler.
-   */
+  /** The configuration information for the message handler. */
   private MessageHandlerConfig messageHandlerConfig;
 
-  /**
-   * The name of the message handler.
-   */
+  /** The name of the message handler. */
   private String name;
 
   /**
    * Constructs a new <code>MessageHandler</code>.
    *
-   * @param name                 the name of the message handler
+   * @param name the name of the message handler
    * @param messageHandlerConfig the configuration information for the message handler
    */
   public MessageHandler(String name, MessageHandlerConfig messageHandlerConfig) {

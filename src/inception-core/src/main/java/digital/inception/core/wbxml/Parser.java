@@ -21,6 +21,7 @@ package digital.inception.core.wbxml;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The <code>Parser</code> class generates a WBXML object hierarchy from the binary data
@@ -36,17 +37,13 @@ public class Parser {
 
   private byte[] stringTable = null;
 
-  /**
-   * Constructs a new <code>Parser</code>.
-   */
-  public Parser() {
-  }
+  /** Constructs a new <code>Parser</code>. */
+  public Parser() {}
 
   /**
    * Parse the specified binary data representation of the WBXML document.
    *
    * @param data the binary data representation of the WBXML document
-   *
    * @return the WBXML object hierarchy
    */
   public Document parse(byte[] data) throws IOException, ParserException {
@@ -92,23 +89,27 @@ public class Parser {
 
     while ((tmpValue = readByte()) != -1) {
       switch (tmpValue) {
-        case WBXML.TOKEN_SWITCH_PAGE: {
-          throw new ParserException("Unsupported token: TOKEN_SWITCH_PAGE");
-        }
+        case WBXML.TOKEN_SWITCH_PAGE:
+          {
+            throw new ParserException("Unsupported token: TOKEN_SWITCH_PAGE");
+          }
 
-        case WBXML.TOKEN_PI: {
-          throw new ParserException("Unsupported token: TOKEN_PI");
-        }
+        case WBXML.TOKEN_PI:
+          {
+            throw new ParserException("Unsupported token: TOKEN_PI");
+          }
 
-        case WBXML.TOKEN_END: {
-          throw new ParserException("Unexpected token: TOKEN_END");
-        }
+        case WBXML.TOKEN_END:
+          {
+            throw new ParserException("Unexpected token: TOKEN_END");
+          }
 
-        default: {
-          parseElement(tmpValue, rootElement);
+        default:
+          {
+            parseElement(tmpValue, rootElement);
 
-          break;
-        }
+            break;
+          }
       }
     }
 
@@ -167,52 +168,57 @@ public class Parser {
       tmpValue = readByte();
 
       switch (tmpValue) {
-        case WBXML.TOKEN_END: {
-          // End of content under this element
-          return;
-        }
-
-        case WBXML.TOKEN_ENTITY: {
-          // NOTE: We do not process the entity token
-          int entityLength = readMultiByteUINT32();
-
-          if (stream.skip(entityLength) != entityLength) {
-            throw new IOException(
-                "Unexpected EOF while skipping entity with length: " + entityLength);
+        case WBXML.TOKEN_END:
+          {
+            // End of content under this element
+            return;
           }
 
-          break;
-        }
+        case WBXML.TOKEN_ENTITY:
+          {
+            // NOTE: We do not process the entity token
+            int entityLength = readMultiByteUINT32();
 
-        case WBXML.TOKEN_STR_I: {
-          // Read the inline string
-          String str = readString();
+            if (stream.skip(entityLength) != entityLength) {
+              throw new IOException(
+                  "Unexpected EOF while skipping entity with length: " + entityLength);
+            }
 
-          // Add as text content to the element
-          element.addContent(str);
+            break;
+          }
 
-          break;
-        }
+        case WBXML.TOKEN_STR_I:
+          {
+            // Read the inline string
+            String str = readString();
 
-        case WBXML.TOKEN_STR_T: {
-          // Read the index into the string table
-          int stringTableOffset = readMultiByteUINT32();
+            // Add as text content to the element
+            element.addContent(str);
 
-          // Read the string from the string table and add as text content to the element
-          element.addContent(readFromStringTable(stringTableOffset));
+            break;
+          }
 
-          break;
-        }
+        case WBXML.TOKEN_STR_T:
+          {
+            // Read the index into the string table
+            int stringTableOffset = readMultiByteUINT32();
 
-        case WBXML.TOKEN_OPAQUE: {
-          // Read the length of the opaque data
-          int opaqueLength = readMultiByteUINT32();
+            // Read the string from the string table and add as text content to the element
+            element.addContent(readFromStringTable(stringTableOffset));
 
-          // Read the opaque data
-          element.addContent(readOpaque(opaqueLength));
+            break;
+          }
 
-          break;
-        }
+        case WBXML.TOKEN_OPAQUE:
+          {
+            // Read the length of the opaque data
+            int opaqueLength = readMultiByteUINT32();
+
+            // Read the opaque data
+            element.addContent(readOpaque(opaqueLength));
+
+            break;
+          }
 
         case WBXML.TOKEN_EXT_I_0:
           throw new ParserException("Unsupported token: TOKEN_EXT_I_0");
@@ -244,14 +250,15 @@ public class Parser {
         case WBXML.TOKEN_PI:
           throw new ParserException("Unsupported token: TOKEN_PI");
 
-        default: {
-          Element childElement = new Element();
+        default:
+          {
+            Element childElement = new Element();
 
-          parseElement(tmpValue, childElement);
-          element.addContent(childElement);
+            parseElement(tmpValue, childElement);
+            element.addContent(childElement);
 
-          break;
-        }
+            break;
+          }
       }
     }
   }
@@ -306,7 +313,7 @@ public class Parser {
     while (index < stringTable.length) {
       if (stringTable[index] == 0) {
         try {
-          return new String(stringTable, offset, index - offset, ENCODING_UTF_8);
+          return new String(stringTable, offset, index - offset, StandardCharsets.UTF_8);
         } catch (Throwable e) {
           throw new ParserException(
               "Failed to retrieve the string at offset " + offset + " from the string table");
@@ -350,7 +357,7 @@ public class Parser {
       if (tmpValue == 0) {
         byte[] bytes = baos.toByteArray();
 
-        return new String(bytes, 0, bytes.length, ENCODING_UTF_8);
+        return new String(bytes, 0, bytes.length, StandardCharsets.UTF_8);
       } else {
         baos.write(tmpValue);
       }

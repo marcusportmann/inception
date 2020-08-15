@@ -33,11 +33,8 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class IntegerToMessagePriorityConverter implements Converter<Integer, MessagePriority> {
 
-  /**
-   * Constructs a new <code>IntegerToMessagePriorityConverter</code>.
-   */
-  public IntegerToMessagePriorityConverter() {
-  }
+  /** Constructs a new <code>IntegerToMessagePriorityConverter</code>. */
+  public IntegerToMessagePriorityConverter() {}
 
   @Override
   public MessagePriority convert(Integer source) {

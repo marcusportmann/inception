@@ -35,7 +35,7 @@ public class BinaryBuffer implements java.io.Serializable {
    * Constructs a new <code>BinaryBuffer</code> and initializes it using the specified binary data.
    *
    * @param data <code>BinaryBuffer</code> instance containing the binary data that will be copied
-   *             and managed by the <code>BinaryBuffer</code> instance
+   *     and managed by the <code>BinaryBuffer</code> instance
    */
   public BinaryBuffer(BinaryBuffer data) {
     this(data.getData());
@@ -45,7 +45,7 @@ public class BinaryBuffer implements java.io.Serializable {
    * Constructs a new <code>BinaryBuffer</code> and initializes it using the specified binary data.
    *
    * @param data the binary data that will be copied and managed by the <code>BinaryBuffer</code>
-   *             instance
+   *     instance
    */
   public BinaryBuffer(byte[] data) {
     this.data = new byte[data.length];
@@ -77,9 +77,7 @@ public class BinaryBuffer implements java.io.Serializable {
     this.data = newData;
   }
 
-  /**
-   * Clears the <code>BinaryBuffer</code>.
-   */
+  /** Clears the <code>BinaryBuffer</code>. */
   public void clear() {
     this.data = new byte[0];
   }

@@ -47,9 +47,7 @@ public class InvalidCMMNException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <code>InvalidCMMNException</code>.
-   */
+  /** Constructs a new <code>InvalidCMMNException</code>. */
   public InvalidCMMNException() {
     super("InvalidCMMNError", "The CMMN 1.1 XML data is invalid");
   }
@@ -67,7 +65,7 @@ public class InvalidCMMNException extends ServiceException {
    * Constructs a new <code>InvalidCMMNException</code>.
    *
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *              <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidCMMNException(Throwable cause) {
     super("InvalidCMMNError", "The CMMN 1.1 XML data is invalid", cause);
