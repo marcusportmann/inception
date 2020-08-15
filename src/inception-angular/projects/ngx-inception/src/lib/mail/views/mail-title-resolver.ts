@@ -39,6 +39,6 @@ export class MailTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Mail');
+    return of($localize`:@@mail_mail_title_resolver:Mail`);
   }
 }

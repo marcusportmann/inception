@@ -41,6 +41,6 @@ export class ConfigurationsTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Configuration');
+    return of($localize`:@@configuration_configurations_title_resolver:Configuration`);
   }
 }

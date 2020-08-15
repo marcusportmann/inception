@@ -41,6 +41,6 @@ export class EditMailTemplateTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Edit Mail Template');
+    return of($localize`:@@mail_edit_mail_template_title_resolver:Edit Mail Template`);
   }
 }

@@ -41,6 +41,6 @@ export class EditGroupTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Edit Group');
+    return of($localize`:@@security_edit_group_title_resolver:Edit Group`);
   }
 }

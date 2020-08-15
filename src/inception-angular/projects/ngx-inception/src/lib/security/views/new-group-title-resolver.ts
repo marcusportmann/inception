@@ -41,6 +41,6 @@ export class NewGroupTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot, routerStateSnapshot: RouterStateSnapshot):
     Observable<string> {
-    return of('New Group');
+    return of($localize`:@@security_new_group_title_resolver:New Group`);
   }
 }

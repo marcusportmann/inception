@@ -41,6 +41,6 @@ export class OrganizationUserDirectoriesTitleResolver implements Resolve<string>
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Organization User Directories');
+    return of($localize`:@@security_organization_user_directories_title_resolver:Organization User Directories`);
   }
 }

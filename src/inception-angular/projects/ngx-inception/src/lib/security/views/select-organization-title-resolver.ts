@@ -41,6 +41,6 @@ export class SelectOrganizationTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Select Organization');
+    return of($localize`:@@security_select_organization_title_resolver:Select Organization`);
   }
 }

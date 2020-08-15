@@ -41,6 +41,6 @@ export class EditUserDirectoryTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Edit User Directory');
+    return of($localize`:@@security_edit_user_directory_title_resolver:Edit User Directory`);
   }
 }

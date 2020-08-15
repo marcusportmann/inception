@@ -41,6 +41,6 @@ export class SecurityOverviewTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Security Overview');
+    return of($localize`:@@security_security_overview_title_resolver:Security Overview`);
   }
 }

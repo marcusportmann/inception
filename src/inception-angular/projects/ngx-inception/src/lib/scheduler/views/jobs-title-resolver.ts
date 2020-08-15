@@ -41,6 +41,6 @@ export class JobsTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Jobs');
+    return of($localize`:@@scheduler_jobs_title_resolver:Jobs`);
   }
 }

@@ -41,6 +41,6 @@ export class NewUserDirectoryTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('New User Directory');
+    return of($localize`:@@security_new_user_directory_title_resolver:New User Directory`);
   }
 }

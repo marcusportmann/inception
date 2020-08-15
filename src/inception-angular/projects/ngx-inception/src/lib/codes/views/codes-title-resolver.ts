@@ -41,6 +41,6 @@ export class CodesTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Codes');
+    return of($localize`:@@codes_codes_title_resolver:Codes`);
   }
 }

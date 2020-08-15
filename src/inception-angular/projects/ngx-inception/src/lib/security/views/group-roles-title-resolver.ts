@@ -41,6 +41,6 @@ export class GroupRolesTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Group Roles');
+    return of($localize`:@@security_group_roles_title_resolver:Group Roles`);
   }
 }

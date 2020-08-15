@@ -41,6 +41,6 @@ export class ExpiredPasswordTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Expired Password');
+    return of($localize`:@@security_expired_password_title_resolver:Expired Password`);
   }
 }

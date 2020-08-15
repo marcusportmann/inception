@@ -41,6 +41,6 @@ export class UsersTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Users');
+    return of($localize`:@@security_users_title_resolver:Users`);
   }
 }

@@ -41,6 +41,6 @@ export class NewMailTemplateTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('New Mail Template');
+    return of($localize`:@@mail_new_mail_template_title_resolver:New Mail Template`);
   }
 }

@@ -41,6 +41,6 @@ export class EditCodeCategoryTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Edit Code Category');
+    return of($localize`:@@codes_edit_code_category_title_resolver:Edit Code Category`);
   }
 }

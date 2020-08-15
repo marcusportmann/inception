@@ -41,6 +41,6 @@ export class ResetUserPasswordTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Reset User Password');
+    return of($localize`:@@security_reset_user_password_title_resolver:Reset User Password`);
   }
 }

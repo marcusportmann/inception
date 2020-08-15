@@ -41,6 +41,6 @@ export class UserDirectoriesTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('User Directories');
+    return of($localize`:@@security_user_directories_title_resolver:User Directories`);
   }
 }

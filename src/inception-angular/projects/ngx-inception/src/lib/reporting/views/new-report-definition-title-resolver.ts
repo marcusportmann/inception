@@ -41,6 +41,6 @@ export class NewReportDefinitionTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('New Report Definition');
+    return of($localize`:@@reporting_new_report_definition_title_resolver:New Report Definition`);
   }
 }

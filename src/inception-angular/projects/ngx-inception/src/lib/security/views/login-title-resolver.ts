@@ -41,6 +41,6 @@ export class LoginTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Login');
+    return of($localize`:@@security_login_title_resolver:Login`);
   }
 }

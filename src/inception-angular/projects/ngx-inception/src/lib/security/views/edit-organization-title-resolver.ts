@@ -41,6 +41,6 @@ export class EditOrganizationTitleResolver implements Resolve<string> {
    */
   resolve(activatedRouteSnapshot: ActivatedRouteSnapshot,
           routerStateSnapshot: RouterStateSnapshot): Observable<string> {
-    return of('Edit Organization');
+    return of($localize`:@@security_edit_organization_title_resolver:Edit Organization`);
   }
 }
