@@ -29,11 +29,10 @@ export class DuplicateJobError extends Error {
   /**
    * Constructs a new DuplicateJobError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The job already exists.', cause);
+    super($localize`:@@scheduler_duplicate_job_error:The job already exists.`, cause);
   }
 }
 
@@ -47,11 +46,10 @@ export class JobNotFoundError extends Error {
   /**
    * Constructs a new JobNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The job could not be found.', cause);
+    super($localize`:@@scheduler_job_not_found_error:The job could not be found.`, cause);
   }
 }
 

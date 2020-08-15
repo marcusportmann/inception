@@ -29,11 +29,10 @@ export class CodeCategoryNotFoundError extends Error {
   /**
    * Constructs a new CodeCategoryNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The code category could not be found.', cause);
+    super($localize`:@@codes_code_category_not_found_error:The code category could not be found.`, cause);
   }
 }
 
@@ -47,11 +46,10 @@ export class CodeNotFoundError extends Error {
   /**
    * Constructs a new CodeNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The code could not be found.', cause);
+    super($localize`:@@codes_code_not_found_error:The code could not be found.`, cause);
   }
 }
 
@@ -83,11 +81,10 @@ export class DuplicateCodeCategoryError extends Error {
   /**
    * Constructs a new DuplicateCodeCategoryError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The code category already exists.', cause);
+    super($localize`:@@codes_duplicate_code_category_error:The code category already exists.`, cause);
   }
 }
 
@@ -101,10 +98,9 @@ export class DuplicateCodeError extends Error {
   /**
    * Constructs a new DuplicateCodeError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The code already exists.', cause);
+    super($localize`:@@codes_duplicate_code_error:The code already exists.`, cause);
   }
 }

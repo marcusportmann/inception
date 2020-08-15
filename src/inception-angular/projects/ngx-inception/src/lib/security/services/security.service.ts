@@ -16,7 +16,7 @@
 
 import {Inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, Subject, throwError, timer} from 'rxjs';
-import {catchError, flatMap, map, mergeMap, switchMap} from 'rxjs/operators';
+import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
 import {Organization} from './organization';
 import {
@@ -36,7 +36,7 @@ import {
   InvalidSecurityCodeError,
   LoginError,
   OrganizationNotFoundError,
-  OrganizationUserDirectoryNotFound,
+  OrganizationUserDirectoryNotFoundError,
   PasswordExpiredError,
   SecurityServiceError,
   UserDirectoryNotFoundError,
@@ -1443,7 +1443,7 @@ export class SecurityService {
     const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 
     return this.httpClient.post<TokenResponse>(this.config.oauthTokenUrl, body.toString(), options)
-    .pipe(flatMap((tokenResponse: TokenResponse) => {
+    .pipe(mergeMap((tokenResponse: TokenResponse) => {
       this.session$.next(
         SecurityService.createSessionFromAccessToken(tokenResponse.access_token, tokenResponse.refresh_token));
 
@@ -1579,7 +1579,7 @@ export class SecurityService {
         if (apiError.code === 'OrganizationNotFoundError') {
           return throwError(new OrganizationNotFoundError(apiError));
         } else if (apiError.code === 'OrganizationUserDirectoryNotFoundError') {
-          return throwError(new OrganizationUserDirectoryNotFound(apiError));
+          return throwError(new OrganizationUserDirectoryNotFoundError(apiError));
         } else {
           return throwError(
             new SecurityServiceError('Failed to remove the user directory from the organization.', apiError));
@@ -1770,7 +1770,7 @@ export class SecurityService {
 
     const accessTokenExpiry: Date | null = helper.getTokenExpirationDate(accessToken);
 
-    const session = new Session((!!token.sub) ? token.sub : '',
+    return new Session((!!token.sub) ? token.sub : '',
       (!!token.user_directory_id) ? token.user_directory_id : '',
       (!!token.name) ? token.name : '',
       (!!token.scope) ? token.scope.split(' ') : [],
@@ -1779,8 +1779,6 @@ export class SecurityService {
       (!!token.organizations) ? token.organizations : [],
       accessToken,
       (!!accessTokenExpiry) ? accessTokenExpiry : undefined, refreshToken);
-
-    return session;
   }
 
   private refreshSession(): Observable<Session | null> {

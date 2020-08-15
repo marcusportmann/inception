@@ -30,11 +30,10 @@ export class DuplicateReportDefinitionError extends Error {
   /**
    * Constructs a new DuplicateReportDefinitionError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The report definition already exists.', cause);
+    super($localize`:@@reporting_duplicate_report_definition_error:The report definition already exists.`, cause);
   }
 }
 
@@ -49,11 +48,10 @@ export class ReportDefinitionNotFoundError extends Error {
   /**
    * Constructs a new ReportDefinitionNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The report definition could not be found.', cause);
+    super($localize`:@@reporting_report_definition_not_found_error:The report definition could not be found.`, cause);
   }
 }
 

@@ -29,11 +29,10 @@ export class ConfigurationNotFoundError extends Error {
   /**
    * Constructs a new ConfigurationNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The configuration could not be found.', cause);
+    super($localize`:@@configuration_configuration_not_found_error:The configuration could not be found.`, cause);
   }
 }
 

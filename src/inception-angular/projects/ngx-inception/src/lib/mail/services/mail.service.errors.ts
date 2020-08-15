@@ -30,11 +30,10 @@ export class DuplicateMailTemplateError extends Error {
   /**
    * Constructs a new DuplicateMailTemplateError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The mail template already exists.', cause);
+    super($localize`:@@mail_duplicate_mail_template_error:The mail template already exists.`, cause);
   }
 }
 
@@ -67,11 +66,10 @@ export class MailTemplateNotFoundError extends Error {
   /**
    * Constructs a new MailTemplateNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The mail template could not be found.', cause);
+    super($localize`:@@mail_mail_template_not_found_error:The mail template could not be found.`, cause);
   }
 }
 

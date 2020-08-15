@@ -30,7 +30,6 @@ export class SystemUnavailableError extends Error {
    * @param httpErrorResponse The HTTP error response containing the error information.
    */
   constructor(httpErrorResponse: HttpErrorResponse) {
-
-    super('An error has occurred and your request could not be processed at this time.', httpErrorResponse);
+    super($localize`:@@core_system_unavailable_error:An error has occurred and your request could not be processed at this time.`, httpErrorResponse);
   }
 }

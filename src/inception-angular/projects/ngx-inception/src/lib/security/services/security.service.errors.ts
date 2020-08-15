@@ -29,12 +29,10 @@ export class AuthenticationFailedError extends Error {
   /**
    * Constructs a new AuthenticationFailedError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
     super($localize`:@@security_authentication_failed_error:Authentication failed.`, cause);
-    //super('Authentication failed.', cause);
   }
 }
 
@@ -48,11 +46,10 @@ export class DuplicateGroupError extends Error {
   /**
    * Constructs a new DuplicateGroupError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('A group with the specified name already exists.', cause);
+    super($localize`:@@security_duplicate_group_error:A group with the specified name already exists.`, cause);
   }
 }
 
@@ -66,11 +63,10 @@ export class DuplicateOrganizationError extends Error {
   /**
    * Constructs a new DuplicateOrganizationError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('An organization with the specified ID or name already exists.', cause);
+    super($localize`:@@security_duplicate_organization_error:An organization with the specified ID or name already exists.`, cause);
   }
 }
 
@@ -84,11 +80,10 @@ export class DuplicateUserDirectoryError extends Error {
   /**
    * Constructs a new DuplicateUserDirectoryError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('A user directory with the specified ID or name already exists.', cause);
+    super($localize`:@@security_duplicate_user_directory_error:A user directory with the specified ID or name already exists.`, cause);
   }
 }
 
@@ -102,11 +97,10 @@ export class DuplicateUserError extends Error {
   /**
    * Constructs a new DuplicateUserError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('A user with the specified username already exists.', cause);
+    super($localize`:@@security_duplicate_user_error:A user with the specified username already exists.`, cause);
   }
 }
 
@@ -120,11 +114,10 @@ export class ExistingGroupMemberError extends Error {
   /**
    * Constructs a new ExistingGroupMemberError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The group member already exists.', cause);
+    super($localize`:@@security_existing_group_member_error:The group member already exists.`, cause);
   }
 }
 
@@ -138,11 +131,10 @@ export class ExistingGroupMembersError extends Error {
   /**
    * Constructs a new ExistingGroupMembersError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The group has existing members.', cause);
+    super($localize`:@@security_existing_group_members_error:The group has existing members.`, cause);
   }
 }
 
@@ -156,11 +148,10 @@ export class ExistingGroupRoleError extends Error {
   /**
    * Constructs a new ExistingGroupRoleError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The group role already exists.', cause);
+    super($localize`:@@security_existing_group_role_error:The group role already exists.`, cause);
   }
 }
 
@@ -175,11 +166,10 @@ export class ExistingOrganizationUserDirectoryError extends Error {
   /**
    * Constructs a new ExistingOrganizationUserDirectoryError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The organization user directory already exists.', cause);
+    super($localize`:@@security_existing_organization_user_directory_error:The organization user directory already exists.`, cause);
   }
 }
 
@@ -193,11 +183,10 @@ export class ExistingPasswordError extends Error {
   /**
    * Constructs a new ExistingPasswordError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The new password has been used recently and is not valid.', cause);
+    super($localize`:@@security_existing_password_error:The new password has been used recently and is not valid.`, cause);
   }
 }
 
@@ -211,11 +200,10 @@ export class GroupMemberNotFoundError extends Error {
   /**
    * Constructs a new GroupMemberNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The group member could not be found.', cause);
+    super($localize`:@@security_group_member_not_found_error:The group member could not be found.`, cause);
   }
 }
 
@@ -227,13 +215,12 @@ export class GroupMemberNotFoundError extends Error {
 export class GroupNotFoundError extends Error {
 
   /**
-   * Constructs a new UserNotFoundError.
+   * Constructs a new GroupNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The group could not be found.', cause);
+    super($localize`:@@security_group_not_found_error:The group could not be found.`, cause);
   }
 }
 
@@ -247,11 +234,10 @@ export class GroupRoleNotFoundError extends Error {
   /**
    * Constructs a new GroupRoleNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The group role could not be found.', cause);
+    super($localize`:@@security_group_role_not_found_error:The group role could not be found.`, cause);
   }
 }
 
@@ -265,11 +251,10 @@ export class InvalidSecurityCodeError extends Error {
   /**
    * Constructs a new InvalidSecurityCodeError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The security code is invalid.', cause);
+    super($localize`:@@security_invalid_security_code_error:The security code is invalid.`, cause);
   }
 }
 
@@ -283,7 +268,6 @@ export class LoginError extends Error {
   /**
    * Constructs a new LoginError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
@@ -301,30 +285,28 @@ export class OrganizationNotFoundError extends Error {
   /**
    * Constructs a new OrganizationNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The organization could not be found.', cause);
+    super($localize`:@@security_organization_not_found_error:The organization could not be found.`, cause);
   }
 }
 
 /**
- * The OrganizationUserDirectoryNotFound class holds the information for an organization user
+ * The OrganizationUserDirectoryNotFoundError class holds the information for an organization user
  * directory not found error.
  *
  * @author Marcus Portmann
  */
-export class OrganizationUserDirectoryNotFound extends Error {
+export class OrganizationUserDirectoryNotFoundError extends Error {
 
   /**
-   * Constructs a new OrganizationUserDirectoryNotFound.
+   * Constructs a new OrganizationUserDirectoryNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The organization user directory could not be found.', cause);
+    super($localize`:@@security_organization_user_directory_not_found_error:The organization user directory could not be found.`, cause);
   }
 }
 
@@ -338,11 +320,10 @@ export class PasswordExpiredError extends Error {
   /**
    * Constructs a new PasswordExpiredError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The password has expired.', cause);
+    super($localize`:@@security_password_expired_error:The password has expired.`, cause);
   }
 }
 
@@ -392,11 +373,10 @@ export class UserDirectoryNotFoundError extends Error {
   /**
    * Constructs a new UserDirectoryNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The user directory could not be found.', cause);
+    super($localize`:@@security_user_directory_not_found_error:The user directory could not be found.`, cause);
   }
 }
 
@@ -410,11 +390,10 @@ export class UserLockedError extends Error {
   /**
    * Constructs a new UserLockedError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The user has exceeded the maximum number of failed password attempts and has been locked.', cause);
+    super($localize`:@@security_user_locked_error:The user has exceeded the maximum number of failed password attempts and has been locked.`, cause);
   }
 }
 
@@ -428,11 +407,10 @@ export class UserNotFoundError extends Error {
   /**
    * Constructs a new UserNotFoundError.
    *
-   * @param i18n  The internationalization service.
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super('The user could not be found.', cause);
+    super($localize`:@@security_user_not_found_error:The user could not be found.`, cause);
   }
 }
 
