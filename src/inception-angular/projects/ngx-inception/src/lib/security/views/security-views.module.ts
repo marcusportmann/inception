@@ -18,12 +18,12 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {OrganizationsComponent} from './organizations.component';
+import {TenantsComponent} from './tenants.component';
 import {SecurityOverviewComponent} from './security-overview.component';
 import {UserDirectoriesComponent} from './user-directories.component';
 import {UsersComponent} from './users.component';
 import {SecurityOverviewTitleResolver} from './security-overview-title-resolver';
-import {OrganizationsTitleResolver} from './organizations-title-resolver';
+import {TenantsTitleResolver} from './tenants-title-resolver';
 import {UsersTitleResolver} from './users-title-resolver';
 import {UserDirectoriesTitleResolver} from './user-directories-title-resolver';
 import {NewUserTitleResolver} from './new-user-title-resolver';
@@ -31,11 +31,11 @@ import {EditUserTitleResolver} from './edit-user-title-resolver';
 import {UserTitleResolver} from './user-title-resolver';
 import {NewUserComponent} from './new-user.component';
 import {EditUserComponent} from './edit-user.component';
-import {NewOrganizationComponent} from './new-organization.component';
-import {NewOrganizationTitleResolver} from './new-organization-title-resolver';
-import {EditOrganizationComponent} from './edit-organization.component';
-import {EditOrganizationTitleResolver} from './edit-organization-title-resolver';
-import {OrganizationTitleResolver} from './organization-title-resolver';
+import {NewTenantComponent} from './new-tenant.component';
+import {NewTenantTitleResolver} from './new-tenant-title-resolver';
+import {EditTenantComponent} from './edit-tenant.component';
+import {EditTenantTitleResolver} from './edit-tenant-title-resolver';
+import {TenantTitleResolver} from './tenant-title-resolver';
 import {EditUserDirectoryComponent} from './edit-user-directory.component';
 import {NewUserDirectoryTitleResolver} from './new-user-directory-title-resolver';
 import {EditUserDirectoryTitleResolver} from './edit-user-directory-title-resolver';
@@ -58,8 +58,8 @@ import {ResetUserPasswordTitleResolver} from './reset-user-password-title-resolv
 import {ResetUserPasswordComponent} from './reset-user-password.component';
 import {GroupRolesComponent} from './group-roles.component';
 import {GroupRolesTitleResolver} from './group-roles-title-resolver';
-import {OrganizationUserDirectoriesComponent} from './organization-user-directories.component';
-import {OrganizationUserDirectoriesTitleResolver} from './organization-user-directories-title-resolver';
+import {TenantUserDirectoriesComponent} from './tenant-user-directories.component';
+import {TenantUserDirectoriesTitleResolver} from './tenant-user-directories-title-resolver';
 import {CanActivateFunctionGuard} from '../routing/can-activate-function-guard';
 import {CoreModule} from '../../core/core.module';
 import {SecurityDirectivesModule} from "../directives/security-directives.module";
@@ -77,7 +77,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: GroupsComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
         'FUNCTION_Security.GroupAdministration'
       ]
     }
@@ -87,7 +87,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: NewGroupComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
         'FUNCTION_Security.GroupAdministration'
       ]
     },
@@ -108,7 +108,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: EditGroupComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
           'FUNCTION_Security.GroupAdministration'
         ]
       },
@@ -120,7 +120,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: GroupMembersComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
           'FUNCTION_Security.GroupAdministration'
         ]
       },
@@ -132,7 +132,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: GroupRolesComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
           'FUNCTION_Security.GroupAdministration'
         ]
       },
@@ -153,56 +153,56 @@ const routes: Routes = [{
     title: SecurityOverviewTitleResolver
   }
 }, {
-  path: 'organizations',
+  path: 'tenants',
   resolve: {
-    title: OrganizationsTitleResolver
+    title: TenantsTitleResolver
   },
   children: [{
     path: '',
     canActivate: [CanActivateFunctionGuard],
-    component: OrganizationsComponent,
+    component: TenantsComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
     }
   }, {
     path: 'new',
     pathMatch: 'full',
     canActivate: [CanActivateFunctionGuard],
-    component: NewOrganizationComponent,
+    component: NewTenantComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
     },
     resolve: {
-      title: NewOrganizationTitleResolver
+      title: NewTenantTitleResolver
     }
   }, {
-    path: ':organizationId',
+    path: ':tenantId',
     pathMatch: 'full',
-    redirectTo: ':organizationId/edit'
+    redirectTo: ':tenantId/edit'
   }, {
-    path: ':organizationId',
+    path: ':tenantId',
     resolve: {
-      title: OrganizationTitleResolver
+      title: TenantTitleResolver
     },
     children: [{
       path: 'edit',
       canActivate: [CanActivateFunctionGuard],
-      component: EditOrganizationComponent,
+      component: EditTenantComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
       },
       resolve: {
-        title: EditOrganizationTitleResolver
+        title: EditTenantTitleResolver
       }
     }, {
       path: 'user-directories',
       canActivate: [CanActivateFunctionGuard],
-      component: OrganizationUserDirectoriesComponent,
+      component: TenantUserDirectoriesComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
       },
       resolve: {
-        title: OrganizationUserDirectoriesTitleResolver
+        title: TenantUserDirectoriesTitleResolver
       }
     }
     ]
@@ -264,7 +264,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: UsersComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
         'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.UserGroups', 'FUNCTION_Security.ResetUserPassword'
       ]
     }
@@ -274,7 +274,7 @@ const routes: Routes = [{
     canActivate: [CanActivateFunctionGuard],
     component: NewUserComponent,
     data: {
-      authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+      authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
         'FUNCTION_Security.UserAdministration'
       ]
     },
@@ -295,7 +295,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: EditUserComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
           'FUNCTION_Security.UserAdministration'
         ]
       },
@@ -307,7 +307,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: UserGroupsComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
       },
       resolve: {
         title: UserGroupsTitleResolver
@@ -317,7 +317,7 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: ResetUserPasswordComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.OrganizationAdministration',
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
           'FUNCTION_Security.UserAdministration', 'FUNCTION_Security.ResetUserPassword'
         ]
       },
@@ -334,10 +334,10 @@ const routes: Routes = [{
 @NgModule({
   declarations: [
     // Components
-    EditGroupComponent, EditOrganizationComponent, EditUserDirectoryComponent, EditUserComponent,
+    EditGroupComponent, EditTenantComponent, EditUserDirectoryComponent, EditUserComponent,
     GroupMembersComponent, GroupRolesComponent, GroupsComponent, InternalUserDirectoryComponent,
-    LdapUserDirectoryComponent, NewGroupComponent, NewOrganizationComponent, NewUserComponent,
-    NewUserDirectoryComponent, OrganizationsComponent, OrganizationUserDirectoriesComponent,
+    LdapUserDirectoryComponent, NewGroupComponent, NewTenantComponent, NewUserComponent,
+    NewUserDirectoryComponent, TenantsComponent, TenantUserDirectoriesComponent,
     ResetUserPasswordComponent, SecurityOverviewComponent, UserDirectoriesComponent,
     UserGroupsComponent, UsersComponent
   ],
@@ -350,10 +350,10 @@ const routes: Routes = [{
   ],
   providers: [
     // Resolvers
-    EditGroupTitleResolver, EditOrganizationTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver,
+    EditGroupTitleResolver, EditTenantTitleResolver, EditUserDirectoryTitleResolver, EditUserTitleResolver,
     GroupMembersTitleResolver, GroupRolesTitleResolver, GroupTitleResolver, GroupsTitleResolver, NewGroupTitleResolver,
-    NewOrganizationTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, OrganizationsTitleResolver,
-    OrganizationTitleResolver, OrganizationUserDirectoriesTitleResolver, ResetUserPasswordTitleResolver,
+    NewTenantTitleResolver, NewUserDirectoryTitleResolver, NewUserTitleResolver, TenantsTitleResolver,
+    TenantTitleResolver, TenantUserDirectoriesTitleResolver, ResetUserPasswordTitleResolver,
     SecurityOverviewTitleResolver, UserDirectoriesTitleResolver, UserDirectoryTitleResolver, UserGroupsTitleResolver,
     UsersTitleResolver, UserTitleResolver
   ]

@@ -78,14 +78,15 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Back', ['../../..'], {
+    return new BackNavigation($localize`:@@security_group_roles_back_navigation:Back`,
+      ['../../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   get title(): string {
-    return 'Group Roles';
+    return $localize`:@@security_group_roles_title:Group Roles`
   }
 
   private static calculateAvailableRoles(allRoles: Role[], existingGroupRoles: GroupRole[]): Role[] {
@@ -185,7 +186,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
 
   removeRoleFromGroup(roleCode: string) {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to remove the role from the group?'
+      message: $localize`:@@security_group_roles_confirm_remove_role_from_group:Are you sure you want to remove the role from the group?`
     });
 
     dialogRef.afterClosed()

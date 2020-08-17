@@ -26,9 +26,9 @@ import {SystemUnavailableError} from '../../core/errors/system-unavailable-error
 import {Error} from '../../core/errors/error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {Session} from '../services/session';
-import {Organizations} from '../services/organizations';
+import {Tenants} from '../services/tenants';
 import {PasswordExpiredError, SecurityServiceError} from '../services/security.service.errors';
-import {Organization} from '../services/organization';
+import {Tenant} from '../services/tenant';
 
 /**
  * The LoginComponent class implements the login component.
@@ -97,18 +97,18 @@ export class LoginComponent implements OnInit {
       .subscribe((session: Session | null) => {
         if (session) {
           if (session.hasRole('Administrator')) {
-            this.securityService.getOrganizations()
+            this.securityService.getTenants()
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe((organizations: Organizations) => {
-              if (organizations.total === 1) {
-                session.organization = organizations.organizations[0];
+            .subscribe((tenants: Tenants) => {
+              if (tenants.total === 1) {
+                session.tenant = tenants.tenants[0];
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigate(['/']);
               } else {
                 // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['select-organization'], {
+                this.router.navigate(['select-tenant'], {
                   relativeTo: this.activatedRoute,
-                  state: {organizations: organizations.organizations}
+                  state: {tenants: tenants.tenants}
                 });
               }
             }, (error: Error) => {
@@ -122,18 +122,18 @@ export class LoginComponent implements OnInit {
               }
             });
           } else {
-            this.securityService.getOrganizationsForUserDirectory(session.userDirectoryId)
+            this.securityService.getTenantsForUserDirectory(session.userDirectoryId)
             .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
-            .subscribe((organizations: Organization[]) => {
-              if (organizations.length === 1) {
-                session.organization = organizations[0];
+            .subscribe((tenants: Tenant[]) => {
+              if (tenants.length === 1) {
+                session.tenant = tenants[0];
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigate(['/']);
               } else {
                 // noinspection JSIgnoredPromiseFromCall
-                this.router.navigate(['select-organization'], {
+                this.router.navigate(['select-tenant'], {
                   relativeTo: this.activatedRoute,
-                  state: {organizations}
+                  state: {tenants}
                 });
               }
             }, (error: Error) => {

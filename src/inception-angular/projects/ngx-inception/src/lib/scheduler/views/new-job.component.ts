@@ -97,11 +97,13 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Jobs', ['..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@scheduler_new_job_back_navigation:Jobs`,
+      ['..'],
+      {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'New Job';
+    return $localize`:@@scheduler_new_job_title:New Job`
   }
 
   cancel(): void {

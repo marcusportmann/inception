@@ -82,11 +82,12 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Mail Templates', ['..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@mail_new_mail_template_back_navigation:Mail Templates`,
+      ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'New Mail Template';
+    return $localize`:@@mail_new_mail_template_title:New Mail Template`
   }
 
   cancel(): void {

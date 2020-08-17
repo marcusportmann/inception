@@ -18,25 +18,25 @@ import {Inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of, Subject, throwError, timer} from 'rxjs';
 import {catchError, map, mergeMap, switchMap} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from '@angular/common/http';
-import {Organization} from './organization';
+import {Tenant} from './tenant';
 import {
   AuthenticationFailedError,
   DuplicateGroupError,
-  DuplicateOrganizationError,
+  DuplicateTenantError,
   DuplicateUserDirectoryError,
   DuplicateUserError,
   ExistingGroupMemberError,
   ExistingGroupMembersError,
   ExistingGroupRoleError,
-  ExistingOrganizationUserDirectoryError,
+  ExistingTenantUserDirectoryError,
   ExistingPasswordError,
   GroupMemberNotFoundError,
   GroupNotFoundError,
   GroupRoleNotFoundError,
   InvalidSecurityCodeError,
   LoginError,
-  OrganizationNotFoundError,
-  OrganizationUserDirectoryNotFoundError,
+  TenantNotFoundError,
+  TenantUserDirectoryNotFoundError,
   PasswordExpiredError,
   SecurityServiceError,
   UserDirectoryNotFoundError,
@@ -47,7 +47,7 @@ import {CommunicationError} from '../../core/errors/communication-error';
 import {ApiError} from '../../core/errors/api-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
 import {SortDirection} from '../../core/sorting/sort-direction';
-import {Organizations} from './organizations';
+import {Tenants} from './tenants';
 import {Users} from './users';
 import {User} from './user';
 import {UserDirectorySummary} from './user-directory-summary';
@@ -65,7 +65,7 @@ import {PasswordChangeReason} from './password-change-reason';
 import {PasswordChange} from './password-change';
 import {Role} from './role';
 import {GroupRole} from './group-role';
-import {OrganizationUserDirectory} from './organization-user-directory';
+import {TenantUserDirectory} from './tenant-user-directory';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {Session} from './session';
 import {TokenResponse} from './token-response';
@@ -189,37 +189,37 @@ export class SecurityService {
   }
 
   /**
-   * Add the user directory to the organization.
+   * Add the user directory to the tenant.
    *
-   * @param organizationId  The Universally Unique Identifier (UUID) uniquely identifying the
-   *                        organization.
+   * @param tenantId  The Universally Unique Identifier (UUID) uniquely identifying the
+   *                        tenant.
    * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory.
    *
-   * @return True if the user directory was successfully added to the organization or false
+   * @return True if the user directory was successfully added to the tenant or false
    *         otherwise.
    */
-  addUserDirectoryToOrganization(organizationId: string, userDirectoryId: string): Observable<boolean> {
-    const organizationUserDirectory = new OrganizationUserDirectory(organizationId, userDirectoryId);
+  addUserDirectoryToTenant(tenantId: string, userDirectoryId: string): Observable<boolean> {
+    const tenantUserDirectory = new TenantUserDirectory(tenantId, userDirectoryId);
 
     return this.httpClient.post<boolean>(
-      this.config.securityApiUrlPrefix + '/organizations/' + organizationId + '/user-directories',
-      organizationUserDirectory, {observe: 'response'})
+      this.config.securityApiUrlPrefix + '/tenants/' + tenantId + '/user-directories',
+      tenantUserDirectory, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(apiError));
+        if (apiError.code === 'TenantNotFoundError') {
+          return throwError(new TenantNotFoundError(apiError));
         } else if (apiError.code === 'UserDirectoryNotFoundError') {
           return throwError(new UserDirectoryNotFoundError(apiError));
-        } else if (apiError.code === 'ExistingOrganizationUserDirectoryError') {
-          return throwError(new ExistingOrganizationUserDirectoryError(apiError));
+        } else if (apiError.code === 'ExistingTenantUserDirectoryError') {
+          return throwError(new ExistingTenantUserDirectoryError(apiError));
         } else {
           return throwError(
-            new SecurityServiceError('Failed to add the user directory to the organization.', apiError));
+            new SecurityServiceError('Failed to add the user directory to the tenant.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -348,20 +348,20 @@ export class SecurityService {
   }
 
   /**
-   * Create the new organization.
+   * Create the new tenant.
    *
-   * @param organization        The organization to create.
+   * @param tenant        The tenant to create.
    * @param createUserDirectory Should a new internal user directory be created for the
-   *                            organization?
+   *                            tenant?
    *
-   * @return True if the organization was created successfully or false otherwise.
+   * @return True if the tenant was created successfully or false otherwise.
    */
-  createOrganization(organization: Organization, createUserDirectory?: boolean): Observable<boolean> {
+  createTenant(tenant: Tenant, createUserDirectory?: boolean): Observable<boolean> {
     let httpParams = new HttpParams();
     httpParams = httpParams.append('createUserDirectory',
       createUserDirectory === undefined ? 'false' : (createUserDirectory ? 'true' : 'false'));
 
-    return this.httpClient.post<boolean>(this.config.securityApiUrlPrefix + '/organizations', organization, {
+    return this.httpClient.post<boolean>(this.config.securityApiUrlPrefix + '/tenants', tenant, {
       params: httpParams,
       observe: 'response'
     }).pipe(map((httpResponse: HttpResponse<boolean>) => {
@@ -370,10 +370,10 @@ export class SecurityService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'DuplicateOrganizationError') {
-          return throwError(new DuplicateOrganizationError(apiError));
+        if (apiError.code === 'DuplicateTenantError') {
+          return throwError(new DuplicateTenantError(apiError));
         } else {
-          return throwError(new SecurityServiceError('Failed to create the organization.', apiError));
+          return throwError(new SecurityServiceError('Failed to create the tenant.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -489,15 +489,15 @@ export class SecurityService {
   }
 
   /**
-   * Delete the organization.
+   * Delete the tenant.
    *
-   * @param organizationId The Universally Unique Identifier (UUID) uniquely identifying the
-   *                       organization.
+   * @param tenantId The Universally Unique Identifier (UUID) uniquely identifying the
+   *                       tenant.
    *
-   * @return True if the organization was deleted or false otherwise.
+   * @return True if the tenant was deleted or false otherwise.
    */
-  deleteOrganization(organizationId: string): Observable<boolean> {
-    return this.httpClient.delete<boolean>(this.config.securityApiUrlPrefix + '/organizations/' + organizationId,
+  deleteTenant(tenantId: string): Observable<boolean> {
+    return this.httpClient.delete<boolean>(this.config.securityApiUrlPrefix + '/tenants/' + tenantId,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -505,10 +505,10 @@ export class SecurityService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(apiError));
+        if (apiError.code === 'TenantNotFoundError') {
+          return throwError(new TenantNotFoundError(apiError));
         } else {
-          return throwError(new SecurityServiceError('Failed to delete the organization.', apiError));
+          return throwError(new SecurityServiceError('Failed to delete the tenant.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -737,55 +737,26 @@ export class SecurityService {
   }
 
   /**
-   * Retrieve the organization.
+   * Retrieve the tenant.
    *
-   * @param organizationId The Universally Unique Identifier (UUID) uniquely identifying the
-   *                       organization.
+   * @param tenantId The Universally Unique Identifier (UUID) uniquely identifying the
+   *                       tenant.
    *
-   * @return The organization.
+   * @return The tenant.
    */
-  getOrganization(organizationId: string): Observable<Organization> {
-    return this.httpClient.get<Organization>(this.config.securityApiUrlPrefix + '/organizations/' + organizationId,
+  getTenant(tenantId: string): Observable<Tenant> {
+    return this.httpClient.get<Tenant>(this.config.securityApiUrlPrefix + '/tenants/' + tenantId,
       {reportProgress: true})
-    .pipe(map((organization: Organization) => {
-      return organization;
+    .pipe(map((tenant: Tenant) => {
+      return tenant;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(apiError));
+        if (apiError.code === 'TenantNotFoundError') {
+          return throwError(new TenantNotFoundError(apiError));
         } else {
-          return throwError(new SecurityServiceError('Failed to retrieve the organization.', apiError));
-        }
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
-      }
-    }));
-  }
-
-  /**
-   * Retrieve the name of the organization.
-   *
-   * @param organizationId The Universally Unique Identifier (UUID) uniquely identifying the
-   *                       organization.
-   *
-   * @return The name of the organization.
-   */
-  getOrganizationName(organizationId: string): Observable<string> {
-    return this.httpClient.get<string>(this.config.securityApiUrlPrefix + '/organizations/' + organizationId + '/name',
-      {reportProgress: true}).pipe(map((organizationName: string) => {
-      return organizationName;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(apiError));
-        } else {
-          return throwError(new SecurityServiceError('Failed to retrieve the organization name.', apiError));
+          return throwError(new SecurityServiceError('Failed to retrieve the tenant.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -846,88 +817,6 @@ export class SecurityService {
           return throwError(new GroupNotFoundError(apiError));
         } else {
           return throwError(new SecurityServiceError('Failed to retrieve the members for the group.', apiError));
-        }
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
-      }
-    }));
-  }
-
-  /**
-   * Retrieve the organizations.
-   *
-   * @param filter        The optional filter to apply to the organizations.
-   * @param sortDirection The optional sort direction to apply to the organizations.
-   * @param pageIndex     The optional page index.
-   * @param pageSize      The optional page size.
-   *
-   * @return The organizations.
-   */
-  getOrganizations(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
-                   pageSize?: number): Observable<Organizations> {
-
-    let params = new HttpParams();
-
-    if (filter != null) {
-      params = params.append('filter', filter);
-    }
-
-    if (sortDirection != null) {
-      params = params.append('sortDirection', sortDirection);
-    }
-
-    if (pageIndex != null) {
-      params = params.append('pageIndex', String(pageIndex));
-    }
-
-    if (pageSize != null) {
-      params = params.append('pageSize', String(pageSize));
-    }
-
-    return this.httpClient.get<Organizations>(this.config.securityApiUrlPrefix + '/organizations', {
-      params,
-      reportProgress: true,
-    }).pipe(map((organizations: Organizations) => {
-      return organizations;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new SecurityServiceError('Failed to retrieve the organizations.', apiError));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
-      }
-    }));
-  }
-
-  /**
-   * Retrieve the organizations the user directory is associated with.
-   *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
-   *                        user directory.
-   *
-   * @return The organizations the user directory is associated with.
-   */
-  getOrganizationsForUserDirectory(userDirectoryId: string): Observable<Organization[]> {
-    return this.httpClient.get<Organization[]>(
-      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/organizations',
-      {reportProgress: true})
-    .pipe(map((organizations: Organization[]) => {
-      return organizations;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        if (apiError.code === 'UserDirectoryNotFoundError') {
-          return throwError(new UserDirectoryNotFoundError(apiError));
-        } else {
-          return throwError(
-            new SecurityServiceError('Failed to retrieve the organizations associated with the user directory.',
-              apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -1021,6 +910,117 @@ export class SecurityService {
           return throwError(new GroupNotFoundError(apiError));
         } else {
           return throwError(new SecurityServiceError('Failed to retrieve the roles for the group.', apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve the name of the tenant.
+   *
+   * @param tenantId The Universally Unique Identifier (UUID) uniquely identifying the
+   *                       tenant.
+   *
+   * @return The name of the tenant.
+   */
+  getTenantName(tenantId: string): Observable<string> {
+    return this.httpClient.get<string>(this.config.securityApiUrlPrefix + '/tenants/' + tenantId + '/name',
+      {reportProgress: true}).pipe(map((tenantName: string) => {
+      return tenantName;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'TenantNotFoundError') {
+          return throwError(new TenantNotFoundError(apiError));
+        } else {
+          return throwError(new SecurityServiceError('Failed to retrieve the tenant name.', apiError));
+        }
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve the tenants.
+   *
+   * @param filter        The optional filter to apply to the tenants.
+   * @param sortDirection The optional sort direction to apply to the tenants.
+   * @param pageIndex     The optional page index.
+   * @param pageSize      The optional page size.
+   *
+   * @return The tenants.
+   */
+  getTenants(filter?: string, sortDirection?: SortDirection, pageIndex?: number,
+             pageSize?: number): Observable<Tenants> {
+
+    let params = new HttpParams();
+
+    if (filter != null) {
+      params = params.append('filter', filter);
+    }
+
+    if (sortDirection != null) {
+      params = params.append('sortDirection', sortDirection);
+    }
+
+    if (pageIndex != null) {
+      params = params.append('pageIndex', String(pageIndex));
+    }
+
+    if (pageSize != null) {
+      params = params.append('pageSize', String(pageSize));
+    }
+
+    return this.httpClient.get<Tenants>(this.config.securityApiUrlPrefix + '/tenants', {
+      params,
+      reportProgress: true,
+    }).pipe(map((tenants: Tenants) => {
+      return tenants;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        return throwError(new SecurityServiceError('Failed to retrieve the tenants.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve the tenants the user directory is associated with.
+   *
+   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
+   *                        user directory.
+   *
+   * @return The tenants the user directory is associated with.
+   */
+  getTenantsForUserDirectory(userDirectoryId: string): Observable<Tenant[]> {
+    return this.httpClient.get<Tenant[]>(
+      this.config.securityApiUrlPrefix + '/user-directories/' + userDirectoryId + '/tenants',
+      {reportProgress: true})
+    .pipe(map((tenants: Tenant[]) => {
+      return tenants;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        if (apiError.code === 'UserDirectoryNotFoundError') {
+          return throwError(new UserDirectoryNotFoundError(apiError));
+        } else {
+          return throwError(
+            new SecurityServiceError('Failed to retrieve the tenants associated with the user directory.',
+              apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -1156,16 +1156,16 @@ export class SecurityService {
   }
 
   /**
-   * Retrieve the summaries for the user directories the organization is associated with.
+   * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param organizationId The Universally Unique Identifier (UUID) uniquely identifying the
-   *                       organization.
+   * @param tenantId The Universally Unique Identifier (UUID) uniquely identifying the
+   *                       tenant.
    *
-   * @return The summaries for the user directories the organization is associated with.
+   * @return The summaries for the user directories the tenant is associated with.
    */
-  getUserDirectorySummariesForOrganization(organizationId: string): Observable<UserDirectorySummary[]> {
+  getUserDirectorySummariesForTenant(tenantId: string): Observable<UserDirectorySummary[]> {
     return this.httpClient.get<UserDirectorySummary[]>(
-      this.config.securityApiUrlPrefix + '/organizations/' + organizationId + '/user-directory-summaries',
+      this.config.securityApiUrlPrefix + '/tenants/' + tenantId + '/user-directory-summaries',
       {reportProgress: true})
     .pipe(map((codeCategories: UserDirectorySummary[]) => {
       return codeCategories;
@@ -1173,11 +1173,11 @@ export class SecurityService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(apiError));
+        if (apiError.code === 'TenantNotFoundError') {
+          return throwError(new TenantNotFoundError(apiError));
         } else {
           return throwError(new SecurityServiceError(
-            'Failed to retrieve the summaries for the user directories associated with the organization.', apiError));
+            'Failed to retrieve the summaries for the user directories associated with the tenant.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -1556,19 +1556,19 @@ export class SecurityService {
   }
 
   /**
-   * Remove the user directory from the organization.
+   * Remove the user directory from the tenant.
    *
-   * @param organizationId  The Universally Unique Identifier (UUID) uniquely identifying the
-   *                        organization.
+   * @param tenantId  The Universally Unique Identifier (UUID) uniquely identifying the
+   *                        tenant.
    * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
    *                        user directory.
    *
-   * @return True if the user directory was successfully removed from the organization or false
+   * @return True if the user directory was successfully removed from the tenant or false
    *         otherwise.
    */
-  removeUserDirectoryFromOrganization(organizationId: string, userDirectoryId: string): Observable<boolean> {
+  removeUserDirectoryFromTenant(tenantId: string, userDirectoryId: string): Observable<boolean> {
     return this.httpClient.delete<boolean>(
-      this.config.securityApiUrlPrefix + '/organizations/' + organizationId + '/user-directories/' + userDirectoryId,
+      this.config.securityApiUrlPrefix + '/tenants/' + tenantId + '/user-directories/' + userDirectoryId,
       {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
@@ -1576,13 +1576,13 @@ export class SecurityService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(apiError));
-        } else if (apiError.code === 'OrganizationUserDirectoryNotFoundError') {
-          return throwError(new OrganizationUserDirectoryNotFoundError(apiError));
+        if (apiError.code === 'TenantNotFoundError') {
+          return throwError(new TenantNotFoundError(apiError));
+        } else if (apiError.code === 'TenantUserDirectoryNotFoundError') {
+          return throwError(new TenantUserDirectoryNotFoundError(apiError));
         } else {
           return throwError(
-            new SecurityServiceError('Failed to remove the user directory from the organization.', apiError));
+            new SecurityServiceError('Failed to remove the user directory from the tenant.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -1664,25 +1664,25 @@ export class SecurityService {
   }
 
   /**
-   * Update the organization.
+   * Update the tenant.
    *
-   * @param organization The organization to update.
+   * @param tenant The tenant to update.
    *
-   * @return True if the organization was updated successfully or false otherwise.
+   * @return True if the tenant was updated successfully or false otherwise.
    */
-  updateOrganization(organization: Organization): Observable<boolean> {
-    return this.httpClient.put<boolean>(this.config.securityApiUrlPrefix + '/organizations/' + organization.id,
-      organization, {observe: 'response'})
+  updateTenant(tenant: Tenant): Observable<boolean> {
+    return this.httpClient.put<boolean>(this.config.securityApiUrlPrefix + '/tenants/' + tenant.id,
+      tenant, {observe: 'response'})
     .pipe(map((httpResponse: HttpResponse<boolean>) => {
       return httpResponse.status === 204;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        if (apiError.code === 'OrganizationNotFoundError') {
-          return throwError(new OrganizationNotFoundError(apiError));
+        if (apiError.code === 'TenantNotFoundError') {
+          return throwError(new TenantNotFoundError(apiError));
         } else {
-          return throwError(new SecurityServiceError('Failed to update the organization.', apiError));
+          return throwError(new SecurityServiceError('Failed to update the tenant.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
@@ -1776,7 +1776,7 @@ export class SecurityService {
       (!!token.scope) ? token.scope.split(' ') : [],
       (!!token.roles) ? token.roles : [],
       (!!token.functions) ? token.functions : [],
-      (!!token.organizations) ? token.organizations : [],
+      (!!token.tenants) ? token.tenants : [],
       accessToken,
       (!!accessTokenExpiry) ? accessTokenExpiry : undefined, refreshToken);
   }
@@ -1784,7 +1784,7 @@ export class SecurityService {
   private refreshSession(): Observable<Session | null> {
     return this.session$.pipe(mergeMap((currentSession: Session | null) => {
       if (currentSession) {
-        const selectedOrganization = currentSession.organization;
+        const selectedTenant = currentSession.tenant;
 
         /*
          * If the access token will expire with 60 seconds then obtain a new one using the refresh
@@ -1805,7 +1805,7 @@ export class SecurityService {
                 tokenResponse.access_token,
                 (!!tokenResponse.refresh_token) ? tokenResponse.refresh_token : currentSession.refreshToken);
 
-              refreshedSession.organization = selectedOrganization;
+              refreshedSession.tenant = selectedTenant;
 
               this.session$.next(refreshedSession);
 

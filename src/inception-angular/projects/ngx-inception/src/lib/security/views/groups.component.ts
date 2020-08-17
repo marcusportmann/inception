@@ -81,14 +81,14 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
   }
 
   get title(): string {
-    return 'Groups';
+    return $localize`:@@security_groups_title:Groups`
   }
 
   // noinspection JSUnusedLocalSymbols
   deleteGroup(groupName: string): void {
     // noinspection JSUnusedLocalSymbols
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the group?'
+      message: $localize`:@@security_groups_confirm_delete_group:Are you sure you want to delete the group?`
     });
 
     dialogRef.afterClosed()
@@ -233,10 +233,10 @@ export class GroupsComponent extends AdminContainerView implements AfterViewInit
     })).subscribe());
 
     this.securityService.session$.pipe(first()).subscribe((session: Session | null) => {
-      if (session && session.organization) {
+      if (session && session.tenant) {
         this.spinnerService.showSpinner();
 
-        this.securityService.getUserDirectorySummariesForOrganization(session.organization.id)
+        this.securityService.getUserDirectorySummariesForTenant(session.tenant.id)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe((userDirectories: UserDirectorySummary[]) => {
           this.userDirectories = userDirectories;

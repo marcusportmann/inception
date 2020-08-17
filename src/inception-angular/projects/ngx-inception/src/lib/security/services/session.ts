@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Organization} from './organization';
+import {Tenant} from './tenant';
 
 /**
  * The Session class holds the information for an active user session associated with an
@@ -46,17 +46,6 @@ export class Session {
   name: string;
 
   /**
-   * The selected organization for the user session.
-   */
-  organization?: Organization;
-
-  /**
-   * The Universally Unique Identifiers (UUIDs) uniquely identifying the organizations the user is
-   * associated with.
-   */
-  organizationIds: string[];
-
-  /**
    * The base-64 encoded OAuth2 refresh token for the user session.
    */
   refreshToken?: string;
@@ -70,6 +59,17 @@ export class Session {
    * The OAuth2 scopes for the user session.
    */
   scopes: string[];
+
+  /**
+   * The selected tenant for the user session.
+   */
+  tenant?: Tenant;
+
+  /**
+   * The Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user is
+   * associated with.
+   */
+  tenantIds: string[];
 
   /**
    * The username for the user, the user session is associated with.
@@ -94,15 +94,15 @@ export class Session {
    *                          the user session.
    * @param functionCodes     The codes identifying the functions assigned to the user associated
    *                          with the user session.
-   * @param organizationIds   The Universally Unique Identifiers (UUIDs) uniquely identifying the
-   *                          organizations the user is associated with.
+   * @param tenantIds   The Universally Unique Identifiers (UUIDs) uniquely identifying the
+   *                          tenants the user is associated with.
    * @param accessToken       The base-64 encoded OAuth2 JWT access token for the user session.
    * @param accessTokenExpiry The string representation of the epoch timestamp giving the date and
    *                          time the OAuth2 JWT access token for the user session will expire.
    * @param refreshToken      The base-64 encoded OAuth2 refresh token for the user session.
    */
   constructor(username: string, userDirectoryId: string, name: string, scopes: string[],
-              roleCodes: string[], functionCodes: string[], organizationIds: string[],
+              roleCodes: string[], functionCodes: string[], tenantIds: string[],
               accessToken: string, accessTokenExpiry?: Date, refreshToken?: string) {
     this.username = username;
     this.userDirectoryId = userDirectoryId;
@@ -110,7 +110,7 @@ export class Session {
     this.scopes = scopes;
     this.roleCodes = roleCodes;
     this.functionCodes = functionCodes;
-    this.organizationIds = organizationIds;
+    this.tenantIds = tenantIds;
     this.accessToken = accessToken;
     this.accessTokenExpiry = accessTokenExpiry;
     this.refreshToken = refreshToken;

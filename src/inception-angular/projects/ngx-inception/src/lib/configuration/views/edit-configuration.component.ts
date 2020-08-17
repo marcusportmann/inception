@@ -83,11 +83,12 @@ export class EditConfigurationComponent extends AdminContainerView implements Af
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Configuration', ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@configuration_edit_configuration_back_navigation:Configuration`,
+      ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'Edit Configuration';
+    return $localize`:@@configuration_edit_configuration_title:Edit Configuration`
   }
 
   cancel(): void {

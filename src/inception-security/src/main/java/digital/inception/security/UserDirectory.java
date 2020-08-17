@@ -103,12 +103,6 @@ public class UserDirectory implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** The organizations the user directory is associated with. */
-  @JsonIgnore
-  @XmlTransient
-  @ManyToMany(mappedBy = "userDirectories")
-  private Set<Organization> organizations = new HashSet<>();
-
   /** The parameters for the user directory. */
   @Schema(description = "The parameters for the user directory", required = true)
   @JsonProperty(required = true)
@@ -117,6 +111,12 @@ public class UserDirectory implements Serializable {
   @Valid
   @Transient
   private List<UserDirectoryParameter> parameters = new ArrayList<>();
+
+  /** The tenants the user directory is associated with. */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(mappedBy = "userDirectories")
+  private Set<Tenant> tenants = new HashSet<>();
 
   /** The code uniquely identifying the user directory type. */
   @Schema(description = "The code uniquely identifying the user directory type", required = true)
@@ -206,21 +206,21 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Returns the organizations the user directory is associated with.
-   *
-   * @return the organizations the user directory is associated with
-   */
-  public Set<Organization> getOrganizations() {
-    return organizations;
-  }
-
-  /**
    * Returns the parameters for the user directory.
    *
    * @return the parameters for the user directory
    */
   public List<UserDirectoryParameter> getParameters() {
     return parameters;
+  }
+
+  /**
+   * Returns the tenants the user directory is associated with.
+   *
+   * @return the tenants the user directory is associated with
+   */
+  public Set<Tenant> getTenants() {
+    return tenants;
   }
 
   /**
@@ -304,21 +304,21 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the organizations the user directory is associated with.
-   *
-   * @param organizations the organizations the user directory is associated with
-   */
-  public void setOrganizations(Set<Organization> organizations) {
-    this.organizations = organizations;
-  }
-
-  /**
    * Set the parameters for the user directory.
    *
    * @param parameters the parameters for the user directory
    */
   public void setParameters(List<UserDirectoryParameter> parameters) {
     this.parameters = parameters;
+  }
+
+  /**
+   * Set the tenants the user directory is associated with.
+   *
+   * @param tenants the tenants the user directory is associated with
+   */
+  public void setTenants(Set<Tenant> tenants) {
+    this.tenants = tenants;
   }
 
   /**

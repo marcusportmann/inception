@@ -66,6 +66,17 @@ public class UserDirectorySummary implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The user directories associated with the tenant. */
+  @JsonIgnore
+  @XmlTransient
+  @ManyToMany(cascade = {CascadeType.REFRESH})
+  @JoinTable(
+      schema = "security",
+      name = "user_directory_to_tenant_map",
+      joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"),
+      inverseJoinColumns = @JoinColumn(name = "tenant_id", referencedColumnName = "id"))
+  private final Set<Tenant> tenants = new HashSet<>();
+
   /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
   @Schema(
       description =
@@ -86,17 +97,6 @@ public class UserDirectorySummary implements java.io.Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "name", nullable = false, length = 100)
   private String name;
-
-  /** The user directories associated with the organization. */
-  @JsonIgnore
-  @XmlTransient
-  @ManyToMany(cascade = {CascadeType.REFRESH})
-  @JoinTable(
-      schema = "security",
-      name = "user_directory_to_organization_map",
-      joinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "organization_id", referencedColumnName = "id"))
-  private Set<Organization> organizations = new HashSet<>();
 
   /** The code uniquely identifying the user directory type. */
   @Schema(description = "The code uniquely identifying the user directory type", required = true)

@@ -42,9 +42,9 @@ import digital.inception.messaging.messages.CodeCategoryData;
 import digital.inception.messaging.messages.CodeData;
 import digital.inception.messaging.messages.GetCodeCategoryRequestData;
 import digital.inception.messaging.messages.GetCodeCategoryResponseData;
-import digital.inception.messaging.messages.OrganizationData;
 import digital.inception.messaging.messages.SubmitErrorReportRequestData;
 import digital.inception.messaging.messages.SubmitErrorReportResponseData;
+import digital.inception.messaging.messages.TenantData;
 import digital.inception.messaging.messages.TestRequestData;
 import digital.inception.messaging.messages.TestResponseData;
 import digital.inception.security.SecurityService;
@@ -144,14 +144,14 @@ public class SystemMessageTest {
     assertEquals(0, responseData.getErrorCode());
     assertNotNull(responseData.getErrorMessage());
 
-    List<OrganizationData> organizations = responseData.getOrganizations();
+    List<TenantData> tenants = responseData.getTenants();
 
-    assertEquals(1, organizations.size());
+    assertEquals(1, tenants.size());
 
-    OrganizationData organization = organizations.get(0);
+    TenantData tenant = tenants.get(0);
 
-    assertEquals(SecurityService.ADMINISTRATION_ORGANIZATION_ID, organization.getId());
-    assertEquals("Administration", organization.getName());
+    assertEquals(SecurityService.ADMINISTRATION_TENANT_ID, tenant.getId());
+    assertEquals("Administration", tenant.getName());
     assertNotNull(responseData.getUserEncryptionKey());
     assertNotNull(responseData.getUserProperties());
 

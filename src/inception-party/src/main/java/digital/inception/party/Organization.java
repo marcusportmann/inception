@@ -64,7 +64,7 @@ public class Organization {
   @XmlTransient
   @NotNull
   @Column(name = "type", nullable = false)
-  private final PartyType type = PartyType.ORGANIZATION;
+  private final PartyType type = PartyType.TENANT;
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the organization. */
   @Schema(

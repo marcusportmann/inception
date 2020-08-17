@@ -50,8 +50,8 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
 
   Page<UserDirectory> findAllByOrderByNameDesc(Pageable pageable);
 
-  @Query("select ud from UserDirectory ud join ud.organizations as o where o.id = :organizationId")
-  List<UserDirectory> findAllByOrganizationId(@Param("organizationId") UUID organizationId);
+  @Query("select ud from UserDirectory ud join ud.tenants as o where o.id = :tenantId")
+  List<UserDirectory> findAllByTenantId(@Param("tenantId") UUID tenantId);
 
   Page<UserDirectory> findByNameContainingIgnoreCaseOrderByNameAsc(String name, Pageable pageable);
 
@@ -60,9 +60,8 @@ public interface UserDirectoryRepository extends JpaRepository<UserDirectory, UU
   @Query("select ud.name from UserDirectory ud where ud.id = :userDirectoryId")
   Optional<String> getNameById(@Param("userDirectoryId") UUID userDirectoryId);
 
-  @Query(
-      "select o.id from Organization o join o.userDirectories as ud where ud.id = :userDirectoryId")
-  List<UUID> getOrganizationIdsById(@Param("userDirectoryId") UUID userDirectoryId);
+  @Query("select o.id from Tenant o join o.userDirectories as ud where ud.id = :userDirectoryId")
+  List<UUID> getTenantIdsById(@Param("userDirectoryId") UUID userDirectoryId);
 
   @Query("select ud.type from UserDirectory ud where ud.id = :userDirectoryId")
   Optional<String> getTypeForUserDirectoryById(@Param("userDirectoryId") UUID userDirectoryId);

@@ -78,14 +78,15 @@ export class NewGroupComponent extends AdminContainerView implements AfterViewIn
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Groups', ['../..'], {
+    return new BackNavigation($localize`:@@security_new_group_back_navigation:Groups`,
+      ['../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   get title(): string {
-    return 'New Group';
+    return $localize`:@@security_new_group_title:New Group`
   }
 
   cancel(): void {

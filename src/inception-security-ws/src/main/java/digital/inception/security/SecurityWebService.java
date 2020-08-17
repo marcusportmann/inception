@@ -38,7 +38,7 @@ import org.springframework.util.StringUtils;
 
 //  For get functions use classes with this naming convention...
 //
-//      Users, Groups, Organizations, etc
+//      Users, Groups, Tenants, etc
 
 /**
  * The <code>SecurityWebService</code> class.
@@ -123,29 +123,27 @@ public class SecurityWebService {
   }
 
   /**
-   * Add the user directory to the organization.
+   * Add the user directory to the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    */
-  @WebMethod(operationName = "AddUserDirectoryToOrganization")
-  public void addUserDirectoryToOrganization(
-      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId,
+  @WebMethod(operationName = "AddUserDirectoryToTenant")
+  public void addUserDirectoryToTenant(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, OrganizationNotFoundException,
-          UserDirectoryNotFoundException, ExistingOrganizationUserDirectoryException,
-          SecurityServiceException {
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+      throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
+          ExistingTenantUserDirectoryException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    securityService.addUserDirectoryToOrganization(organizationId, userDirectoryId);
+    securityService.addUserDirectoryToTenant(tenantId, userDirectoryId);
   }
 
   /**
@@ -275,21 +273,20 @@ public class SecurityWebService {
   }
 
   /**
-   * Create the new organization.
+   * Create the new tenant.
    *
-   * @param organization the organization to create
-   * @param createUserDirectory should a new internal user directory be created for the organization
+   * @param tenant the tenant to create
+   * @param createUserDirectory should a new internal user directory be created for the tenant
    */
-  @WebMethod(operationName = "CreateOrganization")
-  public void createOrganization(
-      @WebParam(name = "Organization") @XmlElement(required = true) Organization organization,
+  @WebMethod(operationName = "CreateTenant")
+  public void createTenant(
+      @WebParam(name = "Tenant") @XmlElement(required = true) Tenant tenant,
       @WebParam(name = "CreateUserDirectory") @XmlElement(required = true)
           Boolean createUserDirectory)
-      throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException {
-    validateOrganization(organization);
+      throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException {
+    validateTenant(tenant);
 
-    securityService.createOrganization(
-        organization, (createUserDirectory != null) && createUserDirectory);
+    securityService.createTenant(tenant, (createUserDirectory != null) && createUserDirectory);
   }
 
   /**
@@ -351,20 +348,18 @@ public class SecurityWebService {
   }
 
   /**
-   * Delete the organization.
+   * Delete the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    */
-  @WebMethod(operationName = "DeleteOrganization")
-  public void deleteOrganization(
-      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+  @WebMethod(operationName = "DeleteTenant")
+  public void deleteTenant(@WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    securityService.deleteOrganization(organizationId);
+    securityService.deleteTenant(tenantId);
   }
 
   /**
@@ -541,83 +536,6 @@ public class SecurityWebService {
   }
 
   /**
-   * Retrieve the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the organization
-   */
-  @WebMethod(operationName = "GetOrganization")
-  @WebResult(name = "Organization")
-  public Organization getOrganization(
-      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
-    }
-
-    return securityService.getOrganization(organizationId);
-  }
-
-  /**
-   * Retrieve the name of the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the name of the organization
-   */
-  @WebMethod(operationName = "GetOrganizationName")
-  @WebResult(name = "OrganizationName")
-  public String getOrganizationName(
-      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
-    }
-
-    return securityService.getOrganizationName(organizationId);
-  }
-
-  /**
-   * Retrieve the filtered organizations using pagination.
-   *
-   * @param filter the optional filter to apply to the organizations
-   * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the organizations
-   */
-  @WebMethod(operationName = "GetOrganizations")
-  @WebResult(name = "Organization")
-  public Organizations getOrganizations(
-      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
-      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
-      throws SecurityServiceException {
-    return securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
-  }
-
-  /**
-   * Retrieve the organizations the user directory is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @return the organizations the user directory is associated with
-   */
-  @WebMethod(operationName = "GetOrganizationsForUserDirectory")
-  @WebResult(name = "Organization")
-  public List<Organization> getOrganizationsForUserDirectory(
-      @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    return securityService.getOrganizationsForUserDirectory(userDirectoryId);
-  }
-
-  /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -681,6 +599,80 @@ public class SecurityWebService {
   }
 
   /**
+   * Retrieve the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the tenant
+   */
+  @WebMethod(operationName = "GetTenant")
+  @WebResult(name = "Tenant")
+  public Tenant getTenant(@WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    return securityService.getTenant(tenantId);
+  }
+
+  /**
+   * Retrieve the name of the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the name of the tenant
+   */
+  @WebMethod(operationName = "GetTenantName")
+  @WebResult(name = "TenantName")
+  public String getTenantName(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    return securityService.getTenantName(tenantId);
+  }
+
+  /**
+   * Retrieve the filtered tenants using pagination.
+   *
+   * @param filter the optional filter to apply to the tenants
+   * @param sortDirection the optional sort direction to apply to the tenants
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the tenants
+   */
+  @WebMethod(operationName = "GetTenants")
+  @WebResult(name = "Tenant")
+  public Tenants getTenants(
+      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
+      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
+      throws SecurityServiceException {
+    return securityService.getTenants(filter, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the tenants the user directory is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @return the tenants the user directory is associated with
+   */
+  @WebMethod(operationName = "GetTenantsForUserDirectory")
+  @WebResult(name = "Tenant")
+  public List<Tenant> getTenantsForUserDirectory(
+      @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    return securityService.getTenantsForUserDirectory(userDirectoryId);
+  }
+
+  /**
    * Retrieve the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -734,18 +726,17 @@ public class SecurityWebService {
   }
 
   /**
-   * Retrieve the user directories the organization is associated with.
+   * Retrieve the user directories the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the user directories the organization is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the user directories the tenant is associated with
    */
-  @WebMethod(operationName = "GetUserDirectoriesForOrganization")
+  @WebMethod(operationName = "GetUserDirectoriesForTenant")
   @WebResult(name = "UserDirectory")
-  public List<UserDirectory> getUserDirectoriesForOrganization(
-      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException {
-    return securityService.getUserDirectoriesForOrganization(organizationId);
+  public List<UserDirectory> getUserDirectoriesForTenant(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
+      throws TenantNotFoundException, SecurityServiceException {
+    return securityService.getUserDirectoriesForTenant(tenantId);
   }
 
   /**
@@ -826,22 +817,21 @@ public class SecurityWebService {
   }
 
   /**
-   * Retrieve the summaries for the user directories the organization is associated with.
+   * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the summaries for the user directories the organization is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the summaries for the user directories the tenant is associated with
    */
-  @WebMethod(operationName = "GetUserDirectorySummariesForOrganization")
+  @WebMethod(operationName = "GetUserDirectorySummariesForTenant")
   @WebResult(name = "UserDirectorySummary")
-  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(
-      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+  public List<UserDirectorySummary> getUserDirectorySummariesForTenant(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    return securityService.getUserDirectorySummariesForOrganization(organizationId);
+    return securityService.getUserDirectorySummariesForTenant(tenantId);
   }
 
   /**
@@ -984,28 +974,27 @@ public class SecurityWebService {
   }
 
   /**
-   * Remove the user directory from the organization.
+   * Remove the user directory from the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    */
-  @WebMethod(operationName = "RemoveUserDirectoryFromOrganization")
-  public void removeUserDirectoryFromOrganization(
-      @WebParam(name = "OrganizationId") @XmlElement(required = true) UUID organizationId,
+  @WebMethod(operationName = "RemoveUserDirectoryFromTenant")
+  public void removeUserDirectoryFromTenant(
+      @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, OrganizationNotFoundException,
-          OrganizationUserDirectoryNotFoundException, SecurityServiceException {
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+      throws InvalidArgumentException, TenantNotFoundException,
+          TenantUserDirectoryNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    securityService.removeUserDirectoryFromOrganization(organizationId, userDirectoryId);
+    securityService.removeUserDirectoryFromTenant(tenantId, userDirectoryId);
   }
 
   /**
@@ -1045,17 +1034,16 @@ public class SecurityWebService {
   }
 
   /**
-   * Update the organization.
+   * Update the tenant.
    *
-   * @param organization the organization
+   * @param tenant the tenant
    */
-  @WebMethod(operationName = "UpdateOrganization")
-  public void updateOrganization(
-      @WebParam(name = "Organization") @XmlElement(required = true) Organization organization)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    validateOrganization(organization);
+  @WebMethod(operationName = "UpdateTenant")
+  public void updateTenant(@WebParam(name = "Tenant") @XmlElement(required = true) Tenant tenant)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    validateTenant(tenant);
 
-    securityService.updateOrganization(organization);
+    securityService.updateTenant(tenant);
   }
 
   /**
@@ -1124,16 +1112,16 @@ public class SecurityWebService {
     }
   }
 
-  private void validateOrganization(Organization organization) throws InvalidArgumentException {
-    if (organization == null) {
-      throw new InvalidArgumentException("organization");
+  private void validateTenant(Tenant tenant) throws InvalidArgumentException {
+    if (tenant == null) {
+      throw new InvalidArgumentException("tenant");
     }
 
-    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(
-          "organization", ValidationError.toValidationErrors(constraintViolations));
+          "tenant", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 

@@ -35,7 +35,7 @@ public enum PartyType {
   @XmlEnumValue("Unknown")
   UNKNOWN(0, "Unknown"),
   @XmlEnumValue("Organization")
-  ORGANIZATION(1, "Organization"),
+  TENANT(1, "Organization"),
   @XmlEnumValue("Person")
   PERSON(2, "Person");
 
@@ -61,7 +61,7 @@ public enum PartyType {
         return PartyType.UNKNOWN;
 
       case 1:
-        return PartyType.ORGANIZATION;
+        return PartyType.TENANT;
 
       case 2:
         return PartyType.PERSON;

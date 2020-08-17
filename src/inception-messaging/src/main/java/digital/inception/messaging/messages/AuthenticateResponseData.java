@@ -24,7 +24,7 @@ import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
 import digital.inception.messaging.MessagingServiceException;
 import digital.inception.messaging.WbxmlMessageData;
-import digital.inception.security.Organization;
+import digital.inception.security.Tenant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,8 +67,8 @@ public class AuthenticateResponseData extends WbxmlMessageData {
   /** The error message describing the result of processing the authentication. */
   private String errorMessage;
 
-  /** The organizations the authenticated user is associated with. */
-  private List<OrganizationData> organizations;
+  /** The tenants the authenticated user is associated with. */
+  private List<TenantData> tenants;
 
   /**
    * The encryption key used to encrypt data on the user's device and any data passed as part of a
@@ -95,7 +95,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
 
     this.errorCode = errorCode;
     this.errorMessage = errorMessage;
-    this.organizations = new ArrayList<>();
+    this.tenants = new ArrayList<>();
     this.userEncryptionKey = new byte[0];
     this.userProperties = new HashMap<>();
   }
@@ -103,15 +103,13 @@ public class AuthenticateResponseData extends WbxmlMessageData {
   /**
    * Constructs a new <code>AuthenticateResponseData</code>.
    *
-   * @param organizations the organizations the authenticated user is associated with
+   * @param tenants the tenants the authenticated user is associated with
    * @param userEncryptionKey the encryption key used to encrypt data on the user's device and any
    *     data passed as part of a message
    * @param userProperties the properties returned for the authenticated user
    */
   public AuthenticateResponseData(
-      List<Organization> organizations,
-      byte[] userEncryptionKey,
-      Map<String, Object> userProperties) {
+      List<Tenant> tenants, byte[] userEncryptionKey, Map<String, Object> userProperties) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
 
     this.errorCode = ERROR_CODE_SUCCESS;
@@ -119,10 +117,9 @@ public class AuthenticateResponseData extends WbxmlMessageData {
     this.userEncryptionKey = userEncryptionKey;
     this.userProperties = userProperties;
 
-    this.organizations = new ArrayList<>();
+    this.tenants = new ArrayList<>();
 
-    this.organizations.addAll(
-        organizations.stream().map(OrganizationData::new).collect(Collectors.toList()));
+    this.tenants.addAll(tenants.stream().map(TenantData::new).collect(Collectors.toList()));
   }
 
   /**
@@ -156,15 +153,15 @@ public class AuthenticateResponseData extends WbxmlMessageData {
 
     this.errorMessage = rootElement.getChildText("ErrorMessage");
 
-    this.organizations = new ArrayList<>();
+    this.tenants = new ArrayList<>();
 
-    if (rootElement.hasChild("Organizations")) {
-      Element organizationsElement = rootElement.getChild("Organizations");
+    if (rootElement.hasChild("Tenants")) {
+      Element tenantsElement = rootElement.getChild("Tenants");
 
-      List<Element> organizationElements = organizationsElement.getChildren("Organization");
+      List<Element> tenantElements = tenantsElement.getChildren("Tenant");
 
-      this.organizations.addAll(
-          organizationElements.stream().map(OrganizationData::new).collect(Collectors.toList()));
+      this.tenants.addAll(
+          tenantElements.stream().map(TenantData::new).collect(Collectors.toList()));
     }
 
     this.userEncryptionKey = rootElement.getChildOpaque("UserEncryptionKey");
@@ -222,12 +219,12 @@ public class AuthenticateResponseData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the organizations the authenticated user is associated with.
+   * Returns the tenants the authenticated user is associated with.
    *
-   * @return the organizations the authenticated user is associated with
+   * @return the tenants the authenticated user is associated with
    */
-  public List<OrganizationData> getOrganizations() {
-    return organizations;
+  public List<TenantData> getTenants() {
+    return tenants;
   }
 
   /**
@@ -266,14 +263,14 @@ public class AuthenticateResponseData extends WbxmlMessageData {
         new Element("ErrorMessage", StringUtils.isEmpty(errorMessage) ? "" : errorMessage));
     rootElement.addContent(new Element("UserEncryptionKey", userEncryptionKey));
 
-    if ((organizations != null) && (organizations.size() > 0)) {
-      Element organizationsElement = new Element("Organizations");
+    if ((tenants != null) && (tenants.size() > 0)) {
+      Element tenantsElement = new Element("Tenants");
 
-      for (OrganizationData organization : organizations) {
-        organizationsElement.addContent(organization.toElement());
+      for (TenantData tenant : tenants) {
+        tenantsElement.addContent(tenant.toElement());
       }
 
-      rootElement.addContent(organizationsElement);
+      rootElement.addContent(tenantsElement);
     }
 
     if ((userProperties != null) && (userProperties.size() > 0)) {

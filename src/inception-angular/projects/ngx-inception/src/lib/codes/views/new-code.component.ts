@@ -79,11 +79,12 @@ export class NewCodeComponent extends AdminContainerView implements AfterViewIni
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Codes', ['..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@codes_new_code_back_navigation:Codes`,
+      ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'New Code';
+    return $localize`:@@codes_new_code_title:New Code`
   }
 
   cancel(): void {

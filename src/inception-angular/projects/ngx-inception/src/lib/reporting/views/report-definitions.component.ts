@@ -63,7 +63,7 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
   }
 
   get title(): string {
-    return 'Report Definitions';
+    return $localize`:@@reporting_report_definitions_title:Report Definitions`
   }
 
   applyFilter(filterValue: string): void {
@@ -74,7 +74,7 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
 
   deleteReportDefinition(reportDefinitionId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the report definition?'
+      message: $localize`:@@reporting_report_definitions_confirm_delete_report_definition:Are you sure you want to delete the report definition?`
     });
 
     dialogRef.afterClosed()

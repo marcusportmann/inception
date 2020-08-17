@@ -20,7 +20,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CoreModule} from '../../core/core.module';
 import {LoginComponent} from './login.component';
-import {SelectOrganizationComponent} from './select-organization.component';
+import {SelectTenantComponent} from './select-tenant.component';
 import {ExpiredPasswordComponent} from './expired-password.component';
 import {ForgottenPasswordComponent} from './forgotten-password.component';
 import {ResetPasswordComponent} from './reset-password.component';
@@ -28,7 +28,7 @@ import {ExpiredPasswordTitleResolver} from './expired-password-title-resolver';
 import {ForgottenPasswordTitleResolver} from './forgotten-password-title-resolver';
 import {LoginTitleResolver} from './login-title-resolver';
 import {ResetPasswordTitleResolver} from './reset-password-title-resolver';
-import {SelectOrganizationTitleResolver} from './select-organization-title-resolver';
+import {SelectTenantTitleResolver} from './select-tenant-title-resolver';
 
 const routes: Routes = [{
   path: '',
@@ -55,10 +55,10 @@ const routes: Routes = [{
     title: ResetPasswordTitleResolver
   }
 }, {
-  path: 'select-organization',
-  component: SelectOrganizationComponent,
+  path: 'select-tenant',
+  component: SelectTenantComponent,
   resolve: {
-    title: SelectOrganizationTitleResolver
+    title: SelectTenantTitleResolver
   }
 }
 ];
@@ -67,7 +67,7 @@ const routes: Routes = [{
   declarations: [
     // Components
     ExpiredPasswordComponent, ForgottenPasswordComponent, LoginComponent, ResetPasswordComponent,
-    SelectOrganizationComponent
+    SelectTenantComponent
   ],
   imports: [
     // Angular modules
@@ -79,7 +79,7 @@ const routes: Routes = [{
   providers: [
     // Resolvers
     ExpiredPasswordTitleResolver, ForgottenPasswordTitleResolver, LoginTitleResolver, ResetPasswordTitleResolver,
-    SelectOrganizationTitleResolver
+    SelectTenantTitleResolver
   ]
 })
 export class LoginViewsModule {

@@ -65,7 +65,7 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
   }
 
   get title(): string {
-    return 'Mail Templates';
+    return $localize`:@@mail_mail_templates_title:Mail Templates`
   }
 
   applyFilter(filterValue: string): void {
@@ -76,7 +76,7 @@ export class MailTemplatesComponent extends AdminContainerView implements AfterV
 
   deleteMailTemplate(mailTemplateId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the mail template?'
+      message: $localize`:@@mail_mail_templates_confirm_delete_mail_template:Are you sure you want to delete the mail template?`
     });
 
     dialogRef.afterClosed()

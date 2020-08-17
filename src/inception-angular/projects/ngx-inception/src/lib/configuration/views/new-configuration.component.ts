@@ -69,11 +69,12 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Configuration', ['..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@configuration_new_configuration_back_navigation:Configuration`,
+      ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'New Configuration';
+    return $localize`:@@configuration_new_configuration_title:New Configuration`
   }
 
   cancel(): void {

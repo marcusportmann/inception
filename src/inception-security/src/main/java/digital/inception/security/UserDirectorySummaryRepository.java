@@ -40,9 +40,8 @@ public interface UserDirectorySummaryRepository extends JpaRepository<UserDirect
 
   Page<UserDirectorySummary> findAllByOrderByNameDesc(Pageable pageable);
 
-  @Query(
-      "select uds from UserDirectorySummary uds join uds.organizations as o where o.id = :organizationId")
-  List<UserDirectorySummary> findAllByOrganizationId(@Param("organizationId") UUID organizationId);
+  @Query("select uds from UserDirectorySummary uds join uds.tenants as o where o.id = :tenantId")
+  List<UserDirectorySummary> findAllByTenantId(@Param("tenantId") UUID tenantId);
 
   Page<UserDirectorySummary> findByNameContainingIgnoreCaseOrderByNameAsc(
       String name, Pageable pageable);

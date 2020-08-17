@@ -66,7 +66,7 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
   }
 
   get title(): string {
-    return 'Jobs';
+    return $localize`:@@scheduler_jobs_title:Jobs`
   }
 
   applyFilter(filterValue: string): void {
@@ -77,7 +77,7 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
 
   deleteJob(jobId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the job?'
+      message: $localize`:@@scheduler_jobs_confirm_delete_job:Are you sure you want to delete the job?`
     });
 
     dialogRef.afterClosed()

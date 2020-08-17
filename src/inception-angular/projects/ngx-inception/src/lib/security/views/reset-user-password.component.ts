@@ -110,14 +110,15 @@ export class ResetUserPasswordComponent extends AdminContainerView implements Af
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Users', ['../../..'], {
+    return new BackNavigation($localize`:@@security_reset_user_password_back_navigation:Users`,
+      ['../../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   get title(): string {
-    return 'Reset User Password';
+    return $localize`:@@security_reset_user_password_title:Reset User Password`
   }
 
   cancel(): void {

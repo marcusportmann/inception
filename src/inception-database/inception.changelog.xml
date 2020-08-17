@@ -667,17 +667,17 @@
       create schema security
     </sql>
 
-    <createTable schemaName="security" tableName="organizations" remarks="Organizations">
+    <createTable schemaName="security" tableName="tenants" remarks="Tenants">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the organization"/>
-      <column name="name" type="nvarchar(100)" remarks="The name of the organization"/>
-      <column name="status" type="int" remarks="The status for the organization"/>
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the tenant"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the tenant"/>
+      <column name="status" type="int" remarks="The status for the tenant"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="organizations" columnNames="id"/>
-    <addNotNullConstraint schemaName="security" tableName="organizations" columnName="id"/>
-    <addNotNullConstraint schemaName="security" tableName="organizations" columnName="name"/>
-    <addNotNullConstraint schemaName="security" tableName="organizations" columnName="status"/>
-    <createIndex indexName="organizations_name_ix" schemaName="security" tableName="organizations">
+    <addPrimaryKey schemaName="security" tableName="tenants" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="name"/>
+    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="status"/>
+    <createIndex indexName="tenants_name_ix" schemaName="security" tableName="tenants">
       <column name="name"/>
     </createIndex>
 
@@ -719,34 +719,34 @@
       <column name="name"/>
     </createIndex>
 
-    <createTable schemaName="security" tableName="user_directory_to_organization_map"
-      remarks="User Directory To Organization Mappings">
+    <createTable schemaName="security" tableName="user_directory_to_tenant_map"
+      remarks="User Directory To Tenant Mappings">
       <column name="user_directory_id" type="uuid"
         remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory"/>
-      <column name="organization_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the organization"/>
+      <column name="tenant_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the tenant"/>
     </createTable>
-    <addPrimaryKey schemaName="security" tableName="user_directory_to_organization_map"
-      columnNames="user_directory_id, organization_id"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directory_to_organization_map"
+    <addPrimaryKey schemaName="security" tableName="user_directory_to_tenant_map"
+      columnNames="user_directory_id, tenant_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_to_tenant_map"
       columnName="user_directory_id"/>
-    <addNotNullConstraint schemaName="security" tableName="user_directory_to_organization_map"
-      columnName="organization_id"/>
-    <addForeignKeyConstraint constraintName="user_directory_to_organization_map_user_directory_fk"
-      baseTableSchemaName="security" baseTableName="user_directory_to_organization_map"
+    <addNotNullConstraint schemaName="security" tableName="user_directory_to_tenant_map"
+      columnName="tenant_id"/>
+    <addForeignKeyConstraint constraintName="user_directory_to_tenant_map_user_directory_fk"
+      baseTableSchemaName="security" baseTableName="user_directory_to_tenant_map"
       baseColumnNames="user_directory_id" referencedTableSchemaName="security"
       referencedTableName="user_directories" referencedColumnNames="id" deleteCascade="true"/>
-    <addForeignKeyConstraint constraintName="user_directory_to_organization_map_organization_fk"
-      baseTableSchemaName="security" baseTableName="user_directory_to_organization_map"
-      baseColumnNames="organization_id" referencedTableSchemaName="security"
-      referencedTableName="organizations" referencedColumnNames="id" deleteCascade="true"/>
-    <createIndex indexName="user_directory_to_organization_map_user_directory_id_ix"
-      schemaName="security" tableName="user_directory_to_organization_map">
+    <addForeignKeyConstraint constraintName="user_directory_to_tenant_map_tenant_fk"
+      baseTableSchemaName="security" baseTableName="user_directory_to_tenant_map"
+      baseColumnNames="tenant_id" referencedTableSchemaName="security"
+      referencedTableName="tenants" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="user_directory_to_tenant_map_user_directory_id_ix"
+      schemaName="security" tableName="user_directory_to_tenant_map">
       <column name="user_directory_id"/>
     </createIndex>
-    <createIndex indexName="user_directory_to_organization_map_organization_id_ix"
-      schemaName="security" tableName="user_directory_to_organization_map">
-      <column name="organization_id"/>
+    <createIndex indexName="user_directory_to_tenant_map_tenant_id_ix"
+      schemaName="security" tableName="user_directory_to_tenant_map">
+      <column name="tenant_id"/>
     </createIndex>
 
     <createTable schemaName="security" tableName="users" remarks="Users">
@@ -986,7 +986,7 @@
       <column name="username"/>
     </createIndex>
 
-    <insert schemaName="security" tableName="organizations">
+    <insert schemaName="security" tableName="tenants">
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Administration"/>
       <column name="status" value="1"/>
@@ -1011,9 +1011,9 @@
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>]]></column>
     </insert>
 
-    <insert schemaName="security" tableName="user_directory_to_organization_map">
+    <insert schemaName="security" tableName="user_directory_to_tenant_map">
       <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="organization_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
     </insert>
 
     <insert schemaName="security" tableName="users">
@@ -1114,9 +1114,9 @@
       <column name="description" value="Group Administration"/>
     </insert>
     <insert schemaName="security" tableName="functions">
-      <column name="code" value="Security.OrganizationAdministration"/>
-      <column name="name" value="Organization Administration"/>
-      <column name="description" value="Organization Administration'"/>
+      <column name="code" value="Security.TenantAdministration"/>
+      <column name="name" value="Tenant Administration"/>
+      <column name="description" value="Tenant Administration'"/>
     </insert>
     <insert schemaName="security" tableName="functions">
       <column name="code" value="Security.ResetUserPassword"/>
@@ -1150,9 +1150,9 @@
       <column name="description" value="Administrator"/>
     </insert>
     <insert schemaName="security" tableName="roles">
-      <column name="code" value="OrganizationAdministrator"/>
-      <column name="name" value="Organization Administrator"/>
-      <column name="description" value="Organization Administrator"/>
+      <column name="code" value="TenantAdministrator"/>
+      <column name="name" value="Tenant Administrator"/>
+      <column name="description" value="Tenant Administrator"/>
     </insert>
     <insert schemaName="security" tableName="roles">
       <column name="code" value="PasswordResetter"/>
@@ -1162,31 +1162,31 @@
 
     <insert schemaName="security" tableName="function_to_role_map">
       <column name="function_code" value="Application.SecureHome"/>
-      <column name="role_code" value="OrganizationAdministrator"/>
+      <column name="role_code" value="TenantAdministrator"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
       <column name="function_code" value="Application.Dashboard"/>
-      <column name="role_code" value="OrganizationAdministrator"/>
+      <column name="role_code" value="TenantAdministrator"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
       <column name="function_code" value="Reporting.ViewReport"/>
-      <column name="role_code" value="OrganizationAdministrator"/>
+      <column name="role_code" value="TenantAdministrator"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
       <column name="function_code" value="Security.ResetUserPassword"/>
-      <column name="role_code" value="OrganizationAdministrator"/>
+      <column name="role_code" value="TenantAdministrator"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
       <column name="function_code" value="Security.UserAdministration"/>
-      <column name="role_code" value="OrganizationAdministrator"/>
+      <column name="role_code" value="TenantAdministrator"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
       <column name="function_code" value="Security.UserGroups"/>
-      <column name="role_code" value="OrganizationAdministrator"/>
+      <column name="role_code" value="TenantAdministrator"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
       <column name="function_code" value="Security.GroupAdministration"/>
-      <column name="role_code" value="OrganizationAdministrator"/>
+      <column name="role_code" value="TenantAdministrator"/>
     </insert>
 
     <insert schemaName="security" tableName="function_to_role_map">

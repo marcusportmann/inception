@@ -83,14 +83,14 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
   }
 
   get title(): string {
-    return 'Users';
+    return $localize`:@@security_users_title:Users`
   }
 
   // noinspection JSUnusedLocalSymbols
   deleteUser(username: string): void {
     // noinspection JSUnusedLocalSymbols
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the user?'
+      message: $localize`:@@security_users_confirm_delete_user:Are you sure you want to delete the user?`
     });
 
     dialogRef.afterClosed()
@@ -236,10 +236,10 @@ export class UsersComponent extends AdminContainerView implements AfterViewInit,
     })).subscribe());
 
     this.securityService.session$.pipe(first()).subscribe((session: Session | null) => {
-      if (session && session.organization) {
+      if (session && session.tenant) {
         this.spinnerService.showSpinner();
 
-        this.securityService.getUserDirectorySummariesForOrganization(session.organization.id)
+        this.securityService.getUserDirectorySummariesForTenant(session.tenant.id)
         .pipe(first(), finalize(() => this.spinnerService.hideSpinner()))
         .subscribe((userDirectories: UserDirectorySummary[]) => {
           this.userDirectories = userDirectories;

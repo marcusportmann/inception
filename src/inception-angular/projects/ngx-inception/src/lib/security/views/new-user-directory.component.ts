@@ -77,11 +77,12 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('User Directories', ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@security_new_user_directory_back_navigation:User Directories`,
+      ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'New User Directory';
+    return $localize`:@@security_new_user_directory_title:New User Directory`
   }
 
   cancel(): void {

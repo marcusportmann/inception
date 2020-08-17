@@ -83,14 +83,15 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Back', ['../../..'], {
+    return new BackNavigation($localize`:@@security_group_members_back_navigation:Back`,
+      ['../../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   get title(): string {
-    return 'Group Members';
+    return $localize`:@@security_group_members_title:Group Members`
   }
 
   addMemberToGroup(): void {
@@ -167,7 +168,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
 
   removeMemberFromGroup(groupMember: GroupMember): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to remove the group member from the group?'
+      message: $localize`:@@security_group_members_confirm_remove_member_from_group:Are you sure you want to remove the group member from the group?`
     });
 
     dialogRef.afterClosed()

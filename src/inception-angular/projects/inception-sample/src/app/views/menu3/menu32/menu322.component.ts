@@ -42,14 +42,15 @@ export class Menu322Component extends AdminContainerView {
    * Tne back navigation for admin container view.
    */
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Menu 3.1.1', ['../menu321'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@sample_menu322_back_navigation:Menu 3.1.1`,
+      ['../menu321'], {relativeTo: this.activatedRoute});
   }
 
   /**
    * The title for the admin container view.
    */
   get title(): string | Observable<string> {
-    return 'Custom Menu 3.2.2 Title';
+    return $localize`:@@sample_menu322_title:Custom Menu 3.2.2 Title`
   }
 }
 

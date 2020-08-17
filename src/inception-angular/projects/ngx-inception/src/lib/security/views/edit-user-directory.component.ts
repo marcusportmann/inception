@@ -86,11 +86,12 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('User Directories', ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@security_edit_user_directory_back_navigation:User Directories`,
+      ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'Edit User Directory';
+    return $localize`:@@security_edit_user_directory_title:Edit User Directory`
   }
 
   cancel(): void {

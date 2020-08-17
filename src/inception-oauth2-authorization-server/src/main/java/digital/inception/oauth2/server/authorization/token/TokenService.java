@@ -169,9 +169,8 @@ public class TokenService implements ITokenService {
       List<String> functionCodes =
           securityService.getFunctionCodesForUser(userDirectoryId, username);
 
-      // Retrieve the list of IDs for the organizations the user is associated with
-      List<UUID> organizationIds =
-          securityService.getOrganizationIdsForUserDirectory(userDirectoryId);
+      // Retrieve the list of IDs for the tenants the user is associated with
+      List<UUID> tenantIds = securityService.getTenantIdsForUserDirectory(userDirectoryId);
 
       // Retrieve the list of roles for the user
       List<String> roleCodes = securityService.getRoleCodesForUser(userDirectoryId, username);
@@ -181,7 +180,7 @@ public class TokenService implements ITokenService {
           user,
           roleCodes,
           functionCodes,
-          organizationIds,
+          tenantIds,
           scopes,
           applicationName,
           ACCESS_TOKEN_VALIDITY,

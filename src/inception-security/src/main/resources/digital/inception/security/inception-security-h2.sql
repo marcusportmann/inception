@@ -7,7 +7,7 @@ CREATE SCHEMA security;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
-CREATE TABLE security.organizations (
+CREATE TABLE security.tenants (
   id     UUID         NOT NULL,
   name   VARCHAR(100) NOT NULL,
   status INTEGER      NOT NULL,
@@ -15,13 +15,13 @@ CREATE TABLE security.organizations (
   PRIMARY KEY (id)
 );
 
-CREATE INDEX organizations_name_ix ON security.organizations(name);
+CREATE INDEX tenants_name_ix ON security.tenants(name);
 
-COMMENT ON COLUMN security.organizations.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the organization';
+COMMENT ON COLUMN security.tenants.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the tenant';
 
-COMMENT ON COLUMN security.organizations.name IS 'The name of the organization';
+COMMENT ON COLUMN security.tenants.name IS 'The name of the tenant';
 
-COMMENT ON COLUMN security.organizations.status IS 'The status for the organization';
+COMMENT ON COLUMN security.tenants.status IS 'The status for the tenant';
 
 
 CREATE TABLE security.user_directory_types (
@@ -60,22 +60,22 @@ COMMENT ON COLUMN security.user_directories.name IS 'The name of the user direct
 COMMENT ON COLUMN security.user_directories.configuration IS 'The XML configuration data for the user directory';
 
 
-CREATE TABLE security.user_directory_to_organization_map (
+CREATE TABLE security.user_directory_to_tenant_map (
   user_directory_id UUID NOT NULL,
-  organization_id   UUID NOT NULL,
+  tenant_id   UUID NOT NULL,
 
-  PRIMARY KEY (user_directory_id, organization_id),
-  CONSTRAINT user_directory_to_organization_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE,
-  CONSTRAINT user_directory_to_organization_map_organization_fk FOREIGN KEY (organization_id) REFERENCES security.organizations(id) ON DELETE CASCADE
+  PRIMARY KEY (user_directory_id, tenant_id),
+  CONSTRAINT user_directory_to_tenant_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE,
+  CONSTRAINT user_directory_to_tenant_map_tenant_fk FOREIGN KEY (tenant_id) REFERENCES security.tenants(id) ON DELETE CASCADE
 );
 
-CREATE INDEX user_directory_to_organization_map_user_directory_id_ix ON security.user_directory_to_organization_map(user_directory_id);
+CREATE INDEX user_directory_to_tenant_map_user_directory_id_ix ON security.user_directory_to_tenant_map(user_directory_id);
 
-CREATE INDEX user_directory_to_organization_map_organization_id_ix ON security.user_directory_to_organization_map(organization_id);
+CREATE INDEX user_directory_to_tenant_map_tenant_id_ix ON security.user_directory_to_tenant_map(tenant_id);
 
-COMMENT ON COLUMN security.user_directory_to_organization_map.user_directory_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the user directory';
+COMMENT ON COLUMN security.user_directory_to_tenant_map.user_directory_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the user directory';
 
-COMMENT ON COLUMN security.user_directory_to_organization_map.organization_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the organization';
+COMMENT ON COLUMN security.user_directory_to_tenant_map.tenant_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the tenant';
 
 
 CREATE TABLE security.users (
@@ -283,7 +283,7 @@ COMMENT ON COLUMN security.password_resets.expired IS 'The date and time the pas
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO security.organizations (id, name, status)
+INSERT INTO security.tenants (id, name, status)
   VALUES ('00000000-0000-0000-0000-000000000000', 'Administration', 1);
 
 INSERT INTO security.user_directory_types (code, name, user_directory_class)
@@ -294,7 +294,7 @@ INSERT INTO security.user_directory_types (code, name, user_directory_class)
 INSERT INTO security.user_directories (id, type, name, configuration)
   VALUES ('00000000-0000-0000-0000-000000000000', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
 
-INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
+INSERT INTO security.user_directory_to_tenant_map (user_directory_id, tenant_id)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
@@ -335,11 +335,11 @@ INSERT INTO security.functions (code, name, description)
 INSERT INTO security.functions (code, name, description)
   VALUES ('Security.GroupAdministration', 'Group Administration', 'Group Administration');
 INSERT INTO security.functions (code, name, description)
-  VALUES ('Security.OrganizationAdministration', 'Organization Administration', 'Organization Administration');
-INSERT INTO security.functions (code, name, description)
   VALUES ('Security.ResetUserPassword', 'Reset User Password', 'Reset User Password');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Security.SecurityAdministration', 'Security Administration', 'Security Administration');
+INSERT INTO security.functions (code, name, description)
+  VALUES ('Security.TenantAdministration', 'Tenant Administration', 'Tenant Administration');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Security.UserAdministration', 'User Administration', 'User Administration');
 INSERT INTO security.functions (code, name, description)
@@ -350,24 +350,24 @@ INSERT INTO security.functions (code, name, description)
 INSERT INTO security.roles (code, name, description)
   VALUES ('Administrator', 'Administrator', 'Administrator');
 INSERT INTO security.roles (code, name, description)
-  VALUES ('OrganizationAdministrator', 'Organization Administrator', 'Organization Administrator');
-INSERT INTO security.roles (code, name, description)
   VALUES ('PasswordResetter', 'Password Resetter', 'Password Resetter');
+INSERT INTO security.roles (code, name, description)
+  VALUES ('TenantAdministrator', 'Tenant Administrator', 'Tenant Administrator');
 
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Application.SecureHome', 'OrganizationAdministrator');
+  VALUES ('Application.SecureHome', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Application.Dashboard', 'OrganizationAdministrator');
+  VALUES ('Application.Dashboard', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Reporting.ViewReport', 'OrganizationAdministrator');
+  VALUES ('Reporting.ViewReport', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Security.ResetUserPassword', 'OrganizationAdministrator');
+  VALUES ('Security.ResetUserPassword', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Security.UserAdministration', 'OrganizationAdministrator');
+  VALUES ('Security.UserAdministration', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Security.UserGroups', 'OrganizationAdministrator');
+  VALUES ('Security.UserGroups', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Security.GroupAdministration', 'OrganizationAdministrator');
+  VALUES ('Security.GroupAdministration', 'TenantAdministrator');
 
 INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Application.SecureHome', 'PasswordResetter');
@@ -384,11 +384,11 @@ INSERT INTO security.role_to_group_map (role_code, group_id)
 
 
 
--- INSERT INTO security.organizations (id, name, status)
---   VALUES ('11111111-1111-1111-1111-111111111111', 'Sample LDAP Organization', 1);
+-- INSERT INTO security.tenants (id, name, status)
+--   VALUES ('11111111-1111-1111-1111-111111111111', 'Sample LDAP Tenant', 1);
 --
 -- INSERT INTO security.user_directories (id, type, name, configuration)
 --   VALUES ('11111111-1111-1111-1111-111111111111', 'LDAPUserDirectory', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>cn=root,o=sample</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserNameAttribute</name><value>cn</value></parameter><parameter><name>UserPreferredNameAttribute</name><value>nickName</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
 --
--- INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
+-- INSERT INTO security.user_directory_to_tenant_map (user_directory_id, tenant_id)
 --   VALUES ('11111111-1111-1111-1111-111111111111', '11111111-1111-1111-1111-111111111111');

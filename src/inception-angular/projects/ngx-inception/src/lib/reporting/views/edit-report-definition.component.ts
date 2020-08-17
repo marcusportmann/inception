@@ -87,11 +87,12 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Report Definitions', ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@reporting_edit_report_definition_back_navigation:Report Definitions`,
+      ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'Edit Report Definition';
+    return $localize`:@@reporting_edit_report_definition_title:Edit Report Definition`
   }
 
   cancel(): void {

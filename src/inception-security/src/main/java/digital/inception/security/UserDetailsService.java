@@ -66,29 +66,27 @@ public class UserDetailsService
         List<String> functionCodes =
             securityService.getFunctionCodesForUser(userDirectoryId, username);
 
-        // Retrieve the list of IDs for the organizations the user is associated with
-        List<UUID> organizationIds =
-            securityService.getOrganizationIdsForUserDirectory(userDirectoryId);
+        // Retrieve the list of IDs for the tenants the user is associated with
+        List<UUID> tenantIds = securityService.getTenantIdsForUserDirectory(userDirectoryId);
 
         /*
          * Retrieve the list of IDs for the user directories the user is associated with as a result
-         * of being associated with one or more organizations.
+         * of being associated with one or more tenants.
          */
-        List<UUID> userDirectoryIdsForOrganizations = new ArrayList<>();
+        List<UUID> userDirectoryIdsForTenants = new ArrayList<>();
 
-        for (var organizationId : organizationIds) {
-          // Retrieve the list of user directories associated with the organization
-          var userDirectoryIdsForOrganization =
-              securityService.getUserDirectoryIdsForOrganization(organizationId);
+        for (var tenantId : tenantIds) {
+          // Retrieve the list of user directories associated with the tenant
+          var userDirectoryIdsForTenant = securityService.getUserDirectoryIdsForTenant(tenantId);
 
-          userDirectoryIdsForOrganizations.addAll(userDirectoryIdsForOrganization);
+          userDirectoryIdsForTenants.addAll(userDirectoryIdsForTenant);
         }
 
         // Retrieve the list of roles for the user
         List<String> roleCodes = securityService.getRoleCodesForUser(userDirectoryId, username);
 
         return new digital.inception.security.UserDetails(
-            user, roleCodes, functionCodes, organizationIds, userDirectoryIdsForOrganizations);
+            user, roleCodes, functionCodes, tenantIds, userDirectoryIdsForTenants);
       }
     } catch (UserNotFoundException e) {
       throw new UsernameNotFoundException(

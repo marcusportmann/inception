@@ -92,14 +92,15 @@ export class EditGroupComponent extends AdminContainerView implements AfterViewI
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Groups', ['../../..'], {
+    return new BackNavigation($localize`:@@security_edit_group_back_navigation:Groups`,
+      ['../../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   get title(): string {
-    return 'Edit Group';
+    return $localize`:@@security_edit_group_title:Edit Group`
   }
 
   cancel(): void {

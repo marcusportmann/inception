@@ -77,14 +77,15 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Back', ['../../..'], {
+    return new BackNavigation($localize`:@@security_user_groups_back_navigation:Back`,
+      ['../../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   get title(): string {
-    return 'User Groups';
+    return $localize`:@@security_user_groups_title:User Groups`
   }
 
   addUserToGroup(): void {
@@ -161,7 +162,7 @@ export class UserGroupsComponent extends AdminContainerView implements AfterView
 
   removeUserFromGroup(groupName: string) {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to remove the user from the group?'
+      message: $localize`:@@security_user_groups_confirm_remove_user_from_group:Are you sure you want to remove the user from the group?`
     });
 
     dialogRef.afterClosed()

@@ -61,12 +61,12 @@ export class UserDirectoriesComponent extends AdminContainerView implements Afte
   }
 
   get title(): string {
-    return 'User Directories';
+    return $localize`:@@security_user_directories_title:User Directories`
   }
 
   deleteUserDirectory(userDirectoryId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the user directory?'
+      message: $localize`:@@security_user_directories_confirm_delete_user_directory:Are you sure you want to delete the user directory?`
     });
 
     dialogRef.afterClosed()

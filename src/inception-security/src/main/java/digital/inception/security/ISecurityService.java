@@ -57,16 +57,15 @@ public interface ISecurityService {
           ExistingGroupRoleException, SecurityServiceException;
 
   /**
-   * Add the user directory to the organization.
+   * Add the user directory to the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    */
-  void addUserDirectoryToOrganization(UUID organizationId, UUID userDirectoryId)
-      throws OrganizationNotFoundException, UserDirectoryNotFoundException,
-          ExistingOrganizationUserDirectoryException, SecurityServiceException;
+  void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
+      throws TenantNotFoundException, UserDirectoryNotFoundException,
+          ExistingTenantUserDirectoryException, SecurityServiceException;
 
   /**
    * Add the user to the group.
@@ -142,15 +141,15 @@ public interface ISecurityService {
       throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException;
 
   /**
-   * Create the new organization.
+   * Create the new tenant.
    *
-   * @param organization the organization
-   * @param createUserDirectory should a new internal user directory be created for the organization
-   * @return the new internal user directory that was created for the organization or <code>null
+   * @param tenant the tenant
+   * @param createUserDirectory should a new internal user directory be created for the tenant
+   * @return the new internal user directory that was created for the tenant or <code>null
    * </code> if no user directory was created
    */
-  UserDirectory createOrganization(Organization organization, boolean createUserDirectory)
-      throws DuplicateOrganizationException, SecurityServiceException;
+  UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
+      throws DuplicateTenantException, SecurityServiceException;
 
   /**
    * Create the new user.
@@ -190,13 +189,11 @@ public interface ISecurityService {
           SecurityServiceException;
 
   /**
-   * Delete the organization.
+   * Delete the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    */
-  void deleteOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException;
+  void deleteTenant(UUID tenantId) throws TenantNotFoundException, SecurityServiceException;
 
   /**
    * Delete the user.
@@ -360,68 +357,6 @@ public interface ISecurityService {
       throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the organization
-   */
-  Organization getOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException;
-
-  /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the organizations the
-   * user directory is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the organizations the
-   *     user directory is associated with
-   */
-  List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
-
-  /**
-   * Retrieve the name of the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the name of the organization
-   */
-  String getOrganizationName(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException;
-
-  /**
-   * Retrieve the organizations.
-   *
-   * @return the organizations
-   */
-  List<Organization> getOrganizations() throws SecurityServiceException;
-
-  /**
-   * Retrieve the organizations.
-   *
-   * @param filter the optional filter to apply to the organizations
-   * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the organizations
-   */
-  Organizations getOrganizations(
-      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException;
-
-  /**
-   * Retrieve the organizations the user directory is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @return the organizations the user directory is associated with
-   */
-  List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
-
-  /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -462,6 +397,64 @@ public interface ISecurityService {
       throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
+   * Retrieve the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the tenant
+   */
+  Tenant getTenant(UUID tenantId) throws TenantNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user
+   * directory is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user
+   *     directory is associated with
+   */
+  List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
+      throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the name of the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the name of the tenant
+   */
+  String getTenantName(UUID tenantId) throws TenantNotFoundException, SecurityServiceException;
+
+  /**
+   * Retrieve the tenants.
+   *
+   * @return the tenants
+   */
+  List<Tenant> getTenants() throws SecurityServiceException;
+
+  /**
+   * Retrieve the tenants.
+   *
+   * @param filter the optional filter to apply to the tenants
+   * @param sortDirection the optional sort direction to apply to the tenants
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the tenants
+   */
+  Tenants getTenants(
+      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+      throws SecurityServiceException;
+
+  /**
+   * Retrieve the tenants the user directory is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @return the tenants the user directory is associated with
+   */
+  List<Tenant> getTenantsForUserDirectory(UUID userDirectoryId)
+      throws UserDirectoryNotFoundException, SecurityServiceException;
+
+  /**
    * Retrieve the user.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -493,14 +486,13 @@ public interface ISecurityService {
       throws SecurityServiceException;
 
   /**
-   * Retrieve the user directories the organization is associated with.
+   * Retrieve the user directories the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the user directories the organization is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the user directories the tenant is associated with
    */
-  List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException;
+  List<UserDirectory> getUserDirectoriesForTenant(UUID tenantId)
+      throws TenantNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user directory.
@@ -535,20 +527,19 @@ public interface ISecurityService {
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
-   * the organization is associated with.
+   * the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
-   *     the organization is associated with
+   *     the tenant is associated with
    */
-  List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException;
+  List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
+      throws TenantNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
    * the user is associated with. Every user is associated with a user directory, which is in turn
-   * associated with one or more organizations, which are in turn associated with one or more user
+   * associated with one or more tenants, which are in turn associated with one or more user
    * directories. The user is therefore associated indirectly with all these user directories.
    *
    * @param username the username identifying the user
@@ -582,14 +573,13 @@ public interface ISecurityService {
       throws SecurityServiceException;
 
   /**
-   * Retrieve the summaries for the user directories the organization is associated with.
+   * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the summaries for the user directories the organization is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the summaries for the user directories the tenant is associated with
    */
-  List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException;
+  List<UserDirectorySummary> getUserDirectorySummariesForTenant(UUID tenantId)
+      throws TenantNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user directory type for the user directory.
@@ -728,15 +718,14 @@ public interface ISecurityService {
           SecurityServiceException;
 
   /**
-   * Remove the user directory from the organization.
+   * Remove the user directory from the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    */
-  void removeUserDirectoryFromOrganization(UUID organizationId, UUID userDirectoryId)
-      throws OrganizationNotFoundException, OrganizationUserDirectoryNotFoundException,
+  void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
+      throws TenantNotFoundException, TenantUserDirectoryNotFoundException,
           SecurityServiceException;
 
   /**
@@ -778,12 +767,11 @@ public interface ISecurityService {
       throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
 
   /**
-   * Update the organization.
+   * Update the tenant.
    *
-   * @param organization the organization
+   * @param tenant the tenant
    */
-  void updateOrganization(Organization organization)
-      throws OrganizationNotFoundException, SecurityServiceException;
+  void updateTenant(Tenant tenant) throws TenantNotFoundException, SecurityServiceException;
 
   /**
    * Update the user.

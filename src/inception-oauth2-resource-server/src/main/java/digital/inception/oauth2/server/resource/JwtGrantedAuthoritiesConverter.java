@@ -36,10 +36,10 @@ public class JwtGrantedAuthoritiesConverter
   public static final String FUNCTIONS_CLAIM = "functions";
 
   /**
-   * The name of the organizations claim that provides the Universally Unique Identifiers (UUIDs)
-   * uniquely identifying the organizations the user is associated with.
+   * The name of the tenants claim that provides the Universally Unique Identifiers (UUIDs) uniquely
+   * identifying the tenants the user is associated with.
    */
-  public static final String ORGANIZATIONS_CLAIM = "organizations";
+  public static final String TENANTS_CLAIM = "tenants";
 
   /** The name of the roles claim that provides the roles assigned to the user. */
   private static final String ROLES_CLAIM = "roles";
@@ -63,12 +63,12 @@ public class JwtGrantedAuthoritiesConverter
       }
     }
 
-    // Organization claims
-    List<String> organizationsClaim = jwt.getClaimAsStringList(ORGANIZATIONS_CLAIM);
+    // Tenant claims
+    List<String> tenantsClaim = jwt.getClaimAsStringList(TENANTS_CLAIM);
 
-    if (organizationsClaim != null) {
-      for (String organizationClaim : organizationsClaim) {
-        grantedAuthorities.add(new SimpleGrantedAuthority("ORGANIZATION_" + organizationClaim));
+    if (tenantsClaim != null) {
+      for (String tenantClaim : tenantsClaim) {
+        grantedAuthorities.add(new SimpleGrantedAuthority("TENANT_" + tenantClaim));
       }
     }
 

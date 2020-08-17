@@ -36,6 +36,6 @@ export class SecurityOverviewComponent extends AdminContainerView {
   }
 
   get title(): string {
-    return 'Security Overview';
+    return $localize`:@@security_security_overview_title:Security Overview`
   }
 }

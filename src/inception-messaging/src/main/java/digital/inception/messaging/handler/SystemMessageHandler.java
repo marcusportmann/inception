@@ -44,7 +44,7 @@ import digital.inception.messaging.messages.TestRequestData;
 import digital.inception.messaging.messages.TestResponseData;
 import digital.inception.security.AuthenticationFailedException;
 import digital.inception.security.ISecurityService;
-import digital.inception.security.Organization;
+import digital.inception.security.Tenant;
 import digital.inception.security.UserNotFoundException;
 import java.util.HashMap;
 import java.util.List;
@@ -175,8 +175,7 @@ public class SystemMessageHandler extends MessageHandler {
         UUID userDirectoryId =
             securityService.authenticate(requestData.getUsername(), requestData.getPassword());
 
-        List<Organization> organizations =
-            securityService.getOrganizationsForUserDirectory(userDirectoryId);
+        List<Tenant> tenants = securityService.getTenantsForUserDirectory(userDirectoryId);
 
         byte[] userEncryptionKey =
             messagingService.deriveUserDeviceEncryptionKey(
@@ -191,8 +190,7 @@ public class SystemMessageHandler extends MessageHandler {
                   requestData.getDeviceId()));
         }
 
-        responseData =
-            new AuthenticateResponseData(organizations, userEncryptionKey, new HashMap<>());
+        responseData = new AuthenticateResponseData(tenants, userEncryptionKey, new HashMap<>());
       } catch (AuthenticationFailedException | UserNotFoundException e) {
         responseData =
             new AuthenticateResponseData(

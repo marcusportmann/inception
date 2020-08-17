@@ -75,11 +75,12 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Code Categories', ['../../../../../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@codes_codes_back_navigation:Code Categories`,
+      ['../../../../../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'Codes';
+    return $localize`:@@codes_codes_title:Codes`
   }
 
   applyFilter(filterValue: string): void {
@@ -90,7 +91,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
 
   deleteCode(codeId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the code?'
+      message: $localize`:@@codes_codes_confirm_delete_code:Are you sure you want to delete the code?`
     });
 
     dialogRef.afterClosed()

@@ -82,11 +82,12 @@ export class EditCodeCategoryComponent extends AdminContainerView implements Aft
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Code Categories', ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@codes_edit_code_category_back_navigation:Code Categories`
+      , ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'Edit Code Category';
+    return $localize`:@@codes_edit_code_category_title:Edit Code Category`
   }
 
   cancel(): void {

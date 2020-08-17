@@ -114,14 +114,15 @@ export class EditUserComponent extends AdminContainerView implements AfterViewIn
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Users', ['../../..'], {
+    return new BackNavigation($localize`:@@security_edit_user_back_navigation:Users`,
+      ['../../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   get title(): string {
-    return 'Edit User';
+    return $localize`:@@security_edit_user_title:Edit User`
   }
 
   cancel(): void {

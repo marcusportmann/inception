@@ -30,7 +30,7 @@ import digital.inception.core.util.BinaryBuffer;
 import digital.inception.security.Attribute;
 import digital.inception.security.AttributeException;
 import digital.inception.security.AuthenticationFailedException;
-import digital.inception.security.DuplicateOrganizationException;
+import digital.inception.security.DuplicateTenantException;
 import digital.inception.security.Function;
 import digital.inception.security.FunctionNotFoundException;
 import digital.inception.security.Group;
@@ -42,13 +42,13 @@ import digital.inception.security.GroupRole;
 import digital.inception.security.Groups;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.InvalidAttributeException;
-import digital.inception.security.Organization;
-import digital.inception.security.OrganizationNotFoundException;
-import digital.inception.security.OrganizationStatus;
-import digital.inception.security.Organizations;
 import digital.inception.security.PasswordChangeReason;
 import digital.inception.security.Role;
 import digital.inception.security.SecurityService;
+import digital.inception.security.Tenant;
+import digital.inception.security.TenantNotFoundException;
+import digital.inception.security.TenantStatus;
+import digital.inception.security.Tenants;
 import digital.inception.security.User;
 import digital.inception.security.UserDirectories;
 import digital.inception.security.UserDirectory;
@@ -99,7 +99,7 @@ public class SecurityServiceTest {
 
   private static int groupCount;
 
-  private static int organizationCount;
+  private static int tenantCount;
 
   private static int userCount;
 
@@ -148,16 +148,16 @@ public class SecurityServiceTest {
     return group;
   }
 
-  private static synchronized Organization getTestOrganizationDetails() {
-    organizationCount++;
+  private static synchronized Tenant getTestTenantDetails() {
+    tenantCount++;
 
-    Organization organization = new Organization();
+    Tenant tenant = new Tenant();
 
-    organization.setId(UuidCreator.getShortPrefixComb());
-    organization.setName("Test Organization Name " + organizationCount);
-    organization.setStatus(OrganizationStatus.ACTIVE);
+    tenant.setId(UuidCreator.getShortPrefixComb());
+    tenant.setName("Test Tenant Name " + tenantCount);
+    tenant.setStatus(TenantStatus.ACTIVE);
 
-    return organization;
+    return tenant;
   }
 
   private static synchronized User getTestUserDetails(UUID userDirectoryId) {
@@ -204,9 +204,9 @@ public class SecurityServiceTest {
   /** Test the functionality to add a user to a group. */
   @Test
   public void addUserToGroupTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -255,9 +255,9 @@ public class SecurityServiceTest {
   /** Test the administrative change user password functionality. */
   @Test
   public void adminChangePasswordTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -383,9 +383,9 @@ public class SecurityServiceTest {
   /** Test the change user password functionality. */
   @Test
   public void changePasswordTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -408,9 +408,9 @@ public class SecurityServiceTest {
   /** Test the functionality to delete a group with existing members. */
   @Test(expected = digital.inception.security.ExistingGroupMembersException.class)
   public void deleteGroupWithExistingMembers() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -453,7 +453,7 @@ public class SecurityServiceTest {
   /** Test the delete invalid group functionality. */
   @Test(expected = digital.inception.security.GroupNotFoundException.class)
   public void deleteInvalidGroupTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
     securityService.deleteGroup(SecurityService.ADMINISTRATION_USER_DIRECTORY_ID, "INVALID");
   }
@@ -461,9 +461,9 @@ public class SecurityServiceTest {
   /** Test the delete invalid user functionality. */
   @Test(expected = digital.inception.security.UserNotFoundException.class)
   public void deleteInvalidUserTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -483,9 +483,9 @@ public class SecurityServiceTest {
   /** Test the duplicate group functionality. */
   @Test(expected = digital.inception.security.DuplicateGroupException.class)
   public void duplicateGroupTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -493,21 +493,21 @@ public class SecurityServiceTest {
     securityService.createGroup(group);
   }
 
-  /** Test the duplicate organization functionality. */
-  @Test(expected = DuplicateOrganizationException.class)
-  public void duplicateOrganizationTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+  /** Test the duplicate tenant functionality. */
+  @Test(expected = DuplicateTenantException.class)
+  public void duplicateTenantTest() throws Exception {
+    Tenant tenant = getTestTenantDetails();
 
-    securityService.createOrganization(organization, false);
-    securityService.createOrganization(organization, false);
+    securityService.createTenant(tenant, false);
+    securityService.createTenant(tenant, false);
   }
 
   /** Test the duplicate user functionality. */
   @Test(expected = digital.inception.security.DuplicateUserException.class)
   public void duplicateUserTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -518,9 +518,9 @@ public class SecurityServiceTest {
   /** Test the expired user password functionality. */
   @Test(expected = digital.inception.security.ExpiredPasswordException.class)
   public void expiredUserPasswordTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -539,9 +539,9 @@ public class SecurityServiceTest {
   /** Test the failed authentication functionality. */
   @Test
   public void failedAuthenticationTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -563,9 +563,9 @@ public class SecurityServiceTest {
   /** Test the find users functionality. */
   @Test
   public void findUsersTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     for (int i = 1; i < 20; i++) {
       User user = getNumberedTestUserDetails(userDirectory.getId(), i);
@@ -692,9 +692,9 @@ public class SecurityServiceTest {
   /** Test the group membership functionality. */
   @Test
   public void groupMembershipTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -739,9 +739,9 @@ public class SecurityServiceTest {
   /** Test the group functionality. */
   @Test
   public void groupTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     assertTrue(
         "The user directory does not support group administration",
@@ -800,9 +800,9 @@ public class SecurityServiceTest {
   /** Test the functionality to check whether a user is a member of a group. */
   @Test
   public void isUserInGroupTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -824,9 +824,9 @@ public class SecurityServiceTest {
   /** Test the locked user functionality. */
   @Test(expected = digital.inception.security.UserLockedException.class)
   public void lockedUserTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -842,148 +842,12 @@ public class SecurityServiceTest {
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
-  /** Test the organization functionality. */
-  @Test
-  public void organizationTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
-
-    List<Organization> beforeRetrievedOrganizations = securityService.getOrganizations();
-
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
-
-    Organization retrievedOrganization = securityService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    String retrievedOrganizationName = securityService.getOrganizationName(organization.getId());
-
-    assertEquals(
-        "The correct organization name was not retrieved",
-        organization.getName(),
-        retrievedOrganizationName);
-
-    List<Organization> afterRetrievedOrganizations = securityService.getOrganizations();
-
-    assertEquals(
-        "The correct number of organizations was not retrieved",
-        beforeRetrievedOrganizations.size() + 1,
-        afterRetrievedOrganizations.size());
-
-    boolean foundOrganization = false;
-
-    for (Organization afterRetrievedOrganization : afterRetrievedOrganizations) {
-      if (afterRetrievedOrganization.getId().equals(organization.getId())) {
-        compareOrganizations(organization, afterRetrievedOrganization);
-
-        foundOrganization = true;
-
-        break;
-      }
-    }
-
-    if (!foundOrganization) {
-      fail(
-          "Failed to find the organization ("
-              + organization.getId()
-              + ") in the list of "
-              + "organizations");
-    }
-
-    Organizations filteredOrganizations =
-        securityService.getOrganizations(organization.getName(), null, null, null);
-
-    assertEquals(
-        "The correct number of filtered organizations was not retrieved",
-        1,
-        filteredOrganizations.getOrganizations().size());
-
-    compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
-
-    filteredOrganizations =
-        securityService.getOrganizations(organization.getName(), SortDirection.ASCENDING, 0, 100);
-
-    assertEquals(
-        "The correct number of filtered organizations was not retrieved",
-        1,
-        filteredOrganizations.getOrganizations().size());
-
-    compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
-
-    List<UserDirectorySummary> userDirectorySummaries =
-        securityService.getUserDirectorySummariesForOrganization(organization.getId());
-
-    assertEquals(
-        "The correct number of user directory summaries was not retrieved for the organization",
-        1,
-        userDirectorySummaries.size());
-
-    assertEquals(
-        "The correct user directory summary was not retrieved",
-        userDirectory.getId(),
-        userDirectorySummaries.get(0).getId());
-
-    organization.setName("Updated " + organization.getName());
-
-    securityService.updateOrganization(organization);
-
-    retrievedOrganization = securityService.getOrganization(organization.getId());
-
-    compareOrganizations(organization, retrievedOrganization);
-
-    UserDirectory additionalUserDirectory = getTestUserDirectoryDetails();
-
-    securityService.createUserDirectory(additionalUserDirectory);
-
-    List<UserDirectorySummary> retrievedUserDirectorySummaries =
-        securityService.getUserDirectorySummariesForOrganization(organization.getId());
-
-    assertEquals(
-        "The correct number of user directory summaries was not retrieved",
-        1,
-        retrievedUserDirectorySummaries.size());
-
-    securityService.addUserDirectoryToOrganization(
-        organization.getId(), additionalUserDirectory.getId());
-
-    retrievedUserDirectorySummaries =
-        securityService.getUserDirectorySummariesForOrganization(organization.getId());
-
-    assertEquals(
-        "The correct number of user directory summaries was not retrieved",
-        2,
-        retrievedUserDirectorySummaries.size());
-
-    securityService.removeUserDirectoryFromOrganization(
-        organization.getId(), additionalUserDirectory.getId());
-
-    retrievedUserDirectorySummaries =
-        securityService.getUserDirectorySummariesForOrganization(organization.getId());
-
-    assertEquals(
-        "The correct number of user directory summaries was not retrieved",
-        1,
-        retrievedUserDirectorySummaries.size());
-
-    securityService.deleteOrganization(organization.getId());
-
-    try {
-      securityService.getOrganization(organization.getId());
-
-      fail(
-          "Retrieved the organization ("
-              + organization.getId()
-              + ") that should have been "
-              + "deleted");
-    } catch (OrganizationNotFoundException ignored) {
-    }
-  }
-
   /** Test the password reset functionality. */
   @Test
   public void passwordResetTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -1009,9 +873,9 @@ public class SecurityServiceTest {
   /** Test the functionality to remove a user from a group. */
   @Test
   public void removeUserFromGroupTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
@@ -1142,18 +1006,16 @@ public class SecurityServiceTest {
         SecurityService.ADMINISTRATOR_ROLE_CODE,
         retrievedRoleCodes.get(0));
 
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     Group group = getTestGroupDetails(userDirectory.getId());
 
     securityService.createGroup(group);
 
     securityService.addRoleToGroup(
-        userDirectory.getId(),
-        group.getName(),
-        SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE);
+        userDirectory.getId(), group.getName(), SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE);
 
     retrievedGroupRoles = securityService.getRolesForGroup(userDirectory.getId(), group.getName());
 
@@ -1162,7 +1024,7 @@ public class SecurityServiceTest {
 
     assertEquals(
         "The expected role code was not retrieved",
-        SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE,
+        SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE,
         retrievedGroupRoles.get(0).getRoleCode());
 
     retrievedRoleCodes =
@@ -1173,13 +1035,11 @@ public class SecurityServiceTest {
 
     assertEquals(
         "The expected role code was not retrieved",
-        SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE,
+        SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE,
         retrievedRoleCodes.get(0));
 
     securityService.removeRoleFromGroup(
-        userDirectory.getId(),
-        group.getName(),
-        SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE);
+        userDirectory.getId(), group.getName(), SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE);
 
     retrievedGroupRoles = securityService.getRolesForGroup(userDirectory.getId(), group.getName());
 
@@ -1187,36 +1047,158 @@ public class SecurityServiceTest {
         "The correct number of group roles was not retrieved", 0, retrievedGroupRoles.size());
   }
 
-  /** Test the user directory organization mapping functionality. */
+  /** Test the tenant functionality. */
   @Test
-  public void userDirectoryOrganizationMappingTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+  public void tenantTest() throws Exception {
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    List<Tenant> beforeRetrievedTenants = securityService.getTenants();
 
-    List<Organization> organizationsForUserDirectory =
-        securityService.getOrganizationsForUserDirectory(userDirectory.getId());
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
-    assertEquals(
-        "The correct number of organizations was not retrieved for the user directory",
-        1,
-        organizationsForUserDirectory.size());
+    Tenant retrievedTenant = securityService.getTenant(tenant.getId());
 
-    List<UUID> organizationIdsForUserDirectory =
-        securityService.getOrganizationIdsForUserDirectory(userDirectory.getId());
+    compareTenants(tenant, retrievedTenant);
+
+    String retrievedTenantName = securityService.getTenantName(tenant.getId());
 
     assertEquals(
-        "The correct number of organization IDs was not retrieved for the user directory",
-        1,
-        organizationIdsForUserDirectory.size());
+        "The correct tenant name was not retrieved", tenant.getName(), retrievedTenantName);
 
-    List<UserDirectory> userDirectoriesForOrganization =
-        securityService.getUserDirectoriesForOrganization(organization.getId());
+    List<Tenant> afterRetrievedTenants = securityService.getTenants();
 
     assertEquals(
-        "The correct number of user directories was not retrieved for the organization",
+        "The correct number of tenants was not retrieved",
+        beforeRetrievedTenants.size() + 1,
+        afterRetrievedTenants.size());
+
+    boolean foundTenant = false;
+
+    for (Tenant afterRetrievedTenant : afterRetrievedTenants) {
+      if (afterRetrievedTenant.getId().equals(tenant.getId())) {
+        compareTenants(tenant, afterRetrievedTenant);
+
+        foundTenant = true;
+
+        break;
+      }
+    }
+
+    if (!foundTenant) {
+      fail("Failed to find the tenant (" + tenant.getId() + ") in the list of " + "tenants");
+    }
+
+    Tenants filteredTenants = securityService.getTenants(tenant.getName(), null, null, null);
+
+    assertEquals(
+        "The correct number of filtered tenants was not retrieved",
         1,
-        userDirectoriesForOrganization.size());
+        filteredTenants.getTenants().size());
+
+    compareTenants(tenant, filteredTenants.getTenants().get(0));
+
+    filteredTenants = securityService.getTenants(tenant.getName(), SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered tenants was not retrieved",
+        1,
+        filteredTenants.getTenants().size());
+
+    compareTenants(tenant, filteredTenants.getTenants().get(0));
+
+    List<UserDirectorySummary> userDirectorySummaries =
+        securityService.getUserDirectorySummariesForTenant(tenant.getId());
+
+    assertEquals(
+        "The correct number of user directory summaries was not retrieved for the tenant",
+        1,
+        userDirectorySummaries.size());
+
+    assertEquals(
+        "The correct user directory summary was not retrieved",
+        userDirectory.getId(),
+        userDirectorySummaries.get(0).getId());
+
+    tenant.setName("Updated " + tenant.getName());
+
+    securityService.updateTenant(tenant);
+
+    retrievedTenant = securityService.getTenant(tenant.getId());
+
+    compareTenants(tenant, retrievedTenant);
+
+    UserDirectory additionalUserDirectory = getTestUserDirectoryDetails();
+
+    securityService.createUserDirectory(additionalUserDirectory);
+
+    List<UserDirectorySummary> retrievedUserDirectorySummaries =
+        securityService.getUserDirectorySummariesForTenant(tenant.getId());
+
+    assertEquals(
+        "The correct number of user directory summaries was not retrieved",
+        1,
+        retrievedUserDirectorySummaries.size());
+
+    securityService.addUserDirectoryToTenant(tenant.getId(), additionalUserDirectory.getId());
+
+    retrievedUserDirectorySummaries =
+        securityService.getUserDirectorySummariesForTenant(tenant.getId());
+
+    assertEquals(
+        "The correct number of user directory summaries was not retrieved",
+        2,
+        retrievedUserDirectorySummaries.size());
+
+    securityService.removeUserDirectoryFromTenant(tenant.getId(), additionalUserDirectory.getId());
+
+    retrievedUserDirectorySummaries =
+        securityService.getUserDirectorySummariesForTenant(tenant.getId());
+
+    assertEquals(
+        "The correct number of user directory summaries was not retrieved",
+        1,
+        retrievedUserDirectorySummaries.size());
+
+    securityService.deleteTenant(tenant.getId());
+
+    try {
+      securityService.getTenant(tenant.getId());
+
+      fail("Retrieved the tenant (" + tenant.getId() + ") that should have been " + "deleted");
+    } catch (TenantNotFoundException ignored) {
+    }
+  }
+
+  /** Test the user directory tenant mapping functionality. */
+  @Test
+  public void userDirectoryTenantMappingTest() throws Exception {
+    Tenant tenant = getTestTenantDetails();
+
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
+
+    List<Tenant> tenantsForUserDirectory =
+        securityService.getTenantsForUserDirectory(userDirectory.getId());
+
+    assertEquals(
+        "The correct number of tenants was not retrieved for the user directory",
+        1,
+        tenantsForUserDirectory.size());
+
+    List<UUID> tenantIdsForUserDirectory =
+        securityService.getTenantIdsForUserDirectory(userDirectory.getId());
+
+    assertEquals(
+        "The correct number of tenant IDs was not retrieved for the user directory",
+        1,
+        tenantIdsForUserDirectory.size());
+
+    List<UserDirectory> userDirectoriesForTenant =
+        securityService.getUserDirectoriesForTenant(tenant.getId());
+
+    assertEquals(
+        "The correct number of user directories was not retrieved for the tenant",
+        1,
+        userDirectoriesForTenant.size());
   }
 
   /** Test the user directory functionality. */
@@ -1269,7 +1251,7 @@ public class SecurityServiceTest {
           "Failed to find the user directory ("
               + userDirectory.getId()
               + ") in the list of "
-              + "organizations");
+              + "tenants");
     }
 
     UserDirectories filteredUserDirectories =
@@ -1317,9 +1299,9 @@ public class SecurityServiceTest {
   /** Test the user password history functionality. */
   @Test(expected = digital.inception.security.ExistingPasswordException.class)
   public void userPasswordHistoryTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -1334,9 +1316,9 @@ public class SecurityServiceTest {
   /** Test the user functionality. */
   @Test
   public void userTest() throws Exception {
-    Organization organization = getTestOrganizationDetails();
+    Tenant tenant = getTestTenantDetails();
 
-    UserDirectory userDirectory = securityService.createOrganization(organization, true);
+    UserDirectory userDirectory = securityService.createTenant(tenant, true);
 
     User user = getTestUserDetails(userDirectory.getId());
 
@@ -1452,15 +1434,11 @@ public class SecurityServiceTest {
         group2.getUserDirectoryId());
   }
 
-  private void compareOrganizations(Organization organization1, Organization organization2) {
+  private void compareTenants(Tenant tenant1, Tenant tenant2) {
     assertEquals(
-        "The ID values for the two organizations do not match",
-        organization1.getId(),
-        organization2.getId());
+        "The ID values for the two tenants do not match", tenant1.getId(), tenant2.getId());
     assertEquals(
-        "The name values for the two organizations do not match",
-        organization1.getName(),
-        organization2.getName());
+        "The name values for the two tenants do not match", tenant1.getName(), tenant2.getName());
   }
 
   private void compareUserDirectories(UserDirectory userDirectory1, UserDirectory userDirectory2) {

@@ -141,7 +141,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void addMemberToGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -249,7 +249,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void addRoleToGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -318,20 +318,19 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Add the user directory to the organization.
+   * Add the user directory to the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @param organizationUserDirectory the organization user directory
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantUserDirectory the tenant user directory
    */
   @Operation(
-      summary = "Add the user directory to the organization",
-      description = "Add the user directory to the organization")
+      summary = "Add the user directory to the tenant",
+      description = "Add the user directory to the tenant")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "204",
-            description = "The user directory was successfully added to the organization"),
+            description = "The user directory was successfully added to the tenant"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -341,14 +340,14 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The organization or user directory could not be found",
+            description = "The tenant or user directory could not be found",
             content =
                 @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "409",
-            description = "The organization user directory already exists",
+            description = "The tenant user directory already exists",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -363,57 +362,55 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
-      value = "/organizations/{organizationId}/user-directories",
+      value = "/tenants/{tenantId}/user-directories",
       method = RequestMethod.POST,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void addUserDirectoryToOrganization(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+  public void addUserDirectoryToTenant(
       @Parameter(
-              name = "organizationId",
+              name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
               required = true)
           @PathVariable
-          UUID organizationId,
+          UUID tenantId,
       @Parameter(
-              name = "organizationUserDirectory",
-              description = "The organization user directory",
+              name = "tenantUserDirectory",
+              description = "The tenant user directory",
               required = true)
           @RequestBody
-          OrganizationUserDirectory organizationUserDirectory)
-      throws InvalidArgumentException, OrganizationNotFoundException,
-          UserDirectoryNotFoundException, ExistingOrganizationUserDirectoryException,
-          SecurityServiceException {
+          TenantUserDirectory tenantUserDirectory)
+      throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
+          ExistingTenantUserDirectoryException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    if (organizationUserDirectory == null) {
-      throw new InvalidArgumentException("organizationUserDirectory");
+    if (tenantUserDirectory == null) {
+      throw new InvalidArgumentException("tenantUserDirectory");
     }
 
-    if (!organizationId.equals(organizationUserDirectory.getOrganizationId())) {
-      throw new InvalidArgumentException("organizationUserDirectory");
+    if (!tenantId.equals(tenantUserDirectory.getTenantId())) {
+      throw new InvalidArgumentException("tenantUserDirectory");
     }
 
-    Set<ConstraintViolation<OrganizationUserDirectory>> constraintViolations =
-        validator.validate(organizationUserDirectory);
+    Set<ConstraintViolation<TenantUserDirectory>> constraintViolations =
+        validator.validate(tenantUserDirectory);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(
-          "organizationUserDirectory", ValidationError.toValidationErrors(constraintViolations));
+          "tenantUserDirectory", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    if (!organizationUserDirectory.getOrganizationId().equals(organizationId)) {
-      throw new InvalidArgumentException("organizationId");
+    if (!tenantUserDirectory.getTenantId().equals(tenantId)) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    securityService.addUserDirectoryToOrganization(
-        organizationId, organizationUserDirectory.getUserDirectoryId());
+    securityService.addUserDirectoryToTenant(tenantId, tenantUserDirectory.getUserDirectoryId());
   }
 
   /**
@@ -461,7 +458,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
   public void adminChangePassword(
       @Parameter(
               name = "userDirectoryId",
@@ -631,7 +628,7 @@ public class SecurityRestController extends SecureRestController {
       }
 
       if (hasRole(authentication, "Administrator")
-          || hasAccessToFunction(authentication, "Security.OrganizationAdministration")
+          || hasAccessToFunction(authentication, "Security.TenantAdministration")
           || hasAccessToFunction(authentication, "Security.UserAdministration")
           || hasAccessToFunction(authentication, "Security.ResetUserPassword")) {
         securityService.adminChangePassword(
@@ -711,7 +708,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void createGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -754,17 +751,15 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Create the new organization.
+   * Create the new tenant.
    *
-   * @param organization the organization
-   * @param createUserDirectory should a new internal user directory be created for the organization
+   * @param tenant the tenant
+   * @param createUserDirectory should a new internal user directory be created for the tenant
    */
-  @Operation(summary = "Create the organization", description = "Create the organization")
+  @Operation(summary = "Create the tenant", description = "Create the tenant")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The organization was created successfully"),
+        @ApiResponse(responseCode = "204", description = "The tenant was created successfully"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -774,7 +769,7 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "409",
-            description = "An organization with the specified ID or name already exists",
+            description = "An tenant with the specified ID or name already exists",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -788,36 +783,31 @@ public class SecurityRestController extends SecureRestController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = RestControllerError.class)))
       })
-  @RequestMapping(
-      value = "/organizations",
-      method = RequestMethod.POST,
-      produces = "application/json")
+  @RequestMapping(value = "/tenants", method = RequestMethod.POST, produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void createOrganization(
-      @Parameter(name = "organization", description = "The organization", required = true)
-          @RequestBody
-          Organization organization,
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+  public void createTenant(
+      @Parameter(name = "tenant", description = "The tenant", required = true) @RequestBody
+          Tenant tenant,
       @Parameter(
               name = "createUserDirectory",
-              description = "Should a new internal user directory be created for the organization")
+              description = "Should a new internal user directory be created for the tenant")
           @RequestParam(value = "createUserDirectory", required = false)
           Boolean createUserDirectory)
-      throws InvalidArgumentException, DuplicateOrganizationException, SecurityServiceException {
-    if (organization == null) {
-      throw new InvalidArgumentException("organization");
+      throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException {
+    if (tenant == null) {
+      throw new InvalidArgumentException("tenant");
     }
 
-    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(
-          "organization", ValidationError.toValidationErrors(constraintViolations));
+          "tenant", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    securityService.createOrganization(
-        organization, (createUserDirectory != null) && createUserDirectory);
+    securityService.createTenant(tenant, (createUserDirectory != null) && createUserDirectory);
   }
 
   /**
@@ -869,7 +859,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void createUser(
       @Parameter(
               name = "userDirectoryId",
@@ -1024,7 +1014,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void deleteGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1060,17 +1050,14 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Delete the organization.
+   * Delete the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    */
-  @Operation(summary = "Delete the organization", description = "Delete the organization")
+  @Operation(summary = "Delete the tenant", description = "Delete the tenant")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The organization was deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "The tenant was deleted successfully"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -1080,7 +1067,7 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The organization could not be found",
+            description = "The tenant could not be found",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -1095,26 +1082,26 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
-      value = "/organizations/{organizationId}",
+      value = "/tenants/{tenantId}",
       method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void deleteOrganization(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+  public void deleteTenant(
       @Parameter(
-              name = "organizationId",
+              name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
               required = true)
           @PathVariable
-          UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+          UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    securityService.deleteOrganization(organizationId);
+    securityService.deleteTenant(tenantId);
   }
 
   /**
@@ -1157,7 +1144,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void deleteUser(
       @Parameter(
               name = "userDirectoryId",
@@ -1291,7 +1278,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public Group getGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1366,7 +1353,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public List<String> getGroupNames(
       @Parameter(
               name = "userDirectoryId",
@@ -1438,7 +1425,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
   public List<String> getGroupNamesForUser(
       @Parameter(
               name = "userDirectoryId",
@@ -1517,7 +1504,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public Groups getGroups(
       @Parameter(
               name = "userDirectoryId",
@@ -1599,7 +1586,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public GroupMembers getMembersForGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1650,246 +1637,6 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the organization
-   */
-  @Operation(summary = "Retrieve the organization", description = "Retrieve the organization")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The organization could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(
-      value = "/organizations/{organizationId}",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public Organization getOrganization(
-      @Parameter(
-              name = "organizationId",
-              description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
-              required = true)
-          @PathVariable
-          UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
-    }
-
-    return securityService.getOrganization(organizationId);
-  }
-
-  /**
-   * Retrieve the name of the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the name of the organization
-   */
-  @Operation(
-      summary = "Retrieve the name of organization",
-      description = "Retrieve the name of the organization")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The organization could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(
-      value = "/organizations/{organizationId}/name",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public String getOrganizationName(
-      @Parameter(
-              name = "organizationId",
-              description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
-              required = true)
-          @PathVariable
-          UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
-    }
-
-    return RestUtil.quote(securityService.getOrganizationName(organizationId));
-  }
-
-  /**
-   * Retrieve the organizations.
-   *
-   * @param filter the optional filter to apply to the organizations
-   * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the organizations
-   */
-  @Operation(summary = "Retrieve the organizations", description = "Retrieve the organizations")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(
-      value = "/organizations",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public Organizations getOrganizations(
-      @Parameter(name = "filter", description = "The optional filter to apply to the organizations")
-          @RequestParam(value = "filter", required = false)
-          String filter,
-      @Parameter(
-              name = "sortDirection",
-              description = "The optional sort direction to apply to the organizations")
-          @RequestParam(value = "sortDirection", required = false)
-          SortDirection sortDirection,
-      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
-          Integer pageIndex,
-      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
-          Integer pageSize)
-      throws SecurityServiceException {
-    return securityService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
-  }
-
-  /**
-   * Retrieve the organizations the user directory is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @return the organizations the user directory is associated with
-   */
-  @Operation(
-      summary = "Retrieve the organizations the user directory is associated with",
-      description = "Retrieve the organizations the user directory is associated with")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid argument",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The user directory could not be found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class))),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(
-      value = "/user-directories/{userDirectoryId}/organizations",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  public ResponseEntity<List<Organization>> getOrganizationsForUserDirectory(
-      @Parameter(
-              name = "userDirectoryId",
-              description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
-              required = true)
-          @PathVariable
-          UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!authentication.isAuthenticated()) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
-    List<Organization> organizations =
-        securityService.getOrganizationsForUserDirectory(userDirectoryId);
-
-    return new ResponseEntity<>(organizations, HttpStatus.OK);
-  }
-
-  /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -1932,7 +1679,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public List<String> getRoleCodesForGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -1988,7 +1735,7 @@ public class SecurityRestController extends SecureRestController {
   @RequestMapping(value = "/roles", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public List<Role> getRoles() throws SecurityServiceException {
     return securityService.getRoles();
   }
@@ -2036,7 +1783,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public List<GroupRole> getRolesForGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -2069,6 +1816,240 @@ public class SecurityRestController extends SecureRestController {
     }
 
     return securityService.getRolesForGroup(userDirectoryId, groupName);
+  }
+
+  /**
+   * Retrieve the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the tenant
+   */
+  @Operation(summary = "Retrieve the tenant", description = "Retrieve the tenant")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The tenant could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/tenants/{tenantId}",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+  public Tenant getTenant(
+      @Parameter(
+              name = "tenantId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+              required = true)
+          @PathVariable
+          UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    return securityService.getTenant(tenantId);
+  }
+
+  /**
+   * Retrieve the name of the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the name of the tenant
+   */
+  @Operation(
+      summary = "Retrieve the name of tenant",
+      description = "Retrieve the name of the tenant")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The tenant could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/tenants/{tenantId}/name",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+  public String getTenantName(
+      @Parameter(
+              name = "tenantId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+              required = true)
+          @PathVariable
+          UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    return RestUtil.quote(securityService.getTenantName(tenantId));
+  }
+
+  /**
+   * Retrieve the tenants.
+   *
+   * @param filter the optional filter to apply to the tenants
+   * @param sortDirection the optional sort direction to apply to the tenants
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the tenants
+   */
+  @Operation(summary = "Retrieve the tenants", description = "Retrieve the tenants")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(value = "/tenants", method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  @PreAuthorize(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+  public Tenants getTenants(
+      @Parameter(name = "filter", description = "The optional filter to apply to the tenants")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the tenants")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false)
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+          @RequestParam(value = "pageSize", required = false)
+          Integer pageSize)
+      throws SecurityServiceException {
+    return securityService.getTenants(filter, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the tenants the user directory is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @return the tenants the user directory is associated with
+   */
+  @Operation(
+      summary = "Retrieve the tenants the user directory is associated with",
+      description = "Retrieve the tenants the user directory is associated with")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The user directory could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/user-directories/{userDirectoryId}/tenants",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  public ResponseEntity<List<Tenant>> getTenantsForUserDirectory(
+      @Parameter(
+              name = "userDirectoryId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+              required = true)
+          @PathVariable
+          UUID userDirectoryId)
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!authentication.isAuthenticated()) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
+    }
+
+    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
+    }
+
+    List<Tenant> tenants = securityService.getTenantsForUserDirectory(userDirectoryId);
+
+    return new ResponseEntity<>(tenants, HttpStatus.OK);
   }
 
   /**
@@ -2112,7 +2093,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
   public User getUser(
       @Parameter(
               name = "userDirectoryId",
@@ -2207,15 +2188,14 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the user directories the organization is associated with.
+   * Retrieve the user directories the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the user directories the organization is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the user directories the tenant is associated with
    */
   @Operation(
-      summary = "Retrieve the user directories the organization is associated with",
-      description = "Retrieve the user directories the organization is associated with")
+      summary = "Retrieve the user directories the tenant is associated with",
+      description = "Retrieve the user directories the tenant is associated with")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -2228,7 +2208,7 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The organization could not be found",
+            description = "The tenant could not be found",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -2243,32 +2223,31 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
-      value = "/organizations/{organizationId}/user-directories",
+      value = "/tenants/{tenantId}/user-directories",
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
-  public ResponseEntity<List<UserDirectory>> getUserDirectoriesForOrganization(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+  public ResponseEntity<List<UserDirectory>> getUserDirectoriesForTenant(
       @Parameter(
-              name = "organizationId",
+              name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
               required = true)
           @PathVariable
-          UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
+          UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    List<UserDirectory> userDirectories =
-        securityService.getUserDirectoriesForOrganization(organizationId);
+    List<UserDirectory> userDirectories = securityService.getUserDirectoriesForTenant(tenantId);
 
     if (hasRole(authentication, "Administrator")
-        || hasAccessToFunction(authentication, "Security.OrganizationAdministration")) {
+        || hasAccessToFunction(authentication, "Security.TenantAdministration")) {
       return new ResponseEntity<>(userDirectories, HttpStatus.OK);
     } else {
       List<UserDirectory> filteredUserDirectories = new ArrayList<>();
@@ -2522,17 +2501,14 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the summaries for the user directories the organization is associated with.
+   * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the summaries for the user directories the organization is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the summaries for the user directories the tenant is associated with
    */
   @Operation(
-      summary =
-          "Retrieve the summaries for the user directories the organization is associated with",
-      description =
-          "Retrieve the summaries for the user directories the organization is associated with")
+      summary = "Retrieve the summaries for the user directories the tenant is associated with",
+      description = "Retrieve the summaries for the user directories the tenant is associated with")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -2545,7 +2521,7 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The organization could not be found",
+            description = "The tenant could not be found",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -2560,32 +2536,32 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
-      value = "/organizations/{organizationId}/user-directory-summaries",
+      value = "/tenants/{tenantId}/user-directory-summaries",
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.UserGroups')")
-  public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummariesForOrganization(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.UserGroups')")
+  public ResponseEntity<List<UserDirectorySummary>> getUserDirectorySummariesForTenant(
       @Parameter(
-              name = "organizationId",
+              name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
               required = true)
           @PathVariable
-          UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
+          UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
     List<UserDirectorySummary> userDirectorySummaries =
-        securityService.getUserDirectorySummariesForOrganization(organizationId);
+        securityService.getUserDirectorySummariesForTenant(tenantId);
 
     if (hasRole(authentication, "Administrator")
-        || hasAccessToFunction(authentication, "Security.OrganizationAdministration")) {
+        || hasAccessToFunction(authentication, "Security.TenantAdministration")) {
       return new ResponseEntity<>(userDirectorySummaries, HttpStatus.OK);
     } else {
       List<UserDirectorySummary> filteredUserDirectorySummaries = new ArrayList<>();
@@ -2741,7 +2717,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
   public String getUserName(
       @Parameter(
               name = "userDirectoryId",
@@ -2821,7 +2797,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration') or hasAuthority('FUNCTION_Security.ResetUserPassword')")
   public Users getUsers(
       @Parameter(
               name = "userDirectoryId",
@@ -2912,7 +2888,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void removeMemberFromGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -3009,7 +2985,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void removeRoleFromGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -3067,21 +3043,20 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Remove the user directory from the organization.
+   * Remove the user directory from the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    */
   @Operation(
-      summary = "Remove the user directory from the organization",
-      description = "Remove the user directory from the organization")
+      summary = "Remove the user directory from the tenant",
+      description = "Remove the user directory from the tenant")
   @ApiResponses(
       value = {
         @ApiResponse(
             responseCode = "204",
-            description = "The user directory was successfully removed from the organization"),
+            description = "The user directory was successfully removed from the tenant"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3091,7 +3066,7 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The organization or organization user directory could not be found",
+            description = "The tenant or tenant user directory could not be found",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -3106,20 +3081,20 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
-      value = "/organizations/{organizationId}/user-directories/{userDirectoryId}",
+      value = "/tenants/{tenantId}/user-directories/{userDirectoryId}",
       method = RequestMethod.DELETE,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void removeUserDirectoryFromOrganization(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+  public void removeUserDirectoryFromTenant(
       @Parameter(
-              name = "organizationId",
+              name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
               required = true)
           @PathVariable
-          UUID organizationId,
+          UUID tenantId,
       @Parameter(
               name = "userDirectoryId",
               description =
@@ -3127,19 +3102,19 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           UUID userDirectoryId)
-      throws InvalidArgumentException, OrganizationNotFoundException,
-          OrganizationUserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException,
+          TenantUserDirectoryNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    securityService.removeUserDirectoryFromOrganization(organizationId, userDirectoryId);
+    securityService.removeUserDirectoryFromTenant(tenantId, userDirectoryId);
   }
 
   /**
@@ -3247,7 +3222,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.GroupAdministration')")
   public void updateGroup(
       @Parameter(
               name = "userDirectoryId",
@@ -3300,18 +3275,15 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Update the organization.
+   * Update the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @param organization the organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenant the tenant
    */
-  @Operation(summary = "Update the organization", description = "Update the organization")
+  @Operation(summary = "Update the tenant", description = "Update the tenant")
   @ApiResponses(
       value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "The organization was updated successfully"),
+        @ApiResponse(responseCode = "204", description = "The tenant was updated successfully"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",
@@ -3321,7 +3293,7 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "404",
-            description = "The organization could not be found",
+            description = "The tenant could not be found",
             content =
                 @Content(
                     mediaType = "application/json",
@@ -3336,46 +3308,45 @@ public class SecurityRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
-      value = "/organizations/{organizationId}",
+      value = "/tenants/{tenantId}",
       method = RequestMethod.PUT,
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration')")
-  public void updateOrganization(
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+  public void updateTenant(
       @Parameter(
-              name = "organizationId",
+              name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
               required = true)
           @PathVariable
-          UUID organizationId,
-      @Parameter(name = "organization", description = "The organization", required = true)
-          @RequestBody
-          Organization organization)
-      throws InvalidArgumentException, OrganizationNotFoundException, SecurityServiceException {
+          UUID tenantId,
+      @Parameter(name = "tenant", description = "The tenant", required = true) @RequestBody
+          Tenant tenant)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    if (organization == null) {
-      throw new InvalidArgumentException("organization");
+    if (tenant == null) {
+      throw new InvalidArgumentException("tenant");
     }
 
-    if (!organization.getId().equals(organizationId)) {
-      throw new InvalidArgumentException("organizationId");
+    if (!tenant.getId().equals(tenantId)) {
+      throw new InvalidArgumentException("tenantId");
     }
 
-    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
 
     if (!constraintViolations.isEmpty()) {
       throw new InvalidArgumentException(
-          "organization", ValidationError.toValidationErrors(constraintViolations));
+          "tenant", ValidationError.toValidationErrors(constraintViolations));
     }
 
-    securityService.updateOrganization(organization);
+    securityService.updateTenant(tenant);
   }
 
   /**
@@ -3421,7 +3392,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.OrganizationAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public void updateUser(
       @Parameter(
               name = "userDirectoryId",
@@ -3583,14 +3554,12 @@ public class SecurityRestController extends SecureRestController {
 
       List<UUID> userDirectoryIdsForUser = new ArrayList<>();
 
-      List<UUID> organizationIds =
-          getUUIDValuesForAuthoritiesWithPrefix(authentication, "ORGANIZATION_");
+      List<UUID> tenantIds = getUUIDValuesForAuthoritiesWithPrefix(authentication, "TENANT_");
 
-      for (UUID organizationId : organizationIds) {
-        var userDirectoryIdsForOrganization =
-            securityService.getUserDirectoryIdsForOrganization(organizationId);
+      for (UUID tenantId : tenantIds) {
+        var userDirectoryIdsForTenant = securityService.getUserDirectoryIdsForTenant(tenantId);
 
-        userDirectoryIdsForUser.addAll(userDirectoryIdsForOrganization);
+        userDirectoryIdsForUser.addAll(userDirectoryIdsForTenant);
       }
 
       return userDirectoryIdsForUser.stream().anyMatch(userDirectoryId::equals);

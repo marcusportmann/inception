@@ -35,10 +35,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
   /** The authorities granted to the user. */
-  private List<GrantedAuthority> authorities;
+  private final List<GrantedAuthority> authorities;
 
   /** The user. */
-  private User user;
+  private final User user;
 
   /**
    * Constructs a new <code>UserDetails</code>.
@@ -46,17 +46,17 @@ public class UserDetails implements org.springframework.security.core.userdetail
    * @param user the user
    * @param roleCodes the codes for the roles that the user has been assigned
    * @param functionCodes the function codes for the user
-   * @param organizationIds the Universally Unique Identifiers (UUIDs) uniquely identifying the
-   *     organizations the user is associated with
+   * @param tenantIds the Universally Unique Identifiers (UUIDs) uniquely identifying the tenants
+   *     the user is associated with
    * @param userDirectoryIds the list of Universally Unique Identifiers (UUIDs) used to uniquely
    *     identify the user directories the user is associated with as a result of being associated
-   *     with one or more organizations
+   *     with one or more tenants
    */
   UserDetails(
       User user,
       List<String> roleCodes,
       List<String> functionCodes,
-      List<UUID> organizationIds,
+      List<UUID> tenantIds,
       List<UUID> userDirectoryIds) {
     this.user = user;
 

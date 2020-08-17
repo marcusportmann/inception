@@ -97,11 +97,12 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Mail Templates', ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@mail_edit_mail_template_back_navigation:Mail Templates`,
+      ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'Edit Mail Template';
+    return $localize`:@@mail_edit_mail_template_title:Edit Mail Template`
   }
 
   cancel(): void {

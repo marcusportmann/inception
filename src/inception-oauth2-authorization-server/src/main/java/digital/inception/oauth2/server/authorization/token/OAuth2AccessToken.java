@@ -47,17 +47,17 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   /** The name of the claim that provides the name of the user. */
   public static final String NAME_CLAIM = "name";
 
-  /**
-   * The name of the organizations claim that provides the Universally Unique Identifiers (UUIDs)
-   * uniquely identifying the organizations the user is associated with.
-   */
-  public static final String ORGANIZATIONS_CLAIM = "organizations";
-
   /** The name of the roles claim that provides the roles assigned to the user. */
   public static final String ROLES_CLAIM = "roles";
 
   /** The name of the scope claim. */
   public static final String SCOPE_CLAIM = "scope";
+
+  /**
+   * The name of the tenants claim that provides the Universally Unique Identifiers (UUIDs) uniquely
+   * identifying the tenants the user is associated with.
+   */
+  public static final String TENANTS_CLAIM = "tenants";
 
   /**
    * The name of the user directory ID claim that provides the Universally Unique Identifier (UUID)
@@ -98,8 +98,8 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
    * @param user the User the token is being issued for
    * @param roleCodes the role codes for the user the token is being issued for
    * @param functionCodes the function codes for the user the token is being issued for
-   * @param organizationIds the IDs identifying the organizations that the user the token is being
-   *     issued for is associated with
+   * @param tenantIds the IDs identifying the tenants that the user the token is being issued for is
+   *     associated with
    * @param scopes the optional scope(s) associated to the token
    * @param issuer the optional issuer of the token, which can be <code>null</code>
    * @param validFor the number of seconds the token should be valid for
@@ -109,7 +109,7 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
       User user,
       List<String> roleCodes,
       List<String> functionCodes,
-      List<UUID> organizationIds,
+      List<UUID> tenantIds,
       Set<String> scopes,
       String issuer,
       int validFor,
@@ -143,8 +143,8 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
       jwtClaimsSetBuilder.expirationTime(Date.from(expiresAt));
 
       jwtClaimsSetBuilder.claim(
-          ORGANIZATIONS_CLAIM,
-          Arrays.stream(organizationIds.toArray(new UUID[0]))
+          TENANTS_CLAIM,
+          Arrays.stream(tenantIds.toArray(new UUID[0]))
               .map(Object::toString)
               .toArray(String[]::new));
 

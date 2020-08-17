@@ -63,7 +63,7 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
   }
 
   get title(): string {
-    return 'Code Categories';
+    return $localize`:@@codes_code_categories_title:Code Categories`
   }
 
   applyFilter(filterValue: string): void {
@@ -79,7 +79,7 @@ export class CodeCategoriesComponent extends AdminContainerView implements After
 
   deleteCodeCategory(codeCategoryId: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the code category?'
+      message: $localize`:@@codes_code_categories_confirm_delete_code_category:Are you sure you want to delete the code category?`
     });
 
     dialogRef.afterClosed()

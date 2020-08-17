@@ -68,11 +68,12 @@ export class NewCodeCategoryComponent extends AdminContainerView implements Afte
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Code Categories', ['..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@codes_new_code_category_back_navigation:Code Categories`,
+      ['..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'New Code Category';
+    return $localize`:@@codes_new_code_category_title:New Code Category`
   }
 
   cancel(): void {

@@ -110,11 +110,12 @@ export class EditJobComponent extends AdminContainerView implements AfterViewIni
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Jobs', ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@scheduler_edit_job_back_navigation:Jobs`,
+      ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'Edit Job';
+    return $localize`:@@scheduler_edit_job_title:Edit Job`
   }
 
   cancel(): void {

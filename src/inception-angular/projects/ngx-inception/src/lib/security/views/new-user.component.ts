@@ -115,14 +115,15 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Users', ['../..'], {
+    return new BackNavigation($localize`:@@security_new_user_back_navigation:Users`,
+      ['../..'], {
       relativeTo: this.activatedRoute,
       state: {userDirectoryId: this.userDirectoryId}
     });
   }
 
   get title(): string {
-    return 'New User';
+    return $localize`:@@security_new_user_title:New User`
   }
 
   cancel(): void {

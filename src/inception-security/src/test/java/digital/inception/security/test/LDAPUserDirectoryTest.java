@@ -216,7 +216,7 @@
 //      securityService.addRoleToGroup(
 //          SAMPLE_LDAP_USER_DIRECTORY_ID,
 //          group.getName(),
-//          SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE);
+//          SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE);
 //
 //      List<GroupRole> retrievedGroupRoles =
 //          securityService.getRolesForGroup(SAMPLE_LDAP_USER_DIRECTORY_ID, group.getName());
@@ -226,7 +226,7 @@
 //
 //      assertEquals(
 //          "The expected role code was not retrieved",
-//          SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE,
+//          SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE,
 //          retrievedGroupRoles.get(0).getRoleCode());
 //
 //      List<String> retrievedRoleCodes =
@@ -237,7 +237,7 @@
 //
 //      assertEquals(
 //          "The expected role code was not retrieved",
-//          SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE,
+//          SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE,
 //          retrievedRoleCodes.get(0));
 //
 //      try {
@@ -441,7 +441,7 @@
 //
 //        assertEquals(
 //            "The expected role code was not retrieved",
-//            SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE,
+//            SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE,
 //            retrievedRoleCodes.get(0));
 //
 //        securityService.removeMemberFromGroup(
@@ -473,7 +473,7 @@
 //      securityService.removeRoleFromGroup(
 //          SAMPLE_LDAP_USER_DIRECTORY_ID,
 //          group.getName(),
-//          SecurityService.ORGANIZATION_ADMINISTRATOR_ROLE_CODE);
+//          SecurityService.TENANT_ADMINISTRATOR_ROLE_CODE);
 //
 //      retrievedGroupRoles =
 //          securityService.getRolesForGroup(SAMPLE_LDAP_USER_DIRECTORY_ID, group.getName());

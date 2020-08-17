@@ -58,10 +58,8 @@ import org.springframework.web.util.UriUtils;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class SecurityService implements ISecurityService, InitializingBean {
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the Administration organization.
-   */
-  public static final UUID ADMINISTRATION_ORGANIZATION_ID =
+  /** The Universally Unique Identifier (UUID) uniquely identifying the Administration tenant. */
+  public static final UUID ADMINISTRATION_TENANT_ID =
       UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /**
@@ -90,13 +88,13 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /** The code uniquely identifying the LDAP user directory type. */
   public static final String LDAP_USER_DIRECTORY_TYPE = "LDAPUserDirectory";
 
-  /** The code uniquely identifying the Organization Administrator role. */
-  public static final String ORGANIZATION_ADMINISTRATOR_ROLE_CODE = "OrganizationAdministrator";
-
   /** The code uniquely identifying the Password Resetter role. */
   public static final String PASSWORD_RESETTER_ROLE_CODE = "PasswordResetter";
 
-  /** The maximum number of filtered organizations. */
+  /** The code uniquely identifying the Tenant Administrator role. */
+  public static final String TENANT_ADMINISTRATOR_ROLE_CODE = "TenantAdministrator";
+
+  /** The maximum number of filtered tenants. */
   private static final int MAX_FILTERED_ORGANISATIONS = 100;
 
   /** The maximum number of filtered user directories. */
@@ -123,9 +121,6 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /** The Mail Service. */
   private final IMailService mailService;
 
-  /** The Organization Repository. */
-  private final OrganizationRepository organizationRepository;
-
   /** The Password Reset Repository. */
   private final PasswordResetRepository passwordResetRepository;
 
@@ -139,6 +134,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   private final RandomStringGenerator securityCodeGenerator =
       new RandomStringGenerator(
           20, new SecureRandom(), "1234567890ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx");
+
+  /** The Tenant Repository. */
+  private final TenantRepository tenantRepository;
 
   /** The User Directory Repository. */
   private final UserDirectoryRepository userDirectoryRepository;
@@ -162,7 +160,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @param mailService the Mail Service
    * @param functionRepository the Function Repository
    * @param groupRepository the Group Repository
-   * @param organizationRepository the Organization Repository
+   * @param tenantRepository the Tenant Repository
    * @param passwordResetRepository the Password Reset Repository
    * @param roleRepository the Role Repository
    * @param userDirectoryRepository the User Directory Repository
@@ -175,7 +173,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       IMailService mailService,
       FunctionRepository functionRepository,
       GroupRepository groupRepository,
-      OrganizationRepository organizationRepository,
+      TenantRepository tenantRepository,
       PasswordResetRepository passwordResetRepository,
       RoleRepository roleRepository,
       UserDirectoryRepository userDirectoryRepository,
@@ -186,7 +184,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     this.mailService = mailService;
     this.functionRepository = functionRepository;
     this.groupRepository = groupRepository;
-    this.organizationRepository = organizationRepository;
+    this.tenantRepository = tenantRepository;
     this.passwordResetRepository = passwordResetRepository;
     this.roleRepository = roleRepository;
     this.userDirectoryRepository = userDirectoryRepository;
@@ -242,43 +240,41 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Add the user directory to the organization.
+   * Add the user directory to the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    */
   @Override
   @Transactional
-  public void addUserDirectoryToOrganization(UUID organizationId, UUID userDirectoryId)
-      throws OrganizationNotFoundException, UserDirectoryNotFoundException,
-          ExistingOrganizationUserDirectoryException, SecurityServiceException {
+  public void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
+      throws TenantNotFoundException, UserDirectoryNotFoundException,
+          ExistingTenantUserDirectoryException, SecurityServiceException {
     try {
-      if (!organizationRepository.existsById(organizationId)) {
-        throw new OrganizationNotFoundException(organizationId);
+      if (!tenantRepository.existsById(tenantId)) {
+        throw new TenantNotFoundException(tenantId);
       }
 
       if (!userDirectoryRepository.existsById(userDirectoryId)) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
       }
 
-      if (organizationRepository.countOrganizationUserDirectory(organizationId, userDirectoryId)
-          > 0) {
-        throw new ExistingOrganizationUserDirectoryException(organizationId, userDirectoryId);
+      if (tenantRepository.countTenantUserDirectory(tenantId, userDirectoryId) > 0) {
+        throw new ExistingTenantUserDirectoryException(tenantId, userDirectoryId);
       }
 
-      organizationRepository.addUserDirectoryToOrganization(organizationId, userDirectoryId);
-    } catch (OrganizationNotFoundException
+      tenantRepository.addUserDirectoryToTenant(tenantId, userDirectoryId);
+    } catch (TenantNotFoundException
         | UserDirectoryNotFoundException
-        | ExistingOrganizationUserDirectoryException e) {
+        | ExistingTenantUserDirectoryException e) {
       throw e;
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to add the user directory ("
               + userDirectoryId
-              + ") to the organization ("
-              + organizationId
+              + ") to the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -533,36 +529,35 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Create the new organization.
+   * Create the new tenant.
    *
-   * @param organization the organization
-   * @param createUserDirectory should a new internal user directory be created for the organization
-   * @return the new internal user directory that was created for the organization or <code>null
+   * @param tenant the tenant
+   * @param createUserDirectory should a new internal user directory be created for the tenant
+   * @return the new internal user directory that was created for the tenant or <code>null
    * </code> if no user directory was created
    */
   @Override
   @Transactional
-  public UserDirectory createOrganization(Organization organization, boolean createUserDirectory)
-      throws DuplicateOrganizationException, SecurityServiceException {
+  public UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
+      throws DuplicateTenantException, SecurityServiceException {
     UserDirectory userDirectory = null;
 
     try {
-      if ((organization.getId() != null)
-          && organizationRepository.existsById(organization.getId())) {
-        throw new DuplicateOrganizationException(organization.getId());
+      if ((tenant.getId() != null) && tenantRepository.existsById(tenant.getId())) {
+        throw new DuplicateTenantException(tenant.getId());
       }
 
-      if (organizationRepository.existsByNameIgnoreCase(organization.getName())) {
-        throw new DuplicateOrganizationException(organization.getName());
+      if (tenantRepository.existsByNameIgnoreCase(tenant.getName())) {
+        throw new DuplicateTenantException(tenant.getName());
       }
 
       if (createUserDirectory) {
-        userDirectory = newInternalUserDirectoryForOrganization(organization);
+        userDirectory = newInternalUserDirectoryForTenant(tenant);
 
-        organization.linkUserDirectory(userDirectory);
+        tenant.linkUserDirectory(userDirectory);
       }
 
-      organizationRepository.saveAndFlush(organization);
+      tenantRepository.saveAndFlush(tenant);
 
       try {
         reloadUserDirectories();
@@ -571,11 +566,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
       }
 
       return userDirectory;
-    } catch (DuplicateOrganizationException e) {
+    } catch (DuplicateTenantException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to create the organization (" + organization.getId() + ")", e);
+      throw new SecurityServiceException("Failed to create the tenant (" + tenant.getId() + ")", e);
     }
   }
 
@@ -681,26 +675,23 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Delete the organization.
+   * Delete the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    */
   @Override
   @Transactional
-  public void deleteOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException {
+  public void deleteTenant(UUID tenantId) throws TenantNotFoundException, SecurityServiceException {
     try {
-      if (!organizationRepository.existsById(organizationId)) {
-        throw new OrganizationNotFoundException(organizationId);
+      if (!tenantRepository.existsById(tenantId)) {
+        throw new TenantNotFoundException(tenantId);
       }
 
-      organizationRepository.deleteById(organizationId);
-    } catch (OrganizationNotFoundException e) {
+      tenantRepository.deleteById(tenantId);
+    } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to delete the organization (" + organizationId + ")", e);
+      throw new SecurityServiceException("Failed to delete the tenant (" + tenantId + ")", e);
     }
   }
 
@@ -1011,199 +1002,6 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the organization
-   */
-  @Override
-  public Organization getOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException {
-    try {
-      Optional<Organization> organizationOptional = organizationRepository.findById(organizationId);
-
-      if (organizationOptional.isPresent()) {
-        return organizationOptional.get();
-      } else {
-        throw new OrganizationNotFoundException(organizationId);
-      }
-    } catch (OrganizationNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the organization (" + organizationId + ")", e);
-    }
-  }
-
-  /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the organizations the
-   * user directory is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the organizations the
-   *     user directory is associated with
-   */
-  @Override
-  public List<UUID> getOrganizationIdsForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
-    try {
-      if (!userDirectoryRepository.existsById(userDirectoryId)) {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-
-      return userDirectoryRepository.getOrganizationIdsById(userDirectoryId);
-    } catch (UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the IDs for the organizations for the user directory ("
-              + userDirectoryId
-              + ")",
-          e);
-    }
-  }
-
-  /**
-   * Retrieve the name of the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the name of the organization
-   */
-  @Override
-  public String getOrganizationName(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException {
-    try {
-      Optional<String> nameOptional = organizationRepository.getNameById(organizationId);
-
-      if (nameOptional.isPresent()) {
-        return nameOptional.get();
-      } else {
-        throw new OrganizationNotFoundException(organizationId);
-      }
-    } catch (OrganizationNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the name of the organization (" + organizationId + ")", e);
-    }
-  }
-
-  /**
-   * Retrieve the organizations.
-   *
-   * @return the organizations
-   */
-  @Override
-  public List<Organization> getOrganizations() throws SecurityServiceException {
-    try {
-      return organizationRepository.findAll();
-    } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to retrieve the organizations", e);
-    }
-  }
-
-  /**
-   * Retrieve the organizations.
-   *
-   * @param filter the optional filter to apply to the organizations
-   * @param sortDirection the optional sort direction to apply to the organizations
-   * @param pageIndex the optional page index
-   * @param pageSize the optional page size
-   * @return the organizations
-   */
-  @Override
-  public Organizations getOrganizations(
-      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException {
-    PageRequest pageRequest;
-
-    if ((pageIndex != null) && (pageSize != null)) {
-      pageRequest =
-          PageRequest.of(
-              pageIndex,
-              (pageSize > MAX_FILTERED_ORGANISATIONS) ? MAX_FILTERED_ORGANISATIONS : pageSize);
-    } else {
-      pageRequest = PageRequest.of(0, MAX_FILTERED_ORGANISATIONS);
-    }
-
-    try {
-      Page<Organization> organizationPage;
-
-      if (StringUtils.isEmpty(filter)) {
-        if (sortDirection == SortDirection.ASCENDING) {
-          organizationPage = organizationRepository.findAllByOrderByNameAsc(pageRequest);
-        } else {
-          organizationPage = organizationRepository.findAllByOrderByNameDesc(pageRequest);
-        }
-      } else {
-        if (sortDirection == SortDirection.ASCENDING) {
-          organizationPage =
-              organizationRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
-                  filter, pageRequest);
-        } else {
-          organizationPage =
-              organizationRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
-                  filter, pageRequest);
-        }
-      }
-
-      return new Organizations(
-          organizationPage.toList(),
-          organizationPage.getTotalElements(),
-          filter,
-          sortDirection,
-          pageIndex,
-          pageSize);
-    } catch (Throwable e) {
-      String message = "Failed to retrieve the organizations";
-
-      if (!StringUtils.isEmpty(filter)) {
-        message += String.format(" matching the filter \"%s\"", filter);
-      }
-
-      if ((pageIndex != null) && (pageSize != null)) {
-        message += " for the page " + pageIndex + " using the page size " + pageSize;
-      }
-
-      message += ": ";
-
-      message += e.getMessage();
-
-      throw new SecurityServiceException(message, e);
-    }
-  }
-
-  /**
-   * Retrieve the organizations the user directory is associated with.
-   *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @return the organizations the user directory is associated with
-   */
-  @Override
-  public List<Organization> getOrganizationsForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
-    try {
-      if (!userDirectoryRepository.existsById(userDirectoryId)) {
-        throw new UserDirectoryNotFoundException(userDirectoryId);
-      }
-
-      return organizationRepository.findAllByUserDirectoryId(userDirectoryId);
-    } catch (UserDirectoryNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to retrieve the organizations associated with the user directory ("
-              + userDirectoryId
-              + ")",
-          e);
-    }
-  }
-
-  /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
@@ -1275,6 +1073,193 @@ public class SecurityService implements ISecurityService, InitializingBean {
     }
 
     return userDirectory.getRolesForGroup(groupName);
+  }
+
+  /**
+   * Retrieve the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the tenant
+   */
+  @Override
+  public Tenant getTenant(UUID tenantId) throws TenantNotFoundException, SecurityServiceException {
+    try {
+      Optional<Tenant> tenantOptional = tenantRepository.findById(tenantId);
+
+      if (tenantOptional.isPresent()) {
+        return tenantOptional.get();
+      } else {
+        throw new TenantNotFoundException(tenantId);
+      }
+    } catch (TenantNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new SecurityServiceException("Failed to retrieve the tenant (" + tenantId + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user
+   * directory is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user
+   *     directory is associated with
+   */
+  @Override
+  public List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
+      throws UserDirectoryNotFoundException, SecurityServiceException {
+    try {
+      if (!userDirectoryRepository.existsById(userDirectoryId)) {
+        throw new UserDirectoryNotFoundException(userDirectoryId);
+      }
+
+      return userDirectoryRepository.getTenantIdsById(userDirectoryId);
+    } catch (UserDirectoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          "Failed to retrieve the IDs for the tenants for the user directory ("
+              + userDirectoryId
+              + ")",
+          e);
+    }
+  }
+
+  /**
+   * Retrieve the name of the tenant.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the name of the tenant
+   */
+  @Override
+  public String getTenantName(UUID tenantId)
+      throws TenantNotFoundException, SecurityServiceException {
+    try {
+      Optional<String> nameOptional = tenantRepository.getNameById(tenantId);
+
+      if (nameOptional.isPresent()) {
+        return nameOptional.get();
+      } else {
+        throw new TenantNotFoundException(tenantId);
+      }
+    } catch (TenantNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          "Failed to retrieve the name of the tenant (" + tenantId + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the tenants.
+   *
+   * @return the tenants
+   */
+  @Override
+  public List<Tenant> getTenants() throws SecurityServiceException {
+    try {
+      return tenantRepository.findAll();
+    } catch (Throwable e) {
+      throw new SecurityServiceException("Failed to retrieve the tenants", e);
+    }
+  }
+
+  /**
+   * Retrieve the tenants.
+   *
+   * @param filter the optional filter to apply to the tenants
+   * @param sortDirection the optional sort direction to apply to the tenants
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the tenants
+   */
+  @Override
+  public Tenants getTenants(
+      String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
+      throws SecurityServiceException {
+    PageRequest pageRequest;
+
+    if ((pageIndex != null) && (pageSize != null)) {
+      pageRequest =
+          PageRequest.of(
+              pageIndex,
+              (pageSize > MAX_FILTERED_ORGANISATIONS) ? MAX_FILTERED_ORGANISATIONS : pageSize);
+    } else {
+      pageRequest = PageRequest.of(0, MAX_FILTERED_ORGANISATIONS);
+    }
+
+    try {
+      Page<Tenant> tenantPage;
+
+      if (StringUtils.isEmpty(filter)) {
+        if (sortDirection == SortDirection.ASCENDING) {
+          tenantPage = tenantRepository.findAllByOrderByNameAsc(pageRequest);
+        } else {
+          tenantPage = tenantRepository.findAllByOrderByNameDesc(pageRequest);
+        }
+      } else {
+        if (sortDirection == SortDirection.ASCENDING) {
+          tenantPage =
+              tenantRepository.findByNameContainingIgnoreCaseOrderByNameAsc(filter, pageRequest);
+        } else {
+          tenantPage =
+              tenantRepository.findByNameContainingIgnoreCaseOrderByNameDesc(filter, pageRequest);
+        }
+      }
+
+      return new Tenants(
+          tenantPage.toList(),
+          tenantPage.getTotalElements(),
+          filter,
+          sortDirection,
+          pageIndex,
+          pageSize);
+    } catch (Throwable e) {
+      String message = "Failed to retrieve the tenants";
+
+      if (!StringUtils.isEmpty(filter)) {
+        message += String.format(" matching the filter \"%s\"", filter);
+      }
+
+      if ((pageIndex != null) && (pageSize != null)) {
+        message += " for the page " + pageIndex + " using the page size " + pageSize;
+      }
+
+      message += ": ";
+
+      message += e.getMessage();
+
+      throw new SecurityServiceException(message, e);
+    }
+  }
+
+  /**
+   * Retrieve the tenants the user directory is associated with.
+   *
+   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   *     directory
+   * @return the tenants the user directory is associated with
+   */
+  @Override
+  public List<Tenant> getTenantsForUserDirectory(UUID userDirectoryId)
+      throws UserDirectoryNotFoundException, SecurityServiceException {
+    try {
+      if (!userDirectoryRepository.existsById(userDirectoryId)) {
+        throw new UserDirectoryNotFoundException(userDirectoryId);
+      }
+
+      return tenantRepository.findAllByUserDirectoryId(userDirectoryId);
+    } catch (UserDirectoryNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new SecurityServiceException(
+          "Failed to retrieve the tenants associated with the user directory ("
+              + userDirectoryId
+              + ")",
+          e);
+    }
   }
 
   /**
@@ -1371,28 +1356,25 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the user directories the organization is associated with.
+   * Retrieve the user directories the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the user directories the organization is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the user directories the tenant is associated with
    */
   @Override
-  public List<UserDirectory> getUserDirectoriesForOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException {
+  public List<UserDirectory> getUserDirectoriesForTenant(UUID tenantId)
+      throws TenantNotFoundException, SecurityServiceException {
     try {
-      if (!organizationRepository.existsById(organizationId)) {
-        throw new OrganizationNotFoundException(organizationId);
+      if (!tenantRepository.existsById(tenantId)) {
+        throw new TenantNotFoundException(tenantId);
       }
 
-      return userDirectoryRepository.findAllByOrganizationId(organizationId);
-    } catch (OrganizationNotFoundException e) {
+      return userDirectoryRepository.findAllByTenantId(tenantId);
+    } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new SecurityServiceException(
-          "Failed to retrieve the user directories associated with the organization ("
-              + organizationId
-              + ")",
+          "Failed to retrieve the user directories associated with the tenant (" + tenantId + ")",
           e);
     }
   }
@@ -1487,28 +1469,27 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
-   * the organization is associated with.
+   * the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
-   *     the organization is associated with
+   *     the tenant is associated with
    */
   @Override
-  public List<UUID> getUserDirectoryIdsForOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException {
+  public List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
+      throws TenantNotFoundException, SecurityServiceException {
     try {
-      if (!organizationRepository.existsById(organizationId)) {
-        throw new OrganizationNotFoundException(organizationId);
+      if (!tenantRepository.existsById(tenantId)) {
+        throw new TenantNotFoundException(tenantId);
       }
 
-      return organizationRepository.getUserDirectoryIdsById(organizationId);
-    } catch (OrganizationNotFoundException e) {
+      return tenantRepository.getUserDirectoryIdsById(tenantId);
+    } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new SecurityServiceException(
-          "Failed to retrieve the IDs for the user directories associated with the organization ("
-              + organizationId
+          "Failed to retrieve the IDs for the user directories associated with the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -1517,7 +1498,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
    * the user is associated with. Every user is associated with a user directory, which is in turn
-   * associated with one or more organizations, which are in turn associated with one or more user
+   * associated with one or more tenants, which are in turn associated with one or more user
    * directories. The user is therefore associated indirectly with all these user directories.
    *
    * @param username the username identifying the user
@@ -1537,20 +1518,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
       }
 
       /*
-       * Retrieve the list of IDs for the organizations the user is associated with as a result
-       * of their user directory being associated with these organizations.
+       * Retrieve the list of IDs for the tenants the user is associated with as a result
+       * of their user directory being associated with these tenants.
        */
-      List<UUID> organizationIds = getOrganizationIdsForUserDirectory(userDirectoryId);
+      List<UUID> tenantIds = getTenantIdsForUserDirectory(userDirectoryId);
 
       /*
        * Retrieve the list of IDs for the user directories the user is associated with as a result
-       * of being associated with one or more organizations.
+       * of being associated with one or more tenants.
        */
-      for (var organizationId : organizationIds) {
-        // Retrieve the list of user directories associated with the organization
-        var userDirectoryIdsForOrganization = getUserDirectoryIdsForOrganization(organizationId);
+      for (var tenantId : tenantIds) {
+        // Retrieve the list of user directories associated with the tenant
+        var userDirectoryIdsForTenant = getUserDirectoryIdsForTenant(tenantId);
 
-        userDirectoryIdsForUser.addAll(userDirectoryIdsForOrganization);
+        userDirectoryIdsForUser.addAll(userDirectoryIdsForTenant);
       }
 
       return userDirectoryIdsForUser;
@@ -1654,28 +1635,27 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the summaries for the user directories the organization is associated with.
+   * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
-   * @return the summaries for the user directories the organization is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the summaries for the user directories the tenant is associated with
    */
   @Override
-  public List<UserDirectorySummary> getUserDirectorySummariesForOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, SecurityServiceException {
+  public List<UserDirectorySummary> getUserDirectorySummariesForTenant(UUID tenantId)
+      throws TenantNotFoundException, SecurityServiceException {
     try {
-      if (!organizationRepository.existsById(organizationId)) {
-        throw new OrganizationNotFoundException(organizationId);
+      if (!tenantRepository.existsById(tenantId)) {
+        throw new TenantNotFoundException(tenantId);
       }
 
-      return userDirectorySummaryRepository.findAllByOrganizationId(organizationId);
-    } catch (OrganizationNotFoundException e) {
+      return userDirectorySummaryRepository.findAllByTenantId(tenantId);
+    } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the summaries for the user "
-              + "directories associated with the organization ("
-              + organizationId
+              + "directories associated with the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -2046,37 +2026,35 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Remove the user directory from the organization.
+   * Remove the user directory from the tenant.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     organization
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    */
   @Override
   @Transactional
-  public void removeUserDirectoryFromOrganization(UUID organizationId, UUID userDirectoryId)
-      throws OrganizationNotFoundException, OrganizationUserDirectoryNotFoundException,
+  public void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
+      throws TenantNotFoundException, TenantUserDirectoryNotFoundException,
           SecurityServiceException {
     try {
-      if (!organizationRepository.existsById(organizationId)) {
-        throw new OrganizationNotFoundException(organizationId);
+      if (!tenantRepository.existsById(tenantId)) {
+        throw new TenantNotFoundException(tenantId);
       }
 
-      if (organizationRepository.countOrganizationUserDirectory(organizationId, userDirectoryId)
-          == 0) {
-        throw new OrganizationUserDirectoryNotFoundException(organizationId, userDirectoryId);
+      if (tenantRepository.countTenantUserDirectory(tenantId, userDirectoryId) == 0) {
+        throw new TenantUserDirectoryNotFoundException(tenantId, userDirectoryId);
       }
 
-      organizationRepository.removeUserDirectoryFromOrganization(organizationId, userDirectoryId);
-    } catch (OrganizationNotFoundException | OrganizationUserDirectoryNotFoundException e) {
+      tenantRepository.removeUserDirectoryFromTenant(tenantId, userDirectoryId);
+    } catch (TenantNotFoundException | TenantUserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to add the user directory ("
               + userDirectoryId
-              + ") to the organization ("
-              + organizationId
+              + ") to the tenant ("
+              + tenantId
               + ")",
           e);
     }
@@ -2193,25 +2171,23 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Update the organization.
+   * Update the tenant.
    *
-   * @param organization the organization
+   * @param tenant the tenant
    */
   @Override
   @Transactional
-  public void updateOrganization(Organization organization)
-      throws OrganizationNotFoundException, SecurityServiceException {
+  public void updateTenant(Tenant tenant) throws TenantNotFoundException, SecurityServiceException {
     try {
-      if (!organizationRepository.existsById(organization.getId())) {
-        throw new OrganizationNotFoundException(organization.getId());
+      if (!tenantRepository.existsById(tenant.getId())) {
+        throw new TenantNotFoundException(tenant.getId());
       }
 
-      organizationRepository.saveAndFlush(organization);
-    } catch (OrganizationNotFoundException e) {
+      tenantRepository.saveAndFlush(tenant);
+    } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
-          "Failed to update the organization (" + organization.getId() + ")", e);
+      throw new SecurityServiceException("Failed to update the tenant (" + tenant.getId() + ")", e);
     }
   }
 
@@ -2302,16 +2278,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
     return false;
   }
 
-  private UserDirectory newInternalUserDirectoryForOrganization(Organization organization)
+  private UserDirectory newInternalUserDirectoryForTenant(Tenant tenant)
       throws SecurityServiceException {
     UserDirectory userDirectory = new UserDirectory();
 
-    if (organization.getId() != null) {
-      userDirectory.setId(organization.getId());
+    if (tenant.getId() != null) {
+      userDirectory.setId(tenant.getId());
     }
 
     userDirectory.setType("InternalUserDirectory");
-    userDirectory.setName(organization.getName() + " Internal User Directory");
+    userDirectory.setName(tenant.getName() + " Internal User Directory");
 
     String buffer =
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE userDirectory "

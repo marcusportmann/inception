@@ -778,7 +778,7 @@
       <xs:element name="GetOrganizationsResponse" type="security:GetOrganizationsResponse"/>
       <xs:element name="GetUserDirectoriesForOrganization" type="security:GetUserDirectoriesForOrganization"/>
       <xs:element name="GetUserDirectoriesForOrganizationResponse" type="security:GetUserDirectoriesForOrganizationResponse"/>
-      <xs:element name="Organization" type="security:Organization"/>
+      <xs:element name="Tenant" type="security:Tenant"/>
       <xs:complexType name="GetUserDirectoriesForOrganization">
         <xs:sequence>
           <xs:element name="OrganizationId" type="xs:string"/>
@@ -833,19 +833,19 @@
       </xs:complexType>
       <xs:complexType name="GetOrganizationsResponse">
         <xs:sequence>
-          <xs:element maxOccurs="unbounded" minOccurs="0" name="Organization" type="security:Organization"/>
+          <xs:element maxOccurs="unbounded" minOccurs="0" name="Tenant" type="security:Tenant"/>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="Organization">
+      <xs:complexType name="Tenant">
         <xs:sequence>
           <xs:element name="Id" type="xs:string"/>
           <xs:element name="Name" type="xs:string"/>
-          <xs:element name="Status" type="security:OrganizationStatus"/>
+          <xs:element name="Status" type="security:TenantStatus"/>
         </xs:sequence>
       </xs:complexType>
       <xs:complexType name="CreateOrganization">
         <xs:sequence>
-          <xs:element name="Organization" type="security:Organization"/>
+          <xs:element name="Tenant" type="security:Tenant"/>
           <xs:element name="CreateUserDirectory" type="xs:boolean"/>
         </xs:sequence>
       </xs:complexType>
@@ -858,7 +858,7 @@
           <xs:enumeration value="Descending"/>
         </xs:restriction>
       </xs:simpleType>
-      <xs:simpleType name="OrganizationStatus">
+      <xs:simpleType name="TenantStatus">
         <xs:restriction base="xs:string">
           <xs:enumeration value="Inactive"/>
           <xs:enumeration value="Active"/>
@@ -1017,11 +1017,11 @@
    <soapenv:Header/>
    <soapenv:Body>
       <sec:CreateOrganization>
-         <Organization>
+         <Tenant>
             <Id>?</Id>
             <Name>?</Name>
             <Status>?</Status>
-         </Organization>
+         </Tenant>
          <CreateUserDirectory>?</CreateUserDirectory>
       </sec:CreateOrganization>
    </soapenv:Body>
@@ -1545,19 +1545,19 @@
          <Key>TestKey</Key>
       </con:GetConfiguration>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="a91d9eee-e884-486b-8320-63c5cb83630c"/><con:assertion type="Schema Compliance" id="91bb1a0b-8ba1-4f12-b9db-db6781ecdd21"><con:configuration/></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="f8d1b965-8317-4421-91c1-e12634159c1f" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Security Service Tests" searchProperties="true"><con:settings/><con:testStep type="request" name="Create Test Organization" id="c0a76043-f63f-4f91-8b4e-e6ded20214ad"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>CreateOrganization</con:operation><con:request name="Create Test Organization" id="ce89d290-1f9b-448e-a90e-78214d1c0d94"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="a91d9eee-e884-486b-8320-63c5cb83630c"/><con:assertion type="Schema Compliance" id="91bb1a0b-8ba1-4f12-b9db-db6781ecdd21"><con:configuration/></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="f8d1b965-8317-4421-91c1-e12634159c1f" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="Security Service Tests" searchProperties="true"><con:settings/><con:testStep type="request" name="Create Test Tenant" id="c0a76043-f63f-4f91-8b4e-e6ded20214ad"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>CreateOrganization</con:operation><con:request name="Create Test Tenant" id="ce89d290-1f9b-448e-a90e-78214d1c0d94"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
    <soapenv:Header/>
    <soapenv:Body>
       <sec:CreateOrganization>
-         <Organization>
+         <Tenant>
             <Id>05ca6d8a-5257-4cd0-8dc6-f4980b9b79ad</Id>
-            <Name>Test Organization</Name>
+            <Name>Test Tenant</Name>
             <Status>Active</Status>
-         </Organization>
+         </Tenant>
          <CreateUserDirectory>true</CreateUserDirectory>
       </sec:CreateOrganization>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="5aadd43b-cba2-4502-8bd4-e44a858112ab"/><con:assertion type="Schema Compliance" id="41077a4c-afba-45f0-be0b-a5e0da87b3df"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="6f458fe5-aa43-4c8b-9dca-08a87aee5001"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Organizations" id="5f2966c8-55d9-40b9-bae7-4c57f48614c7"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>GetOrganizations</con:operation><con:request name="Get Test Organizations" id="6a56d0ef-9c58-4626-b14d-edac219acbd6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="5aadd43b-cba2-4502-8bd4-e44a858112ab"/><con:assertion type="Schema Compliance" id="41077a4c-afba-45f0-be0b-a5e0da87b3df"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="6f458fe5-aa43-4c8b-9dca-08a87aee5001"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get Test Tenants" id="5f2966c8-55d9-40b9-bae7-4c57f48614c7"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>GetOrganizations</con:operation><con:request name="Get Test Tenants" id="6a56d0ef-9c58-4626-b14d-edac219acbd6"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
    <soapenv:Header/>
    <soapenv:Body>
       <sec:GetOrganizations>
@@ -1567,14 +1567,14 @@
          <PageSize>100</PageSize>
       </sec:GetOrganizations>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="9dbbfe09-5c45-4084-a5d9-da9761ae5967"/><con:assertion type="Schema Compliance" id="b721176e-e357-4591-a83d-5af0bcd7b8cd"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="8281689c-9ef3-4a18-b976-6a4e041fcb09"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get User Directories For Test Organization" id="6dccc92a-2494-4f09-aeab-67227b27dd8d"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>GetUserDirectoriesForOrganization</con:operation><con:request name="Get User Directories For Test Organization" id="2c3f0890-eb4e-4d5a-8e27-374fa6c718ee"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="9dbbfe09-5c45-4084-a5d9-da9761ae5967"/><con:assertion type="Schema Compliance" id="b721176e-e357-4591-a83d-5af0bcd7b8cd"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="8281689c-9ef3-4a18-b976-6a4e041fcb09"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Get User Directories For Test Tenant" id="6dccc92a-2494-4f09-aeab-67227b27dd8d"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>GetUserDirectoriesForOrganization</con:operation><con:request name="Get User Directories For Test Tenant" id="2c3f0890-eb4e-4d5a-8e27-374fa6c718ee"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
    <soapenv:Header/>
    <soapenv:Body>
       <sec:GetUserDirectoriesForOrganization>
          <OrganizationId>05ca6d8a-5257-4cd0-8dc6-f4980b9b79ad</OrganizationId>
       </sec:GetUserDirectoriesForOrganization>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="7e6ddc40-bfe1-42b1-a773-572b27f492fe"/><con:assertion type="Schema Compliance" id="ed9e9cbf-0145-4b40-9d9f-a5ce508349f9"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="40e7b4cb-89a5-48f4-9d7c-82bd61d24958"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Delete Test Organization" id="ded56959-3bf4-4cad-a506-f20da09adf1f"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>DeleteOrganization</con:operation><con:request name="Delete Test Organization" id="c02c1d56-c248-4f8b-8e7c-d4ff95b4db80"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="7e6ddc40-bfe1-42b1-a773-572b27f492fe"/><con:assertion type="Schema Compliance" id="ed9e9cbf-0145-4b40-9d9f-a5ce508349f9"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="40e7b4cb-89a5-48f4-9d7c-82bd61d24958"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" name="Delete Test Tenant" id="ded56959-3bf4-4cad-a506-f20da09adf1f"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SecurityServiceSoapBinding</con:interface><con:operation>DeleteOrganization</con:operation><con:request name="Delete Test Tenant" id="c02c1d56-c248-4f8b-8e7c-d4ff95b4db80"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/service/SecurityService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sec="http://security.inception.digital">
    <soapenv:Header/>
    <soapenv:Body>
       <sec:DeleteOrganization>

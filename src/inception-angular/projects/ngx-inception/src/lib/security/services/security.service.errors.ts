@@ -54,19 +54,19 @@ export class DuplicateGroupError extends Error {
 }
 
 /**
- * The DuplicateOrganizationError class holds the information for a duplicate organization error.
+ * The DuplicateTenantError class holds the information for a duplicate tenant error.
  *
  * @author Marcus Portmann
  */
-export class DuplicateOrganizationError extends Error {
+export class DuplicateTenantError extends Error {
 
   /**
-   * Constructs a new DuplicateOrganizationError.
+   * Constructs a new DuplicateTenantError.
    *
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super($localize`:@@security_duplicate_organization_error:An organization with the specified ID or name already exists.`, cause);
+    super($localize`:@@security_duplicate_tenant_error:An tenant with the specified ID or name already exists.`, cause);
   }
 }
 
@@ -156,20 +156,20 @@ export class ExistingGroupRoleError extends Error {
 }
 
 /**
- * The ExistingOrganizationUserDirectoryError class holds the information for an existing
- * organization user directory error.
+ * The ExistingTenantUserDirectoryError class holds the information for an existing
+ * tenant user directory error.
  *
  * @author Marcus Portmann
  */
-export class ExistingOrganizationUserDirectoryError extends Error {
+export class ExistingTenantUserDirectoryError extends Error {
 
   /**
-   * Constructs a new ExistingOrganizationUserDirectoryError.
+   * Constructs a new ExistingTenantUserDirectoryError.
    *
    * @param cause The optional cause of the error.
    */
   constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super($localize`:@@security_existing_organization_user_directory_error:The organization user directory already exists.`, cause);
+    super($localize`:@@security_existing_tenant_user_directory_error:The tenant user directory already exists.`, cause);
   }
 }
 
@@ -276,41 +276,6 @@ export class LoginError extends Error {
 }
 
 /**
- * The OrganizationNotFoundError class holds the information for an organization not found error.
- *
- * @author Marcus Portmann
- */
-export class OrganizationNotFoundError extends Error {
-
-  /**
-   * Constructs a new OrganizationNotFoundError.
-   *
-   * @param cause The optional cause of the error.
-   */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super($localize`:@@security_organization_not_found_error:The organization could not be found.`, cause);
-  }
-}
-
-/**
- * The OrganizationUserDirectoryNotFoundError class holds the information for an organization user
- * directory not found error.
- *
- * @author Marcus Portmann
- */
-export class OrganizationUserDirectoryNotFoundError extends Error {
-
-  /**
-   * Constructs a new OrganizationUserDirectoryNotFoundError.
-   *
-   * @param cause The optional cause of the error.
-   */
-  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
-    super($localize`:@@security_organization_user_directory_not_found_error:The organization user directory could not be found.`, cause);
-  }
-}
-
-/**
  * The PasswordExpiredError class holds the information for a password expired error.
  *
  * @author Marcus Portmann
@@ -360,6 +325,41 @@ export class SessionError extends Error {
    */
   constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
     super(message, cause);
+  }
+}
+
+/**
+ * The TenantNotFoundError class holds the information for a tenant not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class TenantNotFoundError extends Error {
+
+  /**
+   * Constructs a new TenantNotFoundError.
+   *
+   * @param cause The optional cause of the error.
+   */
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super($localize`:@@security_tenant_not_found_error:The tenant could not be found.`, cause);
+  }
+}
+
+/**
+ * The TenantUserDirectoryNotFoundError class holds the information for a tenant user
+ * directory not found error.
+ *
+ * @author Marcus Portmann
+ */
+export class TenantUserDirectoryNotFoundError extends Error {
+
+  /**
+   * Constructs a new TenantUserDirectoryNotFoundError.
+   *
+   * @param cause The optional cause of the error.
+   */
+  constructor(cause?: ApiError | HttpErrorResponse | HttpError) {
+    super($localize`:@@security_tenant_user_directory_not_found_error:The tenant user directory could not be found.`, cause);
   }
 }
 

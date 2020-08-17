@@ -63,7 +63,7 @@ export class ConfigurationsComponent extends AdminContainerView implements After
   }
 
   get title(): string {
-    return 'Configuration';
+    return $localize`:@@configuration_configurations_title:Configuration`
   }
 
   applyFilter(filterValue: string): void {
@@ -74,7 +74,7 @@ export class ConfigurationsComponent extends AdminContainerView implements After
 
   deleteConfiguration(key: string): void {
     const dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean> = this.dialogService.showConfirmationDialog({
-      message: 'Are you sure you want to delete the configuration?'
+      message: $localize`:@@configuration_configurations_confirm_delete_configuration:Are you sure you want to delete the configuration?`
     });
 
     dialogRef.afterClosed()

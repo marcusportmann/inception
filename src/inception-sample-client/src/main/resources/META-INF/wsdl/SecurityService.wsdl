@@ -108,8 +108,8 @@
   <xs:element name="GroupMembers" type="security:GroupMembers"/>
   <xs:element name="GroupRole" type="security:GroupRole"/>
   <xs:element name="Groups" type="security:Groups"/>
-  <xs:element name="Organization" type="security:Organization"/>
-  <xs:element name="Organizations" type="security:Organizations"/>
+  <xs:element name="Tenant" type="security:Tenant"/>
+  <xs:element name="Tenants" type="security:Tenants"/>
   <xs:element name="PasswordChange" type="security:PasswordChange"/>
   <xs:element name="RemoveMemberFromGroup" type="security:RemoveMemberFromGroup"/>
   <xs:element name="RemoveMemberFromGroupResponse" type="security:RemoveMemberFromGroupResponse"/>
@@ -139,14 +139,14 @@
   <xs:element name="Users" type="security:Users"/>
   <xs:complexType name="UpdateOrganization">
     <xs:sequence>
-      <xs:element name="Organization" type="security:Organization"/>
+      <xs:element name="Tenant" type="security:Tenant"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="Organization">
+  <xs:complexType name="Tenant">
     <xs:sequence>
       <xs:element name="Id" type="xs:string"/>
       <xs:element name="Name" type="xs:string"/>
-      <xs:element name="Status" type="security:OrganizationStatus"/>
+      <xs:element name="Status" type="security:TenantStatus"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="UpdateOrganizationResponse">
@@ -380,7 +380,7 @@
   </xs:complexType>
   <xs:complexType name="GetOrganizationsForUserDirectoryResponse">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" minOccurs="0" name="Organization" type="security:Organization"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="Tenant" type="security:Tenant"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="GetGroupNames">
@@ -439,7 +439,7 @@
   </xs:complexType>
   <xs:complexType name="GetOrganizationResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Organization" type="security:Organization"/>
+      <xs:element minOccurs="0" name="Tenant" type="security:Tenant"/>
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="GetUserDirectories">
@@ -554,12 +554,12 @@
   </xs:complexType>
   <xs:complexType name="GetOrganizationsResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" name="Organization" type="security:Organizations"/>
+      <xs:element minOccurs="0" name="Tenant" type="security:Tenants"/>
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="Organizations">
+  <xs:complexType name="Tenants">
     <xs:sequence>
-      <xs:element maxOccurs="unbounded" name="Organizations" type="security:Organization"/>
+      <xs:element maxOccurs="unbounded" name="Tenants" type="security:Tenant"/>
       <xs:element name="Total" type="xs:long"/>
       <xs:element minOccurs="0" name="Filter" type="xs:string"/>
       <xs:element minOccurs="0" name="SortDirection" type="security:SortDirection"/>
@@ -728,7 +728,7 @@
   </xs:complexType>
   <xs:complexType name="CreateOrganization">
     <xs:sequence>
-      <xs:element name="Organization" type="security:Organization"/>
+      <xs:element name="Tenant" type="security:Tenant"/>
       <xs:element name="CreateUserDirectory" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
@@ -765,7 +765,7 @@
   <xs:complexType name="RemoveRoleFromGroupResponse">
     <xs:sequence/>
   </xs:complexType>
-  <xs:simpleType name="OrganizationStatus">
+  <xs:simpleType name="TenantStatus">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Inactive"/>
       <xs:enumeration value="Active"/>

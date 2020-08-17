@@ -92,11 +92,12 @@ export class EditCodeComponent extends AdminContainerView implements AfterViewIn
   }
 
   get backNavigation(): BackNavigation {
-    return new BackNavigation('Codes', ['../..'], {relativeTo: this.activatedRoute});
+    return new BackNavigation($localize`:@@codes_edit_code_back_navigation:Codes`,
+      ['../..'], {relativeTo: this.activatedRoute});
   }
 
   get title(): string {
-    return 'Edit Code';
+    return $localize`:@@codes_edit_code_title:Edit Code`
   }
 
   cancel(): void {

@@ -34,7 +34,7 @@ COMMENT ON COLUMN sample.data.timestamp_value IS 'The timestamp value for the da
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO security.organizations (id, name, status)
+INSERT INTO security.tenants (id, name, status)
   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b64d', 'Sample', 1);
 
 INSERT INTO security.user_directories (id, type, name, configuration)
@@ -43,9 +43,9 @@ INSERT INTO security.user_directories (id, type, name, configuration)
 -- INSERT INTO security.user_directories (id, type, name, configuration)
 --  VALUES ('595d13ac-22d6-4ce2-b898-3add4658a748', 'LDAPUserDirectory', 'Sample LDAP User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>Host</name><value>localhost</value></parameter><parameter><name>Port</name><value>389</value></parameter><parameter><name>UseSSL</name><value>false</value></parameter><parameter><name>BindDN</name><value>cn=root,o=sample</value></parameter><parameter><name>BindPassword</name><value>Password1</value></parameter><parameter><name>BaseDN</name><value>ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserBaseDN</name><value>ou=users,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>GroupBaseDN</name><value>ou=groups,ou=sample,ou=applications,o=sample</value></parameter><parameter><name>UserObjectClass</name><value>inetOrgPerson</value></parameter><parameter><name>UserUsernameAttribute</name><value>uid</value></parameter><parameter><name>UserNameAttribute</name><value>cn</value></parameter><parameter><name>UserPreferredNameAttribute</name><value>nickName</value></parameter><parameter><name>UserPhoneNumberAttribute</name><value>telephoneNumber</value></parameter><parameter><name>UserFaxNumberAttribute</name><value>facsimileTelephoneNumber</value></parameter><parameter><name>UserMobileNumberAttribute</name><value>mobile</value></parameter><parameter><name>UserEmailAttribute</name><value>mail</value></parameter><parameter><name>UserDescriptionAttribute</name><value>cn</value></parameter><parameter><name>GroupObjectClass</name><value>groupOfNames</value></parameter><parameter><name>GroupNameAttribute</name><value>cn</value></parameter><parameter><name>GroupMemberAttribute</name><value>member</value></parameter><parameter><name>GroupDescriptionAttribute</name><value>description</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
 
-INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
+INSERT INTO security.user_directory_to_tenant_map (user_directory_id, tenant_id)
   VALUES ('34ccdbc9-4a01-46f5-a284-ba13e095675c', '204e5b8f-48e7-4354-bd15-753e6543b64d');
--- INSERT INTO security.user_directory_to_organization_map (USER_DIRECTORY_ID, ORGANIZATION_ID)
+-- INSERT INTO security.user_directory_to_tenant_map (USER_DIRECTORY_ID, TENANT_ID)
 --  VALUES ('595d13ac-22d6-4ce2-b898-3add4658a748', '204e5b8f-48e7-4354-bd15-753e6543b64d');
 
 INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
@@ -98,7 +98,7 @@ INSERT INTO security.users (id, user_directory_id, username, status, name, prefe
   VALUES ('22166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Amir.Wells@refrigeratorsignal.com'), 1, 'Amir Wells', 'Amir', '', '', 'Amir.Wells@refrigeratorsignal.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 
 INSERT INTO security.groups (id, user_directory_id, name, description)
-  VALUES ('956c5550-cd3d-42de-8660-7749e1b4df52', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'Organization Administrators', 'Organization Administrators');
+  VALUES ('956c5550-cd3d-42de-8660-7749e1b4df52', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'Tenant Administrators', 'Tenant Administrators');
 INSERT INTO security.groups (id, user_directory_id, name, description)
   VALUES ('146c5550-cd3d-42de-8660-7749e1b4df52', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'Password Resetters', 'Password Resetters');
 
@@ -108,7 +108,7 @@ INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', '146c5550-cd3d-42de-8660-7749e1b4df52');
 
 INSERT INTO security.role_to_group_map (role_code, group_id)
-  VALUES ('OrganizationAdministrator', '956c5550-cd3d-42de-8660-7749e1b4df52');
+  VALUES ('TenantAdministrator', '956c5550-cd3d-42de-8660-7749e1b4df52');
 INSERT INTO security.role_to_group_map (role_code, group_id)
   VALUES ('PasswordResetter', '146c5550-cd3d-42de-8660-7749e1b4df52');
 
@@ -245,25 +245,25 @@ INSERT INTO codes.codes (id, code_category_id, name, value)
 --INSERT INTO configuration.configuration (key, value, description) VALUES ('TestKey', 'TestValue', 'TestDescription');
 
 
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b601', 'Test 1', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b602', 'Test 2', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b603', 'Test 3', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b604', 'Test 4', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b605', 'Test 5', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b606', 'Test 6', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b607', 'Test 7', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b608', 'Test 8', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b609', 'Test 9', 1);
--- INSERT INTO security.organizations (id, name, status)
+-- INSERT INTO security.tenants (id, name, status)
 --   VALUES ('204e5b8f-48e7-4354-bd15-753e6543b610', 'Test 10', 1);
 
 
@@ -284,7 +284,7 @@ INSERT INTO codes.codes (id, code_category_id, name, value)
 INSERT INTO security.user_directories (id, type, name, configuration)
   VALUES ('2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'InternalUserDirectory', 'Another Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter></userDirectory>');
 
-INSERT INTO security.user_directory_to_organization_map (user_directory_id, organization_id)
+INSERT INTO security.user_directory_to_tenant_map (user_directory_id, tenant_id)
   VALUES ('2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', '204e5b8f-48e7-4354-bd15-753e6543b64d');
 
 INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
@@ -295,7 +295,7 @@ INSERT INTO security.users (id, user_directory_id, username, status, name, prefe
   VALUES ('606112a5-5a01-45d6-a29b-cea8d22e592d', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'davis', 1, 'Davis Parks', 'Davis', '', '', 'davis@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
 
 INSERT INTO security.groups (id, user_directory_id, name, description)
-  VALUES ('69aea0f3-5798-4ee8-9082-6c41feba3472', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'Organization Administrators', 'Organization Administrators');
+  VALUES ('69aea0f3-5798-4ee8-9082-6c41feba3472', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'Tenant Administrators', 'Tenant Administrators');
 INSERT INTO security.groups (id, user_directory_id, name, description)
   VALUES ('dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d', '2a935e0d-ac7e-44c4-aa44-e986aeb8c00e', 'Password Resetters', 'Password Resetters');
 
@@ -305,7 +305,7 @@ INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('606112a5-5a01-45d6-a29b-cea8d22e592d', 'dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d');
 
 INSERT INTO security.role_to_group_map (role_code, group_id)
-  VALUES ('OrganizationAdministrator', '69aea0f3-5798-4ee8-9082-6c41feba3472');
+  VALUES ('TenantAdministrator', '69aea0f3-5798-4ee8-9082-6c41feba3472');
 INSERT INTO security.role_to_group_map (role_code, group_id)
   VALUES ('PasswordResetter', 'dd9c3e26-5c86-4ef9-b7c7-f7856c2f836d');
 
