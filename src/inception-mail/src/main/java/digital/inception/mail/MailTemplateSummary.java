@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -124,7 +125,7 @@ public class MailTemplateSummary implements Serializable {
 
     MailTemplateSummary other = (MailTemplateSummary) object;
 
-    return (id != null) && id.equals(other.id);
+    return Objects.equals(id, other.id);
   }
 
   /**

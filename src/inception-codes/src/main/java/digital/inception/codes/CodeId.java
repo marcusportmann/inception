@@ -19,6 +19,7 @@ package digital.inception.codes;
 // ~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * The <code>CodeId</code> class implements the ID class for the <code>Code</code> class.
@@ -73,7 +74,7 @@ public class CodeId implements Serializable {
 
     CodeId other = (CodeId) object;
 
-    return codeCategoryId.equals(other.codeCategoryId) && id.equals(other.id);
+    return Objects.equals(codeCategoryId, other.codeCategoryId) && Objects.equals(id, other.id);
   }
 
   /**

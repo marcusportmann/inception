@@ -20,6 +20,7 @@ package digital.inception.security;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * The <code>PasswordResetId</code> class implements the ID class for the <code>PasswordReset</code>
@@ -75,7 +76,7 @@ public class PasswordResetId implements Serializable {
 
     PasswordResetId other = (PasswordResetId) object;
 
-    return username.equals(other.username) && requested.equals(other.requested);
+    return Objects.equals(username, other.username) && Objects.equals(requested, other.requested);
   }
 
   /**

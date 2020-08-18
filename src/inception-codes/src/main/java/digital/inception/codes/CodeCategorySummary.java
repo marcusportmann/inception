@@ -25,6 +25,7 @@ import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -128,7 +129,7 @@ public class CodeCategorySummary implements Serializable {
 
     CodeCategorySummary other = (CodeCategorySummary) object;
 
-    return (id != null) && id.equals(other.id);
+    return Objects.equals(id, other.id);
   }
 
   /**

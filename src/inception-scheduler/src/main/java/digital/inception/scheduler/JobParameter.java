@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -126,12 +127,7 @@ public class JobParameter implements Serializable {
 
     JobParameter other = (JobParameter) object;
 
-    return ((job != null)
-            && (job.getId() != null)
-            && (other.job != null)
-            && (other.job.getId() != null)
-            && job.getId().equals(other.job.getId()))
-        && ((name != null) && name.equals(other.name));
+    return Objects.equals(job, other.job) && Objects.equals(name, other.name);
   }
 
   /**

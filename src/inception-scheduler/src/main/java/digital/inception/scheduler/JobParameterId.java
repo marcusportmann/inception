@@ -19,6 +19,7 @@ package digital.inception.scheduler;
 // ~--- JDK imports ------------------------------------------------------------
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * The <code>JobParameterId</code> class implements the ID class for the <code>JobParameter</code>
@@ -61,12 +62,7 @@ public class JobParameterId implements Serializable {
 
     JobParameterId other = (JobParameterId) object;
 
-    return (job != null)
-        && (job.getId() != null)
-        && (other.job != null)
-        && (other.job.getId() != null)
-        && job.getId().equals(other.job.getId())
-        && name.equals(other.name);
+    return Objects.equals(job, other.job) && Objects.equals(name, other.name);
   }
 
   /**

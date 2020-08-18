@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -197,7 +198,7 @@ public class Group implements Serializable {
 
     Group other = (Group) object;
 
-    return (id != null) && id.equals(other.id);
+    return Objects.equals(id, other.id);
   }
 
   /**

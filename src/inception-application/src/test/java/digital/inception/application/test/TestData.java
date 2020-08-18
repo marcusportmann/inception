@@ -18,6 +18,7 @@ package digital.inception.application.test;
 
 // ~--- JDK imports ------------------------------------------------------------
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -85,7 +86,7 @@ public class TestData {
 
     TestData other = (TestData) object;
 
-    return (id != null) && id.equals(other.id);
+    return Objects.equals(id, other.id);
   }
 
   /**

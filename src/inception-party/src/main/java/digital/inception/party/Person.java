@@ -99,7 +99,7 @@ public class Person {
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(max = 100)
+  @Size(min = 1, max = 100)
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 

@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -116,7 +117,7 @@ public class ProcessInstanceSummary implements Serializable {
 
     ProcessInstanceSummary other = (ProcessInstanceSummary) object;
 
-    return (id != null) && id.equals(other.id);
+    return Objects.equals(id, other.id);
   }
 
   /**

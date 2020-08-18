@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -133,7 +134,7 @@ public class UserDirectoryType implements java.io.Serializable {
 
     UserDirectoryType other = (UserDirectoryType) object;
 
-    return (code != null) && code.equals(other.code);
+    return Objects.equals(code, other.code);
   }
 
   /**

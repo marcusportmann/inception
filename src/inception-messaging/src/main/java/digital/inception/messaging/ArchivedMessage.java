@@ -25,6 +25,7 @@ import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -238,7 +239,7 @@ public class ArchivedMessage {
 
     ArchivedMessage other = (ArchivedMessage) object;
 
-    return (id != null) && id.equals(other.id);
+    return Objects.equals(id, other.id);
   }
 
   /**

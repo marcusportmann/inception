@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -135,7 +136,7 @@ public class Function implements java.io.Serializable {
 
     Function other = (Function) object;
 
-    return (code != null) && code.equals(other.code);
+    return Objects.equals(code, other.code);
   }
 
   /**

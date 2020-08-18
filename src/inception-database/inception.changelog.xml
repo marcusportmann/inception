@@ -524,55 +524,2037 @@
       create schema reference
     </sql>
 
-    <createTable schemaName="reference" tableName="gender" remarks="Genders">
+    <createTable schemaName="reference" tableName="communication_methods" remarks="Communication Methods">
+      <column name="code" type="nvarchar(10)" remarks="The code for the communication method"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the communication method"/>
+      <column name="sort_index" type="int" remarks="The sort index for the communication method"/>
+      <column name="name" type="nvarchar(20)" remarks="The name of the communication method"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the communication method"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="communication_methods" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="communication_methods" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="communication_methods" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="communication_methods" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="communication_methods" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="communication_methods" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="communication_methods" columnName="description" defaultValue=""/>
+    <createIndex indexName="communication_methods_locale_ix" schemaName="reference" tableName="communication_methods">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="countries" remarks="Countries">
+      <column name="code" type="nvarchar(10)" remarks="The code for the country"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the country"/>
+      <column name="sort_index" type="int" remarks="The sort index for the country"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the country"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the country"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="countries" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="countries" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="countries" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="countries" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="countries" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="countries" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="countries" columnName="description" defaultValue=""/>
+    <createIndex indexName="countries_locale_ix" schemaName="reference" tableName="countries">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="employment_statuses" remarks="Employment Statuses">
+      <column name="code" type="nvarchar(10)" remarks="The code for the employment status"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the employment status"/>
+      <column name="sort_index" type="int" remarks="The sort index for the employment status"/>
+      <column name="name" type="nvarchar(20)" remarks="The name of the employment status"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the employment status"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="employment_statuses" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_statuses" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_statuses" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_statuses" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_statuses" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_statuses" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="employment_statuses" columnName="description" defaultValue=""/>
+    <createIndex indexName="employment_statuses_locale_ix" schemaName="reference" tableName="employment_statuses">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="employment_types" remarks="Employment Statuses">
+      <column name="employment_status" type="nvarchar(10)" remarks="The code for the employment status the employment type is associated with"/>
+      <column name="code" type="nvarchar(10)" remarks="The code for the employment type"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the employment type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the employment type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the employment type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the employment type"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="employment_types" columnNames="employment_status,code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_types" columnName="employment_status"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_types" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_types" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_types" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="employment_types" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="employment_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="employment_types_employment_status_ix" schemaName="reference" tableName="employment_types">
+      <column name="employment_status"/>
+    </createIndex>
+    <createIndex indexName="employment_types_locale_ix" schemaName="reference" tableName="employment_types">
+      <column name="locale"/>
+    </createIndex>    
+
+    <createTable schemaName="reference" tableName="genders" remarks="Genders">
       <column name="code" type="nvarchar(10)" remarks="The code for the gender"/>
-      <column name="local_id" type="nvarchar(10)" remarks="The Unicode locale identifier"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the gender"/>
+      <column name="sort_index" type="int" remarks="The sort index for the gender"/>
       <column name="name" type="nvarchar(20)" remarks="The name of the gender"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the gender"/>
     </createTable>
-    <addPrimaryKey schemaName="reference" tableName="gender" columnNames="code,local_id"/>
-    <addNotNullConstraint schemaName="reference" tableName="gender" columnName="code"/>
-    <addNotNullConstraint schemaName="reference" tableName="gender" columnName="local_id"/>
-    <addNotNullConstraint schemaName="reference" tableName="gender" columnName="name"/>
-    <addNotNullConstraint schemaName="reference" tableName="gender" columnName="description"/>
-    <addDefaultValue schemaName="reference" tableName="gender" columnName="description" defaultValue=""/>
+    <addPrimaryKey schemaName="reference" tableName="genders" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="genders" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="genders" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="genders" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="genders" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="genders" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="genders" columnName="description" defaultValue=""/>
+    <createIndex indexName="genders_locale_ix" schemaName="reference" tableName="genders">
+      <column name="locale"/>
+    </createIndex>
 
-    <insert schemaName="reference" tableName="gender">
+    <insert schemaName="reference" tableName="communication_methods">
       <column name="code" value="0"/>
-      <column name="local_id" value="en-US"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
       <column name="name" value="Not known"/>
       <column name="description" value="Not known"/>
     </insert>
-    <insert schemaName="reference" tableName="gender">
+    <insert schemaName="reference" tableName="communication_methods">
       <column name="code" value="1"/>
-      <column name="local_id" value="en-US"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="E-mail"/>
+      <column name="description" value="E-mail"/>
+    </insert>
+    <insert schemaName="reference" tableName="communication_methods">
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Phone"/>
+      <column name="description" value="Phone"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AD"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Andorra"/>
+      <column name="description" value="Andorra"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="United Arab Emirates"/>
+      <column name="description" value="United Arab Emirates"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Afghanistan"/>
+      <column name="description" value="Afghanistan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Antigua and Barbuda"/>
+      <column name="description" value="Antigua and Barbuda"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Anguilla"/>
+      <column name="description" value="Anguilla"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Albania"/>
+      <column name="description" value="Albania"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Armenia"/>
+      <column name="description" value="Armenia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Angola"/>
+      <column name="description" value="Angola"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AQ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Antarctica"/>
+      <column name="description" value="Antarctica"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Argentina"/>
+      <column name="description" value="Argentina"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="11"/>
+      <column name="name" value="American Samoa"/>
+      <column name="description" value="American Samoa"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="12"/>
+      <column name="name" value="Austria"/>
+      <column name="description" value="Austria"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="13"/>
+      <column name="name" value="Australia"/>
+      <column name="description" value="Australia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="14"/>
+      <column name="name" value="Aruba"/>
+      <column name="description" value="Aruba"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AX"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="15"/>
+      <column name="name" value="Åland Islands"/>
+      <column name="description" value="Åland Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="AZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="16"/>
+      <column name="name" value="Azerbaijan"/>
+      <column name="description" value="Azerbaijan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="17"/>
+      <column name="name" value="Bosnia and Herzegovina"/>
+      <column name="description" value="Bosnia and Herzegovina"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BB"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="18"/>
+      <column name="name" value="Barbados"/>
+      <column name="description" value="Barbados"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BD"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="19"/>
+      <column name="name" value="Bangladesh"/>
+      <column name="description" value="Bangladesh"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="20"/>
+      <column name="name" value="Belgium"/>
+      <column name="description" value="Belgium"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="21"/>
+      <column name="name" value="Burkina Faso"/>
+      <column name="description" value="Burkina Faso"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="22"/>
+      <column name="name" value="Bulgaria"/>
+      <column name="description" value="Bulgaria"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="23"/>
+      <column name="name" value="Bahrain"/>
+      <column name="description" value="Bahrain"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="24"/>
+      <column name="name" value="Burundi"/>
+      <column name="description" value="Burundi"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BJ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="25"/>
+      <column name="name" value="Benin"/>
+      <column name="description" value="Benin"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="26"/>
+      <column name="name" value="Saint Barthélemy"/>
+      <column name="description" value="Saint Barthélemy"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="27"/>
+      <column name="name" value="Bermuda"/>
+      <column name="description" value="Bermuda"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="28"/>
+      <column name="name" value="Brunei Darussalam"/>
+      <column name="description" value="Brunei Darussalam"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="29"/>
+      <column name="name" value="Bolivia, Plurinational State of"/>
+      <column name="description" value="Bolivia, Plurinational State of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BQ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="30"/>
+      <column name="name" value="Bonaire, Sint Eustatius and Saba"/>
+      <column name="description" value="Bonaire, Sint Eustatius and Saba"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="31"/>
+      <column name="name" value="Brazil"/>
+      <column name="description" value="Brazil"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="32"/>
+      <column name="name" value="Bahamas"/>
+      <column name="description" value="Bahamas"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="33"/>
+      <column name="name" value="Bhutan"/>
+      <column name="description" value="Bhutan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BV"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="34"/>
+      <column name="name" value="Bouvet Island"/>
+      <column name="description" value="Bouvet Island"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="35"/>
+      <column name="name" value="Botswana"/>
+      <column name="description" value="Botswana"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="36"/>
+      <column name="name" value="Belarus"/>
+      <column name="description" value="Belarus"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="BZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="37"/>
+      <column name="name" value="Belize"/>
+      <column name="description" value="Belize"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="38"/>
+      <column name="name" value="Canada"/>
+      <column name="description" value="Canada"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CC"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="39"/>
+      <column name="name" value="Cocos (Keeling) Islands"/>
+      <column name="description" value="Cocos (Keeling) Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CD"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="40"/>
+      <column name="name" value="Congo, the Democratic Republic of the"/>
+      <column name="description" value="Congo, the Democratic Republic of the"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="41"/>
+      <column name="name" value="Central African Republic"/>
+      <column name="description" value="Central African Republic"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="42"/>
+      <column name="name" value="Congo"/>
+      <column name="description" value="Congo"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="43"/>
+      <column name="name" value="Switzerland"/>
+      <column name="description" value="Switzerland"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="44"/>
+      <column name="name" value="Côte d'Ivoire"/>
+      <column name="description" value="Côte d'Ivoire"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="45"/>
+      <column name="name" value="Cook Islands"/>
+      <column name="description" value="Cook Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="46"/>
+      <column name="name" value="Chile"/>
+      <column name="description" value="Chile"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="47"/>
+      <column name="name" value="Cameroon"/>
+      <column name="description" value="Cameroon"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="48"/>
+      <column name="name" value="China"/>
+      <column name="description" value="China"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="49"/>
+      <column name="name" value="Colombia"/>
+      <column name="description" value="Colombia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="50"/>
+      <column name="name" value="Costa Rica"/>
+      <column name="description" value="Costa Rica"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="51"/>
+      <column name="name" value="Cuba"/>
+      <column name="description" value="Cuba"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CV"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="52"/>
+      <column name="name" value="Cabo Verde"/>
+      <column name="description" value="Cabo Verde"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="53"/>
+      <column name="name" value="Curaçao"/>
+      <column name="description" value="Curaçao"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CX"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="54"/>
+      <column name="name" value="Christmas Island"/>
+      <column name="description" value="Christmas Island"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="55"/>
+      <column name="name" value="Cyprus"/>
+      <column name="description" value="Cyprus"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="CZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="56"/>
+      <column name="name" value="Czechia"/>
+      <column name="description" value="Czechia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="DE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="57"/>
+      <column name="name" value="Germany"/>
+      <column name="description" value="Germany"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="DJ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="58"/>
+      <column name="name" value="Djibouti"/>
+      <column name="description" value="Djibouti"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="DK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="59"/>
+      <column name="name" value="Denmark"/>
+      <column name="description" value="Denmark"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="DM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="60"/>
+      <column name="name" value="Dominica"/>
+      <column name="description" value="Dominica"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="DO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="61"/>
+      <column name="name" value="Dominican Republic"/>
+      <column name="description" value="Dominican Republic"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="DZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="62"/>
+      <column name="name" value="Algeria"/>
+      <column name="description" value="Algeria"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="EC"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="63"/>
+      <column name="name" value="Ecuador"/>
+      <column name="description" value="Ecuador"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="EE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="64"/>
+      <column name="name" value="Estonia"/>
+      <column name="description" value="Estonia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="EG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="65"/>
+      <column name="name" value="Egypt"/>
+      <column name="description" value="Egypt"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="EH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="66"/>
+      <column name="name" value="Western Sahara"/>
+      <column name="description" value="Western Sahara"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ER"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="67"/>
+      <column name="name" value="Eritrea"/>
+      <column name="description" value="Eritrea"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ES"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="68"/>
+      <column name="name" value="Spain"/>
+      <column name="description" value="Spain"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ET"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="69"/>
+      <column name="name" value="Ethiopia"/>
+      <column name="description" value="Ethiopia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="FI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="70"/>
+      <column name="name" value="Finland"/>
+      <column name="description" value="Finland"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="FJ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="71"/>
+      <column name="name" value="Fiji"/>
+      <column name="description" value="Fiji"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="FK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="72"/>
+      <column name="name" value="Falkland Islands (Malvinas)"/>
+      <column name="description" value="Falkland Islands (Malvinas)"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="FM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="73"/>
+      <column name="name" value="Micronesia, Federated States of"/>
+      <column name="description" value="Micronesia, Federated States of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="FO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="74"/>
+      <column name="name" value="Faroe Islands"/>
+      <column name="description" value="Faroe Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="FR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="75"/>
+      <column name="name" value="France"/>
+      <column name="description" value="France"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="76"/>
+      <column name="name" value="Gabon"/>
+      <column name="description" value="Gabon"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GB"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="77"/>
+      <column name="name" value="United Kingdom"/>
+      <column name="description" value="United Kingdom of Great Britain and Northern Ireland"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GD"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="78"/>
+      <column name="name" value="Grenada"/>
+      <column name="description" value="Grenada"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="79"/>
+      <column name="name" value="Georgia"/>
+      <column name="description" value="Georgia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="80"/>
+      <column name="name" value="French Guiana"/>
+      <column name="description" value="French Guiana"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="81"/>
+      <column name="name" value="Guernsey"/>
+      <column name="description" value="Guernsey"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="82"/>
+      <column name="name" value="Ghana"/>
+      <column name="description" value="Ghana"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="83"/>
+      <column name="name" value="Gibraltar"/>
+      <column name="description" value="Gibraltar"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="84"/>
+      <column name="name" value="Greenland"/>
+      <column name="description" value="Greenland"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="85"/>
+      <column name="name" value="Gambia"/>
+      <column name="description" value="Gambia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="86"/>
+      <column name="name" value="Guinea"/>
+      <column name="description" value="Guinea"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GP"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="87"/>
+      <column name="name" value="Guadeloupe"/>
+      <column name="description" value="Guadeloupe"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GQ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="88"/>
+      <column name="name" value="Equatorial Guinea"/>
+      <column name="description" value="Equatorial Guinea"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="89"/>
+      <column name="name" value="Greece"/>
+      <column name="description" value="Greece"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="90"/>
+      <column name="name" value="South Georgia and the South Sandwich Islands"/>
+      <column name="description" value="South Georgia and the South Sandwich Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="91"/>
+      <column name="name" value="Guatemala"/>
+      <column name="description" value="Guatemala"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="92"/>
+      <column name="name" value="Guam"/>
+      <column name="description" value="Guam"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="93"/>
+      <column name="name" value="Guinea-Bissau"/>
+      <column name="description" value="Guinea-Bissau"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="GY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="94"/>
+      <column name="name" value="Guyana"/>
+      <column name="description" value="Guyana"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="HK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="95"/>
+      <column name="name" value="Hong Kong"/>
+      <column name="description" value="Hong Kong"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="HM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="96"/>
+      <column name="name" value="Heard Island and McDonald Islands"/>
+      <column name="description" value="Heard Island and McDonald Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="HN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="97"/>
+      <column name="name" value="Honduras"/>
+      <column name="description" value="Honduras"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="HR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="98"/>
+      <column name="name" value="Croatia"/>
+      <column name="description" value="Croatia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="HT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Haiti"/>
+      <column name="description" value="Haiti"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="HU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="100"/>
+      <column name="name" value="Hungary"/>
+      <column name="description" value="Hungary"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ID"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="101"/>
+      <column name="name" value="Indonesia"/>
+      <column name="description" value="Indonesia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="102"/>
+      <column name="name" value="Ireland"/>
+      <column name="description" value="Ireland"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="103"/>
+      <column name="name" value="Israel"/>
+      <column name="description" value="Israel"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="104"/>
+      <column name="name" value="Isle of Man"/>
+      <column name="description" value="Isle of Man"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="105"/>
+      <column name="name" value="India"/>
+      <column name="description" value="India"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="106"/>
+      <column name="name" value="British Indian Ocean Territory"/>
+      <column name="description" value="British Indian Ocean Territory"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IQ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="107"/>
+      <column name="name" value="Iraq"/>
+      <column name="description" value="Iraq"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="108"/>
+      <column name="name" value="Iran, Islamic Republic of"/>
+      <column name="description" value="Iran, Islamic Republic of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="109"/>
+      <column name="name" value="Iceland"/>
+      <column name="description" value="Iceland"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="IT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="110"/>
+      <column name="name" value="Italy"/>
+      <column name="description" value="Italy"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="JE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="111"/>
+      <column name="name" value="Jersey"/>
+      <column name="description" value="Jersey"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="JM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="112"/>
+      <column name="name" value="Jamaica"/>
+      <column name="description" value="Jamaica"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="JO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="113"/>
+      <column name="name" value="Jordan"/>
+      <column name="description" value="Jordan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="JP"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="114"/>
+      <column name="name" value="Japan"/>
+      <column name="description" value="Japan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="115"/>
+      <column name="name" value="Kenya"/>
+      <column name="description" value="Kenya"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="116"/>
+      <column name="name" value="Kyrgyzstan"/>
+      <column name="description" value="Kyrgyzstan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="117"/>
+      <column name="name" value="Cambodia"/>
+      <column name="description" value="Cambodia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="118"/>
+      <column name="name" value="Kiribati"/>
+      <column name="description" value="Kiribati"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="119"/>
+      <column name="name" value="Comoros"/>
+      <column name="description" value="Comoros"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="120"/>
+      <column name="name" value="Saint Kitts and Nevis"/>
+      <column name="description" value="Saint Kitts and Nevis"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KP"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="121"/>
+      <column name="name" value="Korea, Democratic People's Republic of"/>
+      <column name="description" value="Korea, Democratic People's Republic of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="122"/>
+      <column name="name" value="Korea, Republic of"/>
+      <column name="description" value="Korea, Republic of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="123"/>
+      <column name="name" value="Kuwait"/>
+      <column name="description" value="Kuwait"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="124"/>
+      <column name="name" value="Cayman Islands"/>
+      <column name="description" value="Cayman Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="KZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="125"/>
+      <column name="name" value="Kazakhstan"/>
+      <column name="description" value="Kazakhstan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="126"/>
+      <column name="name" value="Lao People's Democratic Republic"/>
+      <column name="description" value="Lao People's Democratic Republic"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LB"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="127"/>
+      <column name="name" value="Lebanon"/>
+      <column name="description" value="Lebanon"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LC"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="128"/>
+      <column name="name" value="Saint Lucia"/>
+      <column name="description" value="Saint Lucia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="129"/>
+      <column name="name" value="Liechtenstein"/>
+      <column name="description" value="Liechtenstein"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="130"/>
+      <column name="name" value="Sri Lanka"/>
+      <column name="description" value="Sri Lanka"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="131"/>
+      <column name="name" value="Liberia"/>
+      <column name="description" value="Liberia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="132"/>
+      <column name="name" value="Lesotho"/>
+      <column name="description" value="Lesotho"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="133"/>
+      <column name="name" value="Lithuania"/>
+      <column name="description" value="Lithuania"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="134"/>
+      <column name="name" value="Luxembourg"/>
+      <column name="description" value="Luxembourg"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LV"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="135"/>
+      <column name="name" value="Latvia"/>
+      <column name="description" value="Latvia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="LY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="136"/>
+      <column name="name" value="Libya"/>
+      <column name="description" value="Libya"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="137"/>
+      <column name="name" value="Morocco"/>
+      <column name="description" value="Morocco"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MC"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="138"/>
+      <column name="name" value="Monaco"/>
+      <column name="description" value="Monaco"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MD"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="139"/>
+      <column name="name" value="Moldova, Republic of"/>
+      <column name="description" value="Moldova, Republic of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ME"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="140"/>
+      <column name="name" value="Montenegro"/>
+      <column name="description" value="Montenegro"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="141"/>
+      <column name="name" value="Saint Martin (French part)"/>
+      <column name="description" value="Saint Martin (French part)"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="142"/>
+      <column name="name" value="Madagascar"/>
+      <column name="description" value="Madagascar"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="143"/>
+      <column name="name" value="Marshall Islands"/>
+      <column name="description" value="Marshall Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="144"/>
+      <column name="name" value="Macedonia, the former Yugoslav Republic of"/>
+      <column name="description" value="Macedonia, the former Yugoslav Republic of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ML"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="145"/>
+      <column name="name" value="Mali"/>
+      <column name="description" value="Mali"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="146"/>
+      <column name="name" value="Myanmar"/>
+      <column name="description" value="Myanmar"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="147"/>
+      <column name="name" value="Mongolia"/>
+      <column name="description" value="Mongolia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="148"/>
+      <column name="name" value="Macao"/>
+      <column name="description" value="Macao"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MP"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="149"/>
+      <column name="name" value="Northern Mariana Islands"/>
+      <column name="description" value="Northern Mariana Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MQ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="150"/>
+      <column name="name" value="Martinique"/>
+      <column name="description" value="Martinique"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="151"/>
+      <column name="name" value="Mauritania"/>
+      <column name="description" value="Mauritania"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="152"/>
+      <column name="name" value="Montserrat"/>
+      <column name="description" value="Montserrat"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="153"/>
+      <column name="name" value="Malta"/>
+      <column name="description" value="Malta"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="154"/>
+      <column name="name" value="Mauritius"/>
+      <column name="description" value="Mauritius"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MV"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="155"/>
+      <column name="name" value="Maldives"/>
+      <column name="description" value="Maldives"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="156"/>
+      <column name="name" value="Malawi"/>
+      <column name="description" value="Malawi"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MX"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="157"/>
+      <column name="name" value="Mexico"/>
+      <column name="description" value="Mexico"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="158"/>
+      <column name="name" value="Malaysia"/>
+      <column name="description" value="Malaysia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="MZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="159"/>
+      <column name="name" value="Mozambique"/>
+      <column name="description" value="Mozambique"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="160"/>
+      <column name="name" value="Namibia"/>
+      <column name="description" value="Namibia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NC"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="161"/>
+      <column name="name" value="New Caledonia"/>
+      <column name="description" value="New Caledonia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="162"/>
+      <column name="name" value="Niger"/>
+      <column name="description" value="Niger"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="163"/>
+      <column name="name" value="Norfolk Island"/>
+      <column name="description" value="Norfolk Island"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="164"/>
+      <column name="name" value="Nigeria"/>
+      <column name="description" value="Nigeria"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="165"/>
+      <column name="name" value="Nicaragua"/>
+      <column name="description" value="Nicaragua"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="166"/>
+      <column name="name" value="Netherlands"/>
+      <column name="description" value="Netherlands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="167"/>
+      <column name="name" value="Norway"/>
+      <column name="description" value="Norway"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NP"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="168"/>
+      <column name="name" value="Nepal"/>
+      <column name="description" value="Nepal"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="169"/>
+      <column name="name" value="Nauru"/>
+      <column name="description" value="Nauru"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="170"/>
+      <column name="name" value="Niue"/>
+      <column name="description" value="Niue"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="NZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="171"/>
+      <column name="name" value="New Zealand"/>
+      <column name="description" value="New Zealand"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="OM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="172"/>
+      <column name="name" value="Oman"/>
+      <column name="description" value="Oman"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="173"/>
+      <column name="name" value="Panama"/>
+      <column name="description" value="Panama"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="174"/>
+      <column name="name" value="Peru"/>
+      <column name="description" value="Peru"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="175"/>
+      <column name="name" value="French Polynesia"/>
+      <column name="description" value="French Polynesia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="176"/>
+      <column name="name" value="Papua New Guinea"/>
+      <column name="description" value="Papua New Guinea"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="177"/>
+      <column name="name" value="Philippines"/>
+      <column name="description" value="Philippines"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="178"/>
+      <column name="name" value="Pakistan"/>
+      <column name="description" value="Pakistan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="179"/>
+      <column name="name" value="Poland"/>
+      <column name="description" value="Poland"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="180"/>
+      <column name="name" value="Saint Pierre and Miquelon"/>
+      <column name="description" value="Saint Pierre and Miquelon"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="181"/>
+      <column name="name" value="Pitcairn"/>
+      <column name="description" value="Pitcairn"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="182"/>
+      <column name="name" value="Puerto Rico"/>
+      <column name="description" value="Puerto Rico"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="183"/>
+      <column name="name" value="Palestine, State of"/>
+      <column name="description" value="Palestine, State of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="184"/>
+      <column name="name" value="Portugal"/>
+      <column name="description" value="Portugal"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="185"/>
+      <column name="name" value="Palau"/>
+      <column name="description" value="Palau"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="PY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="186"/>
+      <column name="name" value="Paraguay"/>
+      <column name="description" value="Paraguay"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="QA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="187"/>
+      <column name="name" value="Qatar"/>
+      <column name="description" value="Qatar"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="RE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="188"/>
+      <column name="name" value="Réunion"/>
+      <column name="description" value="Réunion"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="RO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="189"/>
+      <column name="name" value="Romania"/>
+      <column name="description" value="Romania"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="RS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="190"/>
+      <column name="name" value="Serbia"/>
+      <column name="description" value="Serbia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="RU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="191"/>
+      <column name="name" value="Russian Federation"/>
+      <column name="description" value="Russian Federation"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="RW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="192"/>
+      <column name="name" value="Rwanda"/>
+      <column name="description" value="Rwanda"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="193"/>
+      <column name="name" value="Saudi Arabia"/>
+      <column name="description" value="Saudi Arabia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SB"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="194"/>
+      <column name="name" value="Solomon Islands"/>
+      <column name="description" value="Solomon Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SC"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="195"/>
+      <column name="name" value="Seychelles"/>
+      <column name="description" value="Seychelles"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SD"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="196"/>
+      <column name="name" value="Sudan"/>
+      <column name="description" value="Sudan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="197"/>
+      <column name="name" value="Sweden"/>
+      <column name="description" value="Sweden"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="198"/>
+      <column name="name" value="Singapore"/>
+      <column name="description" value="Singapore"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="199"/>
+      <column name="name" value="Saint Helena, Ascension and Tristan da Cunha"/>
+      <column name="description" value="Saint Helena, Ascension and Tristan da Cunha"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="200"/>
+      <column name="name" value="Slovenia"/>
+      <column name="description" value="Slovenia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SJ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="201"/>
+      <column name="name" value="Svalbard and Jan Mayen"/>
+      <column name="description" value="Svalbard and Jan Mayen"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="202"/>
+      <column name="name" value="Slovakia"/>
+      <column name="description" value="Slovakia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="203"/>
+      <column name="name" value="Sierra Leone"/>
+      <column name="description" value="Sierra Leone"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="204"/>
+      <column name="name" value="San Marino"/>
+      <column name="description" value="San Marino"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="205"/>
+      <column name="name" value="Senegal"/>
+      <column name="description" value="Senegal"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="206"/>
+      <column name="name" value="Somalia"/>
+      <column name="description" value="Somalia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="207"/>
+      <column name="name" value="Suriname"/>
+      <column name="description" value="Suriname"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="208"/>
+      <column name="name" value="South Sudan"/>
+      <column name="description" value="South Sudan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ST"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="209"/>
+      <column name="name" value="Sao Tome and Principe"/>
+      <column name="description" value="Sao Tome and Principe"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SV"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="210"/>
+      <column name="name" value="El Salvador"/>
+      <column name="description" value="El Salvador"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SX"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="211"/>
+      <column name="name" value="Sint Maarten (Dutch part)"/>
+      <column name="description" value="Sint Maarten (Dutch part)"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="212"/>
+      <column name="name" value="Syrian Arab Republic"/>
+      <column name="description" value="Syrian Arab Republic"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="SZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="213"/>
+      <column name="name" value="Swaziland"/>
+      <column name="description" value="Swaziland"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TC"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="214"/>
+      <column name="name" value="Turks and Caicos Islands"/>
+      <column name="description" value="Turks and Caicos Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TD"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="215"/>
+      <column name="name" value="Chad"/>
+      <column name="description" value="Chad"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="216"/>
+      <column name="name" value="French Southern Territories"/>
+      <column name="description" value="French Southern Territories"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="217"/>
+      <column name="name" value="Togo"/>
+      <column name="description" value="Togo"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TH"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="218"/>
+      <column name="name" value="Thailand"/>
+      <column name="description" value="Thailand"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TJ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="219"/>
+      <column name="name" value="Tajikistan"/>
+      <column name="description" value="Tajikistan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TK"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="220"/>
+      <column name="name" value="Tokelau"/>
+      <column name="description" value="Tokelau"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TL"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="221"/>
+      <column name="name" value="Timor-Leste"/>
+      <column name="description" value="Timor-Leste"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="222"/>
+      <column name="name" value="Turkmenistan"/>
+      <column name="description" value="Turkmenistan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="223"/>
+      <column name="name" value="Tunisia"/>
+      <column name="description" value="Tunisia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TO"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="224"/>
+      <column name="name" value="Tonga"/>
+      <column name="description" value="Tonga"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TR"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="225"/>
+      <column name="name" value="Turkey"/>
+      <column name="description" value="Turkey"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="226"/>
+      <column name="name" value="Trinidad and Tobago"/>
+      <column name="description" value="Trinidad and Tobago"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TV"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="227"/>
+      <column name="name" value="Tuvalu"/>
+      <column name="description" value="Tuvalu"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="228"/>
+      <column name="name" value="Taiwan, Province of China"/>
+      <column name="description" value="Taiwan, Province of China"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="TZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="229"/>
+      <column name="name" value="Tanzania, United Republic of"/>
+      <column name="description" value="Tanzania, United Republic of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="UA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="230"/>
+      <column name="name" value="Ukraine"/>
+      <column name="description" value="Ukraine"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="UG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="231"/>
+      <column name="name" value="Uganda"/>
+      <column name="description" value="Uganda"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="UM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="232"/>
+      <column name="name" value="United States Minor Outlying Islands"/>
+      <column name="description" value="United States Minor Outlying Islands"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="US"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="233"/>
+      <column name="name" value="United States of America"/>
+      <column name="description" value="United States of America"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="UY"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="234"/>
+      <column name="name" value="Uruguay"/>
+      <column name="description" value="Uruguay"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="UZ"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="235"/>
+      <column name="name" value="Uzbekistan"/>
+      <column name="description" value="Uzbekistan"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="VA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="236"/>
+      <column name="name" value="Holy See"/>
+      <column name="description" value="Holy See"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="VC"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="237"/>
+      <column name="name" value="Saint Vincent and the Grenadines"/>
+      <column name="description" value="Saint Vincent and the Grenadines"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="VE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="238"/>
+      <column name="name" value="Venezuela"/>
+      <column name="description" value="Venezuela, Bolivarian Republic of"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="VG"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="239"/>
+      <column name="name" value="Virgin Islands, British"/>
+      <column name="description" value="Virgin Islands, British"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="VI"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="240"/>
+      <column name="name" value="Virgin Islands, U.S."/>
+      <column name="description" value="Virgin Islands, U.S."/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="VN"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="241"/>
+      <column name="name" value="Viet Nam"/>
+      <column name="description" value="Viet Nam"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="VU"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="242"/>
+      <column name="name" value="Vanuatu"/>
+      <column name="description" value="Vanuatu"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="WF"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="243"/>
+      <column name="name" value="Wallis and Futuna"/>
+      <column name="description" value="Wallis and Futuna"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="WS"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="244"/>
+      <column name="name" value="Samoa"/>
+      <column name="description" value="Samoa"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="YE"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="245"/>
+      <column name="name" value="Yemen"/>
+      <column name="description" value="Yemen"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="YT"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="246"/>
+      <column name="name" value="Mayotte"/>
+      <column name="description" value="Mayotte"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ZA"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="247"/>
+      <column name="name" value="South Africa"/>
+      <column name="description" value="South Africa"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ZM"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="248"/>
+      <column name="name" value="Zambia"/>
+      <column name="description" value="Zambia"/>
+    </insert>
+    <insert schemaName="reference" tableName="countries">
+      <column name="code" value="ZW"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="249"/>
+      <column name="name" value="Zimbabwe"/>
+      <column name="description" value="Zimbabwe"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="employment_statuses">
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Now known"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_statuses">
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Other"/>
+      <column name="description" value="Other"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_statuses">
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Employed"/>
+      <column name="description" value="Employed"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="0"/>
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="13"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Not known"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="1"/>
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Retired/Pensioner"/>
+      <column name="description" value="Retired/Pensioner"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="1"/>
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Unemployed"/>
+      <column name="description" value="Unemployed"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="1"/>
+      <column name="code" value="3"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Housewife/Home Executive"/>
+      <column name="description" value="Housewife/Home Executive"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="1"/>
+      <column name="code" value="4"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Student"/>
+      <column name="description" value="Student"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="1"/>
+      <column name="code" value="5"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Dismissed"/>
+      <column name="description" value="Dismissed"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="1"/>
+      <column name="code" value="6"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Suspended"/>
+      <column name="description" value="Suspended"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="1"/>
+      <column name="code" value="7"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Minor"/>
+      <column name="description" value="Minor"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="1"/>
+      <column name="code" value="8"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Unspecified"/>
+      <column name="description" value="Unspecified"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="2"/>
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Full-time"/>
+      <column name="description" value="Full-time"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="2"/>
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Part-time"/>
+      <column name="description" value="Part-time"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="2"/>
+      <column name="code" value="3"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="11"/>
+      <column name="name" value="Contractor"/>
+      <column name="description" value="Contractor"/>
+    </insert>
+    <insert schemaName="reference" tableName="employment_types">
+      <column name="employment_status" value="2"/>
+      <column name="code" value="4"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="12"/>
+      <column name="name" value="Self-employed"/>
+      <column name="description" value="Self-employed"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="genders">
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Not known"/>
+    </insert>
+    <insert schemaName="reference" tableName="genders">
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
       <column name="name" value="Male"/>
       <column name="description" value="Male"/>
     </insert>
-    <insert schemaName="reference" tableName="gender">
+    <insert schemaName="reference" tableName="genders">
       <column name="code" value="2"/>
-      <column name="local_id" value="en-US"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
       <column name="name" value="Female"/>
       <column name="description" value="Female"/>
     </insert>
-    <insert schemaName="reference" tableName="gender">
+    <insert schemaName="reference" tableName="genders">
       <column name="code" value="3"/>
-      <column name="local_id" value="en-US"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
       <column name="name" value="Transgender"/>
       <column name="description" value="Transgender"/>
     </insert>
-    <insert schemaName="reference" tableName="gender">
+    <insert schemaName="reference" tableName="genders">
       <column name="code" value="4"/>
-      <column name="local_id" value="en-US"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="4"/>
       <column name="name" value="Non-binary"/>
       <column name="description" value="Non-binary"/>
     </insert>
-    <insert schemaName="reference" tableName="gender">
+    <insert schemaName="reference" tableName="genders">
       <column name="code" value="9"/>
-      <column name="local_id" value="en-US"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="5"/>
       <column name="name" value="Not applicable"/>
       <column name="description" value="Not applicable"/>
     </insert>
+
   </changeSet>
 
 
