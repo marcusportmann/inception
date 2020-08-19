@@ -26,9 +26,13 @@ import digital.inception.reference.EmploymentStatus;
 import digital.inception.reference.EmploymentType;
 import digital.inception.reference.Gender;
 import digital.inception.reference.IReferenceService;
+import digital.inception.reference.IdentityDocumentType;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +41,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.util.StringUtils;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -83,30 +88,95 @@ public class ReferenceServiceTest {
   public void countryTest() throws Exception {
     List<Country> retrievedCountries = referenceService.getCountries();
 
+    Country retrievedCountry = retrievedCountries.get(0);
+
     assertEquals(
         "The correct number of countries was not retrieved", 498, retrievedCountries.size());
+
+    assertEquals(
+        "The correct code was not retrieved for the country", "AD", retrievedCountry.getCode());
+    assertEquals(
+        "The correct locale was not retrieved for the country",
+        "en-US",
+        retrievedCountry.getLocale());
+    assertEquals(
+        "The correct name was not retrieved for the country",
+        "Andorra",
+        retrievedCountry.getName());
+    assertEquals(
+        "The correct short name was not retrieved for the country",
+        "Andorra",
+        retrievedCountry.getName());
+    assertEquals(
+        "The correct description was not retrieved for the country",
+        "Andorra",
+        retrievedCountry.getName());
+
+    if (false) {
+      for (Country country : retrievedCountries) {
+        System.out.println(
+            "INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)");
+        System.out.println(
+            "   VALUES ('"
+                + country.getCode()
+                + "', '"
+                + country.getLocale()
+                + "', "
+                + country.getSortIndex()
+                + ", '"
+                + country.getName().replace("'", "''")
+                + "', '"
+                + country.getShortName().replace("'", "''")
+                + "', '"
+                + country.getDescription().replace("'", "''")
+                + "');");
+      }
+    }
 
     retrievedCountries = referenceService.getCountries("en-ZA");
 
     assertEquals(
         "The correct number of countries was not retrieved", 249, retrievedCountries.size());
 
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    //    for (Country retrievedCountry : retrievedCountries) {
-    //      System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
-    //      System.out.println("  <column name=\"code\" value=\"" + retrievedCountry.getCode() +
-    // "\"/>");
-    //      System.out.println("  <column name=\"locale\" value=\"en-US\"/>");
-    //      System.out.println("  <column name=\"sort_index\" value=\"" +
-    // retrievedCountry.getSortIndex() + "\"/>");
-    //      System.out.println("  <column name=\"name\" value=\"" + retrievedCountry.getName() +
-    // "\"/>");
-    //      System.out.println(
-    //          "  <column name=\"description\" value=\"" + retrievedCountry.getDescription() +
-    // "\"/>");
-    //      System.out.println("</insert>");
-    //    }
+    retrievedCountry = retrievedCountries.get(0);
 
+    assertEquals(
+        "The correct code was not retrieved for the country", "AD", retrievedCountry.getCode());
+    assertEquals(
+        "The correct locale was not retrieved for the country",
+        "en-ZA",
+        retrievedCountry.getLocale());
+    assertEquals(
+        "The correct name was not retrieved for the country",
+        "Andorra",
+        retrievedCountry.getName());
+    assertEquals(
+        "The correct short name was not retrieved for the country",
+        "Andorra",
+        retrievedCountry.getName());
+    assertEquals(
+        "The correct description was not retrieved for the country",
+        "Andorra",
+        retrievedCountry.getName());
+
+    retrievedCountries = referenceService.getCountries("en-US");
+
+    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
+    if (false) {
+      for (Country country : retrievedCountries) {
+        System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
+        System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
+        System.out.println("  <column name=\"locale\" value=\"en-US\"/>");
+        System.out.println(
+            "  <column name=\"sort_index\" value=\"" + country.getSortIndex() + "\"/>");
+        System.out.println("  <column name=\"name\" value=\"" + country.getName() + "\"/>");
+        System.out.println(
+            "  <column name=\"short_name\" value=\"" + country.getShortName() + "\"/>");
+        System.out.println(
+            "  <column name=\"description\" value=\"" + country.getDescription() + "\"/>");
+        System.out.println("</insert>");
+      }
+    }
   }
 
   /** Test the employment status reference functionality. */
@@ -155,5 +225,102 @@ public class ReferenceServiceTest {
     retrievedGenders = referenceService.getGenders("en-ZA");
 
     assertEquals("The correct number of genders was not retrieved", 6, retrievedGenders.size());
+  }
+
+  @Test
+  public void generateLanguagesSQL() throws Exception {
+
+    if (false) {
+
+      BufferedReader reader =
+          new BufferedReader(
+              new InputStreamReader(
+                  Thread.currentThread()
+                      .getContextClassLoader()
+                      .getResourceAsStream("csv/languages.csv")));
+
+      String line = reader.readLine();
+
+      int counter = 1;
+
+      while (line != null) {
+        String[] parts = line.split(",");
+
+        if (parts.length != 3) {
+          Assert.fail("Invalid number of language parts");
+        }
+
+        System.out.println(
+            "INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)");
+        System.out.println(
+            "   VALUES ('"
+                + parts[0]
+                + "', 'en-US', "
+                + counter
+                + ", '"
+                + parts[1].replace("'", "''").replace(";", ",")
+                + "', '"
+                + parts[1].replace("'", "''").replace(";", ",")
+                + "', '"
+                + parts[2].replace("'", "''").replace(";", ",")
+                + "');");
+
+        line = reader.readLine();
+        counter++;
+      }
+    }
+
+    if (false) {
+
+      BufferedReader reader =
+          new BufferedReader(
+              new InputStreamReader(
+                  Thread.currentThread()
+                      .getContextClassLoader()
+                      .getResourceAsStream("csv/languages.csv")));
+
+      String line = reader.readLine();
+
+      int counter = 1;
+
+      while (line != null) {
+        String[] parts = line.split(",");
+
+        if (parts.length != 3) {
+          Assert.fail("Invalid number of language parts");
+        }
+
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"languages\">");
+        System.out.println("      <column name=\"code\" value=\"" + parts[0] + "\"/>");
+        System.out.println("      <column name=\"locale\" value=\"en-US\"/>");
+        System.out.println("      <column name=\"sort_index\" value=\"" + counter + "\"/>");
+        System.out.println("      <column name=\"name\" value=\"" + parts[1].replace(";", ",") + "\"/>");
+        System.out.println("      <column name=\"short_name\" value=\"" + parts[1].replace(";", ",") + "\"/>");
+        System.out.println("      <column name=\"description\" value=\"" + parts[2].replace(";", ",") + "\"/>");
+        System.out.println("    </insert>");
+
+        line = reader.readLine();
+        counter++;
+      }
+    }
+  }
+
+  /** Test the identity document type reference functionality. */
+  @Test
+  public void identityDocumentTypeTest() throws Exception {
+    List<IdentityDocumentType> retrievedIdentityDocumentTypes =
+        referenceService.getIdentityDocumentTypes();
+
+    assertEquals(
+        "The correct number of identity document types was not retrieved",
+        8,
+        retrievedIdentityDocumentTypes.size());
+
+    retrievedIdentityDocumentTypes = referenceService.getIdentityDocumentTypes("en-ZA");
+
+    assertEquals(
+        "The correct number of identity document types was not retrieved",
+        4,
+        retrievedIdentityDocumentTypes.size());
   }
 }

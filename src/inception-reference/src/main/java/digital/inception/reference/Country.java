@@ -90,6 +90,15 @@ public class Country {
   @Column(name = "name", nullable = false)
   private String name;
 
+  /** The short name for the country. */
+  @Schema(description = "The short name for the country", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ShortName", required = true)
+  @NotNull
+  @Size(max = 50)
+  @Column(name = "short_name", nullable = false)
+  private String shortName;
+
   /** The sort index for the country. */
   @Schema(description = "The sort index for the country", required = true)
   @JsonProperty(required = true)
@@ -138,6 +147,15 @@ public class Country {
   }
 
   /**
+   * Returns the short name for the country.
+   *
+   * @return the short name for the country
+   */
+  public String getShortName() {
+    return shortName;
+  }
+
+  /**
    * Returns the sort index for the country.
    *
    * @return the sort index for the country
@@ -180,6 +198,15 @@ public class Country {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the short name for the country.
+   *
+   * @param shortDescription the short name for the country
+   */
+  public void setShortName(String shortDescription) {
+    this.shortName = shortDescription;
   }
 
   /**

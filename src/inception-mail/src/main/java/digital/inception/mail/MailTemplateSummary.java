@@ -166,33 +166,6 @@ public class MailTemplateSummary implements Serializable {
   }
 
   /**
-   * Set the content type for the mail template.
-   *
-   * @param contentType the content type for the mail template
-   */
-  public void setContentType(MailTemplateContentType contentType) {
-    this.contentType = contentType;
-  }
-
-  /**
-   * Set the ID uniquely identifying the mail template.
-   *
-   * @param id the ID uniquely identifying the mail template
-   */
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the mail template.
-   *
-   * @param name the name of the mail template
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
    * Returns a string representation of the object.
    *
    * @return a string representation of the object

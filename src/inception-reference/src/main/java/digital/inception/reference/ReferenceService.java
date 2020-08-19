@@ -55,6 +55,9 @@ public class ReferenceService implements IReferenceService {
   /** The Gender Repository. */
   private final GenderRepository genderRepository;
 
+  /** The Identity Document Type Repository. */
+  private final IdentityDocumentTypeRepository identityDocumentTypeRepository;
+
   /**
    * Constructs a new <code>ReferenceService</code>.
    *
@@ -63,18 +66,21 @@ public class ReferenceService implements IReferenceService {
    * @param employmentStatusRepository the Employment Status Repository
    * @param employmentTypeRepository the Employment Type Repository
    * @param genderRepository the Gender Repository
+   * @param identityDocumentTypeRepository the Identity Document Type Repository
    */
   public ReferenceService(
       CountryRepository countryRepository,
       CommunicationMethodRepository communicationMethodRepository,
       EmploymentStatusRepository employmentStatusRepository,
       EmploymentTypeRepository employmentTypeRepository,
-      GenderRepository genderRepository) {
+      GenderRepository genderRepository,
+      IdentityDocumentTypeRepository identityDocumentTypeRepository) {
     this.countryRepository = countryRepository;
     this.communicationMethodRepository = communicationMethodRepository;
     this.employmentStatusRepository = employmentStatusRepository;
     this.employmentTypeRepository = employmentTypeRepository;
     this.genderRepository = genderRepository;
+    this.identityDocumentTypeRepository = identityDocumentTypeRepository;
   }
 
   /**
@@ -233,5 +239,39 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<Gender> getGenders() throws ReferenceServiceException {
     return getGenders(null);
+  }
+
+  /**
+   * Retrieve all the identity document types.
+   *
+   * @return the identity document types
+   */
+  @Override
+  public List<IdentityDocumentType> getIdentityDocumentTypes() throws ReferenceServiceException {
+    return getIdentityDocumentTypes(null);
+  }
+
+  /**
+   * Retrieve the identity document types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the identity
+   *     document types for or <code>null</code> to retrieve the identity document types for all
+   *     locales
+   * @return the identity document types
+   */
+  @Override
+  public List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return identityDocumentTypeRepository.findAll(
+            Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return identityDocumentTypeRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the identity document types", e);
+    }
   }
 }

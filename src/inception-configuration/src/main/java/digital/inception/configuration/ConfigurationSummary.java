@@ -144,22 +144,4 @@ public class ConfigurationSummary implements Serializable {
   public int hashCode() {
     return (key == null) ? 0 : key.hashCode();
   }
-
-  /**
-   * Set the description for the configuration.
-   *
-   * @param description the description for the configuration
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /**
-   * Set the key uniquely identifying the configuration.
-   *
-   * @param key the key uniquely identifying the configuration
-   */
-  public void setKey(String key) {
-    this.key = key;
-  }
 }

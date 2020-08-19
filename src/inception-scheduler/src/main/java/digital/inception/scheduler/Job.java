@@ -180,7 +180,7 @@ public class Job implements Serializable {
       insertable = false,
       updatable = false,
       nullable = false)
-  private Set<JobParameter> parameters = new HashSet<>();
+  private final Set<JobParameter> parameters = new HashSet<>();
 
   /** The cron-style scheduling pattern for the job. */
   @Schema(description = "The cron-style scheduling pattern for the job", required = true)

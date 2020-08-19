@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Party</code> class holds the information for a party.
+ * The <code>Party</code> class holds the information for an independent party.
+ *
+ * See: https://spec.edmcouncil.org/fibo/ontology/FND/Parties/Parties/IndependentParty
  *
  * @author Marcus Portmann
  */
@@ -48,12 +50,13 @@ import javax.xml.bind.annotation.XmlType;
     propOrder = {"id", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "party")
+@Table(schema = "party", name = "parties")
 public class Party {
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the party. */
+  /** The Universally Unique Identifier (UUID) uniquely identifying the independent party. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the party",
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the independent party",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -62,8 +65,8 @@ public class Party {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The name of the party. */
-  @Schema(description = "The name of the party", required = true)
+  /** The name of the independent party. */
+  @Schema(description = "The name of the independent party", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -71,9 +74,9 @@ public class Party {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** The type of party. */
+  /** The type of independent party. */
   @Schema(
-      description = "The type of party",
+      description = "The type of independent party",
       allowableValues = "1 = Organization, 2 = Person",
       required = true)
   @JsonProperty(required = true)
@@ -86,54 +89,54 @@ public class Party {
   public Party() {}
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the party.
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the independent party.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the independent party
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the name of the party.
+   * Returns the name of the independent party.
    *
-   * @return the name of the party
+   * @return the name of the independent party
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the type of party.
+   * Returns the type of independent party.
    *
-   * @return the type of party
+   * @return the type of independent party
    */
   public PartyType getType() {
     return type;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the party.
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the independent party.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @param id the Universally Unique Identifier (UUID) uniquely identifying the independent party
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the name of the party.
+   * Set the name of the independent party.
    *
-   * @param name the name of the party
+   * @param name the name of the independent party
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the type of party.
+   * Set the type of independent party.
    *
-   * @param type the type of party
+   * @param type the type of independent party
    */
   public void setType(PartyType type) {
     this.type = type;

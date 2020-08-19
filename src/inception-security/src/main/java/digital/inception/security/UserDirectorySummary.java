@@ -173,31 +173,4 @@ public class UserDirectorySummary implements java.io.Serializable {
   public int hashCode() {
     return (id == null) ? 0 : id.hashCode();
   }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the user directory
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
-   * Set the name of the user directory.
-   *
-   * @param name the name of the user directory
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
-   * Set the code uniquely identifying the user directory type.
-   *
-   * @param type the code uniquely identifying the user directory type
-   */
-  public void setType(String type) {
-    this.type = type;
-  }
 }

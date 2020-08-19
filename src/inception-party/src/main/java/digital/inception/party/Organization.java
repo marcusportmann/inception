@@ -52,10 +52,10 @@ import javax.xml.bind.annotation.XmlType;
     propOrder = {"id", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "party")
+@Table(schema = "party", name = "parties")
 @SecondaryTable(
     schema = "party",
-    name = "organization",
+    name = "organizations",
     pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")})
 public class Organization {
 

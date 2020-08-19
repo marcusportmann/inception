@@ -110,4 +110,24 @@ public interface IReferenceService {
    * @return the genders
    */
   List<Gender> getGenders(String localeId) throws ReferenceServiceException;
+
+
+
+  /**
+   * Retrieve all the identity document types.
+   *
+   * @return the identity document types
+   */
+  List<IdentityDocumentType> getIdentityDocumentTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the identity document types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the identity document
+   *     types for or <code>null</code> to retrieve the identity document types for all locales
+   * @return the identity document types
+   */
+  List<IdentityDocumentType> getIdentityDocumentTypes(String localeId) throws ReferenceServiceException;
+  
+  
 }
