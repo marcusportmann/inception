@@ -7,11 +7,34 @@ CREATE SCHEMA reference;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
+CREATE TABLE reference.address_types (
+  code        VARCHAR(10)  NOT NULL,
+  locale      VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale)
+);
+
+CREATE INDEX address_types_locale_ix ON reference.address_types(locale);
+
+COMMENT ON COLUMN reference.address_types.code IS 'The code for the address_type';
+
+COMMENT ON COLUMN reference.address_types.locale IS 'The Unicode locale identifier for the address_type';
+
+COMMENT ON COLUMN reference.address_types.sort_index IS 'The sort index for the address_type';
+
+COMMENT ON COLUMN reference.address_types.name IS 'The name of the address_type';
+
+COMMENT ON COLUMN reference.address_types.description IS 'The description for the address_type';
+
+
 CREATE TABLE reference.communication_methods (
   code        VARCHAR(10)  NOT NULL,
   locale      VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
-  name        VARCHAR(20)  NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
   PRIMARY KEY (code, locale)
@@ -60,7 +83,7 @@ CREATE TABLE reference.employment_statuses (
   code        VARCHAR(10)  NOT NULL,
   locale      VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
-  name        VARCHAR(20)  NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
   PRIMARY KEY (code, locale)
@@ -112,7 +135,7 @@ CREATE TABLE reference.genders (
   code        VARCHAR(10)  NOT NULL,
   locale      VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
-  name        VARCHAR(20)  NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
   PRIMARY KEY (code, locale)
@@ -183,6 +206,207 @@ COMMENT ON COLUMN reference.languages.name IS 'The name of the language';
 COMMENT ON COLUMN reference.languages.short_name IS 'The short name for the language';
 
 COMMENT ON COLUMN reference.languages.description IS 'The description for the language';
+
+
+CREATE TABLE reference.marital_statuses (
+  code        VARCHAR(10)  NOT NULL,
+  locale      VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale)
+);
+
+CREATE INDEX marital_statuses_locale_ix ON reference.marital_statuses(locale);
+
+COMMENT ON COLUMN reference.marital_statuses.code IS 'The code for the marital status';
+
+COMMENT ON COLUMN reference.marital_statuses.locale IS 'The Unicode locale identifier for the marital status';
+
+COMMENT ON COLUMN reference.marital_statuses.sort_index IS 'The sort index for the marital status';
+
+COMMENT ON COLUMN reference.marital_statuses.name IS 'The name of the marital status';
+
+COMMENT ON COLUMN reference.marital_statuses.description IS 'The description for the marital status';
+
+
+CREATE TABLE reference.marriage_types (
+  marital_status VARCHAR(10)  NOT NULL,
+  code              VARCHAR(10)  NOT NULL,
+  locale            VARCHAR(10)  NOT NULL,
+  sort_index        INTEGER NOT NULL,
+  name              VARCHAR(50)  NOT NULL,
+  description       VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (marital_status, code, locale)
+);
+
+CREATE INDEX marriage_types_marital_status_ix ON reference.marriage_types(marital_status);
+
+CREATE INDEX marriage_types_locale_ix ON reference.marriage_types(locale);
+
+COMMENT ON COLUMN reference.marriage_types.marital_status IS 'The code for the marital status the marriage type is associated with';
+
+COMMENT ON COLUMN reference.marriage_types.code IS 'The code for the marriage type';
+
+COMMENT ON COLUMN reference.marriage_types.locale IS 'The Unicode locale identifier for the marriage type';
+
+COMMENT ON COLUMN reference.marriage_types.sort_index IS 'The sort index for the marriage type';
+
+COMMENT ON COLUMN reference.marriage_types.name IS 'The name of the marriage type';
+
+COMMENT ON COLUMN reference.marriage_types.description IS 'The description for the marriage type';
+
+
+CREATE TABLE reference.minor_types (
+  code        VARCHAR(10)  NOT NULL,
+  locale      VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale)
+);
+
+CREATE INDEX minor_types_locale_ix ON reference.minor_types(locale);
+
+COMMENT ON COLUMN reference.minor_types.code IS 'The code for the minor type';
+
+COMMENT ON COLUMN reference.minor_types.locale IS 'The Unicode locale identifier for the minor type';
+
+COMMENT ON COLUMN reference.minor_types.sort_index IS 'The sort index for the minor type';
+
+COMMENT ON COLUMN reference.minor_types.name IS 'The name of the minor type';
+
+COMMENT ON COLUMN reference.minor_types.description IS 'The description for the minor type';
+
+
+CREATE TABLE reference.next_of_kin_types (
+  code        VARCHAR(10)  NOT NULL,
+  locale      VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale)
+);
+
+CREATE INDEX next_of_kin_types_locale_ix ON reference.next_of_kin_types(locale);
+
+COMMENT ON COLUMN reference.next_of_kin_types.code IS 'The code for the next of kin type';
+
+COMMENT ON COLUMN reference.next_of_kin_types.locale IS 'The Unicode locale identifier for the next of kin type';
+
+COMMENT ON COLUMN reference.next_of_kin_types.sort_index IS 'The sort index for the next of kin type';
+
+COMMENT ON COLUMN reference.next_of_kin_types.name IS 'The name of the next of kin type';
+
+COMMENT ON COLUMN reference.next_of_kin_types.description IS 'The description for the next of kin type';
+
+
+CREATE TABLE reference.occupations (
+  code        VARCHAR(10)  NOT NULL,
+  locale      VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale)
+);
+
+CREATE INDEX occupations_locale_ix ON reference.occupations(locale);
+
+COMMENT ON COLUMN reference.occupations.code IS 'The code for the occupation';
+
+COMMENT ON COLUMN reference.occupations.locale IS 'The Unicode locale identifier for the occupation';
+
+COMMENT ON COLUMN reference.occupations.sort_index IS 'The sort index for the occupation';
+
+COMMENT ON COLUMN reference.occupations.name IS 'The name of the occupation';
+
+COMMENT ON COLUMN reference.occupations.description IS 'The description for the occupation';
+
+
+CREATE TABLE reference.permit_types (
+  code        VARCHAR(10)  NOT NULL,
+  locale      VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale)
+);
+
+CREATE INDEX permit_types_locale_ix ON reference.permit_types(locale);
+
+COMMENT ON COLUMN reference.permit_types.code IS 'The code for the permit type';
+
+COMMENT ON COLUMN reference.permit_types.locale IS 'The Unicode locale identifier for the permit type';
+
+COMMENT ON COLUMN reference.permit_types.sort_index IS 'The sort index for the permit type';
+
+COMMENT ON COLUMN reference.permit_types.name IS 'The name of the permit type';
+
+COMMENT ON COLUMN reference.permit_types.description IS 'The description for the permit type';
+
+
+CREATE TABLE reference.races (
+  code        VARCHAR(10)  NOT NULL,
+  locale      VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale)
+);
+
+CREATE INDEX races_locale_ix ON reference.races(locale);
+
+COMMENT ON COLUMN reference.races.code IS 'The code for the race';
+
+COMMENT ON COLUMN reference.races.locale IS 'The Unicode locale identifier for the race';
+
+COMMENT ON COLUMN reference.races.sort_index IS 'The sort index for the race';
+
+COMMENT ON COLUMN reference.races.name IS 'The name of the race';
+
+COMMENT ON COLUMN reference.races.description IS 'The description for the race';
+
+
+CREATE TABLE reference.regions (
+  country     VARCHAR(10)  NOT NULL,
+  code        VARCHAR(10)  NOT NULL,
+  locale      VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (country, code, locale)
+);
+
+CREATE INDEX regions_country_ix ON reference.regions(country);
+
+CREATE INDEX regions_locale_ix ON reference.regions(locale);
+
+COMMENT ON COLUMN reference.regions.country IS 'The code for the country the region is associated with';
+
+COMMENT ON COLUMN reference.regions.code IS 'The code for the region';
+
+COMMENT ON COLUMN reference.regions.locale IS 'The Unicode locale identifier for the region';
+
+COMMENT ON COLUMN reference.regions.sort_index IS 'The sort index for the region';
+
+COMMENT ON COLUMN reference.regions.name IS 'The name of the region';
+
+COMMENT ON COLUMN reference.regions.description IS 'The description for the region';
+
+
+
+
+
+
+
 
 
 -- -------------------------------------------------------------------------------------------------
@@ -1201,21 +1425,21 @@ INSERT INTO reference.countries (code, locale, sort_index, name, short_name, des
    VALUES ('ZW', 'en-ZA', 249, 'Zimbabwe', 'Zimbabwe', 'Zimbabwe');
 
 INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
-  VALUES ('0', 'en-US', 3, 'Not known', 'Not known');
+  VALUES ('0', 'en-US', 99, 'Not known', 'Not known');
 INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
   VALUES ('1', 'en-US', 1, 'Other', 'Other');
 INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
   VALUES ('2', 'en-US', 2, 'Employed', 'Employed');
 
 INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
-  VALUES ('0', 'en-ZA', 3, 'Not known', 'Not known');
+  VALUES ('0', 'en-ZA', 99, 'Not known', 'Not known');
 INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
   VALUES ('1', 'en-ZA', 1, 'Other', 'Other');
 INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
   VALUES ('2', 'en-ZA', 2, 'Employed', 'Employed');
   
 INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
-  VALUES ('0', '0', 'en-US', 13, 'Not known', 'Not known');
+  VALUES ('0', '0', 'en-US', 99, 'Not known', 'Not known');
 INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
   VALUES ('1', '1', 'en-US', 1, 'Retired/Pensioner', 'Retired/Pensioner');
 INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
@@ -1242,7 +1466,7 @@ INSERT INTO reference.employment_types (employment_status, code, locale, sort_in
   VALUES ('2', '4', 'en-US', 12, 'Self-employed', 'Self-employed');  
 
 INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
-  VALUES ('0', '0', 'en-ZA', 13, 'Not known', 'Not known');
+  VALUES ('0', '0', 'en-ZA', 99, 'Not known', 'Not known');
 INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
   VALUES ('1', '1', 'en-ZA', 1, 'Retired/Pensioner', 'Retired/Pensioner');
 INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
@@ -1269,7 +1493,7 @@ INSERT INTO reference.employment_types (employment_status, code, locale, sort_in
   VALUES ('2', '4', 'en-ZA', 12, 'Self-employed', 'Self-employed');
 
 INSERT INTO reference.genders (code, locale, sort_index, name, description)
-  VALUES ('0', 'en-US', 6, 'Not known', 'Not known');
+  VALUES ('0', 'en-US', 99, 'Not known', 'Not known');
 INSERT INTO reference.genders (code, locale, sort_index, name, description)
   VALUES ('1', 'en-US', 1, 'Male', 'Male');
 INSERT INTO reference.genders (code, locale, sort_index, name, description)
@@ -1282,7 +1506,7 @@ INSERT INTO reference.genders (code, locale, sort_index, name, description)
   VALUES ('9', 'en-US', 5, 'Not applicable', 'Not applicable');
 
 INSERT INTO reference.genders (code, locale, sort_index, name, description)
-  VALUES ('0', 'en-ZA', 6, 'Not known', 'Not known');
+  VALUES ('0', 'en-ZA', 99, 'Not known', 'Not known');
 INSERT INTO reference.genders (code, locale, sort_index, name, description)
   VALUES ('1', 'en-ZA', 1, 'Male', 'Male');
 INSERT INTO reference.genders (code, locale, sort_index, name, description)
@@ -1312,678 +1536,627 @@ INSERT INTO reference.identity_document_types (code, locale, sort_index, name, d
 INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
   VALUES ('99999', 'en-ZA', 99999, 'Passport', 'Passport', '');
 
+-- See: https://en.wikipedia.org/wiki/List_of_official_languages_by_country_and_territory
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('aa', 'en-US', 1, 'Afar', 'Afar', 'Afar');
+   VALUES ('ab', 'en-US', 1, 'Abkhaz', 'Abkhaz', 'Abkhaz');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ab', 'en-US', 2, 'Abkhazian', 'Abkhazian', 'Abkhazian');
+   VALUES ('af', 'en-US', 2, 'Afrikaans', 'Afrikaans', 'Afrikaans');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('af', 'en-US', 4, 'Afrikaans', 'Afrikaans', 'Afrikaans');
+   VALUES ('am', 'en-US', 3, 'Amharic', 'Amharic', 'Amharic');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ak', 'en-US', 5, 'Akan', 'Akan', 'Akan');
+   VALUES ('ar', 'en-US', 4, 'Arabic', 'Arabic', 'Arabic');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('am', 'en-US', 6, 'Amharic', 'Amharic', 'Amharic');
+   VALUES ('ay', 'en-US', 5, 'Aymara', 'Aymara', 'Aymara');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ar', 'en-US', 8, 'Arabic', 'Arabic', 'Arabic');
+   VALUES ('az', 'en-US', 6, 'Azerbaijani', 'Azerbaijani', 'Azerbaijani');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('as', 'en-US', 9, 'Assamese', 'Assamese', 'Assamese');
+   VALUES ('be', 'en-US', 7, 'Belarusian', 'Belarusian', 'Belarusian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('av', 'en-US', 10, 'Avaric', 'Avaric', 'Avaric');
+   VALUES ('bg', 'en-US', 8, 'Bulgarian', 'Bulgarian', 'Bulgarian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ay', 'en-US', 11, 'Aymara', 'Aymara', 'Aymara');
+   VALUES ('bi', 'en-US', 9, 'Bislama', 'Bislama', 'Bislama');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('az', 'en-US', 12, 'Azerbaijani', 'Azerbaijani', 'Azerbaijani');
+   VALUES ('bn', 'en-US', 10, 'Bengali', 'Bengali', 'Bengali');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ba', 'en-US', 13, 'Bashkir', 'Bashkir', 'Bashkir');
+   VALUES ('bs', 'en-US', 11, 'Bosnian', 'Bosnian', 'Bosnian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('be', 'en-US', 14, 'Belarusian', 'Belarusian', 'Belarusian');
+   VALUES ('cs', 'en-US', 12, 'Czech', 'Czech', 'Czech');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bg', 'en-US', 15, 'Bulgarian', 'Bulgarian', 'Bulgarian');
+   VALUES ('da', 'en-US', 13, 'Danish', 'Danish', 'Danish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bh', 'en-US', 16, 'Bihari', 'Bihari', 'Bihari languages');
+   VALUES ('de', 'en-US', 14, 'German', 'German', 'German');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bi', 'en-US', 17, 'Bislama', 'Bislama', 'Bislama');
+   VALUES ('dz', 'en-US', 15, 'Dzongkha', 'Dzongkha', 'Dzongkha');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bm', 'en-US', 18, 'Bambara', 'Bambara', 'Bambara');
+   VALUES ('el', 'en-US', 16, 'Greek', 'Greek', 'Greek');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bn', 'en-US', 19, 'Bengali', 'Bengali', 'Bengali');
+   VALUES ('en', 'en-US', 17, 'English', 'English', 'English');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bo', 'en-US', 20, 'Tibetan', 'Tibetan', 'Tibetan');
+   VALUES ('es', 'en-US', 18, 'Spanish', 'Spanish', 'Spanish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bs', 'en-US', 22, 'Bosnian', 'Bosnian', 'Bosnian');
+   VALUES ('et', 'en-US', 19, 'Estonian', 'Estonian', 'Estonian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ca', 'en-US', 23, 'Catalan', 'Catalan', 'Catalan, Valencian');
+   VALUES ('fi', 'en-US', 20, 'Finnish', 'Finnish', 'Finnish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ce', 'en-US', 24, 'Chechen', 'Chechen', 'Chechen');
+   VALUES ('fj', 'en-US', 21, 'Fijian', 'Fijian', 'Fijian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('co', 'en-US', 26, 'Corsican', 'Corsican', 'Corsican');
+   VALUES ('fr', 'en-US', 22, 'French', 'French', 'French');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cr', 'en-US', 27, 'Cree', 'Cree', 'Cree');
+   VALUES ('gn', 'en-US', 23, 'Guarani', 'Guarani', 'Guarani');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cs', 'en-US', 28, 'Czech', 'Czech', 'Czech');
+   VALUES ('he', 'en-US', 24, 'Hebrew', 'Hebrew', 'Hebrew');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cu', 'en-US', 29, 'Church Slavic', 'Church Slavic', 'Church Slavic, Old Slavonic, Church Slavonic, Old Bulgarian, Old Church Slavonic');
+   VALUES ('hi', 'en-US', 25, 'Hindi', 'Hindi', 'Hindi');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cv', 'en-US', 30, 'Chuvash', 'Chuvash', 'Chuvash');
+   VALUES ('ho', 'en-US', 26, 'Hiri Motu', 'Hiri Motu', 'Hiri Motu');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cy', 'en-US', 31, 'Welsh', 'Welsh', 'Welsh');
+   VALUES ('hr', 'en-US', 27, 'Croatian', 'Croatian', 'Croatian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('da', 'en-US', 32, 'Danish', 'Danish', 'Danish');
+   VALUES ('ht', 'en-US', 28, 'Haitian Creole', 'Haitian Creole', 'Haitian, Haitian Creole');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('de', 'en-US', 33, 'German', 'German', 'German');
+   VALUES ('hu', 'en-US', 29, 'Hungarian', 'Hungarian', 'Hungarian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('dv', 'en-US', 34, 'Maldivian', 'Maldivian', 'Divehi, Dhivehi, Maldivian');
+   VALUES ('hy', 'en-US', 30, 'Armenian', 'Armenian', 'Armenian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('dz', 'en-US', 35, 'Dzongkha', 'Dzongkha', 'Dzongkha');
+   VALUES ('id', 'en-US', 31, 'Indonesian', 'Indonesian', 'Indonesian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ee', 'en-US', 36, 'Ewe', 'Ewe', 'Ewe');
+   VALUES ('is', 'en-US', 32, 'Icelandic', 'Icelandic', 'Icelandic');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('el', 'en-US', 37, 'Greek', 'Greek', 'Greek Modern (1453-)');
+   VALUES ('it', 'en-US', 33, 'Italian', 'Italian', 'Italian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('en', 'en-US', 38, 'English', 'English', 'English');
+   VALUES ('ja', 'en-US', 34, 'Japanese', 'Japanese', 'Japanese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('es', 'en-US', 40, 'Spanish', 'Spanish', 'Spanish, Castilian');
+   VALUES ('ka', 'en-US', 35, 'Georgian', 'Georgian', 'Georgian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('et', 'en-US', 41, 'Estonian', 'Estonian', 'Estonian');
+   VALUES ('kk', 'en-US', 36, 'Kazakh', 'Kazakh', 'Kazakh');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('eu', 'en-US', 42, 'Basque', 'Basque', 'Basque');
+   VALUES ('km', 'en-US', 37, 'Khmer', 'Khmer', 'Khmer');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fa', 'en-US', 43, 'Persian', 'Persian', 'Persian');
+   VALUES ('ko', 'en-US', 38, 'Korean', 'Korean', 'Korean');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ff', 'en-US', 44, 'Fulah', 'Fulah', 'Fulah');
+   VALUES ('ky', 'en-US', 39, 'Kyrgyz', 'Kyrgyz', 'Kirghiz, Kyrgyz');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fi', 'en-US', 45, 'Finnish', 'Finnish', 'Finnish');
+   VALUES ('lb', 'en-US', 40, 'Luxembourgish', 'Luxembourgish', 'Luxembourgish, Letzeburgesch');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fj', 'en-US', 46, 'Fijian', 'Fijian', 'Fijian');
+   VALUES ('lo', 'en-US', 41, 'Lao', 'Lao', 'Lao');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fo', 'en-US', 47, 'Faroese', 'Faroese', 'Faroese');
+   VALUES ('lt', 'en-US', 42, 'Lithuanian', 'Lithuanian', 'Lithuanian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fr', 'en-US', 48, 'French', 'French', 'French');
+   VALUES ('lv', 'en-US', 43, 'Latvian', 'Latvian', 'Latvian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fy', 'en-US', 49, 'Western Frisian', 'Western Frisian', 'Western Frisian');
+   VALUES ('mg', 'en-US', 44, 'Malagasy', 'Malagasy', 'Malagasy');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ga', 'en-US', 50, 'Irish', 'Irish', 'Irish');
+   VALUES ('mi', 'en-US', 45, 'Maori', 'Maori', 'Maori');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('gd', 'en-US', 51, 'Scottish Gaelic', 'Scottish Gaelic', 'Gaelic, Scottish Gaelic');
+   VALUES ('mk', 'en-US', 46, 'Macedonian', 'Macedonian', 'Macedonian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('gl', 'en-US', 52, 'Galician', 'Galician', 'Galician');
+   VALUES ('mn', 'en-US', 47, 'Mongolian', 'Mongolian', 'Mongolian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('gn', 'en-US', 53, 'Guarani', 'Guarani', 'Guarani');
+   VALUES ('mr', 'en-US', 48, 'Marathi', 'Marathi', 'Marathi');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('gu', 'en-US', 54, 'Gujarati', 'Gujarati', 'Gujarati');
+   VALUES ('ms', 'en-US', 49, 'Malay', 'Malay', 'Malay');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ha', 'en-US', 56, 'Hausa', 'Hausa', 'Hausa');
+   VALUES ('mt', 'en-US', 50, 'Maltese', 'Maltese', 'Maltese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('he', 'en-US', 57, 'Hebrew', 'Hebrew', 'Hebrew');
+   VALUES ('my', 'en-US', 51, 'Burmese', 'Burmese', 'Burmese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hi', 'en-US', 58, 'Hindi', 'Hindi', 'Hindi');
+   VALUES ('nd', 'en-US', 52, 'Ndebele', 'Ndebele', 'Ndebele, Northern Ndebele, North Ndebele');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ho', 'en-US', 59, 'Hiri Motu', 'Hiri Motu', 'Hiri Motu');
+   VALUES ('ne', 'en-US', 53, 'Nepali', 'Nepali', 'Nepali');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hr', 'en-US', 60, 'Croatian', 'Croatian', 'Croatian');
+   VALUES ('nl', 'en-US', 54, 'Dutch', 'Dutch', 'Dutch, Flemish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ht', 'en-US', 61, 'Haitian Creole', 'Haitian Creole', 'Haitian, Haitian Creole');
+   VALUES ('no', 'en-US', 55, 'Norwegian', 'Norwegian', 'Norwegian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hu', 'en-US', 62, 'Hungarian', 'Hungarian', 'Hungarian');
+   VALUES ('nr', 'en-US', 56, 'Southern Ndebele', 'Southern Ndebele', 'Southern Ndebele, South Ndebele');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hy', 'en-US', 63, 'Armenian', 'Armenian', 'Armenian');
+   VALUES ('ny', 'en-US', 57, 'Chewa', 'Chewa', 'Chichewa, Chewa, Nyanja');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hz', 'en-US', 64, 'Herero', 'Herero', 'Herero');
+   VALUES ('os', 'en-US', 58, 'Ossetian', 'Ossetian', 'Ossetian, Ossetic');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('id', 'en-US', 66, 'Indonesian', 'Indonesian', 'Indonesian');
+   VALUES ('pl', 'en-US', 59, 'Polish', 'Polish', 'Polish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ig', 'en-US', 68, 'Igbo', 'Igbo', 'Igbo');
+   VALUES ('ps', 'en-US', 60, 'Pashto', 'Pashto', 'Pushto, Pashto');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ii', 'en-US', 69, 'Nuosu', 'Nuosu', 'Sichuan Yi, Nuosu');
+   VALUES ('pt', 'en-US', 61, 'Portuguese', 'Portuguese', 'Portuguese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ik', 'en-US', 70, 'Inupiaq', 'Inupiaq', 'Inupiaq');
+   VALUES ('qu', 'en-US', 62, 'Quechua', 'Quechua', 'Quechua');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('is', 'en-US', 72, 'Icelandic', 'Icelandic', 'Icelandic');
+   VALUES ('rm', 'en-US', 63, 'Romansh', 'Romansh', 'Romansh');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('it', 'en-US', 73, 'Italian', 'Italian', 'Italian');
+   VALUES ('ro', 'en-US', 64, 'Romanian', 'Romanian', 'Romanian, Moldavian, Moldovan');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('iu', 'en-US', 74, 'Inuktitut', 'Inuktitut', 'Inuktitut');
+   VALUES ('ru', 'en-US', 65, 'Russian', 'Russian', 'Russian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ja', 'en-US', 75, 'Japanese', 'Japanese', 'Japanese');
+   VALUES ('rw', 'en-US', 66, 'Kinyarwanda', 'Kinyarwanda', 'Kinyarwanda');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('jv', 'en-US', 76, 'Javanese', 'Javanese', 'Javanese');
+   VALUES ('se', 'en-US', 67, 'Northern Sami', 'Northern Sami', 'Northern Sami');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ka', 'en-US', 77, 'Georgian', 'Georgian', 'Georgian');
+   VALUES ('si', 'en-US', 68, 'Sinhala', 'Sinhala', 'Sinhala, Sinhalese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kg', 'en-US', 78, 'Kongo', 'Kongo', 'Kongo');
+   VALUES ('sk', 'en-US', 69, 'Slovak', 'Slovak', 'Slovak');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ki', 'en-US', 79, 'Kikuyu', 'Kikuyu', 'Kikuyu, Gikuyu');
+   VALUES ('sl', 'en-US', 70, 'Slovenian', 'Slovenian', 'Slovenian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kj', 'en-US', 80, 'Kwanyama', 'Kwanyama', 'Kuanyama, Kwanyama');
+   VALUES ('sn', 'en-US', 71, 'Shona', 'Shona', 'Shona');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kk', 'en-US', 81, 'Kazakh', 'Kazakh', 'Kazakh');
+   VALUES ('so', 'en-US', 72, 'Somali', 'Somali', 'Somali');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kl', 'en-US', 82, 'Kalaallisut', 'Kalaallisut', 'Kalaallisut, Greenlandic');
+   VALUES ('sr', 'en-US', 73, 'Serbian', 'Serbian', 'Serbian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('km', 'en-US', 83, 'Central Khmer', 'Central Khmer', 'Central Khmer');
+   VALUES ('st', 'en-US', 74, 'Sotho', 'Sotho', 'Sotho, Southern Sotho');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kn', 'en-US', 84, 'Kannada', 'Kannada', 'Kannada');
+   VALUES ('sv', 'en-US', 75, 'Swedish', 'Swedish', 'Swedish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ko', 'en-US', 85, 'Korean', 'Korean', 'Korean');
+   VALUES ('sw', 'en-US', 76, 'Swahili', 'Swahili', 'Swahili');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kr', 'en-US', 86, 'Kanuri', 'Kanuri', 'Kanuri');
+   VALUES ('ta', 'en-US', 77, 'Tamil', 'Tamil', 'Tamil');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ks', 'en-US', 87, 'Kashmiri', 'Kashmiri', 'Kashmiri');
+   VALUES ('tg', 'en-US', 78, 'Tajik', 'Tajik', 'Tajik');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ku', 'en-US', 88, 'Kurdish', 'Kurdish', 'Kurdish');
+   VALUES ('th', 'en-US', 79, 'Thai', 'Thai', 'Thai');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kv', 'en-US', 89, 'Komi', 'Komi', 'Komi');
+   VALUES ('ti', 'en-US', 80, 'Tigrinya', 'Tigrinya', 'Tigrinya');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kw', 'en-US', 90, 'Cornish', 'Cornish', 'Cornish');
+   VALUES ('tk', 'en-US', 81, 'Turkmen', 'Turkmen', 'Turkmen');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ky', 'en-US', 91, 'Kyrgyz', 'Kyrgyz', 'Kirghiz, Kyrgyz');
+   VALUES ('tn', 'en-US', 82, 'Tswana', 'Tswana', 'Tswana');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('la', 'en-US', 92, 'Latin', 'Latin', 'Latin');
+   VALUES ('tr', 'en-US', 83, 'Turkish', 'Turkish', 'Turkish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lb', 'en-US', 93, 'Luxembourgish', 'Luxembourgish', 'Luxembourgish, Letzeburgesch');
+   VALUES ('ts', 'en-US', 84, 'Tsonga', 'Tsonga', 'Tsonga');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lg', 'en-US', 94, 'Ganda', 'Ganda', 'Ganda');
+   VALUES ('uk', 'en-US', 85, 'Ukrainian', 'Ukrainian', 'Ukrainian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('li', 'en-US', 95, 'Limburgish', 'Limburgish', 'Limburgan, Limburger, Limburgish');
+   VALUES ('ur', 'en-US', 86, 'Urdu', 'Urdu', 'Urdu');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ln', 'en-US', 96, 'Lingala', 'Lingala', 'Lingala');
+   VALUES ('uz', 'en-US', 87, 'Uzbek', 'Uzbek', 'Uzbek');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lo', 'en-US', 97, 'Lao', 'Lao', 'Lao');
+   VALUES ('ve', 'en-US', 88, 'Venda', 'Venda', 'Venda');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lt', 'en-US', 98, 'Lithuanian', 'Lithuanian', 'Lithuanian');
+   VALUES ('vi', 'en-US', 89, 'Vietnamese', 'Vietnamese', 'Vietnamese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lu', 'en-US', 99, 'Luba-Katanga', 'Luba-Katanga', 'Luba-Katanga');
+   VALUES ('xh', 'en-US', 90, 'Xhosa', 'Xhosa', 'Xhosa');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lv', 'en-US', 100, 'Latvian', 'Latvian', 'Latvian');
+   VALUES ('zh', 'en-US', 91, 'Chinese', 'Chinese', 'Chinese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mg', 'en-US', 101, 'Malagasy', 'Malagasy', 'Malagasy');
+   VALUES ('zu', 'en-US', 92, 'Zulu', 'Zulu', 'Zulu');
+   
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mi', 'en-US', 103, 'Maori', 'Maori', 'Maori');
+   VALUES ('ab', 'en-ZA', 1, 'Abkhaz', 'Abkhaz', 'Abkhaz');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mk', 'en-US', 104, 'Macedonian', 'Macedonian', 'Macedonian');
+   VALUES ('af', 'en-ZA', 2, 'Afrikaans', 'Afrikaans', 'Afrikaans');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ml', 'en-US', 105, 'Malayalam', 'Malayalam', 'Malayalam');
+   VALUES ('am', 'en-ZA', 3, 'Amharic', 'Amharic', 'Amharic');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mn', 'en-US', 106, 'Mongolian', 'Mongolian', 'Mongolian');
+   VALUES ('ar', 'en-ZA', 4, 'Arabic', 'Arabic', 'Arabic');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mr', 'en-US', 107, 'Marathi', 'Marathi', 'Marathi');
+   VALUES ('ay', 'en-ZA', 5, 'Aymara', 'Aymara', 'Aymara');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ms', 'en-US', 108, 'Malay', 'Malay', 'Malay');
+   VALUES ('az', 'en-ZA', 6, 'Azerbaijani', 'Azerbaijani', 'Azerbaijani');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mt', 'en-US', 109, 'Maltese', 'Maltese', 'Maltese');
+   VALUES ('be', 'en-ZA', 7, 'Belarusian', 'Belarusian', 'Belarusian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('my', 'en-US', 110, 'Burmese', 'Burmese', 'Burmese');
+   VALUES ('bg', 'en-ZA', 8, 'Bulgarian', 'Bulgarian', 'Bulgarian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('nd', 'en-US', 112, 'Northern Ndebele', 'Northern Ndebele', 'Northern Ndebele, North Ndebele');
+   VALUES ('bi', 'en-ZA', 9, 'Bislama', 'Bislama', 'Bislama');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ne', 'en-US', 113, 'Nepali', 'Nepali', 'Nepali');
+   VALUES ('bn', 'en-ZA', 10, 'Bengali', 'Bengali', 'Bengali');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ng', 'en-US', 114, 'Ndonga', 'Ndonga', 'Ndonga');
+   VALUES ('bs', 'en-ZA', 11, 'Bosnian', 'Bosnian', 'Bosnian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('nl', 'en-US', 115, 'Dutch', 'Dutch', 'Dutch, Flemish');
+   VALUES ('cs', 'en-ZA', 12, 'Czech', 'Czech', 'Czech');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('no', 'en-US', 116, 'Norwegian', 'Norwegian', 'Norwegian');
+   VALUES ('da', 'en-ZA', 13, 'Danish', 'Danish', 'Danish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('nr', 'en-US', 117, 'Southern Ndebele', 'Southern Ndebele', 'Southern Ndebele, South Ndebele');
+   VALUES ('de', 'en-ZA', 14, 'German', 'German', 'German');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('nv', 'en-US', 118, 'Navajo', 'Navajo', 'Navajo, Navaho');
+   VALUES ('dz', 'en-ZA', 15, 'Dzongkha', 'Dzongkha', 'Dzongkha');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ny', 'en-US', 119, 'Chewa', 'Chewa', 'Chichewa, Chewa, Nyanja');
+   VALUES ('el', 'en-ZA', 16, 'Greek', 'Greek', 'Greek');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('oc', 'en-US', 120, 'Occitan', 'Occitan', 'Occitan (post 1500)');
+   VALUES ('en', 'en-ZA', 17, 'English', 'English', 'English');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('oj', 'en-US', 121, 'Ojibwa', 'Ojibwa', 'Ojibwa');
+   VALUES ('es', 'en-ZA', 18, 'Spanish', 'Spanish', 'Spanish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('om', 'en-US', 122, 'Oromo', 'Oromo', 'Oromo');
+   VALUES ('et', 'en-ZA', 19, 'Estonian', 'Estonian', 'Estonian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('or', 'en-US', 123, 'Oriya', 'Oriya', 'Oriya');
+   VALUES ('fi', 'en-ZA', 20, 'Finnish', 'Finnish', 'Finnish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('os', 'en-US', 124, 'Ossetian', 'Ossetian', 'Ossetian, Ossetic');
+   VALUES ('fj', 'en-ZA', 21, 'Fijian', 'Fijian', 'Fijian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('pa', 'en-US', 125, 'Punjabi', 'Punjabi', 'Panjabi, Punjabi');
+   VALUES ('fr', 'en-ZA', 22, 'French', 'French', 'French');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('pl', 'en-US', 127, 'Polish', 'Polish', 'Polish');
+   VALUES ('gn', 'en-ZA', 23, 'Guarani', 'Guarani', 'Guarani');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ps', 'en-US', 128, 'Pashto', 'Pashto', 'Pushto, Pashto');
+   VALUES ('he', 'en-ZA', 24, 'Hebrew', 'Hebrew', 'Hebrew');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('pt', 'en-US', 129, 'Portuguese', 'Portuguese', 'Portuguese');
+   VALUES ('hi', 'en-ZA', 25, 'Hindi', 'Hindi', 'Hindi');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('qu', 'en-US', 130, 'Quechua', 'Quechua', 'Quechua');
+   VALUES ('ho', 'en-ZA', 26, 'Hiri Motu', 'Hiri Motu', 'Hiri Motu');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('rm', 'en-US', 131, 'Romansh', 'Romansh', 'Romansh');
+   VALUES ('hr', 'en-ZA', 27, 'Croatian', 'Croatian', 'Croatian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('rn', 'en-US', 132, 'Rundi', 'Rundi', 'Rundi');
+   VALUES ('ht', 'en-ZA', 28, 'Haitian Creole', 'Haitian Creole', 'Haitian, Haitian Creole');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ro', 'en-US', 133, 'Romanian', 'Romanian', 'Romanian, Moldavian, Moldovan');
+   VALUES ('hu', 'en-ZA', 29, 'Hungarian', 'Hungarian', 'Hungarian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ru', 'en-US', 134, 'Russian', 'Russian', 'Russian');
+   VALUES ('hy', 'en-ZA', 30, 'Armenian', 'Armenian', 'Armenian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('rw', 'en-US', 135, 'Kinyarwanda', 'Kinyarwanda', 'Kinyarwanda');
+   VALUES ('id', 'en-ZA', 31, 'Indonesian', 'Indonesian', 'Indonesian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sc', 'en-US', 137, 'Sardinian', 'Sardinian', 'Sardinian');
+   VALUES ('is', 'en-ZA', 32, 'Icelandic', 'Icelandic', 'Icelandic');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sd', 'en-US', 138, 'Sindhi', 'Sindhi', 'Sindhi');
+   VALUES ('it', 'en-ZA', 33, 'Italian', 'Italian', 'Italian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('se', 'en-US', 139, 'Northern Sami', 'Northern Sami', 'Northern Sami');
+   VALUES ('ja', 'en-ZA', 34, 'Japanese', 'Japanese', 'Japanese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sg', 'en-US', 140, 'Sango', 'Sango', 'Sango');
+   VALUES ('ka', 'en-ZA', 35, 'Georgian', 'Georgian', 'Georgian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('si', 'en-US', 141, 'Sinhala', 'Sinhala', 'Sinhala, Sinhalese');
+   VALUES ('kk', 'en-ZA', 36, 'Kazakh', 'Kazakh', 'Kazakh');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sk', 'en-US', 142, 'Slovak', 'Slovak', 'Slovak');
+   VALUES ('km', 'en-ZA', 37, 'Khmer', 'Khmer', 'Khmer');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sl', 'en-US', 143, 'Slovenian', 'Slovenian', 'Slovenian');
+   VALUES ('ko', 'en-ZA', 38, 'Korean', 'Korean', 'Korean');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sm', 'en-US', 144, 'Samoan', 'Samoan', 'Samoan');
+   VALUES ('ky', 'en-ZA', 39, 'Kyrgyz', 'Kyrgyz', 'Kirghiz, Kyrgyz');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sn', 'en-US', 145, 'Shona', 'Shona', 'Shona');
+   VALUES ('lb', 'en-ZA', 40, 'Luxembourgish', 'Luxembourgish', 'Luxembourgish, Letzeburgesch');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('so', 'en-US', 146, 'Somali', 'Somali', 'Somali');
+   VALUES ('lo', 'en-ZA', 41, 'Lao', 'Lao', 'Lao');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sq', 'en-US', 147, 'Albanian', 'Albanian', 'Albanian');
+   VALUES ('lt', 'en-ZA', 42, 'Lithuanian', 'Lithuanian', 'Lithuanian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sr', 'en-US', 148, 'Serbian', 'Serbian', 'Serbian');
+   VALUES ('lv', 'en-ZA', 43, 'Latvian', 'Latvian', 'Latvian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ss', 'en-US', 149, 'Swati', 'Swati', 'Swati');
+   VALUES ('mg', 'en-ZA', 44, 'Malagasy', 'Malagasy', 'Malagasy');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('st', 'en-US', 150, 'Southern Sotho', 'Southern Sotho', ' Southern Sotho');
+   VALUES ('mi', 'en-ZA', 45, 'Maori', 'Maori', 'Maori');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('su', 'en-US', 151, 'Sundanese', 'Sundanese', 'Sundanese');
+   VALUES ('mk', 'en-ZA', 46, 'Macedonian', 'Macedonian', 'Macedonian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sv', 'en-US', 152, 'Swedish', 'Swedish', 'Swedish');
+   VALUES ('mn', 'en-ZA', 47, 'Mongolian', 'Mongolian', 'Mongolian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sw', 'en-US', 153, 'Swahili', 'Swahili', 'Swahili');
+   VALUES ('mr', 'en-ZA', 48, 'Marathi', 'Marathi', 'Marathi');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ta', 'en-US', 154, 'Tamil', 'Tamil', 'Tamil');
+   VALUES ('ms', 'en-ZA', 49, 'Malay', 'Malay', 'Malay');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('te', 'en-US', 155, 'Telugu', 'Telugu', 'Telugu');
+   VALUES ('mt', 'en-ZA', 50, 'Maltese', 'Maltese', 'Maltese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tg', 'en-US', 156, 'Tajik', 'Tajik', 'Tajik');
+   VALUES ('my', 'en-ZA', 51, 'Burmese', 'Burmese', 'Burmese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('th', 'en-US', 157, 'Thai', 'Thai', 'Thai');
+   VALUES ('nd', 'en-ZA', 52, 'Ndebele', 'Ndebele', 'Ndebele, Northern Ndebele, North Ndebele');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ti', 'en-US', 158, 'Tigrinya', 'Tigrinya', 'Tigrinya');
+   VALUES ('ne', 'en-ZA', 53, 'Nepali', 'Nepali', 'Nepali');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tk', 'en-US', 159, 'Turkmen', 'Turkmen', 'Turkmen');
+   VALUES ('nl', 'en-ZA', 54, 'Dutch', 'Dutch', 'Dutch, Flemish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tl', 'en-US', 160, 'Tagalog', 'Tagalog', 'Tagalog');
+   VALUES ('no', 'en-ZA', 55, 'Norwegian', 'Norwegian', 'Norwegian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tn', 'en-US', 161, 'Tswana', 'Tswana', 'Tswana');
+   VALUES ('nr', 'en-ZA', 56, 'Southern Ndebele', 'Southern Ndebele', 'Southern Ndebele, South Ndebele');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('to', 'en-US', 162, 'Tongan', 'Tongan', 'Tonga (Tonga Islands)');
+   VALUES ('ny', 'en-ZA', 57, 'Chewa', 'Chewa', 'Chichewa, Chewa, Nyanja');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tr', 'en-US', 163, 'Turkish', 'Turkish', 'Turkish');
+   VALUES ('os', 'en-ZA', 58, 'Ossetian', 'Ossetian', 'Ossetian, Ossetic');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ts', 'en-US', 164, 'Tsonga', 'Tsonga', 'Tsonga');
+   VALUES ('pl', 'en-ZA', 59, 'Polish', 'Polish', 'Polish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tt', 'en-US', 165, 'Tatar', 'Tatar', 'Tatar');
+   VALUES ('ps', 'en-ZA', 60, 'Pashto', 'Pashto', 'Pushto, Pashto');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tw', 'en-US', 166, 'Twi', 'Twi', 'Twi');
+   VALUES ('pt', 'en-ZA', 61, 'Portuguese', 'Portuguese', 'Portuguese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ty', 'en-US', 167, 'Tahitian', 'Tahitian', 'Tahitian');
+   VALUES ('qu', 'en-ZA', 62, 'Quechua', 'Quechua', 'Quechua');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ug', 'en-US', 168, 'Uyghur', 'Uyghur', 'Uighur, Uyghur');
+   VALUES ('rm', 'en-ZA', 63, 'Romansh', 'Romansh', 'Romansh');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('uk', 'en-US', 169, 'Ukrainian', 'Ukrainian', 'Ukrainian');
+   VALUES ('ro', 'en-ZA', 64, 'Romanian', 'Romanian', 'Romanian, Moldavian, Moldovan');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ur', 'en-US', 170, 'Urdu', 'Urdu', 'Urdu');
+   VALUES ('ru', 'en-ZA', 65, 'Russian', 'Russian', 'Russian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('uz', 'en-US', 171, 'Uzbek', 'Uzbek', 'Uzbek');
+   VALUES ('rw', 'en-ZA', 66, 'Kinyarwanda', 'Kinyarwanda', 'Kinyarwanda');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ve', 'en-US', 172, 'Venda', 'Venda', 'Venda');
+   VALUES ('se', 'en-ZA', 67, 'Northern Sami', 'Northern Sami', 'Northern Sami');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('vi', 'en-US', 173, 'Vietnamese', 'Vietnamese', 'Vietnamese');
+   VALUES ('si', 'en-ZA', 68, 'Sinhala', 'Sinhala', 'Sinhala, Sinhalese');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('wa', 'en-US', 175, 'Walloon', 'Walloon', 'Walloon');
+   VALUES ('sk', 'en-ZA', 69, 'Slovak', 'Slovak', 'Slovak');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('wo', 'en-US', 176, 'Wolof', 'Wolof', 'Wolof');
+   VALUES ('sl', 'en-ZA', 70, 'Slovenian', 'Slovenian', 'Slovenian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('xh', 'en-US', 177, 'Xhosa', 'Xhosa', 'Xhosa');
+   VALUES ('sn', 'en-ZA', 71, 'Shona', 'Shona', 'Shona');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('yi', 'en-US', 178, 'Yiddish', 'Yiddish', 'Yiddish');
+   VALUES ('so', 'en-ZA', 72, 'Somali', 'Somali', 'Somali');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('yo', 'en-US', 179, 'Yoruba', 'Yoruba', 'Yoruba');
+   VALUES ('sr', 'en-ZA', 73, 'Serbian', 'Serbian', 'Serbian');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('za', 'en-US', 180, 'Zhuang', 'Zhuang', 'Zhuang, Chuang');
+   VALUES ('st', 'en-ZA', 74, 'Sotho', 'Sotho', 'Sotho, Southern Sotho');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('zh', 'en-US', 181, 'Chinese', 'Chinese', 'Chinese');
+   VALUES ('sv', 'en-ZA', 75, 'Swedish', 'Swedish', 'Swedish');
 INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('zu', 'en-US', 182, 'Zulu', 'Zulu', 'Zulu');
+   VALUES ('sw', 'en-ZA', 76, 'Swahili', 'Swahili', 'Swahili');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('ta', 'en-ZA', 77, 'Tamil', 'Tamil', 'Tamil');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('tg', 'en-ZA', 78, 'Tajik', 'Tajik', 'Tajik');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('th', 'en-ZA', 79, 'Thai', 'Thai', 'Thai');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('ti', 'en-ZA', 80, 'Tigrinya', 'Tigrinya', 'Tigrinya');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('tk', 'en-ZA', 81, 'Turkmen', 'Turkmen', 'Turkmen');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('tn', 'en-ZA', 82, 'Tswana', 'Tswana', 'Tswana');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('tr', 'en-ZA', 83, 'Turkish', 'Turkish', 'Turkish');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('ts', 'en-ZA', 84, 'Tsonga', 'Tsonga', 'Tsonga');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('uk', 'en-ZA', 85, 'Ukrainian', 'Ukrainian', 'Ukrainian');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('ur', 'en-ZA', 86, 'Urdu', 'Urdu', 'Urdu');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('uz', 'en-ZA', 87, 'Uzbek', 'Uzbek', 'Uzbek');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('ve', 'en-ZA', 88, 'Venda', 'Venda', 'Venda');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('vi', 'en-ZA', 89, 'Vietnamese', 'Vietnamese', 'Vietnamese');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('xh', 'en-ZA', 90, 'Xhosa', 'Xhosa', 'Xhosa');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('zh', 'en-ZA', 91, 'Chinese', 'Chinese', 'Chinese');
+INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+   VALUES ('zu', 'en-ZA', 92, 'Zulu', 'Zulu', 'Zulu');   
 
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('aa', 'en-ZA', 1, 'Afar', 'Afar', 'Afar');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ab', 'en-ZA', 2, 'Abkhazian', 'Abkhazian', 'Abkhazian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('af', 'en-ZA', 4, 'Afrikaans', 'Afrikaans', 'Afrikaans');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ak', 'en-ZA', 5, 'Akan', 'Akan', 'Akan');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('am', 'en-ZA', 6, 'Amharic', 'Amharic', 'Amharic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ar', 'en-ZA', 8, 'Arabic', 'Arabic', 'Arabic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('as', 'en-ZA', 9, 'Assamese', 'Assamese', 'Assamese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('av', 'en-ZA', 10, 'Avaric', 'Avaric', 'Avaric');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ay', 'en-ZA', 11, 'Aymara', 'Aymara', 'Aymara');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('az', 'en-ZA', 12, 'Azerbaijani', 'Azerbaijani', 'Azerbaijani');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ba', 'en-ZA', 13, 'Bashkir', 'Bashkir', 'Bashkir');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('be', 'en-ZA', 14, 'Belarusian', 'Belarusian', 'Belarusian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bg', 'en-ZA', 15, 'Bulgarian', 'Bulgarian', 'Bulgarian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bh', 'en-ZA', 16, 'Bihari', 'Bihari', 'Bihari languages');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bi', 'en-ZA', 17, 'Bislama', 'Bislama', 'Bislama');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bm', 'en-ZA', 18, 'Bambara', 'Bambara', 'Bambara');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bn', 'en-ZA', 19, 'Bengali', 'Bengali', 'Bengali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bo', 'en-ZA', 20, 'Tibetan', 'Tibetan', 'Tibetan');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('bs', 'en-ZA', 22, 'Bosnian', 'Bosnian', 'Bosnian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ca', 'en-ZA', 23, 'Catalan', 'Catalan', 'Catalan, Valencian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ce', 'en-ZA', 24, 'Chechen', 'Chechen', 'Chechen');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('co', 'en-ZA', 26, 'Corsican', 'Corsican', 'Corsican');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cr', 'en-ZA', 27, 'Cree', 'Cree', 'Cree');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cs', 'en-ZA', 28, 'Czech', 'Czech', 'Czech');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cu', 'en-ZA', 29, 'Church Slavic', 'Church Slavic', 'Church Slavic, Old Slavonic, Church Slavonic, Old Bulgarian, Old Church Slavonic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cv', 'en-ZA', 30, 'Chuvash', 'Chuvash', 'Chuvash');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('cy', 'en-ZA', 31, 'Welsh', 'Welsh', 'Welsh');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('da', 'en-ZA', 32, 'Danish', 'Danish', 'Danish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('de', 'en-ZA', 33, 'German', 'German', 'German');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('dv', 'en-ZA', 34, 'Maldivian', 'Maldivian', 'Divehi, Dhivehi, Maldivian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('dz', 'en-ZA', 35, 'Dzongkha', 'Dzongkha', 'Dzongkha');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ee', 'en-ZA', 36, 'Ewe', 'Ewe', 'Ewe');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('el', 'en-ZA', 37, 'Greek', 'Greek', 'Greek Modern (1453-)');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('en', 'en-ZA', 38, 'English', 'English', 'English');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('es', 'en-ZA', 40, 'Spanish', 'Spanish', 'Spanish, Castilian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('et', 'en-ZA', 41, 'Estonian', 'Estonian', 'Estonian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('eu', 'en-ZA', 42, 'Basque', 'Basque', 'Basque');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fa', 'en-ZA', 43, 'Persian', 'Persian', 'Persian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ff', 'en-ZA', 44, 'Fulah', 'Fulah', 'Fulah');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fi', 'en-ZA', 45, 'Finnish', 'Finnish', 'Finnish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fj', 'en-ZA', 46, 'Fijian', 'Fijian', 'Fijian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fo', 'en-ZA', 47, 'Faroese', 'Faroese', 'Faroese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fr', 'en-ZA', 48, 'French', 'French', 'French');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('fy', 'en-ZA', 49, 'Western Frisian', 'Western Frisian', 'Western Frisian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ga', 'en-ZA', 50, 'Irish', 'Irish', 'Irish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('gd', 'en-ZA', 51, 'Scottish Gaelic', 'Scottish Gaelic', 'Gaelic, Scottish Gaelic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('gl', 'en-ZA', 52, 'Galician', 'Galician', 'Galician');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('gn', 'en-ZA', 53, 'Guarani', 'Guarani', 'Guarani');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('gu', 'en-ZA', 54, 'Gujarati', 'Gujarati', 'Gujarati');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ha', 'en-ZA', 56, 'Hausa', 'Hausa', 'Hausa');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('he', 'en-ZA', 57, 'Hebrew', 'Hebrew', 'Hebrew');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hi', 'en-ZA', 58, 'Hindi', 'Hindi', 'Hindi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ho', 'en-ZA', 59, 'Hiri Motu', 'Hiri Motu', 'Hiri Motu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hr', 'en-ZA', 60, 'Croatian', 'Croatian', 'Croatian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ht', 'en-ZA', 61, 'Haitian Creole', 'Haitian Creole', 'Haitian, Haitian Creole');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hu', 'en-ZA', 62, 'Hungarian', 'Hungarian', 'Hungarian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hy', 'en-ZA', 63, 'Armenian', 'Armenian', 'Armenian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('hz', 'en-ZA', 64, 'Herero', 'Herero', 'Herero');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('id', 'en-ZA', 66, 'Indonesian', 'Indonesian', 'Indonesian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ie', 'en-ZA', 67, 'Interlingue', 'Interlingue', 'Interlingue, Occidental');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ig', 'en-ZA', 68, 'Igbo', 'Igbo', 'Igbo');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ii', 'en-ZA', 69, 'Nuosu', 'Nuosu', 'Sichuan Yi, Nuosu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ik', 'en-ZA', 70, 'Inupiaq', 'Inupiaq', 'Inupiaq');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('is', 'en-ZA', 72, 'Icelandic', 'Icelandic', 'Icelandic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('it', 'en-ZA', 73, 'Italian', 'Italian', 'Italian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('iu', 'en-ZA', 74, 'Inuktitut', 'Inuktitut', 'Inuktitut');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ja', 'en-ZA', 75, 'Japanese', 'Japanese', 'Japanese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('jv', 'en-ZA', 76, 'Javanese', 'Javanese', 'Javanese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ka', 'en-ZA', 77, 'Georgian', 'Georgian', 'Georgian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kg', 'en-ZA', 78, 'Kongo', 'Kongo', 'Kongo');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ki', 'en-ZA', 79, 'Kikuyu', 'Kikuyu', 'Kikuyu, Gikuyu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kj', 'en-ZA', 80, 'Kwanyama', 'Kwanyama', 'Kuanyama, Kwanyama');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kk', 'en-ZA', 81, 'Kazakh', 'Kazakh', 'Kazakh');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kl', 'en-ZA', 82, 'Kalaallisut', 'Kalaallisut', 'Kalaallisut, Greenlandic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('km', 'en-ZA', 83, 'Central Khmer', 'Central Khmer', 'Central Khmer');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kn', 'en-ZA', 84, 'Kannada', 'Kannada', 'Kannada');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ko', 'en-ZA', 85, 'Korean', 'Korean', 'Korean');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kr', 'en-ZA', 86, 'Kanuri', 'Kanuri', 'Kanuri');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ks', 'en-ZA', 87, 'Kashmiri', 'Kashmiri', 'Kashmiri');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ku', 'en-ZA', 88, 'Kurdish', 'Kurdish', 'Kurdish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kv', 'en-ZA', 89, 'Komi', 'Komi', 'Komi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('kw', 'en-ZA', 90, 'Cornish', 'Cornish', 'Cornish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ky', 'en-ZA', 91, 'Kyrgyz', 'Kyrgyz', 'Kirghiz, Kyrgyz');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('la', 'en-ZA', 92, 'Latin', 'Latin', 'Latin');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lb', 'en-ZA', 93, 'Luxembourgish', 'Luxembourgish', 'Luxembourgish, Letzeburgesch');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lg', 'en-ZA', 94, 'Ganda', 'Ganda', 'Ganda');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('li', 'en-ZA', 95, 'Limburgish', 'Limburgish', 'Limburgan, Limburger, Limburgish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ln', 'en-ZA', 96, 'Lingala', 'Lingala', 'Lingala');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lo', 'en-ZA', 97, 'Lao', 'Lao', 'Lao');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lt', 'en-ZA', 98, 'Lithuanian', 'Lithuanian', 'Lithuanian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lu', 'en-ZA', 99, 'Luba-Katanga', 'Luba-Katanga', 'Luba-Katanga');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('lv', 'en-ZA', 100, 'Latvian', 'Latvian', 'Latvian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mg', 'en-ZA', 101, 'Malagasy', 'Malagasy', 'Malagasy');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mi', 'en-ZA', 103, 'Maori', 'Maori', 'Maori');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mk', 'en-ZA', 104, 'Macedonian', 'Macedonian', 'Macedonian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ml', 'en-ZA', 105, 'Malayalam', 'Malayalam', 'Malayalam');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mn', 'en-ZA', 106, 'Mongolian', 'Mongolian', 'Mongolian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mr', 'en-ZA', 107, 'Marathi', 'Marathi', 'Marathi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ms', 'en-ZA', 108, 'Malay', 'Malay', 'Malay');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('mt', 'en-ZA', 109, 'Maltese', 'Maltese', 'Maltese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('my', 'en-ZA', 110, 'Burmese', 'Burmese', 'Burmese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('nd', 'en-ZA', 112, 'Northern Ndebele', 'Northern Ndebele', 'Northern Ndebele, North Ndebele');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ne', 'en-ZA', 113, 'Nepali', 'Nepali', 'Nepali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ng', 'en-ZA', 114, 'Ndonga', 'Ndonga', 'Ndonga');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('nl', 'en-ZA', 115, 'Dutch', 'Dutch', 'Dutch, Flemish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('no', 'en-ZA', 116, 'Norwegian', 'Norwegian', 'Norwegian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('nr', 'en-ZA', 117, 'Southern Ndebele', 'Southern Ndebele', 'Southern Ndebele, South Ndebele');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('nv', 'en-ZA', 118, 'Navajo', 'Navajo', 'Navajo, Navaho');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ny', 'en-ZA', 119, 'Chewa', 'Chewa', 'Chichewa, Chewa, Nyanja');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('oc', 'en-ZA', 120, 'Occitan', 'Occitan', 'Occitan (post 1500)');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('oj', 'en-ZA', 121, 'Ojibwa', 'Ojibwa', 'Ojibwa');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('om', 'en-ZA', 122, 'Oromo', 'Oromo', 'Oromo');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('or', 'en-ZA', 123, 'Oriya', 'Oriya', 'Oriya');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('os', 'en-ZA', 124, 'Ossetian', 'Ossetian', 'Ossetian, Ossetic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('pa', 'en-ZA', 125, 'Punjabi', 'Punjabi', 'Panjabi, Punjabi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('pl', 'en-ZA', 127, 'Polish', 'Polish', 'Polish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ps', 'en-ZA', 128, 'Pashto', 'Pashto', 'Pushto, Pashto');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('pt', 'en-ZA', 129, 'Portuguese', 'Portuguese', 'Portuguese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('qu', 'en-ZA', 130, 'Quechua', 'Quechua', 'Quechua');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('rm', 'en-ZA', 131, 'Romansh', 'Romansh', 'Romansh');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('rn', 'en-ZA', 132, 'Rundi', 'Rundi', 'Rundi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ro', 'en-ZA', 133, 'Romanian', 'Romanian', 'Romanian, Moldavian, Moldovan');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ru', 'en-ZA', 134, 'Russian', 'Russian', 'Russian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('rw', 'en-ZA', 135, 'Kinyarwanda', 'Kinyarwanda', 'Kinyarwanda');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sc', 'en-ZA', 137, 'Sardinian', 'Sardinian', 'Sardinian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sd', 'en-ZA', 138, 'Sindhi', 'Sindhi', 'Sindhi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('se', 'en-ZA', 139, 'Northern Sami', 'Northern Sami', 'Northern Sami');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sg', 'en-ZA', 140, 'Sango', 'Sango', 'Sango');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('si', 'en-ZA', 141, 'Sinhala', 'Sinhala', 'Sinhala, Sinhalese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sk', 'en-ZA', 142, 'Slovak', 'Slovak', 'Slovak');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sl', 'en-ZA', 143, 'Slovenian', 'Slovenian', 'Slovenian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sm', 'en-ZA', 144, 'Samoan', 'Samoan', 'Samoan');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sn', 'en-ZA', 145, 'Shona', 'Shona', 'Shona');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('so', 'en-ZA', 146, 'Somali', 'Somali', 'Somali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sq', 'en-ZA', 147, 'Albanian', 'Albanian', 'Albanian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sr', 'en-ZA', 148, 'Serbian', 'Serbian', 'Serbian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ss', 'en-ZA', 149, 'Swati', 'Swati', 'Swati');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('st', 'en-ZA', 150, 'Southern Sotho', 'Southern Sotho', ' Southern Sotho');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('su', 'en-ZA', 151, 'Sundanese', 'Sundanese', 'Sundanese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sv', 'en-ZA', 152, 'Swedish', 'Swedish', 'Swedish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('sw', 'en-ZA', 153, 'Swahili', 'Swahili', 'Swahili');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ta', 'en-ZA', 154, 'Tamil', 'Tamil', 'Tamil');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('te', 'en-ZA', 155, 'Telugu', 'Telugu', 'Telugu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tg', 'en-ZA', 156, 'Tajik', 'Tajik', 'Tajik');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('th', 'en-ZA', 157, 'Thai', 'Thai', 'Thai');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ti', 'en-ZA', 158, 'Tigrinya', 'Tigrinya', 'Tigrinya');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tk', 'en-ZA', 159, 'Turkmen', 'Turkmen', 'Turkmen');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tl', 'en-ZA', 160, 'Tagalog', 'Tagalog', 'Tagalog');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tn', 'en-ZA', 161, 'Tswana', 'Tswana', 'Tswana');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('to', 'en-ZA', 162, 'Tongan', 'Tongan', 'Tonga (Tonga Islands)');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tr', 'en-ZA', 163, 'Turkish', 'Turkish', 'Turkish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ts', 'en-ZA', 164, 'Tsonga', 'Tsonga', 'Tsonga');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tt', 'en-ZA', 165, 'Tatar', 'Tatar', 'Tatar');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('tw', 'en-ZA', 166, 'Twi', 'Twi', 'Twi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ty', 'en-ZA', 167, 'Tahitian', 'Tahitian', 'Tahitian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ug', 'en-ZA', 168, 'Uyghur', 'Uyghur', 'Uighur, Uyghur');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('uk', 'en-ZA', 169, 'Ukrainian', 'Ukrainian', 'Ukrainian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ur', 'en-ZA', 170, 'Urdu', 'Urdu', 'Urdu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('uz', 'en-ZA', 171, 'Uzbek', 'Uzbek', 'Uzbek');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('ve', 'en-ZA', 172, 'Venda', 'Venda', 'Venda');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('vi', 'en-ZA', 173, 'Vietnamese', 'Vietnamese', 'Vietnamese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('wa', 'en-ZA', 175, 'Walloon', 'Walloon', 'Walloon');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('wo', 'en-ZA', 176, 'Wolof', 'Wolof', 'Wolof');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('xh', 'en-ZA', 177, 'Xhosa', 'Xhosa', 'Xhosa');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('yi', 'en-ZA', 178, 'Yiddish', 'Yiddish', 'Yiddish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('yo', 'en-ZA', 179, 'Yoruba', 'Yoruba', 'Yoruba');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('za', 'en-ZA', 180, 'Zhuang', 'Zhuang', 'Zhuang, Chuang');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('zh', 'en-ZA', 181, 'Chinese', 'Chinese', 'Chinese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
-   VALUES ('zu', 'en-ZA', 182, 'Zulu', 'Zulu', 'Zulu');   
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('0', 'en-US', 99, 'Not known', 'Not known');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('1', 'en-US', 1, 'Single', 'Single');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('2', 'en-US', 2, 'Married', 'Married');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('3', 'en-US', 3, 'Common Law', 'Common Law');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('4', 'en-US', 4, 'Divorced', 'Divorced');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('5', 'en-US', 5, 'Widowed', 'Widowed');
+
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('0', '0', 'en-US', 99, 'Not known', 'Not known');
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('2', '0', 'en-US', 99, 'Not known', 'Not known');
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('2', '1', 'en-US', 1, 'In Community Of Property', 'In Community Of Property');
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('2', '2', 'en-US', 1, 'ANC Without Accrual', 'ANC Without Accrual');
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('2', '3', 'en-US', 1, 'ANC With Accrual', 'ANC With Accrual');
+
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('0', 'en-ZA', 99, 'Not known', 'Not known');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('1', 'en-ZA', 1, 'Single', 'Single');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('2', 'en-ZA', 2, 'Married', 'Married');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('3', 'en-ZA', 3, 'Common Law', 'Common Law');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('4', 'en-ZA', 4, 'Divorced', 'Divorced');
+INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+  VALUES ('5', 'en-ZA', 5, 'Widowed', 'Widowed');
+
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('0', '0', 'en-ZA', 99, 'Not known', 'Not known');
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('2', '0', 'en-ZA', 99, 'Not known', 'Not known');
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('2', '1', 'en-ZA', 1, 'In Community Of Property', 'In Community Of Property');
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('2', '2', 'en-ZA', 2, 'ANC Without Accrual', 'ANC Without Accrual');
+INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+  VALUES ('2', '3', 'en-ZA', 3, 'ANC With Accrual', 'ANC With Accrual');
+
+INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+  VALUES ('0', 'en-US', 99, 'Not known', 'Not known');
+INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+  VALUES ('1', 'en-US', 1, 'None', 'None');
+INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+  VALUES ('2', 'en-US', 2, 'Minor', 'Minor');
+INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+  VALUES ('3', 'en-US', 3, 'Emancipated Minor', 'Emancipated Minor');
+
+INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+  VALUES ('0', 'en-ZA', 99, 'Not known', 'Not known');
+INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+  VALUES ('1', 'en-ZA', 1, 'None', 'None');
+INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+  VALUES ('2', 'en-ZA', 2, 'Minor', 'Minor');
+INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+  VALUES ('3', 'en-ZA', 3, 'Emancipated Minor', 'Emancipated Minor');
+
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('0', 'en-US', 99, 'Not known', 'Not known');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('1', 'en-US', 1, 'Aunt', 'Aunt');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('2', 'en-US', 1, 'Brother', 'Brother');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('3', 'en-US', 1, 'Cousin', 'Cousin');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('4', 'en-US', 1, 'Father', 'Father');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('5', 'en-US', 1, 'Friend', 'Friend');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('6', 'en-US', 1, 'Grandfather', 'Grandfather');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('7', 'en-US', 1, 'Grandmother', 'Grandmother');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('8', 'en-US', 1, 'Husband', 'Husband');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('9', 'en-US', 1, 'Life Partner', 'Life Partner');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('10', 'en-US', 1, 'Mother', 'Mother');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('11', 'en-US', 1, 'Nephew', 'Nephew');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('12', 'en-US', 1, 'Niece', 'Niece');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('13', 'en-US', 1, 'Sister', 'Sister');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('14', 'en-US', 1, 'Uncle', 'Uncle');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('15', 'en-US', 1, 'Wife', 'Wife');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('16', 'en-US', 1, 'Other', 'Other');
+
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('0', 'en-ZA', 99, 'Not known', 'Not known');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('1', 'en-ZA', 1, 'Aunt', 'Aunt');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('2', 'en-ZA', 1, 'Brother', 'Brother');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('3', 'en-ZA', 1, 'Cousin', 'Cousin');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('4', 'en-ZA', 1, 'Father', 'Father');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('5', 'en-ZA', 1, 'Friend', 'Friend');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('6', 'en-ZA', 1, 'Grandfather', 'Grandfather');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('7', 'en-ZA', 1, 'Grandmother', 'Grandmother');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('8', 'en-ZA', 1, 'Husband', 'Husband');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('9', 'en-ZA', 1, 'Life Partner', 'Life Partner');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('10', 'en-ZA', 1, 'Mother', 'Mother');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('11', 'en-ZA', 1, 'Nephew', 'Nephew');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('12', 'en-ZA', 1, 'Niece', 'Niece');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('13', 'en-ZA', 1, 'Sister', 'Sister');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('14', 'en-ZA', 1, 'Uncle', 'Uncle');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('15', 'en-ZA', 1, 'Wife', 'Wife');
+INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+  VALUES ('16', 'en-ZA', 1, 'Other', 'Other');
+
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('0', 'en-US', 99, 'Not known', 'Not known');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('1', 'en-US', 1, 'Creative', 'Creative');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('2', 'en-US', 2, 'Driver', 'Driver');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('3', 'en-US', 3, 'Executive', 'Executive');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('4', 'en-US', 4, 'Farmer', 'Farmer');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('5', 'en-US', 5, 'Government Official', 'Government Official');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('6', 'en-US', 6, 'Guard', 'Guard');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('7', 'en-US', 7, 'Labourer', 'Labourer');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('8', 'en-US', 8, 'Military / Police', 'Military / Police');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('9', 'en-US', 9, 'Manager', 'Manager');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('10', 'en-US', 10, 'Office Staff', 'Office Staff');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('11', 'en-US', 11, 'Pensioner / Retired', 'Pensioner / Retired');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('12', 'en-US', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('13', 'en-US', 13, 'Professional: Business', 'Professional: Business');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('14', 'en-US', 14, 'Professional: Education', 'Professional: Education');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('15', 'en-US', 15, 'Professional: Engineering', 'Professional: Engineering');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('16', 'en-US', 16, 'Professional: Government', 'Professional: Government');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('17', 'en-US', 17, 'Professional: Legal', 'Professional: Legal');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('18', 'en-US', 18, 'Professional: Medical', 'Professional: Medical');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('19', 'en-US', 19, 'Professional: Scientific', 'Professional: Scientific');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('20', 'en-US', 20, 'Professional: Transport', 'Professional: Transport');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('21', 'en-US', 21, 'Religious / Charitable', 'Religious / Charitable');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('22', 'en-US', 22, 'Sales', 'Sales');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('23', 'en-US', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('24', 'en-US', 24, 'Service', 'Service');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('25', 'en-US', 25, 'Skilled Worker', 'Skilled Worker');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('26', 'en-US', 26, 'Technician', 'Technician');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('27', 'en-US', 27, 'Trade Worker', 'Trade Worker');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('50', 'en-US', 50, 'Unemployed', 'Unemployed');
+
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('0', 'en-ZA', 99, 'Not known', 'Not known');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('1', 'en-ZA', 1, 'Creative', 'Creative');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('2', 'en-ZA', 2, 'Driver', 'Driver');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('3', 'en-ZA', 3, 'Executive', 'Executive');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('4', 'en-ZA', 4, 'Farmer', 'Farmer');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('5', 'en-ZA', 5, 'Government Official', 'Government Official');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('6', 'en-ZA', 6, 'Guard', 'Guard');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('7', 'en-ZA', 7, 'Labourer', 'Labourer');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('8', 'en-ZA', 8, 'Military / Police', 'Military / Police');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('9', 'en-ZA', 9, 'Manager', 'Manager');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('10', 'en-ZA', 10, 'Office Staff', 'Office Staff');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('11', 'en-ZA', 11, 'Pensioner / Retired', 'Pensioner / Retired');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('12', 'en-ZA', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('13', 'en-ZA', 13, 'Professional: Business', 'Professional: Business');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('14', 'en-ZA', 14, 'Professional: Education', 'Professional: Education');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('15', 'en-ZA', 15, 'Professional: Engineering', 'Professional: Engineering');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('16', 'en-ZA', 16, 'Professional: Government', 'Professional: Government');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('17', 'en-ZA', 17, 'Professional: Legal', 'Professional: Legal');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('18', 'en-ZA', 18, 'Professional: Medical', 'Professional: Medical');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('19', 'en-ZA', 19, 'Professional: Scientific', 'Professional: Scientific');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('20', 'en-ZA', 20, 'Professional: Transport', 'Professional: Transport');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('21', 'en-ZA', 21, 'Religious / Charitable', 'Religious / Charitable');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('22', 'en-ZA', 22, 'Sales', 'Sales');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('23', 'en-ZA', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('24', 'en-ZA', 24, 'Service', 'Service');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('25', 'en-ZA', 25, 'Skilled Worker', 'Skilled Worker');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('26', 'en-ZA', 26, 'Technician', 'Technician');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('27', 'en-ZA', 27, 'Trade Worker', 'Trade Worker');
+INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+  VALUES ('50', 'en-ZA', 50, 'Unemployed', 'Unemployed');

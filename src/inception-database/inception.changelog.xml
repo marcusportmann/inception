@@ -522,11 +522,29 @@
       create schema reference
     </sql>
 
+    <createTable schemaName="reference" tableName="address_types" remarks="Address Types">
+      <column name="code" type="nvarchar(10)" remarks="The code for the address type"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the address type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the address type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the address type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the address type"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="address_types" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="address_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="address_types_locale_ix" schemaName="reference" tableName="address_types">
+      <column name="locale"/>
+    </createIndex>
+
     <createTable schemaName="reference" tableName="communication_methods" remarks="Communication Methods">
       <column name="code" type="nvarchar(10)" remarks="The code for the communication method"/>
       <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the communication method"/>
       <column name="sort_index" type="int" remarks="The sort index for the communication method"/>
-      <column name="name" type="nvarchar(20)" remarks="The name of the communication method"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the communication method"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the communication method"/>
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="communication_methods" columnNames="code,locale"/>
@@ -564,7 +582,7 @@
       <column name="code" type="nvarchar(10)" remarks="The code for the employment status"/>
       <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the employment status"/>
       <column name="sort_index" type="int" remarks="The sort index for the employment status"/>
-      <column name="name" type="nvarchar(20)" remarks="The name of the employment status"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the employment status"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the employment status"/>
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="employment_statuses" columnNames="code,locale"/>
@@ -605,7 +623,7 @@
       <column name="code" type="nvarchar(10)" remarks="The code for the gender"/>
       <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the gender"/>
       <column name="sort_index" type="int" remarks="The sort index for the gender"/>
-      <column name="name" type="nvarchar(20)" remarks="The name of the gender"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the gender"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the gender"/>
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="genders" columnNames="code,locale"/>
@@ -659,7 +677,177 @@
     <addDefaultValue schemaName="reference" tableName="languages" columnName="description" defaultValue=""/>
     <createIndex indexName="languages_locale_ix" schemaName="reference" tableName="languages">
       <column name="locale"/>
-    </createIndex>    
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="marital_statuses" remarks="Marital Statuses">
+      <column name="code" type="nvarchar(10)" remarks="The code for the marital status"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the marital status"/>
+      <column name="sort_index" type="int" remarks="The sort index for the marital status"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the marital status"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the marital status"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="marital_statuses" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="marital_statuses" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="marital_statuses" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="marital_statuses" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="marital_statuses" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="marital_statuses" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="marital_statuses" columnName="description" defaultValue=""/>
+    <createIndex indexName="marital_statuses_locale_ix" schemaName="reference" tableName="marital_statuses">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="marriage_types" remarks="Marriage Types">
+      <column name="marital_status" type="nvarchar(10)" remarks="The code for the marital status the marriage type is associated with"/>
+      <column name="code" type="nvarchar(10)" remarks="The code for the marriage type"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the marriage type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the marriage type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the marriage type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the marriage type"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="marriage_types" columnNames="marital_status,code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="marriage_types" columnName="marital_status"/>
+    <addNotNullConstraint schemaName="reference" tableName="marriage_types" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="marriage_types" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="marriage_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="marriage_types" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="marriage_types" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="marriage_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="marriage_types_marital_status_ix" schemaName="reference" tableName="marriage_types">
+      <column name="marital_status"/>
+    </createIndex>
+    <createIndex indexName="marriage_types_locale_ix" schemaName="reference" tableName="marriage_types">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="minor_types" remarks="Minor Types">
+      <column name="code" type="nvarchar(10)" remarks="The code for the minor type"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the minor type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the minor type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the minor type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the minor type"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="minor_types" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="minor_types" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="minor_types" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="minor_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="minor_types" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="minor_types" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="minor_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="minor_types_locale_ix" schemaName="reference" tableName="minor_types">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="next_of_kin_types" remarks="Next of Kin Types">
+      <column name="code" type="nvarchar(10)" remarks="The code for the next of kin type"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the next of kin type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the next of kin type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the next of kin type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the next of kin type"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="next_of_kin_types" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="next_of_kin_types" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="next_of_kin_types" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="next_of_kin_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="next_of_kin_types" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="next_of_kin_types" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="next_of_kin_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="next_of_kin_types_locale_ix" schemaName="reference" tableName="next_of_kin_types">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="occupations" remarks="Occupations">
+      <column name="code" type="nvarchar(10)" remarks="The code for the occupation"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the occupation"/>
+      <column name="sort_index" type="int" remarks="The sort index for the occupation"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the occupation"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the occupation"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="occupations" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="occupations" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="occupations" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="occupations" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="occupations" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="occupations" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="occupations" columnName="description" defaultValue=""/>
+    <createIndex indexName="occupations_locale_ix" schemaName="reference" tableName="occupations">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="permit_types" remarks="Permit Types">
+      <column name="code" type="nvarchar(10)" remarks="The code for the permit type"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the permit type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the permit type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the permit type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the permit type"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="permit_types" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="permit_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="permit_types_locale_ix" schemaName="reference" tableName="permit_types">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="races" remarks="Races">
+      <column name="code" type="nvarchar(10)" remarks="The code for the race"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the race"/>
+      <column name="sort_index" type="int" remarks="The sort index for the race"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the race"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the race"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="races" columnNames="code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="races" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="races" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="races" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="races" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="races" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="races" columnName="description" defaultValue=""/>
+    <createIndex indexName="races_locale_ix" schemaName="reference" tableName="races">
+      <column name="locale"/>
+    </createIndex>
+
+    <createTable schemaName="reference" tableName="regions" remarks="Regions">
+      <column name="country" type="nvarchar(10)" remarks="The code for the country the region is associated with"/>
+      <column name="code" type="nvarchar(10)" remarks="The code for the region"/>
+      <column name="locale" type="nvarchar(10)" remarks="The Unicode locale identifier for the region"/>
+      <column name="sort_index" type="int" remarks="The sort index for the region"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the region"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the region"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="regions" columnNames="country,code,locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="regions" columnName="country"/>
+    <addNotNullConstraint schemaName="reference" tableName="regions" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="regions" columnName="locale"/>
+    <addNotNullConstraint schemaName="reference" tableName="regions" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="regions" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="regions" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="regions" columnName="description" defaultValue=""/>
+    <createIndex indexName="regions_country_ix" schemaName="reference" tableName="regions">
+      <column name="country"/>
+    </createIndex>
+    <createIndex indexName="regions_locale_ix" schemaName="reference" tableName="regions">
+      <column name="locale"/>
+    </createIndex>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <insert schemaName="reference" tableName="communication_methods">
       <column name="code" value="0"/>
@@ -2679,7 +2867,7 @@
     <insert schemaName="reference" tableName="employment_statuses">
       <column name="code" value="0"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="3"/>
+      <column name="sort_index" value="99"/>
       <column name="name" value="Not known"/>
       <column name="description" value="Now known"/>
     </insert>
@@ -2702,7 +2890,7 @@
       <column name="employment_status" value="0"/>
       <column name="code" value="0"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="13"/>
+      <column name="sort_index" value="99"/>
       <column name="name" value="Not known"/>
       <column name="description" value="Not known"/>
     </insert>
@@ -2806,7 +2994,7 @@
     <insert schemaName="reference" tableName="genders">
       <column name="code" value="0"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="6"/>
+      <column name="sort_index" value="99"/>
       <column name="name" value="Not known"/>
       <column name="description" value="Not known"/>
     </insert>
@@ -2880,41 +3068,25 @@
     </insert>
 
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="aa"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="1"/>
-      <column name="name" value="Afar"/>
-      <column name="short_name" value="Afar"/>
-      <column name="description" value="Afar"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="ab"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="2"/>
-      <column name="name" value="Abkhazian"/>
-      <column name="short_name" value="Abkhazian"/>
-      <column name="description" value="Abkhazian"/>
+      <column name="sort_index" value="1000"/>
+      <column name="name" value="Abkhaz"/>
+      <column name="short_name" value="Abkhaz"/>
+      <column name="description" value="Abkhaz"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="af"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="4"/>
+      <column name="sort_index" value="1001"/>
       <column name="name" value="Afrikaans"/>
       <column name="short_name" value="Afrikaans"/>
       <column name="description" value="Afrikaans"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ak"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="5"/>
-      <column name="name" value="Akan"/>
-      <column name="short_name" value="Akan"/>
-      <column name="description" value="Akan"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="am"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="6"/>
+      <column name="sort_index" value="1002"/>
       <column name="name" value="Amharic"/>
       <column name="short_name" value="Amharic"/>
       <column name="description" value="Amharic"/>
@@ -2922,31 +3094,15 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ar"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="8"/>
+      <column name="sort_index" value="1003"/>
       <column name="name" value="Arabic"/>
       <column name="short_name" value="Arabic"/>
       <column name="description" value="Arabic"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="as"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="9"/>
-      <column name="name" value="Assamese"/>
-      <column name="short_name" value="Assamese"/>
-      <column name="description" value="Assamese"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="av"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="10"/>
-      <column name="name" value="Avaric"/>
-      <column name="short_name" value="Avaric"/>
-      <column name="description" value="Avaric"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="ay"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="11"/>
+      <column name="sort_index" value="1004"/>
       <column name="name" value="Aymara"/>
       <column name="short_name" value="Aymara"/>
       <column name="description" value="Aymara"/>
@@ -2954,23 +3110,15 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="az"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="12"/>
+      <column name="sort_index" value="1005"/>
       <column name="name" value="Azerbaijani"/>
       <column name="short_name" value="Azerbaijani"/>
       <column name="description" value="Azerbaijani"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ba"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="13"/>
-      <column name="name" value="Bashkir"/>
-      <column name="short_name" value="Bashkir"/>
-      <column name="description" value="Bashkir"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="be"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="14"/>
+      <column name="sort_index" value="1006"/>
       <column name="name" value="Belarusian"/>
       <column name="short_name" value="Belarusian"/>
       <column name="description" value="Belarusian"/>
@@ -2978,127 +3126,47 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="bg"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="15"/>
+      <column name="sort_index" value="1007"/>
       <column name="name" value="Bulgarian"/>
       <column name="short_name" value="Bulgarian"/>
       <column name="description" value="Bulgarian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="bh"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="16"/>
-      <column name="name" value="Bihari"/>
-      <column name="short_name" value="Bihari"/>
-      <column name="description" value="Bihari languages"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="bi"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="17"/>
+      <column name="sort_index" value="1008"/>
       <column name="name" value="Bislama"/>
       <column name="short_name" value="Bislama"/>
       <column name="description" value="Bislama"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="bm"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="18"/>
-      <column name="name" value="Bambara"/>
-      <column name="short_name" value="Bambara"/>
-      <column name="description" value="Bambara"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="bn"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="19"/>
+      <column name="sort_index" value="1009"/>
       <column name="name" value="Bengali"/>
       <column name="short_name" value="Bengali"/>
       <column name="description" value="Bengali"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="bo"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="20"/>
-      <column name="name" value="Tibetan"/>
-      <column name="short_name" value="Tibetan"/>
-      <column name="description" value="Tibetan"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="bs"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="22"/>
+      <column name="sort_index" value="1010"/>
       <column name="name" value="Bosnian"/>
       <column name="short_name" value="Bosnian"/>
       <column name="description" value="Bosnian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ca"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="23"/>
-      <column name="name" value="Catalan"/>
-      <column name="short_name" value="Catalan"/>
-      <column name="description" value="Catalan, Valencian"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ce"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="24"/>
-      <column name="name" value="Chechen"/>
-      <column name="short_name" value="Chechen"/>
-      <column name="description" value="Chechen"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="co"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="26"/>
-      <column name="name" value="Corsican"/>
-      <column name="short_name" value="Corsican"/>
-      <column name="description" value="Corsican"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="cr"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="27"/>
-      <column name="name" value="Cree"/>
-      <column name="short_name" value="Cree"/>
-      <column name="description" value="Cree"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="cs"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="28"/>
+      <column name="sort_index" value="1011"/>
       <column name="name" value="Czech"/>
       <column name="short_name" value="Czech"/>
       <column name="description" value="Czech"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="cu"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="29"/>
-      <column name="name" value="Church Slavic"/>
-      <column name="short_name" value="Church Slavic"/>
-      <column name="description" value="Church Slavic, Old Slavonic, Church Slavonic, Old Bulgarian, Old Church Slavonic"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="cv"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="30"/>
-      <column name="name" value="Chuvash"/>
-      <column name="short_name" value="Chuvash"/>
-      <column name="description" value="Chuvash"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="cy"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="31"/>
-      <column name="name" value="Welsh"/>
-      <column name="short_name" value="Welsh"/>
-      <column name="description" value="Welsh"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="da"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="32"/>
+      <column name="sort_index" value="1012"/>
       <column name="name" value="Danish"/>
       <column name="short_name" value="Danish"/>
       <column name="description" value="Danish"/>
@@ -3106,47 +3174,31 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="de"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="33"/>
+      <column name="sort_index" value="1013"/>
       <column name="name" value="German"/>
       <column name="short_name" value="German"/>
       <column name="description" value="German"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="dv"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="34"/>
-      <column name="name" value="Maldivian"/>
-      <column name="short_name" value="Maldivian"/>
-      <column name="description" value="Divehi, Dhivehi, Maldivian"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="dz"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="35"/>
+      <column name="sort_index" value="1014"/>
       <column name="name" value="Dzongkha"/>
       <column name="short_name" value="Dzongkha"/>
       <column name="description" value="Dzongkha"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ee"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="36"/>
-      <column name="name" value="Ewe"/>
-      <column name="short_name" value="Ewe"/>
-      <column name="description" value="Ewe"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="el"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="37"/>
+      <column name="sort_index" value="1015"/>
       <column name="name" value="Greek"/>
       <column name="short_name" value="Greek"/>
-      <column name="description" value="Greek Modern (1453-)"/>
+      <column name="description" value="Greek"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="en"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="38"/>
+      <column name="sort_index" value="1016"/>
       <column name="name" value="English"/>
       <column name="short_name" value="English"/>
       <column name="description" value="English"/>
@@ -3154,47 +3206,23 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="es"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="40"/>
+      <column name="sort_index" value="1017"/>
       <column name="name" value="Spanish"/>
       <column name="short_name" value="Spanish"/>
-      <column name="description" value="Spanish, Castilian"/>
+      <column name="description" value="Spanish"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="et"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="41"/>
+      <column name="sort_index" value="1018"/>
       <column name="name" value="Estonian"/>
       <column name="short_name" value="Estonian"/>
       <column name="description" value="Estonian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="eu"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="42"/>
-      <column name="name" value="Basque"/>
-      <column name="short_name" value="Basque"/>
-      <column name="description" value="Basque"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="fa"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="43"/>
-      <column name="name" value="Persian"/>
-      <column name="short_name" value="Persian"/>
-      <column name="description" value="Persian"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ff"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="44"/>
-      <column name="name" value="Fulah"/>
-      <column name="short_name" value="Fulah"/>
-      <column name="description" value="Fulah"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="fi"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="45"/>
+      <column name="sort_index" value="1019"/>
       <column name="name" value="Finnish"/>
       <column name="short_name" value="Finnish"/>
       <column name="description" value="Finnish"/>
@@ -3202,87 +3230,31 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="fj"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="46"/>
+      <column name="sort_index" value="1020"/>
       <column name="name" value="Fijian"/>
       <column name="short_name" value="Fijian"/>
       <column name="description" value="Fijian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="fo"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="47"/>
-      <column name="name" value="Faroese"/>
-      <column name="short_name" value="Faroese"/>
-      <column name="description" value="Faroese"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="fr"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="48"/>
+      <column name="sort_index" value="1021"/>
       <column name="name" value="French"/>
       <column name="short_name" value="French"/>
       <column name="description" value="French"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="fy"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="49"/>
-      <column name="name" value="Western Frisian"/>
-      <column name="short_name" value="Western Frisian"/>
-      <column name="description" value="Western Frisian"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ga"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="50"/>
-      <column name="name" value="Irish"/>
-      <column name="short_name" value="Irish"/>
-      <column name="description" value="Irish"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="gd"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="51"/>
-      <column name="name" value="Scottish Gaelic"/>
-      <column name="short_name" value="Scottish Gaelic"/>
-      <column name="description" value="Gaelic, Scottish Gaelic"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="gl"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="52"/>
-      <column name="name" value="Galician"/>
-      <column name="short_name" value="Galician"/>
-      <column name="description" value="Galician"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="gn"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="53"/>
+      <column name="sort_index" value="1022"/>
       <column name="name" value="Guarani"/>
       <column name="short_name" value="Guarani"/>
       <column name="description" value="Guarani"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="gu"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="54"/>
-      <column name="name" value="Gujarati"/>
-      <column name="short_name" value="Gujarati"/>
-      <column name="description" value="Gujarati"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ha"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="56"/>
-      <column name="name" value="Hausa"/>
-      <column name="short_name" value="Hausa"/>
-      <column name="description" value="Hausa"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="he"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="57"/>
+      <column name="sort_index" value="1023"/>
       <column name="name" value="Hebrew"/>
       <column name="short_name" value="Hebrew"/>
       <column name="description" value="Hebrew"/>
@@ -3290,7 +3262,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="hi"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="58"/>
+      <column name="sort_index" value="1024"/>
       <column name="name" value="Hindi"/>
       <column name="short_name" value="Hindi"/>
       <column name="description" value="Hindi"/>
@@ -3298,7 +3270,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ho"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="59"/>
+      <column name="sort_index" value="1025"/>
       <column name="name" value="Hiri Motu"/>
       <column name="short_name" value="Hiri Motu"/>
       <column name="description" value="Hiri Motu"/>
@@ -3306,7 +3278,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="hr"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="60"/>
+      <column name="sort_index" value="1026"/>
       <column name="name" value="Croatian"/>
       <column name="short_name" value="Croatian"/>
       <column name="description" value="Croatian"/>
@@ -3314,7 +3286,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ht"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="61"/>
+      <column name="sort_index" value="1027"/>
       <column name="name" value="Haitian Creole"/>
       <column name="short_name" value="Haitian Creole"/>
       <column name="description" value="Haitian, Haitian Creole"/>
@@ -3322,7 +3294,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="hu"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="62"/>
+      <column name="sort_index" value="1028"/>
       <column name="name" value="Hungarian"/>
       <column name="short_name" value="Hungarian"/>
       <column name="description" value="Hungarian"/>
@@ -3330,55 +3302,23 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="hy"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="63"/>
+      <column name="sort_index" value="1029"/>
       <column name="name" value="Armenian"/>
       <column name="short_name" value="Armenian"/>
       <column name="description" value="Armenian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="hz"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="64"/>
-      <column name="name" value="Herero"/>
-      <column name="short_name" value="Herero"/>
-      <column name="description" value="Herero"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="id"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="66"/>
+      <column name="sort_index" value="1030"/>
       <column name="name" value="Indonesian"/>
       <column name="short_name" value="Indonesian"/>
       <column name="description" value="Indonesian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ig"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="68"/>
-      <column name="name" value="Igbo"/>
-      <column name="short_name" value="Igbo"/>
-      <column name="description" value="Igbo"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ii"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="69"/>
-      <column name="name" value="Nuosu"/>
-      <column name="short_name" value="Nuosu"/>
-      <column name="description" value="Sichuan Yi, Nuosu"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ik"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="70"/>
-      <column name="name" value="Inupiaq"/>
-      <column name="short_name" value="Inupiaq"/>
-      <column name="description" value="Inupiaq"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="is"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="72"/>
+      <column name="sort_index" value="1031"/>
       <column name="name" value="Icelandic"/>
       <column name="short_name" value="Icelandic"/>
       <column name="description" value="Icelandic"/>
@@ -3386,199 +3326,71 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="it"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="73"/>
+      <column name="sort_index" value="1032"/>
       <column name="name" value="Italian"/>
       <column name="short_name" value="Italian"/>
       <column name="description" value="Italian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="iu"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="74"/>
-      <column name="name" value="Inuktitut"/>
-      <column name="short_name" value="Inuktitut"/>
-      <column name="description" value="Inuktitut"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="ja"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="75"/>
+      <column name="sort_index" value="1033"/>
       <column name="name" value="Japanese"/>
       <column name="short_name" value="Japanese"/>
       <column name="description" value="Japanese"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="jv"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="76"/>
-      <column name="name" value="Javanese"/>
-      <column name="short_name" value="Javanese"/>
-      <column name="description" value="Javanese"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="ka"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="77"/>
+      <column name="sort_index" value="1034"/>
       <column name="name" value="Georgian"/>
       <column name="short_name" value="Georgian"/>
       <column name="description" value="Georgian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="kg"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="78"/>
-      <column name="name" value="Kongo"/>
-      <column name="short_name" value="Kongo"/>
-      <column name="description" value="Kongo"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ki"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="79"/>
-      <column name="name" value="Kikuyu"/>
-      <column name="short_name" value="Kikuyu"/>
-      <column name="description" value="Kikuyu, Gikuyu"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="kj"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="80"/>
-      <column name="name" value="Kwanyama"/>
-      <column name="short_name" value="Kwanyama"/>
-      <column name="description" value="Kuanyama, Kwanyama"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="kk"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="81"/>
+      <column name="sort_index" value="1035"/>
       <column name="name" value="Kazakh"/>
       <column name="short_name" value="Kazakh"/>
       <column name="description" value="Kazakh"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="kl"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="82"/>
-      <column name="name" value="Kalaallisut"/>
-      <column name="short_name" value="Kalaallisut"/>
-      <column name="description" value="Kalaallisut, Greenlandic"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="km"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="83"/>
-      <column name="name" value="Central Khmer"/>
-      <column name="short_name" value="Central Khmer"/>
-      <column name="description" value="Central Khmer"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="kn"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="84"/>
-      <column name="name" value="Kannada"/>
-      <column name="short_name" value="Kannada"/>
-      <column name="description" value="Kannada"/>
+      <column name="sort_index" value="1036"/>
+      <column name="name" value="Khmer"/>
+      <column name="short_name" value="Khmer"/>
+      <column name="description" value="Khmer"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ko"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="85"/>
+      <column name="sort_index" value="1037"/>
       <column name="name" value="Korean"/>
       <column name="short_name" value="Korean"/>
       <column name="description" value="Korean"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="kr"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="86"/>
-      <column name="name" value="Kanuri"/>
-      <column name="short_name" value="Kanuri"/>
-      <column name="description" value="Kanuri"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ks"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="87"/>
-      <column name="name" value="Kashmiri"/>
-      <column name="short_name" value="Kashmiri"/>
-      <column name="description" value="Kashmiri"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ku"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="88"/>
-      <column name="name" value="Kurdish"/>
-      <column name="short_name" value="Kurdish"/>
-      <column name="description" value="Kurdish"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="kv"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="89"/>
-      <column name="name" value="Komi"/>
-      <column name="short_name" value="Komi"/>
-      <column name="description" value="Komi"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="kw"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="90"/>
-      <column name="name" value="Cornish"/>
-      <column name="short_name" value="Cornish"/>
-      <column name="description" value="Cornish"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="ky"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="91"/>
+      <column name="sort_index" value="1038"/>
       <column name="name" value="Kyrgyz"/>
       <column name="short_name" value="Kyrgyz"/>
       <column name="description" value="Kirghiz, Kyrgyz"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="la"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="92"/>
-      <column name="name" value="Latin"/>
-      <column name="short_name" value="Latin"/>
-      <column name="description" value="Latin"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="lb"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="93"/>
+      <column name="sort_index" value="1039"/>
       <column name="name" value="Luxembourgish"/>
       <column name="short_name" value="Luxembourgish"/>
       <column name="description" value="Luxembourgish, Letzeburgesch"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="lg"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="94"/>
-      <column name="name" value="Ganda"/>
-      <column name="short_name" value="Ganda"/>
-      <column name="description" value="Ganda"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="li"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="95"/>
-      <column name="name" value="Limburgish"/>
-      <column name="short_name" value="Limburgish"/>
-      <column name="description" value="Limburgan, Limburger, Limburgish"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ln"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="96"/>
-      <column name="name" value="Lingala"/>
-      <column name="short_name" value="Lingala"/>
-      <column name="description" value="Lingala"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="lo"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="97"/>
+      <column name="sort_index" value="1040"/>
       <column name="name" value="Lao"/>
       <column name="short_name" value="Lao"/>
       <column name="description" value="Lao"/>
@@ -3586,23 +3398,15 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="lt"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="98"/>
+      <column name="sort_index" value="1041"/>
       <column name="name" value="Lithuanian"/>
       <column name="short_name" value="Lithuanian"/>
       <column name="description" value="Lithuanian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="lu"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="99"/>
-      <column name="name" value="Luba-Katanga"/>
-      <column name="short_name" value="Luba-Katanga"/>
-      <column name="description" value="Luba-Katanga"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="lv"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="100"/>
+      <column name="sort_index" value="1042"/>
       <column name="name" value="Latvian"/>
       <column name="short_name" value="Latvian"/>
       <column name="description" value="Latvian"/>
@@ -3610,7 +3414,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="mg"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="101"/>
+      <column name="sort_index" value="1043"/>
       <column name="name" value="Malagasy"/>
       <column name="short_name" value="Malagasy"/>
       <column name="description" value="Malagasy"/>
@@ -3618,7 +3422,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="mi"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="103"/>
+      <column name="sort_index" value="1044"/>
       <column name="name" value="Maori"/>
       <column name="short_name" value="Maori"/>
       <column name="description" value="Maori"/>
@@ -3626,23 +3430,15 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="mk"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="104"/>
+      <column name="sort_index" value="1045"/>
       <column name="name" value="Macedonian"/>
       <column name="short_name" value="Macedonian"/>
       <column name="description" value="Macedonian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ml"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="105"/>
-      <column name="name" value="Malayalam"/>
-      <column name="short_name" value="Malayalam"/>
-      <column name="description" value="Malayalam"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="mn"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="106"/>
+      <column name="sort_index" value="1046"/>
       <column name="name" value="Mongolian"/>
       <column name="short_name" value="Mongolian"/>
       <column name="description" value="Mongolian"/>
@@ -3650,7 +3446,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="mr"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="107"/>
+      <column name="sort_index" value="1047"/>
       <column name="name" value="Marathi"/>
       <column name="short_name" value="Marathi"/>
       <column name="description" value="Marathi"/>
@@ -3658,7 +3454,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ms"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="108"/>
+      <column name="sort_index" value="1048"/>
       <column name="name" value="Malay"/>
       <column name="short_name" value="Malay"/>
       <column name="description" value="Malay"/>
@@ -3666,7 +3462,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="mt"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="109"/>
+      <column name="sort_index" value="1049"/>
       <column name="name" value="Maltese"/>
       <column name="short_name" value="Maltese"/>
       <column name="description" value="Maltese"/>
@@ -3674,7 +3470,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="my"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="110"/>
+      <column name="sort_index" value="1050"/>
       <column name="name" value="Burmese"/>
       <column name="short_name" value="Burmese"/>
       <column name="description" value="Burmese"/>
@@ -3682,31 +3478,23 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="nd"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="112"/>
-      <column name="name" value="Northern Ndebele"/>
-      <column name="short_name" value="Northern Ndebele"/>
-      <column name="description" value="Northern Ndebele, North Ndebele"/>
+      <column name="sort_index" value="1051"/>
+      <column name="name" value="Ndebele"/>
+      <column name="short_name" value="Ndebele"/>
+      <column name="description" value="Ndebele, Northern Ndebele, North Ndebele"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ne"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="113"/>
+      <column name="sort_index" value="1052"/>
       <column name="name" value="Nepali"/>
       <column name="short_name" value="Nepali"/>
       <column name="description" value="Nepali"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ng"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="114"/>
-      <column name="name" value="Ndonga"/>
-      <column name="short_name" value="Ndonga"/>
-      <column name="description" value="Ndonga"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="nl"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="115"/>
+      <column name="sort_index" value="1053"/>
       <column name="name" value="Dutch"/>
       <column name="short_name" value="Dutch"/>
       <column name="description" value="Dutch, Flemish"/>
@@ -3714,7 +3502,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="no"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="116"/>
+      <column name="sort_index" value="1054"/>
       <column name="name" value="Norwegian"/>
       <column name="short_name" value="Norwegian"/>
       <column name="description" value="Norwegian"/>
@@ -3722,79 +3510,31 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="nr"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="117"/>
+      <column name="sort_index" value="1055"/>
       <column name="name" value="Southern Ndebele"/>
       <column name="short_name" value="Southern Ndebele"/>
       <column name="description" value="Southern Ndebele, South Ndebele"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="nv"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="118"/>
-      <column name="name" value="Navajo"/>
-      <column name="short_name" value="Navajo"/>
-      <column name="description" value="Navajo, Navaho"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="ny"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="119"/>
+      <column name="sort_index" value="1056"/>
       <column name="name" value="Chewa"/>
       <column name="short_name" value="Chewa"/>
       <column name="description" value="Chichewa, Chewa, Nyanja"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="oc"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="120"/>
-      <column name="name" value="Occitan"/>
-      <column name="short_name" value="Occitan"/>
-      <column name="description" value="Occitan (post 1500)"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="oj"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="121"/>
-      <column name="name" value="Ojibwa"/>
-      <column name="short_name" value="Ojibwa"/>
-      <column name="description" value="Ojibwa"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="om"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="122"/>
-      <column name="name" value="Oromo"/>
-      <column name="short_name" value="Oromo"/>
-      <column name="description" value="Oromo"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="or"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="123"/>
-      <column name="name" value="Oriya"/>
-      <column name="short_name" value="Oriya"/>
-      <column name="description" value="Oriya"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="os"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="124"/>
+      <column name="sort_index" value="1057"/>
       <column name="name" value="Ossetian"/>
       <column name="short_name" value="Ossetian"/>
       <column name="description" value="Ossetian, Ossetic"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="pa"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="125"/>
-      <column name="name" value="Punjabi"/>
-      <column name="short_name" value="Punjabi"/>
-      <column name="description" value="Panjabi, Punjabi"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="pl"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="127"/>
+      <column name="sort_index" value="1058"/>
       <column name="name" value="Polish"/>
       <column name="short_name" value="Polish"/>
       <column name="description" value="Polish"/>
@@ -3802,7 +3542,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ps"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="128"/>
+      <column name="sort_index" value="1059"/>
       <column name="name" value="Pashto"/>
       <column name="short_name" value="Pashto"/>
       <column name="description" value="Pushto, Pashto"/>
@@ -3810,7 +3550,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="pt"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="129"/>
+      <column name="sort_index" value="1060"/>
       <column name="name" value="Portuguese"/>
       <column name="short_name" value="Portuguese"/>
       <column name="description" value="Portuguese"/>
@@ -3818,7 +3558,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="qu"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="130"/>
+      <column name="sort_index" value="1061"/>
       <column name="name" value="Quechua"/>
       <column name="short_name" value="Quechua"/>
       <column name="description" value="Quechua"/>
@@ -3826,23 +3566,15 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="rm"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="131"/>
+      <column name="sort_index" value="1062"/>
       <column name="name" value="Romansh"/>
       <column name="short_name" value="Romansh"/>
       <column name="description" value="Romansh"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="rn"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="132"/>
-      <column name="name" value="Rundi"/>
-      <column name="short_name" value="Rundi"/>
-      <column name="description" value="Rundi"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="ro"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="133"/>
+      <column name="sort_index" value="1063"/>
       <column name="name" value="Romanian"/>
       <column name="short_name" value="Romanian"/>
       <column name="description" value="Romanian, Moldavian, Moldovan"/>
@@ -3850,7 +3582,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ru"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="134"/>
+      <column name="sort_index" value="1064"/>
       <column name="name" value="Russian"/>
       <column name="short_name" value="Russian"/>
       <column name="description" value="Russian"/>
@@ -3858,47 +3590,23 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="rw"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="135"/>
+      <column name="sort_index" value="1065"/>
       <column name="name" value="Kinyarwanda"/>
       <column name="short_name" value="Kinyarwanda"/>
       <column name="description" value="Kinyarwanda"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="sc"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="137"/>
-      <column name="name" value="Sardinian"/>
-      <column name="short_name" value="Sardinian"/>
-      <column name="description" value="Sardinian"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="sd"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="138"/>
-      <column name="name" value="Sindhi"/>
-      <column name="short_name" value="Sindhi"/>
-      <column name="description" value="Sindhi"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="se"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="139"/>
+      <column name="sort_index" value="1066"/>
       <column name="name" value="Northern Sami"/>
       <column name="short_name" value="Northern Sami"/>
       <column name="description" value="Northern Sami"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="sg"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="140"/>
-      <column name="name" value="Sango"/>
-      <column name="short_name" value="Sango"/>
-      <column name="description" value="Sango"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="si"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="141"/>
+      <column name="sort_index" value="1067"/>
       <column name="name" value="Sinhala"/>
       <column name="short_name" value="Sinhala"/>
       <column name="description" value="Sinhala, Sinhalese"/>
@@ -3906,7 +3614,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="sk"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="142"/>
+      <column name="sort_index" value="1068"/>
       <column name="name" value="Slovak"/>
       <column name="short_name" value="Slovak"/>
       <column name="description" value="Slovak"/>
@@ -3914,23 +3622,15 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="sl"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="143"/>
+      <column name="sort_index" value="1069"/>
       <column name="name" value="Slovenian"/>
       <column name="short_name" value="Slovenian"/>
       <column name="description" value="Slovenian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="sm"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="144"/>
-      <column name="name" value="Samoan"/>
-      <column name="short_name" value="Samoan"/>
-      <column name="description" value="Samoan"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="sn"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="145"/>
+      <column name="sort_index" value="1070"/>
       <column name="name" value="Shona"/>
       <column name="short_name" value="Shona"/>
       <column name="description" value="Shona"/>
@@ -3938,55 +3638,31 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="so"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="146"/>
+      <column name="sort_index" value="1071"/>
       <column name="name" value="Somali"/>
       <column name="short_name" value="Somali"/>
       <column name="description" value="Somali"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="sq"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="147"/>
-      <column name="name" value="Albanian"/>
-      <column name="short_name" value="Albanian"/>
-      <column name="description" value="Albanian"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="sr"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="148"/>
+      <column name="sort_index" value="1072"/>
       <column name="name" value="Serbian"/>
       <column name="short_name" value="Serbian"/>
       <column name="description" value="Serbian"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ss"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="149"/>
-      <column name="name" value="Swati"/>
-      <column name="short_name" value="Swati"/>
-      <column name="description" value="Swati"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="st"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="150"/>
-      <column name="name" value="Southern Sotho"/>
-      <column name="short_name" value="Southern Sotho"/>
-      <column name="description" value=" Southern Sotho"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="su"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="151"/>
-      <column name="name" value="Sundanese"/>
-      <column name="short_name" value="Sundanese"/>
-      <column name="description" value="Sundanese"/>
+      <column name="sort_index" value="1073"/>
+      <column name="name" value="Sotho"/>
+      <column name="short_name" value="Sotho"/>
+      <column name="description" value="Sotho, Southern Sotho"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="sv"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="152"/>
+      <column name="sort_index" value="1074"/>
       <column name="name" value="Swedish"/>
       <column name="short_name" value="Swedish"/>
       <column name="description" value="Swedish"/>
@@ -3994,7 +3670,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="sw"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="153"/>
+      <column name="sort_index" value="1075"/>
       <column name="name" value="Swahili"/>
       <column name="short_name" value="Swahili"/>
       <column name="description" value="Swahili"/>
@@ -4002,23 +3678,15 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ta"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="154"/>
+      <column name="sort_index" value="1076"/>
       <column name="name" value="Tamil"/>
       <column name="short_name" value="Tamil"/>
       <column name="description" value="Tamil"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="te"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="155"/>
-      <column name="name" value="Telugu"/>
-      <column name="short_name" value="Telugu"/>
-      <column name="description" value="Telugu"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="tg"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="156"/>
+      <column name="sort_index" value="1077"/>
       <column name="name" value="Tajik"/>
       <column name="short_name" value="Tajik"/>
       <column name="description" value="Tajik"/>
@@ -4026,7 +3694,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="th"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="157"/>
+      <column name="sort_index" value="1078"/>
       <column name="name" value="Thai"/>
       <column name="short_name" value="Thai"/>
       <column name="description" value="Thai"/>
@@ -4034,7 +3702,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ti"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="158"/>
+      <column name="sort_index" value="1079"/>
       <column name="name" value="Tigrinya"/>
       <column name="short_name" value="Tigrinya"/>
       <column name="description" value="Tigrinya"/>
@@ -4042,39 +3710,23 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="tk"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="159"/>
+      <column name="sort_index" value="1080"/>
       <column name="name" value="Turkmen"/>
       <column name="short_name" value="Turkmen"/>
       <column name="description" value="Turkmen"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="tl"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="160"/>
-      <column name="name" value="Tagalog"/>
-      <column name="short_name" value="Tagalog"/>
-      <column name="description" value="Tagalog"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="tn"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="161"/>
+      <column name="sort_index" value="1081"/>
       <column name="name" value="Tswana"/>
       <column name="short_name" value="Tswana"/>
       <column name="description" value="Tswana"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="to"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="162"/>
-      <column name="name" value="Tongan"/>
-      <column name="short_name" value="Tongan"/>
-      <column name="description" value="Tonga (Tonga Islands)"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="tr"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="163"/>
+      <column name="sort_index" value="1082"/>
       <column name="name" value="Turkish"/>
       <column name="short_name" value="Turkish"/>
       <column name="description" value="Turkish"/>
@@ -4082,47 +3734,15 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ts"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="164"/>
+      <column name="sort_index" value="1083"/>
       <column name="name" value="Tsonga"/>
       <column name="short_name" value="Tsonga"/>
       <column name="description" value="Tsonga"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="tt"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="165"/>
-      <column name="name" value="Tatar"/>
-      <column name="short_name" value="Tatar"/>
-      <column name="description" value="Tatar"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="tw"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="166"/>
-      <column name="name" value="Twi"/>
-      <column name="short_name" value="Twi"/>
-      <column name="description" value="Twi"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ty"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="167"/>
-      <column name="name" value="Tahitian"/>
-      <column name="short_name" value="Tahitian"/>
-      <column name="description" value="Tahitian"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="ug"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="168"/>
-      <column name="name" value="Uyghur"/>
-      <column name="short_name" value="Uyghur"/>
-      <column name="description" value="Uighur, Uyghur"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="uk"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="169"/>
+      <column name="sort_index" value="1084"/>
       <column name="name" value="Ukrainian"/>
       <column name="short_name" value="Ukrainian"/>
       <column name="description" value="Ukrainian"/>
@@ -4130,7 +3750,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ur"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="170"/>
+      <column name="sort_index" value="1085"/>
       <column name="name" value="Urdu"/>
       <column name="short_name" value="Urdu"/>
       <column name="description" value="Urdu"/>
@@ -4138,7 +3758,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="uz"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="171"/>
+      <column name="sort_index" value="1086"/>
       <column name="name" value="Uzbek"/>
       <column name="short_name" value="Uzbek"/>
       <column name="description" value="Uzbek"/>
@@ -4146,7 +3766,7 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="ve"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="172"/>
+      <column name="sort_index" value="1087"/>
       <column name="name" value="Venda"/>
       <column name="short_name" value="Venda"/>
       <column name="description" value="Venda"/>
@@ -4154,63 +3774,23 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="vi"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="173"/>
+      <column name="sort_index" value="1088"/>
       <column name="name" value="Vietnamese"/>
       <column name="short_name" value="Vietnamese"/>
       <column name="description" value="Vietnamese"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="wa"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="175"/>
-      <column name="name" value="Walloon"/>
-      <column name="short_name" value="Walloon"/>
-      <column name="description" value="Walloon"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="wo"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="176"/>
-      <column name="name" value="Wolof"/>
-      <column name="short_name" value="Wolof"/>
-      <column name="description" value="Wolof"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="xh"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="177"/>
+      <column name="sort_index" value="1089"/>
       <column name="name" value="Xhosa"/>
       <column name="short_name" value="Xhosa"/>
       <column name="description" value="Xhosa"/>
     </insert>
     <insert schemaName="reference" tableName="languages">
-      <column name="code" value="yi"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="178"/>
-      <column name="name" value="Yiddish"/>
-      <column name="short_name" value="Yiddish"/>
-      <column name="description" value="Yiddish"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="yo"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="179"/>
-      <column name="name" value="Yoruba"/>
-      <column name="short_name" value="Yoruba"/>
-      <column name="description" value="Yoruba"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
-      <column name="code" value="za"/>
-      <column name="locale" value="en-US"/>
-      <column name="sort_index" value="180"/>
-      <column name="name" value="Zhuang"/>
-      <column name="short_name" value="Zhuang"/>
-      <column name="description" value="Zhuang, Chuang"/>
-    </insert>
-    <insert schemaName="reference" tableName="languages">
       <column name="code" value="zh"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="181"/>
+      <column name="sort_index" value="1090"/>
       <column name="name" value="Chinese"/>
       <column name="short_name" value="Chinese"/>
       <column name="description" value="Chinese"/>
@@ -4218,11 +3798,458 @@
     <insert schemaName="reference" tableName="languages">
       <column name="code" value="zu"/>
       <column name="locale" value="en-US"/>
-      <column name="sort_index" value="182"/>
+      <column name="sort_index" value="1091"/>
       <column name="name" value="Zulu"/>
       <column name="short_name" value="Zulu"/>
       <column name="description" value="Zulu"/>
     </insert>
+
+
+    <insert schemaName="reference" tableName="marital_statuses">
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Not known"/>
+    </insert>
+    <insert schemaName="reference" tableName="marital_statuses">
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Single"/>
+      <column name="description" value="Single"/>
+    </insert>
+    <insert schemaName="reference" tableName="marital_statuses">
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Married"/>
+      <column name="description" value="Married"/>
+    </insert>
+    <insert schemaName="reference" tableName="marital_statuses">
+      <column name="code" value="3"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Common Law"/>
+      <column name="description" value="Common Law"/>
+    </insert>
+    <insert schemaName="reference" tableName="marital_statuses">
+      <column name="code" value="4"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Divorced"/>
+      <column name="description" value="Divorced"/>
+    </insert>
+    <insert schemaName="reference" tableName="marital_statuses">
+      <column name="code" value="5"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Widowed"/>
+      <column name="description" value="Widowed"/>
+    </insert>
+
+
+    <insert schemaName="reference" tableName="marriage_types">
+      <column name="marital_status" value="0"/>
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Not known"/>
+    </insert>
+    <insert schemaName="reference" tableName="marriage_types">
+      <column name="marital_status" value="2"/>
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Not known"/>
+    </insert>
+    <insert schemaName="reference" tableName="marriage_types">
+      <column name="marital_status" value="2"/>
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="In Community Of Property"/>
+      <column name="description" value="In Community Of Property"/>
+    </insert>
+    <insert schemaName="reference" tableName="marriage_types">
+      <column name="marital_status" value="2"/>
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="ANC Without Accrual"/>
+      <column name="description" value="ANC Without Accrual"/>
+    </insert>
+    <insert schemaName="reference" tableName="marriage_types">
+      <column name="marital_status" value="2"/>
+      <column name="code" value="3"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="ANC With Accrual"/>
+      <column name="description" value="ANC With Accrual"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="minor_types">
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Not known"/>
+    </insert>
+    <insert schemaName="reference" tableName="minor_types">
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="None"/>
+      <column name="description" value="None"/>
+    </insert>
+    <insert schemaName="reference" tableName="minor_types">
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Minor"/>
+      <column name="description" value="Minor"/>
+    </insert>
+    <insert schemaName="reference" tableName="minor_types">
+      <column name="code" value="3"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Emancipated Minor"/>
+      <column name="description" value="Emancipated Minor"/>
+    </insert>
+
+
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Not known"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Aunt"/>
+      <column name="description" value="Aunt"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Brother"/>
+      <column name="description" value="Brother"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="3"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Cousin"/>
+      <column name="description" value="Cousin"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="4"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Father"/>
+      <column name="description" value="Father"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="5"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Friend"/>
+      <column name="description" value="Friend"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="6"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Grandfather"/>
+      <column name="description" value="Grandfather"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="7"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Grandmother"/>
+      <column name="description" value="Grandmother"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="8"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Husband"/>
+      <column name="description" value="Husband"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="9"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Life Partner"/>
+      <column name="description" value="Life Partner"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="10"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Mother"/>
+      <column name="description" value="Mother"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="11"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="11"/>
+      <column name="name" value="Nephew"/>
+      <column name="description" value="Nephew"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="12"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="12"/>
+      <column name="name" value="Niece"/>
+      <column name="description" value="Niece"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="13"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="13"/>
+      <column name="name" value="Sister"/>
+      <column name="description" value="Sister"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="14"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="14"/>
+      <column name="name" value="Uncle"/>
+      <column name="description" value="Uncle"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="15"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="15"/>
+      <column name="name" value="Wife"/>
+      <column name="description" value="Wife"/>
+    </insert>
+    <insert schemaName="reference" tableName="next_of_kin_types">
+      <column name="code" value="16"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="16"/>
+      <column name="name" value="Other"/>
+      <column name="description" value="Other"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="0"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Not known"/>
+      <column name="description" value="Not known"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="1"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Creative"/>
+      <column name="description" value="Creative"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="2"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Driver"/>
+      <column name="description" value="Driver"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="3"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Executive"/>
+      <column name="description" value="Executive"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="4"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Farmer"/>
+      <column name="description" value="Farmer"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="5"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Government Official"/>
+      <column name="description" value="Government Official"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="6"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Guard"/>
+      <column name="description" value="Guard"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="7"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Labourer"/>
+      <column name="description" value="Labourer"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="8"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Military / Police"/>
+      <column name="description" value="Military / Police"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="9"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Manager"/>
+      <column name="description" value="Manager"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="10"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Office Staff"/>
+      <column name="description" value="Office Staff"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="11"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="11"/>
+      <column name="name" value="Pensioner / Retired"/>
+      <column name="description" value="Pensioner / Retired"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="12"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="12"/>
+      <column name="name" value="Plant or Machine Operator or Assembler"/>
+      <column name="description" value="Plant or Machine Operator or Assembler"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="13"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="13"/>
+      <column name="name" value="Professional: Business"/>
+      <column name="description" value="Professional: Business"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="14"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="14"/>
+      <column name="name" value="Professional: Education"/>
+      <column name="description" value="Professional: Education"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="15"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="15"/>
+      <column name="name" value="Professional: Engineering"/>
+      <column name="description" value="Professional: Engineering"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="16"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="16"/>
+      <column name="name" value="Professional: Government"/>
+      <column name="description" value="Professional: Government"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="17"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="17"/>
+      <column name="name" value="Professional: Legal"/>
+      <column name="description" value="Professional: Legal"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="18"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="18"/>
+      <column name="name" value="Professional: Medical"/>
+      <column name="description" value="Professional: Medical"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="19"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="19"/>
+      <column name="name" value="Professional: Scientific"/>
+      <column name="description" value="Professional: Scientific"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="20"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="20"/>
+      <column name="name" value="Professional: Transport"/>
+      <column name="description" value="Professional: Transport"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="21"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="21"/>
+      <column name="name" value="Religious / Charitable"/>
+      <column name="description" value="Religious / Charitable"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="22"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="22"/>
+      <column name="name" value="Sales"/>
+      <column name="description" value="Sales"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="23"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="23"/>
+      <column name="name" value="Semi-skilled Worker"/>
+      <column name="description" value="Semi-skilled Worker"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="24"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="24"/>
+      <column name="name" value="Service"/>
+      <column name="description" value="Service"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="25"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="25"/>
+      <column name="name" value="Skilled Worker"/>
+      <column name="description" value="Skilled Worker"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="26"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="26"/>
+      <column name="name" value="Technician"/>
+      <column name="description" value="Technician"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="27"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="27"/>
+      <column name="name" value="Trade Worker"/>
+      <column name="description" value="Trade Worker"/>
+    </insert>
+    <insert schemaName="reference" tableName="occupations">
+      <column name="code" value="50"/>
+      <column name="locale" value="en-US"/>
+      <column name="sort_index" value="50"/>
+      <column name="name" value="Unemployed"/>
+      <column name="description" value="Unemployed"/>
+    </insert>
+
+
+
+
+
+
+
 
   </changeSet>
 

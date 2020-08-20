@@ -9,6 +9,7 @@ psql --dbname=sample --command="DROP ROLE IF EXISTS sample;"
 psql --dbname=sample --command="CREATE ROLE sample WITH LOGIN PASSWORD 'sample';"
 psql --dbname=sample --command="GRANT ALL PRIVILEGES ON DATABASE sample to sample;"
 psql --dbname=sample --command="ALTER USER sample WITH SUPERUSER;"
+psql --dbname=sample --command="CREATE SCHEMA liquibase;"
 
 
 

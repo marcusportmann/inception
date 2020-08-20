@@ -1,284 +1,121 @@
-
+/*
+ * Copyright 2020 Marcus Portmann
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package digital.inception.reference;
 
-//~--- non-JDK imports --------------------------------------------------------
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
+/**
+ * The <code>Language</code> class holds the information for a possible language for a person.
+ *
+ * @author Marcus Portmann
+ */
+@Schema(description = "Language")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"code", "locale", "sortIndex", "name", "shortName", "description"})
+@XmlRootElement(name = "Language", namespace = "http://reference.inception.digital")
+@XmlType(
+    name = "Language",
+    namespace = "http://reference.inception.digital",
+    propOrder = {"code", "locale", "sortIndex", "name", "shortName", "description"})
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "reference", name = "languages")
+@IdClass(LanguageId.class)
+public class Language {
 
-public enum Language
-{
-  ENGLISH("EN", "English"),
-  AFRIKAANS("AF", "Afrikaans"),
-  NDEBELE_NORTH("ND", "Ndebele, North"),
-  NDEBELE_SOUTH("NR", "Ndebele, South"),
-  SOTHO_NORTHERN("N6", "Sotho, Northern"),
-  SOTHO_SOUTHERN("ST", "Sotho, Southern"),
-  TSONGA("TS", "Tsonga"),
-  TSWANA("TN", "Tswana"),
-  VENDA("VE", "Venda"),
-  XHOSA("XH", "Xhosa"),
-  ZULU("ZU", "Zulu"),
-  SWAZI("Z2", "Swazi"),
-  ARABIC("AR", "Arabic"),
-  BULGARIAN("BG", "Bulgarian"),
-  CATALAN("CA", "Catalan"),
-  CZECH("CS", "Czech"),
-  DANISH("DA", "Danish"),
-  GERMAN("DE", "German"),
-  GREEK("EL", "Greek"),
-  SPANISH("ES", "Spanish"),
-  ESTONIAN("ET", "Estonian"),
-  FINNISH("FI", "Finnish"),
-  FRENCH("FR", "French"),
-  HEBREW("HE", "Hebrew"),
-  HINDI("HI", "Hindi"),
-  CROATIAN("HR", "Croatian"),
-  HUNGARIAN("HU", "Hungarian"),
-  INDONESIAN("ID", "Indonesian"),
-  ICELANDIC("IS", "Icelandic"),
-  ITALIAN("IT", "Italian"),
-  JAPANESE("JA", "Japanese"),
-  KAZAKH("KK", "Kazakh"),
-  KOREAN("KO", "Korean"),
-  LITHUANIAN("LT", "Lithuanian"),
-  LATVIAN("LV", "Latvian"),
-  MALAY("MS", "Malay"),
-  DUTCH("NL", "Dutch"),
-  NORWEGIAN("NO", "Norwegian"),
-  POLISH("PL", "Polish"),
-  PORTUGUESE("PT", "Portuguese"),
-  ROMANIAN("RO", "Romanian"),
-  RUSSIAN("RU", "Russian"),
-  SERBIAN_LATIN("SH", "Serbian (Latin)"),
-  SLOVAK("SK", "Slovak"),
-  SLOVENIAN("SL", "Slovenian"),
-  SERBIAN("SR", "Serbian"),
-  SWEDISH("SV", "Swedish"),
-  THAI("TH", "Thai"),
-  TURKISH("TR", "Turkish"),
-  UKRAINIAN("UK", "Ukrainian"),
-  VIETNAMESE("VI", "Vietnamese"),
-  CHINESE_SIMPLIFIED("ZF", "Chinese Simplified"),
-  CHINESE("ZH", "Chinese");
-
-  /**
-   * All the languages.
-   */
-  public static final Language[] ALL_LANGUAGES =
-      {
-          ENGLISH, AFRIKAANS, NDEBELE_NORTH, NDEBELE_SOUTH, SOTHO_NORTHERN, SOTHO_SOUTHERN, TSONGA,
-          TSWANA, VENDA, XHOSA, ZULU, SWAZI, ARABIC, BULGARIAN, CATALAN, CZECH, DANISH, GERMAN, GREEK,
-          SPANISH, ESTONIAN, FINNISH, FRENCH, HEBREW, HINDI, CROATIAN, HUNGARIAN, INDONESIAN, ICELANDIC,
-          ITALIAN, JAPANESE, KAZAKH, KOREAN, LITHUANIAN, LATVIAN, MALAY, DUTCH, NORWEGIAN, POLISH,
-          PORTUGUESE, ROMANIAN, RUSSIAN, SERBIAN_LATIN, SLOVAK, SLOVENIAN, SERBIAN, SWEDISH, THAI,
-          TURKISH, UKRAINIAN, VIETNAMESE, CHINESE_SIMPLIFIED, CHINESE
-      };
-
-  /**
-   * The regular expression used to validate a code identifying a language.
-   */
-  public static final String PATTERN = "[A-Z0-9][A-Z0-9]";
-
-  /**
-   * The description for the language.
-   */
-  private String description;
-
-  /**
-   * The code for the language.
-   */
+  /** The code for the language. */
+  @Schema(description = "The code for the language", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Code", required = true)
+  @NotNull
+  @Size(min = 1, max = 10)
+  @Id
+  @Column(name = "code", nullable = false)
   private String code;
 
-  Language(String code, String description)
-  {
-    this.code = code;
-    this.description = description;
-  }
+  /** The description for the language. */
+  @Schema(description = "The description for the language", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Description", required = true)
+  @NotNull
+  @Size(max = 200)
+  @Column(name = "description", nullable = false)
+  private String description;
 
-  /**
-   * Returns the language given by the specified code value.
-   *
-   * @param code the code value identifying the language
-   *
-   * @return the language given by the specified code value
-   */
-  public static Language fromCode(String code)
-  {
-    switch (code)
-    {
-      case "EN":
-        return Language.ENGLISH;
+  /** The Unicode locale identifier for the language. */
+  @Schema(description = "The Unicode locale identifier for the language", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Locale", required = true)
+  @NotNull
+  @Size(min = 2, max = 10)
+  @Id
+  @Column(name = "locale", nullable = false)
+  private String locale;
 
-      case "AF":
-        return Language.AFRIKAANS;
+  /** The name of the language. */
+  @Schema(description = "The name of the language", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 20)
+  @Column(name = "name", nullable = false)
+  private String name;
 
-      case "ND":
-        return Language.NDEBELE_NORTH;
+  /** The short name for the language. */
+  @Schema(description = "The short name for the language", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "ShortName", required = true)
+  @NotNull
+  @Size(max = 50)
+  @Column(name = "short_name", nullable = false)
+  private String shortName;
 
-      case "NR":
-        return Language.NDEBELE_SOUTH;
+  /** The sort index for the language. */
+  @Schema(description = "The sort index for the language", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SortIndex", required = true)
+  @NotNull
+  @Column(name = "sort_index", nullable = false)
+  private Integer sortIndex;
 
-      case "N6":
-        return Language.SOTHO_NORTHERN;
-
-      case "ST":
-        return Language.SOTHO_SOUTHERN;
-
-      case "TS":
-        return Language.TSONGA;
-
-      case "TN":
-        return Language.TSWANA;
-
-      case "VE":
-        return Language.VENDA;
-
-      case "XH":
-        return Language.XHOSA;
-
-      case "ZU":
-        return Language.ZULU;
-
-      case "Z2":
-        return Language.SWAZI;
-
-      case "AR":
-        return Language.ARABIC;
-
-      case "BG":
-        return Language.BULGARIAN;
-
-      case "CA":
-        return Language.CATALAN;
-
-      case "CS":
-        return Language.CZECH;
-
-      case "DA":
-        return Language.DANISH;
-
-      case "DE":
-        return Language.GERMAN;
-
-      case "EL":
-        return Language.GREEK;
-
-      case "ES":
-        return Language.SPANISH;
-
-      case "ET":
-        return Language.ESTONIAN;
-
-      case "FI":
-        return Language.FINNISH;
-
-      case "FR":
-        return Language.FRENCH;
-
-      case "HE":
-        return Language.HEBREW;
-
-      case "HI":
-        return Language.HINDI;
-
-      case "HR":
-        return Language.CROATIAN;
-
-      case "HU":
-        return Language.HUNGARIAN;
-
-      case "ID":
-        return Language.INDONESIAN;
-
-      case "IS":
-        return Language.ICELANDIC;
-
-      case "IT":
-        return Language.ITALIAN;
-
-      case "JA":
-        return Language.JAPANESE;
-
-      case "KK":
-        return Language.KAZAKH;
-
-      case "KO":
-        return Language.KOREAN;
-
-      case "LT":
-        return Language.LITHUANIAN;
-
-      case "LV":
-        return Language.LATVIAN;
-
-      case "MS":
-        return Language.MALAY;
-
-      case "NL":
-        return Language.DUTCH;
-
-      case "NO":
-        return Language.NORWEGIAN;
-
-      case "PL":
-        return Language.POLISH;
-
-      case "PT":
-        return Language.PORTUGUESE;
-
-      case "RO":
-        return Language.ROMANIAN;
-
-      case "RU":
-        return Language.RUSSIAN;
-
-      case "SH":
-        return Language.SERBIAN_LATIN;
-
-      case "SK":
-        return Language.SLOVAK;
-
-      case "SL":
-        return Language.SLOVENIAN;
-
-      case "SR":
-        return Language.SERBIAN;
-
-      case "SV":
-        return Language.SWEDISH;
-
-      case "TH":
-        return Language.THAI;
-
-      case "TR":
-        return Language.TURKISH;
-
-      case "UK":
-        return Language.UKRAINIAN;
-
-      case "VI":
-        return Language.VIETNAMESE;
-
-
-      case "ZF":
-        return Language.CHINESE_SIMPLIFIED;
-
-      case "ZH":
-        return Language.CHINESE;
-
-      default:
-        throw new RuntimeException("Failed to determine the language with the invalid code ("
-            + code + ")");
-    }
-  }
+  /** Constructs a new <code>Language</code>. */
+  public Language() {}
 
   /**
    * Returns the code for the language.
    *
    * @return the code for the language
    */
-  public String code()
-  {
+  public String getCode() {
     return code;
   }
 
@@ -287,8 +124,97 @@ public enum Language
    *
    * @return the description for the language
    */
-  public String description()
-  {
+  public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the Unicode locale identifier for the language.
+   *
+   * @return the Unicode locale identifier for the language
+   */
+  public String getLocale() {
+    return locale;
+  }
+
+  /**
+   * Returns the name of the language.
+   *
+   * @return the name of the language
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the short name for the language.
+   *
+   * @return the short name for the language
+   */
+  public String getShortName() {
+    return shortName;
+  }
+
+  /**
+   * Returns the sort index for the language.
+   *
+   * @return the sort index for the language
+   */
+  public Integer getSortIndex() {
+    return sortIndex;
+  }
+
+  /**
+   * Set the code for the language.
+   *
+   * @param code the code for the language
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the description for the language.
+   *
+   * @param description the description for the language
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the Unicode locale identifier for the language.
+   *
+   * @param localeId the Unicode locale identifier for the language
+   */
+  public void setLocale(String localeId) {
+    this.locale = localeId;
+  }
+
+  /**
+   * Set the name of the language.
+   *
+   * @param name the name of the language
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the short name for the language.
+   *
+   * @param shortDescription the short name for the language
+   */
+  public void setShortName(String shortDescription) {
+    this.shortName = shortDescription;
+  }
+
+  /**
+   * Set the sort index for the language.
+   *
+   * @param sortIndex the sort index for the language
+   */
+  public void setSortIndex(Integer sortIndex) {
+    this.sortIndex = sortIndex;
   }
 }

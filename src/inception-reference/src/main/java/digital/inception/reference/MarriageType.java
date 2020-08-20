@@ -34,26 +34,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Gender</code> class holds the information for a possible gender for a person.
+ * The <code>MarriageType</code> class holds the information for a possible marriage type for a
+ * person.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Gender")
+@Schema(description = "MarriageType")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "locale", "sortIndex", "name", "description"})
-@XmlRootElement(name = "Gender", namespace = "http://reference.inception.digital")
+@JsonPropertyOrder({"maritalStatus", "code", "locale", "sortIndex", "name", "description"})
+@XmlRootElement(name = "MarriageType", namespace = "http://reference.inception.digital")
 @XmlType(
-    name = "Gender",
+    name = "MarriageType",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "locale", "sortIndex", "name", "description"})
+    propOrder = {"maritalStatus", "code", "locale", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "genders")
-@IdClass(GenderId.class)
-public class Gender {
+@Table(schema = "reference", name = "marriage_types")
+@IdClass(MarriageTypeId.class)
+public class MarriageType {
 
-  /** The code for the gender. */
-  @Schema(description = "The code for the gender", required = true)
+  /** The code for the marriage type. */
+  @Schema(description = "The code for the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -62,8 +63,8 @@ public class Gender {
   @Column(name = "code", nullable = false)
   private String code;
 
-  /** The description for the gender. */
-  @Schema(description = "The description for the gender", required = true)
+  /** The description for the marriage type. */
+  @Schema(description = "The description for the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -71,8 +72,8 @@ public class Gender {
   @Column(name = "description", nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the gender. */
-  @Schema(description = "The Unicode locale identifier for the gender", required = true)
+  /** The Unicode locale identifier for the marriage type. */
+  @Schema(description = "The Unicode locale identifier for the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Locale", required = true)
   @NotNull
@@ -81,8 +82,20 @@ public class Gender {
   @Column(name = "locale", nullable = false)
   private String locale;
 
-  /** The name of the gender. */
-  @Schema(description = "The name of the gender", required = true)
+  /** The code for the marital status the marriage type is associated with. */
+  @Schema(
+      description = "The code for the marital status the marriage type is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "MaritalStatus", required = true)
+  @NotNull
+  @Size(min = 1, max = 10)
+  @Id
+  @Column(name = "marital_status", nullable = false)
+  private String maritalStatus;
+
+  /** The name of the marriage type. */
+  @Schema(description = "The name of the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -90,102 +103,120 @@ public class Gender {
   @Column(name = "name", nullable = false)
   private String name;
 
-  /** The sort index for the gender. */
-  @Schema(description = "The sort index for the gender", required = true)
+  /** The sort index for the marriage type. */
+  @Schema(description = "The sort index for the marriage type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>Gender</code>. */
-  public Gender() {}
+  /** Constructs a new <code>MarriageType</code>. */
+  public MarriageType() {}
 
   /**
-   * Returns the code for the gender.
+   * Returns the code for the marriage type.
    *
-   * @return the code for the gender
+   * @return the code for the marriage type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the gender.
+   * Returns the description for the marriage type.
    *
-   * @return the description for the gender
+   * @return the description for the marriage type
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the gender.
+   * Returns the Unicode locale identifier for the marriage type.
    *
-   * @return the Unicode locale identifier for the gender
+   * @return the Unicode locale identifier for the marriage type
    */
   public String getLocale() {
     return locale;
   }
 
   /**
-   * Returns the name of the gender.
+   * Returns the code for the marital status the marriage type is associated with.
    *
-   * @return the name of the gender
+   * @return the code for the marital status the marriage type is associated with
+   */
+  public String getMaritalStatus() {
+    return maritalStatus;
+  }
+
+  /**
+   * Returns the name of the marriage type.
+   *
+   * @return the name of the marriage type
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the gender.
+   * Returns the sort index for the marriage type.
    *
-   * @return the sort index for the gender
+   * @return the sort index for the marriage type
    */
   public Integer getSortIndex() {
     return sortIndex;
   }
 
   /**
-   * Set the code for the gender.
+   * Set the code for the marriage type.
    *
-   * @param code the code for the gender
+   * @param code the code for the marriage type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the gender.
+   * Set the description for the marriage type.
    *
-   * @param description the description for the gender
+   * @param description the description for the marriage type
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the gender.
+   * Set the Unicode locale identifier for the marriage type.
    *
-   * @param localeId the Unicode locale identifier for the gender
+   * @param localeId the Unicode locale identifier for the marriage type
    */
   public void setLocale(String localeId) {
     this.locale = localeId;
   }
 
   /**
-   * Set the name of the gender.
+   * Set the code for the marital status the marriage type is associated with.
    *
-   * @param name the name of the gender
+   * @param maritalStatus the code for the marital status the marriage type is associated with
+   */
+  public void setMaritalStatus(String maritalStatus) {
+    this.maritalStatus = maritalStatus;
+  }
+
+  /**
+   * Set the name of the marriage type.
+   *
+   * @param name the name of the marriage type
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the gender.
+   * Set the sort index for the marriage type.
    *
-   * @param sortIndex the sort index for the gender
+   * @param sortIndex the sort index for the marriage type
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

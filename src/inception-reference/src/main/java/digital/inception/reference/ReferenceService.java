@@ -58,6 +58,24 @@ public class ReferenceService implements IReferenceService {
   /** The Identity Document Type Repository. */
   private final IdentityDocumentTypeRepository identityDocumentTypeRepository;
 
+  /** The Language Repository. */
+  private final LanguageRepository languageRepository;
+
+  /** The Marital Status Repository. */
+  private final MaritalStatusRepository maritalStatusRepository;
+
+  /** The Marriage Type Repository. */
+  private final MarriageTypeRepository marriageTypeRepository;
+
+  /** The Minor Type Repository. */
+  private final MinorTypeRepository minorTypeRepository;
+
+  /** The Next Of Kin Type Repository. */
+  private final NextOfKinTypeRepository nextOfKinTypeRepository;
+
+  /** The Occupation Repository. */
+  private final OccupationRepository occupationRepository;
+
   /**
    * Constructs a new <code>ReferenceService</code>.
    *
@@ -67,6 +85,12 @@ public class ReferenceService implements IReferenceService {
    * @param employmentTypeRepository the Employment Type Repository
    * @param genderRepository the Gender Repository
    * @param identityDocumentTypeRepository the Identity Document Type Repository
+   * @param languageRepository the Language Repository
+   * @param maritalStatusRepository the Marital Status Repository
+   * @param marriageTypeRepository the Marriage Type Repository
+   * @param minorTypeRepository the Minor Type Repository
+   * @param nextOfKinTypeRepository the Next Of Kin Repository
+   * @param occupationRepository the Occupation Repository
    */
   public ReferenceService(
       CountryRepository countryRepository,
@@ -74,13 +98,25 @@ public class ReferenceService implements IReferenceService {
       EmploymentStatusRepository employmentStatusRepository,
       EmploymentTypeRepository employmentTypeRepository,
       GenderRepository genderRepository,
-      IdentityDocumentTypeRepository identityDocumentTypeRepository) {
+      IdentityDocumentTypeRepository identityDocumentTypeRepository,
+      LanguageRepository languageRepository,
+      MaritalStatusRepository maritalStatusRepository,
+      MarriageTypeRepository marriageTypeRepository,
+      MinorTypeRepository minorTypeRepository,
+      NextOfKinTypeRepository nextOfKinTypeRepository,
+      OccupationRepository occupationRepository) {
     this.countryRepository = countryRepository;
     this.communicationMethodRepository = communicationMethodRepository;
     this.employmentStatusRepository = employmentStatusRepository;
     this.employmentTypeRepository = employmentTypeRepository;
     this.genderRepository = genderRepository;
     this.identityDocumentTypeRepository = identityDocumentTypeRepository;
+    this.languageRepository = languageRepository;
+    this.maritalStatusRepository = maritalStatusRepository;
+    this.marriageTypeRepository = marriageTypeRepository;
+    this.minorTypeRepository = minorTypeRepository;
+    this.nextOfKinTypeRepository = nextOfKinTypeRepository;
+    this.occupationRepository = occupationRepository;
   }
 
   /**
@@ -272,6 +308,192 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the identity document types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the languages.
+   *
+   * @return the languages
+   */
+  @Override
+  public List<Language> getLanguages() throws ReferenceServiceException {
+    return getLanguages(null);
+  }
+
+  /**
+   * Retrieve the languages.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the languages
+   *     for or <code>null</code> to retrieve the languages for all locales
+   * @return the languages
+   */
+  @Override
+  public List<Language> getLanguages(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return languageRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return languageRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the languages", e);
+    }
+  }
+
+  /**
+   * Retrieve all the marital statuses.
+   *
+   * @return the marital statuses
+   */
+  @Override
+  public List<MaritalStatus> getMaritalStatuses() throws ReferenceServiceException {
+    return getMaritalStatuses(null);
+  }
+
+  /**
+   * Retrieve the marital statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the marital
+   *     statuses for or <code>null</code> to retrieve the marital statuses for all locales
+   * @return the marital statuses
+   */
+  @Override
+  public List<MaritalStatus> getMaritalStatuses(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return maritalStatusRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return maritalStatusRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the marital statuses", e);
+    }
+  }
+
+  /**
+   * Retrieve all the marriage types.
+   *
+   * @return the marriage types
+   */
+  @Override
+  public List<MarriageType> getMarriageTypes() throws ReferenceServiceException {
+    return getMarriageTypes(null);
+  }
+
+  /**
+   * Retrieve the marriage types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the marriage
+   *     types for or <code>null</code> to retrieve the marriage types for all locales
+   * @return the marriage types
+   */
+  @Override
+  public List<MarriageType> getMarriageTypes(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return marriageTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return marriageTypeRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the marriage types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the minor types.
+   *
+   * @return the minor types
+   */
+  @Override
+  public List<MinorType> getMinorTypes() throws ReferenceServiceException {
+    return getMinorTypes(null);
+  }
+
+  /**
+   * Retrieve the minor types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the minor
+   *     types for or <code>null</code> to retrieve the minor types for all locales
+   * @return the minor types
+   */
+  @Override
+  public List<MinorType> getMinorTypes(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return minorTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return minorTypeRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the minor types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the next of kin types.
+   *
+   * @return the next of kin types
+   */
+  @Override
+  public List<NextOfKinType> getNextOfKinTypes() throws ReferenceServiceException {
+    return getNextOfKinTypes(null);
+  }
+
+  /**
+   * Retrieve the next of kin types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the next of
+   *     kin types for or <code>null</code> to retrieve the next of kin types for all locales
+   * @return the next of kin types
+   */
+  @Override
+  public List<NextOfKinType> getNextOfKinTypes(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return nextOfKinTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return nextOfKinTypeRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the next of kin types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the occupations.
+   *
+   * @return the occupations
+   */
+  @Override
+  public List<Occupation> getOccupations() throws ReferenceServiceException {
+    return getOccupations(null);
+  }
+
+  /**
+   * Retrieve the occupations.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     occupations for or <code>null</code> to retrieve the occupations for all locales
+   * @return the occupations
+   */
+  @Override
+  public List<Occupation> getOccupations(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return occupationRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return occupationRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the occupations", e);
     }
   }
 }

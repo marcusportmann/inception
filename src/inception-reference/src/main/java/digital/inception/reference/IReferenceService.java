@@ -111,8 +111,6 @@ public interface IReferenceService {
    */
   List<Gender> getGenders(String localeId) throws ReferenceServiceException;
 
-
-
   /**
    * Retrieve all the identity document types.
    *
@@ -123,11 +121,107 @@ public interface IReferenceService {
   /**
    * Retrieve the identity document types.
    *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the identity document
-   *     types for or <code>null</code> to retrieve the identity document types for all locales
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the identity
+   *     document types for or <code>null</code> to retrieve the identity document types for all
+   *     locales
    * @return the identity document types
    */
-  List<IdentityDocumentType> getIdentityDocumentTypes(String localeId) throws ReferenceServiceException;
-  
-  
+  List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
+      throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the languages.
+   *
+   * @return the languages
+   */
+  List<Language> getLanguages() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the languages.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the languages
+   *     for or <code>null</code> to retrieve the languages for all locales
+   * @return the languages
+   */
+  List<Language> getLanguages(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the marital statuses.
+   *
+   * @return the marital statuses
+   */
+  List<MaritalStatus> getMaritalStatuses() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the marital statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the marital
+   *     statuses for or <code>null</code> to retrieve the marital statuses for all locales
+   * @return the marital statuses
+   */
+  List<MaritalStatus> getMaritalStatuses(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the marriage types.
+   *
+   * @return the marriage types
+   */
+  List<MarriageType> getMarriageTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the marriage types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the marriage
+   *     types for or <code>null</code> to retrieve the marriage types for all locales
+   * @return the marriage types
+   */
+  List<MarriageType> getMarriageTypes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the minor types.
+   *
+   * @return the minor types
+   */
+  List<MinorType> getMinorTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the minor types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the minor
+   *     types for or <code>null</code> to retrieve the minor types for all locales
+   * @return the minor types
+   */
+  List<MinorType> getMinorTypes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the next of kin types.
+   *
+   * @return the next of kin types
+   */
+  List<NextOfKinType> getNextOfKinTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the next of kin types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the next of
+   *     kin types for or <code>null</code> to retrieve the next of kin types for all locales
+   * @return the next of kin types
+   */
+  List<NextOfKinType> getNextOfKinTypes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the occupations.
+   *
+   * @return the occupations
+   */
+  List<Occupation> getOccupations() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the occupations.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     occupations for or <code>null</code> to retrieve the occupations for all locales
+   * @return the occupations
+   */
+  List<Occupation> getOccupations(String localeId) throws ReferenceServiceException;
 }
