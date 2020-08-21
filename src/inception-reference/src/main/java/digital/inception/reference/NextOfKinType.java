@@ -34,8 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>NextOfKinType</code> class holds the information for a possible next of kin type for a
- * person.
+ * The <code>NextOfKinType</code> class holds the information for a possible next of kin type.
  *
  * @author Marcus Portmann
  */
@@ -87,7 +86,7 @@ public class NextOfKinType {
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 20)
+  @Size(min = 1, max = 50)
   @Column(name = "name", nullable = false)
   private String name;
 

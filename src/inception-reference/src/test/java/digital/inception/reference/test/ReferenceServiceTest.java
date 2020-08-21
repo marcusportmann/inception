@@ -20,6 +20,7 @@ package digital.inception.reference.test;
 
 import static org.junit.Assert.assertEquals;
 
+import digital.inception.reference.AddressType;
 import digital.inception.reference.CommunicationMethod;
 import digital.inception.reference.Country;
 import digital.inception.reference.EmploymentStatus;
@@ -35,7 +36,9 @@ import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +69,20 @@ public class ReferenceServiceTest {
   /** The Reference Service. */
   @Autowired private IReferenceService referenceService;
 
+  /** Test the address type reference functionality. */
+  @Test
+  public void addressTypeTest() throws Exception {
+    List<AddressType> retrievedAddressTypes = referenceService.getAddressTypes();
+
+    assertEquals(
+        "The correct number of address types was not retrieved", 7, retrievedAddressTypes.size());
+
+    retrievedAddressTypes = referenceService.getAddressTypes("en-US");
+
+    assertEquals(
+        "The correct number of address types was not retrieved", 7, retrievedAddressTypes.size());
+  }
+
   /** Test the communication method reference functionality. */
   @Test
   public void communicationMethodTest() throws Exception {
@@ -74,7 +91,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of communication methods was not retrieved",
-        6,
+        3,
         retrievedCommunicationMethods.size());
 
     retrievedCommunicationMethods = referenceService.getCommunicationMethods("en-US");
@@ -83,36 +100,6 @@ public class ReferenceServiceTest {
         "The correct number of communication methods was not retrieved",
         3,
         retrievedCommunicationMethods.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (CommunicationMethod retrievedCommunicationMethod : retrievedCommunicationMethods) {
-
-        System.out.println(
-            "    <insert schemaName=\"reference\" tableName=\"communication_methods\">");
-        System.out.println(
-            "      <column name=\"code\" value=\""
-                + retrievedCommunicationMethod.getCode()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\""
-                + retrievedCommunicationMethod.getLocale()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedCommunicationMethod.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\""
-                + retrievedCommunicationMethod.getName()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedCommunicationMethod.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 
   /** Test the country reference functionality. */
@@ -123,68 +110,368 @@ public class ReferenceServiceTest {
     Country retrievedCountry = retrievedCountries.get(0);
 
     assertEquals(
-        "The correct number of countries was not retrieved", 498, retrievedCountries.size());
+        "The correct number of countries was not retrieved", 245, retrievedCountries.size());
 
     assertEquals(
-        "The correct code was not retrieved for the country", "AD", retrievedCountry.getCode());
+        "The correct code was not retrieved for the country", "AF", retrievedCountry.getCode());
     assertEquals(
         "The correct locale was not retrieved for the country",
         "en-US",
         retrievedCountry.getLocale());
     assertEquals(
         "The correct name was not retrieved for the country",
-        "Andorra",
+        "Afghanistan",
         retrievedCountry.getName());
     assertEquals(
         "The correct short name was not retrieved for the country",
-        "Andorra",
+        "Afghanistan",
         retrievedCountry.getName());
     assertEquals(
         "The correct description was not retrieved for the country",
-        "Andorra",
+        "Afghanistan",
         retrievedCountry.getName());
 
     retrievedCountries = referenceService.getCountries("en-US");
 
     assertEquals(
-        "The correct number of countries was not retrieved", 249, retrievedCountries.size());
+        "The correct number of countries was not retrieved", 245, retrievedCountries.size());
 
     retrievedCountry = retrievedCountries.get(0);
 
     assertEquals(
-        "The correct code was not retrieved for the country", "AD", retrievedCountry.getCode());
+        "The correct code was not retrieved for the country", "AF", retrievedCountry.getCode());
     assertEquals(
         "The correct locale was not retrieved for the country",
         "en-US",
         retrievedCountry.getLocale());
     assertEquals(
         "The correct name was not retrieved for the country",
-        "Andorra",
+        "Afghanistan",
         retrievedCountry.getName());
     assertEquals(
         "The correct short name was not retrieved for the country",
-        "Andorra",
+        "Afghanistan",
         retrievedCountry.getName());
     assertEquals(
         "The correct description was not retrieved for the country",
-        "Andorra",
+        "Afghanistan",
         retrievedCountry.getName());
+  }
 
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (Country country : retrievedCountries) {
-        System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
-        System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
-        System.out.println("  <column name=\"locale\" value=\"" + country.getLocale() + "\"/>");
-        System.out.println(
-            "  <column name=\"sort_index\" value=\"" + country.getSortIndex() + "\"/>");
-        System.out.println("  <column name=\"name\" value=\"" + country.getName() + "\"/>");
-        System.out.println(
-            "  <column name=\"short_name\" value=\"" + country.getShortName() + "\"/>");
-        System.out.println(
-            "  <column name=\"description\" value=\"" + country.getDescription() + "\"/>");
-        System.out.println("</insert>");
-      }
+  /** Create the Liquibase inserts. */
+  @Test
+  public void createLiquibaseInserts() throws Exception {
+    for (AddressType retrievedAddressType : referenceService.getAddressTypes("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"address_types\">");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedAddressType.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedAddressType.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedAddressType.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedAddressType.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedAddressType.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (CommunicationMethod retrievedCommunicationMethod :
+        referenceService.getCommunicationMethods("en-US")) {
+
+      System.out.println(
+          "    <insert schemaName=\"reference\" tableName=\"communication_methods\">");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedCommunicationMethod.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\""
+              + retrievedCommunicationMethod.getLocale()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedCommunicationMethod.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedCommunicationMethod.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedCommunicationMethod.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    List<Country> sortedCountries =
+        referenceService.getCountries("en-US").stream()
+            .sorted(Comparator.comparing(Country::getName))
+            .collect(Collectors.toList());
+
+    int counter = 1;
+
+    for (Country country : sortedCountries) {
+      System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
+      System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
+      System.out.println("  <column name=\"locale\" value=\"" + country.getLocale() + "\"/>");
+      System.out.println("  <column name=\"sort_index\" value=\"" + counter + "\"/>");
+      System.out.println("  <column name=\"name\" value=\"" + country.getName() + "\"/>");
+      System.out.println(
+          "  <column name=\"short_name\" value=\"" + country.getShortName() + "\"/>");
+      System.out.println(
+          "  <column name=\"description\" value=\"" + country.getDescription() + "\"/>");
+      System.out.println("</insert>");
+
+      counter++;
+    }
+
+    System.out.println("");
+
+    for (EmploymentStatus retrievedEmploymentStatus :
+        referenceService.getEmploymentStatuses("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"employment_statuses\">");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedEmploymentStatus.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\""
+              + retrievedEmploymentStatus.getLocale()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedEmploymentStatus.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedEmploymentStatus.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedEmploymentStatus.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (EmploymentType retrievedEmploymentType : referenceService.getEmploymentTypes("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"employment_types\">");
+      System.out.println(
+          "      <column name=\"employment_status\" value=\""
+              + retrievedEmploymentType.getEmploymentStatus()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedEmploymentType.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedEmploymentType.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedEmploymentType.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedEmploymentType.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedEmploymentType.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (Gender retrievedGender : referenceService.getGenders("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"genders\">");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedGender.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedGender.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\"" + retrievedGender.getSortIndex() + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedGender.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedGender.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (IdentityDocumentType retrievedIdentityDocumentType :
+        referenceService.getIdentityDocumentTypes("en-US")) {
+
+      System.out.println(
+          "    <insert schemaName=\"reference\" tableName=\"identity_document_types\">");
+      System.out.println(
+          "      <column name=\"code\" value=\""
+              + retrievedIdentityDocumentType.getCode()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\""
+              + retrievedIdentityDocumentType.getLocale()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedIdentityDocumentType.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\""
+              + retrievedIdentityDocumentType.getName()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedIdentityDocumentType.getDescription()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"country_of_issue\" value=\""
+              + retrievedIdentityDocumentType.getCountryOfIssue()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (Language retrievedLanguage : referenceService.getLanguages("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"languages\">");
+      System.out.println(
+          "      <column name=\"code\" value=\""
+              + retrievedLanguage.getCode().toUpperCase()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedLanguage.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\"" + retrievedLanguage.getSortIndex() + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedLanguage.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"short_name\" value=\"" + retrievedLanguage.getShortName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedLanguage.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (MaritalStatus retrievedMaritalStatus : referenceService.getMaritalStatuses("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"marital_statuses\">");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedMaritalStatus.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedMaritalStatus.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedMaritalStatus.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedMaritalStatus.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedMaritalStatus.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (MarriageType retrievedMarriageType : referenceService.getMarriageTypes("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"marriage_types\">");
+      System.out.println(
+          "      <column name=\"marital_status\" value=\""
+              + retrievedMarriageType.getMaritalStatus()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedMarriageType.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedMarriageType.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedMarriageType.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedMarriageType.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedMarriageType.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (MinorType retrievedMinorType : referenceService.getMinorTypes("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"minor_types\">");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedMinorType.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedMinorType.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedMinorType.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedMinorType.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedMinorType.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (NextOfKinType retrievedNextOfKinType : referenceService.getNextOfKinTypes("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"next_of_kin_types\">");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedNextOfKinType.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedNextOfKinType.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedNextOfKinType.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedNextOfKinType.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedNextOfKinType.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
+    }
+
+    System.out.println("");
+
+    for (Occupation retrievedOccupation : referenceService.getOccupations("en-US")) {
+
+      System.out.println("    <insert schemaName=\"reference\" tableName=\"occupations\">");
+      System.out.println(
+          "      <column name=\"code\" value=\"" + retrievedOccupation.getCode() + "\"/>");
+      System.out.println(
+          "      <column name=\"locale\" value=\"" + retrievedOccupation.getLocale() + "\"/>");
+      System.out.println(
+          "      <column name=\"sort_index\" value=\""
+              + retrievedOccupation.getSortIndex()
+              + "\"/>");
+      System.out.println(
+          "      <column name=\"name\" value=\"" + retrievedOccupation.getName() + "\"/>");
+      System.out.println(
+          "      <column name=\"description\" value=\""
+              + retrievedOccupation.getDescription()
+              + "\"/>");
+      System.out.println("    </insert>");
     }
   }
 
@@ -195,7 +482,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of employment statuses was not retrieved",
-        6,
+        3,
         retrievedEmploymentStatuses.size());
 
     retrievedEmploymentStatuses = referenceService.getEmploymentStatuses("en-US");
@@ -204,32 +491,6 @@ public class ReferenceServiceTest {
         "The correct number of employment statuses was not retrieved",
         3,
         retrievedEmploymentStatuses.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (EmploymentStatus retrievedEmploymentStatus : retrievedEmploymentStatuses) {
-
-        System.out.println(
-            "    <insert schemaName=\"reference\" tableName=\"employment_statuses\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedEmploymentStatus.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\""
-                + retrievedEmploymentStatus.getLocale()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedEmploymentStatus.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedEmploymentStatus.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedEmploymentStatus.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 
   /** Test the employment type reference functionality. */
@@ -239,44 +500,15 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of employment types was not retrieved",
-        26,
+        11,
         retrievedEmploymentTypes.size());
 
     retrievedEmploymentTypes = referenceService.getEmploymentTypes("en-US");
 
     assertEquals(
         "The correct number of employment types was not retrieved",
-        13,
+        11,
         retrievedEmploymentTypes.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (EmploymentType retrievedEmploymentType : retrievedEmploymentTypes) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"employment_types\">");
-        System.out.println(
-            "      <column name=\"employment_status\" value=\""
-                + retrievedEmploymentType.getEmploymentStatus()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedEmploymentType.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\""
-                + retrievedEmploymentType.getLocale()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedEmploymentType.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedEmploymentType.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedEmploymentType.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 
   /** Test the gender reference functionality. */
@@ -284,32 +516,11 @@ public class ReferenceServiceTest {
   public void genderTest() throws Exception {
     List<Gender> retrievedGenders = referenceService.getGenders();
 
-    assertEquals("The correct number of genders was not retrieved", 12, retrievedGenders.size());
+    assertEquals("The correct number of genders was not retrieved", 5, retrievedGenders.size());
 
     retrievedGenders = referenceService.getGenders("en-US");
 
-    assertEquals("The correct number of genders was not retrieved", 6, retrievedGenders.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (Gender retrievedGender : retrievedGenders) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"genders\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedGender.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\"" + retrievedGender.getLocale() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\"" + retrievedGender.getSortIndex() + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedGender.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedGender.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
+    assertEquals("The correct number of genders was not retrieved", 5, retrievedGenders.size());
   }
 
   /** Test the identity document type reference functionality. */
@@ -320,7 +531,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of identity document types was not retrieved",
-        8,
+        4,
         retrievedIdentityDocumentTypes.size());
 
     retrievedIdentityDocumentTypes = referenceService.getIdentityDocumentTypes("en-US");
@@ -329,39 +540,6 @@ public class ReferenceServiceTest {
         "The correct number of identity document types was not retrieved",
         4,
         retrievedIdentityDocumentTypes.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (IdentityDocumentType retrievedIdentityDocumentType : retrievedIdentityDocumentTypes) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"genders\">");
-        System.out.println(
-            "      <column name=\"code\" value=\""
-                + retrievedIdentityDocumentType.getCode()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\""
-                + retrievedIdentityDocumentType.getLocale()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedIdentityDocumentType.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\""
-                + retrievedIdentityDocumentType.getName()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedIdentityDocumentType.getDescription()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"country_of_issue\" value=\""
-                + retrievedIdentityDocumentType.getCountryOfIssue()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 
   /** Test the language reference functionality. */
@@ -371,39 +549,12 @@ public class ReferenceServiceTest {
     List<Language> retrievedLanguages = referenceService.getLanguages();
 
     assertEquals(
-        "The correct number of languages was not retrieved", 184, retrievedLanguages.size());
+        "The correct number of languages was not retrieved", 92, retrievedLanguages.size());
 
     retrievedLanguages = referenceService.getLanguages("en-US");
 
     assertEquals(
         "The correct number of languages was not retrieved", 92, retrievedLanguages.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (Language retrievedLanguage : retrievedLanguages) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"languages\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedLanguage.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\"" + retrievedLanguage.getLocale() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedLanguage.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedLanguage.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"short_name\" value=\""
-                + retrievedLanguage.getShortName()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedLanguage.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 
   /** Test the marital status reference functionality. */
@@ -413,7 +564,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of marital statuses was not retrieved",
-        12,
+        6,
         retrievedMaritalStatuses.size());
 
     retrievedMaritalStatuses = referenceService.getMaritalStatuses("en-US");
@@ -422,29 +573,6 @@ public class ReferenceServiceTest {
         "The correct number of marital statuses was not retrieved",
         6,
         retrievedMaritalStatuses.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (MaritalStatus retrievedMaritalStatus : retrievedMaritalStatuses) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"marital_statuses\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedMaritalStatus.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\"" + retrievedMaritalStatus.getLocale() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedMaritalStatus.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedMaritalStatus.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedMaritalStatus.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 
   /** Test the marriage type reference functionality. */
@@ -453,41 +581,12 @@ public class ReferenceServiceTest {
     List<MarriageType> retrievedMarriageTypes = referenceService.getMarriageTypes();
 
     assertEquals(
-        "The correct number of marriage types was not retrieved",
-        10,
-        retrievedMarriageTypes.size());
+        "The correct number of marriage types was not retrieved", 4, retrievedMarriageTypes.size());
 
     retrievedMarriageTypes = referenceService.getMarriageTypes("en-US");
 
     assertEquals(
-        "The correct number of marriage types was not retrieved", 5, retrievedMarriageTypes.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (MarriageType retrievedMarriageType : retrievedMarriageTypes) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"marriage_types\">");
-        System.out.println(
-            "      <column name=\"marital_status\" value=\""
-                + retrievedMarriageType.getMaritalStatus()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedMarriageType.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\"" + retrievedMarriageType.getLocale() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedMarriageType.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedMarriageType.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedMarriageType.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
+        "The correct number of marriage types was not retrieved", 4, retrievedMarriageTypes.size());
   }
 
   /** Test the minor type reference functionality. */
@@ -496,35 +595,12 @@ public class ReferenceServiceTest {
     List<MinorType> retrievedMinorTypes = referenceService.getMinorTypes();
 
     assertEquals(
-        "The correct number of minor types was not retrieved", 8, retrievedMinorTypes.size());
+        "The correct number of minor types was not retrieved", 4, retrievedMinorTypes.size());
 
     retrievedMinorTypes = referenceService.getMinorTypes("en-US");
 
     assertEquals(
         "The correct number of minor types was not retrieved", 4, retrievedMinorTypes.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (MinorType retrievedMinorType : retrievedMinorTypes) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"minor_types\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedMinorType.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\"" + retrievedMinorType.getLocale() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedMinorType.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedMinorType.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedMinorType.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 
   /** Test the next of kin type reference functionality. */
@@ -534,7 +610,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of next of kin types was not retrieved",
-        34,
+        17,
         retrievedNextOfKinTypes.size());
 
     retrievedNextOfKinTypes = referenceService.getNextOfKinTypes("en-US");
@@ -543,29 +619,6 @@ public class ReferenceServiceTest {
         "The correct number of next of kin types was not retrieved",
         17,
         retrievedNextOfKinTypes.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (NextOfKinType retrievedNextOfKinType : retrievedNextOfKinTypes) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"next_of_kin_types\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedNextOfKinType.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\"" + retrievedNextOfKinType.getLocale() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedNextOfKinType.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedNextOfKinType.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedNextOfKinType.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 
   /** Test the occupation reference functionality. */
@@ -574,34 +627,11 @@ public class ReferenceServiceTest {
     List<Occupation> retrievedOccupations = referenceService.getOccupations();
 
     assertEquals(
-        "The correct number of occupations was not retrieved", 58 , retrievedOccupations.size());
+        "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
 
     retrievedOccupations = referenceService.getOccupations("en-US");
 
     assertEquals(
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
-
-    // NOTE: The code below is used to generate the insert statements for the Liquibase changeset
-    if (false) {
-      for (Occupation retrievedOccupation : retrievedOccupations) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"occupations\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + retrievedOccupation.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale\" value=\"" + retrievedOccupation.getLocale() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + retrievedOccupation.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + retrievedOccupation.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + retrievedOccupation.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-    }
   }
 }

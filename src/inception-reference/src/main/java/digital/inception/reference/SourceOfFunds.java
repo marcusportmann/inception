@@ -34,27 +34,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>CommunicationMethod</code> class holds the information for a possible communication
- * method.
+ * The <code>SourceOfFunds</code> class holds the information for a possible source of funds.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "CommunicationMethod")
+@Schema(description = "SourceOfFunds")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "locale", "sortIndex", "name", "description"})
-@XmlRootElement(name = "CommunicationMethod", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "SourceOfFunds", namespace = "http://reference.inception.digital")
 @XmlType(
-    name = "CommunicationMethod",
+    name = "SourceOfFunds",
     namespace = "http://reference.inception.digital",
     propOrder = {"code", "locale", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "communication_methods")
-@IdClass(CommunicationMethodId.class)
-public class CommunicationMethod {
+@Table(schema = "reference", name = "sources_of_funds")
+@IdClass(SourceOfFundsId.class)
+public class SourceOfFunds {
 
-  /** The code for the communication method. */
-  @Schema(description = "The code for the communication method", required = true)
+  /** The code for the source of funds. */
+  @Schema(description = "The code for the source of funds", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -63,8 +62,8 @@ public class CommunicationMethod {
   @Column(name = "code", nullable = false)
   private String code;
 
-  /** The description for the communication method. */
-  @Schema(description = "The description for the communication method", required = true)
+  /** The description for the source of funds. */
+  @Schema(description = "The description for the source of funds", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -72,10 +71,8 @@ public class CommunicationMethod {
   @Column(name = "description", nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the communication method. */
-  @Schema(
-      description = "The Unicode locale identifier for the communication method",
-      required = true)
+  /** The Unicode locale identifier for the source of funds. */
+  @Schema(description = "The Unicode locale identifier for the source of funds", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Locale", required = true)
   @NotNull
@@ -84,8 +81,8 @@ public class CommunicationMethod {
   @Column(name = "locale", nullable = false)
   private String locale;
 
-  /** The name of the communication method. */
-  @Schema(description = "The name of the communication method", required = true)
+  /** The name of the source of funds. */
+  @Schema(description = "The name of the source of funds", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -93,102 +90,102 @@ public class CommunicationMethod {
   @Column(name = "name", nullable = false)
   private String name;
 
-  /** The sort index for the communication method. */
-  @Schema(description = "The sort index for the communication method", required = true)
+  /** The sort index for the source of funds. */
+  @Schema(description = "The sort index for the source of funds", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>CommunicationMethod</code>. */
-  public CommunicationMethod() {}
+  /** Constructs a new <code>SourceOfFunds</code>. */
+  public SourceOfFunds() {}
 
   /**
-   * Returns the code for the communication method.
+   * Returns the code for the source of funds.
    *
-   * @return the code for the communication method
+   * @return the code for the source of funds
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the communication method.
+   * Returns the description for the source of funds.
    *
-   * @return the description for the communication method
+   * @return the description for the source of funds
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the communication method.
+   * Returns the Unicode locale identifier for the source of funds.
    *
-   * @return the Unicode locale identifier for the communication method
+   * @return the Unicode locale identifier for the source of funds
    */
   public String getLocale() {
     return locale;
   }
 
   /**
-   * Returns the name of the communication method.
+   * Returns the name of the source of funds.
    *
-   * @return the name of the communication method
+   * @return the name of the source of funds
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the communication method.
+   * Returns the sort index for the source of funds.
    *
-   * @return the sort index for the communication method
+   * @return the sort index for the source of funds
    */
   public Integer getSortIndex() {
     return sortIndex;
   }
 
   /**
-   * Set the code for the communication method.
+   * Set the code for the source of funds.
    *
-   * @param code the code for the communication method
+   * @param code the code for the source of funds
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the communication method.
+   * Set the description for the source of funds.
    *
-   * @param description the description for the communication method
+   * @param description the description for the source of funds
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the communication method.
+   * Set the Unicode locale identifier for the source of funds.
    *
-   * @param localeId the Unicode locale identifier for the communication method
+   * @param localeId the Unicode locale identifier for the source of funds
    */
   public void setLocale(String localeId) {
     this.locale = localeId;
   }
 
   /**
-   * Set the name of the communication method.
+   * Set the name of the source of funds.
    *
-   * @param name the name of the communication method
+   * @param name the name of the source of funds
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the communication method.
+   * Set the sort index for the source of funds.
    *
-   * @param sortIndex the sort index for the communication method
+   * @param sortIndex the sort index for the source of funds
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

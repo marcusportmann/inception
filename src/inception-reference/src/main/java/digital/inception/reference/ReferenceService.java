@@ -40,6 +40,9 @@ public class ReferenceService implements IReferenceService {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReferenceService.class);
 
+  /** The Address Type Repository. */
+  private final AddressTypeRepository addressTypeRepository;
+
   /** The Communication Method Repository. */
   private final CommunicationMethodRepository communicationMethodRepository;
 
@@ -76,9 +79,22 @@ public class ReferenceService implements IReferenceService {
   /** The Occupation Repository. */
   private final OccupationRepository occupationRepository;
 
+  /** The Permit Type Repository. */
+  private final PermitTypeRepository permitTypeRepository;
+
+  /** The Race Repository. */
+  private final RaceRepository raceRepository;
+
+  /** The Region Repository. */
+  private final RegionRepository regionRepository;
+
+  /** The Residential Status Repository. */
+  private final ResidentialStatusRepository residentialStatusRepository;
+
   /**
    * Constructs a new <code>ReferenceService</code>.
    *
+   * @param addressTypeRepository the Address Type Repository
    * @param countryRepository the Country Repository
    * @param communicationMethodRepository the Communication Method Repository
    * @param employmentStatusRepository the Employment Status Repository
@@ -91,8 +107,13 @@ public class ReferenceService implements IReferenceService {
    * @param minorTypeRepository the Minor Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
    * @param occupationRepository the Occupation Repository
+   * @param permitTypeRepository the Permit Type Repository
+   * @param raceRepository the Race Repository
+   * @param regionRepository the Region Repository
+   * @param residentialStatusRepository the Residential Status Repository
    */
   public ReferenceService(
+      AddressTypeRepository addressTypeRepository,
       CountryRepository countryRepository,
       CommunicationMethodRepository communicationMethodRepository,
       EmploymentStatusRepository employmentStatusRepository,
@@ -104,7 +125,12 @@ public class ReferenceService implements IReferenceService {
       MarriageTypeRepository marriageTypeRepository,
       MinorTypeRepository minorTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
-      OccupationRepository occupationRepository) {
+      OccupationRepository occupationRepository,
+      PermitTypeRepository permitTypeRepository,
+      RaceRepository raceRepository,
+      RegionRepository regionRepository,
+      ResidentialStatusRepository residentialStatusRepository) {
+    this.addressTypeRepository = addressTypeRepository;
     this.countryRepository = countryRepository;
     this.communicationMethodRepository = communicationMethodRepository;
     this.employmentStatusRepository = employmentStatusRepository;
@@ -117,6 +143,41 @@ public class ReferenceService implements IReferenceService {
     this.minorTypeRepository = minorTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
     this.occupationRepository = occupationRepository;
+    this.permitTypeRepository = permitTypeRepository;
+    this.raceRepository = raceRepository;
+    this.regionRepository = regionRepository;
+    this.residentialStatusRepository = residentialStatusRepository;
+  }
+
+  /**
+   * Retrieve all the address types.
+   *
+   * @return the address types
+   */
+  @Override
+  public List<AddressType> getAddressTypes() throws ReferenceServiceException {
+    return getAddressTypes(null);
+  }
+
+  /**
+   * Retrieve the address types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
+   *     types for or <code>null</code> to retrieve the address types for all locales
+   * @return the address types
+   */
+  @Override
+  public List<AddressType> getAddressTypes(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return addressTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return addressTypeRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the address types", e);
+    }
   }
 
   /**
@@ -494,6 +555,132 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the occupations", e);
+    }
+  }
+
+  /**
+   * Retrieve all the permit types.
+   *
+   * @return the permit types
+   */
+  @Override
+  public List<PermitType> getPermitTypes() throws ReferenceServiceException {
+    return getPermitTypes(null);
+  }
+
+  /**
+   * Retrieve the permit types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the permit
+   *     types for or <code>null</code> to retrieve the permit types for all locales
+   * @return the permit types
+   */
+  @Override
+  public List<PermitType> getPermitTypes(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return permitTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return permitTypeRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the permit types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the races.
+   *
+   * @return the races
+   */
+  @Override
+  public List<Race> getRaces() throws ReferenceServiceException {
+    return getRaces(null);
+  }
+
+  /**
+   * Retrieve the races.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the races for
+   *     or <code>null</code> to retrieve the races for all locales
+   * @return the races
+   */
+  @Override
+  public List<Race> getRaces(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return raceRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return raceRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the races", e);
+    }
+  }
+
+  /**
+   * Retrieve all the regions.
+   *
+   * @return the regions
+   */
+  @Override
+  public List<Region> getRegions() throws ReferenceServiceException {
+    return getRegions(null);
+  }
+
+  /**
+   * Retrieve the regions.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the regions
+   *     for or <code>null</code> to retrieve the regions for all locales
+   * @return the regions
+   */
+  @Override
+  public List<Region> getRegions(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return regionRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return regionRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the regions", e);
+    }
+  }
+
+  /**
+   * Retrieve all the residential statuses.
+   *
+   * @return the residential statuses
+   */
+  @Override
+  public List<ResidentialStatus> getResidentialStatuses() throws ReferenceServiceException {
+    return getResidentialStatuses(null);
+  }
+
+  /**
+   * Retrieve the residential statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     residential statuses for or <code>null</code> to retrieve the residential statuses for all
+   *     locales
+   * @return the residential statuses
+   */
+  @Override
+  public List<ResidentialStatus> getResidentialStatuses(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return residentialStatusRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return residentialStatusRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the residential statuses", e);
     }
   }
 }

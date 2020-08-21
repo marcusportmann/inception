@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Occupation</code> class holds the information for a possible occupation for a person.
+ * The <code>Occupation</code> class holds the information for a possible occupation.
  *
  * @author Marcus Portmann
  */
@@ -86,7 +86,7 @@ public class Occupation {
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 20)
+  @Size(min = 1, max = 50)
   @Column(name = "name", nullable = false)
   private String name;
 

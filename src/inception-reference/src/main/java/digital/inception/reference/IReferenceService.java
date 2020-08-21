@@ -30,6 +30,22 @@ import java.util.List;
 public interface IReferenceService {
 
   /**
+   * Retrieve all the address types.
+   *
+   * @return the address types
+   */
+  List<AddressType> getAddressTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the address types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
+   *     types for or <code>null</code> to retrieve the address types for all locales
+   * @return the address types
+   */
+  List<AddressType> getAddressTypes(String localeId) throws ReferenceServiceException;
+
+  /**
    * Retrieve all the communication methods.
    *
    * @return the communication methods
@@ -224,4 +240,69 @@ public interface IReferenceService {
    * @return the occupations
    */
   List<Occupation> getOccupations(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the permit types.
+   *
+   * @return the permit types
+   */
+  List<PermitType> getPermitTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the permit types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the permit
+   *     types for or <code>null</code> to retrieve the permit types for all locales
+   * @return the permit types
+   */
+  List<PermitType> getPermitTypes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the races.
+   *
+   * @return the races
+   */
+  List<Race> getRaces() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the races.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the races for
+   *     or <code>null</code> to retrieve the races for all locales
+   * @return the races
+   */
+  List<Race> getRaces(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the regions.
+   *
+   * @return the regions
+   */
+  List<Region> getRegions() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the regions.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the regions
+   *     for or <code>null</code> to retrieve the regions for all locales
+   * @return the regions
+   */
+  List<Region> getRegions(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the residential statuses.
+   *
+   * @return the residential statuses
+   */
+  List<ResidentialStatus> getResidentialStatuses() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the residential statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     residential statuses for or <code>null</code> to retrieve the residential statuses for all
+   *     locales
+   * @return the residential statuses
+   */
+  List<ResidentialStatus> getResidentialStatuses(String localeId) throws ReferenceServiceException;
 }

@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Country</code> class holds the information for a possible country for a person.
+ * The <code>Country</code> class holds the information for a possible country.
  *
  * @author Marcus Portmann
  */
@@ -86,7 +86,7 @@ public class Country {
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 20)
+  @Size(min = 1, max = 100)
   @Column(name = "name", nullable = false)
   private String name;
 

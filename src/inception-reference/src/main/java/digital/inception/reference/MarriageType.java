@@ -34,8 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>MarriageType</code> class holds the information for a possible marriage type for a
- * person.
+ * The <code>MarriageType</code> class holds the information for a possible marriage type.
  *
  * @author Marcus Portmann
  */
@@ -99,7 +98,7 @@ public class MarriageType {
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(min = 1, max = 20)
+  @Size(min = 1, max = 50)
   @Column(name = "name", nullable = false)
   private String name;
 
