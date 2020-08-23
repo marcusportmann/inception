@@ -54,12 +54,14 @@ COMMENT ON COLUMN reference.communication_methods.description IS 'The descriptio
 
 
 CREATE TABLE reference.countries (
-  code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50) NOT NULL,
-  short_name  VARCHAR(30)  NOT NULL DEFAULT '',
-  description VARCHAR(200) NOT NULL DEFAULT '',
+  code            VARCHAR(10)  NOT NULL,
+  locale          VARCHAR(10)  NOT NULL,
+  sort_index      INTEGER      NOT NULL,
+  name            VARCHAR(50) NOT NULL,
+  short_name      VARCHAR(30)  NOT NULL,
+  description     VARCHAR(200) NOT NULL,
+  sovereign_state VARCHAR(10)  NOT NULL,
+  nationality     VARCHAR(50) NOT NULL,
 
   PRIMARY KEY (code, locale)
 );
@@ -77,6 +79,10 @@ COMMENT ON COLUMN reference.countries.name IS 'The name of the country';
 COMMENT ON COLUMN reference.countries.short_name IS 'The short name for the country';
 
 COMMENT ON COLUMN reference.countries.description IS 'The description for the country';
+
+COMMENT ON COLUMN reference.countries.sovereign_state IS 'The code identifying the sovereign state for the country';
+
+COMMENT ON COLUMN reference.countries.nationality IS 'The nationality for the country';
 
 
 CREATE TABLE reference.employment_statuses (
@@ -656,496 +662,496 @@ INSERT INTO reference.communication_methods (code, locale, sort_index, name, des
 INSERT INTO reference.communication_methods (code, locale, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
 
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AF', 'en-US', 1, 'Afghanistan', 'Afghanistan', 'Afghanistan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AL', 'en-US', 2, 'Albania', 'Albania', 'Albania');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('DZ', 'en-US', 3, 'Algeria', 'Algeria', 'Algeria');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AS', 'en-US', 4, 'American Samoa', 'American Samoa', 'American Samoa');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AD', 'en-US', 5, 'Andorra', 'Andorra', 'Andorra');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AO', 'en-US', 6, 'Angola', 'Angola', 'Angola');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AI', 'en-US', 7, 'Anguilla', 'Anguilla', 'Anguilla');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AQ', 'en-US', 8, 'Antarctica', 'Antarctica', 'Antarctica');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AG', 'en-US', 9, 'Antigua and Barbuda', 'Antigua and Barbuda', 'Antigua and Barbuda');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AR', 'en-US', 10, 'Argentina', 'Argentina', 'Argentina');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AM', 'en-US', 11, 'Armenia', 'Armenia', 'Armenia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AW', 'en-US', 12, 'Aruba', 'Aruba', 'Aruba');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AU', 'en-US', 13, 'Australia', 'Australia', 'Australia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AT', 'en-US', 14, 'Austria', 'Austria', 'Austria');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AZ', 'en-US', 15, 'Azerbaijan', 'Azerbaijan', 'Azerbaijan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BS', 'en-US', 16, 'Bahamas', 'Bahamas', 'Bahamas');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BH', 'en-US', 17, 'Bahrain', 'Bahrain', 'Bahrain');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BD', 'en-US', 18, 'Bangladesh', 'Bangladesh', 'Bangladesh');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BB', 'en-US', 19, 'Barbados', 'Barbados', 'Barbados');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BY', 'en-US', 20, 'Belarus', 'Belarus', 'Belarus');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BE', 'en-US', 21, 'Belgium', 'Belgium', 'Belgium');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BZ', 'en-US', 22, 'Belize', 'Belize', 'Belize');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BJ', 'en-US', 23, 'Benin', 'Benin', 'Benin');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BM', 'en-US', 24, 'Bermuda', 'Bermuda', 'Bermuda');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BT', 'en-US', 25, 'Bhutan', 'Bhutan', 'Bhutan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BO', 'en-US', 26, 'Bolivia, Plurinational State of', 'Bolivia', 'Bolivia, Plurinational State of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BQ', 'en-US', 27, 'Bonaire, Sint Eustatius and Saba', 'Caribbean Netherlands', 'Bonaire, Sint Eustatius and Saba');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BA', 'en-US', 28, 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', 'Bosnia and Herzegovina');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BW', 'en-US', 29, 'Botswana', 'Botswana', 'Botswana');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BV', 'en-US', 30, 'Bouvet Island', 'Bouvet Island', 'Bouvet Island');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BR', 'en-US', 31, 'Brazil', 'Brazil', 'Brazil');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BN', 'en-US', 32, 'Brunei Darussalam', 'Brunei Darussalam', 'Brunei Darussalam');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BG', 'en-US', 33, 'Bulgaria', 'Bulgaria', 'Bulgaria');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BF', 'en-US', 34, 'Burkina Faso', 'Burkina Faso', 'Burkina Faso');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BI', 'en-US', 35, 'Burundi', 'Burundi', 'Burundi');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CV', 'en-US', 36, 'Cabo Verde', 'Cabo Verde', 'Cabo Verde');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KH', 'en-US', 37, 'Cambodia', 'Cambodia', 'Cambodia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CM', 'en-US', 38, 'Cameroon', 'Cameroon', 'Cameroon');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CA', 'en-US', 39, 'Canada', 'Canada', 'Canada');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KY', 'en-US', 40, 'Cayman Islands', 'Cayman Islands', 'Cayman Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CF', 'en-US', 41, 'Central African Republic', 'Central African Republic', 'Central African Republic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TD', 'en-US', 42, 'Chad', 'Chad', 'Chad');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CL', 'en-US', 43, 'Chile', 'Chile', 'Chile');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CN', 'en-US', 44, 'China', 'China', 'China');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CX', 'en-US', 45, 'Christmas Island', 'Christmas Island', 'Christmas Island');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CC', 'en-US', 46, 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CO', 'en-US', 47, 'Colombia', 'Colombia', 'Colombia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KM', 'en-US', 48, 'Comoros', 'Comoros', 'Comoros');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CG', 'en-US', 49, 'Congo', 'Congo', 'Congo');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CD', 'en-US', 50, 'Congo, the Democratic Republic of the', 'Congo, Dem. Rep.', 'Congo, the Democratic Republic of the');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CK', 'en-US', 51, 'Cook Islands', 'Cook Islands', 'Cook Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CR', 'en-US', 52, 'Costa Rica', 'Costa Rica', 'Costa Rica');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('HR', 'en-US', 53, 'Croatia', 'Croatia', 'Croatia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CU', 'en-US', 54, 'Cuba', 'Cuba', 'Cuba');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CW', 'en-US', 55, 'Curaçao', 'Curaçao', 'Curaçao');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CY', 'en-US', 56, 'Cyprus', 'Cyprus', 'Cyprus');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CZ', 'en-US', 57, 'Czech Republic', 'Czech Republic', 'Czechia, Czech Republic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CI', 'en-US', 58, 'Côte d''Ivoire', 'Côte d''Ivoire', 'Côte d''Ivoire');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('DK', 'en-US', 59, 'Denmark', 'Denmark', 'Denmark');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('DJ', 'en-US', 60, 'Djibouti', 'Djibouti', 'Djibouti');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('DM', 'en-US', 61, 'Dominica', 'Dominica', 'Dominica');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('DO', 'en-US', 62, 'Dominican Republic', 'Dominican Republic', 'Dominican Republic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('EC', 'en-US', 63, 'Ecuador', 'Ecuador', 'Ecuador');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('EG', 'en-US', 64, 'Egypt', 'Egypt', 'Egypt');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SV', 'en-US', 65, 'El Salvador', 'El Salvador', 'El Salvador');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GQ', 'en-US', 66, 'Equatorial Guinea', 'Equatorial Guinea', 'Equatorial Guinea');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ER', 'en-US', 67, 'Eritrea', 'Eritrea', 'Eritrea');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('EE', 'en-US', 68, 'Estonia', 'Estonia', 'Estonia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ET', 'en-US', 69, 'Ethiopia', 'Ethiopia', 'Ethiopia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('FK', 'en-US', 70, 'Falkland Islands (Malvinas)', 'Falkland Islands', 'Falkland Islands (Malvinas)');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('FO', 'en-US', 71, 'Faroe Islands', 'Faroe Islands', 'Faroe Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('FJ', 'en-US', 72, 'Fiji', 'Fiji', 'Fiji');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('FI', 'en-US', 73, 'Finland', 'Finland', 'Finland');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('FR', 'en-US', 74, 'France', 'France', 'France');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GF', 'en-US', 75, 'French Guiana', 'French Guiana', 'French Guiana');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PF', 'en-US', 76, 'French Polynesia', 'French Polynesia', 'French Polynesia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TF', 'en-US', 77, 'French Southern Territories', 'French Southern Territories', 'French Southern Territories');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GA', 'en-US', 78, 'Gabon', 'Gabon', 'Gabon');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GM', 'en-US', 79, 'Gambia', 'Gambia', 'Gambia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GE', 'en-US', 80, 'Georgia', 'Georgia', 'Georgia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('DE', 'en-US', 81, 'Germany', 'Germany', 'Germany');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GH', 'en-US', 82, 'Ghana', 'Ghana', 'Ghana');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GI', 'en-US', 83, 'Gibraltar', 'Gibraltar', 'Gibraltar');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GR', 'en-US', 84, 'Greece', 'Greece', 'Greece');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GL', 'en-US', 85, 'Greenland', 'Greenland', 'Greenland');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GD', 'en-US', 86, 'Grenada', 'Grenada', 'Grenada');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GP', 'en-US', 87, 'Guadeloupe', 'Guadeloupe', 'Guadeloupe');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GU', 'en-US', 88, 'Guam', 'Guam', 'Guam');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GT', 'en-US', 89, 'Guatemala', 'Guatemala', 'Guatemala');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GG', 'en-US', 90, 'Guernsey', 'Guernsey', 'Guernsey');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GN', 'en-US', 91, 'Guinea', 'Guinea', 'Guinea');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GW', 'en-US', 92, 'Guinea-Bissau', 'Guinea-Bissau', 'Guinea-Bissau');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GY', 'en-US', 93, 'Guyana', 'Guyana', 'Guyana');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('HT', 'en-US', 94, 'Haiti', 'Haiti', 'Haiti');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('VA', 'en-US', 95, 'Holy See', 'Holy See', 'Holy See');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('HN', 'en-US', 96, 'Honduras', 'Honduras', 'Honduras');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('HK', 'en-US', 97, 'Hong Kong', 'Hong Kong', 'Hong Kong');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('HU', 'en-US', 98, 'Hungary', 'Hungary', 'Hungary');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('IS', 'en-US', 99, 'Iceland', 'Iceland', 'Iceland');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('IN', 'en-US', 100, 'India', 'India', 'India');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ID', 'en-US', 101, 'Indonesia', 'Indonesia', 'Indonesia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('IR', 'en-US', 102, 'Iran, Islamic Republic of', 'Iran', 'Iran, Islamic Republic of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('IQ', 'en-US', 103, 'Iraq', 'Iraq', 'Iraq');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('IE', 'en-US', 104, 'Ireland', 'Ireland', 'Ireland');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('IM', 'en-US', 105, 'Isle of Man', 'Isle of Man', 'Isle of Man');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('IL', 'en-US', 106, 'Israel', 'Israel', 'Israel');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('IT', 'en-US', 107, 'Italy', 'Italy', 'Italy');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('JM', 'en-US', 108, 'Jamaica', 'Jamaica', 'Jamaica');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('JP', 'en-US', 109, 'Japan', 'Japan', 'Japan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('JE', 'en-US', 110, 'Jersey', 'Jersey', 'Jersey');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('JO', 'en-US', 111, 'Jordan', 'Jordan', 'Jordan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KZ', 'en-US', 112, 'Kazakhstan', 'Kazakhstan', 'Kazakhstan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KE', 'en-US', 113, 'Kenya', 'Kenya', 'Kenya');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KI', 'en-US', 114, 'Kiribati', 'Kiribati', 'Kiribati');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KP', 'en-US', 115, 'Korea, Democratic People''s Republic of', 'Korea, Dem. People’s Rep.', 'Korea, Democratic People''s Republic of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KR', 'en-US', 116, 'Korea, Republic of', 'Korea, Rep.', 'Korea, Republic of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KW', 'en-US', 117, 'Kuwait', 'Kuwait', 'Kuwait');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KG', 'en-US', 118, 'Kyrgyz Republic', 'Kyrgyz Republic', 'Kyrgyz Republic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LA', 'en-US', 119, 'Lao People''s Democratic Republic', 'Lao PDR', 'Lao People''s Democratic Republic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LV', 'en-US', 120, 'Latvia', 'Latvia', 'Latvia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LB', 'en-US', 121, 'Lebanon', 'Lebanon', 'Lebanon');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LS', 'en-US', 122, 'Lesotho', 'Lesotho', 'Lesotho');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LR', 'en-US', 123, 'Liberia', 'Liberia', 'Liberia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LY', 'en-US', 124, 'Libya', 'Libya', 'Libya');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LI', 'en-US', 125, 'Liechtenstein', 'Liechtenstein', 'Liechtenstein');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LT', 'en-US', 126, 'Lithuania', 'Lithuania', 'Lithuania');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LU', 'en-US', 127, 'Luxembourg', 'Luxembourg', 'Luxembourg');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MO', 'en-US', 128, 'Macao', 'Macao', 'Macao');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MG', 'en-US', 129, 'Madagascar', 'Madagascar', 'Madagascar');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MW', 'en-US', 130, 'Malawi', 'Malawi', 'Malawi');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MY', 'en-US', 131, 'Malaysia', 'Malaysia', 'Malaysia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MV', 'en-US', 132, 'Maldives', 'Maldives', 'Maldives');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ML', 'en-US', 133, 'Mali', 'Mali', 'Mali');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MT', 'en-US', 134, 'Malta', 'Malta', 'Malta');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MH', 'en-US', 135, 'Marshall Islands', 'Marshall Islands', 'Marshall Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MQ', 'en-US', 136, 'Martinique', 'Martinique', 'Martinique');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MR', 'en-US', 137, 'Mauritania', 'Mauritania', 'Mauritania');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MU', 'en-US', 138, 'Mauritius', 'Mauritius', 'Mauritius');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('YT', 'en-US', 139, 'Mayotte', 'Mayotte', 'Mayotte');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MX', 'en-US', 140, 'Mexico', 'Mexico', 'Mexico');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('FM', 'en-US', 141, 'Micronesia, Federated States of', 'Micronesia, Fed. Sts.', 'Micronesia, Federated States of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MD', 'en-US', 142, 'Moldova, Republic of', 'Moldova', 'Moldova, Republic of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MC', 'en-US', 143, 'Monaco', 'Monaco', 'Monaco');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MN', 'en-US', 144, 'Mongolia', 'Mongolia', 'Mongolia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ME', 'en-US', 145, 'Montenegro', 'Montenegro', 'Montenegro');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MS', 'en-US', 146, 'Montserrat', 'Montserrat', 'Montserrat');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MA', 'en-US', 147, 'Morocco', 'Morocco', 'Morocco');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MZ', 'en-US', 148, 'Mozambique', 'Mozambique', 'Mozambique');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MM', 'en-US', 149, 'Myanmar', 'Myanmar', 'Myanmar');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NA', 'en-US', 150, 'Namibia', 'Namibia', 'Namibia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NR', 'en-US', 151, 'Nauru', 'Nauru', 'Nauru');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NP', 'en-US', 152, 'Nepal', 'Nepal', 'Nepal');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NL', 'en-US', 153, 'Netherlands', 'Netherlands', 'Netherlands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NC', 'en-US', 154, 'New Caledonia', 'New Caledonia', 'New Caledonia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NZ', 'en-US', 155, 'New Zealand', 'New Zealand', 'New Zealand');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NI', 'en-US', 156, 'Nicaragua', 'Nicaragua', 'Nicaragua');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NE', 'en-US', 157, 'Niger', 'Niger', 'Niger');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NG', 'en-US', 158, 'Nigeria', 'Nigeria', 'Nigeria');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NU', 'en-US', 159, 'Niue', 'Niue', 'Niue');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NF', 'en-US', 160, 'Norfolk Island', 'Norfolk Island', 'Norfolk Island');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MP', 'en-US', 161, 'Northern Mariana Islands', 'Northern Mariana Islands', 'Northern Mariana Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('NO', 'en-US', 162, 'Norway', 'Norway', 'Norway');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('OM', 'en-US', 163, 'Oman', 'Oman', 'Oman');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PK', 'en-US', 164, 'Pakistan', 'Pakistan', 'Pakistan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PW', 'en-US', 165, 'Palau', 'Palau', 'Palau');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PS', 'en-US', 166, 'Palestine, State of', 'Palestine', 'Palestine, State of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PA', 'en-US', 167, 'Panama', 'Panama', 'Panama');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PG', 'en-US', 168, 'Papua New Guinea', 'Papua New Guinea', 'Papua New Guinea');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PY', 'en-US', 169, 'Paraguay', 'Paraguay', 'Paraguay');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PE', 'en-US', 170, 'Peru', 'Peru', 'Peru');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PH', 'en-US', 171, 'Philippines', 'Philippines', 'Philippines');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PN', 'en-US', 172, 'Pitcairn', 'Pitcairn', 'Pitcairn');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PL', 'en-US', 173, 'Poland', 'Poland', 'Poland');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PT', 'en-US', 174, 'Portugal', 'Portugal', 'Portugal');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PR', 'en-US', 175, 'Puerto Rico', 'Puerto Rico', 'Puerto Rico');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('QA', 'en-US', 176, 'Qatar', 'Qatar', 'Qatar');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MK', 'en-US', 177, 'Republic of North Macedonia', 'North Macedonia', 'Republic of North Macedonia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('RO', 'en-US', 178, 'Romania', 'Romania', 'Romania');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('RU', 'en-US', 179, 'Russian Federation', 'Russian Federation', 'Russian Federation');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('RW', 'en-US', 180, 'Rwanda', 'Rwanda', 'Rwanda');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('RE', 'en-US', 181, 'Réunion', 'Réunion', 'Réunion');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('BL', 'en-US', 182, 'Saint Barthélemy', 'St. Barthélemy', 'Saint Barthélemy');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('KN', 'en-US', 183, 'Saint Kitts and Nevis', 'St. Kitts and Nevis', 'Saint Kitts and Nevis');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LC', 'en-US', 184, 'Saint Lucia', 'St. Lucia', 'Saint Lucia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('MF', 'en-US', 185, 'Saint Martin (French part)', 'St. Martin (French part)', 'Saint Martin (French part)');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('PM', 'en-US', 186, 'Saint Pierre and Miquelon', 'St. Pierre and Miquelon', 'Saint Pierre and Miquelon');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('VC', 'en-US', 187, 'Saint Vincent and the Grenadines', 'St. Vincent and the Grenadines', 'Saint Vincent and the Grenadines');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('WS', 'en-US', 188, 'Samoa', 'Samoa', 'Samoa');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SM', 'en-US', 189, 'San Marino', 'San Marino', 'San Marino');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ST', 'en-US', 190, 'Sao Tome and Principe', 'Sao Tome and Principe', 'Sao Tome and Principe');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SA', 'en-US', 191, 'Saudi Arabia', 'Saudi Arabia', 'Saudi Arabia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SN', 'en-US', 192, 'Senegal', 'Senegal', 'Senegal');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('RS', 'en-US', 193, 'Serbia', 'Serbia', 'Serbia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SC', 'en-US', 194, 'Seychelles', 'Seychelles', 'Seychelles');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SL', 'en-US', 195, 'Sierra Leone', 'Sierra Leone', 'Sierra Leone');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SG', 'en-US', 196, 'Singapore', 'Singapore', 'Singapore');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SX', 'en-US', 197, 'Sint Maarten (Dutch part)', 'Sint Maarten (Dutch part)', 'Sint Maarten (Dutch part)');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SK', 'en-US', 198, 'Slovak Republic', 'Slovak Republic', 'Slovak Republic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SI', 'en-US', 199, 'Slovenia', 'Slovenia', 'Slovenia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SB', 'en-US', 200, 'Solomon Islands', 'Solomon Islands', 'Solomon Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SO', 'en-US', 201, 'Somalia', 'Somalia', 'Somalia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ZA', 'en-US', 202, 'South Africa', 'South Africa', 'South Africa');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SS', 'en-US', 203, 'South Sudan', 'South Sudan', 'South Sudan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ES', 'en-US', 204, 'Spain', 'Spain', 'Spain');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('LK', 'en-US', 205, 'Sri Lanka', 'Sri Lanka', 'Sri Lanka');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SD', 'en-US', 206, 'Sudan', 'Sudan', 'Sudan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SR', 'en-US', 207, 'Suriname', 'Suriname', 'Suriname');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SJ', 'en-US', 208, 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SZ', 'en-US', 209, 'Swaziland', 'Swaziland', 'Swaziland');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SE', 'en-US', 210, 'Sweden', 'Sweden', 'Sweden');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('CH', 'en-US', 211, 'Switzerland', 'Switzerland', 'Switzerland');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('SY', 'en-US', 212, 'Syrian Arab Republic', 'Syrian Arab Republic', 'Syrian Arab Republic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TW', 'en-US', 213, 'Taiwan, Province of China', 'Taiwan', 'Taiwan, Province of China');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TJ', 'en-US', 214, 'Tajikistan', 'Tajikistan', 'Tajikistan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TZ', 'en-US', 215, 'Tanzania, United Republic of', 'Tanzania', 'Tanzania, United Republic of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TH', 'en-US', 216, 'Thailand', 'Thailand', 'Thailand');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TL', 'en-US', 217, 'Timor-Leste', 'Timor-Leste', 'Timor-Leste');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TG', 'en-US', 218, 'Togo', 'Togo', 'Togo');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TK', 'en-US', 219, 'Tokelau', 'Tokelau', 'Tokelau');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TO', 'en-US', 220, 'Tonga', 'Tonga', 'Tonga');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TT', 'en-US', 221, 'Trinidad and Tobago', 'Trinidad and Tobago', 'Trinidad and Tobago');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TN', 'en-US', 222, 'Tunisia', 'Tunisia', 'Tunisia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TR', 'en-US', 223, 'Turkey', 'Turkey', 'Turkey');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TM', 'en-US', 224, 'Turkmenistan', 'Turkmenistan', 'Turkmenistan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TC', 'en-US', 225, 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'Turks and Caicos Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('TV', 'en-US', 226, 'Tuvalu', 'Tuvalu', 'Tuvalu');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('UG', 'en-US', 227, 'Uganda', 'Uganda', 'Uganda');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('UA', 'en-US', 228, 'Ukraine', 'Ukraine', 'Ukraine');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AE', 'en-US', 229, 'United Arab Emirates', 'United Arab Emirates', 'United Arab Emirates');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('GB', 'en-US', 230, 'United Kingdom', 'United Kingdom', 'United Kingdom of Great Britain and Northern Ireland');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('UM', 'en-US', 231, 'United States Minor Outlying Islands', 'US Minor Outlying Islands', 'United States Minor Outlying Islands');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('US', 'en-US', 232, 'United States of America', 'United States of America', 'United States of America');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('UY', 'en-US', 233, 'Uruguay', 'Uruguay', 'Uruguay');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('UZ', 'en-US', 234, 'Uzbekistan', 'Uzbekistan', 'Uzbekistan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('VU', 'en-US', 235, 'Vanuatu', 'Vanuatu', 'Vanuatu');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('VE', 'en-US', 236, 'Venezuela, Bolivarian Republic of', 'Venezuela', 'Venezuela, Bolivarian Republic of');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('VN', 'en-US', 237, 'Viet Nam', 'Viet Nam', 'Viet Nam');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('VG', 'en-US', 238, 'Virgin Islands, British', 'Virgin Islands, British', 'Virgin Islands, British');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('VI', 'en-US', 239, 'Virgin Islands, U.S.', 'Virgin Islands, U.S.', 'Virgin Islands, U.S.');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('WF', 'en-US', 240, 'Wallis and Futuna', 'Wallis and Futuna', 'Wallis and Futuna');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('EH', 'en-US', 241, 'Western Sahara', 'Western Sahara', 'Western Sahara');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('YE', 'en-US', 242, 'Yemen', 'Yemen', 'Yemen');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ZM', 'en-US', 243, 'Zambia', 'Zambia', 'Zambia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('ZW', 'en-US', 244, 'Zimbabwe', 'Zimbabwe', 'Zimbabwe');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description)
-   VALUES ('AX', 'en-US', 245, 'Åland Islands', 'Åland Islands', 'Åland Islands');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AF', 'en-US', 1, 'Afghanistan', 'Afghanistan', 'Afghanistan', 'AF', 'Afghani, Afghan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AL', 'en-US', 2, 'Republic of Albania', 'Albania', 'Republic of Albania', 'AL', 'Albanian, Alabanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('DZ', 'en-US', 3, 'People''s Democratic Republic of Algeria', 'Algeria', 'People''s Democratic Republic of Algeria', 'DZ', 'Algerian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AS', 'en-US', 4, 'American Samoa', 'American Samoa', 'American Samoa', 'US', 'Samoan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AD', 'en-US', 5, 'Principality of Andorra', 'Andorra', 'Principality of Andorra', 'AD', 'Andorran');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AO', 'en-US', 6, 'Republic of Angola', 'Angola', 'Republic of Angola', 'AO', 'Angolan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AI', 'en-US', 7, 'Anguilla', 'Anguilla', 'Anguilla', 'GB', 'Anguillan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AQ', 'en-US', 8, 'Antarctica', 'Antarctica', 'Antarctica', 'AQ', 'Antarctic');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AG', 'en-US', 9, 'Antigua and Barbuda', 'Antigua and Barbuda', 'Antigua and Barbuda', 'AG', 'Antiguan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AR', 'en-US', 10, 'Argentine Republic', 'Argentina', 'Argentine Republic', 'AR', 'Argentine, Argentinian, Argentinean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AM', 'en-US', 11, 'Republic of Armenia', 'Armenia', 'Republic of Armenia', 'AM', 'Armenian, Hayastani');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AW', 'en-US', 12, 'Aruba', 'Aruba', 'Aruba', 'NL', 'Arubian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AU', 'en-US', 13, 'Commonwealth of Australia', 'Australia', 'Commonwealth of Australia', 'AU', 'Australian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AT', 'en-US', 14, 'Republic of Austria', 'Austria', 'Republic of Austria', 'AT', 'Austrian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AZ', 'en-US', 15, 'Republic of Azerbaijan', 'Azerbaijan', 'Republic of Azerbaijan', 'AZ', 'Azerbaijani');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BS', 'en-US', 16, 'Commonwealth of The Bahamas', 'The Bahamas', 'Commonwealth of The Bahamas', 'BS', 'Bahameese, Bahamian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BH', 'en-US', 17, 'Kingdom of Bahrain', 'Bahrain', 'Kingdom of Bahrain', 'BH', 'Bahrainian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BD', 'en-US', 18, 'People''s Republic of Bangladesh', 'Bangladesh', 'People''s Republic of Bangladesh', 'BD', 'Bangladeshi');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BB', 'en-US', 19, 'Barbados', 'Barbados', 'Barbados', 'BB', 'Barbadian, Barbadan, Bajan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BY', 'en-US', 20, ' Republic of Belarus', 'Belarus', ' Republic of Belarus', 'BY', 'Belarusian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BE', 'en-US', 21, 'Kingdom of Belgium', 'Belgium', 'Kingdom of Belgium', 'BE', 'Belgian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BZ', 'en-US', 22, 'Belize', 'Belize', 'Belize', 'BZ', 'Belizean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BJ', 'en-US', 23, 'Republic of Benin', 'Benin', 'Republic of Benin', 'BJ', 'Beninese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BM', 'en-US', 24, 'Bermuda', 'Bermuda', 'Bermuda', 'GB', 'Bermudan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BT', 'en-US', 25, 'Kingdom of Bhutan', 'Bhutan', 'Kingdom of Bhutan', 'BT', 'Bhutanese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BO', 'en-US', 26, 'Plurinational State of Bolivia', 'Bolivia', 'Plurinational State of Bolivia', 'BO', 'Bolivian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BQ', 'en-US', 27, 'Bonaire, Sint Eustatius and Saba', 'Caribbean Netherlands', 'Bonaire, Sint Eustatius and Saba (Caribbean Netherlands)', 'NL', 'Dutch');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BA', 'en-US', 28, 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', '', 'Bosnian, Herzegovinian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BW', 'en-US', 29, 'Botswana', 'Botswana', 'Botswana', 'BW', 'Motswana, Batswana');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BV', 'en-US', 30, 'Bouvet Island', 'Bouvet Island', 'Bouvet Island', 'NO', 'Norwegian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BR', 'en-US', 31, 'Brazil', 'Brazil', 'Brazil', 'BR', 'Brazilian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BN', 'en-US', 32, 'Nation of Brunei', 'Brunei', 'Nation of Brunei', 'BN', 'Bruneian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BG', 'en-US', 33, 'Republic of Bulgaria', 'Bulgaria', 'Republic of Bulgaria', 'BG', 'Bulgarian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BF', 'en-US', 34, 'Burkina Faso', 'Burkina Faso', 'Burkina Faso', 'BF', 'Burkinabe');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BI', 'en-US', 35, 'Republic of Burundi', 'Burundi', 'Republic of Burundi', 'BI', 'Burundian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CV', 'en-US', 36, 'Republic of Cabo Verde (Cape Verde)', 'Republic of Cabo Verde', 'Republic of Cabo Verde (Cape Verde)', 'CV', 'Cape Verdean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KH', 'en-US', 37, 'Kingdom of Cambodia', 'Cambodia', 'Kingdom of Cambodia', 'KH', 'Cambodian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CM', 'en-US', 38, 'Cameroon', 'Cameroon', 'Cameroon', 'CM', 'Cameroonian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CA', 'en-US', 39, 'Canada', 'Canada', 'Canada', 'CA', 'Canadian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KY', 'en-US', 40, 'Cayman Islands', 'Cayman Islands', 'Cayman Islands', 'GB', 'Caymanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CF', 'en-US', 41, 'Central African Republic', 'Central African Republic', 'Central African Republic', 'CF', 'Central African');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TD', 'en-US', 42, 'Republic of Chad', 'Chad', 'Republic of Chad', 'TD', 'Chadian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CL', 'en-US', 43, 'Republic of Chile', 'Chile', 'Republic of Chile', 'CL', 'Chilean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CN', 'en-US', 44, 'China', 'China', 'China', 'CN', 'Chinese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CX', 'en-US', 45, 'Christmas Island', 'Christmas Island', 'Christmas Island', 'AU', 'Christmas Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CC', 'en-US', 46, 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'AU', 'Cocossian, Cocos Islandia');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CO', 'en-US', 47, 'Republic of Colombia', 'Colombia', 'Republic of Colombia', 'CO', 'Colombian, Columbian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KM', 'en-US', 48, 'Union of the Comoros', 'Comoros', 'Union of the Comoros', 'KM', 'Comoran');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CG', 'en-US', 49, 'Republic of Congo', 'Congo', 'Republic of Congo', 'CG', 'Congolese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CD', 'en-US', 50, 'Democratic Republic of the Congo', 'Dem. Rep. of the Congo', 'Democratic Republic of the Congo', 'CD', 'Congolese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CK', 'en-US', 51, 'Cook Islands', 'Cook Islands', 'Cook Islands', 'CK', 'Cook Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CR', 'en-US', 52, 'Republic of Costa Rica', 'Costa Rica', 'Republic of Costa Rica', 'CR', 'Costa Rican');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('HR', 'en-US', 53, 'Republic of Croatia', 'Croatia', 'Republic of Croatia', 'HR', 'Croatian, Croat');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CU', 'en-US', 54, 'Republic of Cuba', 'Cuba', 'Republic of Cuba', 'CU', 'Cuban');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CW', 'en-US', 55, 'Curaçao', 'Curaçao', 'Curaçao', 'NL', 'Curaçaoan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CY', 'en-US', 56, 'Republic of Cyprus', 'Cyprus', 'Republic of Cyprus', 'CY', 'Cypriot');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CZ', 'en-US', 57, 'Czech Republic', 'Czech Republic', 'Czechia, Czech Republic', 'CZ', 'Czech');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CI', 'en-US', 58, 'Republic of Côte d''Ivoire', 'Côte d''Ivoire', 'Côte d''Ivoire (Ivory Coast)', 'CI', 'Ivorian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('DK', 'en-US', 59, 'Kingdom of Denmark', 'Denmark', 'Kingdom of Denmark', 'DK', 'Danish, Dane');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('DJ', 'en-US', 60, 'Republic of Djibouti', 'Djibouti', 'Republic of Djibouti', 'DJ', 'Djiboutian, Djibouti');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('DM', 'en-US', 61, ' Commonwealth of Dominica', 'Dominica', ' Commonwealth of Dominica', 'DM', 'Dominican');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('DO', 'en-US', 62, 'Dominican Republic', 'Dominican Republic', 'Dominican Republic', 'DO', 'Dominican');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('EC', 'en-US', 63, 'Republic of Ecuador', 'Ecuador', 'Republic of Ecuador', 'EC', 'Ecuadorean, Ecudorean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('EG', 'en-US', 64, 'Arab Republic of Egypt', 'Egypt', 'Arab Republic of Egypt', 'EG', 'Egyptian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SV', 'en-US', 65, 'Republic of El Salvador', 'El Salvador', 'Republic of El Salvador', 'SV', 'Salvadorean,	Salvadoran');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GQ', 'en-US', 66, 'Republic of Equatorial Guinea', 'Equatorial Guinea', 'Republic of Equatorial Guinea', 'GQ', 'Equatorial Guinean, Equatoguinean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ER', 'en-US', 67, 'State of Eritrea', 'Eritrea', 'State of Eritrea', 'ER', 'Eritrean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('EE', 'en-US', 68, 'Republic of Estonia', 'Estonia', 'Republic of Estonia', 'EE', 'Estonian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ET', 'en-US', 69, 'Federal Democratic Republic of Ethiopia', 'Ethiopia', 'Federal Democratic Republic of Ethiopia', 'ET', 'Ethiopian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('FK', 'en-US', 70, 'Falkland Islands (Malvinas)', 'Falkland Islands', 'Falkland Islands (Malvinas)', 'GB', 'Falkland Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('FO', 'en-US', 71, 'Faroe Islands', 'Faroe Islands', 'Faroe Islands', 'DK', 'Faroese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('FJ', 'en-US', 72, 'Republic of Fiji', 'Fiji', 'Republic of Fiji', 'FJ', 'Fijian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('FI', 'en-US', 73, 'Republic of Finland', 'Finland', 'Republic of Finland', 'FI', 'Finnish');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('FR', 'en-US', 74, 'French Republic', 'France', 'French Republic', 'FR', 'French');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GF', 'en-US', 75, 'French Guiana', 'French Guiana', 'French Guiana', 'FR', 'French Guianese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PF', 'en-US', 76, 'Collectivity of French Polynesia', 'French Polynesia', 'Collectivity of French Polynesia', 'FR', 'French Polynesian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TF', 'en-US', 77, 'French Southern and Antarctic Lands', 'French Southern Territories', 'French Southern and Antarctic Lands', 'FR', 'French');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GA', 'en-US', 78, 'Gabonese Republic', 'Gabon', 'Gabonese Republic', 'GA', 'Gabonese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GM', 'en-US', 79, 'Republic of The Gambia', 'Gambia', 'Republic of The Gambia', 'GM', 'Gambian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GE', 'en-US', 80, 'Georgia', 'Georgia', 'Georgia', 'GE', 'Georgian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('DE', 'en-US', 81, 'Federal Republic of Germany', 'Germany', 'Federal Republic of Germany', 'DE', 'German');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GH', 'en-US', 82, 'Republic of Ghana', 'Ghana', 'Republic of Ghana', 'GH', 'Ghanaian, Ghanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GI', 'en-US', 83, 'Gibraltar', 'Gibraltar', 'Gibraltar', 'GB', 'Gibraltarian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GR', 'en-US', 84, 'Hellenic Republic', 'Greece', 'Hellenic Republic', 'GR', 'Greek');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GL', 'en-US', 85, 'Greenland', 'Greenland', 'Greenland', 'GL', 'Greenlander, Greenlandic');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GD', 'en-US', 86, 'Grenada', 'Grenada', 'Grenada', 'GD', 'Grenadian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GP', 'en-US', 87, 'Guadeloupe', 'Guadeloupe', 'Guadeloupe', 'FR', 'Guadeloupean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GU', 'en-US', 88, 'Guam', 'Guam', 'Guam', 'US', 'Guamanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GT', 'en-US', 89, 'Republic of Guatemala', 'Guatemala', 'Republic of Guatemala', 'GT', 'Guatemalan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GG', 'en-US', 90, 'Guernsey', 'Guernsey', 'Guernsey', 'GB', 'British');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GN', 'en-US', 91, 'Republic of Guinea', 'Guinea', 'Republic of Guinea', 'GN', 'Guinean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GW', 'en-US', 92, 'Republic of Guinea-Bissau', 'Guinea-Bissau', 'Republic of Guinea-Bissau', 'GW', 'Guinean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GY', 'en-US', 93, 'Co-operative Republic of Guyana', 'Guyana', 'Co-operative Republic of Guyana', 'GY', 'Guyanese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('HT', 'en-US', 94, 'Republic of Haiti', 'Haiti', 'Republic of Haiti', 'HT', 'Haitian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('VA', 'en-US', 95, 'Holy See', 'Holy See', 'Holy See', 'VA', 'Papal, Pontifical');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('HN', 'en-US', 96, 'Republic of Honduras', 'Honduras', 'Republic of Honduras', 'HN', 'Honduran');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('HK', 'en-US', 97, 'Hong Kong', 'Hong Kong', 'Hong Kong Special Administrative Region of the People''s Republic of China', 'CN', 'Hong Konger');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('HU', 'en-US', 98, 'Hungary', 'Hungary', 'Hungary', 'HU', 'Hungarian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('IS', 'en-US', 99, 'Iceland', 'Iceland', 'Iceland', 'IS', 'Icelander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('IN', 'en-US', 100, 'Republic of India', 'India', 'Republic of India', 'IN', 'Indian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ID', 'en-US', 101, 'Republic of Indonesia', 'Indonesia', 'Republic of Indonesia', 'ID', 'Indonesian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('IR', 'en-US', 102, 'Islamic Republic of Iran', 'Iran', 'Islamic Republic of Iran', 'IR', 'Iranian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('IQ', 'en-US', 103, 'Republic of Iraq', 'Iraq', 'Republic of Iraq', 'IQ', 'Iraqi');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('IE', 'en-US', 104, 'Republic of Ireland', 'Ireland', 'Republic of Ireland', 'IE', 'Irish');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('IM', 'en-US', 105, 'Isle of Man', 'Isle of Man', 'Isle of Man', 'GB', 'Manx');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('IL', 'en-US', 106, 'State of Israel', 'Israel', 'State of Israel', 'IL', 'Israeli');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('IT', 'en-US', 107, 'Italian Republic', 'Italy', 'Italian Republic', 'IT', 'Italian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('JM', 'en-US', 108, 'Jamaica', 'Jamaica', 'Jamaica', 'JM', 'Jamaican');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('JP', 'en-US', 109, 'Japan', 'Japan', 'Japan', 'JP', 'Japanese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('JE', 'en-US', 110, 'Bailiwick of Jersey', 'Jersey', 'Bailiwick of Jersey', 'GB', 'British');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('JO', 'en-US', 111, 'Hashemite Kingdom of Jordan', 'Jordan', 'Hashemite Kingdom of Jordan', 'JO', 'Jordanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KZ', 'en-US', 112, 'Republic of Kazakhstan', 'Kazakhstan', 'Republic of Kazakhstan', 'KZ', 'Kazakhstani, Kazakh');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KE', 'en-US', 113, 'Republic of Kenya', 'Kenya', 'Republic of Kenya', 'KE', 'Kenyan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KI', 'en-US', 114, 'Republic of Kiribati', 'Kiribati', 'Republic of Kiribati', 'KI', 'I-Kiribati');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KP', 'en-US', 115, 'Democratic People''s Republic of Korea', 'North Korea', 'Democratic People''s Republic of Korea', 'KP', 'North Korean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KR', 'en-US', 116, 'Republic of Korea', 'South Korea', 'Republic of Korea', 'KR', 'South Korean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KW', 'en-US', 117, 'State of Kuwait', 'Kuwait', 'State of Kuwait', 'KW', 'Kuwaiti');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KG', 'en-US', 118, 'Kyrgyz Republic', 'Kyrgyzstan', 'Kyrgyz Republic', 'KG', 'Kyrgyzstani');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LA', 'en-US', 119, 'Lao People''s Democratic Republic', 'Laos', 'Lao People''s Democratic Republic', 'LA', 'Laotian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LV', 'en-US', 120, 'Republic of Latvia', 'Latvia', 'Republic of Latvia', 'LV', 'Latvian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LB', 'en-US', 121, 'Lebanese Republic', 'Lebanon', 'Lebanese Republic', 'LB', 'Lebanese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LS', 'en-US', 122, 'Kingdom of Lesotho', 'Lesotho', 'Kingdom of Lesotho', 'LS', 'Mosotho, Basotho');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LR', 'en-US', 123, 'Republic of Liberia', 'Liberia', 'Republic of Liberia', 'LR', 'Liberian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LY', 'en-US', 124, 'State of Libya', 'Libya', 'State of Libya', 'LY', 'Libyan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LI', 'en-US', 125, 'Principality of Liechtenstein', 'Liechtenstein', 'Principality of Liechtenstein', 'LI', 'Liechtensteiner');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LT', 'en-US', 126, 'Republic of Lithuania', 'Lithuania', 'Republic of Lithuania', 'LT', 'Lithunian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LU', 'en-US', 127, 'Grand Duchy of Luxembourg', 'Luxembourg', 'Grand Duchy of Luxembourg', 'LU', 'Luxembourger');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MO', 'en-US', 128, 'Macao', 'Macao', 'Macao', 'CN', 'Macanese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MG', 'en-US', 129, 'Republic of Madagascar', 'Madagascar', 'Republic of Madagascar', 'MG', 'Malagasy');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MW', 'en-US', 130, 'Republic of Malawi', 'Malawi', 'Republic of Malawi', 'MW', 'Malawian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MY', 'en-US', 131, 'Malaysia', 'Malaysia', 'Malaysia', 'MY', 'Malaysian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MV', 'en-US', 132, 'Republic of Maldives', 'Maldives', 'Republic of Maldives', 'MV', 'Maldivan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ML', 'en-US', 133, 'Republic of Mali', 'Mali', 'Republic of Mali', 'ML', 'Malian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MT', 'en-US', 134, 'Republic of Malta', 'Malta', 'Republic of Malta', 'MT', 'Maltese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MH', 'en-US', 135, 'Republic of the Marshall Islands', 'Marshall Islands', 'Republic of the Marshall Islands', 'MH', 'Marshallese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MQ', 'en-US', 136, 'Martinique', 'Martinique', 'Martinique', 'FR', 'Martinican, Martiniquaís');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MR', 'en-US', 137, 'Islamic Republic of Mauritania', 'Mauritania', 'Islamic Republic of Mauritania', 'MR', 'Mauritanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MU', 'en-US', 138, 'Republic of Mauritius', 'Mauritius', 'Republic of Mauritius', 'MU', 'Mauritian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('YT', 'en-US', 139, 'Department of Mayotte', 'Mayotte', 'Department of Mayotte', 'FR', 'Mahoran');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MX', 'en-US', 140, 'United Mexican States', 'Mexico', 'United Mexican States', 'MX', 'Mexican');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('FM', 'en-US', 141, 'Federated States of Micronesia', 'Micronesia', 'Federated States of Micronesia', 'FM', 'Micronesian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MD', 'en-US', 142, 'Republic of Moldova', 'Moldova', 'Republic of Moldova', 'MD', 'Moldovan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MC', 'en-US', 143, ' Principality of Monaco', 'Monaco', ' Principality of Monaco', 'MC', 'Monacan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MN', 'en-US', 144, 'Mongolia', 'Mongolia', 'Mongolia', 'MN', 'Mongolian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ME', 'en-US', 145, 'Montenegro', 'Montenegro', 'Montenegro', 'ME', 'Montenegrin');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MS', 'en-US', 146, 'Montserrat', 'Montserrat', 'Montserrat', 'GB', 'Montserratian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MA', 'en-US', 147, 'Kingdom of Morocco', 'Morocco', 'Kingdom of Morocco', 'MA', 'Moroccan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MZ', 'en-US', 148, 'Republic of Mozambique', 'Mozambique', 'Republic of Mozambique', 'MZ', 'Mozambican');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MM', 'en-US', 149, 'Republic of the Union of Myanmar', 'Myanmar', 'Republic of the Union of Myanmar', 'MM', 'Myanmarese, Burmese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NA', 'en-US', 150, 'Republic of Namibia', 'Namibia', 'Republic of Namibia', 'NA', 'Namibian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NR', 'en-US', 151, 'Republic of Nauru', 'Nauru', 'Republic of Nauru', 'NR', 'Nauruan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NP', 'en-US', 152, 'Federal Democratic Republic of Nepal', 'Nepal', 'Federal Democratic Republic of Nepal', 'NP', 'Nepalese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NL', 'en-US', 153, 'Netherlands', 'Netherlands', 'Netherlands', 'NL', 'Dutch');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NC', 'en-US', 154, 'New Caledonia', 'New Caledonia', 'New Caledonia', 'FR', 'New Caledonian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NZ', 'en-US', 155, 'New Zealand', 'New Zealand', 'New Zealand', 'NZ', 'New Zealander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NI', 'en-US', 156, 'Republic of Nicaragua', 'Nicaragua', 'Republic of Nicaragua', 'NI', 'Nicaraguan, Nicoya');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NE', 'en-US', 157, 'Republic of the Niger', 'Niger', 'Republic of the Niger', 'NE', 'Nigerien');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NG', 'en-US', 158, 'Federal Republic of Nigeria', 'Nigeria', 'Federal Republic of Nigeria', 'NG', 'Nigerian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NU', 'en-US', 159, 'Niue', 'Niue', 'Niue', 'NU', 'Niuean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NF', 'en-US', 160, 'Norfolk Island', 'Norfolk Island', 'Norfolk Island', 'AU', 'Norfolk Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MP', 'en-US', 161, 'Commonwealth of the Northern Mariana Islands', 'Northern Mariana Islands', 'Commonwealth of the Northern Mariana Islands', 'US', 'Northern Mariana Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('NO', 'en-US', 162, 'Kingdom of Norway', 'Norway', 'Kingdom of Norway', 'NO', 'Norwegian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('OM', 'en-US', 163, 'Sultanate of Oman', 'Oman', 'Sultanate of Oman', 'OM', 'Omani');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PK', 'en-US', 164, 'Islamic Republic of Pakistan', 'Pakistan', 'Islamic Republic of Pakistan', 'PK', 'Pakistani');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PW', 'en-US', 165, 'Republic of Palau', 'Palau', 'Republic of Palau', 'PW', 'Palauan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PS', 'en-US', 166, 'State of Palestine', 'Palestine', 'State of Palestine', 'PS', 'Palestinian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PA', 'en-US', 167, 'Republic of Panama', 'Panama', 'Republic of Panama', 'PA', 'Panamanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PG', 'en-US', 168, 'Independent State of Papua New Guinea', 'Papua New Guinea', 'Independent State of Papua New Guinea', 'PG', 'Papua New Guinean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PY', 'en-US', 169, 'Republic of Paraguay', 'Paraguay', 'Republic of Paraguay', 'PY', 'Paraguayan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PE', 'en-US', 170, 'Republic of Peru', 'Peru', 'Republic of Peru', 'PE', 'Peruvian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PH', 'en-US', 171, 'Republic of the Philippines', 'Philippines', 'Republic of the Philippines', 'PH', 'Filipino');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PN', 'en-US', 172, 'Pitcairn Islands', 'Pitcairn Islands', 'Pitcairn Islands', 'GB', 'Pitcairn Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PL', 'en-US', 173, 'Republic of Poland', 'Poland', 'Republic of Poland', 'PL', 'Polish, Pole');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PT', 'en-US', 174, 'Portuguese Republic', 'Portugal', 'Portuguese Republic', 'PT', 'Portuguese, Portugese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PR', 'en-US', 175, 'Commonwealth of Puerto Rico', 'Puerto Rico', 'Commonwealth of Puerto Rico', 'PR', 'Puerto Rican');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('QA', 'en-US', 176, 'State of Qatar', 'Qatar', 'State of Qatar', 'QA', 'Qatari');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MK', 'en-US', 177, 'Republic of North Macedonia', 'North Macedonia', 'Republic of North Macedonia', 'MK', 'Macedonian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('RO', 'en-US', 178, 'Romania', 'Romania', 'Romania', 'RO', 'Romanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('RU', 'en-US', 179, 'Russian Federation', 'Russia', 'Russian Federation', 'RU', 'Russian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('RW', 'en-US', 180, 'Republic of Rwanda', 'Rwanda', 'Republic of Rwanda', 'RW', 'Rwandan, Rwandese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('RE', 'en-US', 181, 'Réunion', 'Réunion', 'Réunion', 'FR', 'French');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('BL', 'en-US', 182, 'Saint Barthélemy', 'St. Barthélemy', 'Saint Barthélemy', 'FR', 'Barthélemois');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('KN', 'en-US', 183, 'Federation of Saint Christopher and Nevis', 'St. Kitts and Nevis', 'Federation of Saint Christopher and Nevis', 'KN', 'Kittian, Nevisian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LC', 'en-US', 184, 'Saint Lucia', 'St. Lucia', 'Saint Lucia', 'LC', 'Saint Lucian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('MF', 'en-US', 185, 'Saint Martin (French part)', 'St. Martin (French part)', 'Saint Martin (French part)', 'FR', 'French');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('PM', 'en-US', 186, 'Saint Pierre and Miquelon', 'St. Pierre and Miquelon', 'Saint Pierre and Miquelon', 'FR', 'Miquelonnais');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('VC', 'en-US', 187, 'Saint Vincent and the Grenadines', 'Saint Vincent', 'Saint Vincent and the Grenadines', 'VC', 'Saint Vincentian, Vincentian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('WS', 'en-US', 188, 'Independent State of Samoa', 'Samoa', 'Independent State of Samoa', 'WS', 'Samoan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SM', 'en-US', 189, 'Republic of San Marino', 'San Marino', 'Republic of San Marino', 'SM', 'Sanmarinese, Sammarinese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ST', 'en-US', 190, 'Democratic Republic of São Tomé and Príncipe', 'Sao Tome and Principe', 'Democratic Republic of São Tomé and Príncipe', 'ST', 'São Tomean, Sao Tomean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SA', 'en-US', 191, 'Kingdom of Saudi Arabia', 'Saudi Arabia', 'Kingdom of Saudi Arabia', 'SA', 'Saudi Arabian, Saudi');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SN', 'en-US', 192, 'Republic of Senegal', 'Senegal', 'Republic of Senegal', 'SN', 'Senegalese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('RS', 'en-US', 193, 'Republic of Serbia', 'Serbia', 'Republic of Serbia', 'RS', 'Serbian, Serb');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SC', 'en-US', 194, 'Republic of Seychelles', 'Seychelles', 'Republic of Seychelles', 'SC', 'Seychellois');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SL', 'en-US', 195, 'Republic of Sierra Leone', 'Sierra Leone', 'Republic of Sierra Leone', 'SL', 'Sierra Leonean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SG', 'en-US', 196, 'Republic of Singapore', 'Singapore', 'Republic of Singapore', 'SG', 'Singaporean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SX', 'en-US', 197, 'Sint Maarten (Dutch part)', 'Sint Maarten', 'Sint Maarten (Dutch part)', 'NL', 'Dutch');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SK', 'en-US', 198, 'Slovak Republic', 'Slovakia', 'Slovak Republic', 'SK', 'Slovakian, Slovak');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SI', 'en-US', 199, 'Republic of Slovenia', 'Slovenia', 'Republic of Slovenia', 'SI', 'Slovenian, Slovene');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SB', 'en-US', 200, 'Solomon Islands', 'Solomon Islands', 'Solomon Islands', 'SB', 'Solomon Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SO', 'en-US', 201, 'Federal Republic of Somalia', 'Somalia', 'Federal Republic of Somalia', 'SO', 'Somali');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ZA', 'en-US', 202, 'Republic of South Africa', 'South Africa', 'Republic of South Africa', 'ZA', 'South African');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SS', 'en-US', 203, 'Republic of South Sudan', 'South Sudan', 'Republic of South Sudan', 'SS', 'Sudanese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ES', 'en-US', 204, 'Kingdom of Spain', 'Spain', 'Kingdom of Spain', 'ES', 'Spanish');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('LK', 'en-US', 205, 'Democratic Socialist Republic of Sri Lanka', 'Sri Lanka', 'Democratic Socialist Republic of Sri Lanka', 'LK', 'Sri Lankan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SD', 'en-US', 206, 'Republic of the Sudan', 'Sudan', 'Republic of the Sudan', 'SD', 'Sudanese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SR', 'en-US', 207, 'Republic of Suriname', 'Suriname', 'Republic of Suriname', 'SR', 'Surinamer, Surinamese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SJ', 'en-US', 208, 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'NO', 'Norwegian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SZ', 'en-US', 209, 'Kingdom of Eswatini', 'Swaziland', 'Kingdom of Eswatini', 'SZ', 'Swazi');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SE', 'en-US', 210, 'Kingdom of Sweden', 'Sweden', 'Kingdom of Sweden', 'SE', 'Swedish, Swede');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('CH', 'en-US', 211, 'Switzerland', 'Switzerland', 'Switzerland', 'CH', 'Swiss');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('SY', 'en-US', 212, 'Syrian Arab Republic', 'Syria', 'Syrian Arab Republic', 'SY', 'Syrian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TW', 'en-US', 213, 'Republic of China', 'Taiwan', 'Republic of China', 'TW', 'Taiwanese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TJ', 'en-US', 214, 'Republic of Tajikistan', 'Tajikistan', 'Republic of Tajikistan', 'TJ', 'Tajikistani');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TZ', 'en-US', 215, 'United Republic of Tanzania', 'Tanzania', 'United Republic of Tanzania', 'TZ', 'Tanzanian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TH', 'en-US', 216, 'Kingdom of Thailand', 'Thailand', 'Kingdom of Thailand', 'TH', 'Thai');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TL', 'en-US', 217, 'Democratic Republic of Timor-Leste', 'East Timor', 'Democratic Republic of Timor-Leste', 'TL', 'Timorese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TG', 'en-US', 218, 'Togolese Republic', 'Togo', 'Togolese Republic', 'TG', 'Togolese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TK', 'en-US', 219, 'Tokelau Islands', 'Tokelau', 'Tokelau Islands', 'NZ', 'Tokelauan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TO', 'en-US', 220, 'Kingdom of Tonga', 'Tonga', 'Kingdom of Tonga', 'TO', 'Tongan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TT', 'en-US', 221, 'Republic of Trinidad and Tobago', 'Trinidad and Tobago', 'Republic of Trinidad and Tobago', 'TT', 'Trinidadian, Tobagonian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TN', 'en-US', 222, 'Republic of Tunisia', 'Tunisia', 'Republic of Tunisia', 'TN', 'Tunisian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TR', 'en-US', 223, 'Republic of Turkey', 'Turkey', 'Republic of Turkey', 'TR', 'Turkish, Turk');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TM', 'en-US', 224, 'Turkmenistan', 'Turkmenistan', 'Turkmenistan', 'TM', 'Turkmen');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TC', 'en-US', 225, 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'GB', 'Turks and Caicos Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('TV', 'en-US', 226, 'Tuvalu', 'Tuvalu', 'Tuvalu', 'TV', 'Tuvaluan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('UG', 'en-US', 227, 'Republic of Uganda', 'Uganda', 'Republic of Uganda', 'UG', 'Ugandan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('UA', 'en-US', 228, 'Ukraine', 'Ukraine', 'Ukraine', 'UA', 'Ukrainian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AE', 'en-US', 229, 'United Arab Emirates', 'United Arab Emirates', 'United Arab Emirates', 'AE', 'Emirian, Emirati');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('GB', 'en-US', 230, 'United Kingdom', 'United Kingdom', 'United Kingdom of Great Britain and Northern Ireland', 'GB', 'British');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('UM', 'en-US', 231, 'United States Minor Outlying Islands', 'US Minor Outlying Islands', 'United States Minor Outlying Islands', 'UM', 'American');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('US', 'en-US', 232, 'United States of America', 'United States of America', 'United States of America', 'US', 'American');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('UY', 'en-US', 233, 'Oriental Republic of Uruguay', 'Uruguay', 'Oriental Republic of Uruguay', 'UY', 'Uruguayan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('UZ', 'en-US', 234, 'Republic of Uzbekistan', 'Uzbekistan', 'Republic of Uzbekistan', 'UZ', 'Uzbekistani');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('VU', 'en-US', 235, 'Republic of Vanuatu', 'Vanuatu', 'Republic of Vanuatu', 'VU', 'Ni-Vanuatu');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('VE', 'en-US', 236, 'Bolivarian Republic of Venezuela', 'Venezuela', 'Bolivarian Republic of Venezuela', 'VE', 'Venezuelan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('VN', 'en-US', 237, 'Socialist Republic of Vietnam', 'Vietnam', 'Socialist Republic of Vietnam', 'VN', 'Vietnamese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('VG', 'en-US', 238, 'Virgin Islands', 'British Virgin Islands', 'Virgin Islands', 'GB', 'Virgin Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('VI', 'en-US', 239, 'United States Virgin Islands', 'U.S. Virgin Islands', 'United States Virgin Islands', 'US', 'Virgin Islander');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('WF', 'en-US', 240, 'Territory of the Wallis and Futuna Islands', 'Wallis and Futuna Islands', 'Territory of the Wallis and Futuna Islands', 'FR', 'Wallisian, Futunan');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('EH', 'en-US', 241, 'Western Sahara', 'Western Sahara', 'Western Sahara', '', 'Western Saharan, Sahrawi');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('YE', 'en-US', 242, 'Republic of Yemen', 'Yemen', 'Republic of Yemen', 'YE', 'Yemeni, Yemenese');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ZM', 'en-US', 243, 'Republic of Zambia', 'Zambia', 'Republic of Zambia', 'ZM', 'Zambian');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('ZW', 'en-US', 244, 'Republic of Zimbabwe', 'Zimbabwe', 'Republic of Zimbabwe', 'ZW', 'Zimbabwean');
+INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+   VALUES ('AX', 'en-US', 245, 'Åland Islands', 'Åland Islands', 'Åland Islands', 'FI', 'Ålandic, Ålandish');
 
 INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
   VALUES ('E', 'en-US', 1, 'Employed', 'Employed');

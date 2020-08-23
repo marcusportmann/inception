@@ -565,6 +565,8 @@
       <column name="name" type="nvarchar(50)" remarks="The name of the country"/>
       <column name="short_name" type="nvarchar(30)" remarks="The short name for the country"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the country"/>
+      <column name="sovereign_state" type="nvarchar(10)" remarks="The code identifying the sovereign state for the country"/>
+      <column name="nationality" type="nvarchar(50)" remarks="The nationality for the country"/>
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="countries" columnNames="code,locale"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="code"/>
@@ -573,7 +575,8 @@
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="short_name"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="description"/>
-    <addDefaultValue schemaName="reference" tableName="countries" columnName="description" defaultValue=""/>
+    <addNotNullConstraint schemaName="reference" tableName="countries" columnName="sovereign_state"/>
+    <addNotNullConstraint schemaName="reference" tableName="countries" columnName="nationality"/>
     <createIndex indexName="countries_locale_ix" schemaName="reference" tableName="countries">
       <column name="locale"/>
     </createIndex>
