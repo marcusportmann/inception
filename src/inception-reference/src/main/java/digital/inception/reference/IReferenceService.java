@@ -305,4 +305,122 @@ public interface IReferenceService {
    * @return the residential statuses
    */
   List<ResidentialStatus> getResidentialStatuses(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the residential types.
+   *
+   * @return the residential types
+   */
+  List<ResidentialType> getResidentialTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the residential types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     residential types for or <code>null</code> to retrieve the residential types for all
+   *     locales
+   * @return the residential types
+   */
+  List<ResidentialType> getResidentialTypes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the sources of funds.
+   *
+   * @return the sources of funds
+   */
+  List<SourceOfFunds> getSourcesOfFunds() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the sources of funds.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the sources of
+   *     funds for or <code>null</code> to retrieve the sources of funds for all locales
+   * @return the sources of funds
+   */
+  List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the suitable times to contact.
+   *
+   * @return the suitable times to contact
+   */
+  List<SuitableTimeToContact> getSuitableTimesToContact() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the suitable times to contact.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the suitable
+   *     times to contact for or <code>null</code> to retrieve the suitable times to contact for all
+   *     locales
+   * @return the suitable times to contact
+   */
+  List<SuitableTimeToContact> getSuitableTimesToContact(String localeId)
+      throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the tax number types.
+   *
+   * @return the tax number types
+   */
+  List<TaxNumberType> getTaxNumberTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the tax number types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the tax number
+   *     types for or <code>null</code> to retrieve the tax number types for all locales
+   * @return the tax number types
+   */
+  List<TaxNumberType> getTaxNumberTypes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the titles.
+   *
+   * @return the titles
+   */
+  List<Title> getTitles() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the titles.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the titles for
+   *     or <code>null</code> to retrieve the titles for all locales
+   * @return the titles
+   */
+  List<Title> getTitles(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the verification methods.
+   *
+   * @return the verification methods
+   */
+  List<VerificationMethod> getVerificationMethods() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the verification methods.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     verification methods for or <code>null</code> to retrieve the verification methods for all
+   *     locales
+   * @return the verification methods
+   */
+  List<VerificationMethod> getVerificationMethods(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the verification statusess.
+   *
+   * @return the verification statusess
+   */
+  List<VerificationStatus> getVerificationStatuses() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the verification statusess.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     verification statusess for or <code>null</code> to retrieve the verification statusess for
+   *     all locales
+   * @return the verification statusess
+   */
+  List<VerificationStatus> getVerificationStatuses(String localeId)
+      throws ReferenceServiceException;
 }

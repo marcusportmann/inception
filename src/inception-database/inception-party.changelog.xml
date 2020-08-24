@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+
+  <changeSet id="inception-party-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Party - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema party
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema party
+    </sql>
+
+    <createTable schemaName="party" tableName="party" remarks="Parties">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the party"/>
+      <column name="type" type="int" remarks="The code identifying the type of party"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the party"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="party" columnNames="id"/>
+    <addNotNullConstraint schemaName="party" tableName="party" columnName="id"/>
+    <addNotNullConstraint schemaName="party" tableName="party" columnName="type"/>
+    <addNotNullConstraint schemaName="party" tableName="party" columnName="name"/>
+  </changeSet>
+
+</databaseChangeLog>

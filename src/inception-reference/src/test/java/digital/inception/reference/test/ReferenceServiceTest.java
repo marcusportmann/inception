@@ -19,6 +19,7 @@ package digital.inception.reference.test;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import digital.inception.reference.AddressType;
 import digital.inception.reference.CommunicationMethod;
@@ -34,6 +35,17 @@ import digital.inception.reference.MarriageType;
 import digital.inception.reference.MinorType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
+import digital.inception.reference.PermitType;
+import digital.inception.reference.Race;
+import digital.inception.reference.Region;
+import digital.inception.reference.ResidentialStatus;
+import digital.inception.reference.ResidentialType;
+import digital.inception.reference.SourceOfFunds;
+import digital.inception.reference.SuitableTimeToContact;
+import digital.inception.reference.TaxNumberType;
+import digital.inception.reference.Title;
+import digital.inception.reference.VerificationMethod;
+import digital.inception.reference.VerificationStatus;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.util.Comparator;
@@ -75,7 +87,7 @@ public class ReferenceServiceTest {
     List<AddressType> retrievedAddressTypes = referenceService.getAddressTypes();
 
     assertEquals(
-        "The correct number of address types was not retrieved", 7, retrievedAddressTypes.size());
+        "The correct number of address types was not retrieved", 14, retrievedAddressTypes.size());
 
     retrievedAddressTypes = referenceService.getAddressTypes("en-US");
 
@@ -91,7 +103,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of communication methods was not retrieved",
-        3,
+        6,
         retrievedCommunicationMethods.size());
 
     retrievedCommunicationMethods = referenceService.getCommunicationMethods("en-US");
@@ -110,7 +122,7 @@ public class ReferenceServiceTest {
     Country retrievedCountry = retrievedCountries.get(0);
 
     assertEquals(
-        "The correct number of countries was not retrieved", 245, retrievedCountries.size());
+        "The correct number of countries was not retrieved", 490, retrievedCountries.size());
 
     assertEquals(
         "The correct code was not retrieved for the country", "AF", retrievedCountry.getCode());
@@ -161,317 +173,329 @@ public class ReferenceServiceTest {
   /** Create the Liquibase inserts. */
   @Test
   public void createLiquibaseInserts() throws Exception {
-    for (AddressType retrievedAddressType : referenceService.getAddressTypes("en-US")) {
+    boolean createLiquibaseInserts = false;
+    boolean createAddressTypeInserts = createLiquibaseInserts && false;
+    boolean createCommunicationMethodInserts = createLiquibaseInserts && false;
+    boolean createCountryInserts = createLiquibaseInserts && true;
+    boolean createEmploymentStatusInserts = createLiquibaseInserts && false;
+    boolean createGenderInserts = createLiquibaseInserts && false;
+    boolean createIdentityDocumentTypeInserts = createLiquibaseInserts && false;
+    boolean createLanguageInserts = createLiquibaseInserts && false;
+    boolean createMaritalStatusInserts = createLiquibaseInserts && false;
+    boolean createMarriageTypeInserts = createLiquibaseInserts && false;
+    boolean createMinorTypeInserts = createLiquibaseInserts && false;
+    boolean createNextOfKinInserts = createLiquibaseInserts && false;
+    boolean createOccupationInserts = createLiquibaseInserts && false;
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"address_types\">");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedAddressType.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedAddressType.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedAddressType.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedAddressType.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedAddressType.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+    if (createAddressTypeInserts) {
+      for (AddressType addressType : referenceService.getAddressTypes("en-US")) {
+
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"address_types\">");
+        System.out.println("      <column name=\"code\" value=\"" + addressType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + addressType.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + addressType.getSortIndex() + "\"/>");
+        System.out.println("      <column name=\"name\" value=\"" + addressType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\"" + addressType.getDescription() + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createCommunicationMethodInserts) {
 
-    for (CommunicationMethod retrievedCommunicationMethod :
-        referenceService.getCommunicationMethods("en-US")) {
+      for (CommunicationMethod communicationMethod :
+          referenceService.getCommunicationMethods("en-US")) {
 
-      System.out.println(
-          "    <insert schemaName=\"reference\" tableName=\"communication_methods\">");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedCommunicationMethod.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\""
-              + retrievedCommunicationMethod.getLocale()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedCommunicationMethod.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedCommunicationMethod.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedCommunicationMethod.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"communication_methods\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + communicationMethod.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + communicationMethod.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + communicationMethod.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + communicationMethod.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + communicationMethod.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createCountryInserts) {
 
-    List<Country> sortedCountries =
-        referenceService.getCountries("en-US").stream()
-            .sorted(Comparator.comparing(Country::getName))
-            .collect(Collectors.toList());
+      List<Country> sortedCountries =
+          referenceService.getCountries("en-US").stream()
+              .sorted(Comparator.comparing(Country::getName))
+              .collect(Collectors.toList());
 
-    int counter = 1;
+      int counter = 1;
 
-    for (Country country : sortedCountries) {
-      System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
-      System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
-      System.out.println("  <column name=\"locale\" value=\"" + country.getLocale() + "\"/>");
-      System.out.println("  <column name=\"sort_index\" value=\"" + counter + "\"/>");
-      System.out.println("  <column name=\"name\" value=\"" + country.getName() + "\"/>");
-      System.out.println(
-          "  <column name=\"short_name\" value=\"" + country.getShortName() + "\"/>");
-      System.out.println(
-          "  <column name=\"description\" value=\"" + country.getDescription() + "\"/>");
-      System.out.println("</insert>");
+      for (Country country : sortedCountries) {
 
-      counter++;
+        if (country.getNationality().contains(",")) {
+          fail("Invalid nationality for country (" + country.getCode() + ")");
+        }
+
+        System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
+        System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
+        System.out.println("  <column name=\"locale\" value=\"" + country.getLocale() + "\"/>");
+        System.out.println("  <column name=\"sort_index\" value=\"" + counter + "\"/>");
+        System.out.println("  <column name=\"name\" value=\"" + country.getName() + "\"/>");
+        System.out.println(
+            "  <column name=\"short_name\" value=\"" + country.getShortName() + "\"/>");
+        System.out.println(
+            "  <column name=\"description\" value=\"" + country.getDescription() + "\"/>");
+        System.out.println(
+            "  <column name=\"sovereign_state\" value=\"" + country.getSovereignState() + "\"/>");
+        System.out.println(
+            "  <column name=\"nationality\" value=\"" + country.getNationality() + "\"/>");
+        System.out.println("</insert>");
+
+        counter++;
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createEmploymentStatusInserts) {
 
-    for (EmploymentStatus retrievedEmploymentStatus :
-        referenceService.getEmploymentStatuses("en-US")) {
+      for (EmploymentStatus employmentStatus : referenceService.getEmploymentStatuses("en-US")) {
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"employment_statuses\">");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedEmploymentStatus.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\""
-              + retrievedEmploymentStatus.getLocale()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedEmploymentStatus.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedEmploymentStatus.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedEmploymentStatus.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"employment_statuses\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + employmentStatus.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + employmentStatus.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + employmentStatus.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + employmentStatus.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + employmentStatus.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+
+      for (EmploymentType employmentType : referenceService.getEmploymentTypes("en-US")) {
+
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"employment_types\">");
+        System.out.println(
+            "      <column name=\"employment_status\" value=\""
+                + employmentType.getEmploymentStatus()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + employmentType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + employmentType.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + employmentType.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + employmentType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + employmentType.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createGenderInserts) {
 
-    for (EmploymentType retrievedEmploymentType : referenceService.getEmploymentTypes("en-US")) {
+      for (Gender gender : referenceService.getGenders("en-US")) {
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"employment_types\">");
-      System.out.println(
-          "      <column name=\"employment_status\" value=\""
-              + retrievedEmploymentType.getEmploymentStatus()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedEmploymentType.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedEmploymentType.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedEmploymentType.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedEmploymentType.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedEmploymentType.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"genders\">");
+        System.out.println("      <column name=\"code\" value=\"" + gender.getCode() + "\"/>");
+        System.out.println("      <column name=\"locale\" value=\"" + gender.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + gender.getSortIndex() + "\"/>");
+        System.out.println("      <column name=\"name\" value=\"" + gender.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\"" + gender.getDescription() + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createIdentityDocumentTypeInserts) {
 
-    for (Gender retrievedGender : referenceService.getGenders("en-US")) {
+      for (IdentityDocumentType identityDocumentType :
+          referenceService.getIdentityDocumentTypes("en-US")) {
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"genders\">");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedGender.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedGender.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\"" + retrievedGender.getSortIndex() + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedGender.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedGender.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"identity_document_types\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + identityDocumentType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + identityDocumentType.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + identityDocumentType.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + identityDocumentType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + identityDocumentType.getDescription()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"country_of_issue\" value=\""
+                + identityDocumentType.getCountryOfIssue()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createLanguageInserts) {
 
-    for (IdentityDocumentType retrievedIdentityDocumentType :
-        referenceService.getIdentityDocumentTypes("en-US")) {
+      for (Language language : referenceService.getLanguages("en-US")) {
 
-      System.out.println(
-          "    <insert schemaName=\"reference\" tableName=\"identity_document_types\">");
-      System.out.println(
-          "      <column name=\"code\" value=\""
-              + retrievedIdentityDocumentType.getCode()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\""
-              + retrievedIdentityDocumentType.getLocale()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedIdentityDocumentType.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\""
-              + retrievedIdentityDocumentType.getName()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedIdentityDocumentType.getDescription()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"country_of_issue\" value=\""
-              + retrievedIdentityDocumentType.getCountryOfIssue()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"languages\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + language.getCode().toUpperCase() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + language.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + language.getSortIndex() + "\"/>");
+        System.out.println("      <column name=\"name\" value=\"" + language.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"short_name\" value=\"" + language.getShortName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\"" + language.getDescription() + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createMaritalStatusInserts) {
 
-    for (Language retrievedLanguage : referenceService.getLanguages("en-US")) {
+      for (MaritalStatus maritalStatus : referenceService.getMaritalStatuses("en-US")) {
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"languages\">");
-      System.out.println(
-          "      <column name=\"code\" value=\""
-              + retrievedLanguage.getCode().toUpperCase()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedLanguage.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\"" + retrievedLanguage.getSortIndex() + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedLanguage.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"short_name\" value=\"" + retrievedLanguage.getShortName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedLanguage.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"marital_statuses\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + maritalStatus.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + maritalStatus.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + maritalStatus.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + maritalStatus.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + maritalStatus.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createMarriageTypeInserts) {
 
-    for (MaritalStatus retrievedMaritalStatus : referenceService.getMaritalStatuses("en-US")) {
+      for (MarriageType marriageType : referenceService.getMarriageTypes("en-US")) {
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"marital_statuses\">");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedMaritalStatus.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedMaritalStatus.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedMaritalStatus.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedMaritalStatus.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedMaritalStatus.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"marriage_types\">");
+        System.out.println(
+            "      <column name=\"marital_status\" value=\""
+                + marriageType.getMaritalStatus()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + marriageType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + marriageType.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + marriageType.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + marriageType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\"" + marriageType.getDescription() + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createMinorTypeInserts) {
 
-    for (MarriageType retrievedMarriageType : referenceService.getMarriageTypes("en-US")) {
+      for (MinorType minorType : referenceService.getMinorTypes("en-US")) {
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"marriage_types\">");
-      System.out.println(
-          "      <column name=\"marital_status\" value=\""
-              + retrievedMarriageType.getMaritalStatus()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedMarriageType.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedMarriageType.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedMarriageType.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedMarriageType.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedMarriageType.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"minor_types\">");
+        System.out.println("      <column name=\"code\" value=\"" + minorType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + minorType.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + minorType.getSortIndex() + "\"/>");
+        System.out.println("      <column name=\"name\" value=\"" + minorType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\"" + minorType.getDescription() + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createNextOfKinInserts) {
 
-    for (MinorType retrievedMinorType : referenceService.getMinorTypes("en-US")) {
+      for (NextOfKinType nextOfKinType : referenceService.getNextOfKinTypes("en-US")) {
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"minor_types\">");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedMinorType.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedMinorType.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedMinorType.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedMinorType.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedMinorType.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"next_of_kin_types\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + nextOfKinType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + nextOfKinType.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + nextOfKinType.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + nextOfKinType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + nextOfKinType.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
     }
 
-    System.out.println("");
+    if (createOccupationInserts) {
 
-    for (NextOfKinType retrievedNextOfKinType : referenceService.getNextOfKinTypes("en-US")) {
+      for (Occupation occupation : referenceService.getOccupations("en-US")) {
 
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"next_of_kin_types\">");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedNextOfKinType.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedNextOfKinType.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedNextOfKinType.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedNextOfKinType.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedNextOfKinType.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
-    }
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"occupations\">");
+        System.out.println("      <column name=\"code\" value=\"" + occupation.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + occupation.getLocale() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + occupation.getSortIndex() + "\"/>");
+        System.out.println("      <column name=\"name\" value=\"" + occupation.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\"" + occupation.getDescription() + "\"/>");
+        System.out.println("    </insert>");
+      }
 
-    System.out.println("");
-
-    for (Occupation retrievedOccupation : referenceService.getOccupations("en-US")) {
-
-      System.out.println("    <insert schemaName=\"reference\" tableName=\"occupations\">");
-      System.out.println(
-          "      <column name=\"code\" value=\"" + retrievedOccupation.getCode() + "\"/>");
-      System.out.println(
-          "      <column name=\"locale\" value=\"" + retrievedOccupation.getLocale() + "\"/>");
-      System.out.println(
-          "      <column name=\"sort_index\" value=\""
-              + retrievedOccupation.getSortIndex()
-              + "\"/>");
-      System.out.println(
-          "      <column name=\"name\" value=\"" + retrievedOccupation.getName() + "\"/>");
-      System.out.println(
-          "      <column name=\"description\" value=\""
-              + retrievedOccupation.getDescription()
-              + "\"/>");
-      System.out.println("    </insert>");
+      System.out.println();
     }
   }
 
@@ -482,7 +506,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of employment statuses was not retrieved",
-        3,
+        6,
         retrievedEmploymentStatuses.size());
 
     retrievedEmploymentStatuses = referenceService.getEmploymentStatuses("en-US");
@@ -500,7 +524,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of employment types was not retrieved",
-        11,
+        22,
         retrievedEmploymentTypes.size());
 
     retrievedEmploymentTypes = referenceService.getEmploymentTypes("en-US");
@@ -516,7 +540,7 @@ public class ReferenceServiceTest {
   public void genderTest() throws Exception {
     List<Gender> retrievedGenders = referenceService.getGenders();
 
-    assertEquals("The correct number of genders was not retrieved", 5, retrievedGenders.size());
+    assertEquals("The correct number of genders was not retrieved", 10, retrievedGenders.size());
 
     retrievedGenders = referenceService.getGenders("en-US");
 
@@ -531,7 +555,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of identity document types was not retrieved",
-        4,
+        8,
         retrievedIdentityDocumentTypes.size());
 
     retrievedIdentityDocumentTypes = referenceService.getIdentityDocumentTypes("en-US");
@@ -549,7 +573,7 @@ public class ReferenceServiceTest {
     List<Language> retrievedLanguages = referenceService.getLanguages();
 
     assertEquals(
-        "The correct number of languages was not retrieved", 92, retrievedLanguages.size());
+        "The correct number of languages was not retrieved", 184, retrievedLanguages.size());
 
     retrievedLanguages = referenceService.getLanguages("en-US");
 
@@ -564,7 +588,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of marital statuses was not retrieved",
-        6,
+        12,
         retrievedMaritalStatuses.size());
 
     retrievedMaritalStatuses = referenceService.getMaritalStatuses("en-US");
@@ -581,7 +605,7 @@ public class ReferenceServiceTest {
     List<MarriageType> retrievedMarriageTypes = referenceService.getMarriageTypes();
 
     assertEquals(
-        "The correct number of marriage types was not retrieved", 4, retrievedMarriageTypes.size());
+        "The correct number of marriage types was not retrieved", 8, retrievedMarriageTypes.size());
 
     retrievedMarriageTypes = referenceService.getMarriageTypes("en-US");
 
@@ -595,7 +619,7 @@ public class ReferenceServiceTest {
     List<MinorType> retrievedMinorTypes = referenceService.getMinorTypes();
 
     assertEquals(
-        "The correct number of minor types was not retrieved", 4, retrievedMinorTypes.size());
+        "The correct number of minor types was not retrieved", 8, retrievedMinorTypes.size());
 
     retrievedMinorTypes = referenceService.getMinorTypes("en-US");
 
@@ -610,7 +634,7 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of next of kin types was not retrieved",
-        17,
+        34,
         retrievedNextOfKinTypes.size());
 
     retrievedNextOfKinTypes = referenceService.getNextOfKinTypes("en-US");
@@ -627,11 +651,191 @@ public class ReferenceServiceTest {
     List<Occupation> retrievedOccupations = referenceService.getOccupations();
 
     assertEquals(
-        "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
+        "The correct number of occupations was not retrieved", 58, retrievedOccupations.size());
 
     retrievedOccupations = referenceService.getOccupations("en-US");
 
     assertEquals(
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
+  }
+
+  /** Test the permit type reference functionality. */
+  @Test
+  public void permitTypeTest() throws Exception {
+    List<PermitType> retrievedPermitTypes = referenceService.getPermitTypes();
+
+    assertEquals(
+        "The correct number of permit types was not retrieved", 18, retrievedPermitTypes.size());
+
+    retrievedPermitTypes = referenceService.getPermitTypes("en-US");
+
+    assertEquals(
+        "The correct number of permit types was not retrieved", 9, retrievedPermitTypes.size());
+  }
+
+  /** Test the race reference functionality. */
+  @Test
+  public void raceTest() throws Exception {
+    List<Race> retrievedRaces = referenceService.getRaces();
+
+    assertEquals("The correct number of races was not retrieved", 12, retrievedRaces.size());
+
+    retrievedRaces = referenceService.getRaces("en-US");
+
+    assertEquals("The correct number of races was not retrieved", 6, retrievedRaces.size());
+  }
+
+  /** Test the region reference functionality. */
+  @Test
+  public void regionTest() throws Exception {
+    List<Region> retrievedRegions = referenceService.getRegions();
+
+    assertEquals("The correct number of regions was not retrieved", 18, retrievedRegions.size());
+
+    retrievedRegions = referenceService.getRegions("en-US");
+
+    assertEquals("The correct number of regions was not retrieved", 9, retrievedRegions.size());
+  }
+
+  /** Test the residential status reference functionality. */
+  @Test
+  public void residentialStatusTest() throws Exception {
+    List<ResidentialStatus> retrievedResidentialStatuses =
+        referenceService.getResidentialStatuses();
+
+    assertEquals(
+        "The correct number of residential statuses was not retrieved",
+        10,
+        retrievedResidentialStatuses.size());
+
+    retrievedResidentialStatuses = referenceService.getResidentialStatuses("en-US");
+
+    assertEquals(
+        "The correct number of residential statuses was not retrieved",
+        5,
+        retrievedResidentialStatuses.size());
+  }
+
+  /** Test the residential type reference functionality. */
+  @Test
+  public void residentialTypeTest() throws Exception {
+    List<ResidentialType> retrievedResidentialTypes = referenceService.getResidentialTypes();
+
+    assertEquals(
+        "The correct number of residential types was not retrieved",
+        14,
+        retrievedResidentialTypes.size());
+
+    retrievedResidentialTypes = referenceService.getResidentialTypes("en-US");
+
+    assertEquals(
+        "The correct number of residential types was not retrieved",
+        7,
+        retrievedResidentialTypes.size());
+  }
+
+  /** Test the sources of funds reference functionality. */
+  @Test
+  public void sourceOfFundsTest() throws Exception {
+    List<SourceOfFunds> retrievedSourceOfFunds = referenceService.getSourcesOfFunds();
+
+    assertEquals(
+        "The correct number of sources of funds was not retrieved",
+        38,
+        retrievedSourceOfFunds.size());
+
+    retrievedSourceOfFunds = referenceService.getSourcesOfFunds("en-US");
+
+    assertEquals(
+        "The correct number of sources of funds was not retrieved",
+        19,
+        retrievedSourceOfFunds.size());
+  }
+
+  /** Test the suitable time to contact reference functionality. */
+  @Test
+  public void suitableTimeToContactFundsTest() throws Exception {
+    List<SuitableTimeToContact> retrievedSuitableTimesToContact =
+        referenceService.getSuitableTimesToContact();
+
+    assertEquals(
+        "The correct number of suitable times to contact was not retrieved",
+        10,
+        retrievedSuitableTimesToContact.size());
+
+    retrievedSuitableTimesToContact = referenceService.getSuitableTimesToContact("en-US");
+
+    assertEquals(
+        "The correct number of suitable times to contact was not retrieved",
+        5,
+        retrievedSuitableTimesToContact.size());
+  }
+
+  /** Test the tax number type reference functionality. */
+  @Test
+  public void taxNumberTypeTest() throws Exception {
+    List<TaxNumberType> retrievedTaxNumberTypes = referenceService.getTaxNumberTypes();
+
+    assertEquals(
+        "The correct number of tax number types was not retrieved",
+        14,
+        retrievedTaxNumberTypes.size());
+
+    retrievedTaxNumberTypes = referenceService.getTaxNumberTypes("en-US");
+
+    assertEquals(
+        "The correct number of tax number types was not retrieved",
+        7,
+        retrievedTaxNumberTypes.size());
+  }
+
+  /** Test the title reference functionality. */
+  @Test
+  public void titleTest() throws Exception {
+    List<Title> retrievedTitles = referenceService.getTitles();
+
+    assertEquals("The correct number of titles was not retrieved", 24, retrievedTitles.size());
+
+    retrievedTitles = referenceService.getTitles("en-US");
+
+    assertEquals("The correct number of titles was not retrieved", 12, retrievedTitles.size());
+  }
+
+  /** Test the verification method functionality. */
+  @Test
+  public void verificationMethodTest() throws Exception {
+    List<VerificationMethod> retrievedVerificationMethods =
+        referenceService.getVerificationMethods();
+
+    assertEquals(
+        "The correct number of verification methods was not retrieved",
+        6,
+        retrievedVerificationMethods.size());
+
+    retrievedVerificationMethods = referenceService.getVerificationMethods("en-US");
+
+    assertEquals(
+        "The correct number of verification methods was not retrieved",
+        3,
+        retrievedVerificationMethods.size());
+  }
+
+  /** Test the verification status functionality. */
+  @Test
+  public void verificationStatusTest() throws Exception {
+    List<VerificationStatus> retrievedVerificationStatuses =
+        referenceService.getVerificationStatuses();
+
+    assertEquals(
+        "The correct number of verification statuses was not retrieved",
+        10,
+        retrievedVerificationStatuses.size());
+
+    retrievedVerificationStatuses = referenceService.getVerificationStatuses("en-US");
+
+    assertEquals(
+        "The correct number of verification statuses was not retrieved",
+        5,
+        retrievedVerificationStatuses.size());
   }
 }

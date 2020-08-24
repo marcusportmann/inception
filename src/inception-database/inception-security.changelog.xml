@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+
+  <changeSet id="inception-security-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Security - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema security
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema security
+    </sql>
+
+    <createTable schemaName="security" tableName="tenants" remarks="Tenants">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the tenant"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the tenant"/>
+      <column name="status" type="int" remarks="The status for the tenant"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="tenants" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="name"/>
+    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="status"/>
+    <createIndex indexName="tenants_name_ix" schemaName="security" tableName="tenants">
+      <column name="name"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="user_directory_types"
+      remarks="User Directory Types">
+      <column name="code" type="nvarchar(100)"
+        remarks="The code uniquely identifying the user directory type"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the user directory type"/>
+      <column name="user_directory_class" type="nvarchar(1000)"
+        remarks="The fully qualified name of the Java class that implements the user directory type"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="user_directory_types" columnNames="code"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_types" columnName="code"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_types" columnName="name"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_types"
+      columnName="user_directory_class"/>
+
+    <createTable schemaName="security" tableName="user_directories" remarks="User Directories">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory"/>
+      <column name="type" type="nvarchar(100)"
+        remarks="The code uniquely identifying the user directory type"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the user directory"/>
+      <column name="configuration" type="nvarchar(4000)"
+        remarks="The XML configuration data for the user directory"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="user_directories" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="type"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="name"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories"
+      columnName="configuration"/>
+    <addForeignKeyConstraint constraintName="user_directories_user_directory_type_fk"
+      baseTableSchemaName="security" baseTableName="user_directories" baseColumnNames="type"
+      referencedTableSchemaName="security" referencedTableName="user_directory_types"
+      referencedColumnNames="code" deleteCascade="true"/>
+    <createIndex indexName="user_directories_name_ix" schemaName="security"
+      tableName="user_directories">
+      <column name="name"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="user_directory_to_tenant_map"
+      remarks="User Directory To Tenant Mappings">
+      <column name="user_directory_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory"/>
+      <column name="tenant_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the tenant"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="user_directory_to_tenant_map"
+      columnNames="user_directory_id, tenant_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_to_tenant_map"
+      columnName="user_directory_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directory_to_tenant_map"
+      columnName="tenant_id"/>
+    <addForeignKeyConstraint constraintName="user_directory_to_tenant_map_user_directory_fk"
+      baseTableSchemaName="security" baseTableName="user_directory_to_tenant_map"
+      baseColumnNames="user_directory_id" referencedTableSchemaName="security"
+      referencedTableName="user_directories" referencedColumnNames="id" deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="user_directory_to_tenant_map_tenant_fk"
+      baseTableSchemaName="security" baseTableName="user_directory_to_tenant_map"
+      baseColumnNames="tenant_id" referencedTableSchemaName="security"
+      referencedTableName="tenants" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="user_directory_to_tenant_map_user_directory_id_ix"
+      schemaName="security" tableName="user_directory_to_tenant_map">
+      <column name="user_directory_id"/>
+    </createIndex>
+    <createIndex indexName="user_directory_to_tenant_map_tenant_id_ix"
+      schemaName="security" tableName="user_directory_to_tenant_map">
+      <column name="tenant_id"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="users" remarks="Users">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
+      <column name="user_directory_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory the user is associated with"/>
+      <column name="username" type="nvarchar(100)" remarks="The username for the user"/>
+      <column name="status" type="int" remarks="The status for the user"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the user"/>
+      <column name="preferred_name" type="nvarchar(100)"
+        remarks="The preferred name for the user'"/>
+      <column name="phone_number" type="nvarchar(100)" remarks="The phone number for the user"/>
+      <column name="mobile_number" type="nvarchar(100)" remarks="The mobile number for the user"/>
+      <column name="email" type="nvarchar(100)" remarks="The e-mail address for the user"/>
+      <column name="password" type="nvarchar(100)" remarks="The password for the user"/>
+      <column name="password_attempts" type="int"
+        remarks="The number of failed attempts to authenticate the user"/>
+      <column name="password_expiry" type="timestamp"
+        remarks="The date and time that the user''s password expires"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="users" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="user_directory_id"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="username"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="status"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="name"
+      defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="preferred_name"
+      defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="phone_number"
+      defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="mobile_number"
+      defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="email"
+      defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="password"
+      defaultNullValue=""/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="password_attempts"
+      defaultNullValue="0"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="password_expiry"/>
+    <addForeignKeyConstraint constraintName="users_user_directory_fk" baseTableSchemaName="security"
+      baseTableName="users" baseColumnNames="user_directory_id" referencedTableSchemaName="security"
+      referencedTableName="user_directories" referencedColumnNames="id"/>
+    <createIndex indexName="users_user_directory_id_ix" schemaName="security" tableName="users">
+      <column name="user_directory_id"/>
+    </createIndex>
+    <createIndex indexName="users_username_ix" schemaName="security" tableName="users"
+      unique="true">
+      <column name="username"/>
+    </createIndex>
+    <createIndex indexName="users_name_ix" schemaName="security" tableName="users" unique="false">
+      <column name="name"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="users_password_history"
+      remarks="User Password History">
+      <column name="user_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
+      <column name="changed" type="timestamp"
+        remarks="When the password change took place for the user"/>
+      <column name="password" type="nvarchar(100)" remarks="The password for the user"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="users_password_history"
+      columnNames="user_id, changed"/>
+    <addNotNullConstraint schemaName="security" tableName="users_password_history"
+      columnName="user_id"/>
+    <addNotNullConstraint schemaName="security" tableName="users_password_history"
+      columnName="changed"/>
+    <addForeignKeyConstraint constraintName="users_password_history_user_id_fk"
+      baseTableSchemaName="security" baseTableName="users_password_history"
+      baseColumnNames="user_id" referencedTableSchemaName="security" referencedTableName="users"
+      referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="users_password_history_user_id_ix" schemaName="security"
+      tableName="users_password_history">
+      <column name="user_id"/>
+    </createIndex>
+    <createIndex indexName="users_password_history_changed_ix" schemaName="security"
+      tableName="users_password_history">
+      <column name="changed"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="groups" remarks="Groups">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
+      <column name="user_directory_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory the group is associated with"/>
+      <column name="name" type="nvarchar(100)" remarks="The name for the group"/>
+      <column name="description" type="nvarchar(100)" remarks="A description for the group"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="groups" columnNames="id"/>
+    <addNotNullConstraint schemaName="security" tableName="groups" columnName="id"/>
+    <addNotNullConstraint schemaName="security" tableName="groups" columnName="user_directory_id"/>
+    <addNotNullConstraint schemaName="security" tableName="groups" columnName="name"/>
+    <addForeignKeyConstraint constraintName="groups_user_directory_fk"
+      baseTableSchemaName="security" baseTableName="groups" baseColumnNames="user_directory_id"
+      referencedTableSchemaName="security" referencedTableName="user_directories"
+      referencedColumnNames="id"/>
+    <createIndex indexName="groups_user_directory_id_ix" schemaName="security" tableName="groups">
+      <column name="user_directory_id"/>
+    </createIndex>
+    <createIndex indexName="groups_user_directory_id_name_ix" schemaName="security"
+      tableName="groups" unique="true">
+      <column name="user_directory_id"/>
+      <column name="name"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="user_to_group_map"
+      remarks="User To Group Mappings">
+      <column name="user_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
+      <column name="group_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="user_to_group_map"
+      columnNames="user_id, group_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_to_group_map" columnName="user_id"/>
+    <addNotNullConstraint schemaName="security" tableName="user_to_group_map"
+      columnName="group_id"/>
+    <addForeignKeyConstraint constraintName="user_to_group_map_user_fk"
+      baseTableSchemaName="security" baseTableName="user_to_group_map" baseColumnNames="user_id"
+      referencedTableSchemaName="security" referencedTableName="users" referencedColumnNames="id"
+      deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="user_to_group_map_group_fk"
+      baseTableSchemaName="security" baseTableName="user_to_group_map" baseColumnNames="group_id"
+      referencedTableSchemaName="security" referencedTableName="groups" referencedColumnNames="id"
+      deleteCascade="true"/>
+    <createIndex indexName="user_to_group_map_user_id_ix" schemaName="security"
+      tableName="user_to_group_map">
+      <column name="user_id"/>
+    </createIndex>
+    <createIndex indexName="user_to_group_map_group_id_ix" schemaName="security"
+      tableName="user_to_group_map">
+      <column name="group_id"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="functions" remarks="Functions">
+      <column name="code" type="nvarchar(100)"
+        remarks="The code uniquely identifying the function"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the function"/>
+      <column name="description" type="nvarchar(100)" remarks="A description for the function'"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="functions" columnNames="code"/>
+    <addNotNullConstraint schemaName="security" tableName="functions" columnName="code"/>
+    <addNotNullConstraint schemaName="security" tableName="functions" columnName="name"/>
+
+    <createTable schemaName="security" tableName="roles" remarks="Roles">
+      <column name="code" type="nvarchar(100)" remarks="The code uniquely identifying the role"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the role"/>
+      <column name="description" type="nvarchar(100)" remarks="The description for the role"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="roles" columnNames="code"/>
+    <addNotNullConstraint schemaName="security" tableName="roles" columnName="code"/>
+    <addNotNullConstraint schemaName="security" tableName="roles" columnName="name"/>
+
+    <createTable schemaName="security" tableName="function_to_role_map"
+      remarks="Function To Role Mappings">
+      <column name="function_code" type="nvarchar(100)"
+        remarks="The code uniquely identifying the function"/>
+      <column name="role_code" type="nvarchar(100)"
+        remarks="The code uniquely identifying the role"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="function_to_role_map"
+      columnNames="function_code, role_code"/>
+    <addNotNullConstraint schemaName="security" tableName="function_to_role_map"
+      columnName="function_code"/>
+    <addNotNullConstraint schemaName="security" tableName="function_to_role_map"
+      columnName="role_code"/>
+    <addForeignKeyConstraint constraintName="function_to_role_map_function_fk"
+      baseTableSchemaName="security" baseTableName="function_to_role_map"
+      baseColumnNames="function_code" referencedTableSchemaName="security"
+      referencedTableName="functions" referencedColumnNames="code" deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="function_to_role_map_role_fk"
+      baseTableSchemaName="security" baseTableName="function_to_role_map"
+      baseColumnNames="role_code" referencedTableSchemaName="security" referencedTableName="roles"
+      referencedColumnNames="code" deleteCascade="true"/>
+    <createIndex indexName="function_to_role_map_function_code_ix" schemaName="security"
+      tableName="function_to_role_map">
+      <column name="function_code"/>
+    </createIndex>
+    <createIndex indexName="function_to_role_map_role_code_ix" schemaName="security"
+      tableName="function_to_role_map">
+      <column name="role_code"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="role_to_group_map"
+      remarks="Role To Group Mappings">
+      <column name="role_code" type="nvarchar(100)"
+        remarks="The code uniquely identifying the role"/>
+      <column name="group_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="role_to_group_map"
+      columnNames="role_code, group_id"/>
+    <addNotNullConstraint schemaName="security" tableName="role_to_group_map"
+      columnName="role_code"/>
+    <addNotNullConstraint schemaName="security" tableName="role_to_group_map"
+      columnName="group_id"/>
+    <addForeignKeyConstraint constraintName="role_to_group_map_role_fk"
+      baseTableSchemaName="security" baseTableName="role_to_group_map" baseColumnNames="role_code"
+      referencedTableSchemaName="security" referencedTableName="roles" referencedColumnNames="code"
+      deleteCascade="true"/>
+    <addForeignKeyConstraint constraintName="role_to_group_map_group_fk"
+      baseTableSchemaName="security" baseTableName="role_to_group_map" baseColumnNames="group_id"
+      referencedTableSchemaName="security" referencedTableName="groups" referencedColumnNames="id"
+      deleteCascade="true"/>
+    <createIndex indexName="role_to_group_map_role_code_ix" schemaName="security"
+      tableName="role_to_group_map">
+      <column name="role_code"/>
+    </createIndex>
+    <createIndex indexName="role_to_group_map_group_id_ix" schemaName="security"
+      tableName="role_to_group_map">
+      <column name="group_id"/>
+    </createIndex>
+
+    <createTable schemaName="security" tableName="password_resets" remarks="Password Resets">
+      <column name="username" type="nvarchar(100)"
+        remarks="The username for the user associated with the password reset"/>
+      <column name="requested" type="timestamp"
+        remarks="The date and time the password reset was requested"/>
+      <column name="status" type="int" remarks="The status of the password reset"/>
+      <column name="security_code_hash" type="nvarchar(100)" remarks="The security code hash"/>
+      <column name="completed" type="timestamp"
+        remarks="The date and time the password reset was completed"/>
+      <column name="expired" type="timestamp"
+        remarks="The date and time the password reset expired"/>
+    </createTable>
+    <addPrimaryKey schemaName="security" tableName="password_resets"
+      columnNames="username, requested"/>
+    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="username"/>
+    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="requested"/>
+    <addNotNullConstraint schemaName="security" tableName="password_resets" columnName="status"/>
+    <addNotNullConstraint schemaName="security" tableName="password_resets"
+      columnName="security_code_hash"/>
+    <createIndex indexName="password_resets_username_ix" schemaName="security"
+      tableName="password_resets">
+      <column name="username"/>
+    </createIndex>
+
+    <insert schemaName="security" tableName="tenants">
+      <column name="id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Administration"/>
+      <column name="status" value="1"/>
+    </insert>
+
+    <insert schemaName="security" tableName="user_directory_types">
+      <column name="code" value="InternalUserDirectory"/>
+      <column name="name" value="Internal User Directory"/>
+      <column name="user_directory_class" value="digital.inception.security.InternalUserDirectory"/>
+    </insert>
+    <insert schemaName="security" tableName="user_directory_types">
+      <column name="code" value="LDAPUserDirectory"/>
+      <column name="name" value="LDAP User Directory"/>
+      <column name="user_directory_class" value="digital.inception.security.LDAPUserDirectory"/>
+    </insert>
+
+    <insert schemaName="security" tableName="user_directories">
+      <column name="id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="type" value="InternalUserDirectory"/>
+      <column name="name" value="Administration Internal User Directory"/>
+      <column name="configuration">
+        <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>]]></column>
+    </insert>
+
+    <insert schemaName="security" tableName="user_directory_to_tenant_map">
+      <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="tenant_id" value="00000000-0000-0000-0000-000000000000"/>
+    </insert>
+
+    <insert schemaName="security" tableName="users">
+      <column name="id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="username" value="administrator"/>
+      <column name="status" value="1"/>
+      <column name="name" value="Administrator"/>
+      <column name="preferred_name" value=""/>
+      <column name="phone_number" value=""/>
+      <column name="mobile_number" value=""/>
+      <column name="email" value=""/>
+      <column name="password" value="GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0="/>
+      <column name="password_attempts" value="0"/>
+      <column name="password_expiry" value="2050-12-31 00:00:00 GMT"/>
+    </insert>
+
+    <insert schemaName="security" tableName="groups">
+      <column name="id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="name" value="Administrators"/>
+      <column name="description" value="Administrators"/>
+    </insert>
+
+    <insert schemaName="security" tableName="user_to_group_map">
+      <column name="user_id" value="00000000-0000-0000-0000-000000000000"/>
+      <column name="group_id" value="00000000-0000-0000-0000-000000000000"/>
+    </insert>
+
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Application.Dashboard"/>
+      <column name="name" value="Dashboard"/>
+      <column name="description" value="Dashboard"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Application.SecureHome"/>
+      <column name="name" value="Secure Home"/>
+      <column name="description" value="Secure Home"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Codes.CodeAdministration"/>
+      <column name="name" value="Code Administration"/>
+      <column name="description" value="Code Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Configuration.ConfigurationAdministration"/>
+      <column name="name" value="Configuration Administration"/>
+      <column name="description" value="Configuration Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Error.ErrorReportAdministration"/>
+      <column name="name" value="Error Report Administration"/>
+      <column name="description" value="Error Report Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Mail.MailTemplateAdministration"/>
+      <column name="name" value="Mail Template Administration"/>
+      <column name="description" value="Mail Template Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Process.ProcessDefinitionAdministration"/>
+      <column name="name" value="Process Definition Administration"/>
+      <column name="description" value="Process Definition Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Process.ViewProcess"/>
+      <column name="name" value="View Process"/>
+      <column name="description" value="View Process"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Reporting.ReportingAdministration"/>
+      <column name="name" value="Reporting Administration"/>
+      <column name="description" value="Reporting Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Reporting.ReportDefinitionAdministration"/>
+      <column name="name" value="Report Definition Administration"/>
+      <column name="description" value="Report Definition Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Reporting.ViewReport"/>
+      <column name="name" value="View Report"/>
+      <column name="description" value="View Report"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Scheduler.SchedulerAdministration"/>
+      <column name="name" value="Scheduler Administration"/>
+      <column name="description" value="Scheduler Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Scheduler.JobAdministration"/>
+      <column name="name" value="Job Administration"/>
+      <column name="description" value="Job Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.GroupAdministration"/>
+      <column name="name" value="Group Administration"/>
+      <column name="description" value="Group Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.TenantAdministration"/>
+      <column name="name" value="Tenant Administration"/>
+      <column name="description" value="Tenant Administration'"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.ResetUserPassword"/>
+      <column name="name" value="Reset User Password"/>
+      <column name="description" value="Reset User Password"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.SecurityAdministration"/>
+      <column name="name" value="Security Administration"/>
+      <column name="description" value="Security Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.UserAdministration"/>
+      <column name="name" value="User Administration"/>
+      <column name="description" value="User Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.UserDirectoryAdministration"/>
+      <column name="name" value="User Directory Administration"/>
+      <column name="description" value="User Directory Administration"/>
+    </insert>
+    <insert schemaName="security" tableName="functions">
+      <column name="code" value="Security.UserGroups"/>
+      <column name="name" value="User Groups"/>
+      <column name="description" value="User Groups"/>
+    </insert>
+
+    <insert schemaName="security" tableName="roles">
+      <column name="code" value="Administrator"/>
+      <column name="name" value="Administrator"/>
+      <column name="description" value="Administrator"/>
+    </insert>
+    <insert schemaName="security" tableName="roles">
+      <column name="code" value="TenantAdministrator"/>
+      <column name="name" value="Tenant Administrator"/>
+      <column name="description" value="Tenant Administrator"/>
+    </insert>
+    <insert schemaName="security" tableName="roles">
+      <column name="code" value="PasswordResetter"/>
+      <column name="name" value="Password Resetter"/>
+      <column name="description" value="Password Resetter"/>
+    </insert>
+
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Application.SecureHome"/>
+      <column name="role_code" value="TenantAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Application.Dashboard"/>
+      <column name="role_code" value="TenantAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Reporting.ViewReport"/>
+      <column name="role_code" value="TenantAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.ResetUserPassword"/>
+      <column name="role_code" value="TenantAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.UserAdministration"/>
+      <column name="role_code" value="TenantAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.UserGroups"/>
+      <column name="role_code" value="TenantAdministrator"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.GroupAdministration"/>
+      <column name="role_code" value="TenantAdministrator"/>
+    </insert>
+
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Application.SecureHome"/>
+      <column name="role_code" value="PasswordResetter"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Application.Dashboard"/>
+      <column name="role_code" value="PasswordResetter"/>
+    </insert>
+    <insert schemaName="security" tableName="function_to_role_map">
+      <column name="function_code" value="Security.ResetUserPassword"/>
+      <column name="role_code" value="PasswordResetter"/>
+    </insert>
+
+    <insert schemaName="security" tableName="role_to_group_map">
+      <column name="role_code" value="Administrator"/>
+      <column name="group_id" value="00000000-0000-0000-0000-000000000000"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

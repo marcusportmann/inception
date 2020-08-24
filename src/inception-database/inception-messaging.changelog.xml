@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+
+  <changeSet id="inception-messaging-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Messaging - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema messaging
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema messaging
+    </sql>
+
+    <createTable schemaName="messaging" tableName="message_types" remarks="Message Types">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the message type"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the message type"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="message_types" columnNames="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_types" columnName="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_types" columnName="name"/>
+
+    <createTable schemaName="messaging" tableName="message_statuses" remarks="Message Statuses">
+      <column name="code" type="int" remarks="The code identifying the message status"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the message status"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="message_statuses" columnNames="code"/>
+
+    <createTable schemaName="messaging" tableName="messages" remarks="Messages">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the message"/>
+      <column name="username" type="nvarchar(100)"
+        remarks="The username identifying the user associated with the message"/>
+      <column name="device_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the message originated from"/>
+      <column name="type_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of message"/>
+      <column name="correlation_id" type="uuid"
+        remarks="The optional Universally Unique Identifier (UUID) used to correlate the message"/>
+      <column name="priority" type="int" remarks="The message priority"/>
+      <column name="status" type="int"
+        remarks="The message status e.g. Initialised, QueuedForSending, etc"/>
+      <column name="created" type="timestamp" remarks="The date and time the message was created"/>
+      <column name="data_hash" type="nvarchar(100)"
+        remarks="The hash of the unencrypted data for the message if the message is encrypted"/>
+      <column name="encryption_iv" type="nvarchar(100)"
+        remarks="The base-64 encoded initialisation vector for the encryption scheme for the message"/>
+      <column name="send_attempts" type="int"
+        remarks="The number of times that the sending of the message was attempted"/>
+      <column name="process_attempts" type="int"
+        remarks="The number of times that the processing of the message was attempted"/>
+      <column name="download_attempts" type="int"
+        remarks="The number of times that an attempt was made to download the message"/>
+      <column name="lock_name" type="nvarchar(100)"
+        remarks="The name of the entity that has locked the message for processing"/>
+      <column name="last_processed" type="timestamp"
+        remarks="The date and time the last attempt was made to process the message"/>
+      <column name="data" type="${blob_type}" remarks="The data for the message"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="messages" columnNames="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="username"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="device_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="type_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="priority"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="status"/>
+    <addNotNullConstraint schemaName="messaging" tableName="messages" columnName="created"/>
+    <addForeignKeyConstraint constraintName="messages_message_type_fk"
+      baseTableSchemaName="messaging" baseTableName="messages" baseColumnNames="type_id"
+      referencedTableSchemaName="messaging" referencedTableName="message_types"
+      referencedColumnNames="id"/>
+    <addForeignKeyConstraint constraintName="messages_message_status_fk"
+      baseTableSchemaName="messaging" baseTableName="messages" baseColumnNames="status"
+      referencedTableSchemaName="messaging" referencedTableName="message_statuses"
+      referencedColumnNames="code"/>
+    <createIndex indexName="messages_username_ix" schemaName="messaging" tableName="messages">
+      <column name="username"/>
+    </createIndex>
+    <createIndex indexName="messages_device_id_ix" schemaName="messaging" tableName="messages">
+      <column name="device_id"/>
+    </createIndex>
+    <createIndex indexName="messages_type_id_ix" schemaName="messaging" tableName="messages">
+      <column name="type_id"/>
+    </createIndex>
+    <createIndex indexName="messages_priority_ix" schemaName="messaging" tableName="messages">
+      <column name="priority"/>
+    </createIndex>
+    <createIndex indexName="messages_status_ix" schemaName="messaging" tableName="messages">
+      <column name="status"/>
+    </createIndex>
+    <createIndex indexName="messages_lock_name_ix" schemaName="messaging" tableName="messages">
+      <column name="lock_name"/>
+    </createIndex>
+
+    <createTable schemaName="messaging" tableName="message_parts" remarks="Message Parts">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the message part"/>
+      <column name="part_no" type="int"
+        remarks="The number of the message part in the set of message parts for the original message"/>
+      <column name="total_parts" type="int"
+        remarks="The total number of parts in the set of message parts for the original message"/>
+      <column name="send_attempts" type="int"
+        remarks="The number of times that the sending of the message part was attempted"/>
+      <column name="download_attempts" type="int"
+        remarks="The number of times that an attempt was made to download the message part"/>
+      <column name="status" type="int"
+        remarks="The message part status e.g. Initialised, QueuedForSending, etc"/>
+      <column name="message_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the original message"/>
+      <column name="message_username" type="nvarchar(100)"
+        remarks="The username identifying the user associated with the original message"/>
+      <column name="message_device_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the original message originated from"/>
+      <column name="message_type_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of the original message"/>
+      <column name="message_correlation_id" type="uuid"
+        remarks="The optional Universally Unique Identifier (UUID) used to correlate the original message"/>
+      <column name="message_priority" type="int" remarks="The priority for the original message"/>
+      <column name="message_created" type="timestamp"
+        remarks="The date and time the original message was created"/>
+      <column name="message_data_hash" type="nvarchar(100)"
+        remarks="The hash of the unencrypted data for the original message if the message was encrypted"/>
+      <column name="message_encryption_iv" type="nvarchar(100)"
+        remarks="The base-64 encoded initialisation vector for the encryption scheme for the original message"/>
+      <column name="message_checksum" type="nvarchar(100)"
+        remarks="The checksum for the original message"/>
+      <column name="lock_name" type="nvarchar(100)"
+        remarks="The name of the entity that has locked the message part for processing"/>
+      <column name="data" type="${blob_type}" remarks="The data for the message part"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="message_parts" columnNames="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="part_no"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts"
+      columnName="total_parts"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="status"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts" columnName="message_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts"
+      columnName="message_username"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts"
+      columnName="message_device_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts"
+      columnName="message_type_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts"
+      columnName="message_priority"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts"
+      columnName="message_created"/>
+    <addNotNullConstraint schemaName="messaging" tableName="message_parts"
+      columnName="message_checksum"/>
+    <addForeignKeyConstraint constraintName="message_parts_message_type_fk"
+      baseTableSchemaName="messaging" baseTableName="message_parts"
+      baseColumnNames="message_type_id" referencedTableSchemaName="messaging"
+      referencedTableName="message_types" referencedColumnNames="id"/>
+    <createIndex indexName="message_parts_status_ix" schemaName="messaging"
+      tableName="message_parts">
+      <column name="status"/>
+    </createIndex>
+    <createIndex indexName="message_parts_message_id_ix" schemaName="messaging"
+      tableName="message_parts">
+      <column name="message_id"/>
+    </createIndex>
+    <createIndex indexName="message_parts_message_device_id_ix" schemaName="messaging"
+      tableName="message_parts">
+      <column name="message_device_id"/>
+    </createIndex>
+    <createIndex indexName="message_parts_message_type_id_ix" schemaName="messaging"
+      tableName="message_parts">
+      <column name="message_type_id"/>
+    </createIndex>
+    <createIndex indexName="message_parts_lock_name_ix" schemaName="messaging"
+      tableName="message_parts">
+      <column name="lock_name"/>
+    </createIndex>
+
+    <createTable schemaName="messaging" tableName="archived_messages" remarks="Archived Messages">
+      <column name="id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the message"/>
+      <column name="username" type="nvarchar(100)"
+        remarks="The username identifying the user associated with the message"/>
+      <column name="device_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the message originated from"/>
+      <column name="type_id" type="uuid"
+        remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of message"/>
+      <column name="correlation_id" type="uuid"
+        remarks="The optional Universally Unique Identifier (UUID) used to correlate the message"/>
+      <column name="created" type="timestamp" remarks="The date and time the message was created"/>
+      <column name="archived" type="timestamp"
+        remarks="The date and time the message was archived"/>
+      <column name="data" type="${blob_type}" remarks="The data for the message"/>
+    </createTable>
+    <addPrimaryKey schemaName="messaging" tableName="archived_messages" columnNames="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages" columnName="id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages"
+      columnName="username"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages"
+      columnName="device_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages"
+      columnName="type_id"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages"
+      columnName="created"/>
+    <addNotNullConstraint schemaName="messaging" tableName="archived_messages"
+      columnName="archived"/>
+
+    <addForeignKeyConstraint constraintName="archived_messages_message_type_fk"
+      baseTableSchemaName="messaging" baseTableName="archived_messages" baseColumnNames="type_id"
+      referencedTableSchemaName="messaging" referencedTableName="message_types"
+      referencedColumnNames="id"/>
+    <createIndex indexName="archived_messages_username_ix" schemaName="messaging"
+      tableName="archived_messages">
+      <column name="username"/>
+    </createIndex>
+    <createIndex indexName="archived_messages_device_id_ix" schemaName="messaging"
+      tableName="archived_messages">
+      <column name="device_id"/>
+    </createIndex>
+    <createIndex indexName="archived_messages_type_id_ix" schemaName="messaging"
+      tableName="archived_messages">
+      <column name="type_id"/>
+    </createIndex>
+
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="d21fb54e-5c5b-49e8-881f-ce00c6ced1a3"/>
+      <column name="name" value="AuthenticateRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="82223035-1726-407f-8703-3977708e792c"/>
+      <column name="name" value="AuthenticateResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="cc005e6a-b01b-48eb-98a0-026297be69f3"/>
+      <column name="name" value="CheckUserExistsRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="a38bd55e-3470-46f1-a96a-a6b08a9adc63"/>
+      <column name="name" value="CheckUserExistsResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="94d60eb6-a062-492d-b5e7-9fb1f05cf088"/>
+      <column name="name" value="GetCodeCategoryRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="0336b544-91e5-4eb9-81db-3dd94e116c92"/>
+      <column name="name" value="GetCodeCategoryResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="a589dc87-2328-4a9b-bdb6-970e55ca2323"/>
+      <column name="name" value="TestRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="a3bad7ba-f9d4-4403-b54a-cb1f335ebbad"/>
+      <column name="name" value="TestResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="e9918051-8ebc-48f1-bad7-13c59b550e1a"/>
+      <column name="name" value="AnotherTestRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="a714a9c6-2914-4498-ab59-64be9991bf37"/>
+      <column name="name" value="AnotherTestResponse"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="ff638c33-b4f1-4e79-804c-9560da2543d6"/>
+      <column name="name" value="SubmitErrorReportRequest"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_types">
+      <column name="id" value="8be50cfa-2fb1-4634-9bfa-d01e77eaf766"/>
+      <column name="name" value="SubmitErrorReportResponse"/>
+    </insert>
+
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="0"/>
+      <column name="name" value="Initialised"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="1"/>
+      <column name="name" value="QueuedForSending"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="2"/>
+      <column name="name" value="QueuedForProcessing"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="3"/>
+      <column name="name" value="Aborted"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="4"/>
+      <column name="name" value="Failed"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="5"/>
+      <column name="name" value="Processing"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="6"/>
+      <column name="name" value="Sending"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="7"/>
+      <column name="name" value="QueuedForDownload"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="8"/>
+      <column name="name" value="Downloading"/>
+    </insert>
+    <insert schemaName="messaging" tableName="message_statuses">
+      <column name="code" value="9"/>
+      <column name="name" value="Processed"/>
+    </insert>
+  </changeSet>
+
+</databaseChangeLog>

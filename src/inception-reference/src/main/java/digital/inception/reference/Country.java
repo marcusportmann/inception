@@ -40,12 +40,30 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "Country")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "locale", "sortIndex", "name", "shortName", "description"})
+@JsonPropertyOrder({
+  "code",
+  "locale",
+  "sortIndex",
+  "name",
+  "shortName",
+  "description",
+  "sovereignState",
+  "nationality"
+})
 @XmlRootElement(name = "Country", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "Country",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "locale", "sortIndex", "name", "shortName", "description"})
+    propOrder = {
+      "code",
+      "locale",
+      "sortIndex",
+      "name",
+      "shortName",
+      "description",
+      "sovereignState",
+      "nationality"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "countries")
@@ -90,6 +108,15 @@ public class Country {
   @Column(name = "name", nullable = false)
   private String name;
 
+  /** The nationality for the country. */
+  @Schema(description = "The nationality for the country", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Nationality", required = true)
+  @NotNull
+  @Size(max = 50)
+  @Column(name = "nationality", nullable = false)
+  private String nationality;
+
   /** The short name for the country. */
   @Schema(description = "The short name for the country", required = true)
   @JsonProperty(required = true)
@@ -106,6 +133,15 @@ public class Country {
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
+
+  /** The code identifying the sovereign state for the country. */
+  @Schema(description = "The code identifying the sovereign state for the country", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SovereignState", required = true)
+  @NotNull
+  @Size(min = 1, max = 10)
+  @Column(name = "sovereign_state", nullable = false)
+  private String sovereignState;
 
   /** Constructs a new <code>Country</code>. */
   public Country() {}
@@ -147,6 +183,15 @@ public class Country {
   }
 
   /**
+   * Returns the nationality for the country.
+   *
+   * @return the nationality for the country
+   */
+  public String getNationality() {
+    return nationality;
+  }
+
+  /**
    * Returns the short name for the country.
    *
    * @return the short name for the country
@@ -162,6 +207,15 @@ public class Country {
    */
   public Integer getSortIndex() {
     return sortIndex;
+  }
+
+  /**
+   * Returns the code identifying the sovereign state for the country.
+   *
+   * @return the code identifying the sovereign state for the country
+   */
+  public String getSovereignState() {
+    return sovereignState;
   }
 
   /**
@@ -201,6 +255,15 @@ public class Country {
   }
 
   /**
+   * Set the nationality for the country.
+   *
+   * @param nationality the nationality for the country
+   */
+  public void setNationality(String nationality) {
+    this.nationality = nationality;
+  }
+
+  /**
    * Set the short name for the country.
    *
    * @param shortDescription the short name for the country
@@ -216,5 +279,14 @@ public class Country {
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the code identifying the sovereign state for the country.
+   *
+   * @param sovereignState the code identifying the sovereign state for the country
+   */
+  public void setSovereignState(String sovereignState) {
+    this.sovereignState = sovereignState;
   }
 }

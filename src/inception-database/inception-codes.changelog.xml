@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+
+  <changeSet id="inception-codes-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Codes - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema codes
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema codes
+    </sql>
+
+    <createTable schemaName="codes" tableName="code_categories" remarks="Code Categories">
+      <column name="id" type="nvarchar(100)"
+        remarks="The ID uniquely identifying the code category"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the code category"/>
+      <column name="data" type="clob" remarks="The code data for the code category"/>
+      <column name="updated" type="timestamp"
+        remarks="The date and time the code category was last updated"/>
+    </createTable>
+    <addPrimaryKey schemaName="codes" tableName="code_categories" columnNames="id"/>
+    <addNotNullConstraint schemaName="codes" tableName="code_categories" columnName="id"/>
+    <addNotNullConstraint schemaName="codes" tableName="code_categories" columnName="name"/>
+
+    <createTable schemaName="codes" tableName="codes" remarks="Codes">
+      <column name="id" type="nvarchar(100)" remarks="The ID uniquely identifying the code"/>
+      <column name="code_category_id" type="nvarchar(100)"
+        remarks="The ID uniquely identifying the code category the code is associated with"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the code"/>
+      <column name="value" type="nvarchar(4000)" remarks="The value for the code"/>
+    </createTable>
+    <addPrimaryKey schemaName="codes" tableName="codes" columnNames="id,code_category_id"/>
+    <addNotNullConstraint schemaName="codes" tableName="codes" columnName="id"/>
+    <addNotNullConstraint schemaName="codes" tableName="codes" columnName="code_category_id"/>
+    <addNotNullConstraint schemaName="codes" tableName="codes" columnName="name"/>
+    <addNotNullConstraint schemaName="codes" tableName="codes" columnName="value"/>
+    <addForeignKeyConstraint constraintName="codes_code_category_fk" baseTableSchemaName="codes"
+      baseTableName="codes" baseColumnNames="code_category_id" referencedTableSchemaName="codes"
+      referencedTableName="code_categories" referencedColumnNames="id" deleteCascade="true"/>
+    <createIndex indexName="codes_code_category_id_ix" schemaName="codes" tableName="codes">
+      <column name="code_category_id"/>
+    </createIndex>
+  </changeSet>
+
+</databaseChangeLog>

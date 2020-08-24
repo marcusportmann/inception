@@ -91,6 +91,27 @@ public class ReferenceService implements IReferenceService {
   /** The Residential Status Repository. */
   private final ResidentialStatusRepository residentialStatusRepository;
 
+  /** The Residential Type Repository. */
+  private final ResidentialTypeRepository residentialTypeRepository;
+
+  /** The Sources of Funds Repository. */
+  private final SourceOfFundsRepository sourceOfFundsRepository;
+
+  /** The Suitable Time To Contact Repository. */
+  private final SuitableTimeToContactRepository suitableTimeToContactRepository;
+
+  /** The Tax Number Type Repository. */
+  private final TaxNumberTypeRepository taxNumberTypeRepository;
+
+  /** The Title Repository. */
+  private final TitleRepository titleRepository;
+
+  /** The Verification Method Repository. */
+  private final VerificationMethodRepository verificationMethodRepository;
+
+  /** The Verification Status Repository. */
+  private final VerificationStatusRepository verificationStatusRepository;
+
   /**
    * Constructs a new <code>ReferenceService</code>.
    *
@@ -111,6 +132,13 @@ public class ReferenceService implements IReferenceService {
    * @param raceRepository the Race Repository
    * @param regionRepository the Region Repository
    * @param residentialStatusRepository the Residential Status Repository
+   * @param residentialTypeRepository the Residential Type Repository
+   * @param sourceOfFundsRepository the Source Of Funds Repository
+   * @param suitableTimeToContactRepository the Suitable Time To Contact Repository
+   * @param taxNumberTypeRepository the Tax Number Type Repository
+   * @param titleRepository the Title Repository
+   * @param verificationMethodRepository the Verification Method Repository
+   * @param verificationStatusRepository the Verification Status Repository
    */
   public ReferenceService(
       AddressTypeRepository addressTypeRepository,
@@ -129,7 +157,14 @@ public class ReferenceService implements IReferenceService {
       PermitTypeRepository permitTypeRepository,
       RaceRepository raceRepository,
       RegionRepository regionRepository,
-      ResidentialStatusRepository residentialStatusRepository) {
+      ResidentialStatusRepository residentialStatusRepository,
+      ResidentialTypeRepository residentialTypeRepository,
+      SourceOfFundsRepository sourceOfFundsRepository,
+      SuitableTimeToContactRepository suitableTimeToContactRepository,
+      TaxNumberTypeRepository taxNumberTypeRepository,
+      TitleRepository titleRepository,
+      VerificationMethodRepository verificationMethodRepository,
+      VerificationStatusRepository verificationStatusRepository) {
     this.addressTypeRepository = addressTypeRepository;
     this.countryRepository = countryRepository;
     this.communicationMethodRepository = communicationMethodRepository;
@@ -147,6 +182,13 @@ public class ReferenceService implements IReferenceService {
     this.raceRepository = raceRepository;
     this.regionRepository = regionRepository;
     this.residentialStatusRepository = residentialStatusRepository;
+    this.residentialTypeRepository = residentialTypeRepository;
+    this.sourceOfFundsRepository = sourceOfFundsRepository;
+    this.suitableTimeToContactRepository = suitableTimeToContactRepository;
+    this.taxNumberTypeRepository = taxNumberTypeRepository;
+    this.titleRepository = titleRepository;
+    this.verificationMethodRepository = verificationMethodRepository;
+    this.verificationStatusRepository = verificationStatusRepository;
   }
 
   /**
@@ -681,6 +723,232 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the residential statuses", e);
+    }
+  }
+
+  /**
+   * Retrieve all the residential types.
+   *
+   * @return the residential types
+   */
+  @Override
+  public List<ResidentialType> getResidentialTypes() throws ReferenceServiceException {
+    return getResidentialTypes(null);
+  }
+
+  /**
+   * Retrieve the residential types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     residential types for or <code>null</code> to retrieve the residential types for all
+   *     locales
+   * @return the residential types
+   */
+  @Override
+  public List<ResidentialType> getResidentialTypes(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return residentialTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return residentialTypeRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the residential types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the sources of funds.
+   *
+   * @return the sources of funds
+   */
+  @Override
+  public List<SourceOfFunds> getSourcesOfFunds() throws ReferenceServiceException {
+    return getSourcesOfFunds(null);
+  }
+
+  /**
+   * Retrieve the sources of funds.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the sources of
+   *     funds for or <code>null</code> to retrieve the sources of funds for all locales
+   * @return the sources of funds
+   */
+  @Override
+  public List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return sourceOfFundsRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return sourceOfFundsRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the sources of funds", e);
+    }
+  }
+
+  /**
+   * Retrieve all the suitable times to contact.
+   *
+   * @return the suitable times to contact
+   */
+  @Override
+  public List<SuitableTimeToContact> getSuitableTimesToContact() throws ReferenceServiceException {
+    return getSuitableTimesToContact(null);
+  }
+
+  /**
+   * Retrieve the suitable times to contact.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the suitable
+   *     times to contact for or <code>null</code> to retrieve the suitable times to contact for all
+   *     locales
+   * @return the suitable times to contact
+   */
+  @Override
+  public List<SuitableTimeToContact> getSuitableTimesToContact(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return suitableTimeToContactRepository.findAll(
+            Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return suitableTimeToContactRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the suitable times to contact", e);
+    }
+  }
+
+  /**
+   * Retrieve all the tax number types.
+   *
+   * @return the tax number types
+   */
+  @Override
+  public List<TaxNumberType> getTaxNumberTypes() throws ReferenceServiceException {
+    return getTaxNumberTypes(null);
+  }
+
+  /**
+   * Retrieve the tax number types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the tax number
+   *     types for or <code>null</code> to retrieve the tax number types for all locales
+   * @return the tax number types
+   */
+  @Override
+  public List<TaxNumberType> getTaxNumberTypes(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return taxNumberTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return taxNumberTypeRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the tax number types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the titles.
+   *
+   * @return the titles
+   */
+  @Override
+  public List<Title> getTitles() throws ReferenceServiceException {
+    return getTitles(null);
+  }
+
+  /**
+   * Retrieve the titles.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the titles for
+   *     or <code>null</code> to retrieve the titles for all locales
+   * @return the titles
+   */
+  @Override
+  public List<Title> getTitles(String localeId) throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return titleRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return titleRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the titles", e);
+    }
+  }
+
+  /**
+   * Retrieve all the verification methods.
+   *
+   * @return the verification methods
+   */
+  @Override
+  public List<VerificationMethod> getVerificationMethods() throws ReferenceServiceException {
+    return getVerificationMethods(null);
+  }
+
+  /**
+   * Retrieve the verification methods.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     verification methods for or <code>null</code> to retrieve the verification methods for all
+   *     locales
+   * @return the verification methods
+   */
+  @Override
+  public List<VerificationMethod> getVerificationMethods(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return verificationMethodRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return verificationMethodRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the verification methods", e);
+    }
+  }
+
+  /**
+   * Retrieve all the verification statusess.
+   *
+   * @return the verification statusess
+   */
+  @Override
+  public List<VerificationStatus> getVerificationStatuses() throws ReferenceServiceException {
+    return getVerificationStatuses(null);
+  }
+
+  /**
+   * Retrieve the verification statusess.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     verification statusess for or <code>null</code> to retrieve the verification statusess for
+   *     all locales
+   * @return the verification statusess
+   */
+  @Override
+  public List<VerificationStatus> getVerificationStatuses(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return verificationStatusRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+      } else {
+        return verificationStatusRepository.findByLocaleIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the verification statuses", e);
     }
   }
 }

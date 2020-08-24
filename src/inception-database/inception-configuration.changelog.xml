@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+  <property name="blob_type" value="bytea" dbms="postgresql"/>
+  <property name="blob_type" value="blob" dbms="oracle"/>
+  <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+
+  <changeSet id="inception-configuration-1.0.0" author="Marcus Portmann">
+    <comment>Inception - Configuration - 1.0.0</comment>
+    <sql dbms="postgresql" endDelimiter=";">
+      create schema configuration
+    </sql>
+    <sql dbms="mssql" endDelimiter=";">
+      create schema configuration
+    </sql>
+
+    <createTable schemaName="configuration" tableName="configuration" remarks="Configuration">
+      <column name="key" type="nvarchar(100)"
+        remarks="The key uniquely identifying the configuration value"/>
+      <column name="value" type="nvarchar(4000)" remarks="The value for the configuration value"/>
+      <column name="description" type="nvarchar(100)"
+        remarks="The description for the configuration value"/>
+    </createTable>
+    <addPrimaryKey schemaName="configuration" tableName="configuration" columnNames="key"/>
+    <addNotNullConstraint schemaName="configuration" tableName="configuration" columnName="key"/>
+    <addNotNullConstraint schemaName="configuration" tableName="configuration" columnName="value"/>
+    <addNotNullConstraint schemaName="configuration" tableName="configuration"
+      columnName="description"/>
+  </changeSet>
+
+</databaseChangeLog>
