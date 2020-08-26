@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AddressTypeRepository extends JpaRepository<AddressType, AddressTypeId> {
 
-  List<AddressType> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<AddressType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

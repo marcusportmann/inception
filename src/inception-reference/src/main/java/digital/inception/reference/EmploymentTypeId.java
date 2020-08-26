@@ -39,7 +39,7 @@ public class EmploymentTypeId implements Serializable {
   private String employmentStatus;
 
   /** The Unicode locale identifier for the employment status. */
-  private String locale;
+  private String localeId;
 
   /** Constructs a new <code>EmploymentTypeId</code>. */
   public EmploymentTypeId() {}
@@ -50,12 +50,12 @@ public class EmploymentTypeId implements Serializable {
    * @param employmentStatus the code for the employment status the employment type is associated
    *     with
    * @param code the code for the employment status
-   * @param locale the Unicode locale identifier for the employment status
+   * @param localeId the Unicode locale identifier for the employment status
    */
-  public EmploymentTypeId(String employmentStatus, String code, String locale) {
+  public EmploymentTypeId(String employmentStatus, String code, String localeId) {
     this.employmentStatus = employmentStatus;
     this.code = code;
-    this.locale = locale;
+    this.localeId = localeId;
   }
 
   /**
@@ -83,7 +83,7 @@ public class EmploymentTypeId implements Serializable {
 
     return Objects.equals(employmentStatus, other.employmentStatus)
         && Objects.equals(code, other.code)
-        && Objects.equals(locale, other.locale);
+        && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -109,8 +109,8 @@ public class EmploymentTypeId implements Serializable {
    *
    * @return the Unicode locale identifier for the employment status
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -122,7 +122,7 @@ public class EmploymentTypeId implements Serializable {
   public int hashCode() {
     return ((employmentStatus == null) ? 0 : employmentStatus.hashCode())
         + ((code == null) ? 0 : code.hashCode())
-        + ((locale == null) ? 0 : locale.hashCode());
+        + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
@@ -149,7 +149,7 @@ public class EmploymentTypeId implements Serializable {
    *
    * @param locale the Unicode locale identifier for the employment status
    */
-  public void setLocale(String locale) {
-    this.locale = locale;
+  public void setLocaleId(String locale) {
+    this.localeId = locale;
   }
 }

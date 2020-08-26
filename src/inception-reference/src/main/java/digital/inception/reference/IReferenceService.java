@@ -407,19 +407,19 @@ public interface IReferenceService {
   List<VerificationMethod> getVerificationMethods(String localeId) throws ReferenceServiceException;
 
   /**
-   * Retrieve all the verification statusess.
+   * Retrieve all the verification statuses.
    *
-   * @return the verification statusess
+   * @return the verification statuses
    */
   List<VerificationStatus> getVerificationStatuses() throws ReferenceServiceException;
 
   /**
-   * Retrieve the verification statusess.
+   * Retrieve the verification statuses.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the
-   *     verification statusess for or <code>null</code> to retrieve the verification statusess for
+   *     verification statuses for or <code>null</code> to retrieve the verification statuses for
    *     all locales
-   * @return the verification statusess
+   * @return the verification statuses
    */
   List<VerificationStatus> getVerificationStatuses(String localeId)
       throws ReferenceServiceException;

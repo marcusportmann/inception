@@ -212,10 +212,10 @@ public class ReferenceService implements IReferenceService {
   public List<AddressType> getAddressTypes(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return addressTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return addressTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return addressTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return addressTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the address types", e);
@@ -245,10 +245,10 @@ public class ReferenceService implements IReferenceService {
       throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return communicationMethodRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return communicationMethodRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return communicationMethodRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return communicationMethodRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the communication methods", e);
@@ -276,10 +276,10 @@ public class ReferenceService implements IReferenceService {
   public List<Country> getCountries(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return countryRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return countryRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return countryRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return countryRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the countries", e);
@@ -308,10 +308,10 @@ public class ReferenceService implements IReferenceService {
       throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return employmentStatusRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return employmentStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return employmentStatusRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return employmentStatusRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the employment statuses", e);
@@ -339,10 +339,10 @@ public class ReferenceService implements IReferenceService {
   public List<EmploymentType> getEmploymentTypes(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return employmentTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return employmentTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return employmentTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return employmentTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the employment types", e);
@@ -360,10 +360,10 @@ public class ReferenceService implements IReferenceService {
   public List<Gender> getGenders(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return genderRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return genderRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return genderRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return genderRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the genders", e);
@@ -404,10 +404,10 @@ public class ReferenceService implements IReferenceService {
     try {
       if (StringUtils.isEmpty(localeId)) {
         return identityDocumentTypeRepository.findAll(
-            Sort.by(Direction.ASC, "locale", "sortIndex"));
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return identityDocumentTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return identityDocumentTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the identity document types", e);
@@ -435,10 +435,10 @@ public class ReferenceService implements IReferenceService {
   public List<Language> getLanguages(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return languageRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return languageRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return languageRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return languageRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the languages", e);
@@ -466,10 +466,10 @@ public class ReferenceService implements IReferenceService {
   public List<MaritalStatus> getMaritalStatuses(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return maritalStatusRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return maritalStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return maritalStatusRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return maritalStatusRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the marital statuses", e);
@@ -497,10 +497,10 @@ public class ReferenceService implements IReferenceService {
   public List<MarriageType> getMarriageTypes(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return marriageTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return marriageTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return marriageTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return marriageTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the marriage types", e);
@@ -528,10 +528,10 @@ public class ReferenceService implements IReferenceService {
   public List<MinorType> getMinorTypes(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return minorTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return minorTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return minorTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return minorTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the minor types", e);
@@ -559,10 +559,10 @@ public class ReferenceService implements IReferenceService {
   public List<NextOfKinType> getNextOfKinTypes(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return nextOfKinTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return nextOfKinTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return nextOfKinTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return nextOfKinTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the next of kin types", e);
@@ -590,10 +590,10 @@ public class ReferenceService implements IReferenceService {
   public List<Occupation> getOccupations(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return occupationRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return occupationRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return occupationRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return occupationRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the occupations", e);
@@ -621,10 +621,10 @@ public class ReferenceService implements IReferenceService {
   public List<PermitType> getPermitTypes(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return permitTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return permitTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return permitTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return permitTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the permit types", e);
@@ -652,10 +652,10 @@ public class ReferenceService implements IReferenceService {
   public List<Race> getRaces(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return raceRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return raceRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return raceRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return raceRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the races", e);
@@ -683,10 +683,10 @@ public class ReferenceService implements IReferenceService {
   public List<Region> getRegions(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return regionRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return regionRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return regionRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return regionRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the regions", e);
@@ -716,10 +716,10 @@ public class ReferenceService implements IReferenceService {
       throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return residentialStatusRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return residentialStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return residentialStatusRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return residentialStatusRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the residential statuses", e);
@@ -749,10 +749,10 @@ public class ReferenceService implements IReferenceService {
       throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return residentialTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return residentialTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return residentialTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return residentialTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the residential types", e);
@@ -780,10 +780,10 @@ public class ReferenceService implements IReferenceService {
   public List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return sourceOfFundsRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return sourceOfFundsRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return sourceOfFundsRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return sourceOfFundsRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the sources of funds", e);
@@ -814,10 +814,10 @@ public class ReferenceService implements IReferenceService {
     try {
       if (StringUtils.isEmpty(localeId)) {
         return suitableTimeToContactRepository.findAll(
-            Sort.by(Direction.ASC, "locale", "sortIndex"));
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return suitableTimeToContactRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return suitableTimeToContactRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the suitable times to contact", e);
@@ -845,10 +845,10 @@ public class ReferenceService implements IReferenceService {
   public List<TaxNumberType> getTaxNumberTypes(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return taxNumberTypeRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return taxNumberTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return taxNumberTypeRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return taxNumberTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the tax number types", e);
@@ -876,10 +876,10 @@ public class ReferenceService implements IReferenceService {
   public List<Title> getTitles(String localeId) throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return titleRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return titleRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return titleRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return titleRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the titles", e);
@@ -909,10 +909,10 @@ public class ReferenceService implements IReferenceService {
       throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return verificationMethodRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return verificationMethodRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return verificationMethodRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return verificationMethodRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the verification methods", e);
@@ -920,9 +920,9 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Retrieve all the verification statusess.
+   * Retrieve all the verification statuses.
    *
-   * @return the verification statusess
+   * @return the verification statuses
    */
   @Override
   public List<VerificationStatus> getVerificationStatuses() throws ReferenceServiceException {
@@ -930,22 +930,22 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Retrieve the verification statusess.
+   * Retrieve the verification statuses.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the
-   *     verification statusess for or <code>null</code> to retrieve the verification statusess for
+   *     verification statuses for or <code>null</code> to retrieve the verification statuses for
    *     all locales
-   * @return the verification statusess
+   * @return the verification statuses
    */
   @Override
   public List<VerificationStatus> getVerificationStatuses(String localeId)
       throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return verificationStatusRepository.findAll(Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return verificationStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return verificationStatusRepository.findByLocaleIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "locale", "sortIndex"));
+        return verificationStatusRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the verification statuses", e);

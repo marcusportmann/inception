@@ -33,5 +33,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface SuitableTimeToContactRepository
     extends JpaRepository<SuitableTimeToContact, SuitableTimeToContactId> {
 
-  List<SuitableTimeToContact> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<SuitableTimeToContact> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

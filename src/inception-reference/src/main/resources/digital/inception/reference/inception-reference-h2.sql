@@ -9,19 +9,19 @@ CREATE SCHEMA reference;
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE reference.address_types (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX address_types_locale_ix ON reference.address_types(locale);
+CREATE INDEX address_types_locale_ix ON reference.address_types(locale_id);
 
 COMMENT ON COLUMN reference.address_types.code IS 'The code for the address type';
 
-COMMENT ON COLUMN reference.address_types.locale IS 'The Unicode locale identifier for the address type';
+COMMENT ON COLUMN reference.address_types.locale_id IS 'The Unicode locale identifier for the address type';
 
 COMMENT ON COLUMN reference.address_types.sort_index IS 'The sort index for the address type';
 
@@ -32,19 +32,19 @@ COMMENT ON COLUMN reference.address_types.description IS 'The description for th
 
 CREATE TABLE reference.communication_methods (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX communication_methods_locale_ix ON reference.communication_methods(locale);
+CREATE INDEX communication_methods_locale_ix ON reference.communication_methods(locale_id);
 
 COMMENT ON COLUMN reference.communication_methods.code IS 'The code for the communication method';
 
-COMMENT ON COLUMN reference.communication_methods.locale IS 'The Unicode locale identifier for the communication method';
+COMMENT ON COLUMN reference.communication_methods.locale_id IS 'The Unicode locale identifier for the communication method';
 
 COMMENT ON COLUMN reference.communication_methods.sort_index IS 'The sort index for the communication method';
 
@@ -55,7 +55,7 @@ COMMENT ON COLUMN reference.communication_methods.description IS 'The descriptio
 
 CREATE TABLE reference.countries (
   code            VARCHAR(10)  NOT NULL,
-  locale          VARCHAR(10)  NOT NULL,
+  locale_id       VARCHAR(10)  NOT NULL,
   sort_index      INTEGER      NOT NULL,
   name            VARCHAR(50) NOT NULL,
   short_name      VARCHAR(30)  NOT NULL,
@@ -63,14 +63,14 @@ CREATE TABLE reference.countries (
   sovereign_state VARCHAR(10)  NOT NULL,
   nationality     VARCHAR(50) NOT NULL,
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX countries_locale_ix ON reference.countries(locale);
+CREATE INDEX countries_locale_ix ON reference.countries(locale_id);
 
 COMMENT ON COLUMN reference.countries.code IS 'The code for the country';
 
-COMMENT ON COLUMN reference.countries.locale IS 'The Unicode locale identifier for the country';
+COMMENT ON COLUMN reference.countries.locale_id IS 'The Unicode locale identifier for the country';
 
 COMMENT ON COLUMN reference.countries.sort_index IS 'The sort index for the country';
 
@@ -87,19 +87,19 @@ COMMENT ON COLUMN reference.countries.nationality IS 'The nationality for the co
 
 CREATE TABLE reference.employment_statuses (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX employment_statuses_locale_ix ON reference.employment_statuses(locale);
+CREATE INDEX employment_statuses_locale_ix ON reference.employment_statuses(locale_id);
 
 COMMENT ON COLUMN reference.employment_statuses.code IS 'The code for the employment status';
 
-COMMENT ON COLUMN reference.employment_statuses.locale IS 'The Unicode locale identifier for the employment status';
+COMMENT ON COLUMN reference.employment_statuses.locale_id IS 'The Unicode locale identifier for the employment status';
 
 COMMENT ON COLUMN reference.employment_statuses.sort_index IS 'The sort index for the employment status';
 
@@ -111,24 +111,24 @@ COMMENT ON COLUMN reference.employment_statuses.description IS 'The description 
 CREATE TABLE reference.employment_types (
   employment_status VARCHAR(10)  NOT NULL,
   code              VARCHAR(10)  NOT NULL,
-  locale            VARCHAR(10)  NOT NULL,
+  locale_id         VARCHAR(10)  NOT NULL,
   sort_index        INTEGER      NOT NULL,
   name              VARCHAR(50)  NOT NULL,
   description       VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (employment_status, code, locale),
-  CONSTRAINT employment_types_employment_status_fk FOREIGN KEY (employment_status, locale) REFERENCES reference.employment_statuses(code, locale) ON DELETE CASCADE
+  PRIMARY KEY (employment_status, code, locale_id),
+  CONSTRAINT employment_types_employment_status_fk FOREIGN KEY (employment_status, locale_id) REFERENCES reference.employment_statuses(code, locale_id) ON DELETE CASCADE
 );
 
 CREATE INDEX employment_types_employment_status_ix ON reference.employment_types(employment_status);
 
-CREATE INDEX employment_types_locale_ix ON reference.employment_types(locale);
+CREATE INDEX employment_types_locale_ix ON reference.employment_types(locale_id);
 
 COMMENT ON COLUMN reference.employment_types.employment_status IS 'The code for the employment status the employment type is associated with';
 
 COMMENT ON COLUMN reference.employment_types.code IS 'The code for the employment type';
 
-COMMENT ON COLUMN reference.employment_types.locale IS 'The Unicode locale identifier for the employment type';
+COMMENT ON COLUMN reference.employment_types.locale_id IS 'The Unicode locale identifier for the employment type';
 
 COMMENT ON COLUMN reference.employment_types.sort_index IS 'The sort index for the employment type';
 
@@ -140,19 +140,19 @@ COMMENT ON COLUMN reference.employment_types.description IS 'The description for
 -- See: https://en.wikipedia.org/wiki/ISO/IEC_5218
 CREATE TABLE reference.genders (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX genders_locale_ix ON reference.genders(locale);
+CREATE INDEX genders_locale_ix ON reference.genders(locale_id);
 
 COMMENT ON COLUMN reference.genders.code IS 'The code for the gender';
 
-COMMENT ON COLUMN reference.genders.locale IS 'The Unicode locale identifier for the gender';
+COMMENT ON COLUMN reference.genders.locale_id IS 'The Unicode locale identifier for the gender';
 
 COMMENT ON COLUMN reference.genders.sort_index IS 'The sort index for the gender';
 
@@ -163,22 +163,22 @@ COMMENT ON COLUMN reference.genders.description IS 'The description for the gend
 
 CREATE TABLE reference.identity_document_types (
   code             VARCHAR(10)  NOT NULL,
-  locale           VARCHAR(10)  NOT NULL,
+  locale_id        VARCHAR(10)  NOT NULL,
   sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50) NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue VARCHAR(10)  NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX identity_document_types_locale_ix ON reference.identity_document_types(locale);
+CREATE INDEX identity_document_types_locale_ix ON reference.identity_document_types(locale_id);
 
 CREATE INDEX identity_document_types_country_of_issue_ix ON reference.identity_document_types(country_of_issue);
 
 COMMENT ON COLUMN reference.identity_document_types.code IS 'The code for the identity document type';
 
-COMMENT ON COLUMN reference.identity_document_types.locale IS 'The Unicode locale identifier for the identity document type';
+COMMENT ON COLUMN reference.identity_document_types.locale_id IS 'The Unicode locale identifier for the identity document type';
 
 COMMENT ON COLUMN reference.identity_document_types.sort_index IS 'The sort index for the identity document type';
 
@@ -191,20 +191,20 @@ COMMENT ON COLUMN reference.identity_document_types.country_of_issue IS 'The opt
 
 CREATE TABLE reference.languages (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50) NOT NULL,
   short_name  VARCHAR(30)  NOT NULL DEFAULT '',
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX languages_locale_ix ON reference.languages(locale);
+CREATE INDEX languages_locale_ix ON reference.languages(locale_id);
 
 COMMENT ON COLUMN reference.languages.code IS 'The code for the language';
 
-COMMENT ON COLUMN reference.languages.locale IS 'The Unicode locale identifier for the language';
+COMMENT ON COLUMN reference.languages.locale_id IS 'The Unicode locale identifier for the language';
 
 COMMENT ON COLUMN reference.languages.sort_index IS 'The sort index for the language';
 
@@ -217,19 +217,19 @@ COMMENT ON COLUMN reference.languages.description IS 'The description for the la
 
 CREATE TABLE reference.marital_statuses (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX marital_statuses_locale_ix ON reference.marital_statuses(locale);
+CREATE INDEX marital_statuses_locale_ix ON reference.marital_statuses(locale_id);
 
 COMMENT ON COLUMN reference.marital_statuses.code IS 'The code for the marital status';
 
-COMMENT ON COLUMN reference.marital_statuses.locale IS 'The Unicode locale identifier for the marital status';
+COMMENT ON COLUMN reference.marital_statuses.locale_id IS 'The Unicode locale identifier for the marital status';
 
 COMMENT ON COLUMN reference.marital_statuses.sort_index IS 'The sort index for the marital status';
 
@@ -241,24 +241,24 @@ COMMENT ON COLUMN reference.marital_statuses.description IS 'The description for
 CREATE TABLE reference.marriage_types (
   marital_status VARCHAR(10)  NOT NULL,
   code           VARCHAR(10)  NOT NULL,
-  locale         VARCHAR(10)  NOT NULL,
+  locale_id      VARCHAR(10)  NOT NULL,
   sort_index     INTEGER      NOT NULL,
   name           VARCHAR(50)  NOT NULL,
   description    VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (marital_status, code, locale),
-  CONSTRAINT marriage_types_marital_statuses_fk FOREIGN KEY (marital_status, locale) REFERENCES reference.marital_statuses(code, locale) ON DELETE CASCADE
+  PRIMARY KEY (marital_status, code, locale_id),
+  CONSTRAINT marriage_types_marital_statuses_fk FOREIGN KEY (marital_status, locale_id) REFERENCES reference.marital_statuses(code, locale_id) ON DELETE CASCADE
 );
 
 CREATE INDEX marriage_types_marital_status_ix ON reference.marriage_types(marital_status);
 
-CREATE INDEX marriage_types_locale_ix ON reference.marriage_types(locale);
+CREATE INDEX marriage_types_locale_ix ON reference.marriage_types(locale_id);
 
 COMMENT ON COLUMN reference.marriage_types.marital_status IS 'The code for the marital status the marriage type is associated with';
 
 COMMENT ON COLUMN reference.marriage_types.code IS 'The code for the marriage type';
 
-COMMENT ON COLUMN reference.marriage_types.locale IS 'The Unicode locale identifier for the marriage type';
+COMMENT ON COLUMN reference.marriage_types.locale_id IS 'The Unicode locale identifier for the marriage type';
 
 COMMENT ON COLUMN reference.marriage_types.sort_index IS 'The sort index for the marriage type';
 
@@ -269,19 +269,19 @@ COMMENT ON COLUMN reference.marriage_types.description IS 'The description for t
 
 CREATE TABLE reference.minor_types (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX minor_types_locale_ix ON reference.minor_types(locale);
+CREATE INDEX minor_types_locale_ix ON reference.minor_types(locale_id);
 
 COMMENT ON COLUMN reference.minor_types.code IS 'The code for the minor type';
 
-COMMENT ON COLUMN reference.minor_types.locale IS 'The Unicode locale identifier for the minor type';
+COMMENT ON COLUMN reference.minor_types.locale_id IS 'The Unicode locale identifier for the minor type';
 
 COMMENT ON COLUMN reference.minor_types.sort_index IS 'The sort index for the minor type';
 
@@ -292,19 +292,19 @@ COMMENT ON COLUMN reference.minor_types.description IS 'The description for the 
 
 CREATE TABLE reference.next_of_kin_types (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX next_of_kin_types_locale_ix ON reference.next_of_kin_types(locale);
+CREATE INDEX next_of_kin_types_locale_ix ON reference.next_of_kin_types(locale_id);
 
 COMMENT ON COLUMN reference.next_of_kin_types.code IS 'The code for the next of kin type';
 
-COMMENT ON COLUMN reference.next_of_kin_types.locale IS 'The Unicode locale identifier for the next of kin type';
+COMMENT ON COLUMN reference.next_of_kin_types.locale_id IS 'The Unicode locale identifier for the next of kin type';
 
 COMMENT ON COLUMN reference.next_of_kin_types.sort_index IS 'The sort index for the next of kin type';
 
@@ -315,19 +315,19 @@ COMMENT ON COLUMN reference.next_of_kin_types.description IS 'The description fo
 
 CREATE TABLE reference.occupations (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX occupations_locale_ix ON reference.occupations(locale);
+CREATE INDEX occupations_locale_ix ON reference.occupations(locale_id);
 
 COMMENT ON COLUMN reference.occupations.code IS 'The code for the occupation';
 
-COMMENT ON COLUMN reference.occupations.locale IS 'The Unicode locale identifier for the occupation';
+COMMENT ON COLUMN reference.occupations.locale_id IS 'The Unicode locale identifier for the occupation';
 
 COMMENT ON COLUMN reference.occupations.sort_index IS 'The sort index for the occupation';
 
@@ -338,23 +338,23 @@ COMMENT ON COLUMN reference.occupations.description IS 'The description for the 
 
 CREATE TABLE reference.permit_types (
   code             VARCHAR(10)  NOT NULL,
-  locale           VARCHAR(10)  NOT NULL,
+  locale_id        VARCHAR(10)  NOT NULL,
   sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue VARCHAR(10)  NOT NULL,
 
-  PRIMARY KEY (code, locale),
-  CONSTRAINT permit_types_country_fk FOREIGN KEY (country_of_issue, locale) REFERENCES reference.countries(code, locale) ON DELETE CASCADE
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT permit_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
 );
 
-CREATE INDEX permit_types_locale_ix ON reference.permit_types(locale);
+CREATE INDEX permit_types_locale_ix ON reference.permit_types(locale_id);
 
 CREATE INDEX permit_types_country_of_issue_ix ON reference.permit_types(country_of_issue);
 
 COMMENT ON COLUMN reference.permit_types.code IS 'The code for the permit type';
 
-COMMENT ON COLUMN reference.permit_types.locale IS 'The Unicode locale identifier for the permit type';
+COMMENT ON COLUMN reference.permit_types.locale_id IS 'The Unicode locale identifier for the permit type';
 
 COMMENT ON COLUMN reference.permit_types.sort_index IS 'The sort index for the permit type';
 
@@ -367,19 +367,19 @@ COMMENT ON COLUMN reference.permit_types.country_of_issue IS 'The code identifyi
 
 CREATE TABLE reference.races (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX races_locale_ix ON reference.races(locale);
+CREATE INDEX races_locale_ix ON reference.races(locale_id);
 
 COMMENT ON COLUMN reference.races.code IS 'The code for the race';
 
-COMMENT ON COLUMN reference.races.locale IS 'The Unicode locale identifier for the race';
+COMMENT ON COLUMN reference.races.locale_id IS 'The Unicode locale identifier for the race';
 
 COMMENT ON COLUMN reference.races.sort_index IS 'The sort index for the race';
 
@@ -391,24 +391,24 @@ COMMENT ON COLUMN reference.races.description IS 'The description for the race';
 CREATE TABLE reference.regions (
   country     VARCHAR(10)  NOT NULL,
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (country, code, locale),
-  CONSTRAINT regions_country_fk FOREIGN KEY (country, locale) REFERENCES reference.countries(code, locale) ON DELETE CASCADE
+  PRIMARY KEY (country, code, locale_id),
+  CONSTRAINT regions_country_fk FOREIGN KEY (country, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
 );
 
 CREATE INDEX regions_country_ix ON reference.regions(country);
 
-CREATE INDEX regions_locale_ix ON reference.regions(locale);
+CREATE INDEX regions_locale_ix ON reference.regions(locale_id);
 
 COMMENT ON COLUMN reference.regions.country IS 'The code for the country the region is associated with';
 
 COMMENT ON COLUMN reference.regions.code IS 'The code for the region';
 
-COMMENT ON COLUMN reference.regions.locale IS 'The Unicode locale identifier for the region';
+COMMENT ON COLUMN reference.regions.locale_id IS 'The Unicode locale identifier for the region';
 
 COMMENT ON COLUMN reference.regions.sort_index IS 'The sort index for the region';
 
@@ -419,19 +419,19 @@ COMMENT ON COLUMN reference.regions.description IS 'The description for the regi
 
 CREATE TABLE reference.residential_statuses (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX residential_statuses_locale_ix ON reference.residential_statuses(locale);
+CREATE INDEX residential_statuses_locale_ix ON reference.residential_statuses(locale_id);
 
 COMMENT ON COLUMN reference.residential_statuses.code IS 'The code for the residential status';
 
-COMMENT ON COLUMN reference.residential_statuses.locale IS 'The Unicode locale identifier for the residential status';
+COMMENT ON COLUMN reference.residential_statuses.locale_id IS 'The Unicode locale identifier for the residential status';
 
 COMMENT ON COLUMN reference.residential_statuses.sort_index IS 'The sort index for the residential status';
 
@@ -442,19 +442,19 @@ COMMENT ON COLUMN reference.residential_statuses.description IS 'The description
 
 CREATE TABLE reference.residential_types (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX residential_types_locale_ix ON reference.residential_types(locale);
+CREATE INDEX residential_types_locale_ix ON reference.residential_types(locale_id);
 
 COMMENT ON COLUMN reference.residential_types.code IS 'The code for the residential type';
 
-COMMENT ON COLUMN reference.residential_types.locale IS 'The Unicode locale identifier for the residential type';
+COMMENT ON COLUMN reference.residential_types.locale_id IS 'The Unicode locale identifier for the residential type';
 
 COMMENT ON COLUMN reference.residential_types.sort_index IS 'The sort index for the residential type';
 
@@ -465,19 +465,19 @@ COMMENT ON COLUMN reference.residential_types.description IS 'The description fo
 
 CREATE TABLE reference.sources_of_funds (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX sources_of_funds_locale_ix ON reference.sources_of_funds(locale);
+CREATE INDEX sources_of_funds_locale_ix ON reference.sources_of_funds(locale_id);
 
 COMMENT ON COLUMN reference.sources_of_funds.code IS 'The code for the source of funds';
 
-COMMENT ON COLUMN reference.sources_of_funds.locale IS 'The Unicode locale identifier for the source of funds';
+COMMENT ON COLUMN reference.sources_of_funds.locale_id IS 'The Unicode locale identifier for the source of funds';
 
 COMMENT ON COLUMN reference.sources_of_funds.sort_index IS 'The sort index for the source of funds';
 
@@ -492,19 +492,19 @@ COMMENT ON COLUMN reference.sources_of_funds.description IS 'The description for
 
 CREATE TABLE reference.standard_industry_codes (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX standard_industry_codes_locale_ix ON reference.standard_industry_codes(locale);
+CREATE INDEX standard_industry_codes_locale_ix ON reference.standard_industry_codes(locale_id);
 
 COMMENT ON COLUMN reference.standard_industry_codes.code IS 'The code for the standard industry code';
 
-COMMENT ON COLUMN reference.standard_industry_codes.locale IS 'The Unicode locale identifier for the standard industry code';
+COMMENT ON COLUMN reference.standard_industry_codes.locale_id IS 'The Unicode locale identifier for the standard industry code';
 
 COMMENT ON COLUMN reference.standard_industry_codes.sort_index IS 'The sort index for the standard industry code';
 
@@ -515,19 +515,19 @@ COMMENT ON COLUMN reference.standard_industry_codes.description IS 'The descript
 
 CREATE TABLE reference.suitable_times_to_contact (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX suitable_times_to_contact_locale_ix ON reference.suitable_times_to_contact(locale);
+CREATE INDEX suitable_times_to_contact_locale_ix ON reference.suitable_times_to_contact(locale_id);
 
 COMMENT ON COLUMN reference.suitable_times_to_contact.code IS 'The code for the suitable time to contact';
 
-COMMENT ON COLUMN reference.suitable_times_to_contact.locale IS 'The Unicode locale identifier for the suitable time to contact';
+COMMENT ON COLUMN reference.suitable_times_to_contact.locale_id IS 'The Unicode locale identifier for the suitable time to contact';
 
 COMMENT ON COLUMN reference.suitable_times_to_contact.sort_index IS 'The sort index for the suitable time to contact';
 
@@ -538,23 +538,23 @@ COMMENT ON COLUMN reference.suitable_times_to_contact.description IS 'The descri
 
 CREATE TABLE reference.tax_number_types (
   code             VARCHAR(10)  NOT NULL,
-  locale           VARCHAR(10)  NOT NULL,
+  locale_id        VARCHAR(10)  NOT NULL,
   sort_index       INTEGER NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue VARCHAR(10)  NOT NULL,
 
-  PRIMARY KEY (code, locale),
-  CONSTRAINT tax_number_types_country_fk FOREIGN KEY (country_of_issue, locale) REFERENCES reference.countries(code, locale) ON DELETE CASCADE
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT tax_number_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
 );
 
-CREATE INDEX tax_number_types_locale_ix ON reference.tax_number_types(locale);
+CREATE INDEX tax_number_types_locale_ix ON reference.tax_number_types(locale_id);
 
 CREATE INDEX tax_number_types_country_of_issue_ix ON reference.tax_number_types(country_of_issue);
 
 COMMENT ON COLUMN reference.tax_number_types.code IS 'The code for the tax number type';
 
-COMMENT ON COLUMN reference.tax_number_types.locale IS 'The Unicode locale identifier for the tax number type';
+COMMENT ON COLUMN reference.tax_number_types.locale_id IS 'The Unicode locale identifier for the tax number type';
 
 COMMENT ON COLUMN reference.tax_number_types.sort_index IS 'The sort index for the tax number type';
 
@@ -567,20 +567,20 @@ COMMENT ON COLUMN reference.tax_number_types.country_of_issue IS 'The code ident
 
 CREATE TABLE reference.titles (
   code         VARCHAR(10)  NOT NULL,
-  locale       VARCHAR(10)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
   sort_index   INTEGER      NOT NULL,
   name         VARCHAR(50)  NOT NULL,
   abbreviation VARCHAR(20) NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX titles_locale_ix ON reference.titles(locale);
+CREATE INDEX titles_locale_ix ON reference.titles(locale_id);
 
 COMMENT ON COLUMN reference.titles.code IS 'The code for the title';
 
-COMMENT ON COLUMN reference.titles.locale IS 'The Unicode locale identifier for the title';
+COMMENT ON COLUMN reference.titles.locale_id IS 'The Unicode locale identifier for the title';
 
 COMMENT ON COLUMN reference.titles.sort_index IS 'The sort index for the title';
 
@@ -593,19 +593,19 @@ COMMENT ON COLUMN reference.titles.description IS 'The description for the title
 
 CREATE TABLE reference.verification_methods (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX verification_methods_locale_ix ON reference.verification_methods(locale);
+CREATE INDEX verification_methods_locale_ix ON reference.verification_methods(locale_id);
 
 COMMENT ON COLUMN reference.verification_methods.code IS 'The code for the verification method';
 
-COMMENT ON COLUMN reference.verification_methods.locale IS 'The Unicode locale identifier for the verification method';
+COMMENT ON COLUMN reference.verification_methods.locale_id IS 'The Unicode locale identifier for the verification method';
 
 COMMENT ON COLUMN reference.verification_methods.sort_index IS 'The sort index for the verification method';
 
@@ -616,19 +616,19 @@ COMMENT ON COLUMN reference.verification_methods.description IS 'The description
 
 CREATE TABLE reference.verification_statuses (
   code        VARCHAR(10)  NOT NULL,
-  locale      VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
-  PRIMARY KEY (code, locale)
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX verification_statuses_locale_ix ON reference.verification_statuses(locale);
+CREATE INDEX verification_statuses_locale_ix ON reference.verification_statuses(locale_id);
 
 COMMENT ON COLUMN reference.verification_statuses.code IS 'The code for the verification status';
 
-COMMENT ON COLUMN reference.verification_statuses.locale IS 'The Unicode locale identifier for the verification status';
+COMMENT ON COLUMN reference.verification_statuses.locale_id IS 'The Unicode locale identifier for the verification status';
 
 COMMENT ON COLUMN reference.verification_statuses.sort_index IS 'The sort index for the verification status';
 
@@ -640,2171 +640,2171 @@ COMMENT ON COLUMN reference.verification_statuses.description IS 'The descriptio
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('B', 'en-US', 1, 'Building', 'Building');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-US', 2, 'Complex', 'Complex');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-US', 3, 'Farm', 'Farm');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('I', 'en-US', 4, 'International', 'International');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('T', 'en-US', 5, 'Site/Township', 'Site/Township');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('S', 'en-US', 6, 'Street', 'Street');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unstructured', 'Unstructured');
   
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('B', 'en-ZA', 1, 'Building', 'Building');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-ZA', 2, 'Complex', 'Complex');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-ZA', 3, 'Farm', 'Farm');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('I', 'en-ZA', 4, 'International', 'International');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('T', 'en-ZA', 5, 'Site/Township', 'Site/Township');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('S', 'en-ZA', 6, 'Street', 'Street');
-INSERT INTO reference.address_types (code, locale, sort_index, name, description)
+INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unstructured', 'Unstructured');  
 
 
 
-INSERT INTO reference.communication_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
   VALUES ('E', 'en-US', 1, 'E-mail', 'E-mail');
-INSERT INTO reference.communication_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
   VALUES ('P', 'en-US', 2, 'Phone', 'Phone');
-INSERT INTO reference.communication_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
 
-INSERT INTO reference.communication_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
   VALUES ('E', 'en-ZA', 1, 'E-mail', 'E-mail');
-INSERT INTO reference.communication_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
   VALUES ('P', 'en-ZA', 2, 'Phone', 'Phone');
-INSERT INTO reference.communication_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
 
   
 
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AF', 'en-US', 1, 'Afghanistan', 'Afghanistan', 'Afghanistan', 'AF', 'Afghan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AL', 'en-US', 2, 'Republic of Albania', 'Albania', 'Republic of Albania', 'AL', 'Albanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DZ', 'en-US', 3, 'People''s Democratic Republic of Algeria', 'Algeria', 'People''s Democratic Republic of Algeria', 'DZ', 'Algerian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AS', 'en-US', 4, 'American Samoa', 'American Samoa', 'American Samoa', 'US', 'Samoan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AD', 'en-US', 5, 'Principality of Andorra', 'Andorra', 'Principality of Andorra', 'AD', 'Andorran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AO', 'en-US', 6, 'Republic of Angola', 'Angola', 'Republic of Angola', 'AO', 'Angolan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AI', 'en-US', 7, 'Anguilla', 'Anguilla', 'Anguilla', 'GB', 'Anguillan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AQ', 'en-US', 8, 'Antarctica', 'Antarctica', 'Antarctica', 'AQ', 'Antarctic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AG', 'en-US', 9, 'Antigua and Barbuda', 'Antigua and Barbuda', 'Antigua and Barbuda', 'AG', 'Antiguan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AR', 'en-US', 10, 'Argentine Republic', 'Argentina', 'Argentine Republic', 'AR', 'Argentine');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AM', 'en-US', 11, 'Republic of Armenia', 'Armenia', 'Republic of Armenia', 'AM', 'Armenian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AW', 'en-US', 12, 'Aruba', 'Aruba', 'Aruba', 'NL', 'Arubian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AU', 'en-US', 13, 'Commonwealth of Australia', 'Australia', 'Commonwealth of Australia', 'AU', 'Australian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AT', 'en-US', 14, 'Republic of Austria', 'Austria', 'Republic of Austria', 'AT', 'Austrian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AZ', 'en-US', 15, 'Republic of Azerbaijan', 'Azerbaijan', 'Republic of Azerbaijan', 'AZ', 'Azerbaijani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BS', 'en-US', 16, 'Commonwealth of The Bahamas', 'The Bahamas', 'Commonwealth of The Bahamas', 'BS', 'Bahamian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BH', 'en-US', 17, 'Kingdom of Bahrain', 'Bahrain', 'Kingdom of Bahrain', 'BH', 'Bahrainian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BD', 'en-US', 18, 'People''s Republic of Bangladesh', 'Bangladesh', 'People''s Republic of Bangladesh', 'BD', 'Bangladeshi');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BB', 'en-US', 19, 'Barbados', 'Barbados', 'Barbados', 'BB', 'Barbadian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BY', 'en-US', 20, ' Republic of Belarus', 'Belarus', ' Republic of Belarus', 'BY', 'Belarusian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BE', 'en-US', 21, 'Kingdom of Belgium', 'Belgium', 'Kingdom of Belgium', 'BE', 'Belgian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BZ', 'en-US', 22, 'Belize', 'Belize', 'Belize', 'BZ', 'Belizean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BJ', 'en-US', 23, 'Republic of Benin', 'Benin', 'Republic of Benin', 'BJ', 'Beninese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BM', 'en-US', 24, 'Bermuda', 'Bermuda', 'Bermuda', 'GB', 'Bermudan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BT', 'en-US', 25, 'Kingdom of Bhutan', 'Bhutan', 'Kingdom of Bhutan', 'BT', 'Bhutanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BO', 'en-US', 26, 'Plurinational State of Bolivia', 'Bolivia', 'Plurinational State of Bolivia', 'BO', 'Bolivian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BQ', 'en-US', 27, 'Bonaire, Sint Eustatius and Saba', 'Caribbean Netherlands', 'Bonaire, Sint Eustatius and Saba (Caribbean Netherlands)', 'NL', 'Dutch');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BA', 'en-US', 28, 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', '', 'Bosnian and Herzegovinian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BW', 'en-US', 29, 'Botswana', 'Botswana', 'Botswana', 'BW', 'Motswana');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BV', 'en-US', 30, 'Bouvet Island', 'Bouvet Island', 'Bouvet Island', 'NO', 'Norwegian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BR', 'en-US', 31, 'Brazil', 'Brazil', 'Brazil', 'BR', 'Brazilian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BN', 'en-US', 32, 'Nation of Brunei', 'Brunei', 'Nation of Brunei', 'BN', 'Bruneian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BG', 'en-US', 33, 'Republic of Bulgaria', 'Bulgaria', 'Republic of Bulgaria', 'BG', 'Bulgarian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BF', 'en-US', 34, 'Burkina Faso', 'Burkina Faso', 'Burkina Faso', 'BF', 'Burkinabe');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BI', 'en-US', 35, 'Republic of Burundi', 'Burundi', 'Republic of Burundi', 'BI', 'Burundian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CV', 'en-US', 36, 'Republic of Cabo Verde (Cape Verde)', 'Republic of Cabo Verde', 'Republic of Cabo Verde (Cape Verde)', 'CV', 'Cape Verdean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KH', 'en-US', 37, 'Kingdom of Cambodia', 'Cambodia', 'Kingdom of Cambodia', 'KH', 'Cambodian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CM', 'en-US', 38, 'Cameroon', 'Cameroon', 'Cameroon', 'CM', 'Cameroonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CA', 'en-US', 39, 'Canada', 'Canada', 'Canada', 'CA', 'Canadian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KY', 'en-US', 40, 'Cayman Islands', 'Cayman Islands', 'Cayman Islands', 'GB', 'Caymanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CF', 'en-US', 41, 'Central African Republic', 'Central African Republic', 'Central African Republic', 'CF', 'Central African');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TD', 'en-US', 42, 'Republic of Chad', 'Chad', 'Republic of Chad', 'TD', 'Chadian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CL', 'en-US', 43, 'Republic of Chile', 'Chile', 'Republic of Chile', 'CL', 'Chilean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CN', 'en-US', 44, 'China', 'China', 'China', 'CN', 'Chinese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CX', 'en-US', 45, 'Christmas Island', 'Christmas Island', 'Christmas Island', 'AU', 'Christmas Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CC', 'en-US', 46, 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'AU', 'Cocos Islandia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CO', 'en-US', 47, 'Republic of Colombia', 'Colombia', 'Republic of Colombia', 'CO', 'Colombian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KM', 'en-US', 48, 'Union of the Comoros', 'Comoros', 'Union of the Comoros', 'KM', 'Comoran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CG', 'en-US', 49, 'Republic of Congo', 'Congo', 'Republic of Congo', 'CG', 'Congolese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CD', 'en-US', 50, 'Democratic Republic of the Congo', 'Dem. Rep. of the Congo', 'Democratic Republic of the Congo', 'CD', 'Congolese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CK', 'en-US', 51, 'Cook Islands', 'Cook Islands', 'Cook Islands', 'CK', 'Cook Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CR', 'en-US', 52, 'Republic of Costa Rica', 'Costa Rica', 'Republic of Costa Rica', 'CR', 'Costa Rican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HR', 'en-US', 53, 'Republic of Croatia', 'Croatia', 'Republic of Croatia', 'HR', 'Croatian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CU', 'en-US', 54, 'Republic of Cuba', 'Cuba', 'Republic of Cuba', 'CU', 'Cuban');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CW', 'en-US', 55, 'Curaçao', 'Curaçao', 'Curaçao', 'NL', 'Curaçaoan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CY', 'en-US', 56, 'Republic of Cyprus', 'Cyprus', 'Republic of Cyprus', 'CY', 'Cypriot');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CZ', 'en-US', 57, 'Czech Republic', 'Czech Republic', 'Czechia, Czech Republic', 'CZ', 'Czech');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CI', 'en-US', 58, 'Republic of Côte d''Ivoire', 'Côte d''Ivoire', 'Côte d''Ivoire (Ivory Coast)', 'CI', 'Ivorian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DK', 'en-US', 59, 'Kingdom of Denmark', 'Denmark', 'Kingdom of Denmark', 'DK', 'Danish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DJ', 'en-US', 60, 'Republic of Djibouti', 'Djibouti', 'Republic of Djibouti', 'DJ', 'Djiboutian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DM', 'en-US', 61, ' Commonwealth of Dominica', 'Dominica', ' Commonwealth of Dominica', 'DM', 'Dominican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DO', 'en-US', 62, 'Dominican Republic', 'Dominican Republic', 'Dominican Republic', 'DO', 'Dominican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('EC', 'en-US', 63, 'Republic of Ecuador', 'Ecuador', 'Republic of Ecuador', 'EC', 'Ecuadorian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('EG', 'en-US', 64, 'Arab Republic of Egypt', 'Egypt', 'Arab Republic of Egypt', 'EG', 'Egyptian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SV', 'en-US', 65, 'Republic of El Salvador', 'El Salvador', 'Republic of El Salvador', 'SV', 'Salvadoran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GQ', 'en-US', 66, 'Republic of Equatorial Guinea', 'Equatorial Guinea', 'Republic of Equatorial Guinea', 'GQ', 'Equatoguinean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ER', 'en-US', 67, 'State of Eritrea', 'Eritrea', 'State of Eritrea', 'ER', 'Eritrean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('EE', 'en-US', 68, 'Republic of Estonia', 'Estonia', 'Republic of Estonia', 'EE', 'Estonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ET', 'en-US', 69, 'Federal Democratic Republic of Ethiopia', 'Ethiopia', 'Federal Democratic Republic of Ethiopia', 'ET', 'Ethiopian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FK', 'en-US', 70, 'Falkland Islands (Malvinas)', 'Falkland Islands', 'Falkland Islands (Malvinas)', 'GB', 'Falkland Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FO', 'en-US', 71, 'Faroe Islands', 'Faroe Islands', 'Faroe Islands', 'DK', 'Faroese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FJ', 'en-US', 72, 'Republic of Fiji', 'Fiji', 'Republic of Fiji', 'FJ', 'Fijian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FI', 'en-US', 73, 'Republic of Finland', 'Finland', 'Republic of Finland', 'FI', 'Finnish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FR', 'en-US', 74, 'French Republic', 'France', 'French Republic', 'FR', 'French');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GF', 'en-US', 75, 'French Guiana', 'French Guiana', 'French Guiana', 'FR', 'French Guianese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PF', 'en-US', 76, 'Collectivity of French Polynesia', 'French Polynesia', 'Collectivity of French Polynesia', 'FR', 'French Polynesian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TF', 'en-US', 77, 'French Southern and Antarctic Lands', 'French Southern Territories', 'French Southern and Antarctic Lands', 'FR', 'French');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GA', 'en-US', 78, 'Gabonese Republic', 'Gabon', 'Gabonese Republic', 'GA', 'Gabonese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GM', 'en-US', 79, 'Republic of The Gambia', 'Gambia', 'Republic of The Gambia', 'GM', 'Gambian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GE', 'en-US', 80, 'Georgia', 'Georgia', 'Georgia', 'GE', 'Georgian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DE', 'en-US', 81, 'Federal Republic of Germany', 'Germany', 'Federal Republic of Germany', 'DE', 'German');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GH', 'en-US', 82, 'Republic of Ghana', 'Ghana', 'Republic of Ghana', 'GH', 'Ghanaian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GI', 'en-US', 83, 'Gibraltar', 'Gibraltar', 'Gibraltar', 'GB', 'Gibraltarian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GR', 'en-US', 84, 'Hellenic Republic', 'Greece', 'Hellenic Republic', 'GR', 'Greek');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GL', 'en-US', 85, 'Greenland', 'Greenland', 'Greenland', 'GL', 'Greenlandic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GD', 'en-US', 86, 'Grenada', 'Grenada', 'Grenada', 'GD', 'Grenadian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GP', 'en-US', 87, 'Guadeloupe', 'Guadeloupe', 'Guadeloupe', 'FR', 'Guadeloupean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GU', 'en-US', 88, 'Guam', 'Guam', 'Guam', 'US', 'Guamanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GT', 'en-US', 89, 'Republic of Guatemala', 'Guatemala', 'Republic of Guatemala', 'GT', 'Guatemalan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GG', 'en-US', 90, 'Guernsey', 'Guernsey', 'Guernsey', 'GB', 'British');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GN', 'en-US', 91, 'Republic of Guinea', 'Guinea', 'Republic of Guinea', 'GN', 'Guinean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GW', 'en-US', 92, 'Republic of Guinea-Bissau', 'Guinea-Bissau', 'Republic of Guinea-Bissau', 'GW', 'Guinean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GY', 'en-US', 93, 'Co-operative Republic of Guyana', 'Guyana', 'Co-operative Republic of Guyana', 'GY', 'Guyanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HT', 'en-US', 94, 'Republic of Haiti', 'Haiti', 'Republic of Haiti', 'HT', 'Haitian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VA', 'en-US', 95, 'Holy See', 'Holy See', 'Holy See', 'VA', 'Papal');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HN', 'en-US', 96, 'Republic of Honduras', 'Honduras', 'Republic of Honduras', 'HN', 'Honduran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HK', 'en-US', 97, 'Hong Kong', 'Hong Kong', 'Hong Kong Special Administrative Region of the People''s Republic of China', 'CN', 'Hong Konger');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HU', 'en-US', 98, 'Hungary', 'Hungary', 'Hungary', 'HU', 'Hungarian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IS', 'en-US', 99, 'Iceland', 'Iceland', 'Iceland', 'IS', 'Icelander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IN', 'en-US', 100, 'Republic of India', 'India', 'Republic of India', 'IN', 'Indian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ID', 'en-US', 101, 'Republic of Indonesia', 'Indonesia', 'Republic of Indonesia', 'ID', 'Indonesian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IR', 'en-US', 102, 'Islamic Republic of Iran', 'Iran', 'Islamic Republic of Iran', 'IR', 'Iranian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IQ', 'en-US', 103, 'Republic of Iraq', 'Iraq', 'Republic of Iraq', 'IQ', 'Iraqi');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IE', 'en-US', 104, 'Republic of Ireland', 'Ireland', 'Republic of Ireland', 'IE', 'Irish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IM', 'en-US', 105, 'Isle of Man', 'Isle of Man', 'Isle of Man', 'GB', 'Manx');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IL', 'en-US', 106, 'State of Israel', 'Israel', 'State of Israel', 'IL', 'Israeli');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IT', 'en-US', 107, 'Italian Republic', 'Italy', 'Italian Republic', 'IT', 'Italian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('JM', 'en-US', 108, 'Jamaica', 'Jamaica', 'Jamaica', 'JM', 'Jamaican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('JP', 'en-US', 109, 'Japan', 'Japan', 'Japan', 'JP', 'Japanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('JE', 'en-US', 110, 'Bailiwick of Jersey', 'Jersey', 'Bailiwick of Jersey', 'GB', 'British');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('JO', 'en-US', 111, 'Hashemite Kingdom of Jordan', 'Jordan', 'Hashemite Kingdom of Jordan', 'JO', 'Jordanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KZ', 'en-US', 112, 'Republic of Kazakhstan', 'Kazakhstan', 'Republic of Kazakhstan', 'KZ', 'Kazakhstani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KE', 'en-US', 113, 'Republic of Kenya', 'Kenya', 'Republic of Kenya', 'KE', 'Kenyan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KI', 'en-US', 114, 'Republic of Kiribati', 'Kiribati', 'Republic of Kiribati', 'KI', 'I-Kiribati');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KP', 'en-US', 115, 'Democratic People''s Republic of Korea', 'North Korea', 'Democratic People''s Republic of Korea', 'KP', 'North Korean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KR', 'en-US', 116, 'Republic of Korea', 'South Korea', 'Republic of Korea', 'KR', 'South Korean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KW', 'en-US', 117, 'State of Kuwait', 'Kuwait', 'State of Kuwait', 'KW', 'Kuwaiti');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KG', 'en-US', 118, 'Kyrgyz Republic', 'Kyrgyzstan', 'Kyrgyz Republic', 'KG', 'Kyrgyzstani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LA', 'en-US', 119, 'Lao People''s Democratic Republic', 'Laos', 'Lao People''s Democratic Republic', 'LA', 'Laotian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LV', 'en-US', 120, 'Republic of Latvia', 'Latvia', 'Republic of Latvia', 'LV', 'Latvian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LB', 'en-US', 121, 'Lebanese Republic', 'Lebanon', 'Lebanese Republic', 'LB', 'Lebanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LS', 'en-US', 122, 'Kingdom of Lesotho', 'Lesotho', 'Kingdom of Lesotho', 'LS', 'Mosotho');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LR', 'en-US', 123, 'Republic of Liberia', 'Liberia', 'Republic of Liberia', 'LR', 'Liberian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LY', 'en-US', 124, 'State of Libya', 'Libya', 'State of Libya', 'LY', 'Libyan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LI', 'en-US', 125, 'Principality of Liechtenstein', 'Liechtenstein', 'Principality of Liechtenstein', 'LI', 'Liechtensteiner');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LT', 'en-US', 126, 'Republic of Lithuania', 'Lithuania', 'Republic of Lithuania', 'LT', 'Lithunian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LU', 'en-US', 127, 'Grand Duchy of Luxembourg', 'Luxembourg', 'Grand Duchy of Luxembourg', 'LU', 'Luxembourger');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MO', 'en-US', 128, 'Macao', 'Macao', 'Macao', 'CN', 'Macanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MG', 'en-US', 129, 'Republic of Madagascar', 'Madagascar', 'Republic of Madagascar', 'MG', 'Malagasy');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MW', 'en-US', 130, 'Republic of Malawi', 'Malawi', 'Republic of Malawi', 'MW', 'Malawian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MY', 'en-US', 131, 'Malaysia', 'Malaysia', 'Malaysia', 'MY', 'Malaysian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MV', 'en-US', 132, 'Republic of Maldives', 'Maldives', 'Republic of Maldives', 'MV', 'Maldivan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ML', 'en-US', 133, 'Republic of Mali', 'Mali', 'Republic of Mali', 'ML', 'Malian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MT', 'en-US', 134, 'Republic of Malta', 'Malta', 'Republic of Malta', 'MT', 'Maltese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MH', 'en-US', 135, 'Republic of the Marshall Islands', 'Marshall Islands', 'Republic of the Marshall Islands', 'MH', 'Marshallese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MQ', 'en-US', 136, 'Martinique', 'Martinique', 'Martinique', 'FR', 'Martinican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MR', 'en-US', 137, 'Islamic Republic of Mauritania', 'Mauritania', 'Islamic Republic of Mauritania', 'MR', 'Mauritanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MU', 'en-US', 138, 'Republic of Mauritius', 'Mauritius', 'Republic of Mauritius', 'MU', 'Mauritian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('YT', 'en-US', 139, 'Department of Mayotte', 'Mayotte', 'Department of Mayotte', 'FR', 'Mahoran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MX', 'en-US', 140, 'United Mexican States', 'Mexico', 'United Mexican States', 'MX', 'Mexican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FM', 'en-US', 141, 'Federated States of Micronesia', 'Micronesia', 'Federated States of Micronesia', 'FM', 'Micronesian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MD', 'en-US', 142, 'Republic of Moldova', 'Moldova', 'Republic of Moldova', 'MD', 'Moldovan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MC', 'en-US', 143, ' Principality of Monaco', 'Monaco', ' Principality of Monaco', 'MC', 'Monacan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MN', 'en-US', 144, 'Mongolia', 'Mongolia', 'Mongolia', 'MN', 'Mongolian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ME', 'en-US', 145, 'Montenegro', 'Montenegro', 'Montenegro', 'ME', 'Montenegrin');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MS', 'en-US', 146, 'Montserrat', 'Montserrat', 'Montserrat', 'GB', 'Montserratian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MA', 'en-US', 147, 'Kingdom of Morocco', 'Morocco', 'Kingdom of Morocco', 'MA', 'Moroccan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MZ', 'en-US', 148, 'Republic of Mozambique', 'Mozambique', 'Republic of Mozambique', 'MZ', 'Mozambican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MM', 'en-US', 149, 'Republic of the Union of Myanmar', 'Myanmar', 'Republic of the Union of Myanmar', 'MM', 'Myanma');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NA', 'en-US', 150, 'Republic of Namibia', 'Namibia', 'Republic of Namibia', 'NA', 'Namibian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NR', 'en-US', 151, 'Republic of Nauru', 'Nauru', 'Republic of Nauru', 'NR', 'Nauruan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NP', 'en-US', 152, 'Federal Democratic Republic of Nepal', 'Nepal', 'Federal Democratic Republic of Nepal', 'NP', 'Nepalese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NL', 'en-US', 153, 'Netherlands', 'Netherlands', 'Netherlands', 'NL', 'Dutch');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NC', 'en-US', 154, 'New Caledonia', 'New Caledonia', 'New Caledonia', 'FR', 'New Caledonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NZ', 'en-US', 155, 'New Zealand', 'New Zealand', 'New Zealand', 'NZ', 'New Zealander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NI', 'en-US', 156, 'Republic of Nicaragua', 'Nicaragua', 'Republic of Nicaragua', 'NI', 'Nicaraguan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NE', 'en-US', 157, 'Republic of the Niger', 'Niger', 'Republic of the Niger', 'NE', 'Nigerien');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NG', 'en-US', 158, 'Federal Republic of Nigeria', 'Nigeria', 'Federal Republic of Nigeria', 'NG', 'Nigerian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NU', 'en-US', 159, 'Niue', 'Niue', 'Niue', 'NU', 'Niuean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NF', 'en-US', 160, 'Norfolk Island', 'Norfolk Island', 'Norfolk Island', 'AU', 'Norfolk Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MP', 'en-US', 161, 'Commonwealth of the Northern Mariana Islands', 'Northern Mariana Islands', 'Commonwealth of the Northern Mariana Islands', 'US', 'Northern Mariana Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NO', 'en-US', 162, 'Kingdom of Norway', 'Norway', 'Kingdom of Norway', 'NO', 'Norwegian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('OM', 'en-US', 163, 'Sultanate of Oman', 'Oman', 'Sultanate of Oman', 'OM', 'Omani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PK', 'en-US', 164, 'Islamic Republic of Pakistan', 'Pakistan', 'Islamic Republic of Pakistan', 'PK', 'Pakistani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PW', 'en-US', 165, 'Republic of Palau', 'Palau', 'Republic of Palau', 'PW', 'Palauan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PS', 'en-US', 166, 'State of Palestine', 'Palestine', 'State of Palestine', 'PS', 'Palestinian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PA', 'en-US', 167, 'Republic of Panama', 'Panama', 'Republic of Panama', 'PA', 'Panamanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PG', 'en-US', 168, 'Independent State of Papua New Guinea', 'Papua New Guinea', 'Independent State of Papua New Guinea', 'PG', 'Papua New Guinean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PY', 'en-US', 169, 'Republic of Paraguay', 'Paraguay', 'Republic of Paraguay', 'PY', 'Paraguayan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PE', 'en-US', 170, 'Republic of Peru', 'Peru', 'Republic of Peru', 'PE', 'Peruvian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PH', 'en-US', 171, 'Republic of the Philippines', 'Philippines', 'Republic of the Philippines', 'PH', 'Filipino');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PN', 'en-US', 172, 'Pitcairn Islands', 'Pitcairn Islands', 'Pitcairn Islands', 'GB', 'Pitcairn Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PL', 'en-US', 173, 'Republic of Poland', 'Poland', 'Republic of Poland', 'PL', 'Polish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PT', 'en-US', 174, 'Portuguese Republic', 'Portugal', 'Portuguese Republic', 'PT', 'Portuguese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PR', 'en-US', 175, 'Commonwealth of Puerto Rico', 'Puerto Rico', 'Commonwealth of Puerto Rico', 'PR', 'Puerto Rican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('QA', 'en-US', 176, 'State of Qatar', 'Qatar', 'State of Qatar', 'QA', 'Qatari');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MK', 'en-US', 177, 'Republic of North Macedonia', 'North Macedonia', 'Republic of North Macedonia', 'MK', 'Macedonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RO', 'en-US', 178, 'Romania', 'Romania', 'Romania', 'RO', 'Romanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RU', 'en-US', 179, 'Russian Federation', 'Russia', 'Russian Federation', 'RU', 'Russian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RW', 'en-US', 180, 'Republic of Rwanda', 'Rwanda', 'Republic of Rwanda', 'RW', 'Rwandan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RE', 'en-US', 181, 'Réunion', 'Réunion', 'Réunion', 'FR', 'French');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BL', 'en-US', 182, 'Saint Barthélemy', 'St. Barthélemy', 'Saint Barthélemy', 'FR', 'Barthélemois');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KN', 'en-US', 183, 'Federation of Saint Christopher and Nevis', 'St. Kitts and Nevis', 'Federation of Saint Christopher and Nevis', 'KN', 'Kittian or Nevisian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LC', 'en-US', 184, 'Saint Lucia', 'St. Lucia', 'Saint Lucia', 'LC', 'Saint Lucian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MF', 'en-US', 185, 'Saint Martin (French part)', 'St. Martin (French part)', 'Saint Martin (French part)', 'FR', 'French');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PM', 'en-US', 186, 'Saint Pierre and Miquelon', 'St. Pierre and Miquelon', 'Saint Pierre and Miquelon', 'FR', 'Miquelonnais');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VC', 'en-US', 187, 'Saint Vincent and the Grenadines', 'Saint Vincent', 'Saint Vincent and the Grenadines', 'VC', 'Saint Vincentian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('WS', 'en-US', 188, 'Independent State of Samoa', 'Samoa', 'Independent State of Samoa', 'WS', 'Samoan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SM', 'en-US', 189, 'Republic of San Marino', 'San Marino', 'Republic of San Marino', 'SM', 'Sammarinese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ST', 'en-US', 190, 'Democratic Republic of São Tomé and Príncipe', 'Sao Tome and Principe', 'Democratic Republic of São Tomé and Príncipe', 'ST', 'São Tomean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SA', 'en-US', 191, 'Kingdom of Saudi Arabia', 'Saudi Arabia', 'Kingdom of Saudi Arabia', 'SA', 'Saudi Arabian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SN', 'en-US', 192, 'Republic of Senegal', 'Senegal', 'Republic of Senegal', 'SN', 'Senegalese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RS', 'en-US', 193, 'Republic of Serbia', 'Serbia', 'Republic of Serbia', 'RS', 'Serbian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SC', 'en-US', 194, 'Republic of Seychelles', 'Seychelles', 'Republic of Seychelles', 'SC', 'Seychellois');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SL', 'en-US', 195, 'Republic of Sierra Leone', 'Sierra Leone', 'Republic of Sierra Leone', 'SL', 'Sierra Leonean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SG', 'en-US', 196, 'Republic of Singapore', 'Singapore', 'Republic of Singapore', 'SG', 'Singaporean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SX', 'en-US', 197, 'Sint Maarten (Dutch part)', 'Sint Maarten', 'Sint Maarten (Dutch part)', 'NL', 'Dutch');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SK', 'en-US', 198, 'Slovak Republic', 'Slovakia', 'Slovak Republic', 'SK', 'Slovak');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SI', 'en-US', 199, 'Republic of Slovenia', 'Slovenia', 'Republic of Slovenia', 'SI', 'Slovene');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SB', 'en-US', 200, 'Solomon Islands', 'Solomon Islands', 'Solomon Islands', 'SB', 'Solomon Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SO', 'en-US', 201, 'Federal Republic of Somalia', 'Somalia', 'Federal Republic of Somalia', 'SO', 'Somali');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ZA', 'en-US', 202, 'Republic of South Africa', 'South Africa', 'Republic of South Africa', 'ZA', 'South African');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SS', 'en-US', 203, 'Republic of South Sudan', 'South Sudan', 'Republic of South Sudan', 'SS', 'Sudanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ES', 'en-US', 204, 'Kingdom of Spain', 'Spain', 'Kingdom of Spain', 'ES', 'Spanish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LK', 'en-US', 205, 'Democratic Socialist Republic of Sri Lanka', 'Sri Lanka', 'Democratic Socialist Republic of Sri Lanka', 'LK', 'Sri Lankan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SD', 'en-US', 206, 'Republic of the Sudan', 'Sudan', 'Republic of the Sudan', 'SD', 'Sudanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SR', 'en-US', 207, 'Republic of Suriname', 'Suriname', 'Republic of Suriname', 'SR', 'Surinamese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SJ', 'en-US', 208, 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'NO', 'Norwegian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SZ', 'en-US', 209, 'Kingdom of Eswatini', 'Swaziland', 'Kingdom of Eswatini', 'SZ', 'Swazi');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SE', 'en-US', 210, 'Kingdom of Sweden', 'Sweden', 'Kingdom of Sweden', 'SE', 'Swedish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CH', 'en-US', 211, 'Switzerland', 'Switzerland', 'Switzerland', 'CH', 'Swiss');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SY', 'en-US', 212, 'Syrian Arab Republic', 'Syria', 'Syrian Arab Republic', 'SY', 'Syrian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TW', 'en-US', 213, 'Republic of China', 'Taiwan', 'Republic of China', 'TW', 'Taiwanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TJ', 'en-US', 214, 'Republic of Tajikistan', 'Tajikistan', 'Republic of Tajikistan', 'TJ', 'Tajikistani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TZ', 'en-US', 215, 'United Republic of Tanzania', 'Tanzania', 'United Republic of Tanzania', 'TZ', 'Tanzanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TH', 'en-US', 216, 'Kingdom of Thailand', 'Thailand', 'Kingdom of Thailand', 'TH', 'Thai');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TL', 'en-US', 217, 'Democratic Republic of Timor-Leste', 'East Timor', 'Democratic Republic of Timor-Leste', 'TL', 'Timorese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TG', 'en-US', 218, 'Togolese Republic', 'Togo', 'Togolese Republic', 'TG', 'Togolese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TK', 'en-US', 219, 'Tokelau Islands', 'Tokelau', 'Tokelau Islands', 'NZ', 'Tokelauan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TO', 'en-US', 220, 'Kingdom of Tonga', 'Tonga', 'Kingdom of Tonga', 'TO', 'Tongan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TT', 'en-US', 221, 'Republic of Trinidad and Tobago', 'Trinidad and Tobago', 'Republic of Trinidad and Tobago', 'TT', 'Trinidadian and Tobagonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TN', 'en-US', 222, 'Republic of Tunisia', 'Tunisia', 'Republic of Tunisia', 'TN', 'Tunisian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TR', 'en-US', 223, 'Republic of Turkey', 'Turkey', 'Republic of Turkey', 'TR', 'Turkish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TM', 'en-US', 224, 'Turkmenistan', 'Turkmenistan', 'Turkmenistan', 'TM', 'Turkmen');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TC', 'en-US', 225, 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'GB', 'Turks and Caicos Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TV', 'en-US', 226, 'Tuvalu', 'Tuvalu', 'Tuvalu', 'TV', 'Tuvaluan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UG', 'en-US', 227, 'Republic of Uganda', 'Uganda', 'Republic of Uganda', 'UG', 'Ugandan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UA', 'en-US', 228, 'Ukraine', 'Ukraine', 'Ukraine', 'UA', 'Ukrainian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AE', 'en-US', 229, 'United Arab Emirates', 'United Arab Emirates', 'United Arab Emirates', 'AE', 'Emirati');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GB', 'en-US', 230, 'United Kingdom', 'United Kingdom', 'United Kingdom of Great Britain and Northern Ireland', 'GB', 'British');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UM', 'en-US', 231, 'United States Minor Outlying Islands', 'US Minor Outlying Islands', 'United States Minor Outlying Islands', 'UM', 'American');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('US', 'en-US', 232, 'United States of America', 'United States of America', 'United States of America', 'US', 'American');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UY', 'en-US', 233, 'Oriental Republic of Uruguay', 'Uruguay', 'Oriental Republic of Uruguay', 'UY', 'Uruguayan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UZ', 'en-US', 234, 'Republic of Uzbekistan', 'Uzbekistan', 'Republic of Uzbekistan', 'UZ', 'Uzbekistani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VU', 'en-US', 235, 'Republic of Vanuatu', 'Vanuatu', 'Republic of Vanuatu', 'VU', 'Ni-Vanuatu');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VE', 'en-US', 236, 'Bolivarian Republic of Venezuela', 'Venezuela', 'Bolivarian Republic of Venezuela', 'VE', 'Venezuelan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VN', 'en-US', 237, 'Socialist Republic of Vietnam', 'Vietnam', 'Socialist Republic of Vietnam', 'VN', 'Vietnamese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VG', 'en-US', 238, 'Virgin Islands', 'British Virgin Islands', 'Virgin Islands', 'GB', 'Virgin Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VI', 'en-US', 239, 'United States Virgin Islands', 'U.S. Virgin Islands', 'United States Virgin Islands', 'US', 'Virgin Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('WF', 'en-US', 240, 'Territory of the Wallis and Futuna Islands', 'Wallis and Futuna Islands', 'Territory of the Wallis and Futuna Islands', 'FR', 'Wallisian or Futunan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('EH', 'en-US', 241, 'Western Sahara', 'Western Sahara', 'Western Sahara', '', 'Western Saharan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('YE', 'en-US', 242, 'Republic of Yemen', 'Yemen', 'Republic of Yemen', 'YE', 'Yemeni');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ZM', 'en-US', 243, 'Republic of Zambia', 'Zambia', 'Republic of Zambia', 'ZM', 'Zambian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ZW', 'en-US', 244, 'Republic of Zimbabwe', 'Zimbabwe', 'Republic of Zimbabwe', 'ZW', 'Zimbabwean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AX', 'en-US', 245, 'Åland Islands', 'Åland Islands', 'Åland Islands', 'FI', 'Ålandic');
    
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AF', 'en-ZA', 1, 'Afghanistan', 'Afghanistan', 'Afghanistan', 'AF', 'Afghan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AL', 'en-ZA', 2, 'Republic of Albania', 'Albania', 'Republic of Albania', 'AL', 'Albanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DZ', 'en-ZA', 3, 'People''s Democratic Republic of Algeria', 'Algeria', 'People''s Democratic Republic of Algeria', 'DZ', 'Algerian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AS', 'en-ZA', 4, 'American Samoa', 'American Samoa', 'American Samoa', 'US', 'Samoan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AD', 'en-ZA', 5, 'Principality of Andorra', 'Andorra', 'Principality of Andorra', 'AD', 'Andorran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AO', 'en-ZA', 6, 'Republic of Angola', 'Angola', 'Republic of Angola', 'AO', 'Angolan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AI', 'en-ZA', 7, 'Anguilla', 'Anguilla', 'Anguilla', 'GB', 'Anguillan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AQ', 'en-ZA', 8, 'Antarctica', 'Antarctica', 'Antarctica', 'AQ', 'Antarctic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AG', 'en-ZA', 9, 'Antigua and Barbuda', 'Antigua and Barbuda', 'Antigua and Barbuda', 'AG', 'Antiguan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AR', 'en-ZA', 10, 'Argentine Republic', 'Argentina', 'Argentine Republic', 'AR', 'Argentine');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AM', 'en-ZA', 11, 'Republic of Armenia', 'Armenia', 'Republic of Armenia', 'AM', 'Armenian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AW', 'en-ZA', 12, 'Aruba', 'Aruba', 'Aruba', 'NL', 'Arubian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AU', 'en-ZA', 13, 'Commonwealth of Australia', 'Australia', 'Commonwealth of Australia', 'AU', 'Australian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AT', 'en-ZA', 14, 'Republic of Austria', 'Austria', 'Republic of Austria', 'AT', 'Austrian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AZ', 'en-ZA', 15, 'Republic of Azerbaijan', 'Azerbaijan', 'Republic of Azerbaijan', 'AZ', 'Azerbaijani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BS', 'en-ZA', 16, 'Commonwealth of The Bahamas', 'The Bahamas', 'Commonwealth of The Bahamas', 'BS', 'Bahamian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BH', 'en-ZA', 17, 'Kingdom of Bahrain', 'Bahrain', 'Kingdom of Bahrain', 'BH', 'Bahrainian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BD', 'en-ZA', 18, 'People''s Republic of Bangladesh', 'Bangladesh', 'People''s Republic of Bangladesh', 'BD', 'Bangladeshi');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BB', 'en-ZA', 19, 'Barbados', 'Barbados', 'Barbados', 'BB', 'Barbadian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BY', 'en-ZA', 20, ' Republic of Belarus', 'Belarus', ' Republic of Belarus', 'BY', 'Belarusian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BE', 'en-ZA', 21, 'Kingdom of Belgium', 'Belgium', 'Kingdom of Belgium', 'BE', 'Belgian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BZ', 'en-ZA', 22, 'Belize', 'Belize', 'Belize', 'BZ', 'Belizean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BJ', 'en-ZA', 23, 'Republic of Benin', 'Benin', 'Republic of Benin', 'BJ', 'Beninese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BM', 'en-ZA', 24, 'Bermuda', 'Bermuda', 'Bermuda', 'GB', 'Bermudan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BT', 'en-ZA', 25, 'Kingdom of Bhutan', 'Bhutan', 'Kingdom of Bhutan', 'BT', 'Bhutanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BO', 'en-ZA', 26, 'Plurinational State of Bolivia', 'Bolivia', 'Plurinational State of Bolivia', 'BO', 'Bolivian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BQ', 'en-ZA', 27, 'Bonaire, Sint Eustatius and Saba', 'Caribbean Netherlands', 'Bonaire, Sint Eustatius and Saba (Caribbean Netherlands)', 'NL', 'Dutch');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BA', 'en-ZA', 28, 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', '', 'Bosnian and Herzegovinian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BW', 'en-ZA', 29, 'Botswana', 'Botswana', 'Botswana', 'BW', 'Motswana');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BV', 'en-ZA', 30, 'Bouvet Island', 'Bouvet Island', 'Bouvet Island', 'NO', 'Norwegian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BR', 'en-ZA', 31, 'Brazil', 'Brazil', 'Brazil', 'BR', 'Brazilian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BN', 'en-ZA', 32, 'Nation of Brunei', 'Brunei', 'Nation of Brunei', 'BN', 'Bruneian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BG', 'en-ZA', 33, 'Republic of Bulgaria', 'Bulgaria', 'Republic of Bulgaria', 'BG', 'Bulgarian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BF', 'en-ZA', 34, 'Burkina Faso', 'Burkina Faso', 'Burkina Faso', 'BF', 'Burkinabe');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BI', 'en-ZA', 35, 'Republic of Burundi', 'Burundi', 'Republic of Burundi', 'BI', 'Burundian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CV', 'en-ZA', 36, 'Republic of Cabo Verde (Cape Verde)', 'Republic of Cabo Verde', 'Republic of Cabo Verde (Cape Verde)', 'CV', 'Cape Verdean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KH', 'en-ZA', 37, 'Kingdom of Cambodia', 'Cambodia', 'Kingdom of Cambodia', 'KH', 'Cambodian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CM', 'en-ZA', 38, 'Cameroon', 'Cameroon', 'Cameroon', 'CM', 'Cameroonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CA', 'en-ZA', 39, 'Canada', 'Canada', 'Canada', 'CA', 'Canadian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KY', 'en-ZA', 40, 'Cayman Islands', 'Cayman Islands', 'Cayman Islands', 'GB', 'Caymanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CF', 'en-ZA', 41, 'Central African Republic', 'Central African Republic', 'Central African Republic', 'CF', 'Central African');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TD', 'en-ZA', 42, 'Republic of Chad', 'Chad', 'Republic of Chad', 'TD', 'Chadian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CL', 'en-ZA', 43, 'Republic of Chile', 'Chile', 'Republic of Chile', 'CL', 'Chilean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CN', 'en-ZA', 44, 'China', 'China', 'China', 'CN', 'Chinese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CX', 'en-ZA', 45, 'Christmas Island', 'Christmas Island', 'Christmas Island', 'AU', 'Christmas Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CC', 'en-ZA', 46, 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', 'AU', 'Cocos Islandia');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CO', 'en-ZA', 47, 'Republic of Colombia', 'Colombia', 'Republic of Colombia', 'CO', 'Colombian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KM', 'en-ZA', 48, 'Union of the Comoros', 'Comoros', 'Union of the Comoros', 'KM', 'Comoran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CG', 'en-ZA', 49, 'Republic of Congo', 'Congo', 'Republic of Congo', 'CG', 'Congolese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CD', 'en-ZA', 50, 'Democratic Republic of the Congo', 'Dem. Rep. of the Congo', 'Democratic Republic of the Congo', 'CD', 'Congolese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CK', 'en-ZA', 51, 'Cook Islands', 'Cook Islands', 'Cook Islands', 'CK', 'Cook Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CR', 'en-ZA', 52, 'Republic of Costa Rica', 'Costa Rica', 'Republic of Costa Rica', 'CR', 'Costa Rican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HR', 'en-ZA', 53, 'Republic of Croatia', 'Croatia', 'Republic of Croatia', 'HR', 'Croatian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CU', 'en-ZA', 54, 'Republic of Cuba', 'Cuba', 'Republic of Cuba', 'CU', 'Cuban');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CW', 'en-ZA', 55, 'Curaçao', 'Curaçao', 'Curaçao', 'NL', 'Curaçaoan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CY', 'en-ZA', 56, 'Republic of Cyprus', 'Cyprus', 'Republic of Cyprus', 'CY', 'Cypriot');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CZ', 'en-ZA', 57, 'Czech Republic', 'Czech Republic', 'Czechia, Czech Republic', 'CZ', 'Czech');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CI', 'en-ZA', 58, 'Republic of Côte d''Ivoire', 'Côte d''Ivoire', 'Côte d''Ivoire (Ivory Coast)', 'CI', 'Ivorian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DK', 'en-ZA', 59, 'Kingdom of Denmark', 'Denmark', 'Kingdom of Denmark', 'DK', 'Danish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DJ', 'en-ZA', 60, 'Republic of Djibouti', 'Djibouti', 'Republic of Djibouti', 'DJ', 'Djiboutian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DM', 'en-ZA', 61, ' Commonwealth of Dominica', 'Dominica', ' Commonwealth of Dominica', 'DM', 'Dominican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DO', 'en-ZA', 62, 'Dominican Republic', 'Dominican Republic', 'Dominican Republic', 'DO', 'Dominican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('EC', 'en-ZA', 63, 'Republic of Ecuador', 'Ecuador', 'Republic of Ecuador', 'EC', 'Ecuadorian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('EG', 'en-ZA', 64, 'Arab Republic of Egypt', 'Egypt', 'Arab Republic of Egypt', 'EG', 'Egyptian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SV', 'en-ZA', 65, 'Republic of El Salvador', 'El Salvador', 'Republic of El Salvador', 'SV', 'Salvadoran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GQ', 'en-ZA', 66, 'Republic of Equatorial Guinea', 'Equatorial Guinea', 'Republic of Equatorial Guinea', 'GQ', 'Equatoguinean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ER', 'en-ZA', 67, 'State of Eritrea', 'Eritrea', 'State of Eritrea', 'ER', 'Eritrean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('EE', 'en-ZA', 68, 'Republic of Estonia', 'Estonia', 'Republic of Estonia', 'EE', 'Estonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ET', 'en-ZA', 69, 'Federal Democratic Republic of Ethiopia', 'Ethiopia', 'Federal Democratic Republic of Ethiopia', 'ET', 'Ethiopian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FK', 'en-ZA', 70, 'Falkland Islands (Malvinas)', 'Falkland Islands', 'Falkland Islands (Malvinas)', 'GB', 'Falkland Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FO', 'en-ZA', 71, 'Faroe Islands', 'Faroe Islands', 'Faroe Islands', 'DK', 'Faroese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FJ', 'en-ZA', 72, 'Republic of Fiji', 'Fiji', 'Republic of Fiji', 'FJ', 'Fijian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FI', 'en-ZA', 73, 'Republic of Finland', 'Finland', 'Republic of Finland', 'FI', 'Finnish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FR', 'en-ZA', 74, 'French Republic', 'France', 'French Republic', 'FR', 'French');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GF', 'en-ZA', 75, 'French Guiana', 'French Guiana', 'French Guiana', 'FR', 'French Guianese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PF', 'en-ZA', 76, 'Collectivity of French Polynesia', 'French Polynesia', 'Collectivity of French Polynesia', 'FR', 'French Polynesian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TF', 'en-ZA', 77, 'French Southern and Antarctic Lands', 'French Southern Territories', 'French Southern and Antarctic Lands', 'FR', 'French');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GA', 'en-ZA', 78, 'Gabonese Republic', 'Gabon', 'Gabonese Republic', 'GA', 'Gabonese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GM', 'en-ZA', 79, 'Republic of The Gambia', 'Gambia', 'Republic of The Gambia', 'GM', 'Gambian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GE', 'en-ZA', 80, 'Georgia', 'Georgia', 'Georgia', 'GE', 'Georgian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('DE', 'en-ZA', 81, 'Federal Republic of Germany', 'Germany', 'Federal Republic of Germany', 'DE', 'German');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GH', 'en-ZA', 82, 'Republic of Ghana', 'Ghana', 'Republic of Ghana', 'GH', 'Ghanaian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GI', 'en-ZA', 83, 'Gibraltar', 'Gibraltar', 'Gibraltar', 'GB', 'Gibraltarian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GR', 'en-ZA', 84, 'Hellenic Republic', 'Greece', 'Hellenic Republic', 'GR', 'Greek');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GL', 'en-ZA', 85, 'Greenland', 'Greenland', 'Greenland', 'GL', 'Greenlandic');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GD', 'en-ZA', 86, 'Grenada', 'Grenada', 'Grenada', 'GD', 'Grenadian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GP', 'en-ZA', 87, 'Guadeloupe', 'Guadeloupe', 'Guadeloupe', 'FR', 'Guadeloupean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GU', 'en-ZA', 88, 'Guam', 'Guam', 'Guam', 'US', 'Guamanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GT', 'en-ZA', 89, 'Republic of Guatemala', 'Guatemala', 'Republic of Guatemala', 'GT', 'Guatemalan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GG', 'en-ZA', 90, 'Guernsey', 'Guernsey', 'Guernsey', 'GB', 'British');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GN', 'en-ZA', 91, 'Republic of Guinea', 'Guinea', 'Republic of Guinea', 'GN', 'Guinean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GW', 'en-ZA', 92, 'Republic of Guinea-Bissau', 'Guinea-Bissau', 'Republic of Guinea-Bissau', 'GW', 'Guinean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GY', 'en-ZA', 93, 'Co-operative Republic of Guyana', 'Guyana', 'Co-operative Republic of Guyana', 'GY', 'Guyanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HT', 'en-ZA', 94, 'Republic of Haiti', 'Haiti', 'Republic of Haiti', 'HT', 'Haitian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VA', 'en-ZA', 95, 'Holy See', 'Holy See', 'Holy See', 'VA', 'Papal');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HN', 'en-ZA', 96, 'Republic of Honduras', 'Honduras', 'Republic of Honduras', 'HN', 'Honduran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HK', 'en-ZA', 97, 'Hong Kong', 'Hong Kong', 'Hong Kong Special Administrative Region of the People''s Republic of China', 'CN', 'Hong Konger');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('HU', 'en-ZA', 98, 'Hungary', 'Hungary', 'Hungary', 'HU', 'Hungarian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IS', 'en-ZA', 99, 'Iceland', 'Iceland', 'Iceland', 'IS', 'Icelander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IN', 'en-ZA', 100, 'Republic of India', 'India', 'Republic of India', 'IN', 'Indian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ID', 'en-ZA', 101, 'Republic of Indonesia', 'Indonesia', 'Republic of Indonesia', 'ID', 'Indonesian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IR', 'en-ZA', 102, 'Islamic Republic of Iran', 'Iran', 'Islamic Republic of Iran', 'IR', 'Iranian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IQ', 'en-ZA', 103, 'Republic of Iraq', 'Iraq', 'Republic of Iraq', 'IQ', 'Iraqi');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IE', 'en-ZA', 104, 'Republic of Ireland', 'Ireland', 'Republic of Ireland', 'IE', 'Irish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IM', 'en-ZA', 105, 'Isle of Man', 'Isle of Man', 'Isle of Man', 'GB', 'Manx');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IL', 'en-ZA', 106, 'State of Israel', 'Israel', 'State of Israel', 'IL', 'Israeli');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('IT', 'en-ZA', 107, 'Italian Republic', 'Italy', 'Italian Republic', 'IT', 'Italian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('JM', 'en-ZA', 108, 'Jamaica', 'Jamaica', 'Jamaica', 'JM', 'Jamaican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('JP', 'en-ZA', 109, 'Japan', 'Japan', 'Japan', 'JP', 'Japanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('JE', 'en-ZA', 110, 'Bailiwick of Jersey', 'Jersey', 'Bailiwick of Jersey', 'GB', 'British');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('JO', 'en-ZA', 111, 'Hashemite Kingdom of Jordan', 'Jordan', 'Hashemite Kingdom of Jordan', 'JO', 'Jordanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KZ', 'en-ZA', 112, 'Republic of Kazakhstan', 'Kazakhstan', 'Republic of Kazakhstan', 'KZ', 'Kazakhstani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KE', 'en-ZA', 113, 'Republic of Kenya', 'Kenya', 'Republic of Kenya', 'KE', 'Kenyan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KI', 'en-ZA', 114, 'Republic of Kiribati', 'Kiribati', 'Republic of Kiribati', 'KI', 'I-Kiribati');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KP', 'en-ZA', 115, 'Democratic People''s Republic of Korea', 'North Korea', 'Democratic People''s Republic of Korea', 'KP', 'North Korean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KR', 'en-ZA', 116, 'Republic of Korea', 'South Korea', 'Republic of Korea', 'KR', 'South Korean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KW', 'en-ZA', 117, 'State of Kuwait', 'Kuwait', 'State of Kuwait', 'KW', 'Kuwaiti');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KG', 'en-ZA', 118, 'Kyrgyz Republic', 'Kyrgyzstan', 'Kyrgyz Republic', 'KG', 'Kyrgyzstani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LA', 'en-ZA', 119, 'Lao People''s Democratic Republic', 'Laos', 'Lao People''s Democratic Republic', 'LA', 'Laotian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LV', 'en-ZA', 120, 'Republic of Latvia', 'Latvia', 'Republic of Latvia', 'LV', 'Latvian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LB', 'en-ZA', 121, 'Lebanese Republic', 'Lebanon', 'Lebanese Republic', 'LB', 'Lebanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LS', 'en-ZA', 122, 'Kingdom of Lesotho', 'Lesotho', 'Kingdom of Lesotho', 'LS', 'Mosotho');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LR', 'en-ZA', 123, 'Republic of Liberia', 'Liberia', 'Republic of Liberia', 'LR', 'Liberian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LY', 'en-ZA', 124, 'State of Libya', 'Libya', 'State of Libya', 'LY', 'Libyan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LI', 'en-ZA', 125, 'Principality of Liechtenstein', 'Liechtenstein', 'Principality of Liechtenstein', 'LI', 'Liechtensteiner');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LT', 'en-ZA', 126, 'Republic of Lithuania', 'Lithuania', 'Republic of Lithuania', 'LT', 'Lithunian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LU', 'en-ZA', 127, 'Grand Duchy of Luxembourg', 'Luxembourg', 'Grand Duchy of Luxembourg', 'LU', 'Luxembourger');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MO', 'en-ZA', 128, 'Macao', 'Macao', 'Macao', 'CN', 'Macanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MG', 'en-ZA', 129, 'Republic of Madagascar', 'Madagascar', 'Republic of Madagascar', 'MG', 'Malagasy');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MW', 'en-ZA', 130, 'Republic of Malawi', 'Malawi', 'Republic of Malawi', 'MW', 'Malawian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MY', 'en-ZA', 131, 'Malaysia', 'Malaysia', 'Malaysia', 'MY', 'Malaysian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MV', 'en-ZA', 132, 'Republic of Maldives', 'Maldives', 'Republic of Maldives', 'MV', 'Maldivan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ML', 'en-ZA', 133, 'Republic of Mali', 'Mali', 'Republic of Mali', 'ML', 'Malian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MT', 'en-ZA', 134, 'Republic of Malta', 'Malta', 'Republic of Malta', 'MT', 'Maltese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MH', 'en-ZA', 135, 'Republic of the Marshall Islands', 'Marshall Islands', 'Republic of the Marshall Islands', 'MH', 'Marshallese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MQ', 'en-ZA', 136, 'Martinique', 'Martinique', 'Martinique', 'FR', 'Martinican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MR', 'en-ZA', 137, 'Islamic Republic of Mauritania', 'Mauritania', 'Islamic Republic of Mauritania', 'MR', 'Mauritanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MU', 'en-ZA', 138, 'Republic of Mauritius', 'Mauritius', 'Republic of Mauritius', 'MU', 'Mauritian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('YT', 'en-ZA', 139, 'Department of Mayotte', 'Mayotte', 'Department of Mayotte', 'FR', 'Mahoran');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MX', 'en-ZA', 140, 'United Mexican States', 'Mexico', 'United Mexican States', 'MX', 'Mexican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('FM', 'en-ZA', 141, 'Federated States of Micronesia', 'Micronesia', 'Federated States of Micronesia', 'FM', 'Micronesian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MD', 'en-ZA', 142, 'Republic of Moldova', 'Moldova', 'Republic of Moldova', 'MD', 'Moldovan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MC', 'en-ZA', 143, ' Principality of Monaco', 'Monaco', ' Principality of Monaco', 'MC', 'Monacan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MN', 'en-ZA', 144, 'Mongolia', 'Mongolia', 'Mongolia', 'MN', 'Mongolian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ME', 'en-ZA', 145, 'Montenegro', 'Montenegro', 'Montenegro', 'ME', 'Montenegrin');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MS', 'en-ZA', 146, 'Montserrat', 'Montserrat', 'Montserrat', 'GB', 'Montserratian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MA', 'en-ZA', 147, 'Kingdom of Morocco', 'Morocco', 'Kingdom of Morocco', 'MA', 'Moroccan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MZ', 'en-ZA', 148, 'Republic of Mozambique', 'Mozambique', 'Republic of Mozambique', 'MZ', 'Mozambican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MM', 'en-ZA', 149, 'Republic of the Union of Myanmar', 'Myanmar', 'Republic of the Union of Myanmar', 'MM', 'Myanma');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NA', 'en-ZA', 150, 'Republic of Namibia', 'Namibia', 'Republic of Namibia', 'NA', 'Namibian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NR', 'en-ZA', 151, 'Republic of Nauru', 'Nauru', 'Republic of Nauru', 'NR', 'Nauruan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NP', 'en-ZA', 152, 'Federal Democratic Republic of Nepal', 'Nepal', 'Federal Democratic Republic of Nepal', 'NP', 'Nepalese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NL', 'en-ZA', 153, 'Netherlands', 'Netherlands', 'Netherlands', 'NL', 'Dutch');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NC', 'en-ZA', 154, 'New Caledonia', 'New Caledonia', 'New Caledonia', 'FR', 'New Caledonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NZ', 'en-ZA', 155, 'New Zealand', 'New Zealand', 'New Zealand', 'NZ', 'New Zealander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NI', 'en-ZA', 156, 'Republic of Nicaragua', 'Nicaragua', 'Republic of Nicaragua', 'NI', 'Nicaraguan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NE', 'en-ZA', 157, 'Republic of the Niger', 'Niger', 'Republic of the Niger', 'NE', 'Nigerien');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NG', 'en-ZA', 158, 'Federal Republic of Nigeria', 'Nigeria', 'Federal Republic of Nigeria', 'NG', 'Nigerian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NU', 'en-ZA', 159, 'Niue', 'Niue', 'Niue', 'NU', 'Niuean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NF', 'en-ZA', 160, 'Norfolk Island', 'Norfolk Island', 'Norfolk Island', 'AU', 'Norfolk Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MP', 'en-ZA', 161, 'Commonwealth of the Northern Mariana Islands', 'Northern Mariana Islands', 'Commonwealth of the Northern Mariana Islands', 'US', 'Northern Mariana Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('NO', 'en-ZA', 162, 'Kingdom of Norway', 'Norway', 'Kingdom of Norway', 'NO', 'Norwegian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('OM', 'en-ZA', 163, 'Sultanate of Oman', 'Oman', 'Sultanate of Oman', 'OM', 'Omani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PK', 'en-ZA', 164, 'Islamic Republic of Pakistan', 'Pakistan', 'Islamic Republic of Pakistan', 'PK', 'Pakistani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PW', 'en-ZA', 165, 'Republic of Palau', 'Palau', 'Republic of Palau', 'PW', 'Palauan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PS', 'en-ZA', 166, 'State of Palestine', 'Palestine', 'State of Palestine', 'PS', 'Palestinian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PA', 'en-ZA', 167, 'Republic of Panama', 'Panama', 'Republic of Panama', 'PA', 'Panamanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PG', 'en-ZA', 168, 'Independent State of Papua New Guinea', 'Papua New Guinea', 'Independent State of Papua New Guinea', 'PG', 'Papua New Guinean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PY', 'en-ZA', 169, 'Republic of Paraguay', 'Paraguay', 'Republic of Paraguay', 'PY', 'Paraguayan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PE', 'en-ZA', 170, 'Republic of Peru', 'Peru', 'Republic of Peru', 'PE', 'Peruvian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PH', 'en-ZA', 171, 'Republic of the Philippines', 'Philippines', 'Republic of the Philippines', 'PH', 'Filipino');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PN', 'en-ZA', 172, 'Pitcairn Islands', 'Pitcairn Islands', 'Pitcairn Islands', 'GB', 'Pitcairn Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PL', 'en-ZA', 173, 'Republic of Poland', 'Poland', 'Republic of Poland', 'PL', 'Polish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PT', 'en-ZA', 174, 'Portuguese Republic', 'Portugal', 'Portuguese Republic', 'PT', 'Portuguese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PR', 'en-ZA', 175, 'Commonwealth of Puerto Rico', 'Puerto Rico', 'Commonwealth of Puerto Rico', 'PR', 'Puerto Rican');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('QA', 'en-ZA', 176, 'State of Qatar', 'Qatar', 'State of Qatar', 'QA', 'Qatari');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MK', 'en-ZA', 177, 'Republic of North Macedonia', 'North Macedonia', 'Republic of North Macedonia', 'MK', 'Macedonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RO', 'en-ZA', 178, 'Romania', 'Romania', 'Romania', 'RO', 'Romanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RU', 'en-ZA', 179, 'Russian Federation', 'Russia', 'Russian Federation', 'RU', 'Russian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RW', 'en-ZA', 180, 'Republic of Rwanda', 'Rwanda', 'Republic of Rwanda', 'RW', 'Rwandan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RE', 'en-ZA', 181, 'Réunion', 'Réunion', 'Réunion', 'FR', 'French');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('BL', 'en-ZA', 182, 'Saint Barthélemy', 'St. Barthélemy', 'Saint Barthélemy', 'FR', 'Barthélemois');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('KN', 'en-ZA', 183, 'Federation of Saint Christopher and Nevis', 'St. Kitts and Nevis', 'Federation of Saint Christopher and Nevis', 'KN', 'Kittian or Nevisian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LC', 'en-ZA', 184, 'Saint Lucia', 'St. Lucia', 'Saint Lucia', 'LC', 'Saint Lucian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('MF', 'en-ZA', 185, 'Saint Martin (French part)', 'St. Martin (French part)', 'Saint Martin (French part)', 'FR', 'French');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('PM', 'en-ZA', 186, 'Saint Pierre and Miquelon', 'St. Pierre and Miquelon', 'Saint Pierre and Miquelon', 'FR', 'Miquelonnais');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VC', 'en-ZA', 187, 'Saint Vincent and the Grenadines', 'Saint Vincent', 'Saint Vincent and the Grenadines', 'VC', 'Saint Vincentian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('WS', 'en-ZA', 188, 'Independent State of Samoa', 'Samoa', 'Independent State of Samoa', 'WS', 'Samoan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SM', 'en-ZA', 189, 'Republic of San Marino', 'San Marino', 'Republic of San Marino', 'SM', 'Sammarinese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ST', 'en-ZA', 190, 'Democratic Republic of São Tomé and Príncipe', 'Sao Tome and Principe', 'Democratic Republic of São Tomé and Príncipe', 'ST', 'São Tomean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SA', 'en-ZA', 191, 'Kingdom of Saudi Arabia', 'Saudi Arabia', 'Kingdom of Saudi Arabia', 'SA', 'Saudi Arabian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SN', 'en-ZA', 192, 'Republic of Senegal', 'Senegal', 'Republic of Senegal', 'SN', 'Senegalese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('RS', 'en-ZA', 193, 'Republic of Serbia', 'Serbia', 'Republic of Serbia', 'RS', 'Serbian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SC', 'en-ZA', 194, 'Republic of Seychelles', 'Seychelles', 'Republic of Seychelles', 'SC', 'Seychellois');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SL', 'en-ZA', 195, 'Republic of Sierra Leone', 'Sierra Leone', 'Republic of Sierra Leone', 'SL', 'Sierra Leonean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SG', 'en-ZA', 196, 'Republic of Singapore', 'Singapore', 'Republic of Singapore', 'SG', 'Singaporean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SX', 'en-ZA', 197, 'Sint Maarten (Dutch part)', 'Sint Maarten', 'Sint Maarten (Dutch part)', 'NL', 'Dutch');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SK', 'en-ZA', 198, 'Slovak Republic', 'Slovakia', 'Slovak Republic', 'SK', 'Slovak');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SI', 'en-ZA', 199, 'Republic of Slovenia', 'Slovenia', 'Republic of Slovenia', 'SI', 'Slovene');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SB', 'en-ZA', 200, 'Solomon Islands', 'Solomon Islands', 'Solomon Islands', 'SB', 'Solomon Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SO', 'en-ZA', 201, 'Federal Republic of Somalia', 'Somalia', 'Federal Republic of Somalia', 'SO', 'Somali');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ZA', 'en-ZA', 202, 'Republic of South Africa', 'South Africa', 'Republic of South Africa', 'ZA', 'South African');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SS', 'en-ZA', 203, 'Republic of South Sudan', 'South Sudan', 'Republic of South Sudan', 'SS', 'Sudanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ES', 'en-ZA', 204, 'Kingdom of Spain', 'Spain', 'Kingdom of Spain', 'ES', 'Spanish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('LK', 'en-ZA', 205, 'Democratic Socialist Republic of Sri Lanka', 'Sri Lanka', 'Democratic Socialist Republic of Sri Lanka', 'LK', 'Sri Lankan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SD', 'en-ZA', 206, 'Republic of the Sudan', 'Sudan', 'Republic of the Sudan', 'SD', 'Sudanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SR', 'en-ZA', 207, 'Republic of Suriname', 'Suriname', 'Republic of Suriname', 'SR', 'Surinamese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SJ', 'en-ZA', 208, 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'Svalbard and Jan Mayen', 'NO', 'Norwegian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SZ', 'en-ZA', 209, 'Kingdom of Eswatini', 'Swaziland', 'Kingdom of Eswatini', 'SZ', 'Swazi');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SE', 'en-ZA', 210, 'Kingdom of Sweden', 'Sweden', 'Kingdom of Sweden', 'SE', 'Swedish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('CH', 'en-ZA', 211, 'Switzerland', 'Switzerland', 'Switzerland', 'CH', 'Swiss');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('SY', 'en-ZA', 212, 'Syrian Arab Republic', 'Syria', 'Syrian Arab Republic', 'SY', 'Syrian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TW', 'en-ZA', 213, 'Republic of China', 'Taiwan', 'Republic of China', 'TW', 'Taiwanese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TJ', 'en-ZA', 214, 'Republic of Tajikistan', 'Tajikistan', 'Republic of Tajikistan', 'TJ', 'Tajikistani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TZ', 'en-ZA', 215, 'United Republic of Tanzania', 'Tanzania', 'United Republic of Tanzania', 'TZ', 'Tanzanian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TH', 'en-ZA', 216, 'Kingdom of Thailand', 'Thailand', 'Kingdom of Thailand', 'TH', 'Thai');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TL', 'en-ZA', 217, 'Democratic Republic of Timor-Leste', 'East Timor', 'Democratic Republic of Timor-Leste', 'TL', 'Timorese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TG', 'en-ZA', 218, 'Togolese Republic', 'Togo', 'Togolese Republic', 'TG', 'Togolese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TK', 'en-ZA', 219, 'Tokelau Islands', 'Tokelau', 'Tokelau Islands', 'NZ', 'Tokelauan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TO', 'en-ZA', 220, 'Kingdom of Tonga', 'Tonga', 'Kingdom of Tonga', 'TO', 'Tongan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TT', 'en-ZA', 221, 'Republic of Trinidad and Tobago', 'Trinidad and Tobago', 'Republic of Trinidad and Tobago', 'TT', 'Trinidadian and Tobagonian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TN', 'en-ZA', 222, 'Republic of Tunisia', 'Tunisia', 'Republic of Tunisia', 'TN', 'Tunisian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TR', 'en-ZA', 223, 'Republic of Turkey', 'Turkey', 'Republic of Turkey', 'TR', 'Turkish');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TM', 'en-ZA', 224, 'Turkmenistan', 'Turkmenistan', 'Turkmenistan', 'TM', 'Turkmen');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TC', 'en-ZA', 225, 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'Turks and Caicos Islands', 'GB', 'Turks and Caicos Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('TV', 'en-ZA', 226, 'Tuvalu', 'Tuvalu', 'Tuvalu', 'TV', 'Tuvaluan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UG', 'en-ZA', 227, 'Republic of Uganda', 'Uganda', 'Republic of Uganda', 'UG', 'Ugandan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UA', 'en-ZA', 228, 'Ukraine', 'Ukraine', 'Ukraine', 'UA', 'Ukrainian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AE', 'en-ZA', 229, 'United Arab Emirates', 'United Arab Emirates', 'United Arab Emirates', 'AE', 'Emirati');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('GB', 'en-ZA', 230, 'United Kingdom', 'United Kingdom', 'United Kingdom of Great Britain and Northern Ireland', 'GB', 'British');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UM', 'en-ZA', 231, 'United States Minor Outlying Islands', 'US Minor Outlying Islands', 'United States Minor Outlying Islands', 'UM', 'American');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('US', 'en-ZA', 232, 'United States of America', 'United States of America', 'United States of America', 'US', 'American');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UY', 'en-ZA', 233, 'Oriental Republic of Uruguay', 'Uruguay', 'Oriental Republic of Uruguay', 'UY', 'Uruguayan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('UZ', 'en-ZA', 234, 'Republic of Uzbekistan', 'Uzbekistan', 'Republic of Uzbekistan', 'UZ', 'Uzbekistani');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VU', 'en-ZA', 235, 'Republic of Vanuatu', 'Vanuatu', 'Republic of Vanuatu', 'VU', 'Ni-Vanuatu');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VE', 'en-ZA', 236, 'Bolivarian Republic of Venezuela', 'Venezuela', 'Bolivarian Republic of Venezuela', 'VE', 'Venezuelan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VN', 'en-ZA', 237, 'Socialist Republic of Vietnam', 'Vietnam', 'Socialist Republic of Vietnam', 'VN', 'Vietnamese');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VG', 'en-ZA', 238, 'Virgin Islands', 'British Virgin Islands', 'Virgin Islands', 'GB', 'Virgin Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('VI', 'en-ZA', 239, 'United States Virgin Islands', 'U.S. Virgin Islands', 'United States Virgin Islands', 'US', 'Virgin Islander');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('WF', 'en-ZA', 240, 'Territory of the Wallis and Futuna Islands', 'Wallis and Futuna Islands', 'Territory of the Wallis and Futuna Islands', 'FR', 'Wallisian or Futunan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('EH', 'en-ZA', 241, 'Western Sahara', 'Western Sahara', 'Western Sahara', '', 'Western Saharan');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('YE', 'en-ZA', 242, 'Republic of Yemen', 'Yemen', 'Republic of Yemen', 'YE', 'Yemeni');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ZM', 'en-ZA', 243, 'Republic of Zambia', 'Zambia', 'Republic of Zambia', 'ZM', 'Zambian');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('ZW', 'en-ZA', 244, 'Republic of Zimbabwe', 'Zimbabwe', 'Republic of Zimbabwe', 'ZW', 'Zimbabwean');
-INSERT INTO reference.countries (code, locale, sort_index, name, short_name, description, sovereign_state, nationality)
+INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AX', 'en-ZA', 245, 'Åland Islands', 'Åland Islands', 'Åland Islands', 'FI', 'Ålandic');
    
       
 
-INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
   VALUES ('E', 'en-US', 1, 'Employed', 'Employed');
-INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
   VALUES ('O', 'en-US', 2, 'Other', 'Other');
-INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
   
-INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
   VALUES ('E', 'en-ZA', 1, 'Employed', 'Employed');
-INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
   VALUES ('O', 'en-ZA', 2, 'Other', 'Other');
-INSERT INTO reference.employment_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
   
 
 
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('E', 'F', 'en-US', 1, 'Full-time', 'Full-time');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('E', 'P', 'en-US', 2, 'Part-time', 'Part-time');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('E', 'C', 'en-US', 3, 'Contractor', 'Contractor');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('E', 'S', 'en-US', 4, 'Self-employed', 'Self-employed');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'R', 'en-US', 5, 'Retired/Pensioner', 'Retired/Pensioner');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'U', 'en-US', 6, 'Unemployed', 'Unemployed');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'H', 'en-US', 7, 'Housewife/Home Executive', 'Housewife/Home Executive');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'S', 'en-US', 8, 'Student', 'Student');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'M', 'en-US', 9, 'Minor', 'Minor');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'N', 'en-US', 10, 'Not Specified', 'Not Specified');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('U', 'U', 'en-US', 99, 'Unknown', 'Unknown');
   
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('E', 'F', 'en-ZA', 1, 'Full-time', 'Full-time');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('E', 'P', 'en-ZA', 2, 'Part-time', 'Part-time');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('E', 'C', 'en-ZA', 3, 'Contractor', 'Contractor');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('E', 'S', 'en-ZA', 4, 'Self-employed', 'Self-employed');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'R', 'en-ZA', 5, 'Retired/Pensioner', 'Retired/Pensioner');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'U', 'en-ZA', 6, 'Unemployed', 'Unemployed');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'H', 'en-ZA', 7, 'Housewife/Home Executive', 'Housewife/Home Executive');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'S', 'en-ZA', 8, 'Student', 'Student');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'M', 'en-ZA', 9, 'Minor', 'Minor');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('O', 'N', 'en-ZA', 10, 'Not Specified', 'Not Specified');
-INSERT INTO reference.employment_types (employment_status, code, locale, sort_index, name, description)
+INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
   VALUES ('U', 'U', 'en-ZA', 99, 'Unknown', 'Unknown');  
 
 
 
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('M', 'en-US', 1, 'Male', 'Male');
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-US', 2, 'Female', 'Female');
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('T', 'en-US', 3, 'Transgender', 'Transgender');
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-US', 4, 'Non-binary', 'Non-binary');
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
   
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('M', 'en-ZA', 1, 'Male', 'Male');
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-ZA', 2, 'Female', 'Female');
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('T', 'en-ZA', 3, 'Transgender', 'Transgender');
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-ZA', 4, 'Non-binary', 'Non-binary');
-INSERT INTO reference.genders (code, locale, sort_index, name, description)
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');  
 
 
 
-INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAIDBOOK', 'en-US', 10001, 'South African ID Book', 'South African ID Book', 'ZA');
-INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAIDCARD', 'en-US', 10002, 'South African ID Card', 'South African ID Card', 'ZA');
-INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZADRVLIC', 'en-US', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
-INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('PASSPORT', 'en-US', 99999, 'Passport', 'Passport', '');
   
 
-INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAIDBOOK', 'en-ZA', 10001, 'South African ID Book', 'South African ID Book', 'ZA');
-INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAIDCARD', 'en-ZA', 10002, 'South African ID Card', 'South African ID Card', 'ZA');
-INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZADRVLIC', 'en-ZA', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
-INSERT INTO reference.identity_document_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('PASSPORT', 'en-ZA', 99999, 'Passport', 'Passport', '');  
 
 
 
 -- See: https://en.wikipedia.org/wiki/List_of_official_languages_by_country_and_territory
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AB', 'en-US', 1, 'Abkhaz', 'Abkhaz', 'Abkhaz');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AF', 'en-US', 2, 'Afrikaans', 'Afrikaans', 'Afrikaans');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AM', 'en-US', 3, 'Amharic', 'Amharic', 'Amharic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AR', 'en-US', 4, 'Arabic', 'Arabic', 'Arabic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AY', 'en-US', 5, 'Aymara', 'Aymara', 'Aymara');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AZ', 'en-US', 6, 'Azerbaijani', 'Azerbaijani', 'Azerbaijani');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BE', 'en-US', 7, 'Belarusian', 'Belarusian', 'Belarusian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BG', 'en-US', 8, 'Bulgarian', 'Bulgarian', 'Bulgarian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BI', 'en-US', 9, 'Bislama', 'Bislama', 'Bislama');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BN', 'en-US', 10, 'Bengali', 'Bengali', 'Bengali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BS', 'en-US', 11, 'Bosnian', 'Bosnian', 'Bosnian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('CS', 'en-US', 12, 'Czech', 'Czech', 'Czech');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('DA', 'en-US', 13, 'Danish', 'Danish', 'Danish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('DE', 'en-US', 14, 'German', 'German', 'German');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('DZ', 'en-US', 15, 'Dzongkha', 'Dzongkha', 'Dzongkha');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('EL', 'en-US', 16, 'Greek', 'Greek', 'Greek');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('EN', 'en-US', 17, 'English', 'English', 'English');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ES', 'en-US', 18, 'Spanish', 'Spanish', 'Spanish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ET', 'en-US', 19, 'Estonian', 'Estonian', 'Estonian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('FI', 'en-US', 20, 'Finnish', 'Finnish', 'Finnish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('FJ', 'en-US', 21, 'Fijian', 'Fijian', 'Fijian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('FR', 'en-US', 22, 'French', 'French', 'French');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('GN', 'en-US', 23, 'Guarani', 'Guarani', 'Guarani');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HE', 'en-US', 24, 'Hebrew', 'Hebrew', 'Hebrew');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HI', 'en-US', 25, 'Hindi', 'Hindi', 'Hindi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HO', 'en-US', 26, 'Hiri Motu', 'Hiri Motu', 'Hiri Motu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HR', 'en-US', 27, 'Croatian', 'Croatian', 'Croatian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HT', 'en-US', 28, 'Haitian Creole', 'Haitian Creole', 'Haitian, Haitian Creole');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HU', 'en-US', 29, 'Hungarian', 'Hungarian', 'Hungarian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HY', 'en-US', 30, 'Armenian', 'Armenian', 'Armenian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ID', 'en-US', 31, 'Indonesian', 'Indonesian', 'Indonesian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('IS', 'en-US', 32, 'Icelandic', 'Icelandic', 'Icelandic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('IT', 'en-US', 33, 'Italian', 'Italian', 'Italian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('JA', 'en-US', 34, 'Japanese', 'Japanese', 'Japanese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KA', 'en-US', 35, 'Georgian', 'Georgian', 'Georgian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KK', 'en-US', 36, 'Kazakh', 'Kazakh', 'Kazakh');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KM', 'en-US', 37, 'Khmer', 'Khmer', 'Khmer');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KO', 'en-US', 38, 'Korean', 'Korean', 'Korean');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KY', 'en-US', 39, 'Kyrgyz', 'Kyrgyz', 'Kirghiz, Kyrgyz');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('LB', 'en-US', 40, 'Luxembourgish', 'Luxembourgish', 'Luxembourgish, Letzeburgesch');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('LO', 'en-US', 41, 'Lao', 'Lao', 'Lao');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('LT', 'en-US', 42, 'Lithuanian', 'Lithuanian', 'Lithuanian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('LV', 'en-US', 43, 'Latvian', 'Latvian', 'Latvian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MG', 'en-US', 44, 'Malagasy', 'Malagasy', 'Malagasy');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MI', 'en-US', 45, 'Maori', 'Maori', 'Maori');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MK', 'en-US', 46, 'Macedonian', 'Macedonian', 'Macedonian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MN', 'en-US', 47, 'Mongolian', 'Mongolian', 'Mongolian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MR', 'en-US', 48, 'Marathi', 'Marathi', 'Marathi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MS', 'en-US', 49, 'Malay', 'Malay', 'Malay');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MT', 'en-US', 50, 'Maltese', 'Maltese', 'Maltese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MY', 'en-US', 51, 'Burmese', 'Burmese', 'Burmese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ND', 'en-US', 52, 'Ndebele', 'Ndebele', 'Ndebele, Northern Ndebele, North Ndebele');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NE', 'en-US', 53, 'Nepali', 'Nepali', 'Nepali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NL', 'en-US', 54, 'Dutch', 'Dutch', 'Dutch, Flemish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NO', 'en-US', 55, 'Norwegian', 'Norwegian', 'Norwegian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NR', 'en-US', 56, 'Southern Ndebele', 'Southern Ndebele', 'Southern Ndebele, South Ndebele');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NY', 'en-US', 57, 'Chewa', 'Chewa', 'Chichewa, Chewa, Nyanja');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('OS', 'en-US', 58, 'Ossetian', 'Ossetian', 'Ossetian, Ossetic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('PL', 'en-US', 59, 'Polish', 'Polish', 'Polish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('PS', 'en-US', 60, 'Pashto', 'Pashto', 'Pushto, Pashto');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('PT', 'en-US', 61, 'Portuguese', 'Portuguese', 'Portuguese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('QU', 'en-US', 62, 'Quechua', 'Quechua', 'Quechua');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('RM', 'en-US', 63, 'Romansh', 'Romansh', 'Romansh');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('RO', 'en-US', 64, 'Romanian', 'Romanian', 'Romanian, Moldavian, Moldovan');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('RU', 'en-US', 65, 'Russian', 'Russian', 'Russian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('RW', 'en-US', 66, 'Kinyarwanda', 'Kinyarwanda', 'Kinyarwanda');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SE', 'en-US', 67, 'Northern Sami', 'Northern Sami', 'Northern Sami');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SI', 'en-US', 68, 'Sinhala', 'Sinhala', 'Sinhala, Sinhalese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SK', 'en-US', 69, 'Slovak', 'Slovak', 'Slovak');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SL', 'en-US', 70, 'Slovenian', 'Slovenian', 'Slovenian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SN', 'en-US', 71, 'Shona', 'Shona', 'Shona');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SO', 'en-US', 72, 'Somali', 'Somali', 'Somali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SR', 'en-US', 73, 'Serbian', 'Serbian', 'Serbian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ST', 'en-US', 74, 'Sotho', 'Sotho', 'Sotho, Southern Sotho');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SV', 'en-US', 75, 'Swedish', 'Swedish', 'Swedish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SW', 'en-US', 76, 'Swahili', 'Swahili', 'Swahili');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TA', 'en-US', 77, 'Tamil', 'Tamil', 'Tamil');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TG', 'en-US', 78, 'Tajik', 'Tajik', 'Tajik');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TH', 'en-US', 79, 'Thai', 'Thai', 'Thai');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TI', 'en-US', 80, 'Tigrinya', 'Tigrinya', 'Tigrinya');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TK', 'en-US', 81, 'Turkmen', 'Turkmen', 'Turkmen');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TN', 'en-US', 82, 'Tswana', 'Tswana', 'Tswana');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TR', 'en-US', 83, 'Turkish', 'Turkish', 'Turkish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TS', 'en-US', 84, 'Tsonga', 'Tsonga', 'Tsonga');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('UK', 'en-US', 85, 'Ukrainian', 'Ukrainian', 'Ukrainian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('UR', 'en-US', 86, 'Urdu', 'Urdu', 'Urdu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('UZ', 'en-US', 87, 'Uzbek', 'Uzbek', 'Uzbek');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('VE', 'en-US', 88, 'Venda', 'Venda', 'Venda');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('VI', 'en-US', 89, 'Vietnamese', 'Vietnamese', 'Vietnamese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('XH', 'en-US', 90, 'Xhosa', 'Xhosa', 'Xhosa');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ZH', 'en-US', 91, 'Chinese', 'Chinese', 'Chinese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ZU', 'en-US', 92, 'Zulu', 'Zulu', 'Zulu');
    
 
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AB', 'en-ZA', 1, 'Abkhaz', 'Abkhaz', 'Abkhaz');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AF', 'en-ZA', 2, 'Afrikaans', 'Afrikaans', 'Afrikaans');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AM', 'en-ZA', 3, 'Amharic', 'Amharic', 'Amharic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AR', 'en-ZA', 4, 'Arabic', 'Arabic', 'Arabic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AY', 'en-ZA', 5, 'Aymara', 'Aymara', 'Aymara');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AZ', 'en-ZA', 6, 'Azerbaijani', 'Azerbaijani', 'Azerbaijani');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BE', 'en-ZA', 7, 'Belarusian', 'Belarusian', 'Belarusian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BG', 'en-ZA', 8, 'Bulgarian', 'Bulgarian', 'Bulgarian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BI', 'en-ZA', 9, 'Bislama', 'Bislama', 'Bislama');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BN', 'en-ZA', 10, 'Bengali', 'Bengali', 'Bengali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('BS', 'en-ZA', 11, 'Bosnian', 'Bosnian', 'Bosnian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('CS', 'en-ZA', 12, 'Czech', 'Czech', 'Czech');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('DA', 'en-ZA', 13, 'Danish', 'Danish', 'Danish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('DE', 'en-ZA', 14, 'German', 'German', 'German');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('DZ', 'en-ZA', 15, 'Dzongkha', 'Dzongkha', 'Dzongkha');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('EL', 'en-ZA', 16, 'Greek', 'Greek', 'Greek');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('EN', 'en-ZA', 17, 'English', 'English', 'English');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ES', 'en-ZA', 18, 'Spanish', 'Spanish', 'Spanish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ET', 'en-ZA', 19, 'Estonian', 'Estonian', 'Estonian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('FI', 'en-ZA', 20, 'Finnish', 'Finnish', 'Finnish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('FJ', 'en-ZA', 21, 'Fijian', 'Fijian', 'Fijian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('FR', 'en-ZA', 22, 'French', 'French', 'French');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('GN', 'en-ZA', 23, 'Guarani', 'Guarani', 'Guarani');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HE', 'en-ZA', 24, 'Hebrew', 'Hebrew', 'Hebrew');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HI', 'en-ZA', 25, 'Hindi', 'Hindi', 'Hindi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HO', 'en-ZA', 26, 'Hiri Motu', 'Hiri Motu', 'Hiri Motu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HR', 'en-ZA', 27, 'Croatian', 'Croatian', 'Croatian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HT', 'en-ZA', 28, 'Haitian Creole', 'Haitian Creole', 'Haitian, Haitian Creole');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HU', 'en-ZA', 29, 'Hungarian', 'Hungarian', 'Hungarian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('HY', 'en-ZA', 30, 'Armenian', 'Armenian', 'Armenian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ID', 'en-ZA', 31, 'Indonesian', 'Indonesian', 'Indonesian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('IS', 'en-ZA', 32, 'Icelandic', 'Icelandic', 'Icelandic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('IT', 'en-ZA', 33, 'Italian', 'Italian', 'Italian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('JA', 'en-ZA', 34, 'Japanese', 'Japanese', 'Japanese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KA', 'en-ZA', 35, 'Georgian', 'Georgian', 'Georgian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KK', 'en-ZA', 36, 'Kazakh', 'Kazakh', 'Kazakh');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KM', 'en-ZA', 37, 'Khmer', 'Khmer', 'Khmer');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KO', 'en-ZA', 38, 'Korean', 'Korean', 'Korean');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('KY', 'en-ZA', 39, 'Kyrgyz', 'Kyrgyz', 'Kirghiz, Kyrgyz');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('LB', 'en-ZA', 40, 'Luxembourgish', 'Luxembourgish', 'Luxembourgish, Letzeburgesch');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('LO', 'en-ZA', 41, 'Lao', 'Lao', 'Lao');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('LT', 'en-ZA', 42, 'Lithuanian', 'Lithuanian', 'Lithuanian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('LV', 'en-ZA', 43, 'Latvian', 'Latvian', 'Latvian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MG', 'en-ZA', 44, 'Malagasy', 'Malagasy', 'Malagasy');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MI', 'en-ZA', 45, 'Maori', 'Maori', 'Maori');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MK', 'en-ZA', 46, 'Macedonian', 'Macedonian', 'Macedonian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MN', 'en-ZA', 47, 'Mongolian', 'Mongolian', 'Mongolian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MR', 'en-ZA', 48, 'Marathi', 'Marathi', 'Marathi');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MS', 'en-ZA', 49, 'Malay', 'Malay', 'Malay');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MT', 'en-ZA', 50, 'Maltese', 'Maltese', 'Maltese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('MY', 'en-ZA', 51, 'Burmese', 'Burmese', 'Burmese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ND', 'en-ZA', 52, 'Ndebele', 'Ndebele', 'Ndebele, Northern Ndebele, North Ndebele');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NE', 'en-ZA', 53, 'Nepali', 'Nepali', 'Nepali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NL', 'en-ZA', 54, 'Dutch', 'Dutch', 'Dutch, Flemish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NO', 'en-ZA', 55, 'Norwegian', 'Norwegian', 'Norwegian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NR', 'en-ZA', 56, 'Southern Ndebele', 'Southern Ndebele', 'Southern Ndebele, South Ndebele');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('NY', 'en-ZA', 57, 'Chewa', 'Chewa', 'Chichewa, Chewa, Nyanja');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('OS', 'en-ZA', 58, 'Ossetian', 'Ossetian', 'Ossetian, Ossetic');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('PL', 'en-ZA', 59, 'Polish', 'Polish', 'Polish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('PS', 'en-ZA', 60, 'Pashto', 'Pashto', 'Pushto, Pashto');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('PT', 'en-ZA', 61, 'Portuguese', 'Portuguese', 'Portuguese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('QU', 'en-ZA', 62, 'Quechua', 'Quechua', 'Quechua');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('RM', 'en-ZA', 63, 'Romansh', 'Romansh', 'Romansh');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('RO', 'en-ZA', 64, 'Romanian', 'Romanian', 'Romanian, Moldavian, Moldovan');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('RU', 'en-ZA', 65, 'Russian', 'Russian', 'Russian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('RW', 'en-ZA', 66, 'Kinyarwanda', 'Kinyarwanda', 'Kinyarwanda');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SE', 'en-ZA', 67, 'Northern Sami', 'Northern Sami', 'Northern Sami');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SI', 'en-ZA', 68, 'Sinhala', 'Sinhala', 'Sinhala, Sinhalese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SK', 'en-ZA', 69, 'Slovak', 'Slovak', 'Slovak');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SL', 'en-ZA', 70, 'Slovenian', 'Slovenian', 'Slovenian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SN', 'en-ZA', 71, 'Shona', 'Shona', 'Shona');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SO', 'en-ZA', 72, 'Somali', 'Somali', 'Somali');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SR', 'en-ZA', 73, 'Serbian', 'Serbian', 'Serbian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ST', 'en-ZA', 74, 'Sotho', 'Sotho', 'Sotho, Southern Sotho');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SV', 'en-ZA', 75, 'Swedish', 'Swedish', 'Swedish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('SW', 'en-ZA', 76, 'Swahili', 'Swahili', 'Swahili');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TA', 'en-ZA', 77, 'Tamil', 'Tamil', 'Tamil');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TG', 'en-ZA', 78, 'Tajik', 'Tajik', 'Tajik');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TH', 'en-ZA', 79, 'Thai', 'Thai', 'Thai');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TI', 'en-ZA', 80, 'Tigrinya', 'Tigrinya', 'Tigrinya');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TK', 'en-ZA', 81, 'Turkmen', 'Turkmen', 'Turkmen');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TN', 'en-ZA', 82, 'Tswana', 'Tswana', 'Tswana');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TR', 'en-ZA', 83, 'Turkish', 'Turkish', 'Turkish');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('TS', 'en-ZA', 84, 'Tsonga', 'Tsonga', 'Tsonga');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('UK', 'en-ZA', 85, 'Ukrainian', 'Ukrainian', 'Ukrainian');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('UR', 'en-ZA', 86, 'Urdu', 'Urdu', 'Urdu');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('UZ', 'en-ZA', 87, 'Uzbek', 'Uzbek', 'Uzbek');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('VE', 'en-ZA', 88, 'Venda', 'Venda', 'Venda');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('VI', 'en-ZA', 89, 'Vietnamese', 'Vietnamese', 'Vietnamese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('XH', 'en-ZA', 90, 'Xhosa', 'Xhosa', 'Xhosa');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ZH', 'en-ZA', 91, 'Chinese', 'Chinese', 'Chinese');
-INSERT INTO reference.languages (code, locale, sort_index, name, short_name, description)
+INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ZU', 'en-ZA', 92, 'Zulu', 'Zulu', 'Zulu');
    
       
 
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('S', 'en-US', 1, 'Single', 'Single');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('M', 'en-US', 2, 'Married', 'Married');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-US', 3, 'Common Law', 'Common Law');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('D', 'en-US', 4, 'Divorced', 'Divorced');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('W', 'en-US', 5, 'Widowed', 'Widowed');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
   
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('S', 'en-ZA', 1, 'Single', 'Single');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('M', 'en-ZA', 2, 'Married', 'Married');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-ZA', 3, 'Common Law', 'Common Law');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('D', 'en-ZA', 4, 'Divorced', 'Divorced');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('W', 'en-ZA', 5, 'Widowed', 'Widowed');
-INSERT INTO reference.marital_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
   
 
 
-INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('M', 'ICOP', 'en-US', 1, 'In Community Of Property', 'In Community Of Property');
-INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('M', 'AWOA', 'en-US', 1, 'ANC Without Accrual', 'ANC Without Accrual');
-INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('M', 'AWIA', 'en-US', 1, 'ANC With Accrual', 'ANC With Accrual');
-INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('U', 'UNKW', 'en-US', 99, 'Unknown', 'Unknown');
   
-INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('M', 'ICOP', 'en-ZA', 1, 'In Community Of Property', 'In Community Of Property');
-INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('M', 'AWOA', 'en-ZA', 1, 'ANC Without Accrual', 'ANC Without Accrual');
-INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('M', 'AWIA', 'en-ZA', 1, 'ANC With Accrual', 'ANC With Accrual');
-INSERT INTO reference.marriage_types (marital_status, code, locale, sort_index, name, description)
+INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
   VALUES ('U', 'UNKW', 'en-ZA', 99, 'Unknown', 'Unknown');  
 
 
 
-INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-US', 1, 'None', 'None');
-INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('M', 'en-US', 2, 'Minor', 'Minor');
-INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('E', 'en-US', 3, 'Emancipated Minor', 'Emancipated Minor');
-INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
   
 
-INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-ZA', 1, 'None', 'None');
-INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('M', 'en-ZA', 2, 'Minor', 'Minor');
-INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('E', 'en-ZA', 3, 'Emancipated Minor', 'Emancipated Minor');
-INSERT INTO reference.minor_types (code, locale, sort_index, name, description)
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
   
     
 
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('0', 'en-US', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('1', 'en-US', 1, 'Aunt', 'Aunt');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('2', 'en-US', 1, 'Brother', 'Brother');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('3', 'en-US', 1, 'Cousin', 'Cousin');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('4', 'en-US', 1, 'Father', 'Father');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('5', 'en-US', 1, 'Friend', 'Friend');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('6', 'en-US', 1, 'Grandfather', 'Grandfather');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('7', 'en-US', 1, 'Grandmother', 'Grandmother');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('8', 'en-US', 1, 'Husband', 'Husband');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('9', 'en-US', 1, 'Life Partner', 'Life Partner');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('10', 'en-US', 1, 'Mother', 'Mother');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('11', 'en-US', 1, 'Nephew', 'Nephew');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('12', 'en-US', 1, 'Niece', 'Niece');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('13', 'en-US', 1, 'Sister', 'Sister');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('14', 'en-US', 1, 'Uncle', 'Uncle');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('15', 'en-US', 1, 'Wife', 'Wife');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('16', 'en-US', 1, 'Other', 'Other');
   
 
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('0', 'en-ZA', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('1', 'en-ZA', 1, 'Aunt', 'Aunt');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('2', 'en-ZA', 1, 'Brother', 'Brother');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('3', 'en-ZA', 1, 'Cousin', 'Cousin');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('4', 'en-ZA', 1, 'Father', 'Father');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('5', 'en-ZA', 1, 'Friend', 'Friend');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('6', 'en-ZA', 1, 'Grandfather', 'Grandfather');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('7', 'en-ZA', 1, 'Grandmother', 'Grandmother');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('8', 'en-ZA', 1, 'Husband', 'Husband');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('9', 'en-ZA', 1, 'Life Partner', 'Life Partner');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('10', 'en-ZA', 1, 'Mother', 'Mother');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('11', 'en-ZA', 1, 'Nephew', 'Nephew');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('12', 'en-ZA', 1, 'Niece', 'Niece');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('13', 'en-ZA', 1, 'Sister', 'Sister');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('14', 'en-ZA', 1, 'Uncle', 'Uncle');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('15', 'en-ZA', 1, 'Wife', 'Wife');
-INSERT INTO reference.next_of_kin_types (code, locale, sort_index, name, description)
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
   VALUES ('16', 'en-ZA', 1, 'Other', 'Other');
   
     
 
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('0', 'en-US', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('1', 'en-US', 1, 'Creative', 'Creative');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('2', 'en-US', 2, 'Driver', 'Driver');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('3', 'en-US', 3, 'Executive', 'Executive');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('4', 'en-US', 4, 'Farmer', 'Farmer');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('5', 'en-US', 5, 'Government Official', 'Government Official');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('6', 'en-US', 6, 'Guard', 'Guard');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('7', 'en-US', 7, 'Labourer', 'Labourer');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('8', 'en-US', 8, 'Military / Police', 'Military / Police');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('9', 'en-US', 9, 'Manager', 'Manager');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('10', 'en-US', 10, 'Office Staff', 'Office Staff');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('11', 'en-US', 11, 'Pensioner / Retired', 'Pensioner / Retired');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('12', 'en-US', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('13', 'en-US', 13, 'Professional: Business', 'Professional: Business');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('14', 'en-US', 14, 'Professional: Education', 'Professional: Education');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('15', 'en-US', 15, 'Professional: Engineering', 'Professional: Engineering');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('16', 'en-US', 16, 'Professional: Government', 'Professional: Government');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('17', 'en-US', 17, 'Professional: Legal', 'Professional: Legal');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('18', 'en-US', 18, 'Professional: Medical', 'Professional: Medical');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('19', 'en-US', 19, 'Professional: Scientific', 'Professional: Scientific');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('20', 'en-US', 20, 'Professional: Transport', 'Professional: Transport');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('21', 'en-US', 21, 'Religious / Charitable', 'Religious / Charitable');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('22', 'en-US', 22, 'Sales', 'Sales');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('23', 'en-US', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('24', 'en-US', 24, 'Service', 'Service');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('25', 'en-US', 25, 'Skilled Worker', 'Skilled Worker');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('26', 'en-US', 26, 'Technician', 'Technician');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('27', 'en-US', 27, 'Trade Worker', 'Trade Worker');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('50', 'en-US', 50, 'Unemployed', 'Unemployed');
   
   
 
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('0', 'en-ZA', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('1', 'en-ZA', 1, 'Creative', 'Creative');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('2', 'en-ZA', 2, 'Driver', 'Driver');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('3', 'en-ZA', 3, 'Executive', 'Executive');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('4', 'en-ZA', 4, 'Farmer', 'Farmer');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('5', 'en-ZA', 5, 'Government Official', 'Government Official');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('6', 'en-ZA', 6, 'Guard', 'Guard');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('7', 'en-ZA', 7, 'Labourer', 'Labourer');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('8', 'en-ZA', 8, 'Military / Police', 'Military / Police');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('9', 'en-ZA', 9, 'Manager', 'Manager');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('10', 'en-ZA', 10, 'Office Staff', 'Office Staff');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('11', 'en-ZA', 11, 'Pensioner / Retired', 'Pensioner / Retired');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('12', 'en-ZA', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('13', 'en-ZA', 13, 'Professional: Business', 'Professional: Business');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('14', 'en-ZA', 14, 'Professional: Education', 'Professional: Education');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('15', 'en-ZA', 15, 'Professional: Engineering', 'Professional: Engineering');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('16', 'en-ZA', 16, 'Professional: Government', 'Professional: Government');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('17', 'en-ZA', 17, 'Professional: Legal', 'Professional: Legal');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('18', 'en-ZA', 18, 'Professional: Medical', 'Professional: Medical');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('19', 'en-ZA', 19, 'Professional: Scientific', 'Professional: Scientific');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('20', 'en-ZA', 20, 'Professional: Transport', 'Professional: Transport');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('21', 'en-ZA', 21, 'Religious / Charitable', 'Religious / Charitable');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('22', 'en-ZA', 22, 'Sales', 'Sales');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('23', 'en-ZA', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('24', 'en-ZA', 24, 'Service', 'Service');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('25', 'en-ZA', 25, 'Skilled Worker', 'Skilled Worker');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('26', 'en-ZA', 26, 'Technician', 'Technician');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('27', 'en-ZA', 27, 'Trade Worker', 'Trade Worker');
-INSERT INTO reference.occupations (code, locale, sort_index, name, description)
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('50', 'en-ZA', 50, 'Unemployed', 'Unemployed');
   
     
 
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZABV', 'en-US', 1, 'Business Visa', 'Business Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAGWV', 'en-US', 2, 'General Work Visa', 'General Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZACSWV', 'en-US', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAITWV', 'en-US', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZASV', 'en-US', 5, 'Study Visa', 'Study Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAEV', 'en-US', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZARPV', 'en-US', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZARV', 'en-US', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAMTV', 'en-US', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
 
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZABV', 'en-ZA', 1, 'Business Visa', 'Business Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAGWV', 'en-ZA', 2, 'General Work Visa', 'General Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZACSWV', 'en-ZA', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAITWV', 'en-ZA', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZASV', 'en-ZA', 5, 'Study Visa', 'Study Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAEV', 'en-ZA', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZARPV', 'en-ZA', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZARV', 'en-ZA', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAMTV', 'en-ZA', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
 
 
 
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('B', 'en-US', 1, 'Black', 'Black');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-US', 2, 'Coloured', 'Coloured');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('I', 'en-US', 3, 'Indian', 'Indian');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('A', 'en-US', 4, 'Asian', 'Asian');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('W', 'en-US', 5, 'White', 'White');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
 
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('B', 'en-ZA', 1, 'Black', 'Black');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-ZA', 2, 'Coloured', 'Coloured');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('I', 'en-ZA', 3, 'Indian', 'Indian');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('A', 'en-ZA', 4, 'Asian', 'Asian');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('W', 'en-ZA', 5, 'White', 'White');
-INSERT INTO reference.races (code, locale, sort_index, name, description)
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');  
 
 
 
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'EC', 'en-US', 1, 'Eastern Cape', 'Eastern Cape');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'FS', 'en-US', 1, 'Free State', 'Free State');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'GP', 'en-US', 1, 'Gauteng', 'Gauteng');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'LP', 'en-US', 1, 'Limpopo', 'Limpopo');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'MP', 'en-US', 1, 'Mpumalanga', 'Mpumalanga');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'NC', 'en-US', 1, 'Northern Cape', 'Northern Cape');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'NW', 'en-US', 1, 'Northwest', 'Northwest');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'WC', 'en-US', 1, 'Western Cape', 'Western Cape');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'ZN', 'en-US', 1, 'KwaZulu-Natal', 'KwaZulu-Natal');
   
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'EC', 'en-ZA', 1, 'Eastern Cape', 'Eastern Cape');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'FS', 'en-ZA', 1, 'Free State', 'Free State');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'GP', 'en-ZA', 1, 'Gauteng', 'Gauteng');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'LP', 'en-ZA', 1, 'Limpopo', 'Limpopo');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'MP', 'en-ZA', 1, 'Mpumalanga', 'Mpumalanga');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'NC', 'en-ZA', 1, 'Northern Cape', 'Northern Cape');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'NW', 'en-ZA', 1, 'Northwest', 'Northwest');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'WC', 'en-ZA', 1, 'Western Cape', 'Western Cape');
-INSERT INTO reference.regions (country, code, locale, sort_index, name, description)
+INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'ZN', 'en-ZA', 1, 'KwaZulu-Natal', 'KwaZulu-Natal');
   
     
 
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-US', 1, 'Citizen', 'Citizen');
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('P', 'en-US', 2, 'Permanent Resident', 'Permanent Resident');
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-US', 3, 'Foreign National', 'Foreign National');
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('R', 'en-US', 4, 'Refugee', 'Refugee');
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
 
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-ZA', 1, 'Citizen', 'Citizen');
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('P', 'en-ZA', 2, 'Permanent Resident', 'Permanent Resident');
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-ZA', 3, 'Foreign National', 'Foreign National');
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('R', 'en-ZA', 4, 'Refugee', 'Refugee');
-INSERT INTO reference.residential_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');  
   
   
 
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('O', 'en-US', 1, 'Owner', 'Owner');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('R', 'en-US', 2, 'Renter', 'Renter');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-US', 3, 'Co-Habitant', 'Co-Habitant');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('B', 'en-US', 4, 'Boarder', 'Boarder');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('L', 'en-US', 5, 'Living with Parents', 'Living with Parents');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-US', 6, 'Not Specified', 'Not Specified');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
   
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('O', 'en-ZA', 1, 'Owner', 'Owner');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('R', 'en-ZA', 2, 'Renter', 'Renter');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-ZA', 3, 'Co-Habitant', 'Co-Habitant');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('B', 'en-ZA', 4, 'Boarder', 'Boarder');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('L', 'en-ZA', 5, 'Living with Parents', 'Living with Parents');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-ZA', 6, 'Not Specified', 'Not Specified');
-INSERT INTO reference.residential_types (code, locale, sort_index, name, description)
+INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
     
     
 
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('0', 'en-US', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('1', 'en-US', 1, 'Salary', 'Salary');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('2', 'en-US', 2, 'Commission', 'Commission');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('3', 'en-US', 3, 'Rental Income', 'Rental Income');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('4', 'en-US', 4, 'Investments', 'Investments');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('5', 'en-US', 5, 'Retirement Annuity', 'Retirement Annuity');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('6', 'en-US', 6, 'Social Grant', 'Social Grant');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('7', 'en-US', 7, 'Inheritance', 'Inheritance');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('8', 'en-US', 8, 'Maintenance', 'Maintenance');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('9', 'en-US', 9, 'Pension', 'Pension');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('10', 'en-US', 10, 'Donations', 'Donations');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('11', 'en-US', 11, 'Allowance', 'Allowance');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('12', 'en-US', 12, 'Winnings', 'Winnings');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('13', 'en-US', 13, 'Owner Draws', 'Owner Draws');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('14', 'en-US', 14, 'Bonus/Incentive', 'Bonus/Incentive');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('15', 'en-US', 15, 'Bursary', 'Bursary');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('16', 'en-US', 16, 'Settlement', 'Settlement');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('17', 'en-US', 17, 'Trust', 'Trust');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('18', 'en-US', 18, 'Other', 'Other');
   
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('0', 'en-ZA', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('1', 'en-ZA', 1, 'Salary', 'Salary');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('2', 'en-ZA', 2, 'Commission', 'Commission');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('3', 'en-ZA', 3, 'Rental Income', 'Rental Income');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('4', 'en-ZA', 4, 'Investments', 'Investments');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('5', 'en-ZA', 5, 'Retirement Annuity', 'Retirement Annuity');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('6', 'en-ZA', 6, 'Social Grant', 'Social Grant');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('7', 'en-ZA', 7, 'Inheritance', 'Inheritance');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('8', 'en-ZA', 8, 'Maintenance', 'Maintenance');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('9', 'en-ZA', 9, 'Pension', 'Pension');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('10', 'en-ZA', 10, 'Donations', 'Donations');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('11', 'en-ZA', 11, 'Allowance', 'Allowance');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('12', 'en-ZA', 12, 'Winnings', 'Winnings');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('13', 'en-ZA', 13, 'Owner Draws', 'Owner Draws');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('14', 'en-ZA', 14, 'Bonus/Incentive', 'Bonus/Incentive');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('15', 'en-ZA', 15, 'Bursary', 'Bursary');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('16', 'en-ZA', 16, 'Settlement', 'Settlement');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('17', 'en-ZA', 17, 'Trust', 'Trust');
-INSERT INTO reference.sources_of_funds (code, locale, sort_index, name, description)
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
   VALUES ('18', 'en-ZA', 18, 'Other', 'Other');
   
     
 
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('A', 'en-US', 1, 'Anytime', 'Anytime');
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('L', 'en-US', 2, 'Long Hours', 'Long Hours');
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('O', 'en-US', 3, 'Office Hours', 'Office Hours');
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-US', 4, 'Do Not Contact', 'Do Not Contact');
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
   
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('A', 'en-ZA', 1, 'Anytime', 'Anytime');
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('L', 'en-ZA', 2, 'Long Hours', 'Long Hours');
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('O', 'en-ZA', 3, 'Office Hours', 'Office Hours');
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-ZA', 4, 'Do Not Contact', 'Do Not Contact');
-INSERT INTO reference.suitable_times_to_contact (code, locale, sort_index, name, description)
+INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
   
     
 
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAITN', 'en-US', 1, 'Income Tax Number', 'South African Income Tax Number', 'ZA');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAVTN', 'en-US', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAOTN', 'en-US', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('UKUTN', 'en-US', 1, 'UK Tax Number', 'UK Tax Number', 'GB');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('UKOTN', 'en-US', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('USTIN', 'en-US', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('USOTN', 'en-US', 2, 'US Other Tax Number', 'US Other Tax Number', 'US');  
   
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAITN', 'en-ZA', 1, 'Income Tax Number', 'South African Income Tax Number', 'ZA');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAVTN', 'en-ZA', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAOTN', 'en-ZA', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('UKUTN', 'en-ZA', 1, 'UK Tax Number', 'UK Tax Number', 'GB');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('UKOTN', 'en-ZA', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('USTIN', 'en-ZA', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US');
-INSERT INTO reference.tax_number_types (code, locale, sort_index, name, description, country_of_issue)
+INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('USOTN', 'en-ZA', 2, 'US Other Tax Number', 'US Other Tax Number', 'US');    
   
   
 
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('0', 'en-US', 99, 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('1', 'en-US', 1, 'Mr', 'Mr.', 'Mr');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('2', 'en-US', 1, 'Ms', 'Ms.', 'Ms');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('3', 'en-US', 1, 'Miss', 'Miss', 'Miss');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('4', 'en-US', 1, 'Mrs', 'Mrs.', 'Mrs');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('5', 'en-US', 1, 'Doctor', 'Dr.', 'Doctor');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('6', 'en-US', 1, 'The Honorable', 'The Hon.', 'The Honorable');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('7', 'en-US', 1, 'Reverend', 'Rev.', 'Reverend');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('8', 'en-US', 1, 'Father', 'Fr.', 'Father');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('9', 'en-US', 1, 'Rabbi', 'Rabbi', 'Rabbi');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('10', 'en-US', 1, 'Professor', 'Prof.', 'Professor');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('11', 'en-US', 1, 'Advocate', 'Adv.', 'Advocate');
   
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('0', 'en-ZA', 99, 'Unknown', 'Unknown', 'Unknown');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('1', 'en-ZA', 1, 'Mr', 'Mr.', 'Mr');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('2', 'en-ZA', 1, 'Ms', 'Ms.', 'Ms');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('3', 'en-ZA', 1, 'Miss', 'Miss', 'Miss');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('4', 'en-ZA', 1, 'Mrs', 'Mrs.', 'Mrs');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('5', 'en-ZA', 1, 'Doctor', 'Dr.', 'Doctor');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('6', 'en-ZA', 1, 'The Honorable', 'The Hon.', 'The Honorable');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('7', 'en-ZA', 1, 'Reverend', 'Rev.', 'Reverend');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('8', 'en-ZA', 1, 'Father', 'Fr.', 'Father');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('9', 'en-ZA', 1, 'Rabbi', 'Rabbi', 'Rabbi');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('10', 'en-ZA', 1, 'Professor', 'Prof.', 'Professor');
-INSERT INTO reference.titles (code, locale, sort_index, name, abbreviation, description)
+INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
   VALUES ('11', 'en-ZA', 1, 'Advocate', 'Adv.', 'Advocate');
     
 
 
-INSERT INTO reference.verification_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
   VALUES ('M', 'en-US', 1, 'Manual', 'Manual');
-INSERT INTO reference.verification_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
   VALUES ('S', 'en-US', 1, 'System', 'System');
-INSERT INTO reference.verification_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
   
-INSERT INTO reference.verification_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
   VALUES ('M', 'en-ZA', 1, 'Manual', 'Manual');
-INSERT INTO reference.verification_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
   VALUES ('S', 'en-ZA', 1, 'System', 'System');
-INSERT INTO reference.verification_methods (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
 
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-US', 1, 'Not Verified', 'Not Verified');
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('I', 'en-US', 1, 'In Progress', 'In Progress');
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-US', 1, 'Complete', 'Complete');
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-US', 1, 'Failed', 'Failed');
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
 
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('N', 'en-ZA', 1, 'Not Verified', 'Not Verified');
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('I', 'en-ZA', 1, 'In Progress', 'In Progress');
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-ZA', 1, 'Complete', 'Complete');
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-ZA', 1, 'Failed', 'Failed');
-INSERT INTO reference.verification_statuses (code, locale, sort_index, name, description)
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');

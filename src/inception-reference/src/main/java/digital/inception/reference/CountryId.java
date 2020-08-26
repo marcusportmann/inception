@@ -35,7 +35,7 @@ public class CountryId implements Serializable {
   private String code;
 
   /** The Unicode locale identifier for the country. */
-  private String locale;
+  private String localeId;
 
   /** Constructs a new <code>CountryId</code>. */
   public CountryId() {}
@@ -44,11 +44,11 @@ public class CountryId implements Serializable {
    * Constructs a new <code>CountryId</code>.
    *
    * @param code the code for the country
-   * @param locale the Unicode locale identifier for the country
+   * @param localeId the Unicode locale identifier for the country
    */
-  public CountryId(String code, String locale) {
+  public CountryId(String code, String localeId) {
     this.code = code;
-    this.locale = locale;
+    this.localeId = localeId;
   }
 
   /**
@@ -74,7 +74,7 @@ public class CountryId implements Serializable {
 
     CountryId other = (CountryId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(locale, other.locale);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -91,8 +91,8 @@ public class CountryId implements Serializable {
    *
    * @return the Unicode locale identifier for the country
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -102,7 +102,7 @@ public class CountryId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((locale == null) ? 0 : locale.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
@@ -119,7 +119,7 @@ public class CountryId implements Serializable {
    *
    * @param locale the Unicode locale identifier for the country
    */
-  public void setLocale(String locale) {
-    this.locale = locale;
+  public void setLocaleId(String locale) {
+    this.localeId = locale;
   }
 }

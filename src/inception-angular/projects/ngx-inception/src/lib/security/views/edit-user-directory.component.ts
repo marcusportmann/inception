@@ -17,7 +17,7 @@
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {finalize, first, pairwise, startWith} from 'rxjs/operators';
+import {debounceTime, finalize, first, pairwise, startWith} from 'rxjs/operators';
 import {Error} from '../../core/errors/error';
 import {AdminContainerView} from '../../layout/components/admin-container-view';
 import {SecurityService} from '../services/security.service';
@@ -79,7 +79,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     });
 
     this.subscriptions.add(this.userDirectoryTypeFormControl.valueChanges
-    .pipe(startWith(null), pairwise())
+    .pipe(startWith(null), debounceTime(500), pairwise())
     .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
       this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
     }));

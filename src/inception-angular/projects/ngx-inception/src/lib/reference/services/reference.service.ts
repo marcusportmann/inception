@@ -23,6 +23,9 @@ import {ReferenceServiceError} from './reference.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {MailTemplateSummary} from "../../mail/services/mail-template-summary";
+import {MailServiceError} from "../../mail/services/mail.service.errors";
+import {AddressType} from "./address-type";
 
 
 /**
@@ -47,7 +50,29 @@ export class ReferenceService {
     console.log('Initializing the Reference Service (' + localeId + ')');
   }
 
-  doIt(): void {
-    console.log('Hello World!');
+  /**
+   * Retrieve the address types.
+   *
+   * @return The address types.
+   */
+  getAddressTypes(): Observable<AddressType[]> {
+    return this.httpClient.get<AddressType[]>(this.config.referenceApiUrlPrefix + '/address-types',
+      {reportProgress: true})
+    .pipe(map((addressTypes: AddressType[]) => {
+      return addressTypes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        return throwError(new ReferenceServiceError('Failed to retrieve the address types.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
+
+
+
 }

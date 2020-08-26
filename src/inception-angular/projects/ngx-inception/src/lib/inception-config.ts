@@ -82,6 +82,11 @@ export interface InceptionConfig {
   prepopulatedLoginPassword?: string;
 
   /**
+   * The Reference API URL prefix.
+   */
+  referenceApiUrlPrefix: string;
+
+  /**
    * The Reporting API URL prefix.
    */
   reportingApiUrlPrefix: string;

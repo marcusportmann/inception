@@ -36,7 +36,7 @@ public class MarriageTypeId implements Serializable {
   private String code;
 
   /** The Unicode locale identifier for the marital status. */
-  private String locale;
+  private String localeId;
 
   /** The code for the marital status the marriage type is associated with. */
   private String maritalStatus;
@@ -49,12 +49,12 @@ public class MarriageTypeId implements Serializable {
    *
    * @param maritalStatus the code for the marital status the marriage type is associated with
    * @param code the code for the marital status
-   * @param locale the Unicode locale identifier for the marital status
+   * @param localeId the Unicode locale identifier for the marital status
    */
-  public MarriageTypeId(String maritalStatus, String code, String locale) {
+  public MarriageTypeId(String maritalStatus, String code, String localeId) {
     this.maritalStatus = maritalStatus;
     this.code = code;
-    this.locale = locale;
+    this.localeId = localeId;
   }
 
   /**
@@ -82,7 +82,7 @@ public class MarriageTypeId implements Serializable {
 
     return Objects.equals(maritalStatus, other.maritalStatus)
         && Objects.equals(code, other.code)
-        && Objects.equals(locale, other.locale);
+        && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -99,8 +99,8 @@ public class MarriageTypeId implements Serializable {
    *
    * @return the Unicode locale identifier for the marital status
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -121,7 +121,7 @@ public class MarriageTypeId implements Serializable {
   public int hashCode() {
     return ((maritalStatus == null) ? 0 : maritalStatus.hashCode())
         + ((code == null) ? 0 : code.hashCode())
-        + ((locale == null) ? 0 : locale.hashCode());
+        + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
@@ -138,8 +138,8 @@ public class MarriageTypeId implements Serializable {
    *
    * @param locale the Unicode locale identifier for the marital status
    */
-  public void setLocale(String locale) {
-    this.locale = locale;
+  public void setLocaleId(String locale) {
+    this.localeId = locale;
   }
 
   /**

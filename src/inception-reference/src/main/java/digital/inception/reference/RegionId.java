@@ -38,7 +38,7 @@ public class RegionId implements Serializable {
   private String country;
 
   /** The Unicode locale identifier for the region. */
-  private String locale;
+  private String localeId;
 
   /** Constructs a new <code>RegionId</code>. */
   public RegionId() {}
@@ -48,12 +48,12 @@ public class RegionId implements Serializable {
    *
    * @param country the code for the country the region is associated with
    * @param code the code for the region
-   * @param locale the Unicode locale identifier for the region
+   * @param localeId the Unicode locale identifier for the region
    */
-  public RegionId(String country, String code, String locale) {
+  public RegionId(String country, String code, String localeId) {
     this.country = country;
     this.code = code;
-    this.locale = locale;
+    this.localeId = localeId;
   }
 
   /**
@@ -81,7 +81,7 @@ public class RegionId implements Serializable {
 
     return Objects.equals(country, other.country)
         && Objects.equals(code, other.code)
-        && Objects.equals(locale, other.locale);
+        && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -107,8 +107,8 @@ public class RegionId implements Serializable {
    *
    * @return the Unicode locale identifier for the region
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -120,7 +120,7 @@ public class RegionId implements Serializable {
   public int hashCode() {
     return ((country == null) ? 0 : country.hashCode())
         + ((code == null) ? 0 : code.hashCode())
-        + ((locale == null) ? 0 : locale.hashCode());
+        + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
@@ -146,7 +146,7 @@ public class RegionId implements Serializable {
    *
    * @param locale the Unicode locale identifier for the region
    */
-  public void setLocale(String locale) {
-    this.locale = locale;
+  public void setLocaleId(String locale) {
+    this.localeId = locale;
   }
 }

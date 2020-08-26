@@ -17,7 +17,7 @@
 import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {finalize, first, map, startWith} from 'rxjs/operators';
+import {debounceTime, finalize, first, map, startWith} from 'rxjs/operators';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialogRef} from '@angular/material/dialog';
@@ -47,23 +47,15 @@ import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-
 })
 export class TenantUserDirectoriesComponent extends AdminContainerView implements AfterViewInit, OnDestroy {
 
-  private subscriptions: Subscription = new Subscription();
-
   allUserDirectories: UserDirectorySummary[] = [];
-
   availableUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
-
   dataSource = new MatTableDataSource<UserDirectorySummary>([]);
-
   displayedColumns = ['existingUserDirectoryName', 'actions'];
-
   filteredUserDirectories$: Subject<UserDirectorySummary[]> = new ReplaySubject<UserDirectorySummary[]>();
-
   newUserDirectoryFormControl: FormControl;
-
   tenantId: string;
-
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute, private securityService: SecurityService,
               private dialogService: DialogService, private spinnerService: SpinnerService) {
@@ -85,8 +77,8 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
   get backNavigation(): BackNavigation {
     return new BackNavigation($localize`:@@security_tenant_user_directories_back_navigation:Back`,
       ['../..'], {
-      relativeTo: this.activatedRoute
-    });
+        relativeTo: this.activatedRoute
+      });
   }
 
   get title(): string {
@@ -172,7 +164,8 @@ export class TenantUserDirectoriesComponent extends AdminContainerView implement
       const availableUserDirectories = TenantUserDirectoriesComponent.calculateAvailableUserDirectories(
         this.allUserDirectories, this.dataSource.data);
 
-      this.subscriptions.add(this.newUserDirectoryFormControl.valueChanges.pipe(startWith(''), map((value) => {
+      this.subscriptions.add(this.newUserDirectoryFormControl.valueChanges.pipe(startWith(''),
+        debounceTime(500), map((value) => {
         this.filteredUserDirectories$.next(this.filterUserDirectories(availableUserDirectories, value));
       })).subscribe());
 

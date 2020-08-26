@@ -41,12 +41,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "VerificationMethod")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "locale", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "VerificationMethod", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "VerificationMethod",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "locale", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "verification_methods")
@@ -77,12 +77,12 @@ public class VerificationMethod {
       description = "The Unicode locale identifier for the verification method",
       required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Locale", required = true)
+  @XmlElement(name = "LocaleId", required = true)
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale", nullable = false)
-  private String locale;
+  @Column(name = "locale_id", nullable = false)
+  private String localeId;
 
   /** The name of the verification method. */
   @Schema(description = "The name of the verification method", required = true)
@@ -127,8 +127,8 @@ public class VerificationMethod {
    *
    * @return the Unicode locale identifier for the verification method
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -172,8 +172,8 @@ public class VerificationMethod {
    *
    * @param localeId the Unicode locale identifier for the verification method
    */
-  public void setLocale(String localeId) {
-    this.locale = localeId;
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
   }
 
   /**

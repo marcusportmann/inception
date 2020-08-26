@@ -16,7 +16,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {map, startWith} from 'rxjs/operators';
+import {debounceTime, map, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {ReferenceService} from "ngx-inception";
@@ -80,9 +80,12 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
     const favoriteCountryControl = this.exampleForm.get('favoriteCountry');
 
     if (favoriteCountryControl) {
-      this.subscriptions.add(favoriteCountryControl.valueChanges
-      .pipe(startWith(''), map(value => {
-        this.filteredCountryOptions$.next(this.filter(value));
+      this.subscriptions.add(favoriteCountryControl.valueChanges.pipe(
+        startWith(''),
+        debounceTime(500),
+        map((value : string) => {
+          this.filteredCountryOptions$.next(this.countryOptions.filter(
+            option => option.toLowerCase().indexOf(value.toLowerCase()) === 0));
       })).subscribe());
     }
   }
@@ -97,11 +100,5 @@ export class ExampleFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-  }
-
-  private filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.countryOptions.filter(option => option.toLowerCase().indexOf(filterValue) === 0);
   }
 }

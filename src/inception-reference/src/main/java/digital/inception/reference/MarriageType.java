@@ -40,12 +40,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "MarriageType")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"maritalStatus", "code", "locale", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"maritalStatus", "code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "MarriageType", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "MarriageType",
     namespace = "http://reference.inception.digital",
-    propOrder = {"maritalStatus", "code", "locale", "sortIndex", "name", "description"})
+    propOrder = {"maritalStatus", "code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "marriage_types")
@@ -74,12 +74,12 @@ public class MarriageType {
   /** The Unicode locale identifier for the marriage type. */
   @Schema(description = "The Unicode locale identifier for the marriage type", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Locale", required = true)
+  @XmlElement(name = "LocaleId", required = true)
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale", nullable = false)
-  private String locale;
+  @Column(name = "locale_id", nullable = false)
+  private String localeId;
 
   /** The code for the marital status the marriage type is associated with. */
   @Schema(
@@ -136,8 +136,8 @@ public class MarriageType {
    *
    * @return the Unicode locale identifier for the marriage type
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -190,8 +190,8 @@ public class MarriageType {
    *
    * @param localeId the Unicode locale identifier for the marriage type
    */
-  public void setLocale(String localeId) {
-    this.locale = localeId;
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
   }
 
   /**

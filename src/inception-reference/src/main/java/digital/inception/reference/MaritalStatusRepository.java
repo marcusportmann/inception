@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MaritalStatusRepository extends JpaRepository<MaritalStatus, MaritalStatusId> {
 
-  List<MaritalStatus> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<MaritalStatus> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

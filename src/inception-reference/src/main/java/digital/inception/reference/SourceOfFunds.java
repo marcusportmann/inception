@@ -40,12 +40,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "SourceOfFunds")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "locale", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "SourceOfFunds", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "SourceOfFunds",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "locale", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "sources_of_funds")
@@ -74,12 +74,12 @@ public class SourceOfFunds {
   /** The Unicode locale identifier for the source of funds. */
   @Schema(description = "The Unicode locale identifier for the source of funds", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Locale", required = true)
+  @XmlElement(name = "LocaleId", required = true)
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale", nullable = false)
-  private String locale;
+  @Column(name = "locale_id", nullable = false)
+  private String localeId;
 
   /** The name of the source of funds. */
   @Schema(description = "The name of the source of funds", required = true)
@@ -124,8 +124,8 @@ public class SourceOfFunds {
    *
    * @return the Unicode locale identifier for the source of funds
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -169,8 +169,8 @@ public class SourceOfFunds {
    *
    * @param localeId the Unicode locale identifier for the source of funds
    */
-  public void setLocale(String localeId) {
-    this.locale = localeId;
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
   }
 
   /**

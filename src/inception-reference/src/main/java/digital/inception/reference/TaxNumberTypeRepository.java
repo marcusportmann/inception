@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TaxNumberTypeRepository extends JpaRepository<TaxNumberType, TaxNumberTypeId> {
 
-  List<TaxNumberType> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<TaxNumberType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

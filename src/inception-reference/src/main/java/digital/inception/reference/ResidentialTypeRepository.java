@@ -33,5 +33,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ResidentialTypeRepository
     extends JpaRepository<ResidentialType, ResidentialTypeId> {
 
-  List<ResidentialType> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<ResidentialType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

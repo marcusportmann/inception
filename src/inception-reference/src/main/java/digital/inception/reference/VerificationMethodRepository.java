@@ -33,5 +33,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VerificationMethodRepository
     extends JpaRepository<VerificationMethod, VerificationMethodId> {
 
-  List<VerificationMethod> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<VerificationMethod> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

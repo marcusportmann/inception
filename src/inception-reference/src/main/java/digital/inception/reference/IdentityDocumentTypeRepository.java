@@ -33,5 +33,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface IdentityDocumentTypeRepository
     extends JpaRepository<IdentityDocumentType, IdentityDocumentTypeId> {
 
-  List<IdentityDocumentType> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<IdentityDocumentType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

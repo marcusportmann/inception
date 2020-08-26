@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface NextOfKinTypeRepository extends JpaRepository<NextOfKinType, NextOfKinTypeId> {
 
-  List<NextOfKinType> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<NextOfKinType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

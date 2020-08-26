@@ -33,5 +33,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface VerificationStatusRepository
     extends JpaRepository<VerificationStatus, VerificationStatusId> {
 
-  List<VerificationStatus> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<VerificationStatus> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

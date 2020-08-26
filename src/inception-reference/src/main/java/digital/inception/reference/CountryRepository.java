@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface CountryRepository extends JpaRepository<Country, CountryId> {
 
-  List<Country> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<Country> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

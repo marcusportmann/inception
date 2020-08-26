@@ -18,9 +18,13 @@ package digital.inception.reference;
 
 // ~--- JDK imports ------------------------------------------------------------
 
+import java.util.List;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.validation.Validator;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * The <code>ReferenceWebService</code> class.
@@ -50,5 +54,348 @@ public class ReferenceWebService {
   public ReferenceWebService(IReferenceService referenceService, Validator validator) {
     this.referenceService = referenceService;
     this.validator = validator;
+  }
+
+  /**
+   * Retrieve the address types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
+   *     types for or <code>null</code> to retrieve the address types for all locales
+   * @return the address types
+   */
+  @WebMethod(operationName = "GetAddressTypes")
+  public List<AddressType> getAddressTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getAddressTypes(localeId);
+  }
+
+  /**
+   * Retrieve the communication methods.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     communication methods for or <code>null</code> to retrieve the communication methods for
+   *     all locales
+   * @return the communication methods
+   */
+  @WebMethod(operationName = "GetCommunicationMethods")
+  public List<CommunicationMethod> getCommunicationMethods(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getCommunicationMethods(localeId);
+  }
+
+  /**
+   * Retrieve the countries.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the countries
+   *     for or <code>null</code> to retrieve the countries for all locales
+   * @return the countries
+   */
+  @WebMethod(operationName = "GetCountries")
+  public List<Country> getCountries(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getCountries(localeId);
+  }
+
+  /**
+   * Retrieve the employment statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the employment
+   *     statuses for or <code>null</code> to retrieve the employment statuses for all locales
+   * @return the employment statuses
+   */
+  @WebMethod(operationName = "GetEmploymentStatuses")
+  public List<EmploymentStatus> getEmploymentStatuses(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getEmploymentStatuses(localeId);
+  }
+
+  /**
+   * Retrieve the employment types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the employment
+   *     types for or <code>null</code> to retrieve the employment types for all locales
+   * @return the employment types
+   */
+  @WebMethod(operationName = "GetEmploymentTypes")
+  public List<EmploymentType> getEmploymentTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getEmploymentTypes(localeId);
+  }
+
+  /**
+   * Retrieve the genders.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the genders
+   *     for or <code>null</code> to retrieve the genders for all locales
+   * @return the genders
+   */
+  @WebMethod(operationName = "GetGenders")
+  public List<Gender> getGenders(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getGenders(localeId);
+  }
+
+  /**
+   * Retrieve the identity document types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the identity
+   *     document types for or <code>null</code> to retrieve the identity document types for all
+   *     locales
+   * @return the identity document types
+   */
+  @WebMethod(operationName = "GetIdentityDocumentTypes")
+  public List<IdentityDocumentType> getIdentityDocumentTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getIdentityDocumentTypes(localeId);
+  }
+
+  /**
+   * Retrieve the languages.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the languages
+   *     for or <code>null</code> to retrieve the languages for all locales
+   * @return the languages
+   */
+  @WebMethod(operationName = "GetLanguages")
+  public List<Language> getLanguages(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getLanguages(localeId);
+  }
+
+  /**
+   * Retrieve the marital statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the marital
+   *     statuses for or <code>null</code> to retrieve the marital statuses for all locales
+   * @return the marital statuses
+   */
+  @WebMethod(operationName = "GetMaritalStatuses")
+  public List<MaritalStatus> getMaritalStatuses(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getMaritalStatuses(localeId);
+  }
+
+  /**
+   * Retrieve the marriage types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the marriage
+   *     types for or <code>null</code> to retrieve the marriage types for all locales
+   * @return the marriage types
+   */
+  @WebMethod(operationName = "GetMarriageTypes")
+  public List<MarriageType> getMarriageTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getMarriageTypes(localeId);
+  }
+
+  /**
+   * Retrieve the minor types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the minor
+   *     types for or <code>null</code> to retrieve the minor types for all locales
+   * @return the minor types
+   */
+  @WebMethod(operationName = "GetMinorTypes")
+  public List<MinorType> getMinorTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getMinorTypes(localeId);
+  }
+
+  /**
+   * Retrieve the next of kin types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the next of
+   *     kin types for or <code>null</code> to retrieve the next of kin types for all locales
+   * @return the next of kin types
+   */
+  @WebMethod(operationName = "GetNextOfKinTypes")
+  public List<NextOfKinType> getNextOfKinTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getNextOfKinTypes(localeId);
+  }
+
+  /**
+   * Retrieve the occupations.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     occupations for or <code>null</code> to retrieve the occupations for all locales
+   * @return the occupations
+   */
+  @WebMethod(operationName = "GetOccupations")
+  public List<Occupation> getOccupations(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getOccupations(localeId);
+  }
+
+  /**
+   * Retrieve the permit types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the permit
+   *     types for or <code>null</code> to retrieve the permit types for all locales
+   * @return the permit types
+   */
+  @WebMethod(operationName = "GetPermitTypes")
+  public List<PermitType> getPermitTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getPermitTypes(localeId);
+  }
+
+  /**
+   * Retrieve the races.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the races for
+   *     or <code>null</code> to retrieve the races for all locales
+   * @return the races
+   */
+  @WebMethod(operationName = "GetRaces")
+  public List<Race> getRaces(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getRaces(localeId);
+  }
+
+  /**
+   * Retrieve the regions.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the regions
+   *     for or <code>null</code> to retrieve the regions for all locales
+   * @return the regions
+   */
+  @WebMethod(operationName = "GetRegions")
+  public List<Region> getRegions(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getRegions(localeId);
+  }
+
+  /**
+   * Retrieve the residential statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     residential statuses for or <code>null</code> to retrieve the residential statuses for all
+   *     locales
+   * @return the residential statuses
+   */
+  @WebMethod(operationName = "GetResidentialStatuses")
+  public List<ResidentialStatus> getResidentialStatuses(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getResidentialStatuses(localeId);
+  }
+
+  /**
+   * Retrieve the residential types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     residential types for or <code>null</code> to retrieve the residential types for all
+   *     locales
+   * @return the residential types
+   */
+  @WebMethod(operationName = "GetResidentialTypes")
+  public List<ResidentialType> getResidentialTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getResidentialTypes(localeId);
+  }
+
+  /**
+   * Retrieve the sources of funds.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the sources of
+   *     funds for or <code>null</code> to retrieve the sources of funds for all locales
+   * @return the sources of funds
+   */
+  @WebMethod(operationName = "GetSourcesOfFunds")
+  public List<SourceOfFunds> getSourcesOfFunds(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getSourcesOfFunds(localeId);
+  }
+
+  /**
+   * Retrieve the suitable times to contact.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the suitable
+   *     times to contact for or <code>null</code> to retrieve the suitable times to contact for all
+   *     locales
+   * @return the suitable times to contact
+   */
+  @WebMethod(operationName = "GetSuitableTimesToContact")
+  public List<SuitableTimeToContact> getSuitableTimesToContact(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getSuitableTimesToContact(localeId);
+  }
+
+  /**
+   * Retrieve the tax number types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the tax number
+   *     types for or <code>null</code> to retrieve the tax number types for all locales
+   * @return the tax number types
+   */
+  @WebMethod(operationName = "GetTaxNumberTypes")
+  public List<TaxNumberType> getTaxNumberTypes(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getTaxNumberTypes(localeId);
+  }
+
+  /**
+   * Retrieve the titles.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the titles for
+   *     or <code>null</code> to retrieve the titles for all locales
+   * @return the titles
+   */
+  @WebMethod(operationName = "GetTitles")
+  public List<Title> getTitles(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getTitles(localeId);
+  }
+
+  /**
+   * Retrieve the verification methods.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     verification methods for or <code>null</code> to retrieve the verification methods for all
+   *     locales
+   * @return the verification methods
+   */
+  @WebMethod(operationName = "GetVerificationMethods")
+  public List<VerificationMethod> getVerificationMethods(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getVerificationMethods(localeId);
+  }
+
+  /**
+   * Retrieve the verification statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
+   *     verification statuses for or <code>null</code> to retrieve the verification statuses for
+   *     all locales
+   * @return the verification statuses
+   */
+  @WebMethod(operationName = "GetVerificationStatuses")
+  public List<VerificationStatus> getVerificationStatuses(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getVerificationStatuses(localeId);
   }
 }

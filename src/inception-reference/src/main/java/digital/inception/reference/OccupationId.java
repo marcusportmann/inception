@@ -36,7 +36,7 @@ public class OccupationId implements Serializable {
   private String code;
 
   /** The Unicode locale identifier for the occupation. */
-  private String locale;
+  private String localeId;
 
   /** Constructs a new <code>OccupationId</code>. */
   public OccupationId() {}
@@ -45,11 +45,11 @@ public class OccupationId implements Serializable {
    * Constructs a new <code>OccupationId</code>.
    *
    * @param code the code for the occupation
-   * @param locale the Unicode locale identifier for the occupation
+   * @param localeId the Unicode locale identifier for the occupation
    */
-  public OccupationId(String code, String locale) {
+  public OccupationId(String code, String localeId) {
     this.code = code;
-    this.locale = locale;
+    this.localeId = localeId;
   }
 
   /**
@@ -75,7 +75,7 @@ public class OccupationId implements Serializable {
 
     OccupationId other = (OccupationId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(locale, other.locale);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -92,8 +92,8 @@ public class OccupationId implements Serializable {
    *
    * @return the Unicode locale identifier for the occupation
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -103,7 +103,7 @@ public class OccupationId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((locale == null) ? 0 : locale.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
@@ -120,7 +120,7 @@ public class OccupationId implements Serializable {
    *
    * @param locale the Unicode locale identifier for the occupation
    */
-  public void setLocale(String locale) {
-    this.locale = locale;
+  public void setLocaleId(String locale) {
+    this.localeId = locale;
   }
 }

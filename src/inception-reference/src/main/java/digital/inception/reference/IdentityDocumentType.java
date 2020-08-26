@@ -41,12 +41,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "IdentityDocumentType")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "locale", "sortIndex", "name", "description", "countryOfIssue"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
 @XmlRootElement(name = "IdentityDocumentType", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "IdentityDocumentType",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "locale", "sortIndex", "name", "description", "countryOfIssue"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "identity_document_types")
@@ -89,12 +89,12 @@ public class IdentityDocumentType {
       description = "The Unicode locale identifier for the identity document type",
       required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Locale", required = true)
+  @XmlElement(name = "LocaleId", required = true)
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale", nullable = false)
-  private String locale;
+  @Column(name = "locale_id", nullable = false)
+  private String localeId;
 
   /** The name of the identity document type. */
   @Schema(description = "The name of the identity document type", required = true)
@@ -148,8 +148,8 @@ public class IdentityDocumentType {
    *
    * @return the Unicode locale identifier for the identity document type
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -203,8 +203,8 @@ public class IdentityDocumentType {
    *
    * @param localeId the Unicode locale identifier for the identity document type
    */
-  public void setLocale(String localeId) {
-    this.locale = localeId;
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
   }
 
   /**

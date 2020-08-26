@@ -46,6 +46,7 @@ const ngxInceptionConfig: InceptionConfig = {
   configurationApiUrlPrefix: 'http://localhost:8080/api/configuration',
   errorApiUrlPrefix: 'http://localhost:8080/api/error',
   mailApiUrlPrefix: 'http://localhost:8080/api/mail',
+  referenceApiUrlPrefix: 'http://localhost:8080/api/reference',
   reportingApiUrlPrefix: 'http://localhost:8080/api/reporting',
   schedulerApiUrlPrefix: 'http://localhost:8080/api/scheduler',
   securityApiUrlPrefix: 'http://localhost:8080/api/security',
@@ -101,7 +102,8 @@ export class AppModule extends InceptionAppModule {
         ]),
 
       new NavigationItem('fa fa-file-alt', 'Form', '/inception/form', [],
-        [new NavigationItem('fa fa-file-alt', 'Example Form', '/inception/form/example-form')
+        [new NavigationItem('fa fa-file-alt', 'Example Form', '/inception/form/example-form'),
+          new NavigationItem('fa fa-file-alt', 'Reference Form', '/inception/form/reference-form')
         ]),
 
       new NavigationItem('fa fa-table', 'Tables', '/inception/tables', [],

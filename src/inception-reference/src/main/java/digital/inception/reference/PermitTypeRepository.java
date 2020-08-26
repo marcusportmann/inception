@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface PermitTypeRepository extends JpaRepository<PermitType, PermitTypeId> {
 
-  List<PermitType> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<PermitType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

@@ -41,12 +41,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "SuitableTimeToContact")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "locale", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "SuitableTimeToContact", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "SuitableTimeToContact",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "locale", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "suitable_times_to_contact")
@@ -77,12 +77,12 @@ public class SuitableTimeToContact {
       description = "The Unicode locale identifier for the suitable time to contact",
       required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Locale", required = true)
+  @XmlElement(name = "LocaleId", required = true)
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale", nullable = false)
-  private String locale;
+  @Column(name = "locale_id", nullable = false)
+  private String localeId;
 
   /** The name of the suitable time to contact. */
   @Schema(description = "The name of the suitable time to contact", required = true)
@@ -127,8 +127,8 @@ public class SuitableTimeToContact {
    *
    * @return the Unicode locale identifier for the suitable time to contact
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -172,8 +172,8 @@ public class SuitableTimeToContact {
    *
    * @param localeId the Unicode locale identifier for the suitable time to contact
    */
-  public void setLocale(String localeId) {
-    this.locale = localeId;
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
   }
 
   /**

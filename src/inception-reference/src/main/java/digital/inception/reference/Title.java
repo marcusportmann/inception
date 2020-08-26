@@ -40,12 +40,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "Title")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "locale", "sortIndex", "name", "", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "", "description"})
 @XmlRootElement(name = "Title", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "Title",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "locale", "sortIndex", "name", "", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "titles")
@@ -83,12 +83,12 @@ public class Title {
   /** The Unicode locale identifier for the title. */
   @Schema(description = "The Unicode locale identifier for the title", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Locale", required = true)
+  @XmlElement(name = "LocaleId", required = true)
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale", nullable = false)
-  private String locale;
+  @Column(name = "locale_id", nullable = false)
+  private String localeId;
 
   /** The name of the title. */
   @Schema(description = "The name of the title", required = true)
@@ -142,8 +142,8 @@ public class Title {
    *
    * @return the Unicode locale identifier for the title
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -196,8 +196,8 @@ public class Title {
    *
    * @param localeId the Unicode locale identifier for the title
    */
-  public void setLocale(String localeId) {
-    this.locale = localeId;
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
   }
 
   /**

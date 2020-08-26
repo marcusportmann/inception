@@ -47,6 +47,7 @@ import {MatSortModule} from "@angular/material/sort";
 import {MatTabsModule} from "@angular/material/tabs";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {AutocompleteSelectionRequiredDirective} from "./directives/autocomplete-selection-required.directive";
 
 /**
  * The InceptionModule class implements the Inception framework module.
@@ -59,7 +60,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     FileUploadComponent, GroupFormFieldComponent, TableFilterComponent,
 
     // Directives
-    AutofocusDirective, ValidatedFormDirective
+    AutocompleteSelectionRequiredDirective, AutofocusDirective, ValidatedFormDirective
   ],
   imports: [
     // Angular modules
@@ -90,7 +91,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     FileUploadComponent, GroupFormFieldComponent, TableFilterComponent,
 
     // Directives
-    AutofocusDirective, ValidatedFormDirective,
+    AutocompleteSelectionRequiredDirective, AutofocusDirective, ValidatedFormDirective,
   ]
 })
 export class CoreModule {

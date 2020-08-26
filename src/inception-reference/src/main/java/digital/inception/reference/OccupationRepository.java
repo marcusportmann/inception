@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface OccupationRepository extends JpaRepository<Occupation, OccupationId> {
 
-  List<Occupation> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<Occupation> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

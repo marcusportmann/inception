@@ -1,0 +1,26 @@
+<form [formGroup]="referenceForm" autocomplete="off" class="d-flex flex-column flex-auto" validatedForm>
+  <mat-card class="d-flex flex-column flex-auto">
+    <mat-card-content class="d-flex flex-column flex-auto">
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Address type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('addressType')" required="true" [matAutocomplete]="addressTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #addressTypeAutocomplete="matAutocomplete" [displayWith]="displayAddressType">
+              <mat-option *ngFor="let addressType of filteredAddressTypes$ | async" [value]="addressType">
+                {{addressType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['addressType'].errors && !referenceForm.controls['addressType'].untouched">
+              <span *ngIf="referenceForm.controls['addressType'].errors?.required">An address type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="align-right">
+      <button type="button" mat-flat-button color="link">Cancel</button>
+      <button type="button" mat-flat-button color="primary" (click)="ok()">OK</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

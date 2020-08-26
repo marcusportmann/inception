@@ -33,5 +33,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface EmploymentStatusRepository
     extends JpaRepository<EmploymentStatus, EmploymentStatusId> {
 
-  List<EmploymentStatus> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<EmploymentStatus> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

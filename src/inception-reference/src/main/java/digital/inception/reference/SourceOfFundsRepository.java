@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface SourceOfFundsRepository extends JpaRepository<SourceOfFunds, SourceOfFundsId> {
 
-  List<SourceOfFunds> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<SourceOfFunds> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

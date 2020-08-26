@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface MinorTypeRepository extends JpaRepository<MinorType, MinorTypeId> {
 
-  List<MinorType> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<MinorType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

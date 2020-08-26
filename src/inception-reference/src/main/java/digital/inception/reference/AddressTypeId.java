@@ -36,7 +36,7 @@ public class AddressTypeId implements Serializable {
   private String code;
 
   /** The Unicode locale identifier for the address type. */
-  private String locale;
+  private String localeId;
 
   /** Constructs a new <code>AddressTypeId</code>. */
   public AddressTypeId() {}
@@ -45,11 +45,11 @@ public class AddressTypeId implements Serializable {
    * Constructs a new <code>AddressTypeId</code>.
    *
    * @param code the code for the address type
-   * @param locale the Unicode locale identifier for the address type
+   * @param localeId the Unicode locale identifier for the address type
    */
-  public AddressTypeId(String code, String locale) {
+  public AddressTypeId(String code, String localeId) {
     this.code = code;
-    this.locale = locale;
+    this.localeId = localeId;
   }
 
   /**
@@ -75,7 +75,7 @@ public class AddressTypeId implements Serializable {
 
     AddressTypeId other = (AddressTypeId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(locale, other.locale);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -92,8 +92,8 @@ public class AddressTypeId implements Serializable {
    *
    * @return the Unicode locale identifier for the address type
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -103,7 +103,7 @@ public class AddressTypeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((locale == null) ? 0 : locale.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
@@ -120,7 +120,7 @@ public class AddressTypeId implements Serializable {
    *
    * @param locale the Unicode locale identifier for the address type
    */
-  public void setLocale(String locale) {
-    this.locale = locale;
+  public void setLocaleId(String locale) {
+    this.localeId = locale;
   }
 }

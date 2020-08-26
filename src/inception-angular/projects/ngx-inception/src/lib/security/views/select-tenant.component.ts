@@ -16,7 +16,7 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {first, map, startWith} from 'rxjs/operators';
+import {debounceTime, first, map, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {Tenant} from '../services/tenant';
@@ -76,7 +76,8 @@ export class SelectTenantComponent implements OnInit, OnDestroy {
     .pipe(first(), map(() => window.history.state))
     .subscribe((state) => {
       if (state.tenants) {
-        this.subscriptions.add(this.tenantFormControl.valueChanges.pipe(startWith(''), map((value) => {
+        this.subscriptions.add(this.tenantFormControl.valueChanges.pipe(startWith(''),
+          debounceTime(500), map((value) => {
           this.filteredTenants$.next(this.filterTenants(state.tenants, value));
         })).subscribe());
       } else {

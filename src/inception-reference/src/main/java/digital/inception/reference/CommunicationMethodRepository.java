@@ -33,5 +33,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CommunicationMethodRepository
     extends JpaRepository<CommunicationMethod, CommunicationMethodId> {
 
-  List<CommunicationMethod> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<CommunicationMethod> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

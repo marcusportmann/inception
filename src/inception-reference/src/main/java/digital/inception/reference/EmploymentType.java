@@ -40,12 +40,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "EmploymentType")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"employmentStatus", "code", "locale", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"employmentStatus", "code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "EmploymentType", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "EmploymentType",
     namespace = "http://reference.inception.digital",
-    propOrder = {"employmentStatus", "code", "locale", "sortIndex", "name", "description"})
+    propOrder = {"employmentStatus", "code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "employment_types")
@@ -86,12 +86,12 @@ public class EmploymentType {
   /** The Unicode locale identifier for the employment type. */
   @Schema(description = "The Unicode locale identifier for the employment type", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Locale", required = true)
+  @XmlElement(name = "LocaleId", required = true)
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale", nullable = false)
-  private String locale;
+  @Column(name = "locale_id", nullable = false)
+  private String localeId;
 
   /** The name of the employment type. */
   @Schema(description = "The name of the employment type", required = true)
@@ -145,8 +145,8 @@ public class EmploymentType {
    *
    * @return the Unicode locale identifier for the employment type
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -200,8 +200,8 @@ public class EmploymentType {
    *
    * @param localeId the Unicode locale identifier for the employment type
    */
-  public void setLocale(String localeId) {
-    this.locale = localeId;
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
   }
 
   /**

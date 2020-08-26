@@ -129,7 +129,7 @@ public class ReferenceServiceTest {
     assertEquals(
         "The correct locale was not retrieved for the country",
         "en-US",
-        retrievedCountry.getLocale());
+        retrievedCountry.getLocaleId());
     assertEquals(
         "The correct name was not retrieved for the country",
         "Afghanistan",
@@ -155,7 +155,7 @@ public class ReferenceServiceTest {
     assertEquals(
         "The correct locale was not retrieved for the country",
         "en-US",
-        retrievedCountry.getLocale());
+        retrievedCountry.getLocaleId());
     assertEquals(
         "The correct name was not retrieved for the country",
         "Afghanistan",
@@ -176,7 +176,7 @@ public class ReferenceServiceTest {
     boolean createLiquibaseInserts = false;
     boolean createAddressTypeInserts = createLiquibaseInserts && false;
     boolean createCommunicationMethodInserts = createLiquibaseInserts && false;
-    boolean createCountryInserts = createLiquibaseInserts && true;
+    boolean createCountryInserts = createLiquibaseInserts && false;
     boolean createEmploymentStatusInserts = createLiquibaseInserts && false;
     boolean createGenderInserts = createLiquibaseInserts && false;
     boolean createIdentityDocumentTypeInserts = createLiquibaseInserts && false;
@@ -186,6 +186,7 @@ public class ReferenceServiceTest {
     boolean createMinorTypeInserts = createLiquibaseInserts && false;
     boolean createNextOfKinInserts = createLiquibaseInserts && false;
     boolean createOccupationInserts = createLiquibaseInserts && false;
+    boolean createPermitTypeInserts = createLiquibaseInserts && true;
 
     if (createAddressTypeInserts) {
       for (AddressType addressType : referenceService.getAddressTypes("en-US")) {
@@ -193,7 +194,7 @@ public class ReferenceServiceTest {
         System.out.println("    <insert schemaName=\"reference\" tableName=\"address_types\">");
         System.out.println("      <column name=\"code\" value=\"" + addressType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + addressType.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + addressType.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + addressType.getSortIndex() + "\"/>");
         System.out.println("      <column name=\"name\" value=\"" + addressType.getName() + "\"/>");
@@ -215,7 +216,7 @@ public class ReferenceServiceTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + communicationMethod.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + communicationMethod.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + communicationMethod.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\""
                 + communicationMethod.getSortIndex()
@@ -249,7 +250,7 @@ public class ReferenceServiceTest {
 
         System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
         System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
-        System.out.println("  <column name=\"locale\" value=\"" + country.getLocale() + "\"/>");
+        System.out.println("  <column name=\"locale\" value=\"" + country.getLocaleId() + "\"/>");
         System.out.println("  <column name=\"sort_index\" value=\"" + counter + "\"/>");
         System.out.println("  <column name=\"name\" value=\"" + country.getName() + "\"/>");
         System.out.println(
@@ -277,7 +278,7 @@ public class ReferenceServiceTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + employmentStatus.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + employmentStatus.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + employmentStatus.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\""
                 + employmentStatus.getSortIndex()
@@ -303,7 +304,7 @@ public class ReferenceServiceTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + employmentType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + employmentType.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + employmentType.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + employmentType.getSortIndex() + "\"/>");
         System.out.println(
@@ -324,7 +325,7 @@ public class ReferenceServiceTest {
 
         System.out.println("    <insert schemaName=\"reference\" tableName=\"genders\">");
         System.out.println("      <column name=\"code\" value=\"" + gender.getCode() + "\"/>");
-        System.out.println("      <column name=\"locale\" value=\"" + gender.getLocale() + "\"/>");
+        System.out.println("      <column name=\"locale\" value=\"" + gender.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + gender.getSortIndex() + "\"/>");
         System.out.println("      <column name=\"name\" value=\"" + gender.getName() + "\"/>");
@@ -346,7 +347,7 @@ public class ReferenceServiceTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + identityDocumentType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + identityDocumentType.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + identityDocumentType.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\""
                 + identityDocumentType.getSortIndex()
@@ -375,7 +376,7 @@ public class ReferenceServiceTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + language.getCode().toUpperCase() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + language.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + language.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + language.getSortIndex() + "\"/>");
         System.out.println("      <column name=\"name\" value=\"" + language.getName() + "\"/>");
@@ -397,7 +398,7 @@ public class ReferenceServiceTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + maritalStatus.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + maritalStatus.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + maritalStatus.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + maritalStatus.getSortIndex() + "\"/>");
         System.out.println(
@@ -424,7 +425,7 @@ public class ReferenceServiceTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + marriageType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + marriageType.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + marriageType.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + marriageType.getSortIndex() + "\"/>");
         System.out.println(
@@ -444,7 +445,7 @@ public class ReferenceServiceTest {
         System.out.println("    <insert schemaName=\"reference\" tableName=\"minor_types\">");
         System.out.println("      <column name=\"code\" value=\"" + minorType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + minorType.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + minorType.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + minorType.getSortIndex() + "\"/>");
         System.out.println("      <column name=\"name\" value=\"" + minorType.getName() + "\"/>");
@@ -464,7 +465,7 @@ public class ReferenceServiceTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + nextOfKinType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + nextOfKinType.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + nextOfKinType.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + nextOfKinType.getSortIndex() + "\"/>");
         System.out.println(
@@ -486,7 +487,26 @@ public class ReferenceServiceTest {
         System.out.println("    <insert schemaName=\"reference\" tableName=\"occupations\">");
         System.out.println("      <column name=\"code\" value=\"" + occupation.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale\" value=\"" + occupation.getLocale() + "\"/>");
+            "      <column name=\"locale\" value=\"" + occupation.getLocaleId() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + occupation.getSortIndex() + "\"/>");
+        System.out.println("      <column name=\"name\" value=\"" + occupation.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\"" + occupation.getDescription() + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createPermitTypeInserts) {
+
+      for (Occupation occupation : referenceService.getOccupations("en-US")) {
+
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"occupations\">");
+        System.out.println("      <column name=\"code\" value=\"" + occupation.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale\" value=\"" + occupation.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + occupation.getSortIndex() + "\"/>");
         System.out.println("      <column name=\"name\" value=\"" + occupation.getName() + "\"/>");

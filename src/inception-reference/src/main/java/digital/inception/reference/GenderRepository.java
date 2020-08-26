@@ -32,5 +32,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface GenderRepository extends JpaRepository<Gender, GenderId> {
 
-  List<Gender> findByLocaleIgnoreCase(String locale, Sort sort);
+  List<Gender> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

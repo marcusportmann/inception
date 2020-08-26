@@ -81,6 +81,10 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-reference-rs</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-reporting-rs</artifactId>
     </dependency>
     <dependency>

@@ -35,7 +35,7 @@ public class MinorTypeId implements Serializable {
   private String code;
 
   /** The Unicode locale identifier for the minor type. */
-  private String locale;
+  private String localeId;
 
   /** Constructs a new <code>MinorTypeId</code>. */
   public MinorTypeId() {}
@@ -44,11 +44,11 @@ public class MinorTypeId implements Serializable {
    * Constructs a new <code>MinorTypeId</code>.
    *
    * @param code the code for the minor type
-   * @param locale the Unicode locale identifier for the minor type
+   * @param localeId the Unicode locale identifier for the minor type
    */
-  public MinorTypeId(String code, String locale) {
+  public MinorTypeId(String code, String localeId) {
     this.code = code;
-    this.locale = locale;
+    this.localeId = localeId;
   }
 
   /**
@@ -74,7 +74,7 @@ public class MinorTypeId implements Serializable {
 
     MinorTypeId other = (MinorTypeId) object;
 
-    return Objects.equals(code, other.code) && Objects.equals(locale, other.locale);
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -91,8 +91,8 @@ public class MinorTypeId implements Serializable {
    *
    * @return the Unicode locale identifier for the minor type
    */
-  public String getLocale() {
-    return locale;
+  public String getLocaleId() {
+    return localeId;
   }
 
   /**
@@ -102,7 +102,7 @@ public class MinorTypeId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((code == null) ? 0 : code.hashCode()) + ((locale == null) ? 0 : locale.hashCode());
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
@@ -119,7 +119,7 @@ public class MinorTypeId implements Serializable {
    *
    * @param locale the Unicode locale identifier for the minor type
    */
-  public void setLocale(String locale) {
-    this.locale = locale;
+  public void setLocaleId(String locale) {
+    this.localeId = locale;
   }
 }
