@@ -137,7 +137,6 @@ COMMENT ON COLUMN reference.employment_types.name IS 'The name of the employment
 COMMENT ON COLUMN reference.employment_types.description IS 'The description for the employment type';
 
 
--- See: https://en.wikipedia.org/wiki/ISO/IEC_5218
 CREATE TABLE reference.genders (
   code        VARCHAR(10)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,

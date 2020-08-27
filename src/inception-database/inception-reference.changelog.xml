@@ -154,6 +154,7 @@
     <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="sort_index"/>
     <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="description"/>
+    <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="country_of_issue"/>
     <addDefaultValue schemaName="reference" tableName="identity_document_types" columnName="description" defaultValue=""/>
     <addDefaultValue schemaName="reference" tableName="identity_document_types" columnName="country_of_issue" defaultValue=""/>
     <createIndex indexName="identity_document_types_locale_ix" schemaName="reference" tableName="identity_document_types">
@@ -176,6 +177,7 @@
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="locale_id"/>
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="sort_index"/>
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="languages" columnName="short_name"/>
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="languages" columnName="description" defaultValue=""/>
     <createIndex indexName="languages_locale_ix" schemaName="reference" tableName="languages">
@@ -294,6 +296,7 @@
     <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="sort_index"/>
     <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="description"/>
+    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="country_of_issue"/>
     <addForeignKeyConstraint constraintName="permit_types_country_fk" baseTableSchemaName="reference"
       baseTableName="permit_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
       referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
@@ -435,6 +438,7 @@
     <addNotNullConstraint schemaName="reference" tableName="tax_number_types" columnName="sort_index"/>
     <addNotNullConstraint schemaName="reference" tableName="tax_number_types" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="tax_number_types" columnName="description"/>
+    <addNotNullConstraint schemaName="reference" tableName="tax_number_types" columnName="country_of_issue"/>
     <addForeignKeyConstraint constraintName="tax_number_types_country_fk" baseTableSchemaName="reference"
       baseTableName="tax_number_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
       referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
@@ -4371,7 +4375,662 @@
       <column name="description" value="Unknown"/>
     </insert>
 
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZABV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Business Visa"/>
+      <column name="description" value="Business Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZAGWV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="General Work Visa"/>
+      <column name="description" value="General Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZACSWV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Critical Skills Work Visa"/>
+      <column name="description" value="Critical Skills Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZAITWV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Intra-company Transfer Work Visa"/>
+      <column name="description" value="Intra-company Transfer Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZASV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Study Visa"/>
+      <column name="description" value="Study Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZAEV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Exchange Visa"/>
+      <column name="description" value="Exchange Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZARPV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Retired Persons Visa"/>
+      <column name="description" value="Retired Persons Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZARV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Relatives Visa"/>
+      <column name="description" value="Relatives Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="permit_types">
+      <column name="code" value="ZAMTV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Medical Treatment Visa"/>
+      <column name="description" value="Medical Treatment Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
 
+    <insert schemaName="reference" tableName="races">
+      <column name="code" value="B"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Black"/>
+      <column name="description" value="Black"/>
+    </insert>
+    <insert schemaName="reference" tableName="races">
+      <column name="code" value="C"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Coloured"/>
+      <column name="description" value="Coloured"/>
+    </insert>
+    <insert schemaName="reference" tableName="races">
+      <column name="code" value="I"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Indian"/>
+      <column name="description" value="Indian"/>
+    </insert>
+    <insert schemaName="reference" tableName="races">
+      <column name="code" value="A"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Asian"/>
+      <column name="description" value="Asian"/>
+    </insert>
+    <insert schemaName="reference" tableName="races">
+      <column name="code" value="W"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="White"/>
+      <column name="description" value="White"/>
+    </insert>
+    <insert schemaName="reference" tableName="races">
+      <column name="code" value="U"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="EC"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Eastern Cape"/>
+      <column name="description" value="Eastern Cape"/>
+    </insert>
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="FS"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Free State"/>
+      <column name="description" value="Free State"/>
+    </insert>
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="GP"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Gauteng"/>
+      <column name="description" value="Gauteng"/>
+    </insert>
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="LP"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Limpopo"/>
+      <column name="description" value="Limpopo"/>
+    </insert>
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="MP"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Mpumalanga"/>
+      <column name="description" value="Mpumalanga"/>
+    </insert>
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="NC"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Northern Cape"/>
+      <column name="description" value="Northern Cape"/>
+    </insert>
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="NW"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Northwest"/>
+      <column name="description" value="Northwest"/>
+    </insert>
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="WC"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Western Cape"/>
+      <column name="description" value="Western Cape"/>
+    </insert>
+    <insert schemaName="reference" tableName="regions">
+      <column name="country" value="ZA"/>
+      <column name="code" value="ZN"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="KwaZulu-Natal"/>
+      <column name="description" value="KwaZulu-Natal"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="residential_statuses">
+      <column name="code" value="C"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Citizen"/>
+      <column name="description" value="Citizen"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_statuses">
+      <column name="code" value="P"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Permanent Resident"/>
+      <column name="description" value="Permanent Resident"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_statuses">
+      <column name="code" value="F"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Foreign National"/>
+      <column name="description" value="Foreign National"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_statuses">
+      <column name="code" value="R"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Refugee"/>
+      <column name="description" value="Refugee"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_statuses">
+      <column name="code" value="U"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="residential_types">
+      <column name="code" value="O"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Owner"/>
+      <column name="description" value="Owner"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_types">
+      <column name="code" value="R"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Renter"/>
+      <column name="description" value="Renter"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_types">
+      <column name="code" value="C"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Co-Habitant"/>
+      <column name="description" value="Co-Habitant"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_types">
+      <column name="code" value="B"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Boarder"/>
+      <column name="description" value="Boarder"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_types">
+      <column name="code" value="L"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Living with Parents"/>
+      <column name="description" value="Living with Parents"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_types">
+      <column name="code" value="N"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Not Specified"/>
+      <column name="description" value="Not Specified"/>
+    </insert>
+    <insert schemaName="reference" tableName="residential_types">
+      <column name="code" value="U"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="1"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Salary"/>
+      <column name="description" value="Salary"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="2"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Commission"/>
+      <column name="description" value="Commission"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="3"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Rental Income"/>
+      <column name="description" value="Rental Income"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="4"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Investments"/>
+      <column name="description" value="Investments"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="5"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Retirement Annuity"/>
+      <column name="description" value="Retirement Annuity"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="6"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Social Grant"/>
+      <column name="description" value="Social Grant"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="7"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Inheritance"/>
+      <column name="description" value="Inheritance"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="8"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Maintenance"/>
+      <column name="description" value="Maintenance"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="9"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Pension"/>
+      <column name="description" value="Pension"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="10"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Donations"/>
+      <column name="description" value="Donations"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="11"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="11"/>
+      <column name="name" value="Allowance"/>
+      <column name="description" value="Allowance"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="12"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="12"/>
+      <column name="name" value="Winnings"/>
+      <column name="description" value="Winnings"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="13"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="13"/>
+      <column name="name" value="Owner Draws"/>
+      <column name="description" value="Owner Draws"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="14"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="14"/>
+      <column name="name" value="Bonus/Incentive"/>
+      <column name="description" value="Bonus/Incentive"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="15"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="15"/>
+      <column name="name" value="Bursary"/>
+      <column name="description" value="Bursary"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="16"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="16"/>
+      <column name="name" value="Settlement"/>
+      <column name="description" value="Settlement"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="17"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="17"/>
+      <column name="name" value="Trust"/>
+      <column name="description" value="Trust"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="18"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="18"/>
+      <column name="name" value="Other"/>
+      <column name="description" value="Other"/>
+    </insert>
+    <insert schemaName="reference" tableName="sources_of_funds">
+      <column name="code" value="0"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="suitable_times_to_contact">
+      <column name="code" value="A"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Anytime"/>
+      <column name="description" value="Anytime"/>
+    </insert>
+    <insert schemaName="reference" tableName="suitable_times_to_contact">
+      <column name="code" value="L"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Long Hours"/>
+      <column name="description" value="Long Hours"/>
+    </insert>
+    <insert schemaName="reference" tableName="suitable_times_to_contact">
+      <column name="code" value="O"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Office Hours"/>
+      <column name="description" value="Office Hours"/>
+    </insert>
+    <insert schemaName="reference" tableName="suitable_times_to_contact">
+      <column name="code" value="N"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Do Not Contact"/>
+      <column name="description" value="Do Not Contact"/>
+    </insert>
+    <insert schemaName="reference" tableName="suitable_times_to_contact">
+      <column name="code" value="U"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="tax_number_types">
+      <column name="code" value="ZAITN"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Income Tax Number"/>
+      <column name="description" value="South African Income Tax Number"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="tax_number_types">
+      <column name="code" value="UKUTN"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="UK Tax Number"/>
+      <column name="description" value="UK Tax Number"/>
+      <column name="country_of_issue" value="GB"/>
+    </insert>
+    <insert schemaName="reference" tableName="tax_number_types">
+      <column name="code" value="USTIN"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="US Taxpayer Identification Number"/>
+      <column name="description" value="US Taxpayer Identification Number"/>
+      <column name="country_of_issue" value="US"/>
+    </insert>
+    <insert schemaName="reference" tableName="tax_number_types">
+      <column name="code" value="ZAVTN"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="VAT Tax Number"/>
+      <column name="description" value="South African VAT Tax Number"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="tax_number_types">
+      <column name="code" value="UKOTN"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="UK Other Tax Number"/>
+      <column name="description" value="UK Other Tax Number"/>
+      <column name="country_of_issue" value="GB"/>
+    </insert>
+    <insert schemaName="reference" tableName="tax_number_types">
+      <column name="code" value="USOTN"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="US Other Tax Number"/>
+      <column name="description" value="US Other Tax Number"/>
+      <column name="country_of_issue" value="US"/>
+    </insert>
+    <insert schemaName="reference" tableName="tax_number_types">
+      <column name="code" value="ZAOTN"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Other Tax Number"/>
+      <column name="description" value="Other South African Tax Number"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="1"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Mr"/>
+      <column name="abbreviation" value="Mr."/>
+      <column name="description" value="Mr"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="2"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Ms"/>
+      <column name="abbreviation" value="Ms."/>
+      <column name="description" value="Ms"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="3"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Miss"/>
+      <column name="abbreviation" value="Miss"/>
+      <column name="description" value="Miss"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="4"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Mrs"/>
+      <column name="abbreviation" value="Mrs."/>
+      <column name="description" value="Mrs"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="5"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Doctor"/>
+      <column name="abbreviation" value="Dr."/>
+      <column name="description" value="Doctor"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="6"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="The Honorable"/>
+      <column name="abbreviation" value="The Hon."/>
+      <column name="description" value="The Honorable"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="7"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Reverend"/>
+      <column name="abbreviation" value="Rev."/>
+      <column name="description" value="Reverend"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="8"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Father"/>
+      <column name="abbreviation" value="Fr."/>
+      <column name="description" value="Father"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="9"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Rabbi"/>
+      <column name="abbreviation" value="Rabbi"/>
+      <column name="description" value="Rabbi"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="10"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Professor"/>
+      <column name="abbreviation" value="Prof."/>
+      <column name="description" value="Professor"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="11"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Advocate"/>
+      <column name="abbreviation" value="Adv."/>
+      <column name="description" value="Advocate"/>
+    </insert>
+    <insert schemaName="reference" tableName="titles">
+      <column name="code" value="0"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="abbreviation" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="verification_methods">
+      <column name="code" value="M"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Manual"/>
+      <column name="description" value="Manual"/>
+    </insert>
+    <insert schemaName="reference" tableName="verification_methods">
+      <column name="code" value="S"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="System"/>
+      <column name="description" value="System"/>
+    </insert>
+    <insert schemaName="reference" tableName="verification_methods">
+      <column name="code" value="U"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="verification_statuses">
+      <column name="code" value="N"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Not Verified"/>
+      <column name="description" value="Not Verified"/>
+    </insert>
+    <insert schemaName="reference" tableName="verification_statuses">
+      <column name="code" value="I"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="In Progress"/>
+      <column name="description" value="In Progress"/>
+    </insert>
+    <insert schemaName="reference" tableName="verification_statuses">
+      <column name="code" value="C"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Complete"/>
+      <column name="description" value="Complete"/>
+    </insert>
+    <insert schemaName="reference" tableName="verification_statuses">
+      <column name="code" value="F"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Failed"/>
+      <column name="description" value="Failed"/>
+    </insert>
+    <insert schemaName="reference" tableName="verification_statuses">
+      <column name="code" value="U"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
 
   </changeSet>
 

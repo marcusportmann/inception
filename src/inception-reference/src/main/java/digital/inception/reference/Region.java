@@ -121,6 +121,15 @@ public class Region {
   }
 
   /**
+   * Returns the code for the country the region is associated with.
+   *
+   * @return the code for the country the region is associated with
+   */
+  public String getCountry() {
+    return country;
+  }
+
+  /**
    * Returns the description for the region.
    *
    * @return the description for the region
@@ -163,6 +172,15 @@ public class Region {
    */
   public void setCode(String code) {
     this.code = code;
+  }
+
+  /**
+   * Set the code for the country the region is associated with.
+   *
+   * @param country the code for the country the region is associated with
+   */
+  public void setCountry(String country) {
+    this.country = country;
   }
 
   /**
