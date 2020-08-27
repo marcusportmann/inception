@@ -17,6 +17,395 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Communication method</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('communicationMethod')" required="true" [matAutocomplete]="communicationMethodAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #communicationMethodAutocomplete="matAutocomplete" [displayWith]="displayCommunicationMethod">
+              <mat-option *ngFor="let communicationMethod of filteredCommunicationMethods$ | async" [value]="communicationMethod">
+                {{communicationMethod.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['communicationMethod'].errors && !referenceForm.controls['communicationMethod'].untouched">
+              <span *ngIf="referenceForm.controls['communicationMethod'].errors?.required">A communication method is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Country</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('country')" required="true" [matAutocomplete]="countryAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #countryAutocomplete="matAutocomplete" [displayWith]="displayCountry">
+              <mat-option *ngFor="let country of filteredCountries$ | async" [value]="country">
+                {{country.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['country'].errors && !referenceForm.controls['country'].untouched">
+              <span *ngIf="referenceForm.controls['country'].errors?.required">A country is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Employment status</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('employmentStatus')" required="true" [matAutocomplete]="employmentStatusAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #employmentStatusAutocomplete="matAutocomplete" [displayWith]="displayEmploymentStatus">
+              <mat-option *ngFor="let employmentStatus of filteredEmploymentStatuses$ | async" [value]="employmentStatus">
+                {{employmentStatus.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['employmentStatus'].errors && !referenceForm.controls['employmentStatus'].untouched">
+              <span *ngIf="referenceForm.controls['employmentStatus'].errors?.required">An employment status is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Employment type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('employmentType')" required="true" [matAutocomplete]="employmentTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #employmentTypeAutocomplete="matAutocomplete" [displayWith]="displayEmploymentType">
+              <mat-option *ngFor="let employmentType of filteredEmploymentTypes$ | async" [value]="employmentType">
+                {{employmentType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['employmentType'].errors && !referenceForm.controls['employmentType'].untouched">
+              <span *ngIf="referenceForm.controls['employmentType'].errors?.required">An employment type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Gender</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('gender')" required="true" [matAutocomplete]="genderAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #genderAutocomplete="matAutocomplete" [displayWith]="displayGender">
+              <mat-option *ngFor="let gender of filteredGenders$ | async" [value]="gender">
+                {{gender.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['gender'].errors && !referenceForm.controls['gender'].untouched">
+              <span *ngIf="referenceForm.controls['gender'].errors?.required">A gender is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Identity document type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('identityDocumentType')" required="true" [matAutocomplete]="identityDocumentTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #identityDocumentTypeAutocomplete="matAutocomplete" [displayWith]="displayIdentityDocumentType">
+              <mat-option *ngFor="let identityDocumentType of filteredIdentityDocumentTypes$ | async" [value]="identityDocumentType">
+                {{identityDocumentType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['identityDocumentType'].errors && !referenceForm.controls['identityDocumentType'].untouched">
+              <span *ngIf="referenceForm.controls['identityDocumentType'].errors?.required">An identity document type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Language</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('language')" required="true" [matAutocomplete]="languageAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #languageAutocomplete="matAutocomplete" [displayWith]="displayLanguage">
+              <mat-option *ngFor="let language of filteredLanguages$ | async" [value]="language">
+                {{language.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['language'].errors && !referenceForm.controls['language'].untouched">
+              <span *ngIf="referenceForm.controls['language'].errors?.required">A language is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Marital status</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('maritalStatus')" required="true" [matAutocomplete]="maritalStatusAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #maritalStatusAutocomplete="matAutocomplete" [displayWith]="displayMaritalStatus">
+              <mat-option *ngFor="let maritalStatus of filteredMaritalStatuses$ | async" [value]="maritalStatus">
+                {{maritalStatus.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['maritalStatus'].errors && !referenceForm.controls['maritalStatus'].untouched">
+              <span *ngIf="referenceForm.controls['maritalStatus'].errors?.required">A marital status is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Marriage type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('marriageType')" required="true" [matAutocomplete]="marriageTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #marriageTypeAutocomplete="matAutocomplete" [displayWith]="displayMarriageType">
+              <mat-option *ngFor="let marriageType of filteredMarriageTypes$ | async" [value]="marriageType">
+                {{marriageType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['marriageType'].errors && !referenceForm.controls['marriageType'].untouched">
+              <span *ngIf="referenceForm.controls['marriageType'].errors?.required">A marriage type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Minor type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('minorType')" required="true" [matAutocomplete]="minorTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #minorTypeAutocomplete="matAutocomplete" [displayWith]="displayMinorType">
+              <mat-option *ngFor="let minorType of filteredMinorTypes$ | async" [value]="minorType">
+                {{minorType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['minorType'].errors && !referenceForm.controls['minorType'].untouched">
+              <span *ngIf="referenceForm.controls['minorType'].errors?.required">A minor type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Next of kin type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('nextOfKinType')" required="true" [matAutocomplete]="nextOfKinTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #nextOfKinTypeAutocomplete="matAutocomplete" [displayWith]="displayNextOfKinType">
+              <mat-option *ngFor="let nextOfKinType of filteredNextOfKinTypes$ | async" [value]="nextOfKinType">
+                {{nextOfKinType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['nextOfKinType'].errors && !referenceForm.controls['nextOfKinType'].untouched">
+              <span *ngIf="referenceForm.controls['nextOfKinType'].errors?.required">A next of kin type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Occupation</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('occupation')" required="true" [matAutocomplete]="occupationAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #occupationAutocomplete="matAutocomplete" [displayWith]="displayOccupation">
+              <mat-option *ngFor="let occupation of filteredOccupations$ | async" [value]="occupation">
+                {{occupation.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['occupation'].errors && !referenceForm.controls['occupation'].untouched">
+              <span *ngIf="referenceForm.controls['occupation'].errors?.required">An occupation is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Permit type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('permitType')" required="true" [matAutocomplete]="permitTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #permitTypeAutocomplete="matAutocomplete" [displayWith]="displayPermitType">
+              <mat-option *ngFor="let permitType of filteredPermitTypes$ | async" [value]="permitType">
+                {{permitType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['permitType'].errors && !referenceForm.controls['permitType'].untouched">
+              <span *ngIf="referenceForm.controls['permitType'].errors?.required">A permit type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Race</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('race')" required="true" [matAutocomplete]="raceAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #raceAutocomplete="matAutocomplete" [displayWith]="displayRace">
+              <mat-option *ngFor="let race of filteredRaces$ | async" [value]="race">
+                {{race.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['race'].errors && !referenceForm.controls['race'].untouched">
+              <span *ngIf="referenceForm.controls['race'].errors?.required">A race is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Region</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('region')" required="true" [matAutocomplete]="regionAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #regionAutocomplete="matAutocomplete" [displayWith]="displayRegion">
+              <mat-option *ngFor="let region of filteredRegions$ | async" [value]="region">
+                {{region.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['region'].errors && !referenceForm.controls['region'].untouched">
+              <span *ngIf="referenceForm.controls['region'].errors?.required">A region is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Residential status</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('residentialStatus')" required="true" [matAutocomplete]="residentialStatusAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #residentialStatusAutocomplete="matAutocomplete" [displayWith]="displayResidentialStatus">
+              <mat-option *ngFor="let residentialStatus of filteredResidentialStatuses$ | async" [value]="residentialStatus">
+                {{residentialStatus.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['residentialStatus'].errors && !referenceForm.controls['residentialStatus'].untouched">
+              <span *ngIf="referenceForm.controls['residentialStatus'].errors?.required">A residential status is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Residential type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('residentialType')" required="true" [matAutocomplete]="residentialTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #residentialTypeAutocomplete="matAutocomplete" [displayWith]="displayResidentialType">
+              <mat-option *ngFor="let residentialType of filteredResidentialTypes$ | async" [value]="residentialType">
+                {{residentialType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['residentialType'].errors && !referenceForm.controls['residentialType'].untouched">
+              <span *ngIf="referenceForm.controls['residentialType'].errors?.required">A residential type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+
+
+
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Source of funds</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('sourceOfFunds')" required="true" [matAutocomplete]="sourceOfFundsAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #sourceOfFundsAutocomplete="matAutocomplete" [displayWith]="displaySourceOfFunds">
+              <mat-option *ngFor="let sourceOfFunds of filteredSourcesOfFunds$ | async" [value]="sourceOfFunds">
+                {{sourceOfFunds.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['sourceOfFunds'].errors && !referenceForm.controls['sourceOfFunds'].untouched">
+              <span *ngIf="referenceForm.controls['sourceOfFunds'].errors?.required">A source of funds is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Suitable time to contact</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('suitableTimeToContact')" required="true" [matAutocomplete]="suitableTimeToContactAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #suitableTimeToContactAutocomplete="matAutocomplete" [displayWith]="displaySuitableTimeToContact">
+              <mat-option *ngFor="let suitableTimeToContact of filteredSuitableTimesToContact$ | async" [value]="suitableTimeToContact">
+                {{suitableTimeToContact.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['suitableTimeToContact'].errors && !referenceForm.controls['suitableTimeToContact'].untouched">
+              <span *ngIf="referenceForm.controls['suitableTimeToContact'].errors?.required">A suitable time to contact is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Tax number type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('taxNumberType')" required="true" [matAutocomplete]="taxNumberTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #taxNumberTypeAutocomplete="matAutocomplete" [displayWith]="displayTaxNumberType">
+              <mat-option *ngFor="let taxNumberType of filteredTaxNumberTypes$ | async" [value]="taxNumberType">
+                {{taxNumberType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['taxNumberType'].errors && !referenceForm.controls['taxNumberType'].untouched">
+              <span *ngIf="referenceForm.controls['taxNumberType'].errors?.required">A tax number type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('title')" required="true" [matAutocomplete]="titleAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #titleAutocomplete="matAutocomplete" [displayWith]="displayTitle">
+              <mat-option *ngFor="let title of filteredTitles$ | async" [value]="title">
+                {{title.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['title'].errors && !referenceForm.controls['title'].untouched">
+              <span *ngIf="referenceForm.controls['title'].errors?.required">A title is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Verification method</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('verificationMethod')" required="true" [matAutocomplete]="verificationMethodAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #verificationMethodAutocomplete="matAutocomplete" [displayWith]="displayVerificationMethod">
+              <mat-option *ngFor="let verificationMethod of filteredVerificationMethods$ | async" [value]="verificationMethod">
+                {{verificationMethod.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['verificationMethod'].errors && !referenceForm.controls['verificationMethod'].untouched">
+              <span *ngIf="referenceForm.controls['verificationMethod'].errors?.required">A verification method is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Verification status</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('verificationStatus')" required="true" [matAutocomplete]="verificationStatusAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #verificationStatusAutocomplete="matAutocomplete" [displayWith]="displayVerificationStatus">
+              <mat-option *ngFor="let verificationStatus of filteredVerificationStatuses$ | async" [value]="verificationStatus">
+                {{verificationStatus.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['verificationStatus'].errors && !referenceForm.controls['verificationStatus'].untouched">
+              <span *ngIf="referenceForm.controls['verificationStatus'].errors?.required">A verification status is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
     </mat-card-content>
     <mat-card-actions class="align-right">
       <button type="button" mat-flat-button color="link">Cancel</button>

@@ -40,12 +40,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "Region")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"country", "code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "Region", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "Region",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
+    propOrder = {"country", "code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "regions")

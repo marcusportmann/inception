@@ -279,6 +279,20 @@ label {
   .mat-hint {
     color: $gray-400;
   }
+
+  &.mat-form-field-invalid {
+    ::placeholder {
+      color: $danger;
+    }
+
+    :-ms-input-placeholder {
+      color: $danger;
+    }
+
+    ::-ms-input-placeholder {
+      color: $danger;
+    }
+  }
 }
 
 .mat-form-field.static {

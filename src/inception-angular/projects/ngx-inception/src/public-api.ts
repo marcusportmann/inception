@@ -109,6 +109,30 @@ export * from './lib/reporting/views/reporting-views.module';
 
 // Reference
 export * from './lib/reference/services/reference.service';
+export * from './lib/reference/services/address-type';
+export * from './lib/reference/services/communication-method';
+export * from './lib/reference/services/country';
+export * from './lib/reference/services/employment-status';
+export * from './lib/reference/services/employment-type';
+export * from './lib/reference/services/gender';
+export * from './lib/reference/services/identity-document-type';
+export * from './lib/reference/services/language';
+export * from './lib/reference/services/marital-status';
+export * from './lib/reference/services/marriage-type';
+export * from './lib/reference/services/minor-type';
+export * from './lib/reference/services/next-of-kin-type';
+export * from './lib/reference/services/occupation';
+export * from './lib/reference/services/permit-type';
+export * from './lib/reference/services/race';
+export * from './lib/reference/services/region';
+export * from './lib/reference/services/residential-status';
+export * from './lib/reference/services/residential-type';
+export * from './lib/reference/services/source-of-funds';
+export * from './lib/reference/services/suitable-time-to-contact';
+export * from './lib/reference/services/tax-number-type';
+export * from './lib/reference/services/title';
+export * from './lib/reference/services/verification-method';
+export * from './lib/reference/services/verification-status';
 
 // Scheduler
 export * from './lib/scheduler/services/job';
@@ -125,7 +149,6 @@ export * from './lib/security/directives/has-authority.directive';
 export * from './lib/security/routing/security-routing.module';
 export * from './lib/security/routing/can-activate-function-guard';
 export * from './lib/security/routing/disabled-function-guard';
-
 export * from './lib/security/services/group';
 export * from './lib/security/services/group-member';
 export * from './lib/security/services/group-member-type';
@@ -153,9 +176,6 @@ export * from './lib/security/services/user-directory-type';
 export * from './lib/security/services/user-sort-by';
 export * from './lib/security/services/user-status';
 export * from './lib/security/services/users';
-
-
-
 export * from './lib/security/views/login-views.module';
 export * from './lib/security/views/security-title-resolver';
 export * from './lib/security/views/security-views.module';
