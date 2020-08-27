@@ -79,7 +79,7 @@ public class LiquibaseChangelogInsertsTest {
   /** Create the Liquibase changelog inserts. */
   @Test
   public void createLiquibaseChangelogInserts() throws Exception {
-    boolean createLiquibaseInserts = true;
+    boolean createLiquibaseInserts = false;
     boolean createAddressTypeInserts = createLiquibaseInserts && false;
     boolean createCommunicationMethodInserts = createLiquibaseInserts && false;
     boolean createCountryInserts = createLiquibaseInserts && false;
@@ -100,7 +100,7 @@ public class LiquibaseChangelogInsertsTest {
     boolean createSourceOfFundsInserts = createLiquibaseInserts && false;
     boolean createSuitableTimeToContactInserts = createLiquibaseInserts && false;
     boolean createTaxNumberTypeInserts = createLiquibaseInserts && false;
-    boolean createTitleInserts = createLiquibaseInserts && true;
+    boolean createTitleInserts = createLiquibaseInserts && false;
     boolean createVerificationMethodInserts = createLiquibaseInserts && false;
     boolean createVerificationStatusInserts = createLiquibaseInserts && false;
 

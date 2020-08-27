@@ -514,9 +514,9 @@ Complete the following steps to create a new application based on the Inception 
       }
       ```
    3. Edit the *src/main/frontend/angular.json* file and change the *outputPath* option to
-      *../../../target/classes/static* as shown below. This will result in the Angular
-      font-end being packaged as part of the Spring Boot application as a set of static
-      resources.
+      *../../../target/classes/static*, and add the *preserveSymlinks* option with a value
+      of *true* as shown below. This will result in the Angular font-end being packaged as
+      part of the Spring Boot application as a set of static resources.
       ```
       {
         ...
@@ -527,6 +527,7 @@ Complete the following steps to create a new application based on the Inception 
               "build": {
                 ...
                 "options": {
+                  "preserveSymlinks": true,
                   "outputPath": "../../../target/classes/static",
                   ...
                 },
@@ -600,6 +601,7 @@ Complete the following steps to create a new application based on the Inception 
         configurationApiUrlPrefix: 'http://localhost:8080/api/configuration',
         errorApiUrlPrefix: 'http://localhost:8080/api/error',
         mailApiUrlPrefix: 'http://localhost:8080/api/mail',
+        referenceApiUrlPrefix: 'http://localhost:8080/api/reference',
         reportingApiUrlPrefix: 'http://localhost:8080/api/reporting',
         schedulerApiUrlPrefix: 'http://localhost:8080/api/scheduler',
         securityApiUrlPrefix: 'http://localhost:8080/api/security',
@@ -731,7 +733,7 @@ Complete the following steps to create a new application based on the Inception 
    13. Create the wrapper modules for the Inception Framework modules:
        1. Create the *src/main/frontend/src/app/views/wrappers* directory.
           ```
-          mkdir -p src/app/views/wrappers
+          mkdir -p src/main/frontend/src/app/views/wrappers
           ```
        2. Create the *src/main/frontend/src/app/views/wrappers/codes-views-wrapper.module.ts* file with the
           following contents.
@@ -991,7 +993,7 @@ Complete the following steps to create a new application based on the Inception 
        ```
    17. Create the *src/main/frontend/src/app/views/dashboard* directory.
        ```
-       mkdir -p src/app/views/dashboard
+       mkdir -p src/main/frontend/src/app/views/dashboard
        ```
    18. Create the *src/main/frontend/src/app/views/dashboard/dashboard.component.ts* file with the following
        contents.
@@ -1157,8 +1159,8 @@ Complete the following steps to create a new application based on the Inception 
        NOTE: If you do not have application-specific logo and logo symbol images then you can
        copy the ones from the *ngx-inception*
        ```
-       cp node_modules/ngx-inception/assets/images/logo.png src/main/frontend/src/assets/images/logo.png
-       cp node_modules/ngx-inception/assets/images/logo-symbol.png src/main/frontend/src/assets/images/logo-symbol.png
+       cp src/main/frontend/node_modules/ngx-inception/assets/images/logo.png src/main/frontend/src/assets/images/logo.png
+       cp src/main/frontend/node_modules/ngx-inception/assets/images/logo-symbol.png src/main/frontend/src/assets/images/logo-symbol.png
        ```
    25. Replace the contents of the *src/main/frontend/src/styles.scss* file with the following.
        ```
