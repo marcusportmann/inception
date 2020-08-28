@@ -32,7 +32,10 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "SMSStatus")
+@Schema(
+    description =
+        "The SMS status, i.e. 0 = Unknown, 1 = Queued For Sending, 2 = Sending, "
+            + "3 = Sent, 4 = Failed, -1 = Any")
 @XmlEnum
 @XmlType(name = "SMSStatus", namespace = "http://sms.inception.digital")
 public enum SMSStatus {
@@ -49,9 +52,9 @@ public enum SMSStatus {
   @XmlEnumValue("Any")
   ANY(-1, "Any");
 
-  private int code;
+  private final int code;
 
-  private String description;
+  private final String description;
 
   SMSStatus(int code, String description) {
     this.code = code;

@@ -16,7 +16,6 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,26 +24,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -59,15 +52,11 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
     name = "Person",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "name", "dateOfBirth", "gender", "identityDocuments"})
+    propOrder = {"dateOfBirth", "gender", "identityDocuments"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "parties")
-@SecondaryTable(
-    schema = "party",
-    name = "persons",
-    pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")})
-public class Person {
+@Table(schema = "party", name = "persons")
+public class Person extends Party {
 
   /** The identity documents for the person. */
   @Schema(description = "The identity documents for the person")
@@ -85,19 +74,12 @@ public class Person {
       nullable = false)
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
-  /** The type of party for the person. */
-  @JsonIgnore
-  @XmlTransient
-  @NotNull
-  @Column(name = "type", nullable = false)
-  private final PartyType type = PartyType.PERSON;
-
   /** The date of birth for the person. */
   @Schema(description = "The date of birth for the person", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "DateOfBirth", required = true)
   @NotNull
-  @Column(table = "persons", name = "date_of_birth", nullable = false)
+  @Column(name = "date_of_birth", nullable = false)
   private LocalDate dateOfBirth;
 
   /** The code identifying the gender for the person. */
@@ -105,31 +87,13 @@ public class Person {
   @JsonProperty(required = true)
   @XmlElement(name = "Gender", required = true)
   @NotNull
-  @Column(table = "persons", name = "gender", nullable = false)
+  @Column(name = "gender", nullable = false)
   private String gender;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the person. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the person",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Id
-  @Column(name = "id", nullable = false)
-  private UUID id;
-
-  /** The name of the person. */
-  @Schema(description = "The name of the person", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
-  private String name;
-
   /** Constructs a new <code>Person</code>. */
-  public Person() {}
+  public Person() {
+    super(PartyType.PERSON);
+  }
 
   /**
    * Add the identity document for the person
@@ -161,30 +125,12 @@ public class Person {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the person.
-   *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the person
-   */
-  public UUID getId() {
-    return id;
-  }
-
-  /**
    * Returns the identity documents for the person.
    *
    * @return the identity documents for the person
    */
   public Set<IdentityDocument> getIdentityDocuments() {
     return identityDocuments;
-  }
-
-  /**
-   * Returns the name of the person.
-   *
-   * @return the name of the person
-   */
-  public String getName() {
-    return name;
   }
 
   /**
@@ -206,15 +152,6 @@ public class Person {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the person.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the person
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
-
-  /**
    * Set the identity documents for the person.
    *
    * @param identityDocuments the identity documents for the person
@@ -222,14 +159,5 @@ public class Person {
   public void setIdentityDocuments(Set<IdentityDocument> identityDocuments) {
     this.identityDocuments.clear();
     this.identityDocuments.addAll(identityDocuments);
-  }
-
-  /**
-   * Set the name of the person.
-   *
-   * @param name the name of the person
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 }

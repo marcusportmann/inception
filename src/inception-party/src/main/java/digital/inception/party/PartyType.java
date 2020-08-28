@@ -28,14 +28,14 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "PartyType")
+@Schema(description = "The party type, i.e. 0 = Unknown, 1 = Organization, 2 = Person")
 @XmlEnum
 @XmlType(name = "PartyType", namespace = "http://party.inception.digital")
 public enum PartyType {
   @XmlEnumValue("Unknown")
   UNKNOWN(0, "Unknown"),
   @XmlEnumValue("Organization")
-  TENANT(1, "Organization"),
+  ORGANIZATION(1, "Organization"),
   @XmlEnumValue("Person")
   PERSON(2, "Person");
 
@@ -61,7 +61,7 @@ public enum PartyType {
         return PartyType.UNKNOWN;
 
       case 1:
-        return PartyType.TENANT;
+        return PartyType.ORGANIZATION;
 
       case 2:
         return PartyType.PERSON;

@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "UserStatus")
+@Schema(description = "The user status, i.e. 0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired")
 @XmlEnum
 @XmlType(name = "UserStatus", namespace = "http://security.inception.digital")
 public enum UserStatus {
@@ -45,9 +45,9 @@ public enum UserStatus {
   @XmlEnumValue("Expired")
   EXPIRED(3, "Expired");
 
-  private int code;
+  private final int code;
 
-  private String description;
+  private final String description;
 
   UserStatus(int code, String description) {
     this.code = code;

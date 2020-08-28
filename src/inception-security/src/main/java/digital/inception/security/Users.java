@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlType;
   "users",
   "total",
   "filter",
+  "sortBy",
   "sortDirection",
   "pageIndex",
   "pageSize"
@@ -56,6 +57,7 @@ import javax.xml.bind.annotation.XmlType;
       "users",
       "total",
       "filter",
+      "sortBy",
       "sortDirection",
       "pageIndex",
       "pageSize"
@@ -83,6 +85,12 @@ public class Users implements Serializable {
   @JsonProperty
   @XmlElement(name = "PageSize")
   private Integer pageSize;
+
+  /** The optional method used to sort the users e.g. by name. */
+  @Schema(description = "The optional method used to sort the users e.g. by name")
+  @JsonProperty
+  @XmlElement(name = "SortBy")
+  private UserSortBy sortBy;
 
   /** The optional sort direction that was applied to the users. */
   @Schema(description = "The optional sort direction that was applied to the users")
@@ -126,6 +134,7 @@ public class Users implements Serializable {
    * @param users the users
    * @param total the total number of users
    * @param filter the optional filter that was applied to the users
+   * @param sortBy the optional method used to sort the users e.g. by name
    * @param sortDirection the optional sort direction that was applied to the users
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -135,6 +144,7 @@ public class Users implements Serializable {
       List<User> users,
       long total,
       String filter,
+      UserSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
@@ -142,6 +152,7 @@ public class Users implements Serializable {
     this.users = users;
     this.total = total;
     this.filter = filter;
+    this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
@@ -172,6 +183,15 @@ public class Users implements Serializable {
    */
   public Integer getPageSize() {
     return pageSize;
+  }
+
+  /**
+   * Returns the optional method used to sort the users e.g. by name.
+   *
+   * @return the optional method used to sort the users e.g. by name
+   */
+  public UserSortBy getSortBy() {
+    return sortBy;
   }
 
   /**

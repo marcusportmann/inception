@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "SortDirection")
+@Schema(description = "The sort direction, i.e. asc = Ascending, desc = Descending")
 @XmlEnum
 @XmlType(name = "SortDirection", namespace = "http://core.inception.digital")
 public enum SortDirection {

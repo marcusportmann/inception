@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "TenantStatus")
+@Schema(description = "The tenant status, i.e. 0 = Inactive, 1 = Active")
 @XmlEnum
 @XmlType(name = "TenantStatus", namespace = "http://security.inception.digital")
 public enum TenantStatus {

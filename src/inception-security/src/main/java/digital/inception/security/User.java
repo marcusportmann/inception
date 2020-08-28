@@ -216,7 +216,6 @@ public class User implements Serializable {
   /** The status for the user. */
   @Schema(
       description = "The status for the user",
-      allowableValues = "0 = Inactive, 1 = Active, 2 = Locked, 3 = Expired",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)

@@ -363,6 +363,7 @@ public class PartyService implements IPartyService {
           personPage.toList(),
           personPage.getTotalElements(),
           filter,
+          sortBy,
           sortDirection,
           pageIndex,
           pageSize);

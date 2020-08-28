@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "MailTemplateContentType")
+@Schema(description = "The mail template content type, i.e. 0 = Unknown, 1 = Text, 2 = HTML")
 @XmlEnum
 @XmlType(name = "MailTemplateContentType", namespace = "http://mail.inception.digital")
 @SuppressWarnings("unused")
@@ -45,9 +45,9 @@ public enum MailTemplateContentType {
   @XmlEnumValue("HTML")
   HTML(2, "HTML");
 
-  private int code;
+  private final int code;
 
-  private String description;
+  private final String description;
 
   MailTemplateContentType(int code, String description) {
     this.code = code;

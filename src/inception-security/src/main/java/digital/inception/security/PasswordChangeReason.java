@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "PasswordChangeReason")
+@Schema(description = "The password change reason, i.e. 0 = User, 1 = Administrative, 2 = Reset")
 @XmlEnum
 @XmlType(name = "PasswordChangeReason", namespace = "http://security.inception.digital")
 public enum PasswordChangeReason {

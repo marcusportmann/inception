@@ -37,12 +37,20 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "Persons")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"persons", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
+@JsonPropertyOrder({
+  "persons",
+  "total",
+  "filter",
+  "sortBy",
+  "sortDirection",
+  "pageIndex",
+  "pageSize"
+})
 @XmlRootElement(name = "Persons", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Persons",
     namespace = "http://party.inception.digital",
-    propOrder = {"persons", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
+    propOrder = {"persons", "total", "filter", "sortBy", "sortDirection", "pageIndex", "pageSize"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused"})
 public class Persons implements Serializable {
@@ -74,6 +82,12 @@ public class Persons implements Serializable {
   @XmlElement(name = "Person", required = true)
   private List<Person> persons;
 
+  /** The optional method used to sort the persons e.g. by name. */
+  @Schema(description = "The optional method used to sort the persons e.g. by name")
+  @JsonProperty
+  @XmlElement(name = "SortBy")
+  private PersonSortBy sortBy;
+
   /** The optional sort direction that was applied to the persons. */
   @Schema(description = "The optional sort direction that was applied to the persons")
   @JsonProperty
@@ -95,6 +109,7 @@ public class Persons implements Serializable {
    * @param persons the persons
    * @param total the total number of persons
    * @param filter the optional filter that was applied to the persons
+   * @param sortBy the optional method used to sort the persons e.g. by name
    * @param sortDirection the optional sort direction that was applied to the persons
    * @param pageIndex the optional page index
    * @param pageSize the optional page size
@@ -103,12 +118,14 @@ public class Persons implements Serializable {
       List<Person> persons,
       long total,
       String filter,
+      PersonSortBy sortBy,
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize) {
     this.persons = persons;
     this.total = total;
     this.filter = filter;
+    this.sortBy = sortBy;
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
@@ -148,6 +165,15 @@ public class Persons implements Serializable {
    */
   public List<Person> getPersons() {
     return persons;
+  }
+
+  /**
+   * Returns the optional method used to sort the persons e.g. by name.
+   *
+   * @return the optional method used to sort the persons e.g. by name
+   */
+  public PersonSortBy getSortBy() {
+    return sortBy;
   }
 
   /**

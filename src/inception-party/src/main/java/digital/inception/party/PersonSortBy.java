@@ -33,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "PersonSortBy")
+@Schema(
+    description = "The method used to sort the list of persons, i.e. 0 = Name, 1 = Preferred Name")
 @XmlEnum
 @XmlType(name = "PersonSortBy", namespace = "http://party.inception.digital")
 public enum PersonSortBy {

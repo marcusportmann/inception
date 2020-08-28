@@ -32,7 +32,10 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "JobStatus")
+@Schema(
+    description =
+        "The job status, i.e. 0 = Unscheduled, 1 = Scheduled, 2 = Executing, "
+            + "3 = Executed, 4 = Aborted, 5 = Failed, 6 = Once-off, -1 = Unknown")
 @XmlEnum
 @XmlType(name = "JobStatus", namespace = "http://scheduler.inception.digital")
 public enum JobStatus {
@@ -53,9 +56,9 @@ public enum JobStatus {
   @XmlEnumValue("Unknown")
   UNKNOWN(-1, "Unknown");
 
-  private int code;
+  private final int code;
 
-  private String description;
+  private final String description;
 
   JobStatus(int code, String description) {
     this.code = code;

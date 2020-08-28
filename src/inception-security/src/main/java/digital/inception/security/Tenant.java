@@ -91,7 +91,6 @@ public class Tenant implements Serializable {
   /** The status for the tenant. */
   @Schema(
       description = "The status for the tenant",
-      allowableValues = "0 = Inactive, 1 = Active",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)

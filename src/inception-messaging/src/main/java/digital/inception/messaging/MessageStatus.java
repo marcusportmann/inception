@@ -28,7 +28,11 @@ import javax.xml.bind.annotation.XmlType;
 // ~--- JDK imports ------------------------------------------------------------
 
 /** The enumeration giving the possible statuses for a message. */
-@Schema(description = "MessageStatus")
+@Schema(
+    description =
+        "The message status, i.e. 0 = Initialized, 1 = Queued For Sending, "
+            + "2 = Queued For Processing, 3 = Aborted, 4 = Failed, 5 = Processing, 6 = Sending, "
+            + "7 = Queued For Download, 8 = Downloading, 9 = Processed, -1 = Unknown")
 @XmlEnum
 @XmlType(name = "MessageStatus", namespace = "http://messaging.inception.digital")
 public enum MessageStatus {
@@ -55,9 +59,9 @@ public enum MessageStatus {
   @XmlEnumValue("Unknown")
   UNKNOWN(-1, "Unknown");
 
-  private int code;
+  private final int code;
 
-  private String description;
+  private final String description;
 
   MessageStatus(int code, String description) {
     this.code = code;

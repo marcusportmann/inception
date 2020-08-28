@@ -2096,7 +2096,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       }
 
       return new Users(
-          getUserDirectoryId(), users, totalUsers, filter, sortDirection, pageIndex, pageSize);
+          getUserDirectoryId(),
+          users,
+          totalUsers,
+          filter,
+          sortBy,
+          sortDirection,
+          pageIndex,
+          pageSize);
     } catch (Throwable e) {
       throw new SecurityServiceException(
           "Failed to retrieve the filtered users for the user directory ("

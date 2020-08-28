@@ -1248,6 +1248,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
           userPage.toList(),
           userPage.getTotalElements(),
           filter,
+          sortBy,
           sortDirection,
           pageIndex,
           pageSize);
