@@ -11,6 +11,7 @@ CREATE TABLE codes.code_categories (
   id      VARCHAR(100) NOT NULL,
   name    VARCHAR(100) NOT NULL,
   data    CLOB,
+  created TIMESTAMP    NOT NULL,
   updated TIMESTAMP,
 
   PRIMARY KEY (id)
@@ -22,6 +23,8 @@ COMMENT ON COLUMN codes.code_categories.name IS 'The name of the code category';
 
 COMMENT ON COLUMN codes.code_categories.data IS 'The code data for the code category';
 
+COMMENT ON COLUMN codes.code_categories.created IS 'The date and time the code category was created';
+
 COMMENT ON COLUMN codes.code_categories.updated IS 'The date and time the code category was last updated';
 
 
@@ -30,6 +33,8 @@ CREATE TABLE codes.codes (
   code_category_id VARCHAR(100)  NOT NULL,
   name             VARCHAR(100)  NOT NULL,
   value            VARCHAR(4000) NOT NULL,
+  created          TIMESTAMP     NOT NULL,
+  updated          TIMESTAMP,
 
   PRIMARY KEY (id, code_category_id),
   CONSTRAINT codes_code_category_fk FOREIGN KEY (code_category_id) REFERENCES codes.code_categories(id) ON DELETE CASCADE
@@ -44,6 +49,10 @@ COMMENT ON COLUMN codes.codes.code_category_id IS 'The ID uniquely identifying t
 COMMENT ON COLUMN codes.codes.name IS 'The name of the code';
 
 COMMENT ON COLUMN codes.codes.value IS 'The value for the code';
+
+COMMENT ON COLUMN codes.codes.created IS 'The date and time the code was created';
+
+COMMENT ON COLUMN codes.codes.updated IS 'The date and time the code was last updated';
 
 
 -- -------------------------------------------------------------------------------------------------

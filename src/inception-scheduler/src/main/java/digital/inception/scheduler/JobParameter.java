@@ -19,11 +19,13 @@ package digital.inception.scheduler;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,6 +42,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -65,6 +69,13 @@ public class JobParameter implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The date and time the job parameter was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
+
   /** The job the job parameter is associated with. */
   @JsonBackReference
   @XmlTransient
@@ -80,6 +91,13 @@ public class JobParameter implements Serializable {
   @Id
   @Column(name = "name", nullable = false, length = 100)
   private String name;
+
+  /** The date and time the job parameter was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** The value of the job parameter. */
   @Schema(description = "The value of the job parameter", required = true)
@@ -131,6 +149,15 @@ public class JobParameter implements Serializable {
   }
 
   /**
+   * Returns the date and time the job parameter was created.
+   *
+   * @return the date and time the job parameter was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
    * Returns the job the job parameter is associated with.
    *
    * @return the job the job parameter is associated with
@@ -146,6 +173,15 @@ public class JobParameter implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Returns the date and time the job parameter was last updated.
+   *
+   * @return the date and time the job parameter was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

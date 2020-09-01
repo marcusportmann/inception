@@ -18,6 +18,7 @@ package digital.inception.sms;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -38,8 +39,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -79,6 +83,13 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class SMS implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The date and time the SMS was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the SMS. */
   @Schema(
@@ -139,6 +150,13 @@ public class SMS implements Serializable {
   @NotNull
   @Column(name = "status", nullable = false)
   private SMSStatus status;
+
+  /** The date and time the SMS was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** Constructs a new <code>SMS</code>. */
   public SMS() {}
@@ -222,6 +240,15 @@ public class SMS implements Serializable {
   }
 
   /**
+   * Returns the date and time the SMS was created.
+   *
+   * @return the date and time the SMS was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the SMS.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the SMS
@@ -282,6 +309,15 @@ public class SMS implements Serializable {
    */
   public SMSStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Returns the date and time the SMS was last updated.
+   *
+   * @return the date and time the SMS was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

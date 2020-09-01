@@ -18,10 +18,10 @@ package digital.inception.mail;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -36,9 +36,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -49,12 +50,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @Schema(description = "MailTemplate")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "name", "contentType", "template", "updated"})
+@JsonPropertyOrder({"id", "name", "contentType", "template"})
 @XmlRootElement(name = "MailTemplate", namespace = "http://mail.inception.digital")
 @XmlType(
     name = "MailTemplate",
     namespace = "http://mail.inception.digital",
-    propOrder = {"id", "name", "contentType", "template", "updated"})
+    propOrder = {"id", "name", "contentType", "template"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "mail", name = "mail_templates")
@@ -70,6 +71,13 @@ public class MailTemplate implements Serializable {
   @NotNull
   @Column(name = "content_type", nullable = false)
   private MailTemplateContentType contentType;
+
+  /** The date and time the mail template was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** The ID uniquely identifying the mail template. */
   @Schema(description = "The ID uniquely identifying the mail template", required = true)
@@ -100,12 +108,10 @@ public class MailTemplate implements Serializable {
   private byte[] template;
 
   /** The date and time the mail template was last updated. */
-  @Schema(description = "The date and time the mail template was last updated")
-  @JsonProperty
-  @XmlElement(name = "Updated")
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "updated")
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
   /** Constructs a new <code>MailTemplate</code>. */
@@ -160,6 +166,15 @@ public class MailTemplate implements Serializable {
    */
   public MailTemplateContentType getContentType() {
     return contentType;
+  }
+
+  /**
+   * Returns the date and time the mail template was created.
+   *
+   * @return the date and time the mail template was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
   }
 
   /**
@@ -242,15 +257,6 @@ public class MailTemplate implements Serializable {
    */
   public void setTemplate(byte[] template) {
     this.template = template;
-  }
-
-  /**
-   * Set the date and time the mail template was last updated.
-   *
-   * @param updated the date and time the mail template was last updated
-   */
-  public void setUpdated(LocalDateTime updated) {
-    this.updated = updated;
   }
 
   /**

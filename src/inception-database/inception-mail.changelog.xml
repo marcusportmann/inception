@@ -9,6 +9,9 @@
   <property name="blob_type" value="bytea" dbms="postgresql"/>
   <property name="blob_type" value="blob" dbms="oracle"/>
   <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-mail-1.0.0" author="Marcus Portmann">
     <comment>Inception - Mail - 1.0.0</comment>
@@ -26,6 +29,8 @@
       <column name="content_type" type="int" remarks="The content type for the mail template"/>
       <column name="template" type="${blob_type}"
         remarks="The Apache FreeMarker template for the mail template"/>
+      <column name="created" type="timestamp"
+        remarks="The date and time the mail template was created"/>
       <column name="updated" type="timestamp"
         remarks="The date and time the mail template was last updated"/>
     </createTable>
@@ -33,6 +38,7 @@
     <addNotNullConstraint schemaName="mail" tableName="mail_templates" columnName="id"/>
     <addNotNullConstraint schemaName="mail" tableName="mail_templates" columnName="name"/>
     <addNotNullConstraint schemaName="mail" tableName="mail_templates" columnName="content_type"/>
+    <addNotNullConstraint schemaName="mail" tableName="mail_templates" columnName="created"/>
   </changeSet>
 
 </databaseChangeLog>

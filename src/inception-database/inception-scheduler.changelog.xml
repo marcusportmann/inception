@@ -9,6 +9,9 @@
   <property name="blob_type" value="bytea" dbms="postgresql"/>
   <property name="blob_type" value="blob" dbms="oracle"/>
   <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-scheduler-1.0.0" author="Marcus Portmann">
     <comment>Inception - Scheduler - 1.0.0</comment>
@@ -35,7 +38,11 @@
       <column name="last_executed" type="timestamp"
         remarks="The date and time the job was last executed"/>
       <column name="next_execution" type="timestamp"
-        remarks="The date and time created the job will next be executed"/>
+        remarks="The date and time the job will next be executed"/>
+      <column name="created" type="timestamp"
+        remarks="The date and time the job was created"/>
+      <column name="updated" type="timestamp"
+        remarks="The date and time the job was last updated"/>
     </createTable>
     <addPrimaryKey schemaName="scheduler" tableName="jobs" columnNames="id"/>
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="id"/>
@@ -44,16 +51,22 @@
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="job_class"/>
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="enabled"/>
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="status"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="created"/>
 
     <createTable schemaName="scheduler" tableName="job_parameters" remarks="Job Parameters">
       <column name="job_id" type="nvarchar(100)" remarks="The ID uniquely identifying the job"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the job parameter"/>
       <column name="value" type="nvarchar(4000)" remarks="The value of the job parameter"/>
+      <column name="created" type="timestamp"
+        remarks="The date and time the job parameter was created"/>
+      <column name="updated" type="timestamp"
+        remarks="The date and time the job parameter was last updated"/>
     </createTable>
     <addPrimaryKey schemaName="scheduler" tableName="job_parameters" columnNames="job_id, name"/>
     <addNotNullConstraint schemaName="scheduler" tableName="job_parameters" columnName="job_id"/>
     <addNotNullConstraint schemaName="scheduler" tableName="job_parameters" columnName="name"/>
     <addNotNullConstraint schemaName="scheduler" tableName="job_parameters" columnName="value"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="job_parameters" columnName="created"/>
     <addForeignKeyConstraint constraintName="job_parameters_job_fk" baseTableSchemaName="scheduler"
       baseTableName="job_parameters" baseColumnNames="job_id" referencedTableSchemaName="scheduler"
       referencedTableName="jobs" referencedColumnNames="id" deleteCascade="true"/>

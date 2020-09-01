@@ -18,11 +18,13 @@ package digital.inception.codes;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +37,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -72,6 +77,13 @@ public class Code implements Serializable {
   @Column(name = "code_category_id", nullable = false, length = 100)
   private String codeCategoryId;
 
+  /** The date and time the code was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
+
   /** The ID uniquely identifying the code. */
   @Schema(description = "The ID uniquely identifying the code", required = true)
   @JsonProperty(required = true)
@@ -90,6 +102,13 @@ public class Code implements Serializable {
   @Size(max = 100)
   @Column(name = "name", nullable = false, length = 100)
   private String name;
+
+  /** The date and time the code was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** The value for the code. */
   @Schema(description = "The value for the code", required = true)
@@ -163,6 +182,15 @@ public class Code implements Serializable {
   }
 
   /**
+   * Returns the date and time the code was created.
+   *
+   * @return the date and time the code was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
    * Returns the ID uniquely identifying the code.
    *
    * @return the ID uniquely identifying the code
@@ -178,6 +206,15 @@ public class Code implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * Returns the date and time the code was last updated.
+   *
+   * @return the date and time the code was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

@@ -51,7 +51,6 @@ import digital.inception.security.SecurityService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -186,11 +185,7 @@ public class SystemMessageTest {
   @Test
   public void getGetCodeCategoryTest() throws Exception {
     CodeCategory testStandardCodeCategory =
-        new CodeCategory(
-            "TestStandardCodeCategory1",
-            "Test Standard Code Category 1",
-            "",
-            LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        new CodeCategory("TestStandardCodeCategory1", "Test Standard Code Category 1", "");
 
     if (testStandardCodeCategory != null) {
       codesService.createCodeCategory(testStandardCodeCategory);
@@ -231,7 +226,6 @@ public class SystemMessageTest {
 
       assertEquals(testStandardCodeCategory.getId(), codeCategory.getId());
       assertEquals(testStandardCodeCategory.getName(), codeCategory.getName());
-      assertEquals(testStandardCodeCategory.getUpdated(), codeCategory.getLastUpdated());
       assertEquals(testCodes.size(), codeCategory.getCodes().size());
 
       boolean foundMatchingCode = false;
@@ -258,11 +252,7 @@ public class SystemMessageTest {
     }
 
     CodeCategory testCustomCodeCategory =
-        new CodeCategory(
-            "TestCustomCodeCategory2",
-            "Test Custom Code Category 2",
-            "",
-            LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        new CodeCategory("TestCustomCodeCategory2", "Test Custom Code Category 2", "");
 
     if (testCustomCodeCategory != null) {
       codesService.createCodeCategory(testCustomCodeCategory);
@@ -287,7 +277,6 @@ public class SystemMessageTest {
 
       assertEquals(testCustomCodeCategory.getId(), codeCategory.getId());
       assertEquals(testCustomCodeCategory.getName(), codeCategory.getName());
-      assertEquals(testCustomCodeCategory.getUpdated(), codeCategory.getLastUpdated());
     }
   }
 
@@ -300,11 +289,7 @@ public class SystemMessageTest {
     parameters.put("Parameter Name 2", "Parameter Value 2");
 
     CodeCategory testStandardCodeCategory =
-        new CodeCategory(
-            "TestStandardCodeCategory2",
-            "Test Standard Code Category 2",
-            "",
-            LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        new CodeCategory("TestStandardCodeCategory2", "Test Standard Code Category 2", "");
 
     if (testStandardCodeCategory != null) {
       codesService.createCodeCategory(testStandardCodeCategory);
@@ -345,7 +330,6 @@ public class SystemMessageTest {
 
       assertEquals(testStandardCodeCategory.getId(), codeCategory.getId());
       assertEquals(testStandardCodeCategory.getName(), codeCategory.getName());
-      assertEquals(testStandardCodeCategory.getUpdated(), codeCategory.getLastUpdated());
       assertEquals(testCodes.size(), codeCategory.getCodes().size());
 
       boolean foundMatchingCode = false;
@@ -372,38 +356,31 @@ public class SystemMessageTest {
     }
 
     CodeCategory testCustomCodeCategory =
-        new CodeCategory(
-            "TestCustomCodeCategory1",
-            "Test Custom Code Category 1",
-            "",
-            LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS));
+        new CodeCategory("TestCustomCodeCategory1", "Test Custom Code Category 1", "");
 
-    if (testCustomCodeCategory != null) {
-      codesService.createCodeCategory(testCustomCodeCategory);
+    codesService.createCodeCategory(testCustomCodeCategory);
 
-      GetCodeCategoryRequestData requestData =
-          new GetCodeCategoryRequestData(
-              testCustomCodeCategory.getId(), LocalDateTime.now(), parameters, true);
+    GetCodeCategoryRequestData requestData =
+        new GetCodeCategoryRequestData(
+            testCustomCodeCategory.getId(), LocalDateTime.now(), parameters, true);
 
-      MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
+    MessageTranslator messageTranslator = new MessageTranslator(USERNAME, DEVICE_ID);
 
-      Message requestMessage =
-          messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
+    Message requestMessage =
+        messageTranslator.toMessage(requestData, UuidCreator.getShortPrefixComb());
 
-      Message responseMessage = messagingService.processMessage(requestMessage);
+    Message responseMessage = messagingService.processMessage(requestMessage);
 
-      GetCodeCategoryResponseData responseData =
-          messageTranslator.fromMessage(responseMessage, new GetCodeCategoryResponseData());
+    GetCodeCategoryResponseData responseData =
+        messageTranslator.fromMessage(responseMessage, new GetCodeCategoryResponseData());
 
-      assertEquals(0, responseData.getErrorCode());
-      assertNotNull(responseData.getErrorMessage());
+    assertEquals(0, responseData.getErrorCode());
+    assertNotNull(responseData.getErrorMessage());
 
-      CodeCategoryData codeCategory = responseData.getCodeCategory();
+    CodeCategoryData codeCategory = responseData.getCodeCategory();
 
-      assertEquals(testCustomCodeCategory.getId(), codeCategory.getId());
-      assertEquals(testCustomCodeCategory.getName(), codeCategory.getName());
-      assertEquals(testCustomCodeCategory.getUpdated(), codeCategory.getLastUpdated());
-    }
+    assertEquals(testCustomCodeCategory.getId(), codeCategory.getId());
+    assertEquals(testCustomCodeCategory.getName(), codeCategory.getName());
   }
 
   /** Test the "Submit Error Report" message. */

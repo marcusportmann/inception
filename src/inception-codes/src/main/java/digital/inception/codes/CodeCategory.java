@@ -18,10 +18,10 @@ package digital.inception.codes;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -36,9 +36,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -49,18 +50,25 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @Schema(description = "CodeCategory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "name", "data", "updated"})
+@JsonPropertyOrder({"id", "name", "data"})
 @XmlRootElement(name = "CodeCategory", namespace = "http://codes.inception.digital")
 @XmlType(
     name = "CodeCategory",
     namespace = "http://codes.inception.digital",
-    propOrder = {"id", "name", "data", "updated"})
+    propOrder = {"id", "name", "data"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "codes", name = "code_categories")
 public class CodeCategory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The date and time the code category was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** The optional code data for the code category. */
   @Schema(description = "The optional code data for the code category")
@@ -89,12 +97,10 @@ public class CodeCategory implements Serializable {
   private String name;
 
   /** The date and time the code category was last updated. */
-  @Schema(description = "The date and time the code category was last updated")
-  @JsonProperty
-  @XmlElement(name = "Updated")
-  @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
-  @XmlSchemaType(name = "dateTime")
-  @Column(name = "updated")
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
   /** Constructs a new <code>CodeCategory</code>. */
@@ -125,21 +131,6 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Constructs a new <code>CodeCategory</code>.
-   *
-   * @param id the ID uniquely identifying the code category
-   * @param name the name of the code category
-   * @param data the optional code data for the code category
-   * @param updated the date and time the code category was last updated
-   */
-  public CodeCategory(String id, String name, String data, LocalDateTime updated) {
-    this.id = id;
-    this.name = name;
-    this.data = data;
-    this.updated = updated;
-  }
-
-  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -163,6 +154,15 @@ public class CodeCategory implements Serializable {
     CodeCategory other = (CodeCategory) object;
 
     return Objects.equals(id, other.id);
+  }
+
+  /**
+   * Returns the date and time the code category was created.
+   *
+   * @return the date and time the code category was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
   }
 
   /**
@@ -236,14 +236,5 @@ public class CodeCategory implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Set the date and time the code category was last updated.
-   *
-   * @param updated the date and time the code category was last updated
-   */
-  public void setUpdated(LocalDateTime updated) {
-    this.updated = updated;
   }
 }

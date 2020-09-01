@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -44,6 +45,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -68,6 +71,13 @@ public class Tenant implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The date and time the tenant was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
+
   /** The Universally Unique Identifier (UUID) uniquely identifying the tenant. */
   @Schema(
       description = "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
@@ -89,14 +99,19 @@ public class Tenant implements Serializable {
   private String name;
 
   /** The status for the tenant. */
-  @Schema(
-      description = "The status for the tenant",
-      required = true)
+  @Schema(description = "The status for the tenant", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
   @Column(name = "status", nullable = false)
   private TenantStatus status;
+
+  /** The date and time the tenant was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** The user directories associated with the tenant. */
   @JsonIgnore
@@ -163,6 +178,15 @@ public class Tenant implements Serializable {
   }
 
   /**
+   * Returns the date and time the tenant was created.
+   *
+   * @return the date and time the tenant was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the tenant.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the tenant
@@ -187,6 +211,15 @@ public class Tenant implements Serializable {
    */
   public TenantStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Returns the date and time the tenant was last updated.
+   *
+   * @return the date and time the tenant was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

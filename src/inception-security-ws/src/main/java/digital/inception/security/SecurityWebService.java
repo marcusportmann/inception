@@ -699,7 +699,7 @@ public class SecurityWebService {
 
     // Remove the password information
     user.setPassword(null);
-    user.setPasswordAttempts(null);
+    user.setPasswordAttempts(0);
     user.setPasswordExpiry(null);
 
     return user;

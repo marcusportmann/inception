@@ -98,14 +98,18 @@ public class PartyServiceTest {
     return party;
   }
 
-  private static synchronized Person getTestPersonDetails() {
+  private static synchronized Person getTestCompletePersonDetails() {
     personCount++;
 
     Person person = new Person();
 
     person.setId(UuidCreator.getShortPrefixComb());
-    person.setName("Person Name " + personCount);
+    person.setName("Full Name " + personCount);
+    person.setGivenName("Given Name " + personCount);
+    person.setGivenName("Surname " + personCount);
+    person.setPreferredName("Preferred Name " + personCount);
     person.setDateOfBirth(LocalDate.of(1976, 3, 7));
+    person.setCountryOfBirth("US");
     person.setGender(String.valueOf(random.nextInt(4)));
 
     IdentityDocument zaidcIdentityDocument = new IdentityDocument();
@@ -115,12 +119,23 @@ public class PartyServiceTest {
 
     person.addIdentityDocument(zaidcIdentityDocument);
 
-    IdentityDocument passportIdentityDocument = new IdentityDocument();
-    passportIdentityDocument.setId(UuidCreator.getShortPrefixComb());
-    passportIdentityDocument.setType("PASSPORT");
-    passportIdentityDocument.setDateOfIssue(LocalDate.of(2016, 10, 7));
+    return person;
+  }
 
-    person.addIdentityDocument(passportIdentityDocument);
+  private static synchronized Person getTestBasicPersonDetails() {
+    personCount++;
+
+    Person person = new Person();
+
+    person.setId(UuidCreator.getShortPrefixComb());
+    person.setName("Full Name " + personCount);
+
+    IdentityDocument zaidcIdentityDocument = new IdentityDocument();
+    zaidcIdentityDocument.setId(UuidCreator.getShortPrefixComb());
+    zaidcIdentityDocument.setType("ZAIDCARD");
+    zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
+
+    person.addIdentityDocument(zaidcIdentityDocument);
 
     return person;
   }
@@ -134,6 +149,19 @@ public class PartyServiceTest {
 
     Organizations filteredOrganizations =
         partyService.getOrganizations("", SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered organizations was not retrieved",
+        1,
+        filteredOrganizations.getOrganizations().size());
+
+    compareOrganizations(organization, filteredOrganizations.getOrganizations().get(0));
+
+    organization.setName(organization.getName() + " Updated");
+
+    partyService.updateOrganization(organization);
+
+    filteredOrganizations = partyService.getOrganizations("", SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
         "The correct number of filtered organizations was not retrieved",
@@ -168,17 +196,72 @@ public class PartyServiceTest {
 
     compareParties(party, filteredParties.getParties().get(0));
 
+    party.setName(party.getName() + " Updated");
+
+    partyService.updateParty(party);
+
+    filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered parties was not retrieved",
+        1,
+        filteredParties.getParties().size());
+
+    compareParties(party, filteredParties.getParties().get(0));
+
     partyService.deleteParty(party.getId());
   }
 
   /** Test the person functionality. */
   @Test
   public void personTest() throws Exception {
-    Person person = getTestPersonDetails();
+    Person person = getTestBasicPersonDetails();
 
     partyService.createPerson(person);
 
     Persons filteredPersons =
+        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered persons was not retrieved",
+        1,
+        filteredPersons.getPersons().size());
+
+    comparePersons(person, filteredPersons.getPersons().get(0));
+
+    partyService.deletePerson(person.getId());
+
+    person = getTestCompletePersonDetails();
+
+    partyService.createPerson(person);
+
+    filteredPersons =
+        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered persons was not retrieved",
+        1,
+        filteredPersons.getPersons().size());
+
+    comparePersons(person, filteredPersons.getPersons().get(0));
+
+    person.setCountryOfBirth("UK");
+    person.setDateOfBirth(LocalDate.of(1985, 5, 1));
+    person.setGender(String.valueOf(random.nextInt(4)));
+    person.setGivenName(person.getGivenName() + " Updated");
+    person.setPreferredName(person.getPreferredName() + " Updated");
+    person.setSurname(person.getSurname() + " Updated");
+
+    IdentityDocument passportIdentityDocument = new IdentityDocument();
+    passportIdentityDocument.setId(UuidCreator.getShortPrefixComb());
+    passportIdentityDocument.setType("PASSPORT");
+    passportIdentityDocument.setDateOfIssue(LocalDate.of(2016, 10, 7));
+
+    person.addIdentityDocument(passportIdentityDocument);
+
+    partyService.updatePerson(person);
+
+    filteredPersons =
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
 
     assertEquals(
@@ -217,9 +300,9 @@ public class PartyServiceTest {
 
   private void comparePersons(Person person1, Person person2) {
     assertEquals(
-        "The ID values for the two persons do not match", person1.getId(), person2.getId());
-    assertEquals(
-        "The name values for the two persons do not match", person1.getName(), person2.getName());
+        "The country of birth values for the two persons do not match",
+        person1.getCountryOfBirth(),
+        person2.getCountryOfBirth());
     assertEquals(
         "The date of birth values for the two persons do not match",
         person1.getDateOfBirth(),
@@ -228,6 +311,23 @@ public class PartyServiceTest {
         "The gender values for the two persons do not match",
         person1.getGender(),
         person2.getGender());
+    assertEquals(
+        "The given name values for the two persons do not match",
+        person1.getGivenName(),
+        person2.getGivenName());
+    assertEquals(
+        "The ID values for the two persons do not match", person1.getId(), person2.getId());
+    assertEquals(
+        "The name values for the two persons do not match", person1.getName(), person2.getName());
+    assertEquals(
+        "The preferred name values for the two persons do not match",
+        person1.getPreferredName(),
+        person2.getPreferredName());
+    assertEquals(
+        "The surname values for the two persons do not match",
+        person1.getSurname(),
+        person2.getSurname());
+
     assertEquals(
         "The number of identity documents for the two persons do not match",
         person1.getIdentityDocuments().size(),

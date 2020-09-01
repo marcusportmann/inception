@@ -46,6 +46,8 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -94,11 +96,17 @@ public class User implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The e-mail address for the user. */
-  @Schema(description = "The e-mail address for the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Email", required = true)
-  @NotNull
+  /** The date and time the user was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
+
+  /** The optional e-mail address for the user. */
+  @Schema(description = "The optional e-mail address for the user")
+  @JsonProperty
+  @XmlElement(name = "Email")
   @Size(max = 100)
   @Pattern(
       message = "invalid e-mail address",
@@ -110,7 +118,7 @@ public class User implements Serializable {
               + "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:"
               + "(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e"
               + "-\\x7f])+)\\])")
-  @Column(name = "email", nullable = false, length = 100)
+  @Column(name = "email", length = 100)
   private String email;
 
   /** The groups the user is associated with. */
@@ -126,11 +134,10 @@ public class User implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The mobile number for the user. */
-  @Schema(description = "The mobile number for the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "MobileNumber", required = true)
-  @NotNull
+  /** The optional mobile number for the user. */
+  @Schema(description = "The optional mobile number for the user")
+  @JsonProperty
+  @XmlElement(name = "MobileNumber")
   @Size(max = 100)
   @Pattern(
       message = "invalid mobile number",
@@ -148,11 +155,17 @@ public class User implements Serializable {
               + "|216|90|688|886|255|256|380|598|1|998|3906698|379|1784|58|1284|1340|84|678|681|685|967|27"
               + "|260|263)(9[976]\\d|8[987530]\\d|6[987]\\d|5[90]\\d|42\\d|3[875]\\d|2[98654321]\\d|9[8543210"
               + "]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\\d{4,20}$")
-  @Column(name = "mobile_number", nullable = false, length = 100)
+  @Column(name = "mobile_number", length = 100)
   private String mobileNumber;
 
-  /** The name of the user. */
-  @Schema(description = "The name of the user", required = true)
+  /**
+   * The personal name or full name of the user.
+   *
+   * <p>In Western culture, this is constructed from a combination of the given name (also known as
+   * the first name, forename, or Christian name), and the surname (also known as the last name or
+   * family name) of the user.
+   */
+  @Schema(description = "The personal name or full name of the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -195,33 +208,41 @@ public class User implements Serializable {
   @Column(name = "password_expiry", nullable = false)
   private LocalDateTime passwordExpiry;
 
-  /** The phone number for the user. */
-  @Schema(description = "The phone number for the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "PhoneNumber", required = true)
-  @NotNull
+  /** The optional phone number for the user. */
+  @Schema(description = "The optional phone number for the user")
+  @JsonProperty
+  @XmlElement(name = "PhoneNumber")
   @Size(max = 100)
-  @Column(name = "phone_number", nullable = false, length = 100)
+  @Column(name = "phone_number", length = 100)
   private String phoneNumber;
 
-  /** The preferred name for the user. */
-  @Schema(description = "The preferred name for the user", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "PreferredName", required = true)
-  @NotNull
+  /**
+   * The optional preferred name for the user.
+   *
+   * <p>In Western culture, this is usually the given name, which is also known as the first name,
+   * forename, or Christian name.
+   */
+  @Schema(description = "The optional preferred name for the user")
+  @JsonProperty
+  @XmlElement(name = "PreferredName")
   @Size(max = 100)
-  @Column(name = "preferred_name", nullable = false, length = 100)
+  @Column(name = "preferred_name", length = 100)
   private String preferredName;
 
   /** The status for the user. */
-  @Schema(
-      description = "The status for the user",
-      required = true)
+  @Schema(description = "The status for the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Status", required = true)
   @NotNull
   @Column(name = "status", nullable = false)
   private UserStatus status;
+
+  /** The date and time the user was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /**
    * The Universally Unique Identifier (UUID) uniquely identifying the user directory the user is
@@ -277,9 +298,18 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the e-mail address for the user
+   * Returns the date and time the user was created.
    *
-   * @return the e-mail address for the user
+   * @return the date and time the user was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
+   * Returns optional the e-mail address for the user.
+   *
+   * @return the optional e-mail address for the user
    */
   public String getEmail() {
     return email;
@@ -304,25 +334,29 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the mobile number for the user
+   * Returns the optional mobile number for the user.
    *
-   * @return the mobile number for the user
+   * @return the optional mobile number for the user
    */
   public String getMobileNumber() {
     return mobileNumber;
   }
 
   /**
-   * Returns the name of the user
+   * Returns the the personal name or full name of the user.
    *
-   * @return the name of the user
+   * <p>In Western culture, this is constructed from a combination of the given name (also known as
+   * the first name, forename, or Christian name), and the surname (also known as the last name or
+   * family name) of the user.
+   *
+   * @return the the personal name or full name of the user
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the password or password hash for the user
+   * Returns the password or password hash for the user.
    *
    * @return the password or password hash for the user
    */
@@ -332,7 +366,7 @@ public class User implements Serializable {
 
   /**
    * Returns the number of failed authentication attempts as a result of an incorrect password for
-   * the user
+   * the user.
    *
    * @return the number of failed authentication attempts as a result of an incorrect password for
    *     the user
@@ -342,7 +376,7 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the date and time the password for the user expires
+   * Returns the date and time the password for the user expires.
    *
    * @return the date and time the password for the user expires
    */
@@ -351,18 +385,21 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the phone number for the user.
+   * Returns the optional phone number for the user.
    *
-   * @return the phone number for the user
+   * @return the optional phone number for the user
    */
   public String getPhoneNumber() {
     return phoneNumber;
   }
 
   /**
-   * Returns the preferred name for the user
+   * Returns the optional preferred name for the user.
    *
-   * @return the preferred name for the user
+   * <p>In Western culture, this is usually the given name, which is also known as the first name,
+   * forename, or Christian name.
+   *
+   * @return the optional preferred name for the user
    */
   public String getPreferredName() {
     return preferredName;
@@ -375,6 +412,15 @@ public class User implements Serializable {
    */
   public UserStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Returns the date and time the user was last updated.
+   *
+   * @return the date and time the user was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**
@@ -459,9 +505,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the e-mail address for the user.
+   * Set the optional e-mail address for the user.
    *
-   * @param email the e-mail address for the user
+   * @param email the optional e-mail address for the user
    */
   public void setEmail(String email) {
     this.email = email;
@@ -486,18 +532,22 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the mobile number for the user.
+   * Set the optional mobile number for the user.
    *
-   * @param mobileNumber the mobile number for the user
+   * @param mobileNumber the optional mobile number for the user
    */
   public void setMobileNumber(String mobileNumber) {
     this.mobileNumber = mobileNumber;
   }
 
   /**
-   * Set the name of the user.
+   * Set the the personal name or full name of the user.
    *
-   * @param name the name of the user
+   * <p>In Western culture, this is constructed from a combination of the given name (also known as
+   * the first name, forename, or Christian name), and the surname (also known as the last name or
+   * family name) of the user.
+   *
+   * @param name the the personal name or full name of the user
    */
   public void setName(String name) {
     this.name = name;
@@ -517,7 +567,7 @@ public class User implements Serializable {
    *
    * @param passwordAttempts the password attempts for the user
    */
-  public void setPasswordAttempts(Integer passwordAttempts) {
+  public void setPasswordAttempts(int passwordAttempts) {
     this.passwordAttempts = passwordAttempts;
   }
 
@@ -531,18 +581,21 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the phone number for the user.
+   * Set the optional phone number for the user.
    *
-   * @param phoneNumber the phone number for the user
+   * @param phoneNumber the optional phone number for the user
    */
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
   /**
-   * Set the preferred name for the user.
+   * Set the optional preferred name for the user.
    *
-   * @param preferredName the preferred name for the user
+   * <p>In Western culture, this is usually the given name, which is also known as the first name,
+   * forename, or Christian name.
+   *
+   * @param preferredName the optional preferred name for the user
    */
   public void setPreferredName(String preferredName) {
     this.preferredName = preferredName;

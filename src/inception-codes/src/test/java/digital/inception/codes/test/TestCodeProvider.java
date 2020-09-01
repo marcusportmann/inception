@@ -52,8 +52,7 @@ public class TestCodeProvider implements ICodeProvider {
         new CodeCategory(
             "TestCodeCategory",
             "Test Code Category Name",
-            "Test Code Category Data",
-            LocalDateTime.now());
+            "Test Code Category Data");
 
     codes = new ArrayList<>();
 

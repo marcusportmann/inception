@@ -32,7 +32,6 @@ import digital.inception.mail.MailTemplateNotFoundException;
 import digital.inception.mail.MailTemplateSummary;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -80,7 +79,6 @@ public class MailServiceTest {
     mailTemplate.setName("Test Mail Template " + mailTemplateCount);
     mailTemplate.setContentType(MailTemplateContentType.HTML);
     mailTemplate.setTemplate(testMailTemplate);
-    mailTemplate.setUpdated(LocalDateTime.now());
 
     return mailTemplate;
   }
@@ -96,11 +94,6 @@ public class MailServiceTest {
 
     compareMailTemplates(mailTemplate, retrievedMailTemplate);
 
-    assertEqualsToMillisecond(
-        "The correct updated time was not retrieved for the mail template",
-        mailTemplate.getUpdated(),
-        mailService.getMailTemplateUpdated(mailTemplate.getId()));
-
     boolean mailTemplateExists = mailService.mailTemplateExists(mailTemplate.getId());
 
     assertTrue("The mail template does not exist", mailTemplateExists);
@@ -115,19 +108,10 @@ public class MailServiceTest {
     mailTemplate.setName("Updated " + mailTemplate.getName());
 
     mailService.updateMailTemplate(mailTemplate);
-    assertEqualsToMillisecond(
-        "The correct updated time was not retrieved for the mail template",
-        mailTemplate.getUpdated(),
-        mailService.getMailTemplateUpdated(mailTemplate.getId()));
 
     retrievedMailTemplate = mailService.getMailTemplate(mailTemplate.getId());
 
     compareMailTemplates(mailTemplate, retrievedMailTemplate);
-
-    assertEqualsToMillisecond(
-        "The correct updated time was not retrieved for the mail template",
-        mailTemplate.getUpdated(),
-        mailService.getMailTemplateUpdated(mailTemplate.getId()));
 
     mailTemplateExists = mailService.mailTemplateExists(mailTemplate.getId());
 
@@ -217,9 +201,5 @@ public class MailServiceTest {
         "The template values for the two mail templates do not match",
         mailTemplate1.getTemplate(),
         mailTemplate2.getTemplate());
-    assertEqualsToMillisecond(
-        "The updated values for the two mail templates do not match",
-        mailTemplate1.getUpdated(),
-        mailTemplate2.getUpdated());
   }
 }

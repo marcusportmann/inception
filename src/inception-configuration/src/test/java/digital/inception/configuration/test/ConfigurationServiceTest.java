@@ -213,6 +213,18 @@ public class ConfigurationServiceTest {
         configurationService.getConfiguration(TEST_CONFIGURATION_KEY);
 
     compareConfiguration(configuration, retrievedConfiguration);
+
+    configuration.setValue(TEST_CONFIGURATION_VALUE + " Updated");
+    configuration.setDescription(TEST_DESCRIPTION  + " Updated");
+
+    configurationService.setConfiguration(
+        configuration.getKey(), configuration.getValue(), configuration.getDescription());
+
+    retrievedConfiguration =
+        configurationService.getConfiguration(TEST_CONFIGURATION_KEY);
+
+    compareConfiguration(configuration, retrievedConfiguration);
+
   }
 
   /** Test the configurations. */

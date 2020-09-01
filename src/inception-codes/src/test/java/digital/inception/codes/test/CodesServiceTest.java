@@ -75,7 +75,6 @@ public class CodesServiceTest {
     codeCategory.setId("TestCodeCategory" + codeCategoryCount);
     codeCategory.setName("Test Code Category Name " + codeCategoryCount);
     codeCategory.setData("Test Code Category Data " + codeCategoryCount);
-    codeCategory.setUpdated(null);
 
     return codeCategory;
   }
@@ -267,8 +266,7 @@ public class CodesServiceTest {
         new CodeCategory(
             codeCategory.getId(),
             codeCategory.getName(),
-            codeCategory.getData(),
-            codeCategory.getUpdated());
+            codeCategory.getData());
 
     compareCodeCategories(codeCategory, codeCategory1);
 
@@ -322,10 +320,6 @@ public class CodesServiceTest {
         "The data values for the two code categories do not match",
         codeCategory1.getData(),
         codeCategory2.getData());
-    assertEqualsToMillisecond(
-        "The updated values for the two code categories do not match",
-        codeCategory1.getUpdated(),
-        codeCategory2.getUpdated());
   }
 
   private void compareCodes(Code code1, Code code2) {

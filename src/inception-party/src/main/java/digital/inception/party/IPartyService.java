@@ -118,4 +118,26 @@ public interface IPartyService {
       Integer pageIndex,
       Integer pageSize)
       throws PartyServiceException;
+
+  /**
+   * Update the organization.
+   *
+   * @param organization the organization
+   */
+  void updateOrganization(Organization organization)
+      throws OrganizationNotFoundException, PartyServiceException;
+
+  /**
+   * Update the party.
+   *
+   * @param party the party
+   */
+  void updateParty(Party party) throws PartyNotFoundException, PartyServiceException;
+
+  /**
+   * Update the person.
+   *
+   * @param person the person
+   */
+  void updatePerson(Person person) throws PersonNotFoundException, PartyServiceException;
 }

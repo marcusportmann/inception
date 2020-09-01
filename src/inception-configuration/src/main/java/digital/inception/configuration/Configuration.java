@@ -18,11 +18,13 @@ package digital.inception.configuration;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +36,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -58,6 +63,13 @@ public class Configuration implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The date and time the configuration was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
+
   /** The description for the configuration. */
   @Schema(description = "The description for the configuration", required = true)
   @JsonProperty(required = true)
@@ -76,6 +88,13 @@ public class Configuration implements Serializable {
   @Id
   @Column(name = "key", nullable = false, length = 100)
   private String key;
+
+  /** The date and time the configuration was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** The value for the configuration. */
   @Schema(description = "The value for the configuration", required = true)
@@ -129,6 +148,15 @@ public class Configuration implements Serializable {
   }
 
   /**
+   * Returns the date and time the configuration was created.
+   *
+   * @return the date and time the configuration was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
    * Returns the description for the configuration.
    *
    * @return the description for the configuration
@@ -144,6 +172,15 @@ public class Configuration implements Serializable {
    */
   public String getKey() {
     return key;
+  }
+
+  /**
+   * Returns the date and time the configuration was last updated.
+   *
+   * @return the date and time the configuration was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

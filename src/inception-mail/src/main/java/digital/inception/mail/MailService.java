@@ -129,10 +129,6 @@ public class MailService implements IMailService, InitializingBean {
         throw new DuplicateMailTemplateException(mailTemplate.getId());
       }
 
-      if (mailTemplate.getUpdated() == null) {
-        mailTemplate.setUpdated(LocalDateTime.now());
-      }
-
       mailTemplateRepository.saveAndFlush(mailTemplate);
     } catch (DuplicateMailTemplateException e) {
       throw e;
@@ -416,8 +412,6 @@ public class MailService implements IMailService, InitializingBean {
       if (!mailTemplateRepository.existsById(mailTemplate.getId())) {
         throw new MailTemplateNotFoundException(mailTemplate.getId());
       }
-
-      mailTemplate.setUpdated(LocalDateTime.now());
 
       mailTemplateRepository.saveAndFlush(mailTemplate);
 

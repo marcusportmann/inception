@@ -8,9 +8,11 @@ CREATE SCHEMA security;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE security.tenants (
-  id     UUID         NOT NULL,
-  name   VARCHAR(100) NOT NULL,
-  status INTEGER      NOT NULL,
+  id      UUID         NOT NULL,
+  name    VARCHAR(100) NOT NULL,
+  status  INTEGER      NOT NULL,
+  created TIMESTAMP    NOT NULL,
+  updated TIMESTAMP,
 
   PRIMARY KEY (id)
 );
@@ -22,6 +24,10 @@ COMMENT ON COLUMN security.tenants.id IS 'The Universally Unique Identifier (UUI
 COMMENT ON COLUMN security.tenants.name IS 'The name of the tenant';
 
 COMMENT ON COLUMN security.tenants.status IS 'The status for the tenant';
+
+COMMENT ON COLUMN security.tenants.created IS 'The date and time the tenant was created';
+
+COMMENT ON COLUMN security.tenants.updated IS 'The date and time the tenant was last updated';
 
 
 CREATE TABLE security.user_directory_types (
@@ -44,6 +50,8 @@ CREATE TABLE security.user_directories (
   type          VARCHAR(100)  NOT NULL,
   name          VARCHAR(100)  NOT NULL,
   configuration VARCHAR(4000) NOT NULL,
+  created       TIMESTAMP     NOT NULL,
+  updated       TIMESTAMP,
 
   PRIMARY KEY (id),
   CONSTRAINT user_directories_user_directory_type_fk FOREIGN KEY (type) REFERENCES security.user_directory_types(code) ON DELETE CASCADE
@@ -58,6 +66,10 @@ COMMENT ON COLUMN security.user_directories.type IS 'The code uniquely identifyi
 COMMENT ON COLUMN security.user_directories.name IS 'The name of the user directory';
 
 COMMENT ON COLUMN security.user_directories.configuration IS 'The XML configuration data for the user directory';
+
+COMMENT ON COLUMN security.user_directories.created IS 'The date and time the user directory was created';
+
+COMMENT ON COLUMN security.user_directories.updated IS 'The date and time the user directory was last updated';
 
 
 CREATE TABLE security.user_directory_to_tenant_map (
@@ -84,13 +96,15 @@ CREATE TABLE security.users (
   username          VARCHAR(100) NOT NULL,
   status            INTEGER      NOT NULL,
   name              VARCHAR(100) NOT NULL DEFAULT '',
-  preferred_name    VARCHAR(100) NOT NULL DEFAULT '',
-  phone_number      VARCHAR(100) NOT NULL DEFAULT '',
-  mobile_number     VARCHAR(100) NOT NULL DEFAULT '',
-  email             VARCHAR(100) NOT NULL DEFAULT '',
+  preferred_name    VARCHAR(100),
+  phone_number      VARCHAR(100),
+  mobile_number     VARCHAR(100),
+  email             VARCHAR(100),
   password          VARCHAR(100) NOT NULL DEFAULT '',
   password_attempts INTEGER      NOT NULL DEFAULT 0,
   password_expiry   TIMESTAMP    NOT NULL,
+  created           TIMESTAMP    NOT NULL,
+  updated           TIMESTAMP,
 
   PRIMARY KEY (id),
   CONSTRAINT users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
@@ -112,19 +126,23 @@ COMMENT ON COLUMN security.users.status IS 'The status for the user';
 
 COMMENT ON COLUMN security.users.name IS 'The name of the user';
 
-COMMENT ON COLUMN security.users.preferred_name IS 'The preferred name for the user';
+COMMENT ON COLUMN security.users.preferred_name IS 'The optional preferred name for the user';
 
-COMMENT ON COLUMN security.users.phone_number IS 'The phone number for the user';
+COMMENT ON COLUMN security.users.phone_number IS 'The optional phone number for the user';
 
-COMMENT ON COLUMN security.users.mobile_number IS 'The mobile number for the user';
+COMMENT ON COLUMN security.users.mobile_number IS 'The optional mobile number for the user';
 
-COMMENT ON COLUMN security.users.email IS 'The e-mail address for the user';
+COMMENT ON COLUMN security.users.email IS 'The optional e-mail address for the user';
 
 COMMENT ON COLUMN security.users.password IS 'The password for the user';
 
 COMMENT ON COLUMN security.users.password_attempts IS 'The number of failed attempts to authenticate the user';
 
 COMMENT ON COLUMN security.users.password_expiry IS 'The date and time that the user''s password expires';
+
+COMMENT ON COLUMN security.users.created IS 'The date and time the user was created';
+
+COMMENT ON COLUMN security.users.updated IS 'The date and time the user was last updated';
 
 
 CREATE TABLE security.users_password_history (
@@ -152,6 +170,8 @@ CREATE TABLE security.groups (
   user_directory_id UUID         NOT NULL,
   name              VARCHAR(100) NOT NULL,
   description       VARCHAR(100),
+  created           TIMESTAMP    NOT NULL,
+  updated           TIMESTAMP,
 
   PRIMARY KEY (id),
   CONSTRAINT groups_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
@@ -168,6 +188,10 @@ COMMENT ON COLUMN security.groups.user_directory_id IS 'The Universally Unique I
 COMMENT ON COLUMN security.groups.name IS 'The name for the group';
 
 COMMENT ON COLUMN security.groups.description IS 'A description for the group';
+
+COMMENT ON COLUMN security.groups.created IS 'The date and time the group was created';
+
+COMMENT ON COLUMN security.groups.updated IS 'The date and time the group was last updated';
 
 
 CREATE TABLE security.user_to_group_map (
@@ -283,25 +307,25 @@ COMMENT ON COLUMN security.password_resets.expired IS 'The date and time the pas
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO security.tenants (id, name, status)
-  VALUES ('00000000-0000-0000-0000-000000000000', 'Administration', 1);
+INSERT INTO security.tenants (id, name, status, created)
+  VALUES ('00000000-0000-0000-0000-000000000000', 'Administration', 1, NOW());
 
 INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
 INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
-INSERT INTO security.user_directories (id, type, name, configuration)
-  VALUES ('00000000-0000-0000-0000-000000000000', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>');
+INSERT INTO security.user_directories (id, type, name, configuration, created)
+  VALUES ('00000000-0000-0000-0000-000000000000', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>', NOW());
 
 INSERT INTO security.user_directory_to_tenant_map (user_directory_id, tenant_id)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
 
-INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry)
-  VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'));
+INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry, created)
+  VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'administrator', 1, 'Administrator', '', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
 
-INSERT INTO security.groups (id, user_directory_id, name, description)
-  VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'Administrators', 'Administrators');
+INSERT INTO security.groups (id, user_directory_id, name, description, created)
+  VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 'Administrators', 'Administrators', NOW());
 
 INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');

@@ -14,6 +14,8 @@ CREATE TABLE sms.sms (
   send_attempts  INTEGER,
   lock_name      VARCHAR(100),
   last_processed TIMESTAMP,
+  created        TIMESTAMP     NOT NULL,
+  updated        TIMESTAMP,
 
   PRIMARY KEY (id)
 );
@@ -33,6 +35,11 @@ COMMENT ON COLUMN sms.sms.send_attempts IS 'The number of times that the sending
 COMMENT ON COLUMN sms.sms.lock_name IS 'The name of the entity that has locked the SMS for sending';
 
 COMMENT ON COLUMN sms.sms.last_processed IS 'The date and time the last attempt was made to send the SMS';
+
+COMMENT ON COLUMN sms.sms.created IS 'The date and time the SMS was created';
+
+COMMENT ON COLUMN sms.sms.updated IS 'The date and time the SMS was last updated';
+
 
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES

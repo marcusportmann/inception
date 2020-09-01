@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -44,6 +45,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -67,6 +70,13 @@ import javax.xml.bind.annotation.XmlType;
 public class Group implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The date and time the group was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** The description for the group. */
   @Schema(description = "The description for the group")
@@ -102,6 +112,13 @@ public class Group implements Serializable {
       joinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id"),
       inverseJoinColumns = @JoinColumn(name = "role_code", referencedColumnName = "code"))
   private Set<Role> roles = new HashSet<>();
+
+  /** The date and time the group was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /**
    * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group is
@@ -202,6 +219,15 @@ public class Group implements Serializable {
   }
 
   /**
+   * Returns the date and time the group was created.
+   *
+   * @return the date and time the group was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
    * Returns the description for the group.
    *
    * @return the description for the group
@@ -235,6 +261,15 @@ public class Group implements Serializable {
    */
   public Set<Role> getRoles() {
     return roles;
+  }
+
+  /**
+   * Returns the date and time the group was last updated.
+   *
+   * @return the date and time the group was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

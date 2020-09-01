@@ -9,6 +9,9 @@
   <property name="blob_type" value="bytea" dbms="postgresql"/>
   <property name="blob_type" value="blob" dbms="oracle"/>
   <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-sms-1.0.0" author="Marcus Portmann">
     <comment>Inception - SMS - 1.0.0</comment>
@@ -32,12 +35,17 @@
         remarks="The name of the entity that has locked the SMS for sending"/>
       <column name="last_processed" type="timestamp"
         remarks="The date and time the last attempt was made to send the SMS"/>
+      <column name="created" type="timestamp"
+        remarks="The date and time the SMS was created"/>
+      <column name="updated" type="timestamp"
+        remarks="The date and time the SMS was last updated"/>
     </createTable>
     <addPrimaryKey schemaName="sms" tableName="sms" columnNames="id"/>
     <addNotNullConstraint schemaName="sms" tableName="sms" columnName="id"/>
     <addNotNullConstraint schemaName="sms" tableName="sms" columnName="mobile_number"/>
     <addNotNullConstraint schemaName="sms" tableName="sms" columnName="message"/>
     <addNotNullConstraint schemaName="sms" tableName="sms" columnName="status"/>
+    <addNotNullConstraint schemaName="sms" tableName="sms" columnName="created"/>
     <createIndex indexName="sms_mobile_number_ix" schemaName="sms" tableName="sms">
       <column name="mobile_number"/>
     </createIndex>

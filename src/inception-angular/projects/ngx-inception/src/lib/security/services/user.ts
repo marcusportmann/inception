@@ -24,9 +24,9 @@ import {UserStatus} from './user-status';
 export class User {
 
   /**
-   * The e-mail address for the user.
+   * The optional e-mail address for the user.
    */
-  email: string;
+  email?: string;
 
   /**
    * The name of the user.
@@ -34,14 +34,14 @@ export class User {
   name: string;
 
   /**
-   * The preferred name for the user.
+   * The optional preferred name for the user.
    */
-  preferredName: string;
+  preferredName?: string;
 
   /**
-   * The mobile number for the user.
+   * The optional mobile number for the user.
    */
-  mobileNumber: string;
+  mobileNumber?: string;
 
   /**
    * The password or password hash for the user.
@@ -59,9 +59,9 @@ export class User {
   passwordExpiry?: Date | undefined;
 
   /**
-   * The phone number for the user.
+   * The optional phone number for the user.
    */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**
    * The status for the user.
@@ -86,10 +86,10 @@ export class User {
    *                          user directory the user is associated with.
    * @param username          The username for the user.
    * @param name              The name of the user.
-   * @param preferredName     The preferred name for the user.
-   * @param mobileNumber      The mobile number for the user.
-   * @param phoneNumber       The phone number for the user.
-   * @param email             The e-mail address for the user.
+   * @param preferredName     The optional preferred name for the user.
+   * @param mobileNumber      The optional mobile number for the user.
+   * @param phoneNumber       The optional phone number for the user.
+   * @param email             The optional e-mail address for the user.
    * @param status            The status for the user.*
    * @param password          The password or password hash for the user.
    * @param passwordAttempts  The number of failed authentication attempts as a result of an

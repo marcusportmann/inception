@@ -16,16 +16,16 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,7 +33,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <code>Party</code> class holds the information for an independent party.
@@ -52,9 +55,15 @@ import javax.xml.bind.annotation.XmlType;
     propOrder = {"id", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "party", name = "parties")
 public class Party {
+
+  /** The date and time the party was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the party. */
   @Schema(
@@ -86,6 +95,13 @@ public class Party {
   @Column(name = "type", nullable = false)
   private PartyType type;
 
+  /** The date and time the party was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
+
   /** Constructs a new <code>Party</code>. */
   public Party() {}
 
@@ -96,6 +112,15 @@ public class Party {
    */
   public Party(PartyType type) {
     this.type = type;
+  }
+
+  /**
+   * Returns the date and time the party was created.
+   *
+   * @return the date and time the party was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
   }
 
   /**
@@ -123,6 +148,15 @@ public class Party {
    */
   public PartyType getType() {
     return type;
+  }
+
+  /**
+   * Returns the date and time the party was last updated.
+   *
+   * @return the date and time the party was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

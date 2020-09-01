@@ -28,6 +28,7 @@ import digital.inception.core.xml.XmlUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.ByteArrayInputStream;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -54,6 +55,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -82,6 +85,13 @@ import org.xml.sax.InputSource;
 public class UserDirectory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The date and time the user directory was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
   @Schema(
@@ -127,6 +137,13 @@ public class UserDirectory implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "type", nullable = false, length = 100)
   private String type;
+
+  /** The date and time the user directory was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** Constructs a new <code>UserDirectory</code>. */
   public UserDirectory() {}
@@ -189,6 +206,15 @@ public class UserDirectory implements Serializable {
   }
 
   /**
+   * Returns the date and time the user directory was created.
+   *
+   * @return the date and time the user directory was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
@@ -231,6 +257,15 @@ public class UserDirectory implements Serializable {
    */
   public String getType() {
     return type;
+  }
+
+  /**
+   * Returns the date and time the user directory was last updated.
+   *
+   * @return the date and time the user directory was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

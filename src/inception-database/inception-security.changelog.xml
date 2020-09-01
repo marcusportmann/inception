@@ -9,6 +9,9 @@
   <property name="blob_type" value="bytea" dbms="postgresql"/>
   <property name="blob_type" value="blob" dbms="oracle"/>
   <property name="blob_type" value="varbinary(max)" dbms="mssql"/>
+  <property name="now" value="now()" dbms="postgresql"/>
+  <property name="now" value="sysdate" dbms="oracle"/>
+  <property name="now" value="CURRENT_TIMESTAMP" dbms="mssql"/>
 
   <changeSet id="inception-security-1.0.0" author="Marcus Portmann">
     <comment>Inception - Security - 1.0.0</comment>
@@ -24,11 +27,16 @@
         remarks="The Universally Unique Identifier (UUID) uniquely identifying the tenant"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the tenant"/>
       <column name="status" type="int" remarks="The status for the tenant"/>
+      <column name="created" type="timestamp"
+        remarks="The date and time the tenant was created"/>
+      <column name="updated" type="timestamp"
+        remarks="The date and time the tenant was last updated"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="tenants" columnNames="id"/>
     <addNotNullConstraint schemaName="security" tableName="tenants" columnName="id"/>
     <addNotNullConstraint schemaName="security" tableName="tenants" columnName="name"/>
     <addNotNullConstraint schemaName="security" tableName="tenants" columnName="status"/>
+    <addNotNullConstraint schemaName="security" tableName="tenants" columnName="created"/>
     <createIndex indexName="tenants_name_ix" schemaName="security" tableName="tenants">
       <column name="name"/>
     </createIndex>
@@ -55,6 +63,10 @@
       <column name="name" type="nvarchar(100)" remarks="The name of the user directory"/>
       <column name="configuration" type="nvarchar(4000)"
         remarks="The XML configuration data for the user directory"/>
+      <column name="created" type="timestamp"
+        remarks="The date and time the user directory was created"/>
+      <column name="updated" type="timestamp"
+        remarks="The date and time the user directory was last updated"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="user_directories" columnNames="id"/>
     <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="id"/>
@@ -62,6 +74,7 @@
     <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="name"/>
     <addNotNullConstraint schemaName="security" tableName="user_directories"
       columnName="configuration"/>
+    <addNotNullConstraint schemaName="security" tableName="user_directories" columnName="created"/>
     <addForeignKeyConstraint constraintName="user_directories_user_directory_type_fk"
       baseTableSchemaName="security" baseTableName="user_directories" baseColumnNames="type"
       referencedTableSchemaName="security" referencedTableName="user_directory_types"
@@ -119,6 +132,10 @@
         remarks="The number of failed attempts to authenticate the user"/>
       <column name="password_expiry" type="timestamp"
         remarks="The date and time that the user''s password expires"/>
+      <column name="created" type="timestamp"
+        remarks="The date and time the user was created"/>
+      <column name="updated" type="timestamp"
+        remarks="The date and time the user was last updated"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="users" columnNames="id"/>
     <addNotNullConstraint schemaName="security" tableName="users" columnName="id"/>
@@ -140,6 +157,7 @@
     <addNotNullConstraint schemaName="security" tableName="users" columnName="password_attempts"
       defaultNullValue="0"/>
     <addNotNullConstraint schemaName="security" tableName="users" columnName="password_expiry"/>
+    <addNotNullConstraint schemaName="security" tableName="users" columnName="created"/>
     <addForeignKeyConstraint constraintName="users_user_directory_fk" baseTableSchemaName="security"
       baseTableName="users" baseColumnNames="user_directory_id" referencedTableSchemaName="security"
       referencedTableName="user_directories" referencedColumnNames="id"/>
@@ -188,11 +206,16 @@
         remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory the group is associated with"/>
       <column name="name" type="nvarchar(100)" remarks="The name for the group"/>
       <column name="description" type="nvarchar(100)" remarks="A description for the group"/>
+      <column name="created" type="timestamp"
+        remarks="The date and time the group was created"/>
+      <column name="updated" type="timestamp"
+        remarks="The date and time the group was last updated"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="groups" columnNames="id"/>
     <addNotNullConstraint schemaName="security" tableName="groups" columnName="id"/>
     <addNotNullConstraint schemaName="security" tableName="groups" columnName="user_directory_id"/>
     <addNotNullConstraint schemaName="security" tableName="groups" columnName="name"/>
+    <addNotNullConstraint schemaName="security" tableName="groups" columnName="created"/>
     <addForeignKeyConstraint constraintName="groups_user_directory_fk"
       baseTableSchemaName="security" baseTableName="groups" baseColumnNames="user_directory_id"
       referencedTableSchemaName="security" referencedTableName="user_directories"
@@ -342,6 +365,7 @@
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Administration"/>
       <column name="status" value="1"/>
+      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="user_directory_types">
@@ -361,6 +385,7 @@
       <column name="name" value="Administration Internal User Directory"/>
       <column name="configuration">
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>]]></column>
+      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="user_directory_to_tenant_map">
@@ -381,6 +406,7 @@
       <column name="password" value="GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0="/>
       <column name="password_attempts" value="0"/>
       <column name="password_expiry" value="2050-12-31 00:00:00 GMT"/>
+      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="groups">
@@ -388,6 +414,7 @@
       <column name="user_directory_id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="name" value="Administrators"/>
       <column name="description" value="Administrators"/>
+      <column name="created" value="${now}"/>
     </insert>
 
     <insert schemaName="security" tableName="user_to_group_map">

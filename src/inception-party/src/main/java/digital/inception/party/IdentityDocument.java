@@ -17,11 +17,13 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -38,6 +40,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <code>IdentityDocument</code> class holds the information for an identity document.
@@ -57,8 +61,14 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "identity_documents")
-// @IdClass(IdentityDocumentId.class)
 public class IdentityDocument {
+
+  /** The date and time the identity document was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** The date of issue for the identity document. */
   @Schema(description = "The date of issue for the identity document", required = true)
@@ -95,6 +105,13 @@ public class IdentityDocument {
   @Column(name = "type", nullable = false)
   private String type;
 
+  /** The date and time the identity document was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
+
   /** Constructs a new <code>IdentityDocument</code>. */
   public IdentityDocument() {}
 
@@ -122,6 +139,15 @@ public class IdentityDocument {
     IdentityDocument other = (IdentityDocument) object;
 
     return Objects.equals(person, other.person) && Objects.equals(id, other.id);
+  }
+
+  /**
+   * Returns the date and time the identity document was created.
+   *
+   * @return the date and time the identity document was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
   }
 
   /**
@@ -158,6 +184,15 @@ public class IdentityDocument {
    */
   public String getType() {
     return type;
+  }
+
+  /**
+   * Returns the date and time the identity document was last updated.
+   *
+   * @return the date and time the identity document was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

@@ -156,6 +156,7 @@ public class PartyService implements IPartyService {
    *     organization
    */
   @Override
+  @Transactional
   public void deleteOrganization(UUID organizationId)
       throws OrganizationNotFoundException, PartyServiceException {
     try {
@@ -178,6 +179,7 @@ public class PartyService implements IPartyService {
    * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
    */
   @Override
+  @Transactional
   public void deleteParty(UUID partyId) throws PartyNotFoundException, PartyServiceException {
     try {
       if (!partyRepository.existsById(partyId)) {
@@ -198,6 +200,7 @@ public class PartyService implements IPartyService {
    * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
    */
   @Override
+  @Transactional
   public void deletePerson(UUID personId) throws PersonNotFoundException, PartyServiceException {
     try {
       if (!personRepository.existsById(personId)) {
@@ -369,6 +372,71 @@ public class PartyService implements IPartyService {
           pageSize);
     } catch (Throwable e) {
       throw new PartyServiceException("Failed to retrieve the filtered persons", e);
+    }
+  }
+
+  /**
+   * Update the organization.
+   *
+   * @param organization the organization
+   */
+  @Override
+  @Transactional
+  public void updateOrganization(Organization organization)
+      throws OrganizationNotFoundException, PartyServiceException {
+    try {
+      if (!organizationRepository.existsById(organization.getId())) {
+        throw new OrganizationNotFoundException(organization.getId());
+      }
+
+      organizationRepository.saveAndFlush(organization);
+    } catch (OrganizationNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new PartyServiceException(
+          "Failed to update the organization (" + organization.getId() + ")", e);
+    }
+  }
+
+  /**
+   * Update the party.
+   *
+   * @param party the party
+   */
+  @Override
+  @Transactional
+  public void updateParty(Party party) throws PartyNotFoundException, PartyServiceException {
+    try {
+      if (!partyRepository.existsById(party.getId())) {
+        throw new PartyNotFoundException(party.getId());
+      }
+
+      partyRepository.saveAndFlush(party);
+    } catch (PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new PartyServiceException("Failed to update the party (" + party.getId() + ")", e);
+    }
+  }
+
+  /**
+   * Update the person.
+   *
+   * @param person the person
+   */
+  @Override
+  @Transactional
+  public void updatePerson(Person person) throws PersonNotFoundException, PartyServiceException {
+    try {
+      if (!personRepository.existsById(person.getId())) {
+        throw new PersonNotFoundException(person.getId());
+      }
+
+      personRepository.saveAndFlush(person);
+    } catch (PersonNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new PartyServiceException("Failed to update the person (" + person.getId() + ")", e);
     }
   }
 }

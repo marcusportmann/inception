@@ -205,10 +205,6 @@ public class CodesService implements ICodesService, InitializingBean {
         throw new DuplicateCodeCategoryException(codeCategory.getId());
       }
 
-      if (codeCategory.getUpdated() == null) {
-        codeCategory.setUpdated(LocalDateTime.now());
-      }
-
       codeCategoryRepository.saveAndFlush(codeCategory);
     } catch (DuplicateCodeCategoryException e) {
       throw e;
@@ -659,8 +655,6 @@ public class CodesService implements ICodesService, InitializingBean {
       if (!codeCategoryRepository.existsById(codeCategory.getId())) {
         throw new CodeCategoryNotFoundException(codeCategory.getId());
       }
-
-      codeCategory.setUpdated(LocalDateTime.now());
 
       codeCategoryRepository.saveAndFlush(codeCategory);
     } catch (CodeCategoryNotFoundException e) {

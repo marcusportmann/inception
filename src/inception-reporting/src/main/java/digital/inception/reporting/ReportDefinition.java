@@ -18,11 +18,13 @@ package digital.inception.reporting;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,7 +36,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -58,6 +63,13 @@ import javax.xml.bind.annotation.XmlType;
 public class ReportDefinition implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The date and time the report definition was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** The ID uniquely identifying the report definition. */
   @Schema(description = "The ID uniquely identifying the report definition", required = true)
@@ -86,6 +98,13 @@ public class ReportDefinition implements Serializable {
   @Size(min = 1)
   @Column(name = "template", nullable = false)
   private byte[] template;
+
+  /** The date and time the report definition was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** Constructs a new <code>ReportDefinition</code>. */
   public ReportDefinition() {}
@@ -130,6 +149,15 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
+   * Returns the date and time the report definition was created.
+   *
+   * @return the date and time the report definition was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
+  }
+
+  /**
    * Returns the ID uniquely identifying the report definition.
    *
    * @return the ID uniquely identifying the report definition
@@ -154,6 +182,15 @@ public class ReportDefinition implements Serializable {
    */
   public byte[] getTemplate() {
     return template;
+  }
+
+  /**
+   * Returns the date and time the report definition was last updated.
+   *
+   * @return the date and time the report definition was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**

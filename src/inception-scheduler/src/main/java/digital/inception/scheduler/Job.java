@@ -18,6 +18,7 @@ package digital.inception.scheduler;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -46,8 +47,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -95,6 +99,29 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class Job implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The parameters for the job. */
+  @Schema(description = "The parameters for the job")
+  @JsonProperty
+  @JsonManagedReference
+  @XmlElementWrapper(name = "Parameters")
+  @XmlElement(name = "Parameter")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(
+      name = "job_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false,
+      nullable = false)
+  private final Set<JobParameter> parameters = new HashSet<>();
+
+  /** The date and time the job was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
 
   /** Is the job enabled for execution? */
   @Schema(description = "Is the job enabled for execution", required = true)
@@ -166,22 +193,6 @@ public class Job implements Serializable {
   @Column(name = "next_execution")
   private LocalDateTime nextExecution;
 
-  /** The parameters for the job. */
-  @Schema(description = "The parameters for the job")
-  @JsonProperty
-  @JsonManagedReference
-  @XmlElementWrapper(name = "Parameters")
-  @XmlElement(name = "Parameter")
-  @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(
-      name = "job_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false,
-      nullable = false)
-  private final Set<JobParameter> parameters = new HashSet<>();
-
   /** The cron-style scheduling pattern for the job. */
   @Schema(description = "The cron-style scheduling pattern for the job", required = true)
   @JsonProperty(required = true)
@@ -198,6 +209,13 @@ public class Job implements Serializable {
   @NotNull
   @Column(name = "status", nullable = false)
   private JobStatus status;
+
+  /** The date and time the job was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(name = "updated", insertable = false)
+  private LocalDateTime updated;
 
   /** Constructs a new <code>Job</code>. */
   public Job() {}
@@ -275,6 +293,15 @@ public class Job implements Serializable {
     Job other = (Job) object;
 
     return Objects.equals(id, other.id);
+  }
+
+  /**
+   * Returns the date and time the job was created.
+   *
+   * @return the date and time the job was created
+   */
+  public LocalDateTime getCreated() {
+    return created;
   }
 
   /**
@@ -365,6 +392,15 @@ public class Job implements Serializable {
    */
   public JobStatus getStatus() {
     return status;
+  }
+
+  /**
+   * Returns the date and time the job was last updated.
+   *
+   * @return the date and time the job was last updated
+   */
+  public LocalDateTime getUpdated() {
+    return updated;
   }
 
   /**
