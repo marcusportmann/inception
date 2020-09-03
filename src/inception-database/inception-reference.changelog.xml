@@ -3993,8 +3993,16 @@
     </insert>
 
     <insert schemaName="reference" tableName="marriage_types">
+      <column name="marital_status" value="U"/>
+      <column name="code" value="0"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unknown"/>
+      <column name="description" value="Unknown"/>
+    </insert>
+    <insert schemaName="reference" tableName="marriage_types">
       <column name="marital_status" value="M"/>
-      <column name="code" value="ICOP"/>
+      <column name="code" value="1"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="1"/>
       <column name="name" value="In Community Of Property"/>
@@ -4002,7 +4010,7 @@
     </insert>
     <insert schemaName="reference" tableName="marriage_types">
       <column name="marital_status" value="M"/>
-      <column name="code" value="AWOA"/>
+      <column name="code" value="2"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="1"/>
       <column name="name" value="ANC Without Accrual"/>
@@ -4010,19 +4018,11 @@
     </insert>
     <insert schemaName="reference" tableName="marriage_types">
       <column name="marital_status" value="M"/>
-      <column name="code" value="AWIA"/>
+      <column name="code" value="3"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="1"/>
       <column name="name" value="ANC With Accrual"/>
       <column name="description" value="ANC With Accrual"/>
-    </insert>
-    <insert schemaName="reference" tableName="marriage_types">
-      <column name="marital_status" value="U"/>
-      <column name="code" value="UNKW"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="99"/>
-      <column name="name" value="Unknown"/>
-      <column name="description" value="Unknown"/>
     </insert>
 
     <insert schemaName="reference" tableName="minor_types">

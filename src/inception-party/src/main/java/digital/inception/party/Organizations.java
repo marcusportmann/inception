@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Organizations")
+@Schema(description = "The results of a request to retrieve a list of organizations")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"organizations", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "Organizations", namespace = "http://party.inception.digital")

@@ -104,11 +104,20 @@ public class PartyServiceTest {
     Person person = new Person();
 
     person.setId(UuidCreator.getShortPrefixComb());
-    person.setName("Full Name " + personCount);
-    person.setGivenName("Given Name " + personCount);
-    person.setGivenName("Surname " + personCount);
-    person.setPreferredName("Preferred Name " + personCount);
+    person.setName("GivenName" + personCount + " " + "MiddleName" + personCount + " " + "Surname" + personCount);
+    person.setPreferredName("PreferredName" + personCount);
+    person.setTitle("1");
+    person.setGivenName("GivenName" + personCount);
+    person.setMiddleNames("MiddleName" + personCount);
+    person.setInitials("G M");
+    person.setSurname("Surname" + personCount);
+    person.setMaidenName("MaidenName" + personCount);
+    person.setGender("M");
+    person.setRace("W");
+    person.setMaritalStatus("M");
+    person.setMarriageType("1");
     person.setDateOfBirth(LocalDate.of(1976, 3, 7));
+    person.setDateOfBirth(LocalDate.of(2200, 1, 1));
     person.setCountryOfBirth("US");
     person.setGender(String.valueOf(random.nextInt(4)));
 
@@ -299,6 +308,9 @@ public class PartyServiceTest {
   }
 
   private void comparePersons(Person person1, Person person2) {
+
+
+
     assertEquals(
         "The country of birth values for the two persons do not match",
         person1.getCountryOfBirth(),
@@ -307,6 +319,11 @@ public class PartyServiceTest {
         "The date of birth values for the two persons do not match",
         person1.getDateOfBirth(),
         person2.getDateOfBirth());
+    assertEquals(
+        "The date of death values for the two persons do not match",
+        person1.getDateOfBirth(),
+        person2.getDateOfBirth());
+
     assertEquals(
         "The gender values for the two persons do not match",
         person1.getGender(),
@@ -318,15 +335,39 @@ public class PartyServiceTest {
     assertEquals(
         "The ID values for the two persons do not match", person1.getId(), person2.getId());
     assertEquals(
+        "The initials values for the two persons do not match", person1.getInitials(), person2.getInitials());
+    assertEquals(
+        "The maiden name values for the two persons do not match", person1.getMaidenName(), person2.getMaidenName());
+    assertEquals(
+        "The marital status values for the two persons do not match", person1.getMaritalStatus(), person2.getMaritalStatus());
+    assertEquals(
+        "The marriage type values for the two persons do not match", person1.getMarriageType(), person2.getMarriageType());
+
+
+    assertEquals(
+        "The middle names values for the two persons do not match", person1.getMiddleNames(), person2.getMiddleNames());
+    assertEquals(
         "The name values for the two persons do not match", person1.getName(), person2.getName());
     assertEquals(
         "The preferred name values for the two persons do not match",
         person1.getPreferredName(),
         person2.getPreferredName());
     assertEquals(
+        "The race values for the two persons do not match",
+        person1.getRace(),
+        person2.getRace());
+
+    assertEquals(
         "The surname values for the two persons do not match",
         person1.getSurname(),
         person2.getSurname());
+    assertEquals(
+        "The title values for the two persons do not match",
+        person1.getTitle(),
+        person2.getTitle());
+
+
+
 
     assertEquals(
         "The number of identity documents for the two persons do not match",

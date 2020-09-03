@@ -65,10 +65,18 @@ import javax.xml.bind.annotation.XmlType;
   "id",
   "name",
   "preferredName",
+  "title",
   "givenName",
+  "middleNames",
+  "initials",
   "surname",
+  "maidenName",
   "gender",
+  "race",
+  "maritalStatus",
+  "marriageType",
   "dateOfBirth",
+  "dateOfDeath",
   "countryOfBirth",
   "identityDocuments"
 })
@@ -78,10 +86,18 @@ import javax.xml.bind.annotation.XmlType;
     namespace = "http://party.inception.digital",
     propOrder = {
       "preferredName",
+      "title",
       "givenName",
+      "middleNames",
+      "initials",
       "surname",
+      "maidenName",
       "gender",
+      "race",
+      "maritalStatus",
+      "marriageType",
       "dateOfBirth",
+      "dateOfDeath",
       "countryOfBirth",
       "identityDocuments"
     })
@@ -138,6 +154,13 @@ public class Person {
   @Column(table = "persons", name = "date_of_birth")
   private LocalDate dateOfBirth;
 
+  /** The optional date of death for the person. */
+  @Schema(description = "The optional date of death for the person")
+  @JsonProperty
+  @XmlElement(name = "DateOfDeath")
+  @Column(table = "persons", name = "date_of_death")
+  private LocalDate dateOfDeath;
+
   /** The optional code identifying the gender for the person. */
   @Schema(description = "The optional code identifying the gender for the person")
   @JsonProperty
@@ -166,6 +189,48 @@ public class Person {
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
+
+  /** The optional initials for the person. */
+  @Schema(description = "The optional initials for the person")
+  @JsonProperty
+  @XmlElement(name = "Initials")
+  @Size(min = 1, max = 20)
+  @Column(table = "persons", name = "initials", length = 20)
+  private String initials;
+
+  /** The optional maiden name for the person. */
+  @Schema(description = "The optional maiden name for the person")
+  @JsonProperty
+  @XmlElement(name = "MaidenName")
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "maiden_name", length = 100)
+  private String maidenName;
+
+  /** The optional code identifying the marital status for the person. */
+  @Schema(description = "The optional code identifying the marital status for the person")
+  @JsonProperty
+  @XmlElement(name = "MaritalStatus")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "marital_status")
+  private String maritalStatus;
+
+  /** The optional code identifying the marriage type for the person if the person is married. */
+  @Schema(
+      description =
+          "The optional code identifying the marriage type for the person if the person is married")
+  @JsonProperty
+  @XmlElement(name = "MarriageType")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "marriage_type")
+  private String marriageType;
+
+  /** The optional middle names for the person. */
+  @Schema(description = "The optional middle names for the person")
+  @JsonProperty
+  @XmlElement(name = "MiddleNames")
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "middle_names", length = 100)
+  private String middleNames;
 
   /**
    * The personal name or full name of the person.
@@ -210,6 +275,14 @@ public class Person {
   @Column(table = "persons", name = "preferred_name", length = 100)
   private String preferredName;
 
+  /** The optional code identifying the race for the person. */
+  @Schema(description = "The optional code identifying the race for the person")
+  @JsonProperty
+  @XmlElement(name = "Race")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "race")
+  private String race;
+
   /** The optional surname, last name, or family name for the person. */
   @Schema(description = "The optional surname, last name, or family name for the person")
   @JsonProperty
@@ -217,6 +290,14 @@ public class Person {
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "surname", length = 100)
   private String surname;
+
+  /** The optional code identifying the title for the person. */
+  @Schema(description = "The optional code identifying the title for the person")
+  @JsonProperty
+  @XmlElement(name = "Title")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "title")
+  private String title;
 
   /** The date and time the person was last updated. */
   @JsonIgnore
@@ -266,6 +347,15 @@ public class Person {
   }
 
   /**
+   * Returns the optional date of death for the person.
+   *
+   * @return the optional date of death for the person
+   */
+  public LocalDate getDateOfDeath() {
+    return dateOfDeath;
+  }
+
+  /**
    * Returns the optional code identifying the gender for the person.
    *
    * @return the optional code identifying the gender for the person
@@ -302,6 +392,52 @@ public class Person {
   }
 
   /**
+   * Returns the optional initials for the person.
+   *
+   * @return the optional initials for the person
+   */
+  public String getInitials() {
+    return initials;
+  }
+
+  /**
+   * Returns the optional maiden name for the person.
+   *
+   * @return the optional maiden name for the person
+   */
+  public String getMaidenName() {
+    return maidenName;
+  }
+
+  /**
+   * Returns the optional code identifying the marital status for the person.
+   *
+   * @return the optional code identifying the marital status for the person
+   */
+  public String getMaritalStatus() {
+    return maritalStatus;
+  }
+
+  /**
+   * Returns the optional code identifying the marriage type for the person if the person is
+   * married.
+   *
+   * @return the optional code identifying the marriage type for the person if the person is married
+   */
+  public String getMarriageType() {
+    return marriageType;
+  }
+
+  /**
+   * Returns the optional middle names for the person.
+   *
+   * @return the optional middle names for the person
+   */
+  public String getMiddleNames() {
+    return middleNames;
+  }
+
+  /**
    * Returns the personal name or full name of the person.
    *
    * <p>In Western culture, this is constructed from a combination of the given name (also known as
@@ -328,12 +464,30 @@ public class Person {
   }
 
   /**
+   * The optional code identifying the race for the person.
+   *
+   * @return the optional code identifying the race for the person
+   */
+  public String getRace() {
+    return race;
+  }
+
+  /**
    * Returns the optional surname, last name, or family name for the person.
    *
    * @return the optional surname, last name, or family name for the person
    */
   public String getSurname() {
     return surname;
+  }
+
+  /**
+   * Returns the optional code identifying the title for the person.
+   *
+   * @return the optional code identifying the title for the person
+   */
+  public String getTitle() {
+    return title;
   }
 
   /**
@@ -361,6 +515,15 @@ public class Person {
    */
   public void setDateOfBirth(LocalDate dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
+  }
+
+  /**
+   * Set the optional date of death for the person.
+   *
+   * @param dateOfDeath the optional date of death for the person
+   */
+  public void setDateOfDeath(LocalDate dateOfDeath) {
+    this.dateOfDeath = dateOfDeath;
   }
 
   /**
@@ -401,6 +564,52 @@ public class Person {
   }
 
   /**
+   * Set the optional initials for the person.
+   *
+   * @param initials the optional initials for the person
+   */
+  public void setInitials(String initials) {
+    this.initials = initials;
+  }
+
+  /**
+   * Set the optional maiden name for the person.
+   *
+   * @param maidenName the optional maiden name for the person
+   */
+  public void setMaidenName(String maidenName) {
+    this.maidenName = maidenName;
+  }
+
+  /**
+   * Set the optional code identifying the marital status for the person.
+   *
+   * @param maritalStatus the optional code identifying the marital status for the person
+   */
+  public void setMaritalStatus(String maritalStatus) {
+    this.maritalStatus = maritalStatus;
+  }
+
+  /**
+   * Set the optional code identifying the marriage type for the person if the person is married.
+   *
+   * @param marriageType the optional code identifying the marriage type for the person if the
+   *     person is married
+   */
+  public void setMarriageType(String marriageType) {
+    this.marriageType = marriageType;
+  }
+
+  /**
+   * Set the optional middle names for the person.
+   *
+   * @param middleNames the optional middle names for the person
+   */
+  public void setMiddleNames(String middleNames) {
+    this.middleNames = middleNames;
+  }
+
+  /**
    * Set the personal name or full name of the person.
    *
    * <p>In Western culture, this is constructed from a combination of the given name (also known as
@@ -427,12 +636,30 @@ public class Person {
   }
 
   /**
+   * Set the optional code identifying the race for the person.
+   *
+   * @param race the optional code identifying the race for the person
+   */
+  public void setRace(String race) {
+    this.race = race;
+  }
+
+  /**
    * Set the optional surname, last name, or family name for the person.
    *
    * @param surname the optional surname, last name, or family name for the person
    */
   public void setSurname(String surname) {
     this.surname = surname;
+  }
+
+  /**
+   * Set the optional code identifying the title for the person.
+   *
+   * @param title the optional code identifying the title for the person
+   */
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   @PrePersist

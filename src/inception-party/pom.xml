@@ -18,6 +18,10 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-persistence</artifactId>
     </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-reference</artifactId>
+    </dependency>
 
     <!-- Dependencies -->
     <dependency>

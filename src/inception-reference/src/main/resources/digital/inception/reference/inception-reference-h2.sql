@@ -1767,7 +1767,6 @@ INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name
   VALUES ('ZADRVLIC', 'en-US', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('PASSPORT', 'en-US', 99999, 'Passport', 'Passport', '');
-  
 
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAIDBOOK', 'en-ZA', 10001, 'South African ID Book', 'South African ID Book', 'ZA');
@@ -2151,8 +2150,8 @@ INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, 
    VALUES ('ZH', 'en-ZA', 91, 'Chinese', 'Chinese', 'Chinese');
 INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ZU', 'en-ZA', 92, 'Zulu', 'Zulu', 'Zulu');
-   
-      
+
+
 
 INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('S', 'en-US', 1, 'Single', 'Single');
@@ -2179,26 +2178,26 @@ INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, descr
   VALUES ('W', 'en-ZA', 5, 'Widowed', 'Widowed');
 INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
-  
 
 
+
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', 'ICOP', 'en-US', 1, 'In Community Of Property', 'In Community Of Property');
+  VALUES ('U', '0', 'en-US', 99, 'Unknown', 'Unknown');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', 'AWOA', 'en-US', 1, 'ANC Without Accrual', 'ANC Without Accrual');
+  VALUES ('M', '1', 'en-US', 1, 'In Community Of Property', 'In Community Of Property');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', 'AWIA', 'en-US', 1, 'ANC With Accrual', 'ANC With Accrual');
+  VALUES ('M', '2', 'en-US', 1, 'ANC Without Accrual', 'ANC Without Accrual');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('U', 'UNKW', 'en-US', 99, 'Unknown', 'Unknown');
-  
+  VALUES ('M', '3', 'en-US', 1, 'ANC With Accrual', 'ANC With Accrual');
+
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', 'ICOP', 'en-ZA', 1, 'In Community Of Property', 'In Community Of Property');
+  VALUES ('U', '0', 'en-ZA', 99, 'Unknown', 'Unknown');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', 'AWOA', 'en-ZA', 1, 'ANC Without Accrual', 'ANC Without Accrual');
+  VALUES ('M', '1', 'en-ZA', 1, 'In Community Of Property', 'In Community Of Property');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', 'AWIA', 'en-ZA', 1, 'ANC With Accrual', 'ANC With Accrual');
+  VALUES ('M', '2', 'en-ZA', 1, 'ANC Without Accrual', 'ANC Without Accrual');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('U', 'UNKW', 'en-ZA', 99, 'Unknown', 'Unknown');  
+  VALUES ('M', '3', 'en-ZA', 1, 'ANC With Accrual', 'ANC With Accrual');
 
 
 

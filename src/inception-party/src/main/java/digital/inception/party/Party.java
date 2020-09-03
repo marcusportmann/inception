@@ -39,7 +39,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>Party</code> class holds the information for an independent party.
+ * The <code>Party</code> class holds the information for a party.
  *
  * <p>See: https://spec.edmcouncil.org/fibo/ontology/FND/Parties/Parties/IndependentParty
  *
