@@ -38,7 +38,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "MinorType")
+@Schema(
+    description =
+        "A type of person under a certain age, usually the age of majority in a given jurisdiction, which legally demarcates childhood from adulthood")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "MinorType", namespace = "http://reference.inception.digital")

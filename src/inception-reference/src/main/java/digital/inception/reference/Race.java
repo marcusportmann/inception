@@ -38,7 +38,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Race")
+@Schema(
+    description =
+        "A subdivision of the human species on the basis of inherited physical and behavioral differences")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "Race", namespace = "http://reference.inception.digital")

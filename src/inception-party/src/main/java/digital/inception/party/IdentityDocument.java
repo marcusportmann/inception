@@ -50,18 +50,29 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "IdentityDocument")
+@Schema(description = "A legal document which may be used to verify aspects of a person's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "dateOfIssue"})
+@JsonPropertyOrder({"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry"})
 @XmlRootElement(name = "IdentityDocument", namespace = "http://party.inception.digital")
 @XmlType(
     name = "IdentityDocument",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "type", "dateOfIssue"})
+    propOrder = {"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "identity_documents")
 public class IdentityDocument {
+
+  /** The code identifying the country of issue for the identity document. */
+  @Schema(
+      description = "The code identifying the country of issue for the identity document",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "CountryOfIssue", required = true)
+  @NotNull
+  @Size(min = 1, max = 10)
+  @Column(name = "country_of_issue", nullable = false)
+  private String countryOfIssue;
 
   /** The date and time the identity document was created. */
   @JsonIgnore
@@ -69,6 +80,13 @@ public class IdentityDocument {
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
+
+  /** The optional date of expiry for the identity document. */
+  @Schema(description = "The optional date of expiry for the identity document")
+  @JsonProperty
+  @XmlElement(name = "DateOfExpiry")
+  @Column(name = "date_of_expiry")
+  private LocalDate dateOfExpiry;
 
   /** The date of issue for the identity document. */
   @Schema(description = "The date of issue for the identity document", required = true)
@@ -142,12 +160,30 @@ public class IdentityDocument {
   }
 
   /**
+   * Returns the code identifying the country of issue for the identity document.
+   *
+   * @return the code identifying the country of issue for the identity document
+   */
+  public String getCountryOfIssue() {
+    return countryOfIssue;
+  }
+
+  /**
    * Returns the date and time the identity document was created.
    *
    * @return the date and time the identity document was created
    */
   public LocalDateTime getCreated() {
     return created;
+  }
+
+  /**
+   * Returns the optional date of expiry for the identity document.
+   *
+   * @return the optional date of expiry for the identity document
+   */
+  public LocalDate getDateOfExpiry() {
+    return dateOfExpiry;
   }
 
   /**
@@ -204,6 +240,24 @@ public class IdentityDocument {
   public int hashCode() {
     return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
         + ((id == null) ? 0 : id.hashCode());
+  }
+
+  /**
+   * Set the code identifying the country of issue for the identity document.
+   *
+   * @param countryOfIssue the code identifying the country of issue for the identity document
+   */
+  public void setCountryOfIssue(String countryOfIssue) {
+    this.countryOfIssue = countryOfIssue;
+  }
+
+  /**
+   * Set the optional date of expiry for the identity document.
+   *
+   * @param dateOfExpiry the optional date of expiry for the identity document
+   */
+  public void setDateOfExpiry(LocalDate dateOfExpiry) {
+    this.dateOfExpiry = dateOfExpiry;
   }
 
   /**

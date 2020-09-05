@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "CodeCategorySummary")
+@Schema(description = "A code category summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "updated"})
 @XmlRootElement(name = "CodeCategorySummary", namespace = "http://codes.inception.digital")

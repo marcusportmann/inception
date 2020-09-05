@@ -18,7 +18,6 @@ package digital.inception.reference.test;
 
 import static org.junit.Assert.fail;
 
-import digital.inception.reference.AddressType;
 import digital.inception.reference.CommunicationMethod;
 import digital.inception.reference.Country;
 import digital.inception.reference.EmploymentStatus;
@@ -32,10 +31,11 @@ import digital.inception.reference.MarriageType;
 import digital.inception.reference.MinorType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
-import digital.inception.reference.PermitType;
+import digital.inception.reference.PhysicalAddressType;
 import digital.inception.reference.Race;
 import digital.inception.reference.Region;
-import digital.inception.reference.ResidentialStatus;
+import digital.inception.reference.ResidencePermitType;
+import digital.inception.reference.ResidencyStatus;
 import digital.inception.reference.ResidentialType;
 import digital.inception.reference.SourceOfFunds;
 import digital.inception.reference.SuitableTimeToContact;
@@ -66,15 +66,14 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
     listeners = {
-        DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class
+      DependencyInjectionTestExecutionListener.class,
+      DirtiesContextTestExecutionListener.class,
+      TransactionalTestExecutionListener.class
     })
 public class LiquibaseChangelogInsertsTest {
 
   /** The Reference Service. */
-  @Autowired
-  private IReferenceService referenceService;
+  @Autowired private IReferenceService referenceService;
 
   /** Create the Liquibase changelog inserts. */
   @Test
@@ -92,10 +91,10 @@ public class LiquibaseChangelogInsertsTest {
     boolean createMinorTypeInserts = createLiquibaseInserts && false;
     boolean createNextOfKinInserts = createLiquibaseInserts && false;
     boolean createOccupationInserts = createLiquibaseInserts && false;
-    boolean createPermitTypeInserts = createLiquibaseInserts && false;
+    boolean createResidencePermitTypeInserts = createLiquibaseInserts && false;
     boolean createRaceInserts = createLiquibaseInserts && false;
     boolean createRegionInserts = createLiquibaseInserts && false;
-    boolean createResidentialStatusInserts = createLiquibaseInserts && false;
+    boolean createResidencyStatusInserts = createLiquibaseInserts && false;
     boolean createResidentialTypeInserts = createLiquibaseInserts && false;
     boolean createSourceOfFundsInserts = createLiquibaseInserts && false;
     boolean createSuitableTimeToContactInserts = createLiquibaseInserts && false;
@@ -105,17 +104,27 @@ public class LiquibaseChangelogInsertsTest {
     boolean createVerificationStatusInserts = createLiquibaseInserts && false;
 
     if (createAddressTypeInserts) {
-      for (AddressType addressType : referenceService.getAddressTypes("en-US")) {
+      for (PhysicalAddressType physicalAddressType :
+          referenceService.getPhysicalAddressTypes("en-US")) {
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"address_types\">");
-        System.out.println("      <column name=\"code\" value=\"" + addressType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale_id\" value=\"" + addressType.getLocaleId() + "\"/>");
+            "    <insert schemaName=\"reference\" tableName=\"physical_address_types\">");
         System.out.println(
-            "      <column name=\"sort_index\" value=\"" + addressType.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + addressType.getName() + "\"/>");
+            "      <column name=\"code\" value=\"" + physicalAddressType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"description\" value=\"" + addressType.getDescription() + "\"/>");
+            "      <column name=\"locale_id\" value=\""
+                + physicalAddressType.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + physicalAddressType.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + physicalAddressType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + physicalAddressType.getDescription()
+                + "\"/>");
         System.out.println("    </insert>");
       }
 
@@ -131,7 +140,9 @@ public class LiquibaseChangelogInsertsTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + communicationMethod.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale_id\" value=\"" + communicationMethod.getLocaleId() + "\"/>");
+            "      <column name=\"locale_id\" value=\""
+                + communicationMethod.getLocaleId()
+                + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\""
                 + communicationMethod.getSortIndex()
@@ -165,7 +176,8 @@ public class LiquibaseChangelogInsertsTest {
 
         System.out.println("<insert schemaName=\"reference\" tableName=\"countries\">");
         System.out.println("  <column name=\"code\" value=\"" + country.getCode() + "\"/>");
-        System.out.println("  <column name=\"locale_id\" value=\"" + country.getLocaleId() + "\"/>");
+        System.out.println(
+            "  <column name=\"locale_id\" value=\"" + country.getLocaleId() + "\"/>");
         System.out.println("  <column name=\"sort_index\" value=\"" + counter + "\"/>");
         System.out.println("  <column name=\"name\" value=\"" + country.getName() + "\"/>");
         System.out.println(
@@ -238,7 +250,8 @@ public class LiquibaseChangelogInsertsTest {
 
         System.out.println("    <insert schemaName=\"reference\" tableName=\"genders\">");
         System.out.println("      <column name=\"code\" value=\"" + gender.getCode() + "\"/>");
-        System.out.println("      <column name=\"locale_id\" value=\"" + gender.getLocaleId() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\"" + gender.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + gender.getSortIndex() + "\"/>");
         System.out.println("      <column name=\"name\" value=\"" + gender.getName() + "\"/>");
@@ -259,7 +272,9 @@ public class LiquibaseChangelogInsertsTest {
         System.out.println(
             "      <column name=\"code\" value=\"" + identityDocumentType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale_id\" value=\"" + identityDocumentType.getLocaleId() + "\"/>");
+            "      <column name=\"locale_id\" value=\""
+                + identityDocumentType.getLocaleId()
+                + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\""
                 + identityDocumentType.getSortIndex()
@@ -405,26 +420,6 @@ public class LiquibaseChangelogInsertsTest {
       System.out.println();
     }
 
-    if (createPermitTypeInserts) {
-      for (PermitType permitType : referenceService.getPermitTypes("en-US")) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"permit_types\">");
-        System.out.println("      <column name=\"code\" value=\"" + permitType.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\"" + permitType.getLocaleId() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\"" + permitType.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + permitType.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\"" + permitType.getDescription() + "\"/>");
-        System.out.println(
-            "      <column name=\"country_of_issue\" value=\"" + permitType.getCountryOfIssue() + "\"/>");
-        System.out.println("    </insert>");
-      }
-
-      System.out.println();
-    }
-
     if (createRaceInserts) {
       for (Race race : referenceService.getRaces("en-US")) {
 
@@ -447,7 +442,8 @@ public class LiquibaseChangelogInsertsTest {
       for (Region region : referenceService.getRegions("en-US")) {
 
         System.out.println("    <insert schemaName=\"reference\" tableName=\"regions\">");
-        System.out.println("      <column name=\"country\" value=\"" + region.getCountry() + "\"/>");
+        System.out.println(
+            "      <column name=\"country\" value=\"" + region.getCountry() + "\"/>");
         System.out.println("      <column name=\"code\" value=\"" + region.getCode() + "\"/>");
         System.out.println(
             "      <column name=\"locale_id\" value=\"" + region.getLocaleId() + "\"/>");
@@ -462,18 +458,55 @@ public class LiquibaseChangelogInsertsTest {
       System.out.println();
     }
 
-    if (createResidentialStatusInserts) {
-      for (ResidentialStatus residentialStatus : referenceService.getResidentialStatuses("en-US")) {
+    if (createResidencePermitTypeInserts) {
+      for (ResidencePermitType residencePermitType :
+          referenceService.getResidencePermitTypes("en-US")) {
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"residential_statuses\">");
-        System.out.println("      <column name=\"code\" value=\"" + residentialStatus.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale_id\" value=\"" + residentialStatus.getLocaleId() + "\"/>");
+            "    <insert schemaName=\"reference\" tableName=\"residence_permit_types\">");
         System.out.println(
-            "      <column name=\"sort_index\" value=\"" + residentialStatus.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + residentialStatus.getName() + "\"/>");
+            "      <column name=\"code\" value=\"" + residencePermitType.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"description\" value=\"" + residentialStatus.getDescription() + "\"/>");
+            "      <column name=\"locale_id\" value=\""
+                + residencePermitType.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + residencePermitType.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + residencePermitType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + residencePermitType.getDescription()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"country_of_issue\" value=\""
+                + residencePermitType.getCountryOfIssue()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createResidencyStatusInserts) {
+      for (ResidencyStatus residencyStatus : referenceService.getResidencyStatuses("en-US")) {
+
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"residency_statuses\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + residencyStatus.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\"" + residencyStatus.getLocaleId() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + residencyStatus.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + residencyStatus.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + residencyStatus.getDescription()
+                + "\"/>");
         System.out.println("    </insert>");
       }
 
@@ -484,14 +517,18 @@ public class LiquibaseChangelogInsertsTest {
       for (ResidentialType residentialType : referenceService.getResidentialTypes("en-US")) {
 
         System.out.println("    <insert schemaName=\"reference\" tableName=\"residential_types\">");
-        System.out.println("      <column name=\"code\" value=\"" + residentialType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + residentialType.getCode() + "\"/>");
         System.out.println(
             "      <column name=\"locale_id\" value=\"" + residentialType.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + residentialType.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + residentialType.getName() + "\"/>");
         System.out.println(
-            "      <column name=\"description\" value=\"" + residentialType.getDescription() + "\"/>");
+            "      <column name=\"name\" value=\"" + residentialType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + residentialType.getDescription()
+                + "\"/>");
         System.out.println("    </insert>");
       }
 
@@ -502,14 +539,18 @@ public class LiquibaseChangelogInsertsTest {
       for (SourceOfFunds sourceOfFunds : referenceService.getSourcesOfFunds("en-US")) {
 
         System.out.println("    <insert schemaName=\"reference\" tableName=\"sources_of_funds\">");
-        System.out.println("      <column name=\"code\" value=\"" + sourceOfFunds.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + sourceOfFunds.getCode() + "\"/>");
         System.out.println(
             "      <column name=\"locale_id\" value=\"" + sourceOfFunds.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + sourceOfFunds.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + sourceOfFunds.getName() + "\"/>");
         System.out.println(
-            "      <column name=\"description\" value=\"" + sourceOfFunds.getDescription() + "\"/>");
+            "      <column name=\"name\" value=\"" + sourceOfFunds.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + sourceOfFunds.getDescription()
+                + "\"/>");
         System.out.println("    </insert>");
       }
 
@@ -517,17 +558,27 @@ public class LiquibaseChangelogInsertsTest {
     }
 
     if (createSuitableTimeToContactInserts) {
-      for (SuitableTimeToContact suitableTimeToContact : referenceService.getSuitableTimesToContact("en-US")) {
+      for (SuitableTimeToContact suitableTimeToContact :
+          referenceService.getSuitableTimesToContact("en-US")) {
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"suitable_times_to_contact\">");
-        System.out.println("      <column name=\"code\" value=\"" + suitableTimeToContact.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale_id\" value=\"" + suitableTimeToContact.getLocaleId() + "\"/>");
+            "    <insert schemaName=\"reference\" tableName=\"suitable_times_to_contact\">");
         System.out.println(
-            "      <column name=\"sort_index\" value=\"" + suitableTimeToContact.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + suitableTimeToContact.getName() + "\"/>");
+            "      <column name=\"code\" value=\"" + suitableTimeToContact.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"description\" value=\"" + suitableTimeToContact.getDescription() + "\"/>");
+            "      <column name=\"locale_id\" value=\""
+                + suitableTimeToContact.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + suitableTimeToContact.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + suitableTimeToContact.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + suitableTimeToContact.getDescription()
+                + "\"/>");
         System.out.println("    </insert>");
       }
 
@@ -538,16 +589,22 @@ public class LiquibaseChangelogInsertsTest {
       for (TaxNumberType taxNumberType : referenceService.getTaxNumberTypes("en-US")) {
 
         System.out.println("    <insert schemaName=\"reference\" tableName=\"tax_number_types\">");
-        System.out.println("      <column name=\"code\" value=\"" + taxNumberType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + taxNumberType.getCode() + "\"/>");
         System.out.println(
             "      <column name=\"locale_id\" value=\"" + taxNumberType.getLocaleId() + "\"/>");
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + taxNumberType.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + taxNumberType.getName() + "\"/>");
         System.out.println(
-            "      <column name=\"description\" value=\"" + taxNumberType.getDescription() + "\"/>");
+            "      <column name=\"name\" value=\"" + taxNumberType.getName() + "\"/>");
         System.out.println(
-            "      <column name=\"country_of_issue\" value=\"" + taxNumberType.getCountryOfIssue() + "\"/>");
+            "      <column name=\"description\" value=\""
+                + taxNumberType.getDescription()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"country_of_issue\" value=\""
+                + taxNumberType.getCountryOfIssue()
+                + "\"/>");
         System.out.println("    </insert>");
       }
 
@@ -564,7 +621,8 @@ public class LiquibaseChangelogInsertsTest {
         System.out.println(
             "      <column name=\"sort_index\" value=\"" + title.getSortIndex() + "\"/>");
         System.out.println("      <column name=\"name\" value=\"" + title.getName() + "\"/>");
-        System.out.println("      <column name=\"abbreviation\" value=\"" + title.getAbbreviation() + "\"/>");
+        System.out.println(
+            "      <column name=\"abbreviation\" value=\"" + title.getAbbreviation() + "\"/>");
         System.out.println(
             "      <column name=\"description\" value=\"" + title.getDescription() + "\"/>");
         System.out.println("    </insert>");
@@ -573,19 +631,28 @@ public class LiquibaseChangelogInsertsTest {
       System.out.println();
     }
 
-
     if (createVerificationMethodInserts) {
-      for (VerificationMethod verificationMethod : referenceService.getVerificationMethods("en-US")) {
+      for (VerificationMethod verificationMethod :
+          referenceService.getVerificationMethods("en-US")) {
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"verification_methods\">");
-        System.out.println("      <column name=\"code\" value=\"" + verificationMethod.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale_id\" value=\"" + verificationMethod.getLocaleId() + "\"/>");
+            "    <insert schemaName=\"reference\" tableName=\"verification_methods\">");
         System.out.println(
-            "      <column name=\"sort_index\" value=\"" + verificationMethod.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + verificationMethod.getName() + "\"/>");
+            "      <column name=\"code\" value=\"" + verificationMethod.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"description\" value=\"" + verificationMethod.getDescription() + "\"/>");
+            "      <column name=\"locale_id\" value=\""
+                + verificationMethod.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + verificationMethod.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + verificationMethod.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + verificationMethod.getDescription()
+                + "\"/>");
         System.out.println("    </insert>");
       }
 
@@ -593,17 +660,27 @@ public class LiquibaseChangelogInsertsTest {
     }
 
     if (createVerificationStatusInserts) {
-      for (VerificationStatus verificationStatus : referenceService.getVerificationStatuses("en-US")) {
+      for (VerificationStatus verificationStatus :
+          referenceService.getVerificationStatuses("en-US")) {
 
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"verification_statuses\">");
-        System.out.println("      <column name=\"code\" value=\"" + verificationStatus.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"locale_id\" value=\"" + verificationStatus.getLocaleId() + "\"/>");
+            "    <insert schemaName=\"reference\" tableName=\"verification_statuses\">");
         System.out.println(
-            "      <column name=\"sort_index\" value=\"" + verificationStatus.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + verificationStatus.getName() + "\"/>");
+            "      <column name=\"code\" value=\"" + verificationStatus.getCode() + "\"/>");
         System.out.println(
-            "      <column name=\"description\" value=\"" + verificationStatus.getDescription() + "\"/>");
+            "      <column name=\"locale_id\" value=\""
+                + verificationStatus.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + verificationStatus.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + verificationStatus.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + verificationStatus.getDescription()
+                + "\"/>");
         System.out.println("    </insert>");
       }
 

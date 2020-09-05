@@ -23,7 +23,7 @@ import {ReferenceServiceError} from './reference.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
-import {AddressType} from "./address-type";
+import {PhysicalAddressType} from "./physical-address-type";
 import {CommunicationMethod} from "./communication-method";
 import {Country} from "./country";
 import {EmploymentStatus} from "./employment-status";
@@ -36,10 +36,10 @@ import {MarriageType} from "./marriage-type";
 import {MinorType} from "./minor-type";
 import {NextOfKinType} from "./next-of-kin-type";
 import {Occupation} from "./occupation";
-import {PermitType} from "./permit-type";
+import {ResidencePermitType} from "./residence-permit-type";
 import {Race} from "./race";
 import {Region} from "./region";
-import {ResidentialStatus} from "./residential-status";
+import {ResidencyStatus} from "./residency-status";
 import {ResidentialType} from "./residential-type";
 import {SourceOfFunds} from "./source-of-funds";
 import {SuitableTimeToContact} from "./suitable-time-to-contact";
@@ -68,33 +68,6 @@ export class ReferenceService {
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
               @Inject(LOCALE_ID) private localeId: string, private httpClient: HttpClient) {
     console.log('Initializing the Reference Service (' + localeId + ')');
-  }
-
-  /**
-   * Retrieve the address types.
-   *
-   * @return The address types.
-   */
-  getAddressTypes(): Observable<AddressType[]> {
-    let params = new HttpParams();
-
-    params = params.append('localeId', this.localeId);
-
-    return this.httpClient.get<AddressType[]>(this.config.referenceApiUrlPrefix + '/address-types',
-      {params, reportProgress: true})
-    .pipe(map((addressTypes: AddressType[]) => {
-      return addressTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ReferenceServiceError('Failed to retrieve the address types.', apiError));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
-      }
-    }));
   }
 
   /**
@@ -422,24 +395,24 @@ export class ReferenceService {
   }
 
   /**
-   * Retrieve the permit types.
+   * Retrieve the physical address types.
    *
-   * @return The permit types.
+   * @return The physical address types.
    */
-  getPermitTypes(): Observable<PermitType[]> {
+  getPhysicalAddressTypes(): Observable<PhysicalAddressType[]> {
     let params = new HttpParams();
 
     params = params.append('localeId', this.localeId);
 
-    return this.httpClient.get<PermitType[]>(this.config.referenceApiUrlPrefix + '/permit-types',
+    return this.httpClient.get<PhysicalAddressType[]>(this.config.referenceApiUrlPrefix + '/physical-address-types',
       {params, reportProgress: true})
-    .pipe(map((permitTypes: PermitType[]) => {
-      return permitTypes;
+    .pipe(map((addressTypes: PhysicalAddressType[]) => {
+      return addressTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the permit types.', apiError));
+        return throwError(new ReferenceServiceError('Failed to retrieve the physical address types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
@@ -503,24 +476,51 @@ export class ReferenceService {
   }
 
   /**
-   * Retrieve the residential statuses.
+   * Retrieve the residence permit types.
    *
-   * @return The residential statuses.
+   * @return The residence permit types.
    */
-  getResidentialStatuses(): Observable<ResidentialStatus[]> {
+  getResidencePermitTypes(): Observable<ResidencePermitType[]> {
     let params = new HttpParams();
 
     params = params.append('localeId', this.localeId);
 
-    return this.httpClient.get<ResidentialStatus[]>(this.config.referenceApiUrlPrefix + '/residential-statuses',
+    return this.httpClient.get<ResidencePermitType[]>(this.config.referenceApiUrlPrefix + '/residence-permit-types',
       {params, reportProgress: true})
-    .pipe(map((residentialStatuses: ResidentialStatus[]) => {
-      return residentialStatuses;
+    .pipe(map((residencePermitTypes: ResidencePermitType[]) => {
+      return residencePermitTypes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the residential statuses.', apiError));
+        return throwError(new ReferenceServiceError('Failed to retrieve the residence permit types.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve the residency statuses.
+   *
+   * @return The residency statuses.
+   */
+  getResidencyStatuses(): Observable<ResidencyStatus[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<ResidencyStatus[]>(this.config.referenceApiUrlPrefix + '/residency-statuses',
+      {params, reportProgress: true})
+    .pipe(map((residencyStatuses: ResidencyStatus[]) => {
+      return residencyStatuses;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        return throwError(new ReferenceServiceError('Failed to retrieve the residency statuses.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {

@@ -39,7 +39,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "IdentityDocumentType")
+@Schema(
+    description =
+        "A type of legal document which may be used to verify aspects of a person's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
 @XmlRootElement(name = "IdentityDocumentType", namespace = "http://reference.inception.digital")

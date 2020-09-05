@@ -55,7 +55,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Message")
+@Schema(description = "A message")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",

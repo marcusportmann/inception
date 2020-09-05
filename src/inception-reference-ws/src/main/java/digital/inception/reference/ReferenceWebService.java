@@ -57,20 +57,6 @@ public class ReferenceWebService {
   }
 
   /**
-   * Retrieve the address types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
-   *     types for or <code>null</code> to retrieve the address types for all locales
-   * @return the address types
-   */
-  @WebMethod(operationName = "GetAddressTypes")
-  public List<AddressType> getAddressTypes(
-      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getAddressTypes(localeId);
-  }
-
-  /**
    * Retrieve the communication methods.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the
@@ -241,17 +227,17 @@ public class ReferenceWebService {
   }
 
   /**
-   * Retrieve the permit types.
+   * Retrieve the physical address types.
    *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the permit
-   *     types for or <code>null</code> to retrieve the permit types for all locales
-   * @return the permit types
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
+   *     types for or <code>null</code> to retrieve the physical address types for all locales
+   * @return the physical address types
    */
-  @WebMethod(operationName = "GetPermitTypes")
-  public List<PermitType> getPermitTypes(
+  @WebMethod(operationName = "GetAddressTypes")
+  public List<PhysicalAddressType> getPhysicalAddressTypes(
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
       throws ReferenceServiceException {
-    return referenceService.getPermitTypes(localeId);
+    return referenceService.getPhysicalAddressTypes(localeId);
   }
 
   /**
@@ -283,18 +269,32 @@ public class ReferenceWebService {
   }
 
   /**
-   * Retrieve the residential statuses.
+   * Retrieve the residence permit types.
    *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
-   *     residential statuses for or <code>null</code> to retrieve the residential statuses for all
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the residence
+   *     permit types for or <code>null</code> to retrieve the residence permit types for all
    *     locales
-   * @return the residential statuses
+   * @return the residence permit types
    */
-  @WebMethod(operationName = "GetResidentialStatuses")
-  public List<ResidentialStatus> getResidentialStatuses(
+  @WebMethod(operationName = "GetResidencePermitTypes")
+  public List<ResidencePermitType> getResidencePermitTypes(
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
       throws ReferenceServiceException {
-    return referenceService.getResidentialStatuses(localeId);
+    return referenceService.getResidencePermitTypes(localeId);
+  }
+
+  /**
+   * Retrieve the residency statuses.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the residency
+   *     statuses for or <code>null</code> to retrieve the residency statuses for all locales
+   * @return the residency statuses
+   */
+  @WebMethod(operationName = "GetResidencyStatuses")
+  public List<ResidencyStatus> getResidencyStatuses(
+      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getResidencyStatuses(localeId);
   }
 
   /**

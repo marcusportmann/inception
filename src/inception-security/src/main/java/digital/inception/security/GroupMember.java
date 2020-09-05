@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "GroupMember")
+@Schema(description = "A group member association")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectoryId", "groupName", "memberName", "memberType"})
 @XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")

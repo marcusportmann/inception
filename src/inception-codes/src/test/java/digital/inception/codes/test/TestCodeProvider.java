@@ -49,10 +49,7 @@ public class TestCodeProvider implements ICodeProvider {
    */
   public TestCodeProvider(CodeProviderConfig codeProviderConfig) {
     codeCategory =
-        new CodeCategory(
-            "TestCodeCategory",
-            "Test Code Category Name",
-            "Test Code Category Data");
+        new CodeCategory("TestCodeCategory", "Test Code Category Name", "Test Code Category Data");
 
     codes = new ArrayList<>();
 

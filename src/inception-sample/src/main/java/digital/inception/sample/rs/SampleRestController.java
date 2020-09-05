@@ -211,7 +211,11 @@ public class SampleRestController {
       })
   @RequestMapping(value = "/validate", method = RequestMethod.POST, produces = "application/json")
   public List<ValidationError> validate(
-      @Parameter(name = "data", description = "The data", required = true) @RequestBody Data data)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The data to validate",
+              required = true)
+          @RequestBody
+          Data data)
       throws SampleServiceException {
     return sampleService.validate(data);
   }

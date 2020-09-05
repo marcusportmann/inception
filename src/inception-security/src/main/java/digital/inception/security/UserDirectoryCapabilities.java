@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "UserDirectoryCapabilities")
+@Schema(description = "The capabilities supported by a user directory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "supportsAdminChangePassword",

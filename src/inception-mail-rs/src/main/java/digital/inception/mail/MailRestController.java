@@ -123,7 +123,9 @@ public class MailRestController extends SecureRestController {
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void createMailTemplate(
-      @Parameter(name = "mailTemplate", description = "The mail template", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The mail template to create",
+              required = true)
           @RequestBody
           MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, MailServiceException {
@@ -479,7 +481,9 @@ public class MailRestController extends SecureRestController {
               required = true)
           @PathVariable
           String mailTemplateId,
-      @Parameter(name = "mailTemplate", description = "The mail template", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The mail template to update",
+              required = true)
           @RequestBody
           MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {

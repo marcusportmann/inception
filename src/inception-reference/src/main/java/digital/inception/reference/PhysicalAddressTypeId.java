@@ -22,32 +22,32 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>PermitTypeId</code> class implements the ID class for the <code>
- * PermitType</code> class.
+ * The <code>PhysicalAddressTypeId</code> class implements the ID class for the <code>
+ * PhysicalAddressType</code> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class PermitTypeId implements Serializable {
+public class PhysicalAddressTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the permit type. */
+  /** The code for the physical address type. */
   private String code;
 
-  /** The Unicode locale identifier for the permit type. */
+  /** The Unicode locale identifier for the physical address type. */
   private String localeId;
 
-  /** Constructs a new <code>PermitTypeId</code>. */
-  public PermitTypeId() {}
+  /** Constructs a new <code>PhysicalAddressTypeId</code>. */
+  public PhysicalAddressTypeId() {}
 
   /**
-   * Constructs a new <code>PermitTypeId</code>.
+   * Constructs a new <code>PhysicalAddressTypeId</code>.
    *
-   * @param code the code for the permit type
-   * @param localeId the Unicode locale identifier for the permit type
+   * @param code the code for the physical address type
+   * @param localeId the Unicode locale identifier for the physical address type
    */
-  public PermitTypeId(String code, String localeId) {
+  public PhysicalAddressTypeId(String code, String localeId) {
     this.code = code;
     this.localeId = localeId;
   }
@@ -73,24 +73,24 @@ public class PermitTypeId implements Serializable {
       return false;
     }
 
-    PermitTypeId other = (PermitTypeId) object;
+    PhysicalAddressTypeId other = (PhysicalAddressTypeId) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the permit type.
+   * Returns the code for the physical address type.
    *
-   * @return the code for the permit type
+   * @return the code for the physical address type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the Unicode locale identifier for the permit type.
+   * Returns the Unicode locale identifier for the physical address type.
    *
-   * @return the Unicode locale identifier for the permit type
+   * @return the Unicode locale identifier for the physical address type
    */
   public String getLocaleId() {
     return localeId;
@@ -107,18 +107,18 @@ public class PermitTypeId implements Serializable {
   }
 
   /**
-   * Set the code for the permit type.
+   * Set the code for the physical address type.
    *
-   * @param code the code for the permit type
+   * @param code the code for the physical address type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the Unicode locale identifier for the permit type.
+   * Set the Unicode locale identifier for the physical address type.
    *
-   * @param locale the Unicode locale identifier for the permit type
+   * @param locale the Unicode locale identifier for the physical address type
    */
   public void setLocaleId(String locale) {
     this.localeId = locale;

@@ -38,7 +38,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Region")
+@Schema(
+    description =
+        "An area, especially part of a country or the world having definable characteristics but not always fixed boundaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"country", "code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "Region", namespace = "http://reference.inception.digital")

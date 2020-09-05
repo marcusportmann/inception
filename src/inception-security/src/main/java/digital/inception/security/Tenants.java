@@ -31,12 +31,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Tenants</code> class holds the results of a request to retrieve a list of group
- * members.
+ * The <code>Tenants</code> class holds the results of a request to retrieve a list of tenants.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Tenants")
+@Schema(description = "The results of a request to retrieve a list of tenants")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"tenants", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "Tenants", namespace = "http://security.inception.digital")

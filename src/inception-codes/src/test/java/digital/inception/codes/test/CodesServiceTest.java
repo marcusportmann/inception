@@ -18,7 +18,6 @@ package digital.inception.codes.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -263,10 +262,7 @@ public class CodesServiceTest {
     CodeCategory codeCategory = getTestCodeCategoryDetails();
 
     CodeCategory codeCategory1 =
-        new CodeCategory(
-            codeCategory.getId(),
-            codeCategory.getName(),
-            codeCategory.getData());
+        new CodeCategory(codeCategory.getId(), codeCategory.getName(), codeCategory.getData());
 
     compareCodeCategories(codeCategory, codeCategory1);
 

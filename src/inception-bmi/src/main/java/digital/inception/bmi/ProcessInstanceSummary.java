@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "ProcessInstanceSummary")
+@Schema(description = "A process instance summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "version"})
 @XmlRootElement(name = "ProcessInstanceSummary", namespace = "http://bmi.inception.digital")

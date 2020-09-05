@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "UserDirectoryParameter")
+@Schema(description = "A name-value pair parameter for a user directory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "UserDirectoryParameter", namespace = "http://security.inception.digital")

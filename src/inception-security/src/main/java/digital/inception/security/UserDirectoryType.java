@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "UserDirectoryType")
+@Schema(description = "A user directory type")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "userDirectoryClassName"})
 @XmlRootElement(name = "UserDirectoryType", namespace = "http://security.inception.digital")

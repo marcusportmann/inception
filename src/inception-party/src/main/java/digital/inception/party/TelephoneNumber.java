@@ -1,5 +1,3 @@
 package digital.inception.party;
 
-public class TelephoneNumber {
-
-}
+public class TelephoneNumber {}

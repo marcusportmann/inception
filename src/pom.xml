@@ -100,7 +100,7 @@
     <spring-shell.version>2.0.0</spring-shell.version>
     <springdoc-openapi-ui.version>1.4.6</springdoc-openapi-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
-    <swagger-annotations.version>2.1.4</swagger-annotations.version>
+    <swagger.version>2.1.4</swagger.version>
     <uuid-creator.version>2.7.4</uuid-creator.version>
     <wss4j-ws-security-common.version>2.2.5</wss4j-ws-security-common.version>
   </properties>
@@ -150,7 +150,12 @@
       <dependency>
         <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-annotations</artifactId>
-        <version>${swagger-annotations.version}</version>
+        <version>${swagger.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-models</artifactId>
+        <version>${swagger.version}</version>
       </dependency>
       <dependency>
         <groupId>javax.jws</groupId>

@@ -309,7 +309,9 @@ public class ConfigurationRestController extends SecureRestController {
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Configuration.ConfigurationAdministration')")
   public void setConfiguration(
-      @Parameter(name = "configuration", description = "The configuration", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The configuration",
+              required = true)
           @RequestBody
           Configuration configuration)
       throws InvalidArgumentException, ConfigurationServiceException {

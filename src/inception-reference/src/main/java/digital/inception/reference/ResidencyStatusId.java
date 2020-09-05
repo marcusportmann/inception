@@ -22,32 +22,32 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>AddressTypeId</code> class implements the ID class for the <code>AddressType</code>
- * class.
+ * The <code>ResidencyStatusId</code> class implements the ID class for the <code>
+ * ResidencyStatus</code> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class AddressTypeId implements Serializable {
+public class ResidencyStatusId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the address type. */
+  /** The code for the residency status. */
   private String code;
 
-  /** The Unicode locale identifier for the address type. */
+  /** The Unicode locale identifier for the residency status. */
   private String localeId;
 
-  /** Constructs a new <code>AddressTypeId</code>. */
-  public AddressTypeId() {}
+  /** Constructs a new <code>ResidencyStatusId</code>. */
+  public ResidencyStatusId() {}
 
   /**
-   * Constructs a new <code>AddressTypeId</code>.
+   * Constructs a new <code>ResidencyStatusId</code>.
    *
-   * @param code the code for the address type
-   * @param localeId the Unicode locale identifier for the address type
+   * @param code the code for the residency status
+   * @param localeId the Unicode locale identifier for the residency status
    */
-  public AddressTypeId(String code, String localeId) {
+  public ResidencyStatusId(String code, String localeId) {
     this.code = code;
     this.localeId = localeId;
   }
@@ -73,24 +73,24 @@ public class AddressTypeId implements Serializable {
       return false;
     }
 
-    AddressTypeId other = (AddressTypeId) object;
+    ResidencyStatusId other = (ResidencyStatusId) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the address type.
+   * Returns the code for the residency status.
    *
-   * @return the code for the address type
+   * @return the code for the residency status
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the Unicode locale identifier for the address type.
+   * Returns the Unicode locale identifier for the residency status.
    *
-   * @return the Unicode locale identifier for the address type
+   * @return the Unicode locale identifier for the residency status
    */
   public String getLocaleId() {
     return localeId;
@@ -107,18 +107,18 @@ public class AddressTypeId implements Serializable {
   }
 
   /**
-   * Set the code for the address type.
+   * Set the code for the residency status.
    *
-   * @param code the code for the address type
+   * @param code the code for the residency status
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the Unicode locale identifier for the address type.
+   * Set the Unicode locale identifier for the residency status.
    *
-   * @param locale the Unicode locale identifier for the address type
+   * @param locale the Unicode locale identifier for the residency status
    */
   public void setLocaleId(String locale) {
     this.localeId = locale;

@@ -49,7 +49,9 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Code")
+@Schema(
+    description =
+        "Reference data in the form of a key-value pair that is used to classify or categorize other data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "codeCategoryId", "name", "value"})
 @XmlRootElement(name = "Code", namespace = "http://codes.inception.digital")

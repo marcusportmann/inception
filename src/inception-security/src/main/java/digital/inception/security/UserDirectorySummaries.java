@@ -32,11 +32,11 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * The <code>UserDirectorySummaries</code> class holds the results of a request to retrieve a list
- * of group members.
+ * of user directory summaries.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "UserDirectorySummaries")
+@Schema(description = "The results of a request to retrieve a list of user directory summaries")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "userDirectorySummaries",

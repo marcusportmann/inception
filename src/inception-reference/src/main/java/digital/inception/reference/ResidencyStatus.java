@@ -34,26 +34,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>AddressType</code> class holds the information for a possible address type.
+ * The <code>ResidencyStatus</code> class holds the information for a possible residency status.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "AddressType")
+@Schema(description = "A residency status for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "AddressType", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "ResidencyStatus", namespace = "http://reference.inception.digital")
 @XmlType(
-    name = "AddressType",
+    name = "ResidencyStatus",
     namespace = "http://reference.inception.digital",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "address_types")
-@IdClass(AddressTypeId.class)
-public class AddressType {
+@Table(schema = "reference", name = "residency_statuses")
+@IdClass(ResidencyStatusId.class)
+public class ResidencyStatus {
 
-  /** The code for the address type. */
-  @Schema(description = "The code for the address type", required = true)
+  /** The code for the residency status. */
+  @Schema(description = "The code for the residency status", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -62,8 +62,8 @@ public class AddressType {
   @Column(name = "code", nullable = false)
   private String code;
 
-  /** The description for the address type. */
-  @Schema(description = "The description for the address type", required = true)
+  /** The description for the residency status. */
+  @Schema(description = "The description for the residency status", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -71,8 +71,8 @@ public class AddressType {
   @Column(name = "description", nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the address type. */
-  @Schema(description = "The Unicode locale identifier for the address type", required = true)
+  /** The Unicode locale identifier for the residency status. */
+  @Schema(description = "The Unicode locale identifier for the residency status", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -81,8 +81,8 @@ public class AddressType {
   @Column(name = "locale_id", nullable = false)
   private String localeId;
 
-  /** The name of the address type. */
-  @Schema(description = "The name of the address type", required = true)
+  /** The name of the residency status. */
+  @Schema(description = "The name of the residency status", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -90,102 +90,102 @@ public class AddressType {
   @Column(name = "name", nullable = false)
   private String name;
 
-  /** The sort index for the address type. */
-  @Schema(description = "The sort index for the address type", required = true)
+  /** The sort index for the residency status. */
+  @Schema(description = "The sort index for the residency status", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>AddressType</code>. */
-  public AddressType() {}
+  /** Constructs a new <code>ResidencyStatus</code>. */
+  public ResidencyStatus() {}
 
   /**
-   * Returns the code for the address type.
+   * Returns the code for the residency status.
    *
-   * @return the code for the address type
+   * @return the code for the residency status
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the address type.
+   * Returns the description for the residency status.
    *
-   * @return the description for the address type
+   * @return the description for the residency status
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the address type.
+   * Returns the Unicode locale identifier for the residency status.
    *
-   * @return the Unicode locale identifier for the address type
+   * @return the Unicode locale identifier for the residency status
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the address type.
+   * Returns the name of the residency status.
    *
-   * @return the name of the address type
+   * @return the name of the residency status
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the address type.
+   * Returns the sort index for the residency status.
    *
-   * @return the sort index for the address type
+   * @return the sort index for the residency status
    */
   public Integer getSortIndex() {
     return sortIndex;
   }
 
   /**
-   * Set the code for the address type.
+   * Set the code for the residency status.
    *
-   * @param code the code for the address type
+   * @param code the code for the residency status
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the address type.
+   * Set the description for the residency status.
    *
-   * @param description the description for the address type
+   * @param description the description for the residency status
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the address type.
+   * Set the Unicode locale identifier for the residency status.
    *
-   * @param localeId the Unicode locale identifier for the address type
+   * @param localeId the Unicode locale identifier for the residency status
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the address type.
+   * Set the name of the residency status.
    *
-   * @param name the name of the address type
+   * @param name the name of the residency status
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the address type.
+   * Set the sort index for the residency status.
    *
-   * @param sortIndex the sort index for the address type
+   * @param sortIndex the sort index for the residency status
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

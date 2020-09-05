@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "NextOfKinType")
+@Schema(description = "A type of living relative for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "NextOfKinType", namespace = "http://reference.inception.digital")

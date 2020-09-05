@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "ValidationError")
+@Schema(description = "A validation error that occurred while validating an entity")
 @JsonPropertyOrder({"property", "message", "attributes"})
 @XmlRootElement(name = "ValidationError", namespace = "http://validation.inception.digital")
 @XmlType(

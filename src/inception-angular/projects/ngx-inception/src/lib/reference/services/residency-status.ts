@@ -15,45 +15,45 @@
  */
 
 /**
- * The AddressType class holds the information for an address type.
+ * The ResidencyStatus class holds the information for a residency status.
  *
  * @author Marcus Portmann
  */
-export class AddressType {
+export class ResidencyStatus {
 
   /**
-   * The code for the address type.
+   * The code for the residency status.
    */
   code: string;
 
   /**
-   * The description for the address type.
+   * The description for the residency status.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the address type.
+   * The Unicode locale identifier for the residency status.
    */
   localeId: string;
 
   /**
-   * The name of the address type.
+   * The name of the residency status.
    */
   name: string;
 
   /**
-   * The sort index for the address type.
+   * The sort index for the residency status.
    */
   sortIndex: number;
 
   /**
-   * Constructs a new AddressType.
+   * Constructs a new ResidencyStatus.
    *
-   * @param code        The code for the address type.
-   * @param localeId    The Unicode locale identifier for the address type.
-   * @param sortIndex   The sort index for the address type.
-   * @param name        The name of the address type.
-   * @param description The description for the address type.
+   * @param code        The code for the residency status.
+   * @param localeId    The Unicode locale identifier for the residency status.
+   * @param sortIndex   The sort index for the residency status.
+   * @param name        The name of the residency status.
+   * @param description The description for the residency status.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string) {
     this.code = code;

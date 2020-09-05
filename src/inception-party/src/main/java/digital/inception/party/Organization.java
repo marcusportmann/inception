@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(
     description =
-        "An organisation is an organised group of people with a particular purpose, such as a business or government department")
+        "An organised group of people with a particular purpose, such as a business or government department")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name"})
 @XmlRootElement(name = "Organization", namespace = "http://party.inception.digital")

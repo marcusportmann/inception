@@ -156,7 +156,9 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           String groupName,
-      @Parameter(name = "groupMember", description = "The group member", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The group member association to add",
+              required = true)
           @RequestBody
           GroupMember groupMember)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
@@ -264,7 +266,10 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           String groupName,
-      @Parameter(name = "groupRole", description = "The group role", required = true) @RequestBody
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The group role association to add",
+              required = true)
+          @RequestBody
           GroupRole groupRole)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
@@ -376,9 +381,8 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           UUID tenantId,
-      @Parameter(
-              name = "tenantUserDirectory",
-              description = "The tenant user directory",
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The tenant user directory association to add",
               required = true)
           @RequestBody
           TenantUserDirectory tenantUserDirectory)
@@ -473,7 +477,9 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           String username,
-      @Parameter(name = "passwordChange", description = "The password change", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The password change to apply",
+              required = true)
           @RequestBody
           PasswordChange passwordChange)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
@@ -591,7 +597,9 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           String username,
-      @Parameter(name = "passwordChange", description = "The password change", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The password change to apply",
+              required = true)
           @RequestBody
           PasswordChange passwordChange)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
@@ -717,7 +725,10 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           UUID userDirectoryId,
-      @Parameter(name = "group", description = "The group", required = true) @RequestBody
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The group to create",
+              required = true)
+          @RequestBody
           Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
           SecurityServiceException {
@@ -788,7 +799,10 @@ public class SecurityRestController extends SecureRestController {
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
   public void createTenant(
-      @Parameter(name = "tenant", description = "The tenant", required = true) @RequestBody
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The tenant to create",
+              required = true)
+          @RequestBody
           Tenant tenant,
       @Parameter(
               name = "createUserDirectory",
@@ -868,7 +882,11 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           UUID userDirectoryId,
-      @Parameter(name = "user", description = "The user", required = true) @RequestBody User user,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The user to create",
+              required = true)
+          @RequestBody
+          User user,
       @Parameter(
               name = "expiredPassword",
               description = "Create the user with its password expired")
@@ -947,7 +965,9 @@ public class SecurityRestController extends SecureRestController {
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Security.UserDirectoryAdministration')")
   public void createUserDirectory(
-      @Parameter(name = "userDirectory", description = "The user directory", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The user directory to create",
+              required = true)
           @RequestBody
           UserDirectory userDirectory)
       throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException {
@@ -3237,7 +3257,10 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           String groupName,
-      @Parameter(name = "group", description = "The group", required = true) @RequestBody
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The group to update",
+              required = true)
+          @RequestBody
           Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
@@ -3322,7 +3345,10 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           UUID tenantId,
-      @Parameter(name = "tenant", description = "The tenant", required = true) @RequestBody
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The tenant to update",
+              required = true)
+          @RequestBody
           Tenant tenant)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -3407,7 +3433,11 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           String username,
-      @Parameter(name = "user", description = "The user", required = true) @RequestBody User user,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The user to update",
+              required = true)
+          @RequestBody
+          User user,
       @Parameter(name = "expirePassword", description = "Expire the user's password")
           @RequestParam(value = "expirePassword", required = false)
           Boolean expirePassword,
@@ -3501,7 +3531,9 @@ public class SecurityRestController extends SecureRestController {
               required = true)
           @PathVariable
           UUID userDirectoryId,
-      @Parameter(name = "userDirectory", description = "The user directory", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The user directory to update",
+              required = true)
           @RequestBody
           UserDirectory userDirectory)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {

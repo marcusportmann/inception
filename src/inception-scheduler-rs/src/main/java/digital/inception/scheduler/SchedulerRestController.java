@@ -114,7 +114,11 @@ public class SchedulerRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
           + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public void createJob(
-      @Parameter(name = "job", description = "The job", required = true) @RequestBody Job job)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The job to create",
+              required = true)
+          @RequestBody
+          Job job)
       throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException {
     if (job == null) {
       throw new InvalidArgumentException("job");
@@ -369,7 +373,11 @@ public class SchedulerRestController extends SecureRestController {
               required = true)
           @PathVariable
           String jobId,
-      @Parameter(name = "job", description = "The job", required = true) @RequestBody Job job)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The job to update",
+              required = true)
+          @RequestBody
+          Job job)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
     if (StringUtils.isEmpty(jobId)) {
       throw new InvalidArgumentException("jobId");

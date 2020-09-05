@@ -51,7 +51,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "UserDirectorySummary")
+@Schema(description = "A user directory summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name"})
 @XmlRootElement(name = "UserDirectorySummary", namespace = "http://security.inception.digital")

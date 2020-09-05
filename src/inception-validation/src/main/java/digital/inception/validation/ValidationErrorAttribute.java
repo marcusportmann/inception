@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "ValidationErrorAttribute")
+@Schema(description = "An attribute associated with a validation error")
 @JsonPropertyOrder({"name", "value"})
 @XmlRootElement(
     name = "ValidationErrorAttribute",

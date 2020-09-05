@@ -25,12 +25,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>PermitTypeRepository</code> interface declares the repository for the <code>PermitType
- * </code> domain type.
+ * The <code>PhysicalAddressTypeRepository</code> interface declares the repository for the <code>
+ * PhysicalAddressType</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface PermitTypeRepository extends JpaRepository<PermitType, PermitTypeId> {
+public interface PhysicalAddressTypeRepository
+    extends JpaRepository<PhysicalAddressType, PhysicalAddressTypeId> {
 
-  List<PermitType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  List<PhysicalAddressType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Attribute")
+@Schema(description = "An attribute in the form of a name-value pair for a security entity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "Attribute", namespace = "http://security.inception.digital")

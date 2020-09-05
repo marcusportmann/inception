@@ -48,7 +48,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "MailTemplate")
+@Schema(description = "A template for an e-mail sent by an application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "contentType", "template"})
 @XmlRootElement(name = "MailTemplate", namespace = "http://mail.inception.digital")

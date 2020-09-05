@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "GenerateReportRequest")
+@Schema(description = "A request to generate a report")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"reportDefinitionId", "reportParameters"})
 @SuppressWarnings({"unused", "WeakerAccess"})

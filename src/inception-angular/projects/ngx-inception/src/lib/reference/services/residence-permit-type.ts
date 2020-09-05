@@ -15,51 +15,51 @@
  */
 
 /**
- * The PermitType class holds the information for a permit type.
+ * The ResidencePermitType class holds the information for a residence permit type.
  *
  * @author Marcus Portmann
  */
-export class PermitType {
+export class ResidencePermitType {
 
   /**
-   * The code for the permit type.
+   * The code for the residence permit type.
    */
   code: string;
 
   /**
-   * The code identifying the country of issue for the permit type.
+   * The code identifying the country of issue for the residence permit type.
    */
   countryOfIssue: string;
 
   /**
-   * The description for the permit type.
+   * The description for the residence permit type.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the permit type.
+   * The Unicode locale identifier for the residence permit type.
    */
   localeId: string;
 
   /**
-   * The name of the permit type.
+   * The name of the residence permit type.
    */
   name: string;
 
   /**
-   * The sort index for the permit type.
+   * The sort index for the residence permit type.
    */
   sortIndex: number;
 
   /**
-   * Constructs a new PermitType.
+   * Constructs a new ResidencePermitType.
    *
-   * @param code           The code for the permit type.
-   * @param localeId       The Unicode locale identifier for the permit type.
-   * @param sortIndex      The sort index for the permit type.
-   * @param name           The name of the permit type.
-   * @param description    The description for the permit type.
-   * @param countryOfIssue The code identifying the country of issue for the permit type.
+   * @param code           The code for the residence permit type.
+   * @param localeId       The Unicode locale identifier for the residence permit type.
+   * @param sortIndex      The sort index for the residence permit type.
+   * @param name           The name of the residence permit type.
+   * @param description    The description for the residence permit type.
+   * @param countryOfIssue The code identifying the country of issue for the residence permit type.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               countryOfIssue: string) {

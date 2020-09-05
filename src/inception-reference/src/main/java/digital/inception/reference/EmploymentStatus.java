@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "EmploymentStatus")
+@Schema(description = "An employment status for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "EmploymentStatus", namespace = "http://reference.inception.digital")

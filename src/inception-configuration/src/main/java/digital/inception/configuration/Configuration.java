@@ -48,7 +48,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Configuration")
+@Schema(description = "A configuration value uniquely identified by a key")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"key", "value", "description"})
 @XmlRootElement(name = "Configuration", namespace = "http://configuration.inception.digital")

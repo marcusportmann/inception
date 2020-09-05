@@ -130,7 +130,11 @@ public class CodesRestController extends SecureRestController {
               required = true)
           @PathVariable
           String codeCategoryId,
-      @Parameter(name = "code", description = "The code", required = true) @RequestBody Code code)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The code to create",
+              required = true)
+          @RequestBody
+          Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
           CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
@@ -196,8 +200,10 @@ public class CodesRestController extends SecureRestController {
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @PreAuthorize("hasRole('Administrator') or hasAuthority('FUNCTION_Codes.CodeAdministration')")
   public void createCodeCategory(
-      @Parameter(name = "codeCategory", description = "The code category", required = true)
-          @RequestBody
+      @RequestBody
+          @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The code category to create",
+              required = true)
           CodeCategory codeCategory)
       throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException {
     if (codeCategory == null) {
@@ -859,7 +865,11 @@ public class CodesRestController extends SecureRestController {
               required = true)
           @PathVariable
           String codeId,
-      @Parameter(name = "code", description = "The code", required = true) @RequestBody Code code)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The code to update",
+              required = true)
+          @RequestBody
+          Code code)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
     if (StringUtils.isEmpty(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
@@ -939,7 +949,9 @@ public class CodesRestController extends SecureRestController {
               required = true)
           @PathVariable
           String codeCategoryId,
-      @Parameter(name = "codeCategory", description = "The code category", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The code category to update",
+              required = true)
           @RequestBody
           CodeCategory codeCategory)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {

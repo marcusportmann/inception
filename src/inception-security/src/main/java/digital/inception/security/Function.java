@@ -43,12 +43,14 @@ import javax.xml.bind.annotation.XmlType;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>Function</code> class holds the information for an authorised function that can be
- * assigned to <code>Role</code>s.
+ * The <code>Function</code> class holds the information for a discrete unit of functionality for an
+ * application that can be assigned to <code>Role</code>s.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Function")
+@Schema(
+    description =
+        "A discrete unit of functionality for an application that can be assigned to a role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "description"})
 @XmlRootElement(name = "Function", namespace = "http://security.inception.digital")

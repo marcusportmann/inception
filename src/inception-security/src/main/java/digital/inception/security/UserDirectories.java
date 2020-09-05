@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "UserDirectories")
+@Schema(description = "The results of a request to retrieve a list of user directories")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectories", "total", "filter", "sortDirection", "pageIndex", "pageSize"})
 @XmlRootElement(name = "UserDirectories", namespace = "http://security.inception.digital")

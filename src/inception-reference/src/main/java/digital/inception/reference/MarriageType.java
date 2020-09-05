@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "MarriageType")
+@Schema(description = "A type of marriage")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"maritalStatus", "code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "MarriageType", namespace = "http://reference.inception.digital")

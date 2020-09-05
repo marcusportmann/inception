@@ -104,7 +104,15 @@ public class PartyServiceTest {
     Person person = new Person();
 
     person.setId(UuidCreator.getShortPrefixComb());
-    person.setName("GivenName" + personCount + " " + "MiddleName" + personCount + " " + "Surname" + personCount);
+    person.setName(
+        "GivenName"
+            + personCount
+            + " "
+            + "MiddleName"
+            + personCount
+            + " "
+            + "Surname"
+            + personCount);
     person.setPreferredName("PreferredName" + personCount);
     person.setTitle("1");
     person.setGivenName("GivenName" + personCount);
@@ -125,6 +133,7 @@ public class PartyServiceTest {
     zaidcIdentityDocument.setId(UuidCreator.getShortPrefixComb());
     zaidcIdentityDocument.setType("ZAIDCARD");
     zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
+    zaidcIdentityDocument.setCountryOfIssue("ZA");
 
     person.addIdentityDocument(zaidcIdentityDocument);
 
@@ -143,6 +152,7 @@ public class PartyServiceTest {
     zaidcIdentityDocument.setId(UuidCreator.getShortPrefixComb());
     zaidcIdentityDocument.setType("ZAIDCARD");
     zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
+    zaidcIdentityDocument.setCountryOfIssue("ZA");
 
     person.addIdentityDocument(zaidcIdentityDocument);
 
@@ -265,6 +275,8 @@ public class PartyServiceTest {
     passportIdentityDocument.setId(UuidCreator.getShortPrefixComb());
     passportIdentityDocument.setType("PASSPORT");
     passportIdentityDocument.setDateOfIssue(LocalDate.of(2016, 10, 7));
+    passportIdentityDocument.setDateOfExpiry(LocalDate.of(2025, 9, 1));
+    passportIdentityDocument.setCountryOfIssue("ZA");
 
     person.addIdentityDocument(passportIdentityDocument);
 
@@ -309,8 +321,6 @@ public class PartyServiceTest {
 
   private void comparePersons(Person person1, Person person2) {
 
-
-
     assertEquals(
         "The country of birth values for the two persons do not match",
         person1.getCountryOfBirth(),
@@ -335,17 +345,26 @@ public class PartyServiceTest {
     assertEquals(
         "The ID values for the two persons do not match", person1.getId(), person2.getId());
     assertEquals(
-        "The initials values for the two persons do not match", person1.getInitials(), person2.getInitials());
+        "The initials values for the two persons do not match",
+        person1.getInitials(),
+        person2.getInitials());
     assertEquals(
-        "The maiden name values for the two persons do not match", person1.getMaidenName(), person2.getMaidenName());
+        "The maiden name values for the two persons do not match",
+        person1.getMaidenName(),
+        person2.getMaidenName());
     assertEquals(
-        "The marital status values for the two persons do not match", person1.getMaritalStatus(), person2.getMaritalStatus());
+        "The marital status values for the two persons do not match",
+        person1.getMaritalStatus(),
+        person2.getMaritalStatus());
     assertEquals(
-        "The marriage type values for the two persons do not match", person1.getMarriageType(), person2.getMarriageType());
+        "The marriage type values for the two persons do not match",
+        person1.getMarriageType(),
+        person2.getMarriageType());
 
-
     assertEquals(
-        "The middle names values for the two persons do not match", person1.getMiddleNames(), person2.getMiddleNames());
+        "The middle names values for the two persons do not match",
+        person1.getMiddleNames(),
+        person2.getMiddleNames());
     assertEquals(
         "The name values for the two persons do not match", person1.getName(), person2.getName());
     assertEquals(
@@ -353,9 +372,7 @@ public class PartyServiceTest {
         person1.getPreferredName(),
         person2.getPreferredName());
     assertEquals(
-        "The race values for the two persons do not match",
-        person1.getRace(),
-        person2.getRace());
+        "The race values for the two persons do not match", person1.getRace(), person2.getRace());
 
     assertEquals(
         "The surname values for the two persons do not match",
@@ -365,9 +382,6 @@ public class PartyServiceTest {
         "The title values for the two persons do not match",
         person1.getTitle(),
         person2.getTitle());
-
-
-
 
     assertEquals(
         "The number of identity documents for the two persons do not match",

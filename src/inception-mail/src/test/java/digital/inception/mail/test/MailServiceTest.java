@@ -18,7 +18,6 @@ package digital.inception.mail.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

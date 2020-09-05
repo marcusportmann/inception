@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "ReportParameter")
+@Schema(description = "A parameter associated with a report")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "ReportParameter", namespace = "http://reporting.inception.digital")

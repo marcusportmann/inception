@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "VerificationStatus")
+@Schema(description = "A verification status for an item of information")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "VerificationStatus", namespace = "http://reference.inception.digital")

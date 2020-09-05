@@ -45,7 +45,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Party")
+@Schema(description = "A person or organization")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name"})
 @XmlRootElement(name = "Party", namespace = "http://party.inception.digital")

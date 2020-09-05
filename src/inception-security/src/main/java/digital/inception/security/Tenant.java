@@ -55,7 +55,9 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Tenant")
+@Schema(
+    description =
+        "A group of users who share common access with specific privileges to a particular subset of the information managed by a multi-tenant application")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "status"})
 @XmlRootElement(name = "Tenant", namespace = "http://security.inception.digital")

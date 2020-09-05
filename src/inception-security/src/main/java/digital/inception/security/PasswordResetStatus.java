@@ -33,7 +33,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The password reset status, i.e. 0 = Unknown, 1 = Requested, 2 = Completed, 3 = Expired")
+@Schema(
+    description =
+        "The password reset status, i.e. 0 = Unknown, 1 = Requested, 2 = Completed, 3 = Expired")
 @XmlEnum
 @XmlType(name = "PasswordResetStatus", namespace = "http://security.inception.digital")
 public enum PasswordResetStatus {

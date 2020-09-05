@@ -89,12 +89,14 @@ COMMENT ON COLUMN party.persons.updated IS 'The date and time the person was las
 
 
 CREATE TABLE party.identity_documents (
-  id            UUID        NOT NULL,
-  person_id     UUID        NOT NULL,
-  type          VARCHAR(10) NOT NULL,
-  date_of_issue DATE        NOT NULL,
-  created       TIMESTAMP   NOT NULL,
-  updated       TIMESTAMP,
+  id               UUID        NOT NULL,
+  person_id        UUID        NOT NULL,
+  type             VARCHAR(10) NOT NULL,
+  date_of_issue    DATE        NOT NULL,
+  date_of_expiry   DATE,
+  country_of_issue VARCHAR(10) NOT NULL,
+  created          TIMESTAMP   NOT NULL,
+  updated          TIMESTAMP,
 
   PRIMARY KEY (id),
   CONSTRAINT identity_documents_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
@@ -109,6 +111,10 @@ COMMENT ON COLUMN party.identity_documents.person_id IS 'The Universally Unique 
 COMMENT ON COLUMN party.identity_documents.type IS 'The code identifying the type of identity document';
 
 COMMENT ON COLUMN party.identity_documents.date_of_issue IS 'The date of issue for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.date_of_expiry IS 'The optional date of expiry for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The code identifying the country of issue for the identity document';
 
 COMMENT ON COLUMN party.identity_documents.created IS 'The date and time the identity document was created';
 
@@ -129,6 +135,36 @@ COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (
 COMMENT ON COLUMN party.organizations.created IS 'The date and time the organization was created';
 
 COMMENT ON COLUMN party.organizations.updated IS 'The date and time the organization was last updated';
+
+--
+-- CREATE TABLE party.contact_mechanisms (
+--   id       UUID    NOT NULL,
+--   type     INTEGER NOT NULL,
+--
+--   PRIMARY KEY (id)
+-- );
+--
+-- COMMENT ON COLUMN party.contact_mechanisms.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the contact mechanism';
+--
+-- COMMENT ON COLUMN party.contact_mechanisms.type IS 'The code identifying the type of contact mechanism';
+--
+--
+--
+-- CREATE TABLE party.person_contact_mechanisms (
+--   person_id       UUID    NOT NULL,
+--   contact_mechanism_id       UUID    NOT NULL,
+--
+--   PRIMARY KEY (person_id, contact_mechanism_id),
+--   CONSTRAINT person_contact_mechanisms_party_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE,
+--   CONSTRAINT person_contact_mechanisms_contact_mechanism_fk FOREIGN KEY (contact_mechanism_id) REFERENCES party.contact_mechanisms(id) ON DELETE CASCADE
+-- );
+--
+-- COMMENT ON COLUMN party.person_contact_mechanisms.party_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the person the person contact mechanism is associated with';
+--
+-- COMMENT ON COLUMN party.person_contact_mechanisms.contact_mechanism_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the contact mechanism the person contact mechanism is associated with';
+--
+
+
 
 
 -- -------------------------------------------------------------------------------------------------

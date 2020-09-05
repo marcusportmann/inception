@@ -20,7 +20,6 @@ import {debounceTime, first, map, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {ReferenceService} from "ngx-inception";
-import {AddressType} from "ngx-inception";
 import {CommunicationMethod} from "ngx-inception";
 import {Country} from "ngx-inception";
 import {EmploymentStatus} from "ngx-inception";
@@ -33,9 +32,10 @@ import {MarriageType} from "ngx-inception";
 import {MinorType} from "ngx-inception";
 import {NextOfKinType} from "ngx-inception";
 import {Occupation} from "ngx-inception";
-import {PermitType} from "ngx-inception";
+import {PhysicalAddressType} from "ngx-inception";
 import {Race} from "ngx-inception";
-import {ResidentialStatus} from "ngx-inception";
+import {ResidencePermitType} from "ngx-inception";
+import {ResidencyStatus} from "ngx-inception";
 import {Region} from "ngx-inception";
 import {ResidentialType} from "ngx-inception";
 import {SourceOfFunds} from "ngx-inception";
@@ -56,8 +56,6 @@ import {VerificationStatus} from "ngx-inception";
 export class ReferenceFormComponent implements OnInit, OnDestroy {
 
   referenceForm: FormGroup;
-
-  filteredAddressTypes$: Subject<AddressType[]> = new ReplaySubject<AddressType[]>();
 
   filteredCommunicationMethods$: Subject<CommunicationMethod[]> = new ReplaySubject<CommunicationMethod[]>();
 
@@ -83,15 +81,17 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
 
   filteredOccupations$: Subject<Occupation[]> = new ReplaySubject<Occupation[]>();
 
-  filteredPermitTypes$: Subject<PermitType[]> = new ReplaySubject<PermitType[]>();
+  filteredPhysicalAddressTypes$: Subject<PhysicalAddressType[]> = new ReplaySubject<PhysicalAddressType[]>();
 
   filteredRaces$: Subject<Race[]> = new ReplaySubject<Race[]>();
 
   filteredRegions$: Subject<Region[]> = new ReplaySubject<Region[]>();
 
-  filteredResidentialStatuses$: Subject<ResidentialStatus[]> = new ReplaySubject<ResidentialStatus[]>();
+  filteredResidencePermitTypes$: Subject<ResidencePermitType[]> = new ReplaySubject<ResidencePermitType[]>();
 
-  filteredResidentialTypes$: Subject<ResidentialStatus[]> = new ReplaySubject<ResidentialStatus[]>();
+  filteredResidencyStatuses$: Subject<ResidencyStatus[]> = new ReplaySubject<ResidencyStatus[]>();
+
+  filteredResidentialTypes$: Subject<ResidentialType[]> = new ReplaySubject<ResidentialType[]>();
 
   filteredSourcesOfFunds$: Subject<SourceOfFunds[]> = new ReplaySubject<SourceOfFunds[]>();
 
@@ -114,7 +114,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       // hideRequired: false,
       // floatLabel: 'auto',
       // tslint:disable-next-line
-      addressType: ['', Validators.required],
       communicationMethod: ['', Validators.required],
       country: ['', Validators.required],
       employmentStatus: ['', Validators.required],
@@ -127,10 +126,11 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       minorType: ['', Validators.required],
       nextOfKinType: ['', Validators.required],
       occupation: ['', Validators.required],
-      permitType: ['', Validators.required],
+      physicalAddressType: ['', Validators.required],
       race: ['', Validators.required],
       region: ['', Validators.required],
-      residentialStatus: ['', Validators.required],
+      residencePermitType: ['', Validators.required],
+      residencyStatus: ['', Validators.required],
       residentialType: ['', Validators.required],
       sourceOfFunds: ['', Validators.required],
       suitableTimeToContact: ['', Validators.required],
@@ -139,14 +139,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       verificationMethod: ['', Validators.required],
       verificationStatus: ['', Validators.required]
     });
-  }
-
-  displayAddressType(addressType: AddressType): string {
-    if (!!addressType) {
-      return addressType.name;
-    } else {
-      return '';
-    }
   }
 
   displayCommunicationMethod(communicationMethod: CommunicationMethod): string {
@@ -245,9 +237,9 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayPermitType(permitType: PermitType): string {
-    if (!!permitType) {
-      return permitType.name;
+  displayPhysicalAddressType(physicalAddressType: PhysicalAddressType): string {
+    if (!!physicalAddressType) {
+      return physicalAddressType.name;
     } else {
       return '';
     }
@@ -269,9 +261,17 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayResidentialStatus(residentialStatus: ResidentialStatus): string {
-    if (!!residentialStatus) {
-      return residentialStatus.name;
+  displayResidencePermitType(residencePermitType: ResidencePermitType): string {
+    if (!!residencePermitType) {
+      return residencePermitType.name;
+    } else {
+      return '';
+    }
+  }
+
+  displayResidencyStatus(residencyStatus: ResidencyStatus): string {
+    if (!!residencyStatus) {
+      return residencyStatus.name;
     } else {
       return '';
     }
@@ -334,25 +334,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.referenceService.getAddressTypes().pipe(first()).subscribe((addressTypes: AddressType[]) => {
-      const addressTypeControl = this.referenceForm.get('addressType');
-
-      if (addressTypeControl) {
-        this.subscriptions.add(addressTypeControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | AddressType) => {
-            if (typeof (value) === 'string') {
-              this.filteredAddressTypes$.next(addressTypes.filter(
-                addressType => addressType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
-            } else {
-              this.filteredAddressTypes$.next(addressTypes.filter(
-                addressType => addressType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
-            }
-          })).subscribe());
-      }
-    });
-
     this.referenceService.getCommunicationMethods().pipe(first()).subscribe((communicationMethods: CommunicationMethod[]) => {
       const communicationMethodControl = this.referenceForm.get('communicationMethod');
 
@@ -582,25 +563,24 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.referenceService.getPermitTypes().pipe(first()).subscribe((permitTypes: PermitType[]) => {
-      const permitTypeControl = this.referenceForm.get('permitType');
+    this.referenceService.getPhysicalAddressTypes().pipe(first()).subscribe((physicalAddressTypes: PhysicalAddressType[]) => {
+      const physicalAddressTypeControl = this.referenceForm.get('physicalAddressType');
 
-      if (permitTypeControl) {
-        this.subscriptions.add(permitTypeControl.valueChanges.pipe(
+      if (physicalAddressTypeControl) {
+        this.subscriptions.add(physicalAddressTypeControl.valueChanges.pipe(
           startWith(''),
           debounceTime(500),
-          map((value: string | PermitType) => {
+          map((value: string | PhysicalAddressType) => {
             if (typeof (value) === 'string') {
-              this.filteredPermitTypes$.next(permitTypes.filter(
-                permitType => permitType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              this.filteredPhysicalAddressTypes$.next(physicalAddressTypes.filter(
+                physicalAddressType => physicalAddressType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
             } else {
-              this.filteredPermitTypes$.next(permitTypes.filter(
-                permitType => permitType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              this.filteredPhysicalAddressTypes$.next(physicalAddressTypes.filter(
+                physicalAddressType => physicalAddressType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
             }
           })).subscribe());
       }
     });
-
 
     this.referenceService.getRaces().pipe(first()).subscribe((races: Race[]) => {
       const raceControl = this.referenceForm.get('race');
@@ -640,20 +620,38 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.referenceService.getResidencePermitTypes().pipe(first()).subscribe((residencePermitTypes: ResidencePermitType[]) => {
+      const residencePermitTypeControl = this.referenceForm.get('residencePermitType');
 
-    this.referenceService.getResidentialStatuses().pipe(first()).subscribe((residentialStatuses: ResidentialStatus[]) => {
-      const residentialStatusControl = this.referenceForm.get('residentialStatus');
-
-      if (residentialStatusControl) {
-        this.subscriptions.add(residentialStatusControl.valueChanges.pipe(
+      if (residencePermitTypeControl) {
+        this.subscriptions.add(residencePermitTypeControl.valueChanges.pipe(
           startWith(''),
           debounceTime(500),
-          map((value: string | ResidentialStatus) => {
+          map((value: string | ResidencePermitType) => {
             if (typeof (value) === 'string') {
-              this.filteredResidentialStatuses$.next(residentialStatuses.filter(
+              this.filteredResidencePermitTypes$.next(residencePermitTypes.filter(
+                permitType => permitType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+            } else {
+              this.filteredResidencePermitTypes$.next(residencePermitTypes.filter(
+                permitType => permitType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+            }
+          })).subscribe());
+      }
+    });
+
+    this.referenceService.getResidencyStatuses().pipe(first()).subscribe((residencyStatuses: ResidencyStatus[]) => {
+      const residencyStatusControl = this.referenceForm.get('residencyStatus');
+
+      if (residencyStatusControl) {
+        this.subscriptions.add(residencyStatusControl.valueChanges.pipe(
+          startWith(''),
+          debounceTime(500),
+          map((value: string | ResidencyStatus) => {
+            if (typeof (value) === 'string') {
+              this.filteredResidencyStatuses$.next(residencyStatuses.filter(
                 residentialStatus => residentialStatus.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
             } else {
-              this.filteredResidentialStatuses$.next(residentialStatuses.filter(
+              this.filteredResidencyStatuses$.next(residencyStatuses.filter(
                 residentialStatus => residentialStatus.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
             }
           })).subscribe());
@@ -678,7 +676,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
           })).subscribe());
       }
     });
-
 
     this.referenceService.getSourcesOfFunds().pipe(first()).subscribe((sourceOfFunds: SourceOfFunds[]) => {
       const sourceOfFundsControl = this.referenceForm.get('sourceOfFunds');
@@ -796,7 +793,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ok(): void {
-    console.log('Address Type = ', this.referenceForm.get('addressType')!.value);
     console.log('Communication Method = ', this.referenceForm.get('communicationMethod')!.value);
     console.log('Country = ', this.referenceForm.get('country')!.value);
     console.log('Employment Status = ', this.referenceForm.get('employmentStatus')!.value);
@@ -809,10 +805,11 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
     console.log('Minor Type = ', this.referenceForm.get('minorType')!.value);
     console.log('Next Of Kin Type = ', this.referenceForm.get('nextOfKinType')!.value);
     console.log('Occupation = ', this.referenceForm.get('occupation')!.value);
-    console.log('Permit Type = ', this.referenceForm.get('permitType')!.value);
+    console.log('Physical Address Type = ', this.referenceForm.get('physicalAddressType')!.value);
     console.log('Race = ', this.referenceForm.get('race')!.value);
     console.log('Region = ', this.referenceForm.get('region')!.value);
-    console.log('Residential Status = ', this.referenceForm.get('residentialStatus')!.value);
+    console.log('Residence Permit Type = ', this.referenceForm.get('residencePermitType')!.value);
+    console.log('Residency Status = ', this.referenceForm.get('residencyStatus')!.value);
     console.log('Residential Type = ', this.referenceForm.get('residentialType')!.value);
     console.log('Source Of Funds = ', this.referenceForm.get('sourceOfFunds')!.value);
     console.log('Suitable Time To Contact = ', this.referenceForm.get('suitableTimeToContact')!.value);

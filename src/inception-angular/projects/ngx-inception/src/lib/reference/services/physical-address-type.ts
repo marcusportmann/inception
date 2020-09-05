@@ -15,45 +15,45 @@
  */
 
 /**
- * The ResidentialStatus class holds the information for a residential status.
+ * The PhysicalAddressType class holds the information for a physical address type.
  *
  * @author Marcus Portmann
  */
-export class ResidentialStatus {
+export class PhysicalAddressType {
 
   /**
-   * The code for the residential status.
+   * The code for the physical address type.
    */
   code: string;
 
   /**
-   * The description for the residential status.
+   * The description for the physical address type.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the residential status.
+   * The Unicode locale identifier for the physical address type.
    */
   localeId: string;
 
   /**
-   * The name of the residential status.
+   * The name of the physical address type.
    */
   name: string;
 
   /**
-   * The sort index for the residential status.
+   * The sort index for the physical address type.
    */
   sortIndex: number;
 
   /**
-   * Constructs a new ResidentialStatus.
+   * Constructs a new PhysicalAddressType.
    *
-   * @param code        The code for the residential status.
-   * @param localeId    The Unicode locale identifier for the residential status.
-   * @param sortIndex   The sort index for the residential status.
-   * @param name        The name of the residential status.
-   * @param description The description for the residential status.
+   * @param code        The code for the physical address type.
+   * @param localeId    The Unicode locale identifier for the physical address type.
+   * @param sortIndex   The sort index for the physical address type.
+   * @param name        The name of the physical address type.
+   * @param description The description for the physical address type.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string) {
     this.code = code;

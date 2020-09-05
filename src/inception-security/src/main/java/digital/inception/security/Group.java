@@ -55,7 +55,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Group")
+@Schema(description = "A group of users")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"userDirectoryId", "name", "description"})
 @XmlRootElement(name = "Group", namespace = "http://security.inception.digital")

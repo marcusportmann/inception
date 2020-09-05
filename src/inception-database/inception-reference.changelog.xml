@@ -22,24 +22,6 @@
       create schema reference
     </sql>
 
-    <createTable schemaName="reference" tableName="address_types" remarks="Address Types">
-      <column name="code" type="nvarchar(10)" remarks="The code for the address type"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the address type"/>
-      <column name="sort_index" type="int" remarks="The sort index for the address type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the address type"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the address type"/>
-    </createTable>
-    <addPrimaryKey schemaName="reference" tableName="address_types" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="code"/>
-    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="sort_index"/>
-    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="name"/>
-    <addNotNullConstraint schemaName="reference" tableName="address_types" columnName="description"/>
-    <addDefaultValue schemaName="reference" tableName="address_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="address_types_locale_ix" schemaName="reference" tableName="address_types">
-      <column name="locale_id"/>
-    </createIndex>
-
     <createTable schemaName="reference" tableName="communication_methods" remarks="Communication Methods">
       <column name="code" type="nvarchar(10)" remarks="The code for the communication method"/>
       <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the communication method"/>
@@ -77,6 +59,7 @@
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="description"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="sovereign_state"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="nationality"/>
+    <addDefaultValue schemaName="reference" tableName="countries" columnName="description" defaultValue=""/>
     <createIndex indexName="countries_locale_ix" schemaName="reference" tableName="countries">
       <column name="locale_id"/>
     </createIndex>
@@ -157,9 +140,10 @@
     <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="sort_index"/>
     <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="description"/>
-    <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="country_of_issue"/>
+    <addForeignKeyConstraint constraintName="identity_document_types_country_fk" baseTableSchemaName="reference"
+      baseTableName="identity_document_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
+      referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
     <addDefaultValue schemaName="reference" tableName="identity_document_types" columnName="description" defaultValue=""/>
-    <addDefaultValue schemaName="reference" tableName="identity_document_types" columnName="country_of_issue" defaultValue=""/>
     <createIndex indexName="identity_document_types_locale_ix" schemaName="reference" tableName="identity_document_types">
       <column name="locale_id"/>
     </createIndex>
@@ -285,30 +269,22 @@
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable schemaName="reference" tableName="permit_types" remarks="Permit Types">
-      <column name="code" type="nvarchar(10)" remarks="The code for the permit type"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the permit type"/>
-      <column name="sort_index" type="int" remarks="The sort index for the permit type"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the permit type"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the permit type"/>
-      <column name="country_of_issue" type="nvarchar(10)" remarks="The code identifying the country of issue for the permit type"/>
+    <createTable schemaName="reference" tableName="physical_address_types" remarks="Physical Address Types">
+      <column name="code" type="nvarchar(10)" remarks="The code for the physical address type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the physical address type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the physical address type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the physical address type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the physical address type"/>
     </createTable>
-    <addPrimaryKey schemaName="reference" tableName="permit_types" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="code"/>
-    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="sort_index"/>
-    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="name"/>
-    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="description"/>
-    <addNotNullConstraint schemaName="reference" tableName="permit_types" columnName="country_of_issue"/>
-    <addForeignKeyConstraint constraintName="permit_types_country_fk" baseTableSchemaName="reference"
-      baseTableName="permit_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
-      referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
-    <addDefaultValue schemaName="reference" tableName="permit_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="permit_types_locale_ix" schemaName="reference" tableName="permit_types">
+    <addPrimaryKey schemaName="reference" tableName="physical_address_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="reference" tableName="physical_address_types" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="physical_address_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="reference" tableName="physical_address_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="physical_address_types" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="physical_address_types" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="physical_address_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="physical_address_types_locale_ix" schemaName="reference" tableName="physical_address_types">
       <column name="locale_id"/>
-    </createIndex>
-    <createIndex indexName="permit_types_country_of_issue_ix" schemaName="reference" tableName="permit_types">
-      <column name="country_of_issue"/>
     </createIndex>
 
     <createTable schemaName="reference" tableName="races" remarks="Races">
@@ -355,21 +331,47 @@
       <column name="locale_id"/>
     </createIndex>
 
-    <createTable schemaName="reference" tableName="residential_statuses" remarks="Residential Statuses">
-      <column name="code" type="nvarchar(10)" remarks="The code for the residential status"/>
-      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residential status"/>
-      <column name="sort_index" type="int" remarks="The sort index for the residential status"/>
-      <column name="name" type="nvarchar(50)" remarks="The name of the residential status"/>
-      <column name="description" type="nvarchar(200)" remarks="The description for the residential status"/>
+    <createTable schemaName="reference" tableName="residence_permit_types" remarks="Residence Permit Types">
+      <column name="code" type="nvarchar(10)" remarks="The code for the residence permit type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residence permit type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the residence permit type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the residence permit type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the residence permit type"/>
+      <column name="country_of_issue" type="nvarchar(10)" remarks="The code identifying the country of issue for the residence permit type"/>
     </createTable>
-    <addPrimaryKey schemaName="reference" tableName="residential_statuses" columnNames="code,locale_id"/>
-    <addNotNullConstraint schemaName="reference" tableName="residential_statuses" columnName="code"/>
-    <addNotNullConstraint schemaName="reference" tableName="residential_statuses" columnName="locale_id"/>
-    <addNotNullConstraint schemaName="reference" tableName="residential_statuses" columnName="sort_index"/>
-    <addNotNullConstraint schemaName="reference" tableName="residential_statuses" columnName="name"/>
-    <addNotNullConstraint schemaName="reference" tableName="residential_statuses" columnName="description"/>
-    <addDefaultValue schemaName="reference" tableName="residential_statuses" columnName="description" defaultValue=""/>
-    <createIndex indexName="residential_statuses_locale_ix" schemaName="reference" tableName="residential_statuses">
+    <addPrimaryKey schemaName="reference" tableName="residence_permit_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="reference" tableName="residence_permit_types" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="residence_permit_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="reference" tableName="residence_permit_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="residence_permit_types" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="residence_permit_types" columnName="description"/>
+    <addNotNullConstraint schemaName="reference" tableName="residence_permit_types" columnName="country_of_issue"/>
+    <addForeignKeyConstraint constraintName="residence_permit_types_country_fk" baseTableSchemaName="reference"
+      baseTableName="residence_permit_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
+      referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="reference" tableName="residence_permit_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="residence_permit_types_locale_ix" schemaName="reference" tableName="residence_permit_types">
+      <column name="locale_id"/>
+    </createIndex>
+    <createIndex indexName="residence_permit_types_country_of_issue_ix" schemaName="reference" tableName="residence_permit_types">
+      <column name="country_of_issue"/>
+    </createIndex>    
+    
+    <createTable schemaName="reference" tableName="residency_statuses" remarks="Residency Statuses">
+      <column name="code" type="nvarchar(10)" remarks="The code for the residency status"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the residency status"/>
+      <column name="sort_index" type="int" remarks="The sort index for the residency status"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the residency status"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the residency status"/>
+    </createTable>
+    <addPrimaryKey schemaName="reference" tableName="residency_statuses" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="reference" tableName="residency_statuses" columnName="code"/>
+    <addNotNullConstraint schemaName="reference" tableName="residency_statuses" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="reference" tableName="residency_statuses" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="reference" tableName="residency_statuses" columnName="name"/>
+    <addNotNullConstraint schemaName="reference" tableName="residency_statuses" columnName="description"/>
+    <addDefaultValue schemaName="reference" tableName="residency_statuses" columnName="description" defaultValue=""/>
+    <createIndex indexName="residency_statuses_locale_ix" schemaName="reference" tableName="residency_statuses">
       <column name="locale_id"/>
     </createIndex>
 
@@ -509,55 +511,7 @@
       <column name="locale_id"/>
     </createIndex>
 
-   <insert schemaName="reference" tableName="address_types">
-      <column name="code" value="B"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="1"/>
-      <column name="name" value="Building"/>
-      <column name="description" value="Building"/>
-    </insert>
-    <insert schemaName="reference" tableName="address_types">
-      <column name="code" value="C"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="2"/>
-      <column name="name" value="Complex"/>
-      <column name="description" value="Complex"/>
-    </insert>
-    <insert schemaName="reference" tableName="address_types">
-      <column name="code" value="F"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="3"/>
-      <column name="name" value="Farm"/>
-      <column name="description" value="Farm"/>
-    </insert>
-    <insert schemaName="reference" tableName="address_types">
-      <column name="code" value="I"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="4"/>
-      <column name="name" value="International"/>
-      <column name="description" value="International"/>
-    </insert>
-    <insert schemaName="reference" tableName="address_types">
-      <column name="code" value="T"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="5"/>
-      <column name="name" value="Site/Township"/>
-      <column name="description" value="Site/Township"/>
-    </insert>
-    <insert schemaName="reference" tableName="address_types">
-      <column name="code" value="S"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="6"/>
-      <column name="name" value="Street"/>
-      <column name="description" value="Street"/>
-    </insert>
-    <insert schemaName="reference" tableName="address_types">
-      <column name="code" value="U"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="99"/>
-      <column name="name" value="Unstructured"/>
-      <column name="description" value="Unstructured"/>
-    </insert>
+
 
     <insert schemaName="reference" tableName="communication_methods">
       <column name="code" value="E"/>
@@ -3209,7 +3163,6 @@
       <column name="sort_index" value="99999"/>
       <column name="name" value="Passport"/>
       <column name="description" value="Passport"/>
-      <column name="country_of_issue" value=""/>
     </insert>
 
     <insert schemaName="reference" tableName="languages">
@@ -4378,77 +4331,54 @@
       <column name="description" value="Unknown"/>
     </insert>
 
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZABV"/>
+    <insert schemaName="reference" tableName="physical_address_types">
+      <column name="code" value="B"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="1"/>
-      <column name="name" value="Business Visa"/>
-      <column name="description" value="Business Visa"/>
-      <column name="country_of_issue" value="ZA"/>
+      <column name="name" value="Building"/>
+      <column name="description" value="Building"/>
     </insert>
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZAGWV"/>
+    <insert schemaName="reference" tableName="physical_address_types">
+      <column name="code" value="C"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="2"/>
-      <column name="name" value="General Work Visa"/>
-      <column name="description" value="General Work Visa"/>
-      <column name="country_of_issue" value="ZA"/>
+      <column name="name" value="Complex"/>
+      <column name="description" value="Complex"/>
     </insert>
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZACSWV"/>
+    <insert schemaName="reference" tableName="physical_address_types">
+      <column name="code" value="F"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="3"/>
-      <column name="name" value="Critical Skills Work Visa"/>
-      <column name="description" value="Critical Skills Work Visa"/>
-      <column name="country_of_issue" value="ZA"/>
+      <column name="name" value="Farm"/>
+      <column name="description" value="Farm"/>
     </insert>
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZAITWV"/>
+    <insert schemaName="reference" tableName="physical_address_types">
+      <column name="code" value="I"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="4"/>
-      <column name="name" value="Intra-company Transfer Work Visa"/>
-      <column name="description" value="Intra-company Transfer Work Visa"/>
-      <column name="country_of_issue" value="ZA"/>
+      <column name="name" value="International"/>
+      <column name="description" value="International"/>
     </insert>
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZASV"/>
+    <insert schemaName="reference" tableName="physical_address_types">
+      <column name="code" value="T"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="5"/>
-      <column name="name" value="Study Visa"/>
-      <column name="description" value="Study Visa"/>
-      <column name="country_of_issue" value="ZA"/>
+      <column name="name" value="Site/Township"/>
+      <column name="description" value="Site/Township"/>
     </insert>
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZAEV"/>
+    <insert schemaName="reference" tableName="physical_address_types">
+      <column name="code" value="S"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="6"/>
-      <column name="name" value="Exchange Visa"/>
-      <column name="description" value="Exchange Visa"/>
-      <column name="country_of_issue" value="ZA"/>
+      <column name="name" value="Street"/>
+      <column name="description" value="Street"/>
     </insert>
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZARPV"/>
+    <insert schemaName="reference" tableName="physical_address_types">
+      <column name="code" value="U"/>
       <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="7"/>
-      <column name="name" value="Retired Persons Visa"/>
-      <column name="description" value="Retired Persons Visa"/>
-      <column name="country_of_issue" value="ZA"/>
-    </insert>
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZARV"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="8"/>
-      <column name="name" value="Relatives Visa"/>
-      <column name="description" value="Relatives Visa"/>
-      <column name="country_of_issue" value="ZA"/>
-    </insert>
-    <insert schemaName="reference" tableName="permit_types">
-      <column name="code" value="ZAMTV"/>
-      <column name="locale_id" value="en-US"/>
-      <column name="sort_index" value="9"/>
-      <column name="name" value="Medical Treatment Visa"/>
-      <column name="description" value="Medical Treatment Visa"/>
-      <column name="country_of_issue" value="ZA"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unstructured"/>
+      <column name="description" value="Unstructured"/>
     </insert>
 
     <insert schemaName="reference" tableName="races">
@@ -4567,35 +4497,108 @@
       <column name="description" value="KwaZulu-Natal"/>
     </insert>
 
-    <insert schemaName="reference" tableName="residential_statuses">
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZABV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Business Visa"/>
+      <column name="description" value="Business Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZAGWV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="General Work Visa"/>
+      <column name="description" value="General Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZACSWV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Critical Skills Work Visa"/>
+      <column name="description" value="Critical Skills Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZAITWV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Intra-company Transfer Work Visa"/>
+      <column name="description" value="Intra-company Transfer Work Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZASV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Study Visa"/>
+      <column name="description" value="Study Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZAEV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Exchange Visa"/>
+      <column name="description" value="Exchange Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZARPV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Retired Persons Visa"/>
+      <column name="description" value="Retired Persons Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZARV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Relatives Visa"/>
+      <column name="description" value="Relatives Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+    <insert schemaName="reference" tableName="residence_permit_types">
+      <column name="code" value="ZAMTV"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Medical Treatment Visa"/>
+      <column name="description" value="Medical Treatment Visa"/>
+      <column name="country_of_issue" value="ZA"/>
+    </insert>
+
+    <insert schemaName="reference" tableName="residency_statuses">
       <column name="code" value="C"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="1"/>
       <column name="name" value="Citizen"/>
       <column name="description" value="Citizen"/>
     </insert>
-    <insert schemaName="reference" tableName="residential_statuses">
+    <insert schemaName="reference" tableName="residency_statuses">
       <column name="code" value="P"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="2"/>
       <column name="name" value="Permanent Resident"/>
       <column name="description" value="Permanent Resident"/>
     </insert>
-    <insert schemaName="reference" tableName="residential_statuses">
+    <insert schemaName="reference" tableName="residency_statuses">
       <column name="code" value="F"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="3"/>
       <column name="name" value="Foreign National"/>
       <column name="description" value="Foreign National"/>
     </insert>
-    <insert schemaName="reference" tableName="residential_statuses">
+    <insert schemaName="reference" tableName="residency_statuses">
       <column name="code" value="R"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="4"/>
       <column name="name" value="Refugee"/>
       <column name="description" value="Refugee"/>
     </insert>
-    <insert schemaName="reference" tableName="residential_statuses">
+    <insert schemaName="reference" tableName="residency_statuses">
       <column name="code" value="U"/>
       <column name="locale_id" value="en-US"/>
       <column name="sort_index" value="99"/>

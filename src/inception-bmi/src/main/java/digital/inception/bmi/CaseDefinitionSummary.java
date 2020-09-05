@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "CaseDefinitionSummary")
+@Schema(description = "A case definition summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name"})
 @XmlRootElement(name = "CaseDefinitionSummary", namespace = "http://bmi.inception.digital")

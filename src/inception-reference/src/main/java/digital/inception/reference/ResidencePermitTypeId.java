@@ -22,32 +22,32 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>ResidentialStatusId</code> class implements the ID class for the <code>
- * ResidentialStatus</code> class.
+ * The <code>ResidencePermitTypeId</code> class implements the ID class for the <code>
+ * ResidencePermitType</code> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ResidentialStatusId implements Serializable {
+public class ResidencePermitTypeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the residential status. */
+  /** The code for the residence permit type. */
   private String code;
 
-  /** The Unicode locale identifier for the residential status. */
+  /** The Unicode locale identifier for the residence permit type. */
   private String localeId;
 
-  /** Constructs a new <code>ResidentialStatusId</code>. */
-  public ResidentialStatusId() {}
+  /** Constructs a new <code>ResidencePermitTypeId</code>. */
+  public ResidencePermitTypeId() {}
 
   /**
-   * Constructs a new <code>ResidentialStatusId</code>.
+   * Constructs a new <code>ResidencePermitTypeId</code>.
    *
-   * @param code the code for the residential status
-   * @param localeId the Unicode locale identifier for the residential status
+   * @param code the code for the residence permit type
+   * @param localeId the Unicode locale identifier for the residence permit type
    */
-  public ResidentialStatusId(String code, String localeId) {
+  public ResidencePermitTypeId(String code, String localeId) {
     this.code = code;
     this.localeId = localeId;
   }
@@ -73,24 +73,24 @@ public class ResidentialStatusId implements Serializable {
       return false;
     }
 
-    ResidentialStatusId other = (ResidentialStatusId) object;
+    ResidencePermitTypeId other = (ResidencePermitTypeId) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the residential status.
+   * Returns the code for the residence permit type.
    *
-   * @return the code for the residential status
+   * @return the code for the residence permit type
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the Unicode locale identifier for the residential status.
+   * Returns the Unicode locale identifier for the residence permit type.
    *
-   * @return the Unicode locale identifier for the residential status
+   * @return the Unicode locale identifier for the residence permit type
    */
   public String getLocaleId() {
     return localeId;
@@ -107,18 +107,18 @@ public class ResidentialStatusId implements Serializable {
   }
 
   /**
-   * Set the code for the residential status.
+   * Set the code for the residence permit type.
    *
-   * @param code the code for the residential status
+   * @param code the code for the residence permit type
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the Unicode locale identifier for the residential status.
+   * Set the Unicode locale identifier for the residence permit type.
    *
-   * @param locale the Unicode locale identifier for the residential status
+   * @param locale the Unicode locale identifier for the residence permit type
    */
   public void setLocaleId(String locale) {
     this.localeId = locale;

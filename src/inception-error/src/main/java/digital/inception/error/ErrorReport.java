@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "ErrorReport")
+@Schema(description = "An error report submitted by a user after experiencing an application error")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "id",

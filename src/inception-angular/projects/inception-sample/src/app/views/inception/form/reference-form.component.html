@@ -4,22 +4,6 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Address type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('addressType')" required="true" [matAutocomplete]="addressTypeAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #addressTypeAutocomplete="matAutocomplete" [displayWith]="displayAddressType">
-              <mat-option *ngFor="let addressType of filteredAddressTypes$ | async" [value]="addressType">
-                {{addressType.name}}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="referenceForm.controls['addressType'].errors && !referenceForm.controls['addressType'].untouched">
-              <span *ngIf="referenceForm.controls['addressType'].errors?.required">An address type is required.</span>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <mat-form-field>
             <mat-label>Communication method</mat-label>
             <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('communicationMethod')" required="true" [matAutocomplete]="communicationMethodAutocomplete">
             <mat-autocomplete autoActiveFirstOption #communicationMethodAutocomplete="matAutocomplete" [displayWith]="displayCommunicationMethod">
@@ -209,26 +193,22 @@
           </mat-form-field>
         </div>
       </div>
-
-
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Permit type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('permitType')" required="true" [matAutocomplete]="permitTypeAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #permitTypeAutocomplete="matAutocomplete" [displayWith]="displayPermitType">
-              <mat-option *ngFor="let permitType of filteredPermitTypes$ | async" [value]="permitType">
-                {{permitType.name}}
+            <mat-label>Physical address type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('physicalAddressType')" required="true" [matAutocomplete]="physicalAddressTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #physicalAddressTypeAutocomplete="matAutocomplete" [displayWith]="displayPhysicalAddressType">
+              <mat-option *ngFor="let physicalAddressType of filteredPhysicalAddressTypes$ | async" [value]="physicalAddressType">
+                {{physicalAddressType.name}}
               </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="referenceForm.controls['permitType'].errors && !referenceForm.controls['permitType'].untouched">
-              <span *ngIf="referenceForm.controls['permitType'].errors?.required">A permit type is required.</span>
+            <mat-error *ngIf="referenceForm.controls['physicalAddressType'].errors && !referenceForm.controls['physicalAddressType'].untouched">
+              <span *ngIf="referenceForm.controls['physicalAddressType'].errors?.required">A physical address type is required.</span>
             </mat-error>
           </mat-form-field>
         </div>
       </div>
-
-
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
@@ -245,10 +225,6 @@
           </mat-form-field>
         </div>
       </div>
-
-
-
-
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
@@ -266,20 +242,35 @@
         </div>
       </div>
 
-
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Residence permit type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('residencePermitType')" required="true" [matAutocomplete]="residencePermitTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #residencePermitTypeAutocomplete="matAutocomplete" [displayWith]="displayResidencePermitType">
+              <mat-option *ngFor="let residencePermitType of filteredResidencePermitTypes$ | async" [value]="residencePermitType">
+                {{residencePermitType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['residencePermitType'].errors && !referenceForm.controls['residencePermitType'].untouched">
+              <span *ngIf="referenceForm.controls['residencePermitType'].errors?.required">A permit type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
 
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Residential status</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('residentialStatus')" required="true" [matAutocomplete]="residentialStatusAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #residentialStatusAutocomplete="matAutocomplete" [displayWith]="displayResidentialStatus">
-              <mat-option *ngFor="let residentialStatus of filteredResidentialStatuses$ | async" [value]="residentialStatus">
-                {{residentialStatus.name}}
+            <mat-label>Residency status</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('residencyStatus')" required="true" [matAutocomplete]="residencyStatusAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #residencyStatusAutocomplete="matAutocomplete" [displayWith]="displayResidencyStatus">
+              <mat-option *ngFor="let residencyStatus of filteredResidencyStatuses$ | async" [value]="residencyStatus">
+                {{residencyStatus.name}}
               </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="referenceForm.controls['residentialStatus'].errors && !referenceForm.controls['residentialStatus'].untouched">
-              <span *ngIf="referenceForm.controls['residentialStatus'].errors?.required">A residential status is required.</span>
+            <mat-error *ngIf="referenceForm.controls['residencyStatus'].errors && !referenceForm.controls['residencyStatus'].untouched">
+              <span *ngIf="referenceForm.controls['residencyStatus'].errors?.required">A residency status is required.</span>
             </mat-error>
           </mat-form-field>
         </div>

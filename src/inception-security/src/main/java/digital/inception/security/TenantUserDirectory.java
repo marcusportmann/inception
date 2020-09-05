@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "TenantUserDirectory")
+@Schema(description = "A tenant user directory association")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"tenantId", "userDirectoryId"})
 @XmlRootElement(name = "TenantUserDirectory", namespace = "http://security.inception.digital")

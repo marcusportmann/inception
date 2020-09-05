@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "MailTemplateSummary")
+@Schema(description = "A mail template summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "contentType"})
 @XmlRootElement(name = "MailTemplateSummary", namespace = "http://mail.inception.digital")

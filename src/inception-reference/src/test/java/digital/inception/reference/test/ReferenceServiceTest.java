@@ -20,7 +20,6 @@ package digital.inception.reference.test;
 
 import static org.junit.Assert.assertEquals;
 
-import digital.inception.reference.AddressType;
 import digital.inception.reference.CommunicationMethod;
 import digital.inception.reference.Country;
 import digital.inception.reference.EmploymentStatus;
@@ -34,10 +33,11 @@ import digital.inception.reference.MarriageType;
 import digital.inception.reference.MinorType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
-import digital.inception.reference.PermitType;
+import digital.inception.reference.PhysicalAddressType;
 import digital.inception.reference.Race;
 import digital.inception.reference.Region;
-import digital.inception.reference.ResidentialStatus;
+import digital.inception.reference.ResidencePermitType;
+import digital.inception.reference.ResidencyStatus;
 import digital.inception.reference.ResidentialType;
 import digital.inception.reference.SourceOfFunds;
 import digital.inception.reference.SuitableTimeToContact;
@@ -78,18 +78,23 @@ public class ReferenceServiceTest {
   /** The Reference Service. */
   @Autowired private IReferenceService referenceService;
 
-  /** Test the address type reference functionality. */
+  /** Test the physical address type reference functionality. */
   @Test
   public void addressTypeTest() throws Exception {
-    List<AddressType> retrievedAddressTypes = referenceService.getAddressTypes();
+    List<PhysicalAddressType> retrievedPhysicalAddressTypes =
+        referenceService.getPhysicalAddressTypes();
 
     assertEquals(
-        "The correct number of address types was not retrieved", 14, retrievedAddressTypes.size());
+        "The correct number of physical address types was not retrieved",
+        14,
+        retrievedPhysicalAddressTypes.size());
 
-    retrievedAddressTypes = referenceService.getAddressTypes("en-US");
+    retrievedPhysicalAddressTypes = referenceService.getPhysicalAddressTypes("en-US");
 
     assertEquals(
-        "The correct number of address types was not retrieved", 7, retrievedAddressTypes.size());
+        "The correct number of physical address types was not retrieved",
+        7,
+        retrievedPhysicalAddressTypes.size());
   }
 
   /** Test the communication method reference functionality. */
@@ -327,20 +332,6 @@ public class ReferenceServiceTest {
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
   }
 
-  /** Test the permit type reference functionality. */
-  @Test
-  public void permitTypeTest() throws Exception {
-    List<PermitType> retrievedPermitTypes = referenceService.getPermitTypes();
-
-    assertEquals(
-        "The correct number of permit types was not retrieved", 18, retrievedPermitTypes.size());
-
-    retrievedPermitTypes = referenceService.getPermitTypes("en-US");
-
-    assertEquals(
-        "The correct number of permit types was not retrieved", 9, retrievedPermitTypes.size());
-  }
-
   /** Test the race reference functionality. */
   @Test
   public void raceTest() throws Exception {
@@ -365,23 +356,41 @@ public class ReferenceServiceTest {
     assertEquals("The correct number of regions was not retrieved", 9, retrievedRegions.size());
   }
 
-  /** Test the residential status reference functionality. */
+  /** Test the residence permit type reference functionality. */
   @Test
-  public void residentialStatusTest() throws Exception {
-    List<ResidentialStatus> retrievedResidentialStatuses =
-        referenceService.getResidentialStatuses();
+  public void residencePermitTypeTest() throws Exception {
+    List<ResidencePermitType> retrievedResidencePermitTypes =
+        referenceService.getResidencePermitTypes();
 
     assertEquals(
-        "The correct number of residential statuses was not retrieved",
+        "The correct number of residence permit types was not retrieved",
+        18,
+        retrievedResidencePermitTypes.size());
+
+    retrievedResidencePermitTypes = referenceService.getResidencePermitTypes("en-US");
+
+    assertEquals(
+        "The correct number of residence permit types was not retrieved",
+        9,
+        retrievedResidencePermitTypes.size());
+  }
+
+  /** Test the residency status reference functionality. */
+  @Test
+  public void residencyStatusTest() throws Exception {
+    List<ResidencyStatus> retrievedResidencyStatuses = referenceService.getResidencyStatuses();
+
+    assertEquals(
+        "The correct number of residency statuses was not retrieved",
         10,
-        retrievedResidentialStatuses.size());
+        retrievedResidencyStatuses.size());
 
-    retrievedResidentialStatuses = referenceService.getResidentialStatuses("en-US");
+    retrievedResidencyStatuses = referenceService.getResidencyStatuses("en-US");
 
     assertEquals(
-        "The correct number of residential statuses was not retrieved",
+        "The correct number of residency statuses was not retrieved",
         5,
-        retrievedResidentialStatuses.size());
+        retrievedResidencyStatuses.size());
   }
 
   /** Test the residential type reference functionality. */

@@ -48,7 +48,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "CodeCategory")
+@Schema(description = "A collection of related codes")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "name", "data"})
 @XmlRootElement(name = "CodeCategory", namespace = "http://codes.inception.digital")

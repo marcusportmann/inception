@@ -7,29 +7,6 @@ CREATE SCHEMA reference;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
-CREATE TABLE reference.address_types (
-  code        VARCHAR(10)  NOT NULL,
-  locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50)  NOT NULL,
-  description VARCHAR(200) NOT NULL DEFAULT '',
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX address_types_locale_ix ON reference.address_types(locale_id);
-
-COMMENT ON COLUMN reference.address_types.code IS 'The code for the address type';
-
-COMMENT ON COLUMN reference.address_types.locale_id IS 'The Unicode locale identifier for the address type';
-
-COMMENT ON COLUMN reference.address_types.sort_index IS 'The sort index for the address type';
-
-COMMENT ON COLUMN reference.address_types.name IS 'The name of the address type';
-
-COMMENT ON COLUMN reference.address_types.description IS 'The description for the address type';
-
-
 CREATE TABLE reference.communication_methods (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
@@ -57,11 +34,11 @@ CREATE TABLE reference.countries (
   code            VARCHAR(10)  NOT NULL,
   locale_id       VARCHAR(10)  NOT NULL,
   sort_index      INTEGER      NOT NULL,
-  name            VARCHAR(50) NOT NULL,
+  name            VARCHAR(50)  NOT NULL,
   short_name      VARCHAR(30)  NOT NULL,
-  description     VARCHAR(200) NOT NULL,
+  description     VARCHAR(200) NOT NULL DEFAULT '',
   sovereign_state VARCHAR(10)  NOT NULL,
-  nationality     VARCHAR(50) NOT NULL,
+  nationality     VARCHAR(50)  NOT NULL,
 
   PRIMARY KEY (code, locale_id)
 );
@@ -139,7 +116,7 @@ COMMENT ON COLUMN reference.employment_types.description IS 'The description for
 
 CREATE TABLE reference.genders (
   code        VARCHAR(10)  NOT NULL,
-  locale_id    VARCHAR(10)  NOT NULL,
+  locale_id    VARCHAR(10) NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
@@ -164,11 +141,12 @@ CREATE TABLE reference.identity_document_types (
   code             VARCHAR(10)  NOT NULL,
   locale_id        VARCHAR(10)  NOT NULL,
   sort_index       INTEGER      NOT NULL,
-  name             VARCHAR(50) NOT NULL,
+  name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
-  country_of_issue VARCHAR(10)  NOT NULL DEFAULT '',
+  country_of_issue VARCHAR(10),
 
-  PRIMARY KEY (code, locale_id)
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT identity_document_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
 );
 
 CREATE INDEX identity_document_types_locale_ix ON reference.identity_document_types(locale_id);
@@ -192,8 +170,8 @@ CREATE TABLE reference.languages (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50) NOT NULL,
-  short_name  VARCHAR(30)  NOT NULL DEFAULT '',
+  name        VARCHAR(50)  NOT NULL,
+  short_name  VARCHAR(30)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
   PRIMARY KEY (code, locale_id)
@@ -246,7 +224,7 @@ CREATE TABLE reference.marriage_types (
   description    VARCHAR(200) NOT NULL DEFAULT '',
 
   PRIMARY KEY (marital_status, code, locale_id),
-  CONSTRAINT marriage_types_marital_statuses_fk FOREIGN KEY (marital_status, locale_id) REFERENCES reference.marital_statuses(code, locale_id) ON DELETE CASCADE
+  CONSTRAINT marriage_types_marital_status_fk FOREIGN KEY (marital_status, locale_id) REFERENCES reference.marital_statuses(code, locale_id) ON DELETE CASCADE
 );
 
 CREATE INDEX marriage_types_marital_status_ix ON reference.marriage_types(marital_status);
@@ -269,7 +247,7 @@ COMMENT ON COLUMN reference.marriage_types.description IS 'The description for t
 CREATE TABLE reference.minor_types (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -292,7 +270,7 @@ COMMENT ON COLUMN reference.minor_types.description IS 'The description for the 
 CREATE TABLE reference.next_of_kin_types (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -315,7 +293,7 @@ COMMENT ON COLUMN reference.next_of_kin_types.description IS 'The description fo
 CREATE TABLE reference.occupations (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -335,39 +313,35 @@ COMMENT ON COLUMN reference.occupations.name IS 'The name of the occupation';
 COMMENT ON COLUMN reference.occupations.description IS 'The description for the occupation';
 
 
-CREATE TABLE reference.permit_types (
-  code             VARCHAR(10)  NOT NULL,
-  locale_id        VARCHAR(10)  NOT NULL,
-  sort_index       INTEGER      NOT NULL,
-  name             VARCHAR(50)  NOT NULL,
-  description      VARCHAR(200) NOT NULL DEFAULT '',
-  country_of_issue VARCHAR(10)  NOT NULL,
 
-  PRIMARY KEY (code, locale_id),
-  CONSTRAINT permit_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
+CREATE TABLE reference.physical_address_types (
+  code        VARCHAR(10)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX permit_types_locale_ix ON reference.permit_types(locale_id);
+CREATE INDEX physical_address_types_locale_ix ON reference.physical_address_types(locale_id);
 
-CREATE INDEX permit_types_country_of_issue_ix ON reference.permit_types(country_of_issue);
+COMMENT ON COLUMN reference.physical_address_types.code IS 'The code for the physical address type';
 
-COMMENT ON COLUMN reference.permit_types.code IS 'The code for the permit type';
+COMMENT ON COLUMN reference.physical_address_types.locale_id IS 'The Unicode locale identifier for the physical address type';
 
-COMMENT ON COLUMN reference.permit_types.locale_id IS 'The Unicode locale identifier for the permit type';
+COMMENT ON COLUMN reference.physical_address_types.sort_index IS 'The sort index for the physical address type';
 
-COMMENT ON COLUMN reference.permit_types.sort_index IS 'The sort index for the permit type';
+COMMENT ON COLUMN reference.physical_address_types.name IS 'The name of the physical address type';
 
-COMMENT ON COLUMN reference.permit_types.name IS 'The name of the permit type';
+COMMENT ON COLUMN reference.physical_address_types.description IS 'The description for the physical address type';
 
-COMMENT ON COLUMN reference.permit_types.description IS 'The description for the permit type';
-
-COMMENT ON COLUMN reference.permit_types.country_of_issue IS 'The code identifying the country of issue for the permit type';
 
 
 CREATE TABLE reference.races (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -391,7 +365,7 @@ CREATE TABLE reference.regions (
   country     VARCHAR(10)  NOT NULL,
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -416,33 +390,62 @@ COMMENT ON COLUMN reference.regions.name IS 'The name of the region';
 COMMENT ON COLUMN reference.regions.description IS 'The description for the region';
 
 
-CREATE TABLE reference.residential_statuses (
+CREATE TABLE reference.residence_permit_types (
+  code             VARCHAR(10)  NOT NULL,
+  locale_id        VARCHAR(10)  NOT NULL,
+  sort_index       INTEGER      NOT NULL,
+  name             VARCHAR(50)  NOT NULL,
+  description      VARCHAR(200) NOT NULL DEFAULT '',
+  country_of_issue VARCHAR(10)  NOT NULL,
+
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT residence_permit_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
+);
+
+CREATE INDEX residence_permit_types_locale_ix ON reference.residence_permit_types(locale_id);
+
+CREATE INDEX residence_permit_types_country_of_issue_ix ON reference.residence_permit_types(country_of_issue);
+
+COMMENT ON COLUMN reference.residence_permit_types.code IS 'The code for the residence permit type';
+
+COMMENT ON COLUMN reference.residence_permit_types.locale_id IS 'The Unicode locale identifier for the residence permit type';
+
+COMMENT ON COLUMN reference.residence_permit_types.sort_index IS 'The sort index for the residence permit type';
+
+COMMENT ON COLUMN reference.residence_permit_types.name IS 'The name of the residence permit type';
+
+COMMENT ON COLUMN reference.residence_permit_types.description IS 'The description for the residence permit type';
+
+COMMENT ON COLUMN reference.residence_permit_types.country_of_issue IS 'The code identifying the country of issue for the residence permit type';
+
+
+CREATE TABLE reference.residency_statuses (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX residential_statuses_locale_ix ON reference.residential_statuses(locale_id);
+CREATE INDEX residency_statuses_locale_ix ON reference.residency_statuses(locale_id);
 
-COMMENT ON COLUMN reference.residential_statuses.code IS 'The code for the residential status';
+COMMENT ON COLUMN reference.residency_statuses.code IS 'The code for the residency status';
 
-COMMENT ON COLUMN reference.residential_statuses.locale_id IS 'The Unicode locale identifier for the residential status';
+COMMENT ON COLUMN reference.residency_statuses.locale_id IS 'The Unicode locale identifier for the residency status';
 
-COMMENT ON COLUMN reference.residential_statuses.sort_index IS 'The sort index for the residential status';
+COMMENT ON COLUMN reference.residency_statuses.sort_index IS 'The sort index for the residency status';
 
-COMMENT ON COLUMN reference.residential_statuses.name IS 'The name of the residential status';
+COMMENT ON COLUMN reference.residency_statuses.name IS 'The name of the residency status';
 
-COMMENT ON COLUMN reference.residential_statuses.description IS 'The description for the residential status';
+COMMENT ON COLUMN reference.residency_statuses.description IS 'The description for the residency status';
 
 
 CREATE TABLE reference.residential_types (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -465,7 +468,7 @@ COMMENT ON COLUMN reference.residential_types.description IS 'The description fo
 CREATE TABLE reference.sources_of_funds (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -492,7 +495,7 @@ COMMENT ON COLUMN reference.sources_of_funds.description IS 'The description for
 CREATE TABLE reference.standard_industry_codes (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -515,7 +518,7 @@ COMMENT ON COLUMN reference.standard_industry_codes.description IS 'The descript
 CREATE TABLE reference.suitable_times_to_contact (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER NOT NULL,
+  sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
 
@@ -538,7 +541,7 @@ COMMENT ON COLUMN reference.suitable_times_to_contact.description IS 'The descri
 CREATE TABLE reference.tax_number_types (
   code             VARCHAR(10)  NOT NULL,
   locale_id        VARCHAR(10)  NOT NULL,
-  sort_index       INTEGER NOT NULL,
+  sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
   country_of_issue VARCHAR(10)  NOT NULL,
@@ -569,7 +572,7 @@ CREATE TABLE reference.titles (
   locale_id    VARCHAR(10)  NOT NULL,
   sort_index   INTEGER      NOT NULL,
   name         VARCHAR(50)  NOT NULL,
-  abbreviation VARCHAR(20) NOT NULL,
+  abbreviation VARCHAR(20)  NOT NULL,
   description  VARCHAR(200) NOT NULL DEFAULT '',
 
   PRIMARY KEY (code, locale_id)
@@ -639,38 +642,6 @@ COMMENT ON COLUMN reference.verification_statuses.description IS 'The descriptio
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('B', 'en-US', 1, 'Building', 'Building');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-US', 2, 'Complex', 'Complex');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-US', 3, 'Farm', 'Farm');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('I', 'en-US', 4, 'International', 'International');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('T', 'en-US', 5, 'Site/Township', 'Site/Township');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('S', 'en-US', 6, 'Street', 'Street');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unstructured', 'Unstructured');
-  
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('B', 'en-ZA', 1, 'Building', 'Building');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-ZA', 2, 'Complex', 'Complex');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-ZA', 3, 'Farm', 'Farm');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('I', 'en-ZA', 4, 'International', 'International');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('T', 'en-ZA', 5, 'Site/Township', 'Site/Township');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('S', 'en-ZA', 6, 'Street', 'Street');
-INSERT INTO reference.address_types (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unstructured', 'Unstructured');  
-
-
-
 INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
   VALUES ('E', 'en-US', 1, 'E-mail', 'E-mail');
 INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
@@ -1765,8 +1736,8 @@ INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name
   VALUES ('ZAIDCARD', 'en-US', 10002, 'South African ID Card', 'South African ID Card', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZADRVLIC', 'en-US', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
-INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('PASSPORT', 'en-US', 99999, 'Passport', 'Passport', '');
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description)
+  VALUES ('PASSPORT', 'en-US', 99999, 'Passport', 'Passport');
 
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZAIDBOOK', 'en-ZA', 10001, 'South African ID Book', 'South African ID Book', 'ZA');
@@ -1774,8 +1745,8 @@ INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name
   VALUES ('ZAIDCARD', 'en-ZA', 10002, 'South African ID Card', 'South African ID Card', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
   VALUES ('ZADRVLIC', 'en-ZA', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
-INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('PASSPORT', 'en-ZA', 99999, 'Passport', 'Passport', '');  
+INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description)
+  VALUES ('PASSPORT', 'en-ZA', 99999, 'Passport', 'Passport');
 
 
 
@@ -2414,46 +2385,38 @@ INSERT INTO reference.occupations (code, locale_id, sort_index, name, descriptio
   VALUES ('27', 'en-ZA', 27, 'Trade Worker', 'Trade Worker');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('50', 'en-ZA', 50, 'Unemployed', 'Unemployed');
-  
-    
 
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZABV', 'en-US', 1, 'Business Visa', 'Business Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAGWV', 'en-US', 2, 'General Work Visa', 'General Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZACSWV', 'en-US', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAITWV', 'en-US', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZASV', 'en-US', 5, 'Study Visa', 'Study Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAEV', 'en-US', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZARPV', 'en-US', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZARV', 'en-US', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAMTV', 'en-US', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
 
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZABV', 'en-ZA', 1, 'Business Visa', 'Business Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAGWV', 'en-ZA', 2, 'General Work Visa', 'General Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZACSWV', 'en-ZA', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAITWV', 'en-ZA', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZASV', 'en-ZA', 5, 'Study Visa', 'Study Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAEV', 'en-ZA', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZARPV', 'en-ZA', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZARV', 'en-ZA', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
-INSERT INTO reference.permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAMTV', 'en-ZA', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
+
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('B', 'en-US', 1, 'Building', 'Building');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('C', 'en-US', 2, 'Complex', 'Complex');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('F', 'en-US', 3, 'Farm', 'Farm');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('I', 'en-US', 4, 'International', 'International');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('T', 'en-US', 5, 'Site/Township', 'Site/Township');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('S', 'en-US', 6, 'Street', 'Street');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('U', 'en-US', 99, 'Unstructured', 'Unstructured');
+
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('B', 'en-ZA', 1, 'Building', 'Building');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('C', 'en-ZA', 2, 'Complex', 'Complex');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('F', 'en-ZA', 3, 'Farm', 'Farm');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('I', 'en-ZA', 4, 'International', 'International');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('T', 'en-ZA', 5, 'Site/Township', 'Site/Township');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('S', 'en-ZA', 6, 'Street', 'Street');
+INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+  VALUES ('U', 'en-ZA', 99, 'Unstructured', 'Unstructured');
 
 
 
@@ -2523,28 +2486,68 @@ INSERT INTO reference.regions (country, code, locale_id, sort_index, name, descr
 INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
   VALUES ('ZA', 'ZN', 'en-ZA', 1, 'KwaZulu-Natal', 'KwaZulu-Natal');
   
-    
 
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZABV', 'en-US', 1, 'Business Visa', 'Business Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZAGWV', 'en-US', 2, 'General Work Visa', 'General Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZACSWV', 'en-US', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZAITWV', 'en-US', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZASV', 'en-US', 5, 'Study Visa', 'Study Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZAEV', 'en-US', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZARPV', 'en-US', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZARV', 'en-US', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZAMTV', 'en-US', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
+
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZABV', 'en-ZA', 1, 'Business Visa', 'Business Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZAGWV', 'en-ZA', 2, 'General Work Visa', 'General Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZACSWV', 'en-ZA', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZAITWV', 'en-ZA', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZASV', 'en-ZA', 5, 'Study Visa', 'Study Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZAEV', 'en-ZA', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZARPV', 'en-ZA', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZARV', 'en-ZA', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('ZAMTV', 'en-ZA', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
+
+
+
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-US', 1, 'Citizen', 'Citizen');
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('P', 'en-US', 2, 'Permanent Resident', 'Permanent Resident');
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-US', 3, 'Foreign National', 'Foreign National');
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('R', 'en-US', 4, 'Refugee', 'Refugee');
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
 
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('C', 'en-ZA', 1, 'Citizen', 'Citizen');
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('P', 'en-ZA', 2, 'Permanent Resident', 'Permanent Resident');
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('F', 'en-ZA', 3, 'Foreign National', 'Foreign National');
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('R', 'en-ZA', 4, 'Refugee', 'Refugee');
-INSERT INTO reference.residential_statuses (code, locale_id, sort_index, name, description)
+INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');  
   
   

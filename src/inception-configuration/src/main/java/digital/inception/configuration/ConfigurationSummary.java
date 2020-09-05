@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "ConfigurationSummary")
+@Schema(description = "A configuration summary")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"key", "description"})
 @XmlRootElement(name = "ConfigurationSummary", namespace = "http://configuration.inception.digital")

@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Groups")
+@Schema(description = "The results of a request to retrieve a list of groups")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "userDirectoryId",

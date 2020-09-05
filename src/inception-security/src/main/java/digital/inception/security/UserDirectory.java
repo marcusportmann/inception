@@ -70,7 +70,7 @@ import org.xml.sax.InputSource;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "UserDirectory")
+@Schema(description = "A user directory")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name", "parameters"})
 @XmlRootElement(name = "UserDirectory", namespace = "http://security.inception.digital")

@@ -34,11 +34,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>SourceOfFunds</code> class holds the information for a possible source of funds.
+ * The <code>SourceOfFunds</code> class holds the information for a possible source of funds for a
+ * person.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "SourceOfFunds")
+@Schema(description = "A source of funds for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "SourceOfFunds", namespace = "http://reference.inception.digital")

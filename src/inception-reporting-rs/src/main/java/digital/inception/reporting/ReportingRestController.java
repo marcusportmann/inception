@@ -134,7 +134,9 @@ public class ReportingRestController extends SecureRestController {
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Reporting.ReportingAdministration') or hasAuthority('FUNCTION_Reporting.ReportDefinitionAdministration')")
   public void createReportDefinition(
-      @Parameter(name = "reportDefinition", description = "The report definition", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The report definition to create",
+              required = true)
           @RequestBody
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, DuplicateReportDefinitionException,
@@ -251,8 +253,7 @@ public class ReportingRestController extends SecureRestController {
       method = RequestMethod.POST,
       produces = "application/pdf")
   public ResponseEntity<byte[]> generateReport(
-      @Parameter(
-              name = "generateReportRequest",
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The request to generate a report",
               required = true)
           @RequestBody
@@ -529,7 +530,9 @@ public class ReportingRestController extends SecureRestController {
               required = true)
           @PathVariable
           String reportDefinitionId,
-      @Parameter(name = "reportDefinition", description = "The report definition", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The report definition to update",
+              required = true)
           @RequestBody
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,

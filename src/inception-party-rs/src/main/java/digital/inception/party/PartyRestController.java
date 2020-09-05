@@ -35,7 +35,6 @@ import java.util.UUID;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -120,7 +119,9 @@ public class PartyRestController extends SecureRestController {
   //  @PreAuthorize(
   //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
   public void createOrganization(
-      @Parameter(name = "organization", description = "The organization", required = true)
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The organization to create",
+              required = true)
           @RequestBody
           Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, PartyServiceException {
@@ -136,6 +137,65 @@ public class PartyRestController extends SecureRestController {
     }
 
     partyService.createOrganization(organization);
+  }
+
+  /**
+   * Retrieve the organization.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
+   * @return the organization
+   */
+  @Operation(summary = "Retrieve the organization", description = "Retrieve the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  public Organization getOrganization(
+      @Parameter(
+              name = "organizationId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId)
+      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (organizationId == null) {
+      throw new InvalidArgumentException("organizationId");
+    }
+
+    return null;
   }
 
   /**
@@ -198,99 +258,36 @@ public class PartyRestController extends SecureRestController {
   @Operation(summary = "Retrieve the parties", description = "Retrieve the parties")
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
       })
-  @RequestMapping(
-      value = "/parties",
-      method = RequestMethod.GET,
-      produces = "application/json")
+  @RequestMapping(value = "/parties", method = RequestMethod.GET, produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   //  @PreAuthorize(
   //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
   public Parties getParties(
       @Parameter(name = "filter", description = "The optional filter to apply to the parties")
-      @RequestParam(value = "filter", required = false)
+          @RequestParam(value = "filter", required = false)
           String filter,
       @Parameter(
-          name = "sortDirection",
-          description = "The optional sort direction to apply to the parties")
-      @RequestParam(value = "sortDirection", required = false)
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the parties")
+          @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-      @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false)
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-      @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
       throws PartyServiceException {
     return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
   }
-
-
-  /**
-   * Retrieve the organization.
-   *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the organization
-   * @return the organization
-   */
-  @Operation(summary = "Retrieve the organization", description = "Retrieve the organization")
-  @ApiResponses(
-      value = {
-          @ApiResponse(responseCode = "200", description = "OK"),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid argument",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "The organization could not be found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class))),
-          @ApiResponse(
-              responseCode = "500",
-              description =
-                  "An error has occurred and the request could not be processed at this time",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(
-      value = "/organizations/{organizationId}",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
-  public Organization getOrganization(
-      @Parameter(
-          name = "organizationId",
-          description =
-              "The Universally Unique Identifier (UUID) uniquely identifying the organization",
-          required = true)
-      @PathVariable
-          UUID organizationId)
-      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
-    }
-
-    return null;
-  }  
-  
 }

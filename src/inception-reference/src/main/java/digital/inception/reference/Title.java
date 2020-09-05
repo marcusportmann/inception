@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Title")
+@Schema(description = "An honorific prefixing a person's name")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "abbreviation", "description"})
 @XmlRootElement(name = "Title", namespace = "http://reference.inception.digital")

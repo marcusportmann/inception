@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "PasswordReset")
+@Schema(description = "A password reset")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"username", "requested", "completed", "expired", "status", "securityCodeHash"})
 @XmlRootElement(name = "GroupMember", namespace = "http://security.inception.digital")

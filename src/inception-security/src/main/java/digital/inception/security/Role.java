@@ -50,7 +50,9 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Role")
+@Schema(
+    description =
+        "A representation of a particular job function that is used to assign the permissions needed to perform particular system functions to a user")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "name", "description"})
 @XmlRootElement(name = "Role", namespace = "http://security.inception.digital")

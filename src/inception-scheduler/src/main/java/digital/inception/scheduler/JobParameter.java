@@ -52,7 +52,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "JobParameter")
+@Schema(description = "A parameter for a scheduled job")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "JobParameter", namespace = "http://scheduler.inception.digital")

@@ -25,12 +25,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>AddressTypeRepository</code> interface declares the repository for the <code>
- * AddressType</code> domain type.
+ * The <code>ResidencyStatusRepository</code> interface declares the repository for the <code>
+ * ResidencyStatus</code> domain type.
  *
  * @author Marcus Portmann
  */
-public interface AddressTypeRepository extends JpaRepository<AddressType, AddressTypeId> {
+public interface ResidencyStatusRepository
+    extends JpaRepository<ResidencyStatus, ResidencyStatusId> {
 
-  List<AddressType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  List<ResidencyStatus> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

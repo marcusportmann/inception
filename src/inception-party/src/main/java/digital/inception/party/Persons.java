@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "Persons")
+@Schema(description = "The results of a request to retrieve a list of persons")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "persons",
