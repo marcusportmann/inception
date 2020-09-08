@@ -54,9 +54,8 @@ export class NewJobComponent extends AdminContainerView implements AfterViewInit
 
   jobParameters: JobParameter[] = [];
 
-  jobStatuses: JobStatus[] = [JobStatus.Unscheduled, JobStatus.Scheduled, JobStatus.Executing, JobStatus.Executed,
-    JobStatus.Aborted, JobStatus.Failed, JobStatus.OnceOff, JobStatus.Unknown
-  ];
+  jobStatuses: JobStatus[] = [JobStatus.Unscheduled, JobStatus.Scheduled, JobStatus.Executing,
+    JobStatus.Executed, JobStatus.Aborted, JobStatus.Failed, JobStatus.OnceOff];
 
   job?: Job;
 

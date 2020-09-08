@@ -25,15 +25,15 @@ export enum PasswordChangeReason {
   /**
    * User.
    */
-  User = 0,
+  User = 'user',
 
   /**
    * Administrative.
    */
-  Administrative = 1,
+  Administrative = 'administrative',
 
   /**
    * Reset.
    */
-  Reset = 2
+  Reset = 'reset'
 }

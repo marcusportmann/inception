@@ -23,26 +23,21 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToMailTemplateContentTypeConverter</code> class implements the Spring converter
- * that converts an <code>Integer</code> type into a <code>MailTemplateContentType</code> type.
+ * The <code>StringToMailTemplateContentTypeConverter</code> class implements the Spring converter
+ * that converts a <code>String</code> type into a <code>MailTemplateContentType</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToMailTemplateContentTypeConverter
-    implements Converter<Integer, MailTemplateContentType> {
+public class StringToMailTemplateContentTypeConverter
+    implements Converter<String, MailTemplateContentType> {
 
-  /** Constructs a new <code>IntegerToMailTemplateContentTypeConverter</code>. */
-  public IntegerToMailTemplateContentTypeConverter() {}
+  /** Constructs a new <code>StringToMailTemplateContentTypeConverter</code>. */
+  public StringToMailTemplateContentTypeConverter() {}
 
   @Override
-  public MailTemplateContentType convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
+  public MailTemplateContentType convert(String source) {
     return MailTemplateContentType.fromCode(source);
   }
 }

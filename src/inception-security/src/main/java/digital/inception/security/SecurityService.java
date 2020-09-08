@@ -2179,11 +2179,18 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void updateTenant(Tenant tenant) throws TenantNotFoundException, SecurityServiceException {
     try {
-      if (!tenantRepository.existsById(tenant.getId())) {
+      Optional<Tenant> tenantOptional = tenantRepository.findById(tenant.getId());
+
+      if (tenantOptional.isPresent()) {
+        Tenant existingTenant = tenantOptional.get();
+
+        existingTenant.setName(tenant.getName());
+        existingTenant.setStatus(tenant.getStatus());
+
+        tenantRepository.saveAndFlush(existingTenant);
+      } else {
         throw new TenantNotFoundException(tenant.getId());
       }
-
-      tenantRepository.saveAndFlush(tenant);
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {

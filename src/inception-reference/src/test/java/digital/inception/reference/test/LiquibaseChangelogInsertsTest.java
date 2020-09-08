@@ -18,7 +18,6 @@ package digital.inception.reference.test;
 
 import static org.junit.Assert.fail;
 
-import digital.inception.reference.CommunicationMethod;
 import digital.inception.reference.Country;
 import digital.inception.reference.EmploymentStatus;
 import digital.inception.reference.EmploymentType;
@@ -31,14 +30,12 @@ import digital.inception.reference.MarriageType;
 import digital.inception.reference.MinorType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
-import digital.inception.reference.PhysicalAddressType;
 import digital.inception.reference.Race;
 import digital.inception.reference.Region;
 import digital.inception.reference.ResidencePermitType;
 import digital.inception.reference.ResidencyStatus;
 import digital.inception.reference.ResidentialType;
 import digital.inception.reference.SourceOfFunds;
-import digital.inception.reference.SuitableTimeToContact;
 import digital.inception.reference.TaxNumberType;
 import digital.inception.reference.Title;
 import digital.inception.reference.VerificationMethod;
@@ -79,8 +76,6 @@ public class LiquibaseChangelogInsertsTest {
   @Test
   public void createLiquibaseChangelogInserts() throws Exception {
     boolean createLiquibaseInserts = false;
-    boolean createAddressTypeInserts = createLiquibaseInserts && false;
-    boolean createCommunicationMethodInserts = createLiquibaseInserts && false;
     boolean createCountryInserts = createLiquibaseInserts && false;
     boolean createEmploymentStatusInserts = createLiquibaseInserts && false;
     boolean createGenderInserts = createLiquibaseInserts && false;
@@ -97,67 +92,10 @@ public class LiquibaseChangelogInsertsTest {
     boolean createResidencyStatusInserts = createLiquibaseInserts && false;
     boolean createResidentialTypeInserts = createLiquibaseInserts && false;
     boolean createSourceOfFundsInserts = createLiquibaseInserts && false;
-    boolean createSuitableTimeToContactInserts = createLiquibaseInserts && false;
     boolean createTaxNumberTypeInserts = createLiquibaseInserts && false;
     boolean createTitleInserts = createLiquibaseInserts && false;
     boolean createVerificationMethodInserts = createLiquibaseInserts && false;
     boolean createVerificationStatusInserts = createLiquibaseInserts && false;
-
-    if (createAddressTypeInserts) {
-      for (PhysicalAddressType physicalAddressType :
-          referenceService.getPhysicalAddressTypes("en-US")) {
-
-        System.out.println(
-            "    <insert schemaName=\"reference\" tableName=\"physical_address_types\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + physicalAddressType.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\""
-                + physicalAddressType.getLocaleId()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + physicalAddressType.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + physicalAddressType.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + physicalAddressType.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-
-      System.out.println();
-    }
-
-    if (createCommunicationMethodInserts) {
-      for (CommunicationMethod communicationMethod :
-          referenceService.getCommunicationMethods("en-US")) {
-
-        System.out.println(
-            "    <insert schemaName=\"reference\" tableName=\"communication_methods\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + communicationMethod.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\""
-                + communicationMethod.getLocaleId()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + communicationMethod.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + communicationMethod.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + communicationMethod.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-
-      System.out.println();
-    }
 
     if (createCountryInserts) {
 
@@ -550,34 +488,6 @@ public class LiquibaseChangelogInsertsTest {
         System.out.println(
             "      <column name=\"description\" value=\""
                 + sourceOfFunds.getDescription()
-                + "\"/>");
-        System.out.println("    </insert>");
-      }
-
-      System.out.println();
-    }
-
-    if (createSuitableTimeToContactInserts) {
-      for (SuitableTimeToContact suitableTimeToContact :
-          referenceService.getSuitableTimesToContact("en-US")) {
-
-        System.out.println(
-            "    <insert schemaName=\"reference\" tableName=\"suitable_times_to_contact\">");
-        System.out.println(
-            "      <column name=\"code\" value=\"" + suitableTimeToContact.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\""
-                + suitableTimeToContact.getLocaleId()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\""
-                + suitableTimeToContact.getSortIndex()
-                + "\"/>");
-        System.out.println(
-            "      <column name=\"name\" value=\"" + suitableTimeToContact.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\""
-                + suitableTimeToContact.getDescription()
                 + "\"/>");
         System.out.println("    </insert>");
       }

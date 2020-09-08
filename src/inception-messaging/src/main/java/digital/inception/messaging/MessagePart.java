@@ -326,7 +326,7 @@ public class MessagePart {
     }
 
     this.messagePriority =
-        MessagePriority.fromCode(
+        MessagePriority.fromNumericCode(
             Integer.parseInt(rootElement.getAttributeValue("messagePriority")));
 
     String messageCreatedAttributeValue = rootElement.getAttributeValue("messageCreated");
@@ -971,7 +971,8 @@ public class MessagePart {
       rootElement.setAttribute("messageCorrelationId", messageCorrelationId.toString());
     }
 
-    rootElement.setAttribute("messagePriority", Integer.toString(messagePriority.code()));
+    rootElement.setAttribute(
+        "messagePriority", Integer.toString(MessagePriority.toNumericCode(messagePriority)));
     rootElement.setAttribute("messageCreated", ISO8601Util.fromLocalDateTime(messageCreated));
 
     if (messageDataHash != null) {

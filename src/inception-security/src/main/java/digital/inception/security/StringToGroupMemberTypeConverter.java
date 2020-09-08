@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * The <code>StringToGroupMemberTypeConverter</code> class implements the Spring converter that
- * converts an <code>String</code> type into a <code>GroupMemberType</code> type.
+ * converts a <code>String</code> type into a <code>GroupMemberType</code> type.
  *
  * @author Marcus Portmann
  */
@@ -38,10 +38,6 @@ public class StringToGroupMemberTypeConverter implements Converter<String, Group
 
   @Override
   public GroupMemberType convert(String source) {
-    if (source == null) {
-      return null;
-    }
-
-    return GroupMemberType.fromCode(Integer.parseInt(source));
+    return GroupMemberType.fromCode(source);
   }
 }

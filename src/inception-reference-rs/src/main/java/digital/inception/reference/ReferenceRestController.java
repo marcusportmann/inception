@@ -69,47 +69,6 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the communication methods.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
-   *     communication methods for or <code>null</code> to retrieve the communication methods for
-   *     all locales
-   * @return the communication methods
-   */
-  @Operation(
-      summary = "Retrieve the communication methods",
-      description = "Retrieve the communication methods")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(
-      value = "/communication-methods",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
-  public List<CommunicationMethod> getCommunicationMethods(
-      @Parameter(
-              name = "locale",
-              description =
-                  "The optional Unicode locale identifier identifying the locale to retrieve the communication methods for",
-              example = "en-US")
-          @RequestParam(value = "localeId", required = false)
-          String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getCommunicationMethods(localeId);
-  }
-
-  /**
    * Retrieve the countries.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the countries
@@ -524,46 +483,6 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the physical address types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
-   *     types for or <code>null</code> to retrieve the physical address types for all locales
-   * @return the physical address types
-   */
-  @Operation(
-      summary = "Retrieve the physical address types",
-      description = "Retrieve the physical address types")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(
-      value = "/physical-address-types",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
-  public List<PhysicalAddressType> getPhysicalAddressTypes(
-      @Parameter(
-              name = "locale",
-              description =
-                  "The optional Unicode locale identifier identifying the locale to retrieve the physical address types for",
-              example = "en-US")
-          @RequestParam(value = "localeId", required = false)
-          String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getPhysicalAddressTypes(localeId);
-  }
-
-  /**
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the races for
@@ -793,47 +712,6 @@ public class ReferenceRestController extends SecureRestController {
           String localeId)
       throws ReferenceServiceException {
     return referenceService.getSourcesOfFunds(localeId);
-  }
-
-  /**
-   * Retrieve the suitable times to contact.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the suitable
-   *     times to contact for or <code>null</code> to retrieve the suitable times to contact for all
-   *     locales
-   * @return the suitable times to contact
-   */
-  @Operation(
-      summary = "Retrieve the suitable times to contact",
-      description = "Retrieve the suitable times to contact")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(
-      value = "/suitable-times-to-contact",
-      method = RequestMethod.GET,
-      produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
-  public List<SuitableTimeToContact> getSuitableTimesToContact(
-      @Parameter(
-              name = "locale",
-              description =
-                  "The optional Unicode locale identifier identifying the locale to retrieve the suitable times to contact for",
-              example = "en-US")
-          @RequestParam(value = "localeId", required = false)
-          String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getSuitableTimesToContact(localeId);
   }
 
   /**

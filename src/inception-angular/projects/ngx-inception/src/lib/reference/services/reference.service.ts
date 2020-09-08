@@ -23,30 +23,27 @@ import {ReferenceServiceError} from './reference.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
-import {PhysicalAddressType} from "./physical-address-type";
-import {CommunicationMethod} from "./communication-method";
-import {Country} from "./country";
-import {EmploymentStatus} from "./employment-status";
-import {EmploymentType} from "./employment-type";
-import {Gender} from "./gender";
-import {IdentityDocumentType} from "./identity-document-type";
-import {Language} from "./language";
-import {MaritalStatus} from "./marital-status";
-import {MarriageType} from "./marriage-type";
-import {MinorType} from "./minor-type";
-import {NextOfKinType} from "./next-of-kin-type";
-import {Occupation} from "./occupation";
-import {ResidencePermitType} from "./residence-permit-type";
-import {Race} from "./race";
-import {Region} from "./region";
-import {ResidencyStatus} from "./residency-status";
-import {ResidentialType} from "./residential-type";
-import {SourceOfFunds} from "./source-of-funds";
-import {SuitableTimeToContact} from "./suitable-time-to-contact";
-import {TaxNumberType} from "./tax-number-type";
-import {Title} from "./title";
-import {VerificationStatus} from "./verification-status";
-import {VerificationMethod} from "./verification-method";
+import {Country} from './country';
+import {EmploymentStatus} from './employment-status';
+import {EmploymentType} from './employment-type';
+import {Gender} from './gender';
+import {IdentityDocumentType} from './identity-document-type';
+import {Language} from './language';
+import {MaritalStatus} from './marital-status';
+import {MarriageType} from './marriage-type';
+import {MinorType} from './minor-type';
+import {NextOfKinType} from './next-of-kin-type';
+import {Occupation} from './occupation';
+import {ResidencePermitType} from './residence-permit-type';
+import {Race} from './race';
+import {Region} from './region';
+import {ResidencyStatus} from './residency-status';
+import {ResidentialType} from './residential-type';
+import {SourceOfFunds} from './source-of-funds';
+import {TaxNumberType} from './tax-number-type';
+import {Title} from './title';
+import {VerificationStatus} from './verification-status';
+import {VerificationMethod} from './verification-method';
 
 /**
  * The Reference Service implementation.
@@ -68,33 +65,6 @@ export class ReferenceService {
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
               @Inject(LOCALE_ID) private localeId: string, private httpClient: HttpClient) {
     console.log('Initializing the Reference Service (' + localeId + ')');
-  }
-
-  /**
-   * Retrieve the communication methods.
-   *
-   * @return The communication methods.
-   */
-  getCommunicationMethods(): Observable<CommunicationMethod[]> {
-    let params = new HttpParams();
-
-    params = params.append('localeId', this.localeId);
-
-    return this.httpClient.get<CommunicationMethod[]>(this.config.referenceApiUrlPrefix + '/communication-methods',
-      {params, reportProgress: true})
-    .pipe(map((communicationMethods: CommunicationMethod[]) => {
-      return communicationMethods;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ReferenceServiceError('Failed to retrieve the communication methods.', apiError));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
-      }
-    }));
   }
 
   /**
@@ -395,33 +365,6 @@ export class ReferenceService {
   }
 
   /**
-   * Retrieve the physical address types.
-   *
-   * @return The physical address types.
-   */
-  getPhysicalAddressTypes(): Observable<PhysicalAddressType[]> {
-    let params = new HttpParams();
-
-    params = params.append('localeId', this.localeId);
-
-    return this.httpClient.get<PhysicalAddressType[]>(this.config.referenceApiUrlPrefix + '/physical-address-types',
-      {params, reportProgress: true})
-    .pipe(map((addressTypes: PhysicalAddressType[]) => {
-      return addressTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ReferenceServiceError('Failed to retrieve the physical address types.', apiError));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
-      }
-    }));
-  }
-
-  /**
    * Retrieve the races.
    *
    * @return The races.
@@ -575,33 +518,6 @@ export class ReferenceService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         return throwError(new ReferenceServiceError('Failed to retrieve the sources of funds.', apiError));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
-      }
-    }));
-  }
-
-  /**
-   * Retrieve the suitable times to contact.
-   *
-   * @return The suitable times to contact.
-   */
-  getSuitableTimesToContact(): Observable<SuitableTimeToContact[]> {
-    let params = new HttpParams();
-
-    params = params.append('localeId', this.localeId);
-
-    return this.httpClient.get<SuitableTimeToContact[]>(this.config.referenceApiUrlPrefix + '/suitable-times-to-contact',
-      {params, reportProgress: true})
-    .pipe(map((suitableTimesToContact: SuitableTimeToContact[]) => {
-      return suitableTimesToContact;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ReferenceServiceError('Failed to retrieve the suitable times to contact.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {

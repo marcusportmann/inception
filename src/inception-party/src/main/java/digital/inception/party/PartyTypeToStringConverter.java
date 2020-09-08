@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.party;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -23,25 +23,20 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>UserStatusToIntegerConverter</code> class implements the Spring converter that converts
- * a <code>UserStatus</code> type into an <code>Integer</code> type.
+ * The <code>PartyTypeToStringConverter</code> class implements the Spring converter that converts
+ * a <code>PartyType</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @WritingConverter
-public class UserStatusToIntegerConverter implements Converter<UserStatus, Integer> {
+public class PartyTypeToStringConverter implements Converter<PartyType, String> {
 
-  /** Constructs a new <code>UserStatusToIntegerConverter</code>. */
-  public UserStatusToIntegerConverter() {}
+  /** Constructs a new <code>PartyTypeToStringConverter</code>. */
+  public PartyTypeToStringConverter() {}
 
   @Override
-  public Integer convert(UserStatus source) {
-    if (source == null) {
-      return null;
-    }
-
+  public String convert(PartyType source) {
     return source.code();
   }
 }

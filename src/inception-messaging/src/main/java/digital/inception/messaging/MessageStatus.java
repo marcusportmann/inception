@@ -28,97 +28,152 @@ import javax.xml.bind.annotation.XmlType;
 // ~--- JDK imports ------------------------------------------------------------
 
 /** The enumeration giving the possible statuses for a message. */
-@Schema(
-    description =
-        "The message status, i.e. 0 = Initialized, 1 = Queued For Sending, "
-            + "2 = Queued For Processing, 3 = Aborted, 4 = Failed, 5 = Processing, 6 = Sending, "
-            + "7 = Queued For Download, 8 = Downloading, 9 = Processed, -1 = Unknown")
+@Schema(description = "The message status")
 @XmlEnum
 @XmlType(name = "MessageStatus", namespace = "http://messaging.inception.digital")
 public enum MessageStatus {
   @XmlEnumValue("Initialized")
-  INITIALIZED(0, "Initialized"),
+  INITIALIZED("initialized", "Initialized"),
   @XmlEnumValue("QueuedForSending")
-  QUEUED_FOR_SENDING(1, "QueuedForSending"),
+  QUEUED_FOR_SENDING("queued_for_sending", "QueuedForSending"),
   @XmlEnumValue("QueuedForProcessing")
-  QUEUED_FOR_PROCESSING(2, "QueuedForProcessing"),
+  QUEUED_FOR_PROCESSING("queued_for_processing", "QueuedForProcessing"),
   @XmlEnumValue("Aborted")
-  ABORTED(3, "Aborted"),
+  ABORTED("aborted", "Aborted"),
   @XmlEnumValue("Failed")
-  FAILED(4, "Failed"),
+  FAILED("failed", "Failed"),
   @XmlEnumValue("Processing")
-  PROCESSING(5, "Processing"),
+  PROCESSING("processing", "Processing"),
   @XmlEnumValue("Sending")
-  SENDING(6, "Sending"),
+  SENDING("sending", "Sending"),
   @XmlEnumValue("QueuedForDownload")
-  QUEUED_FOR_DOWNLOAD(7, "QueuedForDownload"),
+  QUEUED_FOR_DOWNLOAD("queued_for_download", "QueuedForDownload"),
   @XmlEnumValue("Downloading")
-  DOWNLOADING(8, "Downloading"),
+  DOWNLOADING("downloading", "Downloading"),
   @XmlEnumValue("Processed")
-  PROCESSED(9, "Processed"),
-  @XmlEnumValue("Unknown")
-  UNKNOWN(-1, "Unknown");
+  PROCESSED("processed", "Processed");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  MessageStatus(int code, String description) {
+  MessageStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the message status given by the specified numeric code value.
+   * Returns the message status given by the specified code value.
    *
-   * @param code the numeric code value identifying the message status
-   * @return the message status given by the specified numeric code value
+   * @param code the code value identifying the message status
+   * @return the message status given by the specified code value
    */
   @JsonCreator
-  public static MessageStatus fromCode(int code) {
+  public static MessageStatus fromCode(String code) {
     switch (code) {
-      case 0:
+      case "initialized":
         return MessageStatus.INITIALIZED;
-
-      case 1:
+      case "queued_for_sending":
         return MessageStatus.QUEUED_FOR_SENDING;
-
-      case 2:
+      case "queued_for_processing":
         return MessageStatus.QUEUED_FOR_PROCESSING;
-
-      case 3:
+      case "aborted":
         return MessageStatus.ABORTED;
-
-      case 4:
+      case "failed":
         return MessageStatus.FAILED;
-
-      case 5:
+      case "processing":
         return MessageStatus.PROCESSING;
-
-      case 6:
+      case "sending":
         return MessageStatus.SENDING;
-
-      case 7:
+      case "queued_for_download":
         return MessageStatus.QUEUED_FOR_DOWNLOAD;
-
-      case 8:
+      case "downloading":
         return MessageStatus.DOWNLOADING;
-
-      case 9:
+      case "processed":
         return MessageStatus.PROCESSED;
-
       default:
-        return MessageStatus.UNKNOWN;
+        throw new RuntimeException(
+            "Failed to determine the message status with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying the message status.
+   * Returns the message status for the specified numeric code.
    *
-   * @return the numeric code value identifying the message status
+   * @param numericCode the numeric code identifying the message status
+   * @return the message status given by the specified numeric code value
+   */
+  public static MessageStatus fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return MessageStatus.INITIALIZED;
+      case 2:
+        return MessageStatus.QUEUED_FOR_SENDING;
+      case 3:
+        return MessageStatus.QUEUED_FOR_PROCESSING;
+      case 4:
+        return MessageStatus.ABORTED;
+      case 5:
+        return MessageStatus.FAILED;
+      case 6:
+        return MessageStatus.PROCESSING;
+      case 7:
+        return MessageStatus.SENDING;
+      case 8:
+        return MessageStatus.QUEUED_FOR_DOWNLOAD;
+      case 9:
+        return MessageStatus.DOWNLOADING;
+      case 10:
+        return MessageStatus.PROCESSED;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the message status for the numeric code (" + numericCode + ")");
+    }
+  }
+
+  /**
+   * Returns the numeric code for the message status.
+   *
+   * @param messageStatus the message status
+   * @return the numeric code for the message status
+   */
+  public static int toNumericCode(MessageStatus messageStatus) {
+    switch (messageStatus) {
+      case INITIALIZED:
+        return 1;
+      case QUEUED_FOR_SENDING:
+        return 2;
+      case QUEUED_FOR_PROCESSING:
+        return 3;
+      case ABORTED:
+        return 4;
+      case FAILED:
+        return 5;
+      case PROCESSING:
+        return 6;
+      case SENDING:
+        return 7;
+      case QUEUED_FOR_DOWNLOAD:
+        return 8;
+      case DOWNLOADING:
+        return 9;
+      case PROCESSED:
+        return 10;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the message status ("
+                + messageStatus.code()
+                + ")");
+    }
+  }
+
+  /**
+   * Returns the code value identifying the message status.
+   *
+   * @return the code value identifying the message status
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

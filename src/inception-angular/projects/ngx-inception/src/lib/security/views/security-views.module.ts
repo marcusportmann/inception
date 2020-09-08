@@ -307,7 +307,8 @@ const routes: Routes = [{
       canActivate: [CanActivateFunctionGuard],
       component: UserGroupsComponent,
       data: {
-        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration']
+        authorities: ['ROLE_Administrator', 'FUNCTION_Security.TenantAdministration',
+          'FUNCTION_Security.UserAdministration']
       },
       resolve: {
         title: UserGroupsTitleResolver

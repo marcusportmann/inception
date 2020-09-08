@@ -26,7 +26,6 @@ import javax.persistence.Converter;
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-@SuppressWarnings("unused")
 public class MessageStatusConverter implements AttributeConverter<MessageStatus, Integer> {
 
   /**
@@ -38,7 +37,7 @@ public class MessageStatusConverter implements AttributeConverter<MessageStatus,
    */
   @Override
   public Integer convertToDatabaseColumn(MessageStatus attribute) {
-    return attribute.code();
+    return MessageStatus.toNumericCode(attribute);
   }
 
   /**
@@ -52,6 +51,6 @@ public class MessageStatusConverter implements AttributeConverter<MessageStatus,
    */
   @Override
   public MessageStatus convertToEntityAttribute(Integer dbData) {
-    return MessageStatus.fromCode(dbData);
+    return MessageStatus.fromNumericCode(dbData);
   }
 }

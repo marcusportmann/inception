@@ -14,32 +14,29 @@
  * limitations under the License.
  */
 
-package digital.inception.messaging;
+package digital.inception.security;
+
+// ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>MessagePartStatusToIntegerConverter</code> class implements the Spring converter that
- * converts a <code>MessagePartStatus</code> type into an <code>Integer</code> type.
+ * The <code>StringToTenantStatusConverter</code> class implements the Spring converter that
+ * converts a <code>String</code> type into a <code>TenantStatus</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
-@WritingConverter
-public class MessagePartStatusToIntegerConverter implements Converter<MessagePartStatus, Integer> {
+@ReadingConverter
+public class StringToTenantStatusConverter implements Converter<String, TenantStatus> {
 
-  /** Constructs a new <code>MessagePartStatusToIntegerConverter</code>. */
-  public MessagePartStatusToIntegerConverter() {}
+  /** Constructs a new <code>StringToTenantStatusConverter</code>. */
+  public StringToTenantStatusConverter() {}
 
   @Override
-  public Integer convert(MessagePartStatus source) {
-    if (source == null) {
-      return null;
-    }
-
-    return source.code();
+  public TenantStatus convert(String source) {
+    return TenantStatus.fromCode(source);
   }
 }

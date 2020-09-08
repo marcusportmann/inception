@@ -19,30 +19,24 @@ package digital.inception.security;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToPasswordResetStatusConverter</code> class implements the Spring converter that
- * converts an <code>Integer</code> type into a <code>PasswordResetStatus</code> type.
+ * The <code>UserStatusToStringConverter</code> class implements the Spring converter that converts
+ * a <code>UserStatus</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
-@ReadingConverter
-public class IntegerToPasswordResetStatusConverter
-    implements Converter<Integer, PasswordResetStatus> {
+@WritingConverter
+public class UserStatusToStringConverter implements Converter<UserStatus, String> {
 
-  /** Constructs a new <code>IntegerToPasswordResetStatusConverter</code>. */
-  public IntegerToPasswordResetStatusConverter() {}
+  /** Constructs a new <code>UserStatusToStringConverter</code>. */
+  public UserStatusToStringConverter() {}
 
   @Override
-  public PasswordResetStatus convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
-    return PasswordResetStatus.fromCode(source);
+  public String convert(UserStatus source) {
+    return source.code();
   }
 }

@@ -32,20 +32,20 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The group member type, i.e. 0 = User, 1 = Group")
+@Schema(description = "The group member type")
 @XmlEnum
 @XmlType(name = "GroupMemberType", namespace = "http://security.inception.digital")
 public enum GroupMemberType {
   @XmlEnumValue("User")
-  USER(0, "User"),
+  USER("user", "User"),
   @XmlEnumValue("Group")
-  GROUP(1, "Group");
+  GROUP("group", "Group");
 
-  private int code;
+  private final String code;
 
-  private String description;
+  private final String description;
 
-  GroupMemberType(int code, String description) {
+  GroupMemberType(String code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -57,26 +57,25 @@ public enum GroupMemberType {
    * @return the group member type given by the specified code value
    */
   @JsonCreator
-  public static GroupMemberType fromCode(int code) {
+  public static GroupMemberType fromCode(String code) {
     switch (code) {
-      case 0:
+      case "user":
         return GroupMemberType.USER;
-
-      case 1:
+      case "group":
         return GroupMemberType.GROUP;
-
       default:
-        return GroupMemberType.USER;
+        throw new RuntimeException(
+            "Failed to determine the group member type with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying for the group member type.
+   * Returns the code value identifying for the group member type.
    *
-   * @return the numeric code value identifying for the group member type
+   * @return the code value identifying for the group member type
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

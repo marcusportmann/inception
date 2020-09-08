@@ -47,9 +47,8 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
 
   contentTypeFormControl: FormControl;
 
-  contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text, MailTemplateContentType.HTML,
-    MailTemplateContentType.Unknown
-  ];
+  contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text,
+    MailTemplateContentType.HTML];
 
   idFormControl: FormControl;
 

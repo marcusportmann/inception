@@ -19,27 +19,25 @@ package digital.inception.security;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToUserSortByConverter</code> class implements the Spring converter that converts
- * an <code>Integer</code> type into a <code>UserSortBy</code> type.
+ * The <code>PasswordChangeReasonToStringConverter</code> class implements the Spring converter that
+ * converts a <code>PasswordChangeReason</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
-public class IntegerToUserSortByConverter implements Converter<Integer, UserSortBy> {
+@WritingConverter
+public class PasswordChangeReasonToStringConverter
+    implements Converter<PasswordChangeReason, String> {
 
-  /** Constructs a new <code>IntegerToUserSortByConverter</code>. */
-  public IntegerToUserSortByConverter() {}
+  /** Constructs a new <code>PasswordChangeReasonToStringConverter</code>. */
+  public PasswordChangeReasonToStringConverter() {}
 
   @Override
-  public UserSortBy convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
-    return UserSortBy.fromCode(source);
+  public String convert(PasswordChangeReason source) {
+    return source.code();
   }
 }

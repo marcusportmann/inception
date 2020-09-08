@@ -109,8 +109,6 @@ export * from './lib/reporting/views/reporting-views.module';
 
 // Reference
 export * from './lib/reference/services/reference.service';
-export * from './lib/reference/services/physical-address-type';
-export * from './lib/reference/services/communication-method';
 export * from './lib/reference/services/country';
 export * from './lib/reference/services/employment-status';
 export * from './lib/reference/services/employment-type';
@@ -128,7 +126,6 @@ export * from './lib/reference/services/region';
 export * from './lib/reference/services/residency-status';
 export * from './lib/reference/services/residential-type';
 export * from './lib/reference/services/source-of-funds';
-export * from './lib/reference/services/suitable-time-to-contact';
 export * from './lib/reference/services/tax-number-type';
 export * from './lib/reference/services/title';
 export * from './lib/reference/services/verification-method';

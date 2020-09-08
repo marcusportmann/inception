@@ -57,21 +57,6 @@ public class ReferenceWebService {
   }
 
   /**
-   * Retrieve the communication methods.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
-   *     communication methods for or <code>null</code> to retrieve the communication methods for
-   *     all locales
-   * @return the communication methods
-   */
-  @WebMethod(operationName = "GetCommunicationMethods")
-  public List<CommunicationMethod> getCommunicationMethods(
-      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getCommunicationMethods(localeId);
-  }
-
-  /**
    * Retrieve the countries.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the countries
@@ -227,20 +212,6 @@ public class ReferenceWebService {
   }
 
   /**
-   * Retrieve the physical address types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
-   *     types for or <code>null</code> to retrieve the physical address types for all locales
-   * @return the physical address types
-   */
-  @WebMethod(operationName = "GetAddressTypes")
-  public List<PhysicalAddressType> getPhysicalAddressTypes(
-      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getPhysicalAddressTypes(localeId);
-  }
-
-  /**
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the races for
@@ -324,21 +295,6 @@ public class ReferenceWebService {
       @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
       throws ReferenceServiceException {
     return referenceService.getSourcesOfFunds(localeId);
-  }
-
-  /**
-   * Retrieve the suitable times to contact.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the suitable
-   *     times to contact for or <code>null</code> to retrieve the suitable times to contact for all
-   *     locales
-   * @return the suitable times to contact
-   */
-  @WebMethod(operationName = "GetSuitableTimesToContact")
-  public List<SuitableTimeToContact> getSuitableTimesToContact(
-      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getSuitableTimesToContact(localeId);
   }
 
   /**

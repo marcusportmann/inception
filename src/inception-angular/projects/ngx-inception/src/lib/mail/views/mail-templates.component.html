@@ -8,13 +8,13 @@
     <!-- Name Column -->
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@mail_mail_templates_component_table_header_name">Name</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+      <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
     </ng-container>
 
     <!-- Content Type Column -->
     <ng-container matColumnDef="contentType">
       <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@mail_mail_templates_component_table_header_content_type">Content Type</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{MailTemplateContentType[row.contentType]}}</mat-cell>
+      <mat-cell *matCellDef="let row">{{ row.contentType }}</mat-cell>
     </ng-container>
 
     <!-- Actions Column -->

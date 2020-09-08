@@ -1445,7 +1445,7 @@ public class SecurityRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   @PreAuthorize(
-      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration')")
+      "hasRole('Administrator') or hasAuthority('FUNCTION_Security.TenantAdministration') or hasAuthority('FUNCTION_Security.UserAdministration')")
   public List<String> getGroupNamesForUser(
       @Parameter(
               name = "userDirectoryId",

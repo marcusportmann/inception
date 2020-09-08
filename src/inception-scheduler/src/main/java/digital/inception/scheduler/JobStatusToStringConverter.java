@@ -14,35 +14,29 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.scheduler;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToPasswordChangeReasonConverter</code> class implements the Spring converter
- * that converts an <code>Integer</code> type into a <code>PasswordChangeReason</code> type.
+ * The <code>JobStatusToStringConverter</code> class implements the Spring converter that converts a
+ * <code>JobStatus</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
-@ReadingConverter
-public class IntegerToPasswordChangeReasonConverter
-    implements Converter<Integer, PasswordChangeReason> {
+@WritingConverter
+public class JobStatusToStringConverter implements Converter<JobStatus, String> {
 
-  /** Constructs a new <code>IntegerToPasswordChangeReasonConverter</code>. */
-  public IntegerToPasswordChangeReasonConverter() {}
+  /** Constructs a new <code>JobStatusToStringConverter</code>. */
+  public JobStatusToStringConverter() {}
 
   @Override
-  public PasswordChangeReason convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
-    return PasswordChangeReason.fromCode(source);
+  public String convert(JobStatus source) {
+    return source.code();
   }
 }

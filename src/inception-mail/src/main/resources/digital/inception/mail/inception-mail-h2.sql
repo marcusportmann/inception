@@ -22,7 +22,7 @@ COMMENT ON COLUMN mail.mail_templates.id IS 'The ID uniquely identifying the mai
 
 COMMENT ON COLUMN mail.mail_templates.name IS 'The name of the mail template';
 
-COMMENT ON COLUMN mail.mail_templates.content_type IS 'The content type for the mail template';
+COMMENT ON COLUMN mail.mail_templates.content_type IS 'The code identifying the content type for the mail template';
 
 COMMENT ON COLUMN mail.mail_templates.template IS 'The Apache FreeMarker template for the mail template';
 

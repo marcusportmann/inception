@@ -23,25 +23,20 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>TenantStatusToIntegerConverter</code> class implements the Spring converter that
- * converts a <code>TenantStatus</code> type into an <code>Integer</code> type.
+ * The <code>GroupMemberTypeToStringConverter</code> class implements the Spring converter that
+ * converts a <code>GroupMemberType</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @WritingConverter
-public class TenantStatusToIntegerConverter implements Converter<TenantStatus, Integer> {
+public class GroupMemberTypeToStringConverter implements Converter<GroupMemberType, String> {
 
-  /** Constructs a new <code>TenantStatusToIntegerConverter</code>. */
-  public TenantStatusToIntegerConverter() {}
+  /** Constructs a new <code>GroupMemberTypeToStringConverter</code>. */
+  public GroupMemberTypeToStringConverter() {}
 
   @Override
-  public Integer convert(TenantStatus source) {
-    if (source == null) {
-      return null;
-    }
-
+  public String convert(GroupMemberType source) {
     return source.code();
   }
 }

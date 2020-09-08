@@ -14,34 +14,27 @@
  * limitations under the License.
  */
 
-package digital.inception.sms;
-
-// ~--- non-JDK imports --------------------------------------------------------
+package digital.inception.messaging;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>SMSStatusToIntegerConverter</code> class implements the Spring converter that converts
- * a <code>SMSStatus</code> type into an <code>Integer</code> type.
+ * The <code>MessageStatusToStringConverter</code> class implements the Spring converter that
+ * converts a <code>MessageStatus</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @WritingConverter
-public class SMSStatusToIntegerConverter implements Converter<SMSStatus, Integer> {
+public class MessageStatusToStringConverter implements Converter<MessageStatus, String> {
 
-  /** Constructs a new <code>SMSStatusToIntegerConverter</code>. */
-  public SMSStatusToIntegerConverter() {}
+  /** Constructs a new <code>MessageStatusToStringConverter</code>. */
+  public MessageStatusToStringConverter() {}
 
   @Override
-  public Integer convert(SMSStatus source) {
-    if (source == null) {
-      return null;
-    }
-
+  public String convert(MessageStatus source) {
     return source.code();
   }
 }

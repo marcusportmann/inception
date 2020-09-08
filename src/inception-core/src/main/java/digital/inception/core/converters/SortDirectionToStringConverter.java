@@ -28,7 +28,6 @@ import org.springframework.stereotype.Component;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 public class SortDirectionToStringConverter implements Converter<SortDirection, String> {
 
@@ -37,10 +36,6 @@ public class SortDirectionToStringConverter implements Converter<SortDirection, 
 
   @Override
   public String convert(SortDirection source) {
-    if (source == null) {
-      return null;
-    }
-
-    return source.getCode();
+    return source.code();
   }
 }

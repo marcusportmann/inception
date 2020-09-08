@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.sms;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -23,25 +23,20 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToUserStatusConverter</code> class implements the Spring converter that converts
- * an <code>Integer</code> type into a <code>UserStatus</code> type.
+ * The <code>StringToSMSStatusConverter</code> class implements the Spring converter that converts
+ * a <code>String</code> type into a <code>SMSStatus</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToUserStatusConverter implements Converter<Integer, UserStatus> {
+public class StringToSMSStatusConverter implements Converter<String, SMSStatus> {
 
-  /** Constructs a new <code>IntegerToUserStatusConverter</code>. */
-  public IntegerToUserStatusConverter() {}
+  /** Constructs a new <code>StringToSMSStatusConverter</code>. */
+  public StringToSMSStatusConverter() {}
 
   @Override
-  public UserStatus convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
-    return UserStatus.fromCode(source);
+  public SMSStatus convert(String source) {
+    return SMSStatus.fromCode(source);
   }
 }

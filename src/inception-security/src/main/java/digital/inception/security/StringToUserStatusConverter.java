@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.scheduler;
+package digital.inception.security;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -23,25 +23,20 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToJobStatusConverter</code> class implements the Spring converter that converts
- * an <code>Integer</code> type into a <code>JobStatus</code> type.
+ * The <code>StringToUserStatusConverter</code> class implements the Spring converter that converts
+ * a <code>String</code> type into a <code>UserStatus</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToJobStatusConverter implements Converter<Integer, JobStatus> {
+public class StringToUserStatusConverter implements Converter<String, UserStatus> {
 
-  /** Constructs a new <code>IntegerToJobStatusConverter</code>. */
-  public IntegerToJobStatusConverter() {}
+  /** Constructs a new <code>StringToUserStatusConverter</code>. */
+  public StringToUserStatusConverter() {}
 
   @Override
-  public JobStatus convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
-    return JobStatus.fromCode(source);
+  public UserStatus convert(String source) {
+    return UserStatus.fromCode(source);
   }
 }

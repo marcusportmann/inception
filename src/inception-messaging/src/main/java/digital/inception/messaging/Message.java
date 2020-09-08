@@ -287,7 +287,7 @@ public class Message {
     }
 
     this.priority =
-        MessagePriority.fromCode(Integer.parseInt(rootElement.getAttributeValue("priority")));
+        MessagePriority.fromNumericCode(Integer.parseInt(rootElement.getAttributeValue("priority")));
     this.data = rootElement.getOpaque();
 
     if (rootElement.hasAttribute("dataHash")) {
@@ -962,7 +962,7 @@ public class Message {
       rootElement.setAttribute("correlationId", correlationId.toString());
     }
 
-    rootElement.setAttribute("priority", Integer.toString(priority.code()));
+    rootElement.setAttribute("priority", Integer.toString(MessagePriority.toNumericCode(priority)));
     rootElement.setAttribute("created", ISO8601Util.fromLocalDateTime(created));
 
     if (sendAttempts != null) {

@@ -45,7 +45,7 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
-      "select m from Message m where m.status = 2 and "
+      "select m from Message m where m.status = 3 and "
           + "(m.lastProcessed < :processedBefore or m.lastProcessed is null) order by m.lastProcessed")
   List<Message> findMessagesQueuedForProcessingForWrite(
       @Param("processedBefore") LocalDateTime processedBefore, Pageable pageable);
@@ -62,14 +62,14 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
 
   @Modifying
   @Query(
-      "update Message m set m.lockName = :lockName, m.status = 8, "
+      "update Message m set m.lockName = :lockName, m.status = 9, "
           + "m.downloadAttempts = m.downloadAttempts + 1 where m.id = :messageId")
   void lockMessageForDownload(
       @Param("messageId") UUID messageId, @Param("lockName") String lockName);
 
   @Modifying
   @Query(
-      "update Message m set m.lockName = :lockName, m.status = 5, "
+      "update Message m set m.lockName = :lockName, m.status = 6, "
           + "m.processAttempts = m.processAttempts + 1, m.lastProcessed = :when "
           + "where m.id = :messageId")
   void lockMessageForProcessing(
@@ -87,10 +87,10 @@ public interface MessageRepository extends JpaRepository<Message, UUID> {
       @Param("lockName") String lockName);
 
   @Modifying
-  @Query("update Message m set m.status = :status " + "where m.id = :messageId")
+  @Query("update Message m set m.status = :status where m.id = :messageId")
   void setMessageStatus(@Param("messageId") UUID messageId, @Param("status") MessageStatus status);
 
   @Modifying
-  @Query("update Message m set m.status = :status, m.lockName = null " + "where m.id = :messageId")
+  @Query("update Message m set m.status = :status, m.lockName = null where m.id = :messageId")
   void unlockMessage(@Param("messageId") UUID messageId, @Param("status") MessageStatus status);
 }

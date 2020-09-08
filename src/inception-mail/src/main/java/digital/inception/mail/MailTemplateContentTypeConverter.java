@@ -28,7 +28,6 @@ import javax.persistence.Converter;
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-@SuppressWarnings("unused")
 public class MailTemplateContentTypeConverter
     implements AttributeConverter<MailTemplateContentType, Integer> {
 
@@ -41,7 +40,7 @@ public class MailTemplateContentTypeConverter
    */
   @Override
   public Integer convertToDatabaseColumn(MailTemplateContentType attribute) {
-    return attribute.code();
+    return MailTemplateContentType.toNumericCode(attribute);
   }
 
   /**
@@ -55,6 +54,6 @@ public class MailTemplateContentTypeConverter
    */
   @Override
   public MailTemplateContentType convertToEntityAttribute(Integer dbData) {
-    return MailTemplateContentType.fromCode(dbData);
+    return MailTemplateContentType.fromNumericCode(dbData);
   }
 }

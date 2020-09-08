@@ -79,7 +79,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
     });
 
     this.subscriptions.add(this.userDirectoryTypeFormControl.valueChanges
-    .pipe(startWith(null), debounceTime(500), pairwise())
+    .pipe(startWith(null), pairwise())
     .subscribe(([previousUserDirectoryType, currentUserDirectoryType]: [string, string]) => {
       this.userDirectoryTypeSelected(previousUserDirectoryType, currentUserDirectoryType);
     }));

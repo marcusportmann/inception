@@ -23,11 +23,10 @@ import org.springframework.stereotype.Component;
 
 /**
  * The <code>StringToUserSortByConverter</code> class implements the Spring converter that converts
- * an <code>String</code> type into a <code>UserSortBy</code> type.
+ * a <code>String</code> type into a <code>UserSortBy</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 public class StringToUserSortByConverter implements Converter<String, UserSortBy> {
 
@@ -36,10 +35,6 @@ public class StringToUserSortByConverter implements Converter<String, UserSortBy
 
   @Override
   public UserSortBy convert(String source) {
-    if (source == null) {
-      return null;
-    }
-
     return UserSortBy.fromCode(source);
   }
 }

@@ -20,7 +20,6 @@ package digital.inception.reference.test;
 
 import static org.junit.Assert.assertEquals;
 
-import digital.inception.reference.CommunicationMethod;
 import digital.inception.reference.Country;
 import digital.inception.reference.EmploymentStatus;
 import digital.inception.reference.EmploymentType;
@@ -33,14 +32,12 @@ import digital.inception.reference.MarriageType;
 import digital.inception.reference.MinorType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
-import digital.inception.reference.PhysicalAddressType;
 import digital.inception.reference.Race;
 import digital.inception.reference.Region;
 import digital.inception.reference.ResidencePermitType;
 import digital.inception.reference.ResidencyStatus;
 import digital.inception.reference.ResidentialType;
 import digital.inception.reference.SourceOfFunds;
-import digital.inception.reference.SuitableTimeToContact;
 import digital.inception.reference.TaxNumberType;
 import digital.inception.reference.Title;
 import digital.inception.reference.VerificationMethod;
@@ -77,44 +74,6 @@ public class ReferenceServiceTest {
 
   /** The Reference Service. */
   @Autowired private IReferenceService referenceService;
-
-  /** Test the physical address type reference functionality. */
-  @Test
-  public void addressTypeTest() throws Exception {
-    List<PhysicalAddressType> retrievedPhysicalAddressTypes =
-        referenceService.getPhysicalAddressTypes();
-
-    assertEquals(
-        "The correct number of physical address types was not retrieved",
-        14,
-        retrievedPhysicalAddressTypes.size());
-
-    retrievedPhysicalAddressTypes = referenceService.getPhysicalAddressTypes("en-US");
-
-    assertEquals(
-        "The correct number of physical address types was not retrieved",
-        7,
-        retrievedPhysicalAddressTypes.size());
-  }
-
-  /** Test the communication method reference functionality. */
-  @Test
-  public void communicationMethodTest() throws Exception {
-    List<CommunicationMethod> retrievedCommunicationMethods =
-        referenceService.getCommunicationMethods();
-
-    assertEquals(
-        "The correct number of communication methods was not retrieved",
-        6,
-        retrievedCommunicationMethods.size());
-
-    retrievedCommunicationMethods = referenceService.getCommunicationMethods("en-US");
-
-    assertEquals(
-        "The correct number of communication methods was not retrieved",
-        3,
-        retrievedCommunicationMethods.size());
-  }
 
   /** Test the country reference functionality. */
   @Test
@@ -427,25 +386,6 @@ public class ReferenceServiceTest {
         "The correct number of sources of funds was not retrieved",
         19,
         retrievedSourceOfFunds.size());
-  }
-
-  /** Test the suitable time to contact reference functionality. */
-  @Test
-  public void suitableTimeToContactFundsTest() throws Exception {
-    List<SuitableTimeToContact> retrievedSuitableTimesToContact =
-        referenceService.getSuitableTimesToContact();
-
-    assertEquals(
-        "The correct number of suitable times to contact was not retrieved",
-        10,
-        retrievedSuitableTimesToContact.size());
-
-    retrievedSuitableTimesToContact = referenceService.getSuitableTimesToContact("en-US");
-
-    assertEquals(
-        "The correct number of suitable times to contact was not retrieved",
-        5,
-        retrievedSuitableTimesToContact.size());
   }
 
   /** Test the tax number type reference functionality. */

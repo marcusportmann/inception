@@ -32,81 +32,119 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "The SMS status, i.e. 0 = Unknown, 1 = Queued For Sending, 2 = Sending, "
-            + "3 = Sent, 4 = Failed, -1 = Any")
+@Schema(description = "The SMS status")
 @XmlEnum
 @XmlType(name = "SMSStatus", namespace = "http://sms.inception.digital")
 public enum SMSStatus {
   @XmlEnumValue("Unknown")
-  UNKNOWN(0, "Unknown"),
+  UNKNOWN("unknown", "Unknown"),
   @XmlEnumValue("QueuedForSending")
-  QUEUED_FOR_SENDING(1, "QueuedForSending"),
+  QUEUED_FOR_SENDING("queued_for_sending", "QueuedForSending"),
   @XmlEnumValue("Sending")
-  SENDING(2, "Sending"),
+  SENDING("sending", "Sending"),
   @XmlEnumValue("Sent")
-  SENT(3, "Sent"),
+  SENT("sent", "Sent"),
   @XmlEnumValue("Failed")
-  FAILED(4, "Failed"),
+  FAILED("failed", "Failed"),
   @XmlEnumValue("Any")
-  ANY(-1, "Any");
+  ANY("any", "Any");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  SMSStatus(int code, String description) {
+  SMSStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the SMS status given by the specified numeric code value.
+   * Returns the SMS status given by the specified code value.
    *
-   * @param code the numeric code value identifying the SMS status
-   * @return the SMS status given by the specified numeric code value
+   * @param code the code value identifying the SMS status
+   * @return the SMS status given by the specified code value
    */
   @JsonCreator
-  public static SMSStatus fromCode(int code) {
+  public static SMSStatus fromCode(String code) {
     switch (code) {
-      case 1:
-        return SMSStatus.QUEUED_FOR_SENDING;
-
-      case 2:
-        return SMSStatus.SENDING;
-
-      case 3:
-        return SMSStatus.SENT;
-
-      case 4:
-        return SMSStatus.FAILED;
-
-      case -1:
-        return SMSStatus.ANY;
-
-      default:
+      case "unknown":
         return SMSStatus.UNKNOWN;
+      case "queued_for_sending":
+        return SMSStatus.QUEUED_FOR_SENDING;
+      case "sending":
+        return SMSStatus.SENDING;
+      case "sent":
+        return SMSStatus.SENT;
+      case "failed":
+        return SMSStatus.FAILED;
+      case "any":
+        return SMSStatus.ANY;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the SMS status with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying the SMS status.
+   * Returns the sms status for the specified numeric code.
    *
-   * @return the numeric code value identifying the SMS status
+   * @param numericCode the numeric code identifying the sms status
+   * @return the sms status given by the specified numeric code value
    */
-  @JsonValue
-  public int code() {
-    return code;
+  public static SMSStatus fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return SMSStatus.UNKNOWN;
+      case 2:
+        return SMSStatus.QUEUED_FOR_SENDING;
+      case 3:
+        return SMSStatus.SENDING;
+      case 4:
+        return SMSStatus.SENT;
+      case 5:
+        return SMSStatus.FAILED;
+      case -1:
+        return SMSStatus.ANY;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the sms status for the numeric code (" + numericCode + ")");
+    }
   }
 
   /**
-   * Returns the <code>String</code> value of the numeric code value identifying the SMS status.
+   * Returns the numeric code for the sms status.
    *
-   * @return the <code>String</code> value of the numeric code value identifying the SMS status
+   * @param smsStatus the sms status
+   * @return the numeric code for the sms status
    */
-  public String codeAsString() {
-    return String.valueOf(code);
+  public static int toNumericCode(SMSStatus smsStatus) {
+    switch (smsStatus) {
+      case UNKNOWN:
+        return 1;
+      case QUEUED_FOR_SENDING:
+        return 2;
+      case SENDING:
+        return 3;
+      case SENT:
+        return 4;
+      case FAILED:
+        return 5;
+      case ANY:
+        return -1;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the sms status (" + smsStatus.code() + ")");
+    }
+  }
+
+  /**
+   * Returns the code value identifying the SMS status.
+   *
+   * @return the code value identifying the SMS status
+   */
+  @JsonValue
+  public String code() {
+    return code;
   }
 
   /**

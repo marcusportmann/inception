@@ -26,26 +26,7 @@ import java.util.List;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 public interface IReferenceService {
-
-  /**
-   * Retrieve all the communication methods.
-   *
-   * @return the communication methods
-   */
-  List<CommunicationMethod> getCommunicationMethods() throws ReferenceServiceException;
-
-  /**
-   * Retrieve the communication methods.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
-   *     communication methods for or <code>null</code> to retrieve the communication methods for
-   *     all locales
-   * @return the communication methods
-   */
-  List<CommunicationMethod> getCommunicationMethods(String localeId)
-      throws ReferenceServiceException;
 
   /**
    * Retrieve all the countries.
@@ -226,23 +207,6 @@ public interface IReferenceService {
   List<Occupation> getOccupations(String localeId) throws ReferenceServiceException;
 
   /**
-   * Retrieve all the physical address types.
-   *
-   * @return the physical address types
-   */
-  List<PhysicalAddressType> getPhysicalAddressTypes() throws ReferenceServiceException;
-
-  /**
-   * Retrieve the physical address types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
-   *     types for or <code>null</code> to retrieve the physical address types for all locales
-   * @return the physical address types
-   */
-  List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
-      throws ReferenceServiceException;
-
-  /**
    * Retrieve all the races.
    *
    * @return the races
@@ -340,24 +304,6 @@ public interface IReferenceService {
    * @return the sources of funds
    */
   List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ReferenceServiceException;
-
-  /**
-   * Retrieve all the suitable times to contact.
-   *
-   * @return the suitable times to contact
-   */
-  List<SuitableTimeToContact> getSuitableTimesToContact() throws ReferenceServiceException;
-
-  /**
-   * Retrieve the suitable times to contact.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the suitable
-   *     times to contact for or <code>null</code> to retrieve the suitable times to contact for all
-   *     locales
-   * @return the suitable times to contact
-   */
-  List<SuitableTimeToContact> getSuitableTimesToContact(String localeId)
-      throws ReferenceServiceException;
 
   /**
    * Retrieve all the tax number types.

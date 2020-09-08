@@ -26,7 +26,6 @@ import javax.persistence.Converter;
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-@SuppressWarnings("unused")
 public class MessagePriorityConverter implements AttributeConverter<MessagePriority, Integer> {
 
   /**
@@ -38,7 +37,7 @@ public class MessagePriorityConverter implements AttributeConverter<MessagePrior
    */
   @Override
   public Integer convertToDatabaseColumn(MessagePriority attribute) {
-    return attribute.code();
+    return MessagePriority.toNumericCode(attribute);
   }
 
   /**
@@ -52,6 +51,6 @@ public class MessagePriorityConverter implements AttributeConverter<MessagePrior
    */
   @Override
   public MessagePriority convertToEntityAttribute(Integer dbData) {
-    return MessagePriority.fromCode(dbData);
+    return MessagePriority.fromNumericCode(dbData);
   }
 }

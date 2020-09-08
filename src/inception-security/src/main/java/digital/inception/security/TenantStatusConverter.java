@@ -28,7 +28,6 @@ import javax.persistence.Converter;
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-@SuppressWarnings("unused")
 public class TenantStatusConverter implements AttributeConverter<TenantStatus, Integer> {
 
   /**
@@ -40,7 +39,7 @@ public class TenantStatusConverter implements AttributeConverter<TenantStatus, I
    */
   @Override
   public Integer convertToDatabaseColumn(TenantStatus attribute) {
-    return attribute.code();
+    return TenantStatus.toNumericCode(attribute);
   }
 
   /**
@@ -54,6 +53,6 @@ public class TenantStatusConverter implements AttributeConverter<TenantStatus, I
    */
   @Override
   public TenantStatus convertToEntityAttribute(Integer dbData) {
-    return TenantStatus.fromCode(dbData);
+    return TenantStatus.fromNumericCode(dbData);
   }
 }

@@ -47,9 +47,8 @@ export class EditMailTemplateComponent extends AdminContainerView implements Aft
 
   contentTypeFormControl: FormControl;
 
-  contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text, MailTemplateContentType.HTML,
-    MailTemplateContentType.Unknown
-  ];
+  contentTypes: MailTemplateContentType[] = [MailTemplateContentType.Text,
+    MailTemplateContentType.HTML];
 
   editMailTemplateForm: FormGroup;
 

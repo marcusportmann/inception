@@ -24,10 +24,10 @@ export enum GroupMemberType {
   /**
    * User.
    */
-  User = 0,
+  User = 'user',
 
   /**
    * Group.
    */
-  Group = 1
+  Group = 'group'
 }

@@ -33,43 +33,37 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The mail template content type, i.e. 0 = Unknown, 1 = Text, 2 = HTML")
+@Schema(description = "The mail template content type")
 @XmlEnum
 @XmlType(name = "MailTemplateContentType", namespace = "http://mail.inception.digital")
-@SuppressWarnings("unused")
 public enum MailTemplateContentType {
-  @XmlEnumValue("Unknown")
-  UNKNOWN(0, "Unknown"),
   @XmlEnumValue("Text")
-  TEXT(1, "Text"),
+  TEXT("text", "Text"),
   @XmlEnumValue("HTML")
-  HTML(2, "HTML");
+  HTML("html", "HTML");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  MailTemplateContentType(int code, String description) {
+  MailTemplateContentType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the mail template content type given by the specified numeric code value.
+   * Returns the mail template content type given by the specified code value.
    *
-   * @param code the numeric code value identifying the mail template content type
-   * @return the mail template content type given by the specified numeric code value
+   * @param code the code value identifying the mail template content type
+   * @return the mail template content type given by the specified code value
    */
   @JsonCreator
-  public static MailTemplateContentType fromCode(int code) {
+  public static MailTemplateContentType fromCode(String code) {
     switch (code) {
-      case 0:
-        return MailTemplateContentType.UNKNOWN;
-
-      case 1:
+      case "text":
         return MailTemplateContentType.TEXT;
 
-      case 2:
+      case "html":
         return MailTemplateContentType.HTML;
 
       default:
@@ -81,12 +75,52 @@ public enum MailTemplateContentType {
   }
 
   /**
+   * Returns the mail template content type for the specified numeric code.
+   *
+   * @param numericCode the numeric code identifying the mail template content type
+   * @return the mail template content type given by the specified numeric code value
+   */
+  public static MailTemplateContentType fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return MailTemplateContentType.TEXT;
+      case 2:
+        return MailTemplateContentType.HTML;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the mail template content type for the numeric code ("
+                + numericCode
+                + ")");
+    }
+  }
+
+  /**
    * Returns the numeric code for the mail template content type.
    *
+   * @param mailTemplateContentType the mail template content type
    * @return the numeric code for the mail template content type
    */
+  public static int toNumericCode(MailTemplateContentType mailTemplateContentType) {
+    switch (mailTemplateContentType) {
+      case TEXT:
+        return 1;
+      case HTML:
+        return 2;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the mail template content type ("
+                + mailTemplateContentType.code()
+                + ")");
+    }
+  }
+
+  /**
+   * Returns the code for the mail template content type.
+   *
+   * @return the code for the mail template content type
+   */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 
@@ -97,16 +131,5 @@ public enum MailTemplateContentType {
    */
   public String description() {
     return description;
-  }
-
-  /**
-   * Returns the <code>String</code> representation of the numeric code for the mail template
-   * content type.
-   *
-   * @return the <code>String</code> representation of the numeric code for the mail template
-   *     content type
-   */
-  public String getCodeAsString() {
-    return String.valueOf(code);
   }
 }

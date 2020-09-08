@@ -33,22 +33,22 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The password change reason, i.e. 0 = User, 1 = Administrative, 2 = Reset")
+@Schema(description = "The password change reason")
 @XmlEnum
 @XmlType(name = "PasswordChangeReason", namespace = "http://security.inception.digital")
 public enum PasswordChangeReason {
   @XmlEnumValue("User")
-  USER(0, "User"),
+  USER("user", "User"),
   @XmlEnumValue("Administrative")
-  ADMINISTRATIVE(1, "Administrative"),
+  ADMINISTRATIVE("administrative", "Administrative"),
   @XmlEnumValue("Reset")
-  RESET(2, "Reset");
+  RESET("reset", "Reset");
 
-  private int code;
+  private final String code;
 
-  private String description;
+  private final String description;
 
-  PasswordChangeReason(int code, String description) {
+  PasswordChangeReason(String code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -60,26 +60,27 @@ public enum PasswordChangeReason {
    * @return the password change reason given by the specified code value
    */
   @JsonCreator
-  public static PasswordChangeReason fromCode(int code) {
+  public static PasswordChangeReason fromCode(String code) {
     switch (code) {
-      case 0:
+      case "user":
         return PasswordChangeReason.USER;
-
-      case 1:
+      case "administrative":
         return PasswordChangeReason.ADMINISTRATIVE;
-
-      default:
+      case "reset":
         return PasswordChangeReason.RESET;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the password change reason with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying for the password change reason.
+   * Returns the code value identifying for the password change reason.
    *
-   * @return the numeric code value identifying for the password change reason
+   * @return the code value identifying for the password change reason
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

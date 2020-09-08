@@ -24,10 +24,10 @@ export enum TenantStatus {
   /**
    * The tenant is inactive.
    */
-  Inactive = 0,
+  Inactive = 'inactive',
 
   /**
    * The tenant is active.
    */
-  Active = 1
+  Active = 'active'
 }

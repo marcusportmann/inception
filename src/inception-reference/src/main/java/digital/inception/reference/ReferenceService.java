@@ -34,14 +34,10 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Service
-@SuppressWarnings("unused")
 public class ReferenceService implements IReferenceService {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReferenceService.class);
-
-  /** The Communication Method Repository. */
-  private final CommunicationMethodRepository communicationMethodRepository;
 
   /** The Country repository. */
   private final CountryRepository countryRepository;
@@ -76,9 +72,6 @@ public class ReferenceService implements IReferenceService {
   /** The Occupation Repository. */
   private final OccupationRepository occupationRepository;
 
-  /** The Physical Address Type Repository. */
-  private final PhysicalAddressTypeRepository physicalAddressTypeRepository;
-
   /** The Race Repository. */
   private final RaceRepository raceRepository;
 
@@ -97,9 +90,6 @@ public class ReferenceService implements IReferenceService {
   /** The Sources of Funds Repository. */
   private final SourceOfFundsRepository sourceOfFundsRepository;
 
-  /** The Suitable Time To Contact Repository. */
-  private final SuitableTimeToContactRepository suitableTimeToContactRepository;
-
   /** The Tax Number Type Repository. */
   private final TaxNumberTypeRepository taxNumberTypeRepository;
 
@@ -115,9 +105,7 @@ public class ReferenceService implements IReferenceService {
   /**
    * Constructs a new <code>ReferenceService</code>.
    *
-   * @param physicalAddressTypeRepository the Physical Address Type Repository
    * @param countryRepository the Country Repository
-   * @param communicationMethodRepository the Communication Method Repository
    * @param employmentStatusRepository the Employment Status Repository
    * @param employmentTypeRepository the Employment Type Repository
    * @param genderRepository the Gender Repository
@@ -134,16 +122,13 @@ public class ReferenceService implements IReferenceService {
    * @param residencyStatusRepository the Residency Status Repository
    * @param residentialTypeRepository the Residential Type Repository
    * @param sourceOfFundsRepository the Source Of Funds Repository
-   * @param suitableTimeToContactRepository the Suitable Time To Contact Repository
    * @param taxNumberTypeRepository the Tax Number Type Repository
    * @param titleRepository the Title Repository
    * @param verificationMethodRepository the Verification Method Repository
    * @param verificationStatusRepository the Verification Status Repository
    */
   public ReferenceService(
-      PhysicalAddressTypeRepository physicalAddressTypeRepository,
       CountryRepository countryRepository,
-      CommunicationMethodRepository communicationMethodRepository,
       EmploymentStatusRepository employmentStatusRepository,
       EmploymentTypeRepository employmentTypeRepository,
       GenderRepository genderRepository,
@@ -160,14 +145,11 @@ public class ReferenceService implements IReferenceService {
       ResidencyStatusRepository residencyStatusRepository,
       ResidentialTypeRepository residentialTypeRepository,
       SourceOfFundsRepository sourceOfFundsRepository,
-      SuitableTimeToContactRepository suitableTimeToContactRepository,
       TaxNumberTypeRepository taxNumberTypeRepository,
       TitleRepository titleRepository,
       VerificationMethodRepository verificationMethodRepository,
       VerificationStatusRepository verificationStatusRepository) {
-    this.physicalAddressTypeRepository = physicalAddressTypeRepository;
     this.countryRepository = countryRepository;
-    this.communicationMethodRepository = communicationMethodRepository;
     this.employmentStatusRepository = employmentStatusRepository;
     this.employmentTypeRepository = employmentTypeRepository;
     this.genderRepository = genderRepository;
@@ -184,45 +166,10 @@ public class ReferenceService implements IReferenceService {
     this.residencyStatusRepository = residencyStatusRepository;
     this.residentialTypeRepository = residentialTypeRepository;
     this.sourceOfFundsRepository = sourceOfFundsRepository;
-    this.suitableTimeToContactRepository = suitableTimeToContactRepository;
     this.taxNumberTypeRepository = taxNumberTypeRepository;
     this.titleRepository = titleRepository;
     this.verificationMethodRepository = verificationMethodRepository;
     this.verificationStatusRepository = verificationStatusRepository;
-  }
-
-  /**
-   * Retrieve all the communication methods.
-   *
-   * @return the communication methods
-   */
-  @Override
-  public List<CommunicationMethod> getCommunicationMethods() throws ReferenceServiceException {
-    return getCommunicationMethods(null);
-  }
-
-  /**
-   * Retrieve the communication methods.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the
-   *     communication methods for or <code>null</code> to retrieve the communication methods for
-   *     all locales
-   * @return the communication methods
-   */
-  @Override
-  public List<CommunicationMethod> getCommunicationMethods(String localeId)
-      throws ReferenceServiceException {
-    try {
-      if (StringUtils.isEmpty(localeId)) {
-        return communicationMethodRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return communicationMethodRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ReferenceServiceException("Failed to retrieve the communication methods", e);
-    }
   }
 
   /**
@@ -571,39 +518,6 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Retrieve all the physical address types.
-   *
-   * @return the physical address types
-   */
-  @Override
-  public List<PhysicalAddressType> getPhysicalAddressTypes() throws ReferenceServiceException {
-    return getPhysicalAddressTypes(null);
-  }
-
-  /**
-   * Retrieve the physical address types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the address
-   *     types for or <code>null</code> to retrieve the physical address types for all locales
-   * @return the physical address types
-   */
-  @Override
-  public List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
-      throws ReferenceServiceException {
-    try {
-      if (StringUtils.isEmpty(localeId)) {
-        return physicalAddressTypeRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return physicalAddressTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ReferenceServiceException("Failed to retrieve the physical address types", e);
-    }
-  }
-
-  /**
    * Retrieve all the races.
    *
    * @return the races
@@ -792,40 +706,6 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the sources of funds", e);
-    }
-  }
-
-  /**
-   * Retrieve all the suitable times to contact.
-   *
-   * @return the suitable times to contact
-   */
-  @Override
-  public List<SuitableTimeToContact> getSuitableTimesToContact() throws ReferenceServiceException {
-    return getSuitableTimesToContact(null);
-  }
-
-  /**
-   * Retrieve the suitable times to contact.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the suitable
-   *     times to contact for or <code>null</code> to retrieve the suitable times to contact for all
-   *     locales
-   * @return the suitable times to contact
-   */
-  @Override
-  public List<SuitableTimeToContact> getSuitableTimesToContact(String localeId)
-      throws ReferenceServiceException {
-    try {
-      if (StringUtils.isEmpty(localeId)) {
-        return suitableTimeToContactRepository.findAll(
-            Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return suitableTimeToContactRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ReferenceServiceException("Failed to retrieve the suitable times to contact", e);
     }
   }
 

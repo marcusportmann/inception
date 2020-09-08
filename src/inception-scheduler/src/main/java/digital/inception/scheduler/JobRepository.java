@@ -50,17 +50,17 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
-      "select j from Job j where j.enabled = true and j.status = 1 and "
+      "select j from Job j where j.enabled = true and j.status = 2 and "
           + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts is null) "
           + "and j.nextExecution <= current_timestamp")
   List<Job> findJobsScheduledForExecutionForWrite(
       @Param("lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
 
-  @Query("select j from Job j where j.enabled = true and j.status = 0")
+  @Query("select j from Job j where j.enabled = true and j.status = 1")
   List<Job> findUnscheduledJobs();
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
-  @Query("select j from Job j where j.enabled = true and j.status = 0")
+  @Query("select j from Job j where j.enabled = true and j.status = 1")
   List<Job> findUnscheduledJobsForWrite(Pageable pageable);
 
   @Query("select j.name from Job j where j.id = :jobId")
@@ -68,7 +68,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
   @Modifying
   @Query(
-      "update Job j set j.lockName = :lockName, j.status = 2, "
+      "update Job j set j.lockName = :lockName, j.status = 3, "
           + "j.executionAttempts = j.executionAttempts + 1, j.lastExecuted = :when "
           + "where j.id = :jobId")
   void lockJobForExecution(
@@ -87,7 +87,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
   @Modifying
   @Query(
-      "update Job j set j.status = 1, j.executionAttempts = null, "
+      "update Job j set j.status = 2, j.executionAttempts = null, "
           + "j.nextExecution = :nextExecution where j.id = :jobId")
   void scheduleJob(
       @Param("jobId") String jobId, @Param("nextExecution") LocalDateTime nextExecution);

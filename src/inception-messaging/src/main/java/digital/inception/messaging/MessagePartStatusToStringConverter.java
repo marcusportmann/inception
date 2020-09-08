@@ -14,35 +14,27 @@
  * limitations under the License.
  */
 
-package digital.inception.mail;
-
-// ~--- non-JDK imports --------------------------------------------------------
+package digital.inception.messaging;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>MailTemplateContentTypeToIntegerConverter</code> class implements the Spring converter
- * that converts a <code>MailTemplateContentType</code> type into an <code>Integer</code> type.
+ * The <code>MessagePartStatusToStringConverter</code> class implements the Spring converter that
+ * converts a <code>MessagePartStatus</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @WritingConverter
-public class MailTemplateContentTypeToIntegerConverter
-    implements Converter<MailTemplateContentType, Integer> {
+public class MessagePartStatusToStringConverter implements Converter<MessagePartStatus, String> {
 
-  /** Constructs a new <code>MailTemplateContentTypeToIntegerConverter</code>. */
-  public MailTemplateContentTypeToIntegerConverter() {}
+  /** Constructs a new <code>MessagePartStatusToStringConverter</code>. */
+  public MessagePartStatusToStringConverter() {}
 
   @Override
-  public Integer convert(MailTemplateContentType source) {
-    if (source == null) {
-      return null;
-    }
-
+  public String convert(MessagePartStatus source) {
     return source.code();
   }
 }

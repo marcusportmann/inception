@@ -40,7 +40,7 @@ public class SMSStatusConverter implements AttributeConverter<SMSStatus, Integer
    */
   @Override
   public Integer convertToDatabaseColumn(SMSStatus attribute) {
-    return attribute.code();
+    return SMSStatus.toNumericCode(attribute);
   }
 
   /**
@@ -54,6 +54,6 @@ public class SMSStatusConverter implements AttributeConverter<SMSStatus, Integer
    */
   @Override
   public SMSStatus convertToEntityAttribute(Integer dbData) {
-    return SMSStatus.fromCode(dbData);
+    return SMSStatus.fromNumericCode(dbData);
   }
 }

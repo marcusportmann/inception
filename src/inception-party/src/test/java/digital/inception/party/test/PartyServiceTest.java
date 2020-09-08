@@ -37,6 +37,7 @@ import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.security.SecureRandom;
 import java.time.LocalDate;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +93,7 @@ public class PartyServiceTest {
     Party party = new Party();
 
     party.setId(UuidCreator.getShortPrefixComb());
-    party.setType(PartyType.UNKNOWN);
+    party.setType(PartyType.ORGANIZATION);
     party.setName("Party Name " + partyCount);
 
     return party;

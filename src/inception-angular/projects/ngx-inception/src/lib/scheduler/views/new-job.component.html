@@ -69,7 +69,7 @@
             <mat-label i18n="@@scheduler_new_job_component_label_status">Status</mat-label>
             <mat-select formControlName="status" required="true">
               <mat-option *ngFor="let jobStatus of jobStatuses" [value]="jobStatus">
-                {{JobStatus[jobStatus]}}
+                {{ jobStatus }}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="statusFormControl.errors && !statusFormControl.untouched">

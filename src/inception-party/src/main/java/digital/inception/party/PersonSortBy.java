@@ -33,23 +33,23 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description = "The method used to sort the list of persons, i.e. 0 = Name, 1 = Preferred Name")
+@Schema(description = "The method used to sort the list of persons")
 @XmlEnum
 @XmlType(name = "PersonSortBy", namespace = "http://party.inception.digital")
 public enum PersonSortBy {
   /** Sort by name. */
   @XmlEnumValue("Name")
-  NAME(0, "Sort By Name"),
+  NAME("name", "Sort By Name"),
+
   /** Sort by preferred name. */
   @XmlEnumValue("PreferredName")
-  PREFERRED_NAME(1, "Sort By Preferred Name");
+  PREFERRED_NAME("preferred_name", "Sort By Preferred Name");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  PersonSortBy(int code, String description) {
+  PersonSortBy(String code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -61,27 +61,18 @@ public enum PersonSortBy {
    * @return the method used to sort a list of persons given by the specified code value
    */
   @JsonCreator
-  public static PersonSortBy fromCode(int code) {
+  public static PersonSortBy fromCode(String code) {
     switch (code) {
-      case 0:
+      case "name":
         return PersonSortBy.NAME;
 
-      case 1:
+      case "preferred_name":
         return PersonSortBy.PREFERRED_NAME;
 
       default:
-        return PersonSortBy.NAME;
+        throw new RuntimeException(
+            "Failed to determine the person sort by with the invalid code (" + code + ")");
     }
-  }
-
-  /**
-   * Returns the method used to sort a list of persons given by the specified code value.
-   *
-   * @param code the code value identifying the method used to sort a list of persons
-   * @return the method used to sort a list of persons given by the specified code value
-   */
-  public static PersonSortBy fromCode(String code) {
-    return fromCode(Integer.parseInt(code));
   }
 
   /**
@@ -90,7 +81,7 @@ public enum PersonSortBy {
    * @return the code value identifying the method used to sort a list of persons
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The sort direction, i.e. asc = Ascending, desc = Descending")
+@Schema(description = "The sort direction")
 @XmlEnum
 @XmlType(name = "SortDirection", namespace = "http://core.inception.digital")
 public enum SortDirection {
@@ -47,11 +47,11 @@ public enum SortDirection {
 
   private final String code;
 
-  private final String name;
+  private final String description;
 
-  SortDirection(String code, String name) {
+  SortDirection(String code, String description) {
     this.code = code;
-    this.name = name;
+    this.description = description;
   }
 
   /**
@@ -63,11 +63,15 @@ public enum SortDirection {
   @JsonCreator
   public static SortDirection fromCode(String code) {
     switch (code) {
+      case "asc":
+        return SortDirection.ASCENDING;
+
       case "desc":
         return SortDirection.DESCENDING;
 
       default:
-        return SortDirection.ASCENDING;
+        throw new RuntimeException(
+            "Failed to determine the sort direction with the invalid code (" + code + ")");
     }
   }
 
@@ -77,17 +81,17 @@ public enum SortDirection {
    * @return the code value identifying the sort direction
    */
   @JsonValue
-  public String getCode() {
+  public String code() {
     return code;
   }
 
   /**
-   * Returns the name of the sort direction.
+   * Returns the description for the sort direction.
    *
-   * @return the name of the sort direction
+   * @return the description for the sort direction
    */
-  public String getName() {
-    return name;
+  public String description() {
+    return description;
   }
 
   /**
@@ -96,6 +100,6 @@ public enum SortDirection {
    * @return the string representation of the sort direction enumeration value
    */
   public String toString() {
-    return name;
+    return description;
   }
 }

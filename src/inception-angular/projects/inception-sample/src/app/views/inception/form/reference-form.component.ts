@@ -20,7 +20,6 @@ import {debounceTime, first, map, startWith} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ReplaySubject, Subject, Subscription} from 'rxjs';
 import {ReferenceService} from "ngx-inception";
-import {CommunicationMethod} from "ngx-inception";
 import {Country} from "ngx-inception";
 import {EmploymentStatus} from "ngx-inception";
 import {EmploymentType} from "ngx-inception";
@@ -32,14 +31,12 @@ import {MarriageType} from "ngx-inception";
 import {MinorType} from "ngx-inception";
 import {NextOfKinType} from "ngx-inception";
 import {Occupation} from "ngx-inception";
-import {PhysicalAddressType} from "ngx-inception";
 import {Race} from "ngx-inception";
 import {ResidencePermitType} from "ngx-inception";
 import {ResidencyStatus} from "ngx-inception";
 import {Region} from "ngx-inception";
 import {ResidentialType} from "ngx-inception";
 import {SourceOfFunds} from "ngx-inception";
-import {SuitableTimeToContact} from "ngx-inception";
 import {TaxNumberType} from "ngx-inception";
 import {Title} from "ngx-inception";
 import {VerificationMethod} from "ngx-inception";
@@ -56,8 +53,6 @@ import {VerificationStatus} from "ngx-inception";
 export class ReferenceFormComponent implements OnInit, OnDestroy {
 
   referenceForm: FormGroup;
-
-  filteredCommunicationMethods$: Subject<CommunicationMethod[]> = new ReplaySubject<CommunicationMethod[]>();
 
   filteredCountries$: Subject<Country[]> = new ReplaySubject<Country[]>();
 
@@ -81,8 +76,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
 
   filteredOccupations$: Subject<Occupation[]> = new ReplaySubject<Occupation[]>();
 
-  filteredPhysicalAddressTypes$: Subject<PhysicalAddressType[]> = new ReplaySubject<PhysicalAddressType[]>();
-
   filteredRaces$: Subject<Race[]> = new ReplaySubject<Race[]>();
 
   filteredRegions$: Subject<Region[]> = new ReplaySubject<Region[]>();
@@ -94,8 +87,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   filteredResidentialTypes$: Subject<ResidentialType[]> = new ReplaySubject<ResidentialType[]>();
 
   filteredSourcesOfFunds$: Subject<SourceOfFunds[]> = new ReplaySubject<SourceOfFunds[]>();
-
-  filteredSuitableTimesToContact$: Subject<SuitableTimeToContact[]> = new ReplaySubject<SuitableTimeToContact[]>();
 
   filteredTaxNumberTypes$: Subject<TaxNumberType[]> = new ReplaySubject<TaxNumberType[]>();
 
@@ -114,7 +105,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       // hideRequired: false,
       // floatLabel: 'auto',
       // tslint:disable-next-line
-      communicationMethod: ['', Validators.required],
       country: ['', Validators.required],
       employmentStatus: ['', Validators.required],
       employmentType: ['', Validators.required],
@@ -126,27 +116,17 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       minorType: ['', Validators.required],
       nextOfKinType: ['', Validators.required],
       occupation: ['', Validators.required],
-      physicalAddressType: ['', Validators.required],
       race: ['', Validators.required],
       region: ['', Validators.required],
       residencePermitType: ['', Validators.required],
       residencyStatus: ['', Validators.required],
       residentialType: ['', Validators.required],
       sourceOfFunds: ['', Validators.required],
-      suitableTimeToContact: ['', Validators.required],
       taxNumberType: ['', Validators.required],
       title: ['', Validators.required],
       verificationMethod: ['', Validators.required],
       verificationStatus: ['', Validators.required]
     });
-  }
-
-  displayCommunicationMethod(communicationMethod: CommunicationMethod): string {
-    if (!!communicationMethod) {
-      return communicationMethod.name;
-    } else {
-      return '';
-    }
   }
 
   displayCountry(country: Country): string {
@@ -237,14 +217,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displayPhysicalAddressType(physicalAddressType: PhysicalAddressType): string {
-    if (!!physicalAddressType) {
-      return physicalAddressType.name;
-    } else {
-      return '';
-    }
-  }
-
   displayRace(race: Race): string {
     if (!!race) {
       return race.name;
@@ -293,14 +265,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  displaySuitableTimeToContact(suitableTimeToContact: SuitableTimeToContact): string {
-    if (!!suitableTimeToContact) {
-      return suitableTimeToContact.name;
-    } else {
-      return '';
-    }
-  }
-
   displayTaxNumberType(taxNumberType: TaxNumberType): string {
     if (!!taxNumberType) {
       return taxNumberType.name;
@@ -334,25 +298,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.referenceService.getCommunicationMethods().pipe(first()).subscribe((communicationMethods: CommunicationMethod[]) => {
-      const communicationMethodControl = this.referenceForm.get('communicationMethod');
-
-      if (communicationMethodControl) {
-        this.subscriptions.add(communicationMethodControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | CommunicationMethod) => {
-            if (typeof (value) === 'string') {
-              this.filteredCommunicationMethods$.next(communicationMethods.filter(
-                communicationMethod => communicationMethod.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
-            } else {
-              this.filteredCommunicationMethods$.next(communicationMethods.filter(
-                communicationMethod => communicationMethod.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
-            }
-          })).subscribe());
-      }
-    });
-
     this.referenceService.getCountries().pipe(first()).subscribe((countries: Country[]) => {
       const countryControl = this.referenceForm.get('country');
 
@@ -563,25 +508,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.referenceService.getPhysicalAddressTypes().pipe(first()).subscribe((physicalAddressTypes: PhysicalAddressType[]) => {
-      const physicalAddressTypeControl = this.referenceForm.get('physicalAddressType');
-
-      if (physicalAddressTypeControl) {
-        this.subscriptions.add(physicalAddressTypeControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | PhysicalAddressType) => {
-            if (typeof (value) === 'string') {
-              this.filteredPhysicalAddressTypes$.next(physicalAddressTypes.filter(
-                physicalAddressType => physicalAddressType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
-            } else {
-              this.filteredPhysicalAddressTypes$.next(physicalAddressTypes.filter(
-                physicalAddressType => physicalAddressType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
-            }
-          })).subscribe());
-      }
-    });
-
     this.referenceService.getRaces().pipe(first()).subscribe((races: Race[]) => {
       const raceControl = this.referenceForm.get('race');
 
@@ -696,25 +622,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.referenceService.getSuitableTimesToContact().pipe(first()).subscribe((suitableTimesToContact: SuitableTimeToContact[]) => {
-      const suitableTimeToContactControl = this.referenceForm.get('suitableTimeToContact');
-
-      if (suitableTimeToContactControl) {
-        this.subscriptions.add(suitableTimeToContactControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | SuitableTimeToContact) => {
-            if (typeof (value) === 'string') {
-              this.filteredSuitableTimesToContact$.next(suitableTimesToContact.filter(
-                suitableTimeToContact => suitableTimeToContact.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
-            } else {
-              this.filteredSuitableTimesToContact$.next(suitableTimesToContact.filter(
-                suitableTimeToContact => suitableTimeToContact.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
-            }
-          })).subscribe());
-      }
-    });
-
     this.referenceService.getTaxNumberTypes().pipe(first()).subscribe((taxNumberTypes: TaxNumberType[]) => {
       const taxNumberTypeControl = this.referenceForm.get('taxNumberType');
 
@@ -793,7 +700,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ok(): void {
-    console.log('Communication Method = ', this.referenceForm.get('communicationMethod')!.value);
     console.log('Country = ', this.referenceForm.get('country')!.value);
     console.log('Employment Status = ', this.referenceForm.get('employmentStatus')!.value);
     console.log('Employment Type = ', this.referenceForm.get('employmentType')!.value);
@@ -805,14 +711,12 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
     console.log('Minor Type = ', this.referenceForm.get('minorType')!.value);
     console.log('Next Of Kin Type = ', this.referenceForm.get('nextOfKinType')!.value);
     console.log('Occupation = ', this.referenceForm.get('occupation')!.value);
-    console.log('Physical Address Type = ', this.referenceForm.get('physicalAddressType')!.value);
     console.log('Race = ', this.referenceForm.get('race')!.value);
     console.log('Region = ', this.referenceForm.get('region')!.value);
     console.log('Residence Permit Type = ', this.referenceForm.get('residencePermitType')!.value);
     console.log('Residency Status = ', this.referenceForm.get('residencyStatus')!.value);
     console.log('Residential Type = ', this.referenceForm.get('residentialType')!.value);
     console.log('Source Of Funds = ', this.referenceForm.get('sourceOfFunds')!.value);
-    console.log('Suitable Time To Contact = ', this.referenceForm.get('suitableTimeToContact')!.value);
     console.log('Tax Number Type = ', this.referenceForm.get('taxNumberType')!.value);
     console.log('Title = ', this.referenceForm.get('title')!.value);
     console.log('Verification Method = ', this.referenceForm.get('verificationMethod')!.value);

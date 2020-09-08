@@ -28,48 +28,86 @@ import javax.xml.bind.annotation.XmlType;
 // ~--- JDK imports ------------------------------------------------------------
 
 /** The enumeration giving the possible priorities for a message. */
-@Schema(description = "The message priority, i.e. 1 = Low, 5 = Medium, 10 = High")
+@Schema(description = "The message priority")
 @XmlEnum
 @XmlType(name = "MessagePriority", namespace = "http://messaging.inception.digital")
 public enum MessagePriority {
   @XmlEnumValue("Low")
-  LOW(1, "Low"),
+  LOW("low", "Low"),
   @XmlEnumValue("Medium")
-  MEDIUM(5, "Medium"),
+  MEDIUM("medium", "Medium"),
   @XmlEnumValue("High")
-  HIGH(10, "High");
+  HIGH("high", "High");
 
-  /** The code identifying the message priority. */
-  private final int code;
+  private final String code;
 
-  /** The description for the message priority. */
   private final String description;
 
-  MessagePriority(int code, String description) {
+  MessagePriority(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the message priority given by the specified numeric code value.
+   * Returns the message priority given by the specified code value.
    *
-   * @param code the numeric code value identifying the message priority
-   * @return the message priority given by the specified numeric code value
+   * @param code the code value identifying the message priority
+   * @return the message priority given by the specified code value
    */
   @JsonCreator
-  public static MessagePriority fromCode(int code) {
+  public static MessagePriority fromCode(String code) {
     switch (code) {
+      case "low":
+        return MessagePriority.LOW;
+      case "medium":
+        return MessagePriority.MEDIUM;
+      case "high":
+        return MessagePriority.HIGH;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the message priority with the invalid code (" + code + ")");
+    }
+  }
+
+  /**
+   * Returns the message priority for the specified numeric code.
+   *
+   * @param numericCode the numeric code identifying the message priority
+   * @return the message priority given by the specified numeric code value
+   */
+  public static MessagePriority fromNumericCode(int numericCode) {
+    switch (numericCode) {
       case 1:
         return MessagePriority.LOW;
-
       case 5:
         return MessagePriority.MEDIUM;
-
       case 10:
         return MessagePriority.HIGH;
-
       default:
-        return MessagePriority.MEDIUM;
+        throw new RuntimeException(
+            "Failed to determine the message priority for the numeric code (" + numericCode + ")");
+    }
+  }
+
+  /**
+   * Returns the numeric code for the message priority.
+   *
+   * @param messagePriority the message priority
+   * @return the numeric code for the message priority
+   */
+  public static int toNumericCode(MessagePriority messagePriority) {
+    switch (messagePriority) {
+      case LOW:
+        return 1;
+      case MEDIUM:
+        return 5;
+      case HIGH:
+        return 10;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the message priority ("
+                + messagePriority.code()
+                + ")");
     }
   }
 
@@ -79,7 +117,7 @@ public enum MessagePriority {
    * @return the code identifying the message priority
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

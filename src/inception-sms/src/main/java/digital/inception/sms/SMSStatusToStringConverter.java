@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.sms;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -23,26 +23,20 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>PasswordChangeReasonToIntegerConverter</code> class implements the Spring converter
- * that converts a <code>PasswordChangeReason</code> type into an <code>Integer</code> type.
+ * The <code>SMSStatusToStringConverter</code> class implements the Spring converter that converts a
+ * <code>SMSStatus</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @WritingConverter
-public class PasswordChangeReasonToIntegerConverter
-    implements Converter<PasswordChangeReason, Integer> {
+public class SMSStatusToStringConverter implements Converter<SMSStatus, String> {
 
-  /** Constructs a new <code>PasswordChangeReasonToIntegerConverter</code>. */
-  public PasswordChangeReasonToIntegerConverter() {}
+  /** Constructs a new <code>SMSStatusToStringConverter</code>. */
+  public SMSStatusToStringConverter() {}
 
   @Override
-  public Integer convert(PasswordChangeReason source) {
-    if (source == null) {
-      return null;
-    }
-
+  public String convert(SMSStatus source) {
     return source.code();
   }
 }

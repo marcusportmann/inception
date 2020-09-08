@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.messaging;
+package digital.inception.party;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -23,25 +23,20 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToMessagePriorityConverter</code> class implements the Spring converter that
- * converts an <code>Integer</code> type into a <code>MessagePriority</code> type.
+ * The <code>StringToPartyTypeConverter</code> class implements the Spring converter that converts
+ * a <code>String</code> type into a <code>PartyType</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToMessagePriorityConverter implements Converter<Integer, MessagePriority> {
+public class StringToPartyTypeConverter implements Converter<String, PartyType> {
 
-  /** Constructs a new <code>IntegerToMessagePriorityConverter</code>. */
-  public IntegerToMessagePriorityConverter() {}
+  /** Constructs a new <code>StringToPartyTypeConverter</code>. */
+  public StringToPartyTypeConverter() {}
 
   @Override
-  public MessagePriority convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
-    return MessagePriority.fromCode(source);
+  public PartyType convert(String source) {
+    return PartyType.fromCode(source);
   }
 }

@@ -24,12 +24,12 @@ export enum UserStatus {
   /**
    * The user is inactive.
    */
-  Inactive = 0,
+  Inactive = 'inactive',
 
   /**
    * The user is active.
    */
-  Active = 1,
+  Active = 'active',
 
   /**
    * The user is locked.

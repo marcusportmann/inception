@@ -610,7 +610,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
 
       for (Attribute attribute : attributes) {
         if (attribute.getName().equalsIgnoreCase("status")) {
-          userCriteria.setStatus(UserStatus.fromCode(attribute.getIntegerValue()));
+          userCriteria.setStatus(UserStatus.fromCode(attribute.getValue()));
         } else if (attribute.getName().equalsIgnoreCase("email")) {
           userCriteria.setEmail(attribute.getValue());
         } else if (attribute.getName().equalsIgnoreCase("name")) {

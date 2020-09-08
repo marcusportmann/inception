@@ -22,17 +22,12 @@
 export enum MailTemplateContentType {
 
   /**
-   * Unknown.
-   */
-  Unknown = 0,
-
-  /**
    * Text.
    */
-  Text = 1,
+  Text = 'text',
 
   /**
    * HTML.
    */
-  HTML = 2
+  HTML = 'html'
 }

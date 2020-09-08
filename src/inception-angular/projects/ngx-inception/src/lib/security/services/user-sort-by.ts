@@ -24,15 +24,15 @@ export enum UserSortBy {
   /**
    * Sort by name.
    */
-  Name = 0,
+  Name = 'name',
 
   /**
    * Sort by preferred name.
    */
-  PreferredName = 1,
+  PreferredName = 'preferred_name',
 
   /**
    * Sort by username.
    */
-  Username = 2
+  Username = 'username'
 }

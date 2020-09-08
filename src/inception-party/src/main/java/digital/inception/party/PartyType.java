@@ -28,22 +28,20 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The party type, i.e. 0 = Unknown, 1 = Organization, 2 = Person")
+@Schema(description = "The party type")
 @XmlEnum
 @XmlType(name = "PartyType", namespace = "http://party.inception.digital")
 public enum PartyType {
-  @XmlEnumValue("Unknown")
-  UNKNOWN(0, "Unknown"),
   @XmlEnumValue("Organization")
-  ORGANIZATION(1, "Organization"),
+  ORGANIZATION("organization", "Organization"),
   @XmlEnumValue("Person")
-  PERSON(2, "Person");
+  PERSON("person", "Person");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  PartyType(int code, String description) {
+  PartyType(String code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -55,15 +53,12 @@ public enum PartyType {
    * @return the party type given by the specified code value
    */
   @JsonCreator
-  public static PartyType fromCode(int code) {
+  public static PartyType fromCode(String code) {
     switch (code) {
-      case 0:
-        return PartyType.UNKNOWN;
-
-      case 1:
+      case "organization":
         return PartyType.ORGANIZATION;
 
-      case 2:
+      case "person":
         return PartyType.PERSON;
 
       default:
@@ -73,12 +68,48 @@ public enum PartyType {
   }
 
   /**
-   * Returns the numeric code value identifying for the party type.
+   * Returns the party type for the specified numeric code.
    *
-   * @return the numeric code value identifying for the party type
+   * @param numericCode the numeric code identifying the party type
+   * @return the party type given by the specified numeric code value
+   */
+  public static PartyType fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return PartyType.ORGANIZATION;
+      case 2:
+        return PartyType.PERSON;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the party type for the numeric code (" + numericCode + ")");
+    }
+  }
+
+  /**
+   * Returns the numeric code for the party type.
+   *
+   * @param partyType the party type
+   * @return the numeric code for the party type
+   */
+  public static int toNumericCode(PartyType partyType) {
+    switch (partyType) {
+      case ORGANIZATION:
+        return 1;
+      case PERSON:
+        return 2;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the party type (" + partyType.code() + ")");
+    }
+  }
+
+  /**
+   * Returns the code value identifying for the party type.
+   *
+   * @return the code value identifying for the party type
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

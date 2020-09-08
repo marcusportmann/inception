@@ -14,34 +14,29 @@
  * limitations under the License.
  */
 
-package digital.inception.party;
+package digital.inception.scheduler;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>PartyTypeToIntegerConverter</code> class implements the Spring converter that converts
- * a <code>PartyType</code> type into an <code>Integer</code> type.
+ * The <code>StringToJobStatusConverter</code> class implements the Spring converter that converts a
+ * <code>String</code> type into a <code>JobStatus</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
-@WritingConverter
-public class PartyTypeToIntegerConverter implements Converter<PartyType, Integer> {
+@ReadingConverter
+public class StringToJobStatusConverter implements Converter<String, JobStatus> {
 
-  /** Constructs a new <code>PartyTypeToIntegerConverter</code>. */
-  public PartyTypeToIntegerConverter() {}
+  /** Constructs a new <code>StringToJobStatusConverter</code>. */
+  public StringToJobStatusConverter() {}
 
   @Override
-  public Integer convert(PartyType source) {
-    if (source == null) {
-      return null;
-    }
-
-    return source.code();
+  public JobStatus convert(String source) {
+    return JobStatus.fromCode(source);
   }
 }

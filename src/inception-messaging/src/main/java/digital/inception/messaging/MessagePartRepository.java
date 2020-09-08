@@ -39,7 +39,7 @@ import org.springframework.data.repository.query.Param;
 public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> {
 
   @Query(
-      "select count(mp.id) from MessagePart mp where mp.status = 3 and "
+      "select count(mp.id) from MessagePart mp where mp.status = 4 and "
           + "mp.messageId = :messageId")
   int countMessagePartsQueuedForAssemblyByMessageId(@Param("messageId") UUID messageId);
 
@@ -73,14 +73,14 @@ public interface MessagePartRepository extends JpaRepository<MessagePart, UUID> 
 
   @Modifying
   @Query(
-      "update MessagePart mp set mp.lockName = :lockName, mp.status = 4 "
+      "update MessagePart mp set mp.lockName = :lockName, mp.status = 5 "
           + "where mp.id = :messagePartId")
   void lockMessagePartForAssembly(
       @Param("messagePartId") UUID messagePartId, @Param("lockName") String lockName);
 
   @Modifying
   @Query(
-      "update MessagePart mp set mp.lockName = :lockName, mp.status = 6, "
+      "update MessagePart mp set mp.lockName = :lockName, mp.status = 7, "
           + "mp.downloadAttempts = mp.downloadAttempts + 1 where mp.id = :messagePartId")
   void lockMessagePartForDownload(
       @Param("messagePartId") UUID messagePartId, @Param("lockName") String lockName);

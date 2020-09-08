@@ -28,7 +28,6 @@ import javax.persistence.Converter;
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-@SuppressWarnings("unused")
 public class PasswordResetStatusConverter
     implements AttributeConverter<PasswordResetStatus, Integer> {
 
@@ -41,7 +40,7 @@ public class PasswordResetStatusConverter
    */
   @Override
   public Integer convertToDatabaseColumn(PasswordResetStatus attribute) {
-    return attribute.code();
+    return PasswordResetStatus.toNumericCode(attribute);
   }
 
   /**
@@ -55,6 +54,6 @@ public class PasswordResetStatusConverter
    */
   @Override
   public PasswordResetStatus convertToEntityAttribute(Integer dbData) {
-    return PasswordResetStatus.fromCode(dbData);
+    return PasswordResetStatus.fromNumericCode(dbData);
   }
 }

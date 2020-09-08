@@ -7,29 +7,6 @@ CREATE SCHEMA reference;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
-CREATE TABLE reference.communication_methods (
-  code        VARCHAR(10)  NOT NULL,
-  locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50)  NOT NULL,
-  description VARCHAR(200) NOT NULL DEFAULT '',
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX communication_methods_locale_ix ON reference.communication_methods(locale_id);
-
-COMMENT ON COLUMN reference.communication_methods.code IS 'The code for the communication method';
-
-COMMENT ON COLUMN reference.communication_methods.locale_id IS 'The Unicode locale identifier for the communication method';
-
-COMMENT ON COLUMN reference.communication_methods.sort_index IS 'The sort index for the communication method';
-
-COMMENT ON COLUMN reference.communication_methods.name IS 'The name of the communication method';
-
-COMMENT ON COLUMN reference.communication_methods.description IS 'The description for the communication method';
-
-
 CREATE TABLE reference.countries (
   code            VARCHAR(10)  NOT NULL,
   locale_id       VARCHAR(10)  NOT NULL,
@@ -314,27 +291,27 @@ COMMENT ON COLUMN reference.occupations.description IS 'The description for the 
 
 
 
-CREATE TABLE reference.physical_address_types (
-  code        VARCHAR(10)  NOT NULL,
-  locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50)  NOT NULL,
-  description VARCHAR(200) NOT NULL DEFAULT '',
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX physical_address_types_locale_ix ON reference.physical_address_types(locale_id);
-
-COMMENT ON COLUMN reference.physical_address_types.code IS 'The code for the physical address type';
-
-COMMENT ON COLUMN reference.physical_address_types.locale_id IS 'The Unicode locale identifier for the physical address type';
-
-COMMENT ON COLUMN reference.physical_address_types.sort_index IS 'The sort index for the physical address type';
-
-COMMENT ON COLUMN reference.physical_address_types.name IS 'The name of the physical address type';
-
-COMMENT ON COLUMN reference.physical_address_types.description IS 'The description for the physical address type';
+-- CREATE TABLE reference.physical_address_types (
+--   code        VARCHAR(10)  NOT NULL,
+--   locale_id   VARCHAR(10)  NOT NULL,
+--   sort_index  INTEGER      NOT NULL,
+--   name        VARCHAR(50)  NOT NULL,
+--   description VARCHAR(200) NOT NULL DEFAULT '',
+--
+--   PRIMARY KEY (code, locale_id)
+-- );
+--
+-- CREATE INDEX physical_address_types_locale_ix ON reference.physical_address_types(locale_id);
+--
+-- COMMENT ON COLUMN reference.physical_address_types.code IS 'The code for the physical address type';
+--
+-- COMMENT ON COLUMN reference.physical_address_types.locale_id IS 'The Unicode locale identifier for the physical address type';
+--
+-- COMMENT ON COLUMN reference.physical_address_types.sort_index IS 'The sort index for the physical address type';
+--
+-- COMMENT ON COLUMN reference.physical_address_types.name IS 'The name of the physical address type';
+--
+-- COMMENT ON COLUMN reference.physical_address_types.description IS 'The description for the physical address type';
 
 
 
@@ -642,22 +619,6 @@ COMMENT ON COLUMN reference.verification_statuses.description IS 'The descriptio
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
-INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
-  VALUES ('E', 'en-US', 1, 'E-mail', 'E-mail');
-INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
-  VALUES ('P', 'en-US', 2, 'Phone', 'Phone');
-INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-
-INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
-  VALUES ('E', 'en-ZA', 1, 'E-mail', 'E-mail');
-INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
-  VALUES ('P', 'en-ZA', 2, 'Phone', 'Phone');
-INSERT INTO reference.communication_methods (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
-
-  
-
 INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AF', 'en-US', 1, 'Afghanistan', 'Afghanistan', 'Afghanistan', 'AF', 'Afghan');
 INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
@@ -2388,35 +2349,35 @@ INSERT INTO reference.occupations (code, locale_id, sort_index, name, descriptio
 
 
 
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('B', 'en-US', 1, 'Building', 'Building');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-US', 2, 'Complex', 'Complex');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-US', 3, 'Farm', 'Farm');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('I', 'en-US', 4, 'International', 'International');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('T', 'en-US', 5, 'Site/Township', 'Site/Township');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('S', 'en-US', 6, 'Street', 'Street');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unstructured', 'Unstructured');
-
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('B', 'en-ZA', 1, 'Building', 'Building');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-ZA', 2, 'Complex', 'Complex');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-ZA', 3, 'Farm', 'Farm');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('I', 'en-ZA', 4, 'International', 'International');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('T', 'en-ZA', 5, 'Site/Township', 'Site/Township');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('S', 'en-ZA', 6, 'Street', 'Street');
-INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unstructured', 'Unstructured');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('B', 'en-US', 1, 'Building', 'Building');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('C', 'en-US', 2, 'Complex', 'Complex');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('F', 'en-US', 3, 'Farm', 'Farm');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('I', 'en-US', 4, 'International', 'International');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('T', 'en-US', 5, 'Site/Township', 'Site/Township');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('S', 'en-US', 6, 'Street', 'Street');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('U', 'en-US', 99, 'Unstructured', 'Unstructured');
+--
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('B', 'en-ZA', 1, 'Building', 'Building');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('C', 'en-ZA', 2, 'Complex', 'Complex');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('F', 'en-ZA', 3, 'Farm', 'Farm');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('I', 'en-ZA', 4, 'International', 'International');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('T', 'en-ZA', 5, 'Site/Township', 'Site/Township');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('S', 'en-ZA', 6, 'Street', 'Street');
+-- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
+--   VALUES ('U', 'en-ZA', 99, 'Unstructured', 'Unstructured');
 
 
 
@@ -2664,27 +2625,27 @@ INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, descr
   
     
 
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('A', 'en-US', 1, 'Anytime', 'Anytime');
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('L', 'en-US', 2, 'Long Hours', 'Long Hours');
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('O', 'en-US', 3, 'Office Hours', 'Office Hours');
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-US', 4, 'Do Not Contact', 'Do Not Contact');
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-  
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('A', 'en-ZA', 1, 'Anytime', 'Anytime');
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('L', 'en-ZA', 2, 'Long Hours', 'Long Hours');
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('O', 'en-ZA', 3, 'Office Hours', 'Office Hours');
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-ZA', 4, 'Do Not Contact', 'Do Not Contact');
-INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('A', 'en-US', 1, 'Anytime', 'Anytime');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('L', 'en-US', 2, 'Long Hours', 'Long Hours');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('O', 'en-US', 3, 'Office Hours', 'Office Hours');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('N', 'en-US', 4, 'Do Not Contact', 'Do Not Contact');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
+--
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('A', 'en-ZA', 1, 'Anytime', 'Anytime');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('L', 'en-ZA', 2, 'Long Hours', 'Long Hours');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('O', 'en-ZA', 3, 'Office Hours', 'Office Hours');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('N', 'en-ZA', 4, 'Do Not Contact', 'Do Not Contact');
+-- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
+--   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
   
     
 

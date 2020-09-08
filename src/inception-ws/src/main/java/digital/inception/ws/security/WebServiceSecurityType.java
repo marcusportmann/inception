@@ -16,81 +16,86 @@
 
 package digital.inception.ws.security;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /** The enumeration giving the supported types of web service security. */
 public enum WebServiceSecurityType {
   /** The value indicating that the web service does not implement a security service. */
-  NONE(0, "None"),
+  NONE("none", "None"),
 
   /**
    * The value indicating that the web service implements the WS-Security X509 token authentication
    * security service.
    */
-  WSS_SECURITY_X509_TOKEN(1, "WS-Security X509 Token"),
+  WSS_SECURITY_X509_TOKEN("wss_security_x509_token", "WS-Security X509 Token"),
 
   /**
    * The value indicating that the web service implements the WS-Security username token security
    * service.
    */
-  WSS_SECURITY_USERNAME_TOKEN(2, "WS-Security Username Token"),
+  WSS_SECURITY_USERNAME_TOKEN("wss_security_username_token", "WS-Security Username Token"),
 
   /** The value indicating that the web service implements the Mutual SSL security service. */
-  MUTUAL_SSL(3, "Mutual SSL"),
+  MUTUAL_SSL("mutual_ssl", "Mutual SSL"),
 
   /**
    * The value indicating that the web service implements the basic HTTP authentication security
    * service.
    */
-  HTTP_AUTHENTICATION(4, "HTTP Authentication"),
+  HTTP_AUTHENTICATION("http_authentication", "HTTP Authentication"),
 
   /**
    * The value indicating that the web service implements the digest authentication security
    * service.
    */
-  DIGEST_AUTHENTICATION(5, "Digest Authentication");
+  DIGEST_AUTHENTICATION("digest_authentication", "Digest Authentication");
 
-  private int code;
+  private final String code;
 
-  private String description;
+  private final String description;
 
-  WebServiceSecurityType(int code, String description) {
+  WebServiceSecurityType(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the web service security type given by the specified numeric code value.
+   * Returns the web service security type given by the specified code value.
    *
-   * @param code the numeric code value identifying the web service security type
-   * @return the web service security type given by the specified numeric code value
+   * @param code the code value identifying the web service security type
+   * @return the web service security type given by the specified code value
    */
-  public static WebServiceSecurityType fromCode(int code) {
+  @JsonCreator
+  public static WebServiceSecurityType fromCode(String code) {
     switch (code) {
-      case 0:
+      case "none":
         return WebServiceSecurityType.NONE;
-
-      case 1:
+      case "wss_security_x509_token":
         return WebServiceSecurityType.WSS_SECURITY_X509_TOKEN;
-
-      case 2:
+      case "wss_security_username_token":
         return WebServiceSecurityType.WSS_SECURITY_USERNAME_TOKEN;
-
-      case 3:
+      case "mutual_ssl":
         return WebServiceSecurityType.MUTUAL_SSL;
-
-      case 4:
+      case "http_authentication":
         return WebServiceSecurityType.HTTP_AUTHENTICATION;
-
-      default:
+      case "digest_authentication":
         return WebServiceSecurityType.DIGEST_AUTHENTICATION;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the web service security type with the invalid code ("
+                + code
+                + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying the web service security type.
+   * Returns the code value identifying the web service security type.
    *
-   * @return the numeric code value identifying the web service security type
+   * @return the code value identifying the web service security type
    */
-  public int code() {
+  @JsonValue
+  public String code() {
     return code;
   }
 

@@ -32,106 +32,142 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "The job status, i.e. 0 = Unscheduled, 1 = Scheduled, 2 = Executing, "
-            + "3 = Executed, 4 = Aborted, 5 = Failed, 6 = Once-off, -1 = Unknown")
+@Schema(description = "The job status")
 @XmlEnum
 @XmlType(name = "JobStatus", namespace = "http://scheduler.inception.digital")
 public enum JobStatus {
   @XmlEnumValue("Unscheduled")
-  UNSCHEDULED(0, "Unscheduled"),
+  UNSCHEDULED("unscheduled", "Unscheduled"),
   @XmlEnumValue("Scheduled")
-  SCHEDULED(1, "Scheduled"),
+  SCHEDULED("scheduled", "Scheduled"),
   @XmlEnumValue("Executing")
-  EXECUTING(2, "Executing"),
+  EXECUTING("executing", "Executing"),
   @XmlEnumValue("Executed")
-  EXECUTED(3, "Executed"),
+  EXECUTED("executed", "Executed"),
   @XmlEnumValue("Aborted")
-  ABORTED(4, "Aborted"),
+  ABORTED("aborted", "Aborted"),
   @XmlEnumValue("Failed")
-  FAILED(5, "Failed"),
+  FAILED("failed", "Failed"),
   @XmlEnumValue("OnceOff")
-  ONCE_OFF(6, "Once-Off"),
-  @XmlEnumValue("Unknown")
-  UNKNOWN(-1, "Unknown");
+  ONCE_OFF("once_off", "Once-Off");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  JobStatus(int code, String description) {
+  JobStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the status given by the specified numeric code value.
+   * Returns the job status given by the specified code value.
    *
-   * @param code the numeric code value identifying the status
-   * @return the status given by the specified numeric code value
+   * @param code the code value identifying the job status
+   * @return the job status given by the specified code value
    */
   @JsonCreator
-  public static JobStatus fromCode(int code) {
+  public static JobStatus fromCode(String code) {
     switch (code) {
-      case 0:
+      case "unscheduled":
         return JobStatus.UNSCHEDULED;
-
-      case 1:
+      case "scheduled":
         return JobStatus.SCHEDULED;
-
-      case 2:
+      case "executing":
         return JobStatus.EXECUTING;
-
-      case 3:
+      case "executed":
         return JobStatus.EXECUTED;
-
-      case 4:
+      case "aborted":
         return JobStatus.ABORTED;
-
-      case 5:
+      case "failed":
         return JobStatus.FAILED;
-
-      case 6:
+      case "once_off":
         return JobStatus.ONCE_OFF;
-
       default:
-        return JobStatus.UNKNOWN;
+        throw new RuntimeException(
+            "Failed to determine the job status with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying the status.
+   * Returns the job status for the specified numeric code.
    *
-   * @return the numeric code value identifying the status
+   * @param numericCode the numeric code identifying the job status
+   * @return the job status given by the specified numeric code value
+   */
+  public static JobStatus fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return JobStatus.UNSCHEDULED;
+      case 2:
+        return JobStatus.SCHEDULED;
+      case 3:
+        return JobStatus.EXECUTING;
+      case 4:
+        return JobStatus.EXECUTED;
+      case 5:
+        return JobStatus.ABORTED;
+      case 6:
+        return JobStatus.FAILED;
+      case 7:
+        return JobStatus.ONCE_OFF;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the job status for the numeric code (" + numericCode + ")");
+    }
+  }
+
+  /**
+   * Returns the numeric code for the job status.
+   *
+   * @param jobStatus the job status
+   * @return the numeric code for the job status
+   */
+  public static int toNumericCode(JobStatus jobStatus) {
+    switch (jobStatus) {
+      case UNSCHEDULED:
+        return 1;
+      case SCHEDULED:
+        return 2;
+      case EXECUTING:
+        return 3;
+      case EXECUTED:
+        return 4;
+      case ABORTED:
+        return 5;
+      case FAILED:
+        return 6;
+      case ONCE_OFF:
+        return 7;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the job status (" + jobStatus.code() + ")");
+    }
+  }
+
+  /**
+   * Returns the code value identifying the job status.
+   *
+   * @return the code value identifying the job status
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 
   /**
-   * Returns the <code>String</code> value of the numeric code value identifying the status.
+   * Returns the description for the job status.
    *
-   * @return the <code>String</code> value of the numeric code value identifying the status
-   */
-  public String codeAsString() {
-    return String.valueOf(code);
-  }
-
-  /**
-   * Returns the description for the status.
-   *
-   * @return the description for the status
+   * @return the description for the job status
    */
   public String description() {
     return description;
   }
 
   /**
-   * Return the string representation of the status enumeration value.
+   * Return the string representation of the job status enumeration value.
    *
-   * @return the string representation of the status enumeration value
+   * @return the string representation of the job status enumeration value
    */
   public String toString() {
     return description;

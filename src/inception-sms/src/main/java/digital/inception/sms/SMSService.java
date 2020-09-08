@@ -198,7 +198,7 @@ public class SMSService implements ISMSService {
       PageRequest pageRequest = PageRequest.of(0, 1);
 
       List<SMS> smss =
-          smsRepository.findSMSsScheduledForExecutionForWrite(lastProcessedBefore, pageRequest);
+          smsRepository.findSMSsQueuedForSendingForWrite(lastProcessedBefore, pageRequest);
 
       if (smss.size() > 0) {
         SMS sms = smss.get(0);

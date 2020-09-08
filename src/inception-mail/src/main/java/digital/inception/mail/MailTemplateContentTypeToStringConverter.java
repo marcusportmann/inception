@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.mail;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -23,25 +23,21 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>GroupMemberTypeToIntegerConverter</code> class implements the Spring converter that
- * converts a <code>GroupMemberType</code> type into an <code>Integer</code> type.
+ * The <code>MailTemplateContentTypeToStringConverter</code> class implements the Spring converter
+ * that converts a <code>MailTemplateContentType</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @WritingConverter
-public class GroupMemberTypeToIntegerConverter implements Converter<GroupMemberType, Integer> {
+public class MailTemplateContentTypeToStringConverter
+    implements Converter<MailTemplateContentType, String> {
 
-  /** Constructs a new <code>GroupMemberTypeToIntegerConverter</code>. */
-  public GroupMemberTypeToIntegerConverter() {}
+  /** Constructs a new <code>MailTemplateContentTypeToStringConverter</code>. */
+  public MailTemplateContentTypeToStringConverter() {}
 
   @Override
-  public Integer convert(GroupMemberType source) {
-    if (source == null) {
-      return null;
-    }
-
+  public String convert(MailTemplateContentType source) {
     return source.code();
   }
 }

@@ -32,51 +32,90 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The tenant status, i.e. 0 = Inactive, 1 = Active")
+@Schema(description = "The tenant status")
 @XmlEnum
 @XmlType(name = "TenantStatus", namespace = "http://security.inception.digital")
 public enum TenantStatus {
   @XmlEnumValue("Inactive")
-  INACTIVE(0, "Inactive"),
+  INACTIVE("inactive", "Inactive"),
   @XmlEnumValue("Active")
-  ACTIVE(1, "Active");
+  ACTIVE("active", "Active");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  TenantStatus(int code, String description) {
+  TenantStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the tenant status given by the specified numeric code value.
+   * Returns the tenant status given by the specified code value.
    *
-   * @param code the numeric code value identifying the tenant status
-   * @return the tenant status given by the specified numeric code value
+   * @param code the code value identifying the tenant status
+   * @return the tenant status given by the specified code value
    */
   @JsonCreator
-  public static TenantStatus fromCode(int code) {
+  public static TenantStatus fromCode(String code) {
     switch (code) {
-      case 0:
+      case "inactive":
         return TenantStatus.INACTIVE;
 
-      case 1:
+      case "active":
         return TenantStatus.ACTIVE;
 
       default:
-        return TenantStatus.INACTIVE;
+        throw new RuntimeException(
+            "Failed to determine the tenant status with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value for the tenant status.
+   * Returns the numeric code for the tenant status.
    *
-   * @return the numeric code value for the tenant status
+   * @param tenantStatus the tenant status
+   * @return the numeric code for the tenant status
+   */
+  public static int toNumericCode(TenantStatus tenantStatus) {
+    switch (tenantStatus) {
+      case ACTIVE:
+        return 1;
+      case INACTIVE:
+        return 2;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the tenant status ("
+                + tenantStatus.code()
+                + ")");
+    }
+  }
+
+  /**
+   * Returns the tenant status for the specified numeric code.
+   *
+   * @param numericCode the numeric code identifying the tenant status
+   * @return the tenant status given by the specified numeric code value
+   */
+  public static TenantStatus fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return TenantStatus.ACTIVE;
+      case 2:
+        return TenantStatus.INACTIVE;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the tenant status for the numeric code (" + numericCode + ")");
+    }
+  }
+
+  /**
+   * Returns the code value for the tenant status.
+   *
+   * @return the code value for the tenant status
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

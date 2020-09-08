@@ -33,29 +33,27 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "The method used to sort the list of users, i.e. 0 = Name, 1 = Preferred Name, 2 = Username")
+@Schema(description = "The method used to sort the list of users")
 @XmlEnum
 @XmlType(name = "UserSortBy", namespace = "http://security.inception.digital")
 public enum UserSortBy {
   /** Sort by name. */
   @XmlEnumValue("Name")
-  NAME(0, "Sort By Name"),
+  NAME("name", "Sort By Name"),
 
   /** Sort by preferred name. */
   @XmlEnumValue("PreferredName")
-  PREFERRED_NAME(1, "Sort By Preferred Name"),
+  PREFERRED_NAME("preferred_name", "Sort By Preferred Name"),
 
   /** Sort by username. */
   @XmlEnumValue("Username")
-  USERNAME(2, "Sort By Username");
+  USERNAME("username", "Sort By Username");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  UserSortBy(int code, String description) {
+  UserSortBy(String code, String description) {
     this.code = code;
     this.description = description;
   }
@@ -67,27 +65,18 @@ public enum UserSortBy {
    * @return the method used to sort a list of users given by the specified code value
    */
   @JsonCreator
-  public static UserSortBy fromCode(int code) {
-    switch (code) {
-      case 0:
-        return UserSortBy.NAME;
-
-      case 1:
-        return UserSortBy.PREFERRED_NAME;
-
-      default:
-        return UserSortBy.USERNAME;
-    }
-  }
-
-  /**
-   * Returns the method used to sort a list of users given by the specified code value.
-   *
-   * @param code the code value identifying the method used to sort a list of users
-   * @return the method used to sort a list of users given by the specified code value
-   */
   public static UserSortBy fromCode(String code) {
-    return fromCode(Integer.parseInt(code));
+    switch (code) {
+      case "name":
+        return UserSortBy.NAME;
+      case "preferred_name":
+        return UserSortBy.PREFERRED_NAME;
+      case "username":
+        return UserSortBy.USERNAME;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the user sort by with the invalid code (" + code + ")");
+    }
   }
 
   /**
@@ -96,7 +85,7 @@ public enum UserSortBy {
    * @return the code value identifying the method used to sort a list of users
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

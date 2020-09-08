@@ -21,25 +21,20 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>MessagePriorityToIntegerConverter</code> class implements the Spring converter that
- * converts a <code>MessagePriority</code> type into an <code>Integer</code> type.
+ * The <code>MessagePriorityToStringConverter</code> class implements the Spring converter that
+ * converts a <code>MessagePriority</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @WritingConverter
-public class MessagePriorityToIntegerConverter implements Converter<MessagePriority, Integer> {
+public class MessagePriorityToStringConverter implements Converter<MessagePriority, String> {
 
-  /** Constructs a new <code>MessagePriorityToIntegerConverter</code>. */
-  public MessagePriorityToIntegerConverter() {}
+  /** Constructs a new <code>MessagePriorityToStringConverter</code>. */
+  public MessagePriorityToStringConverter() {}
 
   @Override
-  public Integer convert(MessagePriority source) {
-    if (source == null) {
-      return null;
-    }
-
+  public String convert(MessagePriority source) {
     return source.code();
   }
 }

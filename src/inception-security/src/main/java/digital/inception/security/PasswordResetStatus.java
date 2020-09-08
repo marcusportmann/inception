@@ -33,63 +33,98 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "The password reset status, i.e. 0 = Unknown, 1 = Requested, 2 = Completed, 3 = Expired")
+@Schema(description = "The password reset status")
 @XmlEnum
 @XmlType(name = "PasswordResetStatus", namespace = "http://security.inception.digital")
 public enum PasswordResetStatus {
-  @XmlEnumValue("Unknown")
-  UNKNOWN(0, "Unknown"),
   @XmlEnumValue("Requested")
-  REQUESTED(1, "Requested"),
+  REQUESTED("requested", "Requested"),
   @XmlEnumValue("Completed")
-  COMPLETED(2, "Completed"),
+  COMPLETED("completed", "Completed"),
   @XmlEnumValue("Expired")
-  EXPIRED(3, "Expired");
+  EXPIRED("expired", "Expired");
 
-  private int code;
+  private final String code;
 
-  private String description;
+  private final String description;
 
-  PasswordResetStatus(int code, String description) {
+  PasswordResetStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the password reset status given by the specified numeric code value.
+   * Returns the password reset status given by the specified code value.
    *
-   * @param code the numeric code value identifying the password reset status
-   * @return the password reset status given by the specified numeric code value
+   * @param code the code value identifying the password reset status
+   * @return the password reset status given by the specified code value
    */
   @JsonCreator
-  public static PasswordResetStatus fromCode(int code) {
+  public static PasswordResetStatus fromCode(String code) {
     switch (code) {
-      case 0:
-        return PasswordResetStatus.UNKNOWN;
-
-      case 1:
+      case "requested":
         return PasswordResetStatus.REQUESTED;
-
-      case 2:
+      case "completed":
         return PasswordResetStatus.COMPLETED;
-
-      case 3:
+      case "expired":
         return PasswordResetStatus.EXPIRED;
-
       default:
-        return PasswordResetStatus.UNKNOWN;
+        throw new RuntimeException(
+            "Failed to determine the password reset status with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value for the password reset status.
+   * Returns the numeric code for the password reset status.
    *
-   * @return the numeric code value for the password reset status
+   * @param passwordResetStatus the password reset status
+   * @return the numeric code for the password reset status
+   */
+  public static int toNumericCode(PasswordResetStatus passwordResetStatus) {
+    switch (passwordResetStatus) {
+      case REQUESTED:
+        return 1;
+      case COMPLETED:
+        return 2;
+      case EXPIRED:
+        return 3;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the password reset status ("
+                + passwordResetStatus.code()
+                + ")");
+    }
+  }
+
+  /**
+   * Returns the password reset status for the specified numeric code.
+   *
+   * @param numericCode the numeric code identifying the password reset status
+   * @return the password reset status given by the specified numeric code value
+   */
+  public static PasswordResetStatus fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return PasswordResetStatus.REQUESTED;
+      case 2:
+        return PasswordResetStatus.COMPLETED;
+      case 3:
+        return PasswordResetStatus.EXPIRED;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the password reset status for the numeric code ("
+                + numericCode
+                + ")");
+    }
+  }
+
+  /**
+   * Returns the code value for the password reset status.
+   *
+   * @return the code value for the password reset status
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

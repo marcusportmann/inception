@@ -28,92 +28,155 @@ import javax.xml.bind.annotation.XmlType;
 // ~--- JDK imports ------------------------------------------------------------
 
 /** The enumeration giving the possible statuses for a message part. */
-@Schema(
-    description =
-        "The message part status, i.e. 0 = Initialized, 1 = Queued For Sending, 2 = Sending, "
-            + "3 = Queued For Assembly, 4 = Assembling, 5 = Queued For Download, 6 = Downloading, "
-            + "7 = Aborted, 8 = Failed, -1 = Unknown")
+@Schema(description = "The message part status")
 @XmlEnum
 @XmlType(name = "MessagePartStatus", namespace = "http://messaging.inception.digital")
 public enum MessagePartStatus {
   @XmlEnumValue("Initialized")
-  INITIALIZED(0, "Initialized"),
+  INITIALIZED("initialized", "Initialized"),
   @XmlEnumValue("QueuedForSending")
-  QUEUED_FOR_SENDING(1, "QueuedForSending"),
+  QUEUED_FOR_SENDING("queued_for_sending", "QueuedForSending"),
   @XmlEnumValue("Sending")
-  SENDING(2, "Sending"),
+  SENDING("sending", "Sending"),
   @XmlEnumValue("QueuedForAssembly")
-  QUEUED_FOR_ASSEMBLY(3, "QueuedForAssembly"),
+  QUEUED_FOR_ASSEMBLY("queued_for_assembly", "QueuedForAssembly"),
   @XmlEnumValue("Assembling")
-  ASSEMBLING(4, "Assembling"),
+  ASSEMBLING("assembling", "Assembling"),
   @XmlEnumValue("QueuedForDownload")
-  QUEUED_FOR_DOWNLOAD(5, "QueuedForDownload"),
+  QUEUED_FOR_DOWNLOAD("queued_for_download", "QueuedForDownload"),
   @XmlEnumValue("Downloading")
-  DOWNLOADING(6, "Downloading"),
+  DOWNLOADING("downloading", "Downloading"),
   @XmlEnumValue("Aborted")
-  ABORTED(7, "Aborted"),
+  ABORTED("aborted", "Aborted"),
   @XmlEnumValue("Failed")
-  FAILED(8, "Failed"),
-  @XmlEnumValue("Unknown")
-  UNKNOWN(-1, "Unknown");
+  FAILED("failed", "Failed");
 
-  private final int code;
+  private final String code;
 
   private final String description;
 
-  MessagePartStatus(int code, String description) {
+  MessagePartStatus(String code, String description) {
     this.code = code;
     this.description = description;
   }
 
   /**
-   * Returns the message part status given by the specified numeric code value.
+   * Returns the message part status given by the specified code value.
    *
-   * @param code the numeric code value identifying the message part status
-   * @return the message part status given by the specified numeric code value
+   * @param code the code value identifying the message part status
+   * @return the message part status given by the specified code value
    */
   @JsonCreator
-  public static MessagePartStatus fromCode(int code) {
+  public static MessagePartStatus fromCode(String code) {
     switch (code) {
-      case 0:
+      case "initialized":
         return MessagePartStatus.INITIALIZED;
 
-      case 1:
+      case "queued_for_sending":
         return MessagePartStatus.QUEUED_FOR_SENDING;
 
-      case 2:
+      case "sending":
         return MessagePartStatus.SENDING;
 
-      case 3:
+      case "queued_for_assembly":
         return MessagePartStatus.QUEUED_FOR_ASSEMBLY;
 
-      case 4:
+      case "assembling":
         return MessagePartStatus.ASSEMBLING;
 
-      case 5:
+      case "queued_for_download":
         return MessagePartStatus.QUEUED_FOR_DOWNLOAD;
 
-      case 6:
+      case "downloading":
         return MessagePartStatus.DOWNLOADING;
 
-      case 7:
+      case "aborted":
         return MessagePartStatus.ABORTED;
 
-      case 8:
+      case "failed":
         return MessagePartStatus.FAILED;
 
       default:
-        return MessagePartStatus.UNKNOWN;
+        throw new RuntimeException(
+            "Failed to determine the message part status with the invalid code (" + code + ")");
     }
   }
 
   /**
-   * Returns the numeric code value identifying the message part status.
+   * Returns the message part status for the specified numeric code.
    *
-   * @return the numeric code value identifying the message part status
+   * @param numericCode the numeric code identifying the message part status
+   * @return the message part status given by the specified numeric code value
+   */
+  public static MessagePartStatus fromNumericCode(int numericCode) {
+    switch (numericCode) {
+      case 1:
+        return MessagePartStatus.INITIALIZED;
+      case 2:
+        return MessagePartStatus.QUEUED_FOR_SENDING;
+      case 3:
+        return MessagePartStatus.SENDING;
+      case 4:
+        return MessagePartStatus.QUEUED_FOR_ASSEMBLY;
+      case 5:
+        return MessagePartStatus.ASSEMBLING;
+      case 6:
+        return MessagePartStatus.QUEUED_FOR_DOWNLOAD;
+      case 7:
+        return MessagePartStatus.DOWNLOADING;
+      case 8:
+        return MessagePartStatus.ABORTED;
+      case 9:
+        return MessagePartStatus.FAILED;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the message part status for the numeric code ("
+                + numericCode
+                + ")");
+    }
+  }
+
+  /**
+   * Returns the numeric code for the message part status.
+   *
+   * @param messagePartStatus the message part status
+   * @return the numeric code for the message part status
+   */
+  public static int toNumericCode(MessagePartStatus messagePartStatus) {
+    switch (messagePartStatus) {
+      case INITIALIZED:
+        return 1;
+      case QUEUED_FOR_SENDING:
+        return 2;
+      case SENDING:
+        return 3;
+      case QUEUED_FOR_ASSEMBLY:
+        return 4;
+      case ASSEMBLING:
+        return 5;
+      case QUEUED_FOR_DOWNLOAD:
+        return 6;
+      case DOWNLOADING:
+        return 7;
+      case ABORTED:
+        return 8;
+      case FAILED:
+        return 9;
+      default:
+        throw new RuntimeException(
+            "Failed to determine the numeric code for the message part status ("
+                + messagePartStatus.code()
+                + ")");
+    }
+  }
+
+  /**
+   * Returns the code value identifying the message part status.
+   *
+   * @return the code value identifying the message part status
    */
   @JsonValue
-  public int code() {
+  public String code() {
     return code;
   }
 

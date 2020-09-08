@@ -579,6 +579,7 @@ public class SecurityServiceTest {
 
     List<Attribute> attributes = new ArrayList<>();
 
+    attributes.add(new Attribute("status", "active"));
     attributes.add(new Attribute("email", "E-Mail 1"));
     attributes.add(new Attribute("name", "Name 1"));
     attributes.add(new Attribute("preferredName", "Preferred Name 1"));

@@ -24,40 +24,35 @@ export enum JobStatus {
   /**
    * Unscheduled.
    */
-  Unscheduled = 0,
+  Unscheduled = 'unscheduled',
 
   /**
    * Scheduled.
    */
-  Scheduled = 1,
+  Scheduled = 'scheduled',
 
   /**
    * Executing.
    */
-  Executing = 2,
+  Executing = 'executing',
 
   /**
    * Executed.
    */
-  Executed = 3,
+  Executed = 'executed',
 
   /**
    * Aborted.
    */
-  Aborted = 4,
+  Aborted = 'aborted',
 
   /**
    * Failed.
    */
-  Failed = 5,
+  Failed = 'failed',
 
   /**
    * OnceOff.
    */
-  OnceOff = 6,
-
-  /**
-   * Unknown.
-   */
-  Unknown = -1
+  OnceOff = 'once_off'
 }

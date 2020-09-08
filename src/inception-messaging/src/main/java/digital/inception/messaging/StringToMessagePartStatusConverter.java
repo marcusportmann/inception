@@ -23,25 +23,20 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToMessagePartStatusConverter</code> class implements the Spring converter that
- * converts an <code>Integer</code> type into a <code>MessagePartStatus</code> type.
+ * The <code>StringToMessagePartStatusConverter</code> class implements the Spring converter that
+ * converts a <code>String</code> type into a <code>MessagePartStatus</code> type.
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToMessagePartStatusConverter implements Converter<Integer, MessagePartStatus> {
+public class StringToMessagePartStatusConverter implements Converter<String, MessagePartStatus> {
 
-  /** Constructs a new <code>IntegerToMessagePartStatusConverter</code>. */
-  public IntegerToMessagePartStatusConverter() {}
+  /** Constructs a new <code>StringToMessagePartStatusConverter</code>. */
+  public StringToMessagePartStatusConverter() {}
 
   @Override
-  public MessagePartStatus convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
+  public MessagePartStatus convert(String source) {
     return MessagePartStatus.fromCode(source);
   }
 }

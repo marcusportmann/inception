@@ -48,7 +48,6 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(classes = {TestConfiguration.class})
 @TestExecutionListeners(
@@ -75,7 +74,7 @@ public class SMSServiceTest {
     SMS sms = new SMS();
     sms.setMobileNumber("0832763107");
     sms.setMessage("Testing 1.. 2.. 3..");
-    sms.setStatus(SMSStatus.UNKNOWN);
+    sms.setStatus(SMSStatus.SENT);
 
     return sms;
   }
@@ -147,12 +146,12 @@ public class SMSServiceTest {
 
     assertEquals("The status for the SMS is not correct", SMSStatus.SENT, retrievedSMS.getStatus());
 
-    smsService.unlockSMS(sms.getId(), SMSStatus.UNKNOWN);
+    smsService.unlockSMS(sms.getId(), SMSStatus.FAILED);
 
     retrievedSMS = smsService.getSMS(sms.getId());
 
     assertEquals(
-        "The status for the SMS is not correct", SMSStatus.UNKNOWN, retrievedSMS.getStatus());
+        "The status for the SMS is not correct", SMSStatus.FAILED, retrievedSMS.getStatus());
   }
 
   private void compareSMSs(SMS sms1, SMS sms2) {

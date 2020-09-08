@@ -14,24 +14,29 @@
  * limitations under the License.
  */
 
-package digital.inception.reference;
+package digital.inception.security;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import java.util.List;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-// ~--- JDK imports ------------------------------------------------------------
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.stereotype.Component;
 
 /**
- * The <code>SuitableTimeToContactRepository</code> interface declares the repository for the <code>
- * SuitableTimeToContact</code> domain type.
+ * The <code>TenantStatusToStringConverter</code> class implements the Spring converter that
+ * converts a <code>TenantStatus</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-public interface SuitableTimeToContactRepository
-    extends JpaRepository<SuitableTimeToContact, SuitableTimeToContactId> {
+@Component
+@WritingConverter
+public class TenantStatusToStringConverter implements Converter<TenantStatus, String> {
 
-  List<SuitableTimeToContact> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  /** Constructs a new <code>TenantStatusToStringConverter</code>. */
+  public TenantStatusToStringConverter() {}
+
+  @Override
+  public String convert(TenantStatus source) {
+    return source.code();
+  }
 }

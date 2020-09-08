@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.security;
+package digital.inception.messaging;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -23,25 +23,21 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>IntegerToGroupMemberTypeConverter</code> class implements the Spring converter that
- * converts an <code>Integer</code> type into a <code>GroupMemberType</code> type.
+ * The <code>StringToMessageStatusConverter</code> class implements the Spring converter that
+ * converts a <code>String</code> type into a <code>MessageStatus</code> type.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
 @Component
 @ReadingConverter
-public class IntegerToGroupMemberTypeConverter implements Converter<Integer, GroupMemberType> {
+public class StringToMessageStatusConverter implements Converter<String, MessageStatus> {
 
-  /** Constructs a new <code>IntegerToGroupMemberTypeConverter</code>. */
-  public IntegerToGroupMemberTypeConverter() {}
+  /** Constructs a new <code>StringToMessageStatusConverter</code>. */
+  public StringToMessageStatusConverter() {}
 
   @Override
-  public GroupMemberType convert(Integer source) {
-    if (source == null) {
-      return null;
-    }
-
-    return GroupMemberType.fromCode(source);
+  public MessageStatus convert(String source) {
+    return MessageStatus.fromCode(source);
   }
 }

@@ -45,14 +45,14 @@ public interface SMSRepository extends JpaRepository<SMS, UUID> {
 
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
-      "select s from SMS s where s.status = 1 and (s.lastProcessed < :lastProcessedBefore "
+      "select s from SMS s where s.status = 2 and (s.lastProcessed < :lastProcessedBefore "
           + "or s.lastProcessed is null)")
-  List<SMS> findSMSsScheduledForExecutionForWrite(
+  List<SMS> findSMSsQueuedForSendingForWrite(
       @Param("lastProcessedBefore") LocalDateTime lastProcessedBefore, Pageable pageable);
 
   @Modifying
   @Query(
-      "update SMS s set s.lockName = :lockName, s.status = 2, "
+      "update SMS s set s.lockName = :lockName, s.status = 3, "
           + "s.sendAttempts = s.sendAttempts + 1, s.lastProcessed = :when where s.id = :smsId")
   void lockSMSForSending(
       @Param("smsId") UUID smsId,
