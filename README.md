@@ -514,8 +514,8 @@ Complete the following steps to create a new application based on the Inception 
       }
       ```
    3. Edit the *src/main/frontend/angular.json* file and change the *outputPath* option to
-      *../../../target/classes/static*, and add the *preserveSymlinks* option with a value
-      of *true* as shown below. This will result in the Angular font-end being packaged as
+      *../../../target/classes/static*, add the *preserveSymlinks* option with a value
+      of *true*, and set the *aot* option to *true* as shown below. This will result in the Angular font-end being packaged as
       part of the Spring Boot application as a set of static resources.
       ```
       {
@@ -529,6 +529,8 @@ Complete the following steps to create a new application based on the Inception 
                 "options": {
                   "preserveSymlinks": true,
                   "outputPath": "../../../target/classes/static",
+                  ...
+                  "aot": true,
                   ...
                 },
         ...
