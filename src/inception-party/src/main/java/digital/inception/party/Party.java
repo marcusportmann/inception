@@ -16,38 +16,22 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * The <code>Party</code> class holds the information for a party.
@@ -56,7 +40,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A person or organization")
+@Schema(description = "Party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id", "type", "name"})
 @XmlRootElement(name = "Party", namespace = "http://party.inception.digital")
@@ -66,69 +50,8 @@ import org.hibernate.annotations.UpdateTimestamp;
     propOrder = {"id", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "party", name = "parties")
 public class Party {
-
-  /**
-   * Returns the contact mechanisms for the party.
-   *
-   * @return the contact mechanisms for the party
-   */
-  public Set<ContactMechanism> getContactMechanisms() {
-    return contactMechanisms;
-  }
-
-  /**
-   * Set the contact mechanisms for the party.
-   *
-   * @param contactMechanisms the contact mechanisms for the party
-   */
-  public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
-    this.contactMechanisms.clear();
-    this.contactMechanisms.addAll(contactMechanisms);
-  }
-
-  /** The contact mechanisms for the party. */
-  @Schema(description = "The contact mechanisms for the party")
-  @JsonProperty
-  @JsonManagedReference
-  @XmlElementWrapper(name = "ContactMechanisms")
-  @XmlElement(name = "ContactMechanism")
-  @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(
-      name = "party_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false,
-      nullable = false)
-  private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
-
-  /**
-   * Add the contact mechanism for the party.
-   *
-   * @param contactMechanism the contact mechanism
-   */
-  public void addContactMechanism(ContactMechanism contactMechanism) {
-    contactMechanism.setParty(this);
-
-    this.contactMechanisms.add(contactMechanism);
-  }
-
-  /** The date and time the party was created. */
-  @JsonIgnore
-  @XmlTransient
-  @CreationTimestamp
-  @Column(name = "created", nullable = false, updatable = false)
-  protected LocalDateTime created;
-
-  /** The date and time the party was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @UpdateTimestamp
-  @Column(name = "updated", insertable = false)
-  protected LocalDateTime updated;
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the party. */
   @Schema(
@@ -153,6 +76,7 @@ public class Party {
   /** The type of party. */
   @Schema(
       description = "The type of party",
+      allowableValues = "1 = Organization, 2 = Person",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -162,24 +86,6 @@ public class Party {
 
   /** Constructs a new <code>Party</code>. */
   public Party() {}
-
-  /**
-   * Constructs a new <code>Party</code>.
-   *
-   * @param type the type of party
-   */
-  public Party(PartyType type) {
-    this.type = type;
-  }
-
-  /**
-   * Returns the date and time the party was created.
-   *
-   * @return the date and time the party was created
-   */
-  public LocalDateTime getCreated() {
-    return created;
-  }
 
   /**
    * Returns the Universally Unique Identifier (UUID) uniquely identifying the party.
@@ -206,15 +112,6 @@ public class Party {
    */
   public PartyType getType() {
     return type;
-  }
-
-  /**
-   * Returns the date and time the party was last updated.
-   *
-   * @return the date and time the party was last updated
-   */
-  public LocalDateTime getUpdated() {
-    return updated;
   }
 
   /**

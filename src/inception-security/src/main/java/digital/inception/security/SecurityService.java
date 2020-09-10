@@ -1773,6 +1773,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
       Integer pageIndex,
       Integer pageSize)
       throws UserDirectoryNotFoundException, SecurityServiceException {
+    if (sortBy == null) {
+      sortBy = UserSortBy.NAME;
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {

@@ -324,6 +324,9 @@ public class PartyService implements IPartyService {
       Integer pageIndex,
       Integer pageSize)
       throws PartyServiceException {
+    if (sortBy == null) {
+      sortBy = PersonSortBy.NAME;
+    }
 
     try {
       PageRequest pageRequest = null;

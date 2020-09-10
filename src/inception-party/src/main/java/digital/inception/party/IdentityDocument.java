@@ -109,6 +109,7 @@ public class IdentityDocument {
   private UUID id;
 
   /** The person the identity document is associated with. */
+  @Schema(hidden = true)
   @JsonBackReference
   @XmlTransient
   @ManyToOne(fetch = FetchType.LAZY)
@@ -209,6 +210,7 @@ public class IdentityDocument {
    *
    * @return the person the identity document is associated with
    */
+  @Schema(hidden = true)
   public Person getPerson() {
     return person;
   }
@@ -283,6 +285,7 @@ public class IdentityDocument {
    *
    * @param person the person the identity document is associated with
    */
+  @Schema(hidden = true)
   public void setPerson(Person person) {
     this.person = person;
   }

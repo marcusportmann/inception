@@ -49,12 +49,12 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A mechanism that can be used to contact a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "value"})
+@JsonPropertyOrder({"id", "type", "subType", "value"})
 @XmlRootElement(name = "ContactMechanism", namespace = "http://party.inception.digital")
 @XmlType(
     name = "ContactMechanism",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "value"})
+    propOrder = {"id", "type", "subType", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "contact_mechanisms")
@@ -80,10 +80,26 @@ public class ContactMechanism {
   private UUID id;
 
   /** The party the contact mechanism is associated with. */
-  @JsonBackReference
+  @JsonIgnore
   @XmlTransient
   @ManyToOne(fetch = FetchType.LAZY)
   private Party party;
+
+  /** The contact mechanism sub type. */
+  @Schema(description = "The contact mechanism sub type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SubType", required = true)
+  @NotNull
+  @Column(name = "sub_type", nullable = false)
+  private ContactMechanismSubType subType;
+
+  /** The contact mechanism type. */
+  @Schema(description = "The contact mechanism type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Column(name = "type", nullable = false)
+  private ContactMechanismType type;
 
   /** The date and time the contact mechanism was last updated. */
   @JsonIgnore
@@ -91,35 +107,6 @@ public class ContactMechanism {
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
-
-  /**
-   * Returns the type of contact mechanism.
-   *
-   * @return the type of contact mechanism
-   */
-  public ContactMechanismType getType() {
-    return type;
-  }
-
-  /**
-   * Set the type of contact mechanism.
-   *
-   * @param type the type of contact mechanism
-   */
-  public void setType(ContactMechanismType type) {
-    this.type = type;
-  }
-
-  /** The type of contact mechanism. */
-  @Schema(
-      description = "The type of contact mechanism",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
-  @NotNull
-  @Column(name = "type", nullable = false)
-  private ContactMechanismType type;
-
 
   /** The value for the contact mechanism. */
   @Schema(description = "The value for the contact mechanism", required = true)
@@ -187,6 +174,24 @@ public class ContactMechanism {
   }
 
   /**
+   * Returns the contact mechanism sub type.
+   *
+   * @return the contact mechanism sub type
+   */
+  public ContactMechanismSubType getSubType() {
+    return subType;
+  }
+
+  /**
+   * Returns the contact mechanism type.
+   *
+   * @return the contact mechanism type
+   */
+  public ContactMechanismType getType() {
+    return type;
+  }
+
+  /**
    * Returns the date and time the contact mechanism was last updated.
    *
    * @return the date and time the contact mechanism was last updated
@@ -231,6 +236,24 @@ public class ContactMechanism {
    */
   public void setParty(Party party) {
     this.party = party;
+  }
+
+  /**
+   * Set the contact mechanism sub type.
+   *
+   * @param subType the contact mechanism sub type
+   */
+  public void setSubType(ContactMechanismSubType subType) {
+    this.subType = subType;
+  }
+
+  /**
+   * Set the contact mechanism type.
+   *
+   * @param type the contact mechanism type
+   */
+  public void setType(ContactMechanismType type) {
+    this.type = type;
   }
 
   /**

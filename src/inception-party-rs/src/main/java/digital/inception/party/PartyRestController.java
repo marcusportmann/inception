@@ -117,7 +117,8 @@ public class PartyRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
+  // hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public void createOrganization(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
               description = "The organization to create",
@@ -137,6 +138,64 @@ public class PartyRestController extends SecureRestController {
     }
 
     partyService.createOrganization(organization);
+  }
+
+  /**
+   * Create the new person.
+   *
+   * @param person the person
+   */
+  @Operation(summary = "Create the person", description = "Create the person")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The person was created successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "A person with the specified ID already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(value = "/persons", method = RequestMethod.POST, produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
+  // hasAuthority('FUNCTION_Party.PersonAdministration')")
+  public void createPerson(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The person to create",
+              required = true)
+          @RequestBody
+          Person person)
+      throws InvalidArgumentException, DuplicatePersonException, PartyServiceException {
+    if (person == null) {
+      throw new InvalidArgumentException("person");
+    }
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "person", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    partyService.createPerson(person);
   }
 
   /**
@@ -179,7 +238,8 @@ public class PartyRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
+  // hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public Organization getOrganization(
       @Parameter(
               name = "organizationId",
@@ -226,7 +286,8 @@ public class PartyRestController extends SecureRestController {
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   //  @PreAuthorize(
-  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
+  // hasAuthority('FUNCTION_Party.OrganizationAdministration')")
   public Organizations getOrganizations(
       @Parameter(name = "filter", description = "The optional filter to apply to the organizations")
           @RequestParam(value = "filter", required = false)
@@ -289,5 +350,116 @@ public class PartyRestController extends SecureRestController {
           Integer pageSize)
       throws PartyServiceException {
     return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
+   * Retrieve the person.
+   *
+   * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @return the person
+   */
+  @Operation(summary = "Retrieve the person", description = "Retrieve the person")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The person could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/persons/{personId}",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
+  // hasAuthority('FUNCTION_Party.PersonAdministration')")
+  public Person getPerson(
+      @Parameter(
+              name = "personId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the person",
+              required = true)
+          @PathVariable
+          UUID personId)
+      throws InvalidArgumentException, PersonNotFoundException, PartyServiceException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (personId == null) {
+      throw new InvalidArgumentException("personId");
+    }
+
+    return null;
+  }
+
+  /**
+   * Retrieve the persons.
+   *
+   * @param filter the optional filter to apply to the persons
+   * @param sortBy the optional method used to sort the persons e.g. by name
+   * @param sortDirection the optional sort direction to apply to the persons
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the persons
+   */
+  @Operation(summary = "Retrieve the persons", description = "Retrieve the persons")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(value = "/persons", method = RequestMethod.GET, produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
+  // hasAuthority('FUNCTION_Party.PersonAdministration')")
+  public Persons getPersons(
+      @Parameter(name = "filter", description = "The optional filter to apply to the persons")
+          @RequestParam(value = "filter", required = false)
+          String filter,
+      @Parameter(
+              name = "sortBy",
+              description = "The optional method used to sort the persons e.g. by name")
+          @RequestParam(value = "sortBy", required = false)
+          PersonSortBy sortBy,
+      @Parameter(
+              name = "sortDirection",
+              description = "The optional sort direction to apply to the persons")
+          @RequestParam(value = "sortDirection", required = false)
+          SortDirection sortDirection,
+      @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
+          @RequestParam(value = "pageIndex", required = false)
+          Integer pageIndex,
+      @Parameter(name = "pageSize", description = "The optional page size", example = "0")
+          @RequestParam(value = "pageSize", required = false)
+          Integer pageSize)
+      throws PartyServiceException {
+    return partyService.getPersons(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

@@ -18,23 +18,26 @@ package digital.inception.party;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-// ~--- JDK imports ------------------------------------------------------------
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.convert.WritingConverter;
+import org.springframework.stereotype.Component;
 
 /**
- * The <code>PartyRepository</code> interface declares the repository for the <code>Party</code>
- * domain type.
+ * The <code>ContactMechanismTypeToStringConverter</code> class implements the Spring converter that
+ * converts a <code>ContactMechanismType</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */
-public interface PartyRepository extends JpaRepository<Party, UUID> {
+@Component
+@WritingConverter
+public class ContactMechanismTypeToStringConverter
+    implements Converter<ContactMechanismType, String> {
 
-  @Query("select p from Party p where (lower(p.name) like lower(:filter))")
-  Page<Party> findFiltered(@Param("filter") String filter, Pageable pageable);
+  /** Constructs a new <code>ContactMechanismTypeToStringConverter</code>. */
+  public ContactMechanismTypeToStringConverter() {}
+
+  @Override
+  public String convert(ContactMechanismType source) {
+    return source.code();
+  }
 }
