@@ -44,6 +44,8 @@ import {MailTemplateContentType} from '../services/mail-template-content-type';
 })
 export class MailTemplatesComponent extends AdminContainerView implements AfterViewInit {
 
+  getMailTemplateContentTypeDescription = MailService.getMailTemplateContentTypeDescription;
+
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   MailTemplateContentType = MailTemplateContentType;

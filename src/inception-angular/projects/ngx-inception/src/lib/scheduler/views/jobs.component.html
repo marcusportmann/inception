@@ -14,7 +14,7 @@
     <!-- Status Column -->
     <ng-container matColumnDef="status">
       <mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@scheduler_jobs_component_table_header_status">Status</mat-header-cell>
-      <mat-cell *matCellDef="let row">{{ row.status }}</mat-cell>
+      <mat-cell *matCellDef="let row">{{ getJobStatusDescription(row.status) }}</mat-cell>
     </ng-container>
 
     <!-- Next Execution Column -->

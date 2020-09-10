@@ -29,6 +29,7 @@ import {SystemUnavailableError} from '../../core/errors/system-unavailable-error
 import {MailTemplate} from './mail-template';
 import {MailTemplateSummary} from './mail-template-summary';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {MailTemplateContentType} from "./mail-template-content-type";
 
 /**
  * The Mail Service implementation.
@@ -50,6 +51,17 @@ export class MailService {
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
     console.log('Initializing the Mail Service');
+  }
+
+  static getMailTemplateContentTypeDescription(mailTemplateContentType: MailTemplateContentType) : string {
+    switch (mailTemplateContentType) {
+      case MailTemplateContentType.HTML:
+        return $localize`:@@mail_mail_template_content_type_text:HTML`;
+      case MailTemplateContentType.Text:
+        return $localize`:@@mail_mail_template_content_type_text:Text`;
+      default:
+        return $localize`:@@mail_mail_template_content_type_unknown:Unknown`;
+    }
   }
 
   /**

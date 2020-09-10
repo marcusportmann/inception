@@ -20,10 +20,15 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {ApiError} from '../../core/errors/api-error';
-import {DuplicateJobError, JobNotFoundError, SchedulerServiceError} from './scheduler.service.errors';
+import {
+  DuplicateJobError,
+  JobNotFoundError,
+  SchedulerServiceError
+} from './scheduler.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
 import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
+import {JobStatus} from "./job-status";
 
 /**
  * The Scheduler Service implementation.
@@ -43,6 +48,32 @@ export class SchedulerService {
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig, private httpClient: HttpClient) {
     console.log('Initializing the Scheduler Service');
+  }
+
+  /**
+   * Retrieve the description for the job status.
+   *
+   * @param jobStatus the job status
+   */
+  static getJobStatusDescription(jobStatus: JobStatus): string {
+    switch (jobStatus) {
+      case JobStatus.Unscheduled:
+        return $localize`:@@scheduler_job_status_unscheduled:Unscheduled`;
+      case JobStatus.Scheduled:
+        return $localize`:@@scheduler_job_status_scheduled:Scheduled`;
+      case JobStatus.Executing:
+        return $localize`:@@scheduler_job_status_executing:Executing`;
+      case JobStatus.Executed:
+        return $localize`:@@scheduler_job_status_executed:Executed`;
+      case JobStatus.Aborted:
+        return $localize`:@@scheduler_job_status_aborted:Aborted`;
+      case JobStatus.Failed:
+        return $localize`:@@scheduler_job_status_failed:Failed`;
+      case JobStatus.OnceOff:
+        return $localize`:@@scheduler_job_status_once_off:Once Off`;
+      default:
+        return $localize`:@@scheduler_job_status_unknown:Unknown`;
+    }
   }
 
   /**

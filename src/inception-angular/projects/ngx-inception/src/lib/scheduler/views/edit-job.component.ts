@@ -44,6 +44,8 @@ import {JobStatus} from '../services/job-status';
 })
 export class EditJobComponent extends AdminContainerView implements AfterViewInit {
 
+  getJobStatusDescription = SchedulerService.getJobStatusDescription;
+
   JobStatus = JobStatus;
 
   editJobForm: FormGroup;

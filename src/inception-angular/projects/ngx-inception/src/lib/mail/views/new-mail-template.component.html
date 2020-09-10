@@ -30,7 +30,7 @@
             <mat-label i18n="@@mail_new_mail_template_component_label_content_type">Content Type</mat-label>
             <mat-select formControlName="contentType" required="true">
               <mat-option *ngFor="let contentType of contentTypes" [value]="contentType">
-                {{ contentType }}
+                {{ getMailTemplateContentTypeDescription(contentType) }}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="contentTypeFormControl.errors && !contentTypeFormControl.untouched">

@@ -44,6 +44,8 @@ import {JobStatus} from '../services/job-status';
 })
 export class JobsComponent extends AdminContainerView implements AfterViewInit {
 
+  getJobStatusDescription = SchedulerService.getJobStatusDescription;
+
   @HostBinding('class') hostClass = 'flex flex-column flex-fill';
 
   JobStatus = JobStatus;
