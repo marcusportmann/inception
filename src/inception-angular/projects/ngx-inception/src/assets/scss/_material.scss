@@ -293,6 +293,12 @@ label {
       color: $danger;
     }
   }
+
+  // To fix cut-off text in single line textareas
+  textarea.mat-input-element {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .mat-form-field.static {
@@ -817,3 +823,6 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
   position: static;
   overflow: hidden !important;
 }
+
+
+
