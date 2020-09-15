@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -51,7 +53,9 @@ import javax.xml.bind.annotation.XmlType;
 @Entity
 @Table(schema = "reference", name = "languages")
 @IdClass(LanguageId.class)
-public class Language {
+public class Language implements Serializable {
+
+  private static final long serialVersionUID = 1000000;
 
   /** The code for the language. */
   @Schema(description = "The code for the language", required = true)
@@ -112,6 +116,32 @@ public class Language {
   public Language() {}
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   * false</code>
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+
+    if (object == null) {
+      return false;
+    }
+
+    if (getClass() != object.getClass()) {
+      return false;
+    }
+
+    Language other = (Language) object;
+
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
+  }
+
+  /**
    * Returns the code for the language.
    *
    * @return the code for the language
@@ -163,6 +193,16 @@ public class Language {
    */
   public Integer getSortIndex() {
     return sortIndex;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**

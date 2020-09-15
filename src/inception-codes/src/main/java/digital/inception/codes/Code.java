@@ -171,7 +171,7 @@ public class Code implements Serializable {
 
     Code other = (Code) object;
 
-    return Objects.equals(id, other.id);
+    return Objects.equals(codeCategoryId, other.codeCategoryId) && Objects.equals(id, other.id);
   }
 
   /**
@@ -235,8 +235,8 @@ public class Code implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (id == null) ? 0 : id.hashCode();
-  }
+    return ((codeCategoryId == null) ? 0 : codeCategoryId.hashCode())
+        + ((id == null) ? 0 : id.hashCode());  }
 
   /**
    * Set the ID uniquely identifying the code category the code is associated with.

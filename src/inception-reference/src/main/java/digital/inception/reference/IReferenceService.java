@@ -29,6 +29,42 @@ import java.util.List;
 public interface IReferenceService {
 
   /**
+   * Retrieve all the contact mechanism sub types.
+   *
+   * @return the contact mechanism sub types
+   */
+  List<ContactMechanismSubType> getContactMechanismSubTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the contact mechanism sub types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
+   *     mechanism sub types for or <code>null</code> to retrieve the contact mechanism sub types
+   *     for all locales
+   * @return the contact mechanism sub types
+   */
+  List<ContactMechanismSubType> getContactMechanismSubTypes(String localeId)
+      throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the contact mechanism types.
+   *
+   * @return the contact mechanism types
+   */
+  List<ContactMechanismType> getContactMechanismTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the contact mechanism types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
+   *     mechanism types for or <code>null</code> to retrieve the contact mechanism types for all
+   *     locales
+   * @return the contact mechanism types
+   */
+  List<ContactMechanismType> getContactMechanismTypes(String localeId)
+      throws ReferenceServiceException;
+
+  /**
    * Retrieve all the countries.
    *
    * @return the countries

@@ -22,13 +22,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -49,16 +50,19 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A mechanism that can be used to contact a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "subType", "value"})
+@JsonPropertyOrder({"type", "subType", "value"})
 @XmlRootElement(name = "ContactMechanism", namespace = "http://party.inception.digital")
 @XmlType(
     name = "ContactMechanism",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "type", "subType", "value"})
+    propOrder = {"type", "subType", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "contact_mechanisms")
-public class ContactMechanism {
+@IdClass(ContactMechanismId.class)
+public class ContactMechanism implements Serializable {
+
+  private static final long serialVersionUID = 1000000;
 
   /** The date and time the contact mechanism was created. */
   @JsonIgnore
@@ -67,21 +71,11 @@ public class ContactMechanism {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the contact mechanism. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the contact mechanism",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Id
-  @Column(name = "id", nullable = false)
-  private UUID id;
-
   /** The party the contact mechanism is associated with. */
-  @JsonIgnore
+  @Schema(hidden = true)
+  @JsonBackReference
   @XmlTransient
+  @Id
   @ManyToOne(fetch = FetchType.LAZY)
   private Party party;
 
@@ -90,6 +84,7 @@ public class ContactMechanism {
   @JsonProperty(required = true)
   @XmlElement(name = "SubType", required = true)
   @NotNull
+  @Id
   @Column(name = "sub_type", nullable = false)
   private ContactMechanismSubType subType;
 
@@ -98,6 +93,7 @@ public class ContactMechanism {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
+  @Id
   @Column(name = "type", nullable = false)
   private ContactMechanismType type;
 
@@ -143,7 +139,9 @@ public class ContactMechanism {
 
     ContactMechanism other = (ContactMechanism) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(id, other.id);
+    return Objects.equals(party, other.party)
+        && Objects.equals(type, other.type)
+        && Objects.equals(subType, other.subType);
   }
 
   /**
@@ -156,19 +154,11 @@ public class ContactMechanism {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the contact mechanism.
-   *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the contact mechanism
-   */
-  public UUID getId() {
-    return id;
-  }
-
-  /**
    * Returns the party the contact mechanism is associated with.
    *
    * @return the party the contact mechanism is associated with
    */
+  @Schema(hidden = true)
   public Party getParty() {
     return party;
   }
@@ -217,23 +207,26 @@ public class ContactMechanism {
   @Override
   public int hashCode() {
     return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
-        + ((id == null) ? 0 : id.hashCode());
+        + ((type == null) ? 0 : type.hashCode())
+        + ((subType == null) ? 0 : subType.hashCode());
   }
 
-  /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the contact mechanism.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the contact mechanism
-   */
-  public void setId(UUID id) {
-    this.id = id;
-  }
+  //  /**
+  //   * Set the Universally Unique Identifier (UUID) uniquely identifying the contact mechanism.
+  //   *
+  //   * @param id the Universally Unique Identifier (UUID) uniquely identifying the contact
+  // mechanism
+  //   */
+  //  public void setId(UUID id) {
+  //    this.id = id;
+  //  }
 
   /**
    * Set the party the contact mechanism is associated with.
    *
    * @param party the party the contact mechanism is associated with
    */
+  @Schema(hidden = true)
   public void setParty(Party party) {
     this.party = party;
   }

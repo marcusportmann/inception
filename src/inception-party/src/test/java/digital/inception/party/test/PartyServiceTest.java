@@ -23,6 +23,9 @@ import static org.junit.Assert.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.party.ContactMechanism;
+import digital.inception.party.ContactMechanismSubType;
+import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.Organization;
@@ -37,7 +40,7 @@ import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Objects;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +107,16 @@ public class PartyServiceTest {
 
     Person person = new Person();
 
+    person.setCountryOfBirth("US");
+    person.setDateOfBirth(LocalDate.of(1976, 3, 7));
+    person.setGender("M");
+    person.setGivenName("GivenName" + personCount);
     person.setId(UuidCreator.getShortPrefixComb());
+    person.setInitials("G M");
+    person.setMaidenName("MaidenName" + personCount);
+    person.setMaritalStatus("M");
+    person.setMarriageType("1");
+    person.setMiddleNames("MiddleName" + personCount);
     person.setName(
         "GivenName"
             + personCount
@@ -114,29 +126,34 @@ public class PartyServiceTest {
             + " "
             + "Surname"
             + personCount);
-//    person.setPreferredName("PreferredName" + personCount);
-//    person.setTitle("1");
-//    person.setGivenName("GivenName" + personCount);
-//    person.setMiddleNames("MiddleName" + personCount);
-//    person.setInitials("G M");
-//    person.setSurname("Surname" + personCount);
-//    person.setMaidenName("MaidenName" + personCount);
-//    person.setGender("M");
-//    person.setRace("W");
-//    person.setMaritalStatus("M");
-//    person.setMarriageType("1");
-//    person.setDateOfBirth(LocalDate.of(1976, 3, 7));
-//    person.setDateOfBirth(LocalDate.of(2200, 1, 1));
-//    person.setCountryOfBirth("US");
-//    person.setGender(String.valueOf(random.nextInt(4)));
+    person.setPreferredName("PreferredName" + personCount);
+    person.setRace("W");
+    person.setSurname("Surname" + personCount);
+    person.setTitle("1");
 
     IdentityDocument zaidcIdentityDocument = new IdentityDocument();
     zaidcIdentityDocument.setId(UuidCreator.getShortPrefixComb());
     zaidcIdentityDocument.setType("ZAIDCARD");
-    zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
     zaidcIdentityDocument.setCountryOfIssue("ZA");
+    zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
+    zaidcIdentityDocument.setNumber("8904085800089");
 
-    //person.addIdentityDocument(zaidcIdentityDocument);
+    person.addIdentityDocument(zaidcIdentityDocument);
+
+
+    ContactMechanism mobilePhoneNumberContactMechanism = new ContactMechanism();
+    mobilePhoneNumberContactMechanism.setType(ContactMechanismType.PHONE_NUMBER);
+    mobilePhoneNumberContactMechanism.setSubType(ContactMechanismSubType.MOBILE_PHONE_NUMBER);
+    mobilePhoneNumberContactMechanism.setValue("+27835551234");
+
+    person.addContactMechanism(mobilePhoneNumberContactMechanism);
+
+    ContactMechanism personalEmailAddressContactMechanism = new ContactMechanism();
+    personalEmailAddressContactMechanism.setType(ContactMechanismType.EMAIL_ADDRESS);
+    personalEmailAddressContactMechanism.setSubType(ContactMechanismSubType.PERSONAL_EMAIL_ADDRESS);
+    personalEmailAddressContactMechanism.setValue("test@test.com");
+
+    person.addContactMechanism(personalEmailAddressContactMechanism);
 
     return person;
   }
@@ -152,10 +169,11 @@ public class PartyServiceTest {
     IdentityDocument zaidcIdentityDocument = new IdentityDocument();
     zaidcIdentityDocument.setId(UuidCreator.getShortPrefixComb());
     zaidcIdentityDocument.setType("ZAIDCARD");
-    zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
     zaidcIdentityDocument.setCountryOfIssue("ZA");
+    zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
+    zaidcIdentityDocument.setNumber("8904085800089");
 
-    //person.addIdentityDocument(zaidcIdentityDocument);
+    person.addIdentityDocument(zaidcIdentityDocument);
 
     return person;
   }
@@ -265,12 +283,21 @@ public class PartyServiceTest {
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
-//    person.setCountryOfBirth("UK");
-//    person.setDateOfBirth(LocalDate.of(1985, 5, 1));
-//    person.setGender(String.valueOf(random.nextInt(4)));
-//    person.setGivenName(person.getGivenName() + " Updated");
-//    person.setPreferredName(person.getPreferredName() + " Updated");
-//    person.setSurname(person.getSurname() + " Updated");
+    person.setCountryOfBirth("UK");
+    person.setDateOfBirth(LocalDate.of(1985, 5, 1));
+    person.setDateOfDeath(LocalDate.of(2200, 1, 1));
+    person.setGender("F");
+    person.setGivenName(person.getGivenName() + " Updated");
+    person.setInitials(person.getInitials() + " Updated");
+    person.setMaidenName(person.getMaidenName() + " Updated");
+    person.setMaritalStatus("D");
+    person.setMarriageType(null);
+    person.setMiddleNames(person.getMiddleNames() + " Updated");
+    person.setName(person.getName() + " Updated");
+    person.setPreferredName(person.getPreferredName() + " Updated");
+    person.setRace("B");
+    person.setSurname(person.getSurname() + " Updated");
+    person.setTitle("5");
 
     IdentityDocument passportIdentityDocument = new IdentityDocument();
     passportIdentityDocument.setId(UuidCreator.getShortPrefixComb());
@@ -278,8 +305,9 @@ public class PartyServiceTest {
     passportIdentityDocument.setDateOfIssue(LocalDate.of(2016, 10, 7));
     passportIdentityDocument.setDateOfExpiry(LocalDate.of(2025, 9, 1));
     passportIdentityDocument.setCountryOfIssue("ZA");
+    passportIdentityDocument.setNumber("A1234567890");
 
-//    person.addIdentityDocument(passportIdentityDocument);
+    person.addIdentityDocument(passportIdentityDocument);
 
     partyService.updatePerson(person);
 
@@ -321,96 +349,125 @@ public class PartyServiceTest {
   }
 
   private void comparePersons(Person person1, Person person2) {
+    assertEquals(
+        "The country of birth values for the two persons do not match",
+        person1.getCountryOfBirth(),
+        person2.getCountryOfBirth());
+    assertEquals(
+        "The date of birth values for the two persons do not match",
+        person1.getDateOfBirth(),
+        person2.getDateOfBirth());
+    assertEquals(
+        "The date of death values for the two persons do not match",
+        person1.getDateOfBirth(),
+        person2.getDateOfBirth());
+    assertEquals(
+        "The gender values for the two persons do not match",
+        person1.getGender(),
+        person2.getGender());
+    assertEquals(
+        "The given name values for the two persons do not match",
+        person1.getGivenName(),
+        person2.getGivenName());
+    assertEquals(
+        "The ID values for the two persons do not match", person1.getId(), person2.getId());
+    assertEquals(
+        "The initials values for the two persons do not match",
+        person1.getInitials(),
+        person2.getInitials());
+    assertEquals(
+        "The maiden name values for the two persons do not match",
+        person1.getMaidenName(),
+        person2.getMaidenName());
+    assertEquals(
+        "The marital status values for the two persons do not match",
+        person1.getMaritalStatus(),
+        person2.getMaritalStatus());
+    assertEquals(
+        "The marriage type values for the two persons do not match",
+        person1.getMarriageType(),
+        person2.getMarriageType());
+    assertEquals(
+        "The middle names values for the two persons do not match",
+        person1.getMiddleNames(),
+        person2.getMiddleNames());
+    assertEquals(
+        "The name values for the two persons do not match", person1.getName(), person2.getName());
+    assertEquals(
+        "The preferred name values for the two persons do not match",
+        person1.getPreferredName(),
+        person2.getPreferredName());
+    assertEquals(
+        "The race values for the two persons do not match", person1.getRace(), person2.getRace());
+    assertEquals(
+        "The surname values for the two persons do not match",
+        person1.getSurname(),
+        person2.getSurname());
+    assertEquals(
+        "The title values for the two persons do not match",
+        person1.getTitle(),
+        person2.getTitle());
 
-//    assertEquals(
-//        "The country of birth values for the two persons do not match",
-//        person1.getCountryOfBirth(),
-//        person2.getCountryOfBirth());
-//    assertEquals(
-//        "The date of birth values for the two persons do not match",
-//        person1.getDateOfBirth(),
-//        person2.getDateOfBirth());
-//    assertEquals(
-//        "The date of death values for the two persons do not match",
-//        person1.getDateOfBirth(),
-//        person2.getDateOfBirth());
-//
-//    assertEquals(
-//        "The gender values for the two persons do not match",
-//        person1.getGender(),
-//        person2.getGender());
-//    assertEquals(
-//        "The given name values for the two persons do not match",
-//        person1.getGivenName(),
-//        person2.getGivenName());
-//    assertEquals(
-//        "The ID values for the two persons do not match", person1.getId(), person2.getId());
-//    assertEquals(
-//        "The initials values for the two persons do not match",
-//        person1.getInitials(),
-//        person2.getInitials());
-//    assertEquals(
-//        "The maiden name values for the two persons do not match",
-//        person1.getMaidenName(),
-//        person2.getMaidenName());
-//    assertEquals(
-//        "The marital status values for the two persons do not match",
-//        person1.getMaritalStatus(),
-//        person2.getMaritalStatus());
-//    assertEquals(
-//        "The marriage type values for the two persons do not match",
-//        person1.getMarriageType(),
-//        person2.getMarriageType());
-//
-//    assertEquals(
-//        "The middle names values for the two persons do not match",
-//        person1.getMiddleNames(),
-//        person2.getMiddleNames());
-//    assertEquals(
-//        "The name values for the two persons do not match", person1.getName(), person2.getName());
-//    assertEquals(
-//        "The preferred name values for the two persons do not match",
-//        person1.getPreferredName(),
-//        person2.getPreferredName());
-//    assertEquals(
-//        "The race values for the two persons do not match", person1.getRace(), person2.getRace());
-//
-//    assertEquals(
-//        "The surname values for the two persons do not match",
-//        person1.getSurname(),
-//        person2.getSurname());
-//    assertEquals(
-//        "The title values for the two persons do not match",
-//        person1.getTitle(),
-//        person2.getTitle());
-//
-//    assertEquals(
-//        "The number of identity documents for the two persons do not match",
-//        person1.getIdentityDocuments().size(),
-//        person2.getIdentityDocuments().size());
-//
-//    for (IdentityDocument person1IdentityDocument : person1.getIdentityDocuments()) {
-//      boolean foundIdentityDocument = false;
-//
-//      for (IdentityDocument person2IdentityDocument : person2.getIdentityDocuments()) {
-//        if (person1IdentityDocument.getId().equals(person2IdentityDocument.getId())) {
-//          assertEquals(
-//              "The dates of issue for the two identity documents do not match",
-//              person1IdentityDocument.getDateOfIssue(),
-//              person2IdentityDocument.getDateOfIssue());
-//
-//          assertEquals(
-//              "The types for the two identity documents do not match",
-//              person1IdentityDocument.getType(),
-//              person2IdentityDocument.getType());
-//
-//          foundIdentityDocument = true;
-//        }
-//      }
-//
-//      if (!foundIdentityDocument) {
-//        fail("Failed to find the identity document (" + person1IdentityDocument.getId() + ")");
-//      }
-//    }
+    assertEquals(
+        "The number of identity documents for the two persons do not match",
+        person1.getIdentityDocuments().size(),
+        person2.getIdentityDocuments().size());
+
+    for (IdentityDocument person1IdentityDocument : person1.getIdentityDocuments()) {
+      boolean foundIdentityDocument = false;
+
+      for (IdentityDocument person2IdentityDocument : person2.getIdentityDocuments()) {
+        if (person1IdentityDocument.getId().equals(person2IdentityDocument.getId())) {
+          assertEquals(
+              "The dates of issue for the two identity documents do not match",
+              person1IdentityDocument.getDateOfIssue(),
+              person2IdentityDocument.getDateOfIssue());
+
+          assertEquals(
+              "The types for the two identity documents do not match",
+              person1IdentityDocument.getType(),
+              person2IdentityDocument.getType());
+
+          foundIdentityDocument = true;
+        }
+      }
+
+      if (!foundIdentityDocument) {
+        fail("Failed to find the identity document (" + person1IdentityDocument.getId() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of contact mechanisms for the two persons do not match",
+        person1.getContactMechanisms().size(),
+        person2.getContactMechanisms().size());
+
+    for (ContactMechanism person1ContactMechanism : person1.getContactMechanisms()) {
+      boolean foundContactMechanism = false;
+
+      for (ContactMechanism person2ContactMechanism : person2.getContactMechanisms()) {
+
+        if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
+            && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
+            && Objects.equals(
+                person1ContactMechanism.getSubType(), person2ContactMechanism.getSubType())) {
+          assertEquals(
+              "The values for the two contact mechanisms do not match",
+              person1ContactMechanism.getValue(),
+              person2ContactMechanism.getValue());
+
+          foundContactMechanism = true;
+        }
+      }
+
+      if (!foundContactMechanism) {
+        fail(
+            "Failed to find the contact mechanism ("
+                + person1ContactMechanism.getType()
+                + ")("
+                + person1ContactMechanism.getSubType()
+                + ")");
+      }
+    }
   }
 }

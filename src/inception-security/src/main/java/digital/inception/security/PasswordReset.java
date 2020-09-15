@@ -25,6 +25,7 @@ import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -138,6 +139,32 @@ public class PasswordReset implements Serializable {
   }
 
   /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   * false</code>
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+
+    if (object == null) {
+      return false;
+    }
+
+    if (getClass() != object.getClass()) {
+      return false;
+    }
+
+    PasswordReset other = (PasswordReset) object;
+
+    return Objects.equals(username, other.username) && Objects.equals(requested, other.requested);
+  }
+
+  /**
    * Returns the date and time the password reset was completed.
    *
    * @return the date and time the password reset was completed
@@ -189,6 +216,17 @@ public class PasswordReset implements Serializable {
    */
   public String getUsername() {
     return username;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((username == null) ? 0 : username.hashCode())
+        + ((requested == null) ? 0 : requested.hashCode());
   }
 
   /**

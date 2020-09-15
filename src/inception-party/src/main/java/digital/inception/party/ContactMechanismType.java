@@ -32,12 +32,12 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "ContactMechanismType", namespace = "http://party.inception.digital")
 public enum ContactMechanismType {
-  @XmlEnumValue("PhoneNumbers")
-  PHONE_NUMBERS("phone_numbers", "Phone Numbers"),
-  @XmlEnumValue("FaxNumbers")
-  FAX_NUMBERS("fax_numbers", "Fax Numbers"),
-  @XmlEnumValue("EmailAddresses")
-  EMAIL_ADDRESSES("email_addresses", "E-mail Addresses"),
+  @XmlEnumValue("PhoneNumber")
+  PHONE_NUMBER("phone_number", "Phone Number"),
+  @XmlEnumValue("FaxNumber")
+  FAX_NUMBER("fax_number", "Fax Number"),
+  @XmlEnumValue("EmailAddress")
+  EMAIL_ADDRESS("email_address", "E-mail Address"),
   @XmlEnumValue("SocialMedia")
   SOCIAL_MEDIA("social_media", "Social Media");
 
@@ -59,14 +59,14 @@ public enum ContactMechanismType {
   @JsonCreator
   public static ContactMechanismType fromCode(String code) {
     switch (code) {
-      case "phone_numbers":
-        return ContactMechanismType.PHONE_NUMBERS;
+      case "phone_number":
+        return ContactMechanismType.PHONE_NUMBER;
 
-      case "fax_numbers":
-        return ContactMechanismType.FAX_NUMBERS;
+      case "fax_number":
+        return ContactMechanismType.FAX_NUMBER;
 
-      case "email_addresses":
-        return ContactMechanismType.EMAIL_ADDRESSES;
+      case "email_address":
+        return ContactMechanismType.EMAIL_ADDRESS;
 
       case "social_media":
         return ContactMechanismType.SOCIAL_MEDIA;
@@ -86,11 +86,11 @@ public enum ContactMechanismType {
   public static ContactMechanismType fromNumericCode(int numericCode) {
     switch (numericCode) {
       case 1:
-        return ContactMechanismType.PHONE_NUMBERS;
+        return ContactMechanismType.PHONE_NUMBER;
       case 2:
-        return ContactMechanismType.FAX_NUMBERS;
+        return ContactMechanismType.FAX_NUMBER;
       case 3:
-        return ContactMechanismType.EMAIL_ADDRESSES;
+        return ContactMechanismType.EMAIL_ADDRESS;
       case 4:
         return ContactMechanismType.SOCIAL_MEDIA;
       default:
@@ -109,11 +109,11 @@ public enum ContactMechanismType {
    */
   public static int toNumericCode(ContactMechanismType contactMechanismTypeCategory) {
     switch (contactMechanismTypeCategory) {
-      case PHONE_NUMBERS:
+      case PHONE_NUMBER:
         return 1;
-      case FAX_NUMBERS:
+      case FAX_NUMBER:
         return 2;
-      case EMAIL_ADDRESSES:
+      case EMAIL_ADDRESS:
         return 3;
       case SOCIAL_MEDIA:
         return 4;

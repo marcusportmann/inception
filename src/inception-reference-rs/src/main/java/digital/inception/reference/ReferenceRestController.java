@@ -69,6 +69,88 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
+   * Retrieve the contact mechanism sub types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
+   *     mechanism sub types for or <code>null</code> to retrieve the contact mechanism sub types
+   *     for all locales
+   * @return the contact mechanism sub types
+   */
+  @Operation(
+      summary = "Retrieve the contact mechanism sub types",
+      description = "Retrieve the contact mechanism sub types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/contact-mechanism-sub-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<ContactMechanismSubType> getContactMechanismSubTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier identifying the locale to retrieve the contact mechanism sub types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getContactMechanismSubTypes(localeId);
+  }
+
+  /**
+   * Retrieve the contact mechanism types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
+   *     mechanism types for or <code>null</code> to retrieve the contact mechanism types for all
+   *     locales
+   * @return the contact mechanism types
+   */
+  @Operation(
+      summary = "Retrieve the contact mechanism types",
+      description = "Retrieve the contact mechanism types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/contact-mechanism-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<ContactMechanismType> getContactMechanismTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier identifying the locale to retrieve the contact mechanism types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getContactMechanismTypes(localeId);
+  }
+
+  /**
    * Retrieve the countries.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the countries
@@ -93,7 +175,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<Country> getCountries(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the countries for",
               example = "en-US")
@@ -133,7 +215,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<EmploymentStatus> getEmploymentStatuses(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the employment statuses for",
               example = "en-US")
@@ -173,7 +255,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<EmploymentType> getEmploymentTypes(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the employment types for",
               example = "en-US")
@@ -208,7 +290,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<Gender> getGenders(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the genders for",
               example = "en-US")
@@ -249,7 +331,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<IdentityDocumentType> getIdentityDocumentTypes(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the identity document types for",
               example = "en-US")
@@ -284,7 +366,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<Language> getLanguages(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the languages for",
               example = "en-US")
@@ -324,7 +406,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<MaritalStatus> getMaritalStatuses(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the marital statuses for",
               example = "en-US")
@@ -362,7 +444,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<MarriageType> getMarriageTypes(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the marriage types for",
               example = "en-US")
@@ -397,7 +479,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<MinorType> getMinorTypes(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the minor types for",
               example = "en-US")
@@ -437,7 +519,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<NextOfKinType> getNextOfKinTypes(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the next of kin types for",
               example = "en-US")
@@ -472,7 +554,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<Occupation> getOccupations(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the occupations for",
               example = "en-US")
@@ -507,7 +589,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<Race> getRaces(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the races for",
               example = "en-US")
@@ -542,7 +624,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<Region> getRegions(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the regions for",
               example = "en-US")
@@ -583,7 +665,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<ResidencePermitType> getResidencePermitTypes(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the residence permit types for",
               example = "en-US")
@@ -623,7 +705,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<ResidencyStatus> getResidencyStatuses(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the residency statuses for",
               example = "en-US")
@@ -664,7 +746,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<ResidentialType> getResidentialTypes(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the residential types for",
               example = "en-US")
@@ -704,7 +786,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<SourceOfFunds> getSourcesOfFunds(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the sources of funds for",
               example = "en-US")
@@ -744,7 +826,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<TaxNumberType> getTaxNumberTypes(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the tax number types for",
               example = "en-US")
@@ -779,7 +861,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<Title> getTitles(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the titles for",
               example = "en-US")
@@ -820,7 +902,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<VerificationMethod> getVerificationMethods(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the verification methods for",
               example = "en-US")
@@ -861,7 +943,7 @@ public class ReferenceRestController extends SecureRestController {
   // @PreAuthorize("isAuthenticated()")
   public List<VerificationStatus> getVerificationStatuses(
       @Parameter(
-              name = "locale",
+              name = "localeId",
               description =
                   "The optional Unicode locale identifier identifying the locale to retrieve the verification statuses for",
               example = "en-US")

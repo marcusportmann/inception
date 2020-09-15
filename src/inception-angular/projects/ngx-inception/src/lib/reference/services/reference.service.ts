@@ -44,6 +44,8 @@ import {TaxNumberType} from './tax-number-type';
 import {Title} from './title';
 import {VerificationStatus} from './verification-status';
 import {VerificationMethod} from './verification-method';
+import {ContactMechanismType} from "./contact-mechanism-type";
+import {ContactMechanismSubType} from "./contact-mechanism-sub-type";
 
 /**
  * The Reference Service implementation.
@@ -65,6 +67,60 @@ export class ReferenceService {
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,
               @Inject(LOCALE_ID) private localeId: string, private httpClient: HttpClient) {
     console.log('Initializing the Reference Service (' + localeId + ')');
+  }
+
+  /**
+   * Retrieve the contact mechanism sub types.
+   *
+   * @return The contact mechanism sub types.
+   */
+  getContactMechanismSubTypes(): Observable<ContactMechanismSubType[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<ContactMechanismSubType[]>(this.config.referenceApiUrlPrefix + '/contact-mechanism-sub-types',
+      {params, reportProgress: true})
+    .pipe(map((contactMechanismTypes: ContactMechanismSubType[]) => {
+      return contactMechanismTypes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        return throwError(new ReferenceServiceError('Failed to retrieve the contact mechanism sub types.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
+  }
+
+  /**
+   * Retrieve the contact mechanism types.
+   *
+   * @return The contact mechanism types.
+   */
+  getContactMechanismTypes(): Observable<ContactMechanismType[]> {
+    let params = new HttpParams();
+
+    params = params.append('localeId', this.localeId);
+
+    return this.httpClient.get<ContactMechanismType[]>(this.config.referenceApiUrlPrefix + '/contact-mechanism-types',
+      {params, reportProgress: true})
+    .pipe(map((contactMechanismTypes: ContactMechanismType[]) => {
+      return contactMechanismTypes;
+    }), catchError((httpErrorResponse: HttpErrorResponse) => {
+      if (ApiError.isApiError(httpErrorResponse)) {
+        const apiError: ApiError = new ApiError(httpErrorResponse);
+
+        return throwError(new ReferenceServiceError('Failed to retrieve the contact mechanism types.', apiError));
+      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
+        return throwError(new CommunicationError(httpErrorResponse));
+      } else {
+        return throwError(new SystemUnavailableError(httpErrorResponse));
+      }
+    }));
   }
 
   /**

@@ -7,6 +7,72 @@ CREATE SCHEMA reference;
 -- -------------------------------------------------------------------------------------------------
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
+CREATE TABLE reference.contact_mechanism_types (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  numeric_code INTEGER      NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  plural       VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX contact_mechanism_types_locale_id_ix ON reference.contact_mechanism_types(locale_id);
+
+COMMENT ON COLUMN reference.contact_mechanism_types.code IS 'The code for the contact mechanism type';
+
+COMMENT ON COLUMN reference.contact_mechanism_types.locale_id IS 'The Unicode locale identifier for the contact mechanism type';
+
+COMMENT ON COLUMN reference.contact_mechanism_types.numeric_code IS 'The numeric code for the contact mechanism type';
+
+COMMENT ON COLUMN reference.contact_mechanism_types.sort_index IS 'The sort index for the contact mechanism type';
+
+COMMENT ON COLUMN reference.contact_mechanism_types.name IS 'The name of the contact mechanism type';
+
+COMMENT ON COLUMN reference.contact_mechanism_types.plural IS 'The plural name for the contact mechanism type';
+
+COMMENT ON COLUMN reference.contact_mechanism_types.description IS 'The description for the contact mechanism type';
+
+
+CREATE TABLE reference.contact_mechanism_sub_types (
+  type         VARCHAR(30)  NOT NULL,
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  numeric_code INTEGER      NOT NULL,
+  party_type   VARCHAR(30)  NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (type, code, locale_id),
+  CONSTRAINT contact_mechanism_sub_types_contact_mechanism_type_fk FOREIGN KEY (type, locale_id) REFERENCES reference.contact_mechanism_types(code, locale_id) ON DELETE CASCADE
+);
+
+CREATE INDEX contact_mechanism_sub_types_type_ix ON reference.contact_mechanism_sub_types(type);
+
+CREATE INDEX contact_mechanism_sub_types_locale_id_ix ON reference.contact_mechanism_sub_types(locale_id);
+
+CREATE UNIQUE INDEX contact_mechanism_sub_types_code_ix ON reference.contact_mechanism_sub_types(code);
+
+COMMENT ON COLUMN reference.contact_mechanism_sub_types.type IS 'The code for the contact mechanism type the contact mechanism sub type is associated with';
+
+COMMENT ON COLUMN reference.contact_mechanism_sub_types.code IS 'The code for the contact mechanism sub type';
+
+COMMENT ON COLUMN reference.contact_mechanism_sub_types.locale_id IS 'The Unicode locale identifier for the contact mechanism sub type';
+
+COMMENT ON COLUMN reference.contact_mechanism_sub_types.numeric_code IS 'The numeric code for the contact mechanism sub type';
+
+COMMENT ON COLUMN reference.contact_mechanism_sub_types.party_type IS 'The code for the party type the contact mechanism sub type is associated with';
+
+COMMENT ON COLUMN reference.contact_mechanism_sub_types.sort_index IS 'The sort index for the contact mechanism sub type';
+
+COMMENT ON COLUMN reference.contact_mechanism_sub_types.name IS 'The name of the contact mechanism sub type';
+
+COMMENT ON COLUMN reference.contact_mechanism_sub_types.description IS 'The description for the contact mechanism sub type';
+
+
 CREATE TABLE reference.countries (
   code            VARCHAR(10)  NOT NULL,
   locale_id       VARCHAR(10)  NOT NULL,
@@ -20,7 +86,7 @@ CREATE TABLE reference.countries (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX countries_locale_ix ON reference.countries(locale_id);
+CREATE INDEX countries_locale_id_ix ON reference.countries(locale_id);
 
 COMMENT ON COLUMN reference.countries.code IS 'The code for the country';
 
@@ -49,7 +115,7 @@ CREATE TABLE reference.employment_statuses (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX employment_statuses_locale_ix ON reference.employment_statuses(locale_id);
+CREATE INDEX employment_statuses_locale_id_ix ON reference.employment_statuses(locale_id);
 
 COMMENT ON COLUMN reference.employment_statuses.code IS 'The code for the employment status';
 
@@ -76,7 +142,7 @@ CREATE TABLE reference.employment_types (
 
 CREATE INDEX employment_types_employment_status_ix ON reference.employment_types(employment_status);
 
-CREATE INDEX employment_types_locale_ix ON reference.employment_types(locale_id);
+CREATE INDEX employment_types_locale_id_ix ON reference.employment_types(locale_id);
 
 COMMENT ON COLUMN reference.employment_types.employment_status IS 'The code for the employment status the employment type is associated with';
 
@@ -101,7 +167,7 @@ CREATE TABLE reference.genders (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX genders_locale_ix ON reference.genders(locale_id);
+CREATE INDEX genders_locale_id_ix ON reference.genders(locale_id);
 
 COMMENT ON COLUMN reference.genders.code IS 'The code for the gender';
 
@@ -126,7 +192,7 @@ CREATE TABLE reference.identity_document_types (
   CONSTRAINT identity_document_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
 );
 
-CREATE INDEX identity_document_types_locale_ix ON reference.identity_document_types(locale_id);
+CREATE INDEX identity_document_types_locale_id_ix ON reference.identity_document_types(locale_id);
 
 CREATE INDEX identity_document_types_country_of_issue_ix ON reference.identity_document_types(country_of_issue);
 
@@ -154,7 +220,7 @@ CREATE TABLE reference.languages (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX languages_locale_ix ON reference.languages(locale_id);
+CREATE INDEX languages_locale_id_ix ON reference.languages(locale_id);
 
 COMMENT ON COLUMN reference.languages.code IS 'The code for the language';
 
@@ -179,7 +245,7 @@ CREATE TABLE reference.marital_statuses (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX marital_statuses_locale_ix ON reference.marital_statuses(locale_id);
+CREATE INDEX marital_statuses_locale_id_ix ON reference.marital_statuses(locale_id);
 
 COMMENT ON COLUMN reference.marital_statuses.code IS 'The code for the marital status';
 
@@ -206,7 +272,7 @@ CREATE TABLE reference.marriage_types (
 
 CREATE INDEX marriage_types_marital_status_ix ON reference.marriage_types(marital_status);
 
-CREATE INDEX marriage_types_locale_ix ON reference.marriage_types(locale_id);
+CREATE INDEX marriage_types_locale_id_ix ON reference.marriage_types(locale_id);
 
 COMMENT ON COLUMN reference.marriage_types.marital_status IS 'The code for the marital status the marriage type is associated with';
 
@@ -231,7 +297,7 @@ CREATE TABLE reference.minor_types (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX minor_types_locale_ix ON reference.minor_types(locale_id);
+CREATE INDEX minor_types_locale_id_ix ON reference.minor_types(locale_id);
 
 COMMENT ON COLUMN reference.minor_types.code IS 'The code for the minor type';
 
@@ -254,7 +320,7 @@ CREATE TABLE reference.next_of_kin_types (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX next_of_kin_types_locale_ix ON reference.next_of_kin_types(locale_id);
+CREATE INDEX next_of_kin_types_locale_id_ix ON reference.next_of_kin_types(locale_id);
 
 COMMENT ON COLUMN reference.next_of_kin_types.code IS 'The code for the next of kin type';
 
@@ -277,7 +343,7 @@ CREATE TABLE reference.occupations (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX occupations_locale_ix ON reference.occupations(locale_id);
+CREATE INDEX occupations_locale_id_ix ON reference.occupations(locale_id);
 
 COMMENT ON COLUMN reference.occupations.code IS 'The code for the occupation';
 
@@ -301,7 +367,7 @@ COMMENT ON COLUMN reference.occupations.description IS 'The description for the 
 --   PRIMARY KEY (code, locale_id)
 -- );
 --
--- CREATE INDEX physical_address_types_locale_ix ON reference.physical_address_types(locale_id);
+-- CREATE INDEX physical_address_types_locale_id_ix ON reference.physical_address_types(locale_id);
 --
 -- COMMENT ON COLUMN reference.physical_address_types.code IS 'The code for the physical address type';
 --
@@ -325,7 +391,7 @@ CREATE TABLE reference.races (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX races_locale_ix ON reference.races(locale_id);
+CREATE INDEX races_locale_id_ix ON reference.races(locale_id);
 
 COMMENT ON COLUMN reference.races.code IS 'The code for the race';
 
@@ -352,7 +418,7 @@ CREATE TABLE reference.regions (
 
 CREATE INDEX regions_country_ix ON reference.regions(country);
 
-CREATE INDEX regions_locale_ix ON reference.regions(locale_id);
+CREATE INDEX regions_locale_id_ix ON reference.regions(locale_id);
 
 COMMENT ON COLUMN reference.regions.country IS 'The code for the country the region is associated with';
 
@@ -379,7 +445,7 @@ CREATE TABLE reference.residence_permit_types (
   CONSTRAINT residence_permit_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
 );
 
-CREATE INDEX residence_permit_types_locale_ix ON reference.residence_permit_types(locale_id);
+CREATE INDEX residence_permit_types_locale_id_ix ON reference.residence_permit_types(locale_id);
 
 CREATE INDEX residence_permit_types_country_of_issue_ix ON reference.residence_permit_types(country_of_issue);
 
@@ -406,7 +472,7 @@ CREATE TABLE reference.residency_statuses (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX residency_statuses_locale_ix ON reference.residency_statuses(locale_id);
+CREATE INDEX residency_statuses_locale_id_ix ON reference.residency_statuses(locale_id);
 
 COMMENT ON COLUMN reference.residency_statuses.code IS 'The code for the residency status';
 
@@ -429,7 +495,7 @@ CREATE TABLE reference.residential_types (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX residential_types_locale_ix ON reference.residential_types(locale_id);
+CREATE INDEX residential_types_locale_id_ix ON reference.residential_types(locale_id);
 
 COMMENT ON COLUMN reference.residential_types.code IS 'The code for the residential type';
 
@@ -452,7 +518,7 @@ CREATE TABLE reference.sources_of_funds (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX sources_of_funds_locale_ix ON reference.sources_of_funds(locale_id);
+CREATE INDEX sources_of_funds_locale_id_ix ON reference.sources_of_funds(locale_id);
 
 COMMENT ON COLUMN reference.sources_of_funds.code IS 'The code for the source of funds';
 
@@ -469,27 +535,27 @@ COMMENT ON COLUMN reference.sources_of_funds.description IS 'The description for
 --
 -- FINISH SIC CODES
 
-CREATE TABLE reference.standard_industry_codes (
-  code        VARCHAR(10)  NOT NULL,
-  locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50)  NOT NULL,
-  description VARCHAR(200) NOT NULL DEFAULT '',
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX standard_industry_codes_locale_ix ON reference.standard_industry_codes(locale_id);
-
-COMMENT ON COLUMN reference.standard_industry_codes.code IS 'The code for the standard industry code';
-
-COMMENT ON COLUMN reference.standard_industry_codes.locale_id IS 'The Unicode locale identifier for the standard industry code';
-
-COMMENT ON COLUMN reference.standard_industry_codes.sort_index IS 'The sort index for the standard industry code';
-
-COMMENT ON COLUMN reference.standard_industry_codes.name IS 'The name of the standard industry code';
-
-COMMENT ON COLUMN reference.standard_industry_codes.description IS 'The description for the standard industry code';
+-- CREATE TABLE reference.standard_industry_codes (
+--   code        VARCHAR(10)  NOT NULL,
+--   locale_id   VARCHAR(10)  NOT NULL,
+--   sort_index  INTEGER      NOT NULL,
+--   name        VARCHAR(50)  NOT NULL,
+--   description VARCHAR(200) NOT NULL DEFAULT '',
+--
+--   PRIMARY KEY (code, locale_id)
+-- );
+--
+-- CREATE INDEX standard_industry_codes_locale_id_ix ON reference.standard_industry_codes(locale_id);
+--
+-- COMMENT ON COLUMN reference.standard_industry_codes.code IS 'The code for the standard industry code';
+--
+-- COMMENT ON COLUMN reference.standard_industry_codes.locale_id IS 'The Unicode locale identifier for the standard industry code';
+--
+-- COMMENT ON COLUMN reference.standard_industry_codes.sort_index IS 'The sort index for the standard industry code';
+--
+-- COMMENT ON COLUMN reference.standard_industry_codes.name IS 'The name of the standard industry code';
+--
+-- COMMENT ON COLUMN reference.standard_industry_codes.description IS 'The description for the standard industry code';
 
 
 CREATE TABLE reference.suitable_times_to_contact (
@@ -502,7 +568,7 @@ CREATE TABLE reference.suitable_times_to_contact (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX suitable_times_to_contact_locale_ix ON reference.suitable_times_to_contact(locale_id);
+CREATE INDEX suitable_times_to_contact_locale_id_ix ON reference.suitable_times_to_contact(locale_id);
 
 COMMENT ON COLUMN reference.suitable_times_to_contact.code IS 'The code for the suitable time to contact';
 
@@ -527,7 +593,7 @@ CREATE TABLE reference.tax_number_types (
   CONSTRAINT tax_number_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
 );
 
-CREATE INDEX tax_number_types_locale_ix ON reference.tax_number_types(locale_id);
+CREATE INDEX tax_number_types_locale_id_ix ON reference.tax_number_types(locale_id);
 
 CREATE INDEX tax_number_types_country_of_issue_ix ON reference.tax_number_types(country_of_issue);
 
@@ -555,7 +621,7 @@ CREATE TABLE reference.titles (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX titles_locale_ix ON reference.titles(locale_id);
+CREATE INDEX titles_locale_id_ix ON reference.titles(locale_id);
 
 COMMENT ON COLUMN reference.titles.code IS 'The code for the title';
 
@@ -580,7 +646,7 @@ CREATE TABLE reference.verification_methods (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX verification_methods_locale_ix ON reference.verification_methods(locale_id);
+CREATE INDEX verification_methods_locale_id_ix ON reference.verification_methods(locale_id);
 
 COMMENT ON COLUMN reference.verification_methods.code IS 'The code for the verification method';
 
@@ -603,7 +669,7 @@ CREATE TABLE reference.verification_statuses (
   PRIMARY KEY (code, locale_id)
 );
 
-CREATE INDEX verification_statuses_locale_ix ON reference.verification_statuses(locale_id);
+CREATE INDEX verification_statuses_locale_id_ix ON reference.verification_statuses(locale_id);
 
 COMMENT ON COLUMN reference.verification_statuses.code IS 'The code for the verification status';
 
@@ -619,6 +685,65 @@ COMMENT ON COLUMN reference.verification_statuses.description IS 'The descriptio
 -- -------------------------------------------------------------------------------------------------
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('phone_number', 'en-US', 1, 1, 'Phone Number', 'Phone Numbers', 'Phone Number');
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('fax_number', 'en-US', 2, 1, 'Fax Number', 'Fax Numbers', 'Fax Number');
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('email_address', 'en-US', 3, 1, 'E-mail Address', 'E-mail Addresses', 'E-mail Address');
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('social_media', 'en-US', 4, 1, 'Social Media', 'Social Media', 'Social Media');
+
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('phone_number', 'en-ZA', 1, 1, 'Phone Number', 'Phone Numbers', 'Phone Number');
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('fax_number', 'en-ZA', 2, 1, 'Fax Number', 'Fax Numbers', 'Fax Number');
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('email_address', 'en-ZA', 3, 1, 'E-mail Address', 'E-mail Addresses', 'E-mail Address');
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('social_media', 'en-ZA', 4, 1, 'Social Media', 'Social Media', 'Social Media');
+
+
+
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'mobile_phone_number', 'en-US', 101, 'person', 101, 'Mobile Phone Number', 'Mobile Phone Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'home_phone_number', 'en-US', 102, 'person', 102, 'Home Phone Number', 'Home Phone Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'work_phone_number', 'en-US', 103, 'person', 103, 'Work Phone Number', 'Work Phone Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'school_phone_number', 'en-US', 104, 'person', 104, 'School Phone Number', 'School Phone Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'pager_phone_number', 'en-US', 105, 'person', 105, 'Pager Phone Number', 'Pager Phone Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'other_phone_number', 'en-US', 106, 'person', 106, 'Other Phone Number', 'Other Phone Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'main_phone_number', 'en-US', 110, 'organization', 110, 'Main Phone Number', 'Main Phone Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'home_fax_number', 'en-US', 201, 'person', 201, 'Home Fax Number', 'Home Fax Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'work_fax_number', 'en-US', 202, 'person', 202, 'Work Fax Number', 'Work Fax Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'other_fax_number', 'en-US', 203, 'person', 203, 'Other Fax Number', 'Other Fax Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'main_fax_number', 'en-US', 210, 'organization', 210, 'Main Fax Number', 'Main Fax Number');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'personal_email_address', 'en-US', 301, 'person', 301, 'Personal E-mail Address', 'Personal E-mail Address');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'work_email_address', 'en-US', 302, 'person', 302, 'Work E-mail Address', 'Work E-mail Address');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'school_email_address', 'en-US', 303, 'person', 303, 'School E-mail Address', 'School E-mail Address');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'other_email_address', 'en-US', 304, 'person', 304, 'Other E-mail Address', 'Other E-mail Address');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'main_email_address', 'en-US', 310, 'organization', 310, 'Main E-mail Address', 'Main E-mail Address');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('social_media', 'whatsapp_user_id', 'en-US', 401, 'person', 401, 'WhatsApp User ID', 'WhatsApp User ID');
+INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('social_media', 'twitter_id', 'en-US', 402, 'person', 402, 'Twitter ID', 'Twitter ID');
+
+
+
 INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AF', 'en-US', 1, 'Afghanistan', 'Afghanistan', 'Afghanistan', 'AF', 'Afghan');
 INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)

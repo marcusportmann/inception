@@ -4,6 +4,38 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
+            <mat-label>Contact Mechanism Sub Type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('contactMechanismSubType')" required="true" [matAutocomplete]="contactMechanismSubTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #contactMechanismSubTypeAutocomplete="matAutocomplete" [displayWith]="displayContactMechanismSubType">
+              <mat-option *ngFor="let contactMechanismSubType of filteredContactMechanismSubTypes$ | async" [value]="contactMechanismSubType">
+                {{contactMechanismSubType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['contactMechanismSubType'].errors && !referenceForm.controls['contactMechanismSubType'].untouched">
+              <span *ngIf="referenceForm.controls['contactMechanismSubType'].errors?.required">A contact mechanism sub type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
+            <mat-label>Contact Mechanism Type</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('contactMechanismType')" required="true" [matAutocomplete]="contactMechanismTypeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #contactMechanismTypeAutocomplete="matAutocomplete" [displayWith]="displayContactMechanismType">
+              <mat-option *ngFor="let contactMechanismType of filteredContactMechanismTypes$ | async" [value]="contactMechanismType">
+                {{contactMechanismType.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="referenceForm.controls['contactMechanismType'].errors && !referenceForm.controls['contactMechanismType'].untouched">
+              <span *ngIf="referenceForm.controls['contactMechanismType'].errors?.required">A contact mechanism type is required.</span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <mat-form-field>
             <mat-label>Country</mat-label>
             <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('country')" required="true" [matAutocomplete]="countryAutocomplete">
             <mat-autocomplete autoActiveFirstOption #countryAutocomplete="matAutocomplete" [displayWith]="displayCountry">

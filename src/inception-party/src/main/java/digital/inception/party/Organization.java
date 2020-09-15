@@ -16,112 +16,77 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Organization</code> class holds the information for an organization.
+ * The <code>Organization</code> class holds the information for an organization, which is an
+ * organised group of people with a particular purpose, such as a business or government department.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "An organised group of people with a particular purpose, such as a business or government department")
+@Schema(
+    description =
+        "An organised group of people with a particular purpose, such as a business or government department")
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties({"type"})
 @JsonPropertyOrder({"id", "name"})
 @XmlRootElement(name = "Organization", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Organization",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "name"})
+    propOrder = {})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "party", name = "parties")
-@SecondaryTable(
-    schema = "party",
-    name = "organizations",
-    pkJoinColumns = {@PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id")})
-public class Organization {
+@Table(schema = "party", name = "organizations")
+public class Organization extends Party implements Serializable {
 
-  /** The type of party for the organization. */
-  @JsonIgnore
-  @XmlTransient
-  @NotNull
-  @Column(name = "type", nullable = false)
-  private final PartyType partyType = PartyType.ORGANIZATION;
-
-  /** The date and time the organization was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(table = "organizations", name = "created", nullable = false, updatable = false)
-  private LocalDateTime created;
-
-  /** The Universally Unique Identifier (UUID) uniquely identifying the organization. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the organization",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Id
-  @Column(name = "id", nullable = false)
-  private UUID id;
-
-  /** The name of the organization. */
-  @Schema(description = "The name of the organization", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
-  private String name;
-
-  /** The date and time the party associated with the organization was created. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(table = "parties", name = "created", nullable = false, updatable = false)
-  private LocalDateTime partyCreated;
-
-  /** The date and time the party associated with the organization was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(table = "parties", name = "updated", insertable = false)
-  private LocalDateTime partyUpdated;
-
-  /** The date and time the organization was last updated. */
-  @JsonIgnore
-  @XmlTransient
-  @Column(table = "organizations", name = "updated", insertable = false)
-  private LocalDateTime updated;
+  private static final long serialVersionUID = 1000000;
 
   /** Constructs a new <code>Organization</code>. */
-  public Organization() {}
+  public Organization() {
+    super(PartyType.ORGANIZATION);
+  }
+
+  /**
+   * Add the contact mechanism for the organization.
+   *
+   * @param contactMechanism the contact mechanism
+   */
+  @Override
+  public void addContactMechanism(ContactMechanism contactMechanism) {
+    super.addContactMechanism(contactMechanism);
+  }
+
+  /**
+   * Returns the contact mechanisms for the organization.
+   *
+   * @return the contact mechanisms for the organization
+   */
+  @Schema(description = "The contact mechanisms for the organization")
+  @Override
+  public Set<ContactMechanism> getContactMechanisms() {
+    return super.getContactMechanisms();
+  }
 
   /**
    * Returns the date and time the organization was created.
    *
    * @return the date and time the organization was created
    */
+  @Override
   public LocalDateTime getCreated() {
     return created;
   }
@@ -131,8 +96,12 @@ public class Organization {
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the organization
    */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the organization")
+  @Override
   public UUID getId() {
-    return id;
+    return super.getId();
   }
 
   /**
@@ -140,8 +109,10 @@ public class Organization {
    *
    * @return the name of the organization
    */
+  @Schema(description = "The name of the organization")
+  @Override
   public String getName() {
-    return name;
+    return super.getName();
   }
 
   /**
@@ -149,8 +120,19 @@ public class Organization {
    *
    * @return the date and time the organization was last updated
    */
+  @Override
   public LocalDateTime getUpdated() {
-    return updated;
+    return super.getUpdated();
+  }
+
+  /**
+   * Set the contact mechanisms for the organization.
+   *
+   * @param contactMechanisms the contact mechanisms for the organization
+   */
+  @Override
+  public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
+    super.setContactMechanisms(contactMechanisms);
   }
 
   /**
@@ -158,8 +140,9 @@ public class Organization {
    *
    * @param id the Universally Unique Identifier (UUID) uniquely identifying the organization
    */
+  @Override
   public void setId(UUID id) {
-    this.id = id;
+    super.setId(id);
   }
 
   /**
@@ -167,21 +150,8 @@ public class Organization {
    *
    * @param name the name of the organization
    */
+  @Override
   public void setName(String name) {
-    this.name = name;
-  }
-
-  @PrePersist
-  protected void prePersist() {
-    LocalDateTime now = LocalDateTime.now();
-    created = now;
-    partyCreated = now;
-  }
-
-  @PreUpdate
-  protected void preUpdate() {
-    LocalDateTime now = LocalDateTime.now();
-    updated = now;
-    partyUpdated = now;
+    super.setName(name);
   }
 }

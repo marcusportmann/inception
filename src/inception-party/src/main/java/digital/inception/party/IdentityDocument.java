@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -52,16 +53,18 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A legal document which may be used to verify aspects of a person's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry"})
+@JsonPropertyOrder({"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlRootElement(name = "IdentityDocument", namespace = "http://party.inception.digital")
 @XmlType(
     name = "IdentityDocument",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry"})
+    propOrder = {"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "identity_documents")
-public class IdentityDocument {
+public class IdentityDocument implements Serializable {
+
+  private static final long serialVersionUID = 1000000;
 
   /** The code identifying the country of issue for the identity document. */
   @Schema(
@@ -107,6 +110,15 @@ public class IdentityDocument {
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
+
+  /** The number for the identity document. */
+  @Schema(description = "The number for the identity document", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Number", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  @Column(name = "number", length = 50, nullable = false)
+  private String number;
 
   /** The person the identity document is associated with. */
   @Schema(hidden = true)
@@ -206,6 +218,15 @@ public class IdentityDocument {
   }
 
   /**
+   * The number for the identity document.
+   *
+   * @return the number for the identity document
+   */
+  public String getNumber() {
+    return number;
+  }
+
+  /**
    * Returns the person the identity document is associated with.
    *
    * @return the person the identity document is associated with
@@ -278,6 +299,15 @@ public class IdentityDocument {
    */
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   * Set the number for the identity document.
+   *
+   * @param number the number for the identity document
+   */
+  public void setNumber(String number) {
+    this.number = number;
   }
 
   /**

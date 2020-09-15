@@ -27,6 +27,11 @@ import javax.xml.bind.annotation.XmlType;
  * The <code>ContactMechanismSubType</code> enumeration defines the possible contact mechanism sub
  * types.
  *
+ * <p>NOTE: The numeric codes for the contact mechanism sub types fall into ranges based on the
+ * contact mechanism type they are associated with, e.g. the numeric code for the phone number
+ * contact mechanism type is 1 and all contact mechanism subtypes associated with this contact
+ * mechanism type start with 1; 101 = Mobile Phone Number, 102 = Home Phone Number, etc.
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "The contact mechanism sub type")
@@ -35,55 +40,114 @@ import javax.xml.bind.annotation.XmlType;
 public enum ContactMechanismSubType {
   @XmlEnumValue("MobilePhoneNumber")
   MOBILE_PHONE_NUMBER(
-      "mobile_phone_number", ContactMechanismType.PHONE_NUMBERS, "Mobile Phone Number"),
+      "mobile_phone_number",
+      ContactMechanismType.PHONE_NUMBER,
+      PartyType.PERSON,
+      "Mobile Phone Number"),
   @XmlEnumValue("HomePhoneNumber")
-  HOME_PHONE_NUMBER("home_phone_number", ContactMechanismType.PHONE_NUMBERS, "Home Phone Number"),
+  HOME_PHONE_NUMBER(
+      "home_phone_number",
+      ContactMechanismType.PHONE_NUMBER,
+      PartyType.PERSON,
+      "Home Phone Number"),
   @XmlEnumValue("WorkPhoneNumber")
-  WORK_PHONE_NUMBER("work_phone_number", ContactMechanismType.PHONE_NUMBERS, "Work Phone Number"),
+  WORK_PHONE_NUMBER(
+      "work_phone_number",
+      ContactMechanismType.PHONE_NUMBER,
+      PartyType.PERSON,
+      "Work Phone Number"),
   @XmlEnumValue("SchoolPhoneNumber")
   SCHOOL_PHONE_NUMBER(
-      "school_phone_number", ContactMechanismType.PHONE_NUMBERS, "School Phone Number"),
+      "school_phone_number",
+      ContactMechanismType.PHONE_NUMBER,
+      PartyType.PERSON,
+      "School Phone Number"),
   @XmlEnumValue("PagerPhoneNumber")
   PAGER_PHONE_NUMBER(
-      "pager_phone_number", ContactMechanismType.PHONE_NUMBERS, "Pager Phone Number"),
+      "pager_phone_number",
+      ContactMechanismType.PHONE_NUMBER,
+      PartyType.PERSON,
+      "Pager Phone Number"),
   @XmlEnumValue("OtherPhoneNumber")
   OTHER_PHONE_NUMBER(
-      "other_phone_number", ContactMechanismType.PHONE_NUMBERS, "Other Phone Number"),
+      "other_phone_number",
+      ContactMechanismType.PHONE_NUMBER,
+      PartyType.PERSON,
+      "Other Phone Number"),
+  @XmlEnumValue("MainPhoneNumber")
+  MAIN_PHONE_NUMBER(
+      "main_phone_number",
+      ContactMechanismType.PHONE_NUMBER,
+      PartyType.ORGANIZATION,
+      "Main Phone Number"),
   @XmlEnumValue("HomeFaxNumber")
-  HOME_FAX_NUMBER("home_fax_number", ContactMechanismType.FAX_NUMBERS, "Home Fax Number"),
+  HOME_FAX_NUMBER(
+      "home_fax_number", ContactMechanismType.FAX_NUMBER, PartyType.PERSON, "Home Fax Number"),
   @XmlEnumValue("WorkFaxNumber")
-  WORK_FAX_NUMBER("work_fax_number", ContactMechanismType.FAX_NUMBERS, "Work Fax Number"),
+  WORK_FAX_NUMBER(
+      "work_fax_number", ContactMechanismType.FAX_NUMBER, PartyType.PERSON, "Work Fax Number"),
   @XmlEnumValue("OtherFaxNumber")
-  OTHER_FAX_NUMBER("other_fax_number", ContactMechanismType.FAX_NUMBERS, "Other Fax Number"),
+  OTHER_FAX_NUMBER(
+      "other_fax_number", ContactMechanismType.FAX_NUMBER, PartyType.PERSON, "Other Fax Number"),
+  @XmlEnumValue("MainFaxNumber")
+  MAIN_FAX_NUMBER(
+      "main_fax_number",
+      ContactMechanismType.FAX_NUMBER,
+      PartyType.ORGANIZATION,
+      "Main Fax Number"),
   @XmlEnumValue("PersonalEmailAddress")
   PERSONAL_EMAIL_ADDRESS(
-      "personal_email_address", ContactMechanismType.EMAIL_ADDRESSES, "Personal E-mail Address"),
-  @XmlEnumValue("HomeEmailAddress")
-  HOME_EMAIL_ADDRESS(
-      "home_email_address", ContactMechanismType.EMAIL_ADDRESSES, "Home E-mail Address"),
+      "personal_email_address",
+      ContactMechanismType.EMAIL_ADDRESS,
+      PartyType.PERSON,
+      "Personal E-mail Address"),
   @XmlEnumValue("WorkEmailAddress")
   WORK_EMAIL_ADDRESS(
-      "work_email_address", ContactMechanismType.EMAIL_ADDRESSES, "Work E-mail Address"),
+      "work_email_address",
+      ContactMechanismType.EMAIL_ADDRESS,
+      PartyType.PERSON,
+      "Work E-mail Address"),
   @XmlEnumValue("SchoolEmailAddress")
   SCHOOL_EMAIL_ADDRESS(
-      "school_email_address", ContactMechanismType.EMAIL_ADDRESSES, "School E-mail Address"),
+      "school_email_address",
+      ContactMechanismType.EMAIL_ADDRESS,
+      PartyType.PERSON,
+      "School E-mail Address"),
+
   @XmlEnumValue("OtherEmailAddress")
   OTHER_EMAIL_ADDRESS(
-      "other_email_address", ContactMechanismType.EMAIL_ADDRESSES, "Other E-mail Address"),
-  @XmlEnumValue("WhatsAppUserID")
-  WHATSAPP_USER_ID("whatsapp_user_id", ContactMechanismType.SOCIAL_MEDIA, "WhatsApp User ID"),
-  @XmlEnumValue("TwitterID")
-  TWITTER_ID("twitter_id", ContactMechanismType.SOCIAL_MEDIA, "Twitter ID");
+      "other_email_address",
+      ContactMechanismType.EMAIL_ADDRESS,
+      PartyType.PERSON,
+      "Other E-mail Address"),
 
-  private final ContactMechanismType type;
+  @XmlEnumValue("MainEmailAddress")
+  MAIN_EMAIL_ADDRESS(
+      "main_email_address",
+      ContactMechanismType.EMAIL_ADDRESS,
+      PartyType.ORGANIZATION,
+      "Main E-mail Address"),
+
+  @XmlEnumValue("WhatsAppUserID")
+  WHATSAPP_USER_ID(
+      "whatsapp_user_id", ContactMechanismType.SOCIAL_MEDIA, PartyType.PERSON, "WhatsApp User ID"),
+
+  @XmlEnumValue("TwitterID")
+  TWITTER_ID("twitter_id", ContactMechanismType.SOCIAL_MEDIA, PartyType.PERSON, "Twitter ID");
 
   private final String code;
 
   private final String description;
 
-  ContactMechanismSubType(String code, ContactMechanismType type, String description) {
+  private final PartyType partyType;
+
+  private final ContactMechanismType type;
+
+  ContactMechanismSubType(
+      String code, ContactMechanismType type, PartyType partyType, String description) {
     this.code = code;
     this.type = type;
+    this.partyType = partyType;
     this.description = description;
   }
 
@@ -114,6 +178,9 @@ public enum ContactMechanismSubType {
       case "other_phone_number":
         return ContactMechanismSubType.OTHER_PHONE_NUMBER;
 
+      case "main_phone_number":
+        return ContactMechanismSubType.MAIN_PHONE_NUMBER;
+
       case "home_fax_number":
         return ContactMechanismSubType.HOME_FAX_NUMBER;
 
@@ -123,11 +190,11 @@ public enum ContactMechanismSubType {
       case "other_fax_number":
         return ContactMechanismSubType.OTHER_FAX_NUMBER;
 
+      case "main_fax_number":
+        return ContactMechanismSubType.MAIN_FAX_NUMBER;
+
       case "personal_email_address":
         return ContactMechanismSubType.PERSONAL_EMAIL_ADDRESS;
-
-      case "home_email_address":
-        return ContactMechanismSubType.HOME_EMAIL_ADDRESS;
 
       case "work_email_address":
         return ContactMechanismSubType.WORK_EMAIL_ADDRESS;
@@ -137,6 +204,9 @@ public enum ContactMechanismSubType {
 
       case "other_email_address":
         return ContactMechanismSubType.OTHER_EMAIL_ADDRESS;
+
+      case "main_email_address":
+        return ContactMechanismSubType.MAIN_EMAIL_ADDRESS;
 
       case "whatsapp_user_id":
         return ContactMechanismSubType.WHATSAPP_USER_ID;
@@ -170,24 +240,28 @@ public enum ContactMechanismSubType {
         return ContactMechanismSubType.SCHOOL_PHONE_NUMBER;
       case 105:
         return ContactMechanismSubType.PAGER_PHONE_NUMBER;
-      case 199:
+      case 106:
         return ContactMechanismSubType.OTHER_PHONE_NUMBER;
+      case 110:
+        return ContactMechanismSubType.MAIN_PHONE_NUMBER;
       case 201:
         return ContactMechanismSubType.HOME_FAX_NUMBER;
       case 202:
         return ContactMechanismSubType.WORK_FAX_NUMBER;
-      case 299:
+      case 203:
         return ContactMechanismSubType.OTHER_FAX_NUMBER;
+      case 210:
+        return ContactMechanismSubType.MAIN_FAX_NUMBER;
       case 301:
         return ContactMechanismSubType.PERSONAL_EMAIL_ADDRESS;
       case 302:
-        return ContactMechanismSubType.HOME_EMAIL_ADDRESS;
-      case 303:
         return ContactMechanismSubType.WORK_EMAIL_ADDRESS;
-      case 304:
+      case 303:
         return ContactMechanismSubType.SCHOOL_EMAIL_ADDRESS;
-      case 399:
+      case 304:
         return ContactMechanismSubType.OTHER_EMAIL_ADDRESS;
+      case 310:
+        return ContactMechanismSubType.MAIN_EMAIL_ADDRESS;
       case 401:
         return ContactMechanismSubType.WHATSAPP_USER_ID;
       case 402:
@@ -219,23 +293,27 @@ public enum ContactMechanismSubType {
       case PAGER_PHONE_NUMBER:
         return 105;
       case OTHER_PHONE_NUMBER:
-        return 199;
+        return 106;
+      case MAIN_PHONE_NUMBER:
+        return 110;
       case HOME_FAX_NUMBER:
         return 201;
       case WORK_FAX_NUMBER:
         return 202;
       case OTHER_FAX_NUMBER:
-        return 299;
+        return 203;
+      case MAIN_FAX_NUMBER:
+        return 210;
       case PERSONAL_EMAIL_ADDRESS:
         return 301;
-      case HOME_EMAIL_ADDRESS:
-        return 302;
       case WORK_EMAIL_ADDRESS:
-        return 303;
+        return 302;
       case SCHOOL_EMAIL_ADDRESS:
-        return 304;
+        return 303;
       case OTHER_EMAIL_ADDRESS:
-        return 399;
+        return 304;
+      case MAIN_EMAIL_ADDRESS:
+        return 310;
       case WHATSAPP_USER_ID:
         return 401;
       case TWITTER_ID:
@@ -246,15 +324,6 @@ public enum ContactMechanismSubType {
                 + contactMechanismSubType.code()
                 + ")");
     }
-  }
-
-  /**
-   * Returns the contact mechanism type the contact mechanism sub type is associated with.
-   *
-   * @return the contact mechanism type the contact mechanism sub type is associated with
-   */
-  public ContactMechanismType type() {
-    return type;
   }
 
   /**
@@ -274,5 +343,14 @@ public enum ContactMechanismSubType {
    */
   public String description() {
     return description;
+  }
+
+  /**
+   * Returns the contact mechanism type the contact mechanism sub type is associated with.
+   *
+   * @return the contact mechanism type the contact mechanism sub type is associated with
+   */
+  public ContactMechanismType type() {
+    return type;
   }
 }

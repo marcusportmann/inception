@@ -39,6 +39,12 @@ public class ReferenceService implements IReferenceService {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReferenceService.class);
 
+  /** The Contact Mechanism Sub Type Repository. */
+  private final ContactMechanismSubTypeRepository contactMechanismSubTypeRepository;
+
+  /** The Contact Mechanism Type Repository. */
+  private final ContactMechanismTypeRepository contactMechanismTypeRepository;
+
   /** The Country repository. */
   private final CountryRepository countryRepository;
 
@@ -105,6 +111,8 @@ public class ReferenceService implements IReferenceService {
   /**
    * Constructs a new <code>ReferenceService</code>.
    *
+   * @param contactMechanismSubTypeRepository the Contact Mechanism Sub Type Repository
+   * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
    * @param countryRepository the Country Repository
    * @param employmentStatusRepository the Employment Status Repository
    * @param employmentTypeRepository the Employment Type Repository
@@ -128,6 +136,8 @@ public class ReferenceService implements IReferenceService {
    * @param verificationStatusRepository the Verification Status Repository
    */
   public ReferenceService(
+      ContactMechanismSubTypeRepository contactMechanismSubTypeRepository,
+      ContactMechanismTypeRepository contactMechanismTypeRepository,
       CountryRepository countryRepository,
       EmploymentStatusRepository employmentStatusRepository,
       EmploymentTypeRepository employmentTypeRepository,
@@ -149,6 +159,8 @@ public class ReferenceService implements IReferenceService {
       TitleRepository titleRepository,
       VerificationMethodRepository verificationMethodRepository,
       VerificationStatusRepository verificationStatusRepository) {
+    this.contactMechanismSubTypeRepository = contactMechanismSubTypeRepository;
+    this.contactMechanismTypeRepository = contactMechanismTypeRepository;
     this.countryRepository = countryRepository;
     this.employmentStatusRepository = employmentStatusRepository;
     this.employmentTypeRepository = employmentTypeRepository;
@@ -170,6 +182,75 @@ public class ReferenceService implements IReferenceService {
     this.titleRepository = titleRepository;
     this.verificationMethodRepository = verificationMethodRepository;
     this.verificationStatusRepository = verificationStatusRepository;
+  }
+
+  /**
+   * Retrieve all the contact mechanism sub types.
+   *
+   * @return the contact mechanism sub types
+   */
+  @Override
+  public List<ContactMechanismSubType> getContactMechanismSubTypes()
+      throws ReferenceServiceException {
+    return getContactMechanismSubTypes(null);
+  }
+
+  /**
+   * Retrieve the contact mechanism sub types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
+   *     mechanism sub types for or <code>null</code> to retrieve the contact mechanism sub types
+   *     for all locales
+   * @return the contact mechanism sub types
+   */
+  @Override
+  public List<ContactMechanismSubType> getContactMechanismSubTypes(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return contactMechanismSubTypeRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return contactMechanismSubTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the contact mechanism sub types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the contact mechanism types.
+   *
+   * @return the contact mechanism types
+   */
+  @Override
+  public List<ContactMechanismType> getContactMechanismTypes() throws ReferenceServiceException {
+    return getContactMechanismTypes(null);
+  }
+
+  /**
+   * Retrieve the contact mechanism types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
+   *     mechanism types for or <code>null</code> to retrieve the contact mechanism types for all
+   *     locales
+   * @return the contact mechanism types
+   */
+  @Override
+  public List<ContactMechanismType> getContactMechanismTypes(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (StringUtils.isEmpty(localeId)) {
+        return contactMechanismTypeRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return contactMechanismTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the contact mechanism types", e);
+    }
   }
 
   /**

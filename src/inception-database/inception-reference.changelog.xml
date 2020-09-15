@@ -36,7 +36,7 @@
     <addNotNullConstraint schemaName="reference" tableName="communication_methods" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="communication_methods" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="communication_methods" columnName="description" defaultValue=""/>
-    <createIndex indexName="communication_methods_locale_ix" schemaName="reference" tableName="communication_methods">
+    <createIndex indexName="communication_methods_locale_id_ix" schemaName="reference" tableName="communication_methods">
       <column name="locale_id"/>
     </createIndex>
 
@@ -60,7 +60,7 @@
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="sovereign_state"/>
     <addNotNullConstraint schemaName="reference" tableName="countries" columnName="nationality"/>
     <addDefaultValue schemaName="reference" tableName="countries" columnName="description" defaultValue=""/>
-    <createIndex indexName="countries_locale_ix" schemaName="reference" tableName="countries">
+    <createIndex indexName="countries_locale_id_ix" schemaName="reference" tableName="countries">
       <column name="locale_id"/>
     </createIndex>
 
@@ -78,7 +78,7 @@
     <addNotNullConstraint schemaName="reference" tableName="employment_statuses" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="employment_statuses" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="employment_statuses" columnName="description" defaultValue=""/>
-    <createIndex indexName="employment_statuses_locale_ix" schemaName="reference" tableName="employment_statuses">
+    <createIndex indexName="employment_statuses_locale_id_ix" schemaName="reference" tableName="employment_statuses">
       <column name="locale_id"/>
     </createIndex>
 
@@ -104,7 +104,7 @@
     <createIndex indexName="employment_types_employment_status_ix" schemaName="reference" tableName="employment_types">
       <column name="employment_status"/>
     </createIndex>
-    <createIndex indexName="employment_types_locale_ix" schemaName="reference" tableName="employment_types">
+    <createIndex indexName="employment_types_locale_id_ix" schemaName="reference" tableName="employment_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -122,7 +122,7 @@
     <addNotNullConstraint schemaName="reference" tableName="genders" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="genders" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="genders" columnName="description" defaultValue=""/>
-    <createIndex indexName="genders_locale_ix" schemaName="reference" tableName="genders">
+    <createIndex indexName="genders_locale_id_ix" schemaName="reference" tableName="genders">
       <column name="locale_id"/>
     </createIndex>
 
@@ -144,7 +144,7 @@
       baseTableName="identity_document_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
       referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
     <addDefaultValue schemaName="reference" tableName="identity_document_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="identity_document_types_locale_ix" schemaName="reference" tableName="identity_document_types">
+    <createIndex indexName="identity_document_types_locale_id_ix" schemaName="reference" tableName="identity_document_types">
       <column name="locale_id"/>
     </createIndex>
     <createIndex indexName="identity_document_types_country_of_issue_ix" schemaName="reference" tableName="identity_document_types">
@@ -167,7 +167,7 @@
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="short_name"/>
     <addNotNullConstraint schemaName="reference" tableName="languages" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="languages" columnName="description" defaultValue=""/>
-    <createIndex indexName="languages_locale_ix" schemaName="reference" tableName="languages">
+    <createIndex indexName="languages_locale_id_ix" schemaName="reference" tableName="languages">
       <column name="locale_id"/>
     </createIndex>
 
@@ -185,7 +185,7 @@
     <addNotNullConstraint schemaName="reference" tableName="marital_statuses" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="marital_statuses" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="marital_statuses" columnName="description" defaultValue=""/>
-    <createIndex indexName="marital_statuses_locale_ix" schemaName="reference" tableName="marital_statuses">
+    <createIndex indexName="marital_statuses_locale_id_ix" schemaName="reference" tableName="marital_statuses">
       <column name="locale_id"/>
     </createIndex>
 
@@ -211,7 +211,7 @@
     <createIndex indexName="marriage_types_marital_status_ix" schemaName="reference" tableName="marriage_types">
       <column name="marital_status"/>
     </createIndex>
-    <createIndex indexName="marriage_types_locale_ix" schemaName="reference" tableName="marriage_types">
+    <createIndex indexName="marriage_types_locale_id_ix" schemaName="reference" tableName="marriage_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -229,7 +229,7 @@
     <addNotNullConstraint schemaName="reference" tableName="minor_types" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="minor_types" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="minor_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="minor_types_locale_ix" schemaName="reference" tableName="minor_types">
+    <createIndex indexName="minor_types_locale_id_ix" schemaName="reference" tableName="minor_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -247,7 +247,7 @@
     <addNotNullConstraint schemaName="reference" tableName="next_of_kin_types" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="next_of_kin_types" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="next_of_kin_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="next_of_kin_types_locale_ix" schemaName="reference" tableName="next_of_kin_types">
+    <createIndex indexName="next_of_kin_types_locale_id_ix" schemaName="reference" tableName="next_of_kin_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -265,7 +265,7 @@
     <addNotNullConstraint schemaName="reference" tableName="occupations" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="occupations" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="occupations" columnName="description" defaultValue=""/>
-    <createIndex indexName="occupations_locale_ix" schemaName="reference" tableName="occupations">
+    <createIndex indexName="occupations_locale_id_ix" schemaName="reference" tableName="occupations">
       <column name="locale_id"/>
     </createIndex>
 
@@ -283,7 +283,7 @@
     <addNotNullConstraint schemaName="reference" tableName="physical_address_types" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="physical_address_types" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="physical_address_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="physical_address_types_locale_ix" schemaName="reference" tableName="physical_address_types">
+    <createIndex indexName="physical_address_types_locale_id_ix" schemaName="reference" tableName="physical_address_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -301,7 +301,7 @@
     <addNotNullConstraint schemaName="reference" tableName="races" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="races" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="races" columnName="description" defaultValue=""/>
-    <createIndex indexName="races_locale_ix" schemaName="reference" tableName="races">
+    <createIndex indexName="races_locale_id_ix" schemaName="reference" tableName="races">
       <column name="locale_id"/>
     </createIndex>
 
@@ -327,7 +327,7 @@
     <createIndex indexName="regions_country_ix" schemaName="reference" tableName="regions">
       <column name="country"/>
     </createIndex>
-    <createIndex indexName="regions_locale_ix" schemaName="reference" tableName="regions">
+    <createIndex indexName="regions_locale_id_ix" schemaName="reference" tableName="regions">
       <column name="locale_id"/>
     </createIndex>
 
@@ -350,7 +350,7 @@
       baseTableName="residence_permit_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
       referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
     <addDefaultValue schemaName="reference" tableName="residence_permit_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="residence_permit_types_locale_ix" schemaName="reference" tableName="residence_permit_types">
+    <createIndex indexName="residence_permit_types_locale_id_ix" schemaName="reference" tableName="residence_permit_types">
       <column name="locale_id"/>
     </createIndex>
     <createIndex indexName="residence_permit_types_country_of_issue_ix" schemaName="reference" tableName="residence_permit_types">
@@ -371,7 +371,7 @@
     <addNotNullConstraint schemaName="reference" tableName="residency_statuses" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="residency_statuses" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="residency_statuses" columnName="description" defaultValue=""/>
-    <createIndex indexName="residency_statuses_locale_ix" schemaName="reference" tableName="residency_statuses">
+    <createIndex indexName="residency_statuses_locale_id_ix" schemaName="reference" tableName="residency_statuses">
       <column name="locale_id"/>
     </createIndex>
 
@@ -389,7 +389,7 @@
     <addNotNullConstraint schemaName="reference" tableName="residential_types" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="residential_types" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="residential_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="residential_types_locale_ix" schemaName="reference" tableName="residential_types">
+    <createIndex indexName="residential_types_locale_id_ix" schemaName="reference" tableName="residential_types">
       <column name="locale_id"/>
     </createIndex>
 
@@ -407,7 +407,7 @@
     <addNotNullConstraint schemaName="reference" tableName="sources_of_funds" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="sources_of_funds" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="sources_of_funds" columnName="description" defaultValue=""/>
-    <createIndex indexName="sources_of_funds_locale_ix" schemaName="reference" tableName="sources_of_funds">
+    <createIndex indexName="sources_of_funds_locale_id_ix" schemaName="reference" tableName="sources_of_funds">
       <column name="locale_id"/>
     </createIndex>
 
@@ -425,7 +425,7 @@
     <addNotNullConstraint schemaName="reference" tableName="suitable_times_to_contact" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="suitable_times_to_contact" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="suitable_times_to_contact" columnName="description" defaultValue=""/>
-    <createIndex indexName="suitable_times_to_contact_locale_ix" schemaName="reference" tableName="suitable_times_to_contact">
+    <createIndex indexName="suitable_times_to_contact_locale_id_ix" schemaName="reference" tableName="suitable_times_to_contact">
       <column name="locale_id"/>
     </createIndex>
 
@@ -448,7 +448,7 @@
       baseTableName="tax_number_types" baseColumnNames="country_of_issue,locale_id" referencedTableSchemaName="reference"
       referencedTableName="countries" referencedColumnNames="code,locale_id" deleteCascade="true"/>
     <addDefaultValue schemaName="reference" tableName="tax_number_types" columnName="description" defaultValue=""/>
-    <createIndex indexName="tax_number_types_locale_ix" schemaName="reference" tableName="tax_number_types">
+    <createIndex indexName="tax_number_types_locale_id_ix" schemaName="reference" tableName="tax_number_types">
       <column name="locale_id"/>
     </createIndex>
     <createIndex indexName="tax_number_types_country_of_issue_ix" schemaName="reference" tableName="tax_number_types">
@@ -471,7 +471,7 @@
     <addNotNullConstraint schemaName="reference" tableName="titles" columnName="abbreviation"/>
     <addNotNullConstraint schemaName="reference" tableName="titles" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="titles" columnName="description" defaultValue=""/>
-    <createIndex indexName="titles_locale_ix" schemaName="reference" tableName="titles">
+    <createIndex indexName="titles_locale_id_ix" schemaName="reference" tableName="titles">
       <column name="locale_id"/>
     </createIndex>
 
@@ -489,7 +489,7 @@
     <addNotNullConstraint schemaName="reference" tableName="verification_methods" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="verification_methods" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="verification_methods" columnName="description" defaultValue=""/>
-    <createIndex indexName="verification_methods_locale_ix" schemaName="reference" tableName="verification_methods">
+    <createIndex indexName="verification_methods_locale_id_ix" schemaName="reference" tableName="verification_methods">
       <column name="locale_id"/>
     </createIndex>
 
@@ -507,7 +507,7 @@
     <addNotNullConstraint schemaName="reference" tableName="verification_statuses" columnName="name"/>
     <addNotNullConstraint schemaName="reference" tableName="verification_statuses" columnName="description"/>
     <addDefaultValue schemaName="reference" tableName="verification_statuses" columnName="description" defaultValue=""/>
-    <createIndex indexName="verification_statuses_locale_ix" schemaName="reference" tableName="verification_statuses">
+    <createIndex indexName="verification_statuses_locale_id_ix" schemaName="reference" tableName="verification_statuses">
       <column name="locale_id"/>
     </createIndex>
 
