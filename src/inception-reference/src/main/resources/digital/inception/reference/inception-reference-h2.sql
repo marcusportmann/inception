@@ -21,6 +21,8 @@ CREATE TABLE reference.contact_mechanism_types (
 
 CREATE INDEX contact_mechanism_types_locale_id_ix ON reference.contact_mechanism_types(locale_id);
 
+CREATE UNIQUE INDEX contact_mechanism_types_locale_id_numeric_code_ix ON reference.contact_mechanism_types(locale_id, numeric_code);
+
 COMMENT ON COLUMN reference.contact_mechanism_types.code IS 'The code for the contact mechanism type';
 
 COMMENT ON COLUMN reference.contact_mechanism_types.locale_id IS 'The Unicode locale identifier for the contact mechanism type';
@@ -36,7 +38,7 @@ COMMENT ON COLUMN reference.contact_mechanism_types.plural IS 'The plural name f
 COMMENT ON COLUMN reference.contact_mechanism_types.description IS 'The description for the contact mechanism type';
 
 
-CREATE TABLE reference.contact_mechanism_sub_types (
+CREATE TABLE reference.contact_mechanism_purposes (
   type         VARCHAR(30)  NOT NULL,
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
@@ -47,30 +49,30 @@ CREATE TABLE reference.contact_mechanism_sub_types (
   description  VARCHAR(200) NOT NULL DEFAULT '',
 
   PRIMARY KEY (type, code, locale_id),
-  CONSTRAINT contact_mechanism_sub_types_contact_mechanism_type_fk FOREIGN KEY (type, locale_id) REFERENCES reference.contact_mechanism_types(code, locale_id) ON DELETE CASCADE
+  CONSTRAINT contact_mechanism_purposes_contact_mechanism_type_fk FOREIGN KEY (type, locale_id) REFERENCES reference.contact_mechanism_types(code, locale_id) ON DELETE CASCADE
 );
 
-CREATE INDEX contact_mechanism_sub_types_type_ix ON reference.contact_mechanism_sub_types(type);
+CREATE INDEX contact_mechanism_purposes_type_ix ON reference.contact_mechanism_purposes(type);
 
-CREATE INDEX contact_mechanism_sub_types_locale_id_ix ON reference.contact_mechanism_sub_types(locale_id);
+CREATE INDEX contact_mechanism_purposes_locale_id_ix ON reference.contact_mechanism_purposes(locale_id);
 
-CREATE UNIQUE INDEX contact_mechanism_sub_types_code_ix ON reference.contact_mechanism_sub_types(code);
+CREATE UNIQUE INDEX contact_mechanism_purposes_locale_id_code_ix ON reference.contact_mechanism_purposes(locale_id, code);
 
-COMMENT ON COLUMN reference.contact_mechanism_sub_types.type IS 'The code for the contact mechanism type the contact mechanism sub type is associated with';
+COMMENT ON COLUMN reference.contact_mechanism_purposes.type IS 'The code for the contact mechanism type the contact mechanism purpose is associated with';
 
-COMMENT ON COLUMN reference.contact_mechanism_sub_types.code IS 'The code for the contact mechanism sub type';
+COMMENT ON COLUMN reference.contact_mechanism_purposes.code IS 'The code for the contact mechanism purpose';
 
-COMMENT ON COLUMN reference.contact_mechanism_sub_types.locale_id IS 'The Unicode locale identifier for the contact mechanism sub type';
+COMMENT ON COLUMN reference.contact_mechanism_purposes.locale_id IS 'The Unicode locale identifier for the contact mechanism purpose';
 
-COMMENT ON COLUMN reference.contact_mechanism_sub_types.numeric_code IS 'The numeric code for the contact mechanism sub type';
+COMMENT ON COLUMN reference.contact_mechanism_purposes.numeric_code IS 'The numeric code for the contact mechanism purpose';
 
-COMMENT ON COLUMN reference.contact_mechanism_sub_types.party_type IS 'The code for the party type the contact mechanism sub type is associated with';
+COMMENT ON COLUMN reference.contact_mechanism_purposes.party_type IS 'The code for the party type the contact mechanism purpose is associated with';
 
-COMMENT ON COLUMN reference.contact_mechanism_sub_types.sort_index IS 'The sort index for the contact mechanism sub type';
+COMMENT ON COLUMN reference.contact_mechanism_purposes.sort_index IS 'The sort index for the contact mechanism purpose';
 
-COMMENT ON COLUMN reference.contact_mechanism_sub_types.name IS 'The name of the contact mechanism sub type';
+COMMENT ON COLUMN reference.contact_mechanism_purposes.name IS 'The name of the contact mechanism purpose';
 
-COMMENT ON COLUMN reference.contact_mechanism_sub_types.description IS 'The description for the contact mechanism sub type';
+COMMENT ON COLUMN reference.contact_mechanism_purposes.description IS 'The description for the contact mechanism purpose';
 
 
 CREATE TABLE reference.countries (
@@ -686,63 +688,116 @@ COMMENT ON COLUMN reference.verification_statuses.description IS 'The descriptio
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
-  VALUES ('phone_number', 'en-US', 1, 1, 'Phone Number', 'Phone Numbers', 'Phone Number');
+  VALUES ('mobile_number', 'en-US', 1, 1, 'Mobile Number', 'Mobile Numbers', 'Mobile Number');
 INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
-  VALUES ('fax_number', 'en-US', 2, 1, 'Fax Number', 'Fax Numbers', 'Fax Number');
+  VALUES ('phone_number', 'en-US', 2, 2, 'Phone Number', 'Phone Numbers', 'Phone Number');
 INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
-  VALUES ('email_address', 'en-US', 3, 1, 'E-mail Address', 'E-mail Addresses', 'E-mail Address');
+  VALUES ('fax_number', 'en-US', 3, 3, 'Fax Number', 'Fax Numbers', 'Fax Number');
 INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
-  VALUES ('social_media', 'en-US', 4, 1, 'Social Media', 'Social Media', 'Social Media');
+  VALUES ('email_address', 'en-US', 4, 4, 'E-mail Address', 'E-mail Addresses', 'E-mail Address');
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('social_media', 'en-US', 5, 5, 'Social Media', 'Social Media', 'Social Media');
 
 INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
-  VALUES ('phone_number', 'en-ZA', 1, 1, 'Phone Number', 'Phone Numbers', 'Phone Number');
+  VALUES ('mobile_number', 'en-ZA', 1, 1, 'Mobile Number', 'Mobile Numbers', 'Mobile Number');
 INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
-  VALUES ('fax_number', 'en-ZA', 2, 1, 'Fax Number', 'Fax Numbers', 'Fax Number');
+  VALUES ('phone_number', 'en-ZA', 2, 2, 'Phone Number', 'Phone Numbers', 'Phone Number');
 INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
-  VALUES ('email_address', 'en-ZA', 3, 1, 'E-mail Address', 'E-mail Addresses', 'E-mail Address');
+  VALUES ('fax_number', 'en-ZA', 3, 3, 'Fax Number', 'Fax Numbers', 'Fax Number');
 INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
-  VALUES ('social_media', 'en-ZA', 4, 1, 'Social Media', 'Social Media', 'Social Media');
+  VALUES ('email_address', 'en-ZA', 4, 4, 'E-mail Address', 'E-mail Addresses', 'E-mail Address');
+INSERT INTO reference.contact_mechanism_types (code, locale_id, numeric_code, sort_index, name, plural, description)
+  VALUES ('social_media', 'en-ZA', 5, 5, 'Social Media', 'Social Media', 'Social Media');
 
 
 
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('phone_number', 'mobile_phone_number', 'en-US', 101, 'person', 101, 'Mobile Phone Number', 'Mobile Phone Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('phone_number', 'home_phone_number', 'en-US', 102, 'person', 102, 'Home Phone Number', 'Home Phone Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('phone_number', 'work_phone_number', 'en-US', 103, 'person', 103, 'Work Phone Number', 'Work Phone Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('phone_number', 'school_phone_number', 'en-US', 104, 'person', 104, 'School Phone Number', 'School Phone Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('phone_number', 'pager_phone_number', 'en-US', 105, 'person', 105, 'Pager Phone Number', 'Pager Phone Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('phone_number', 'other_phone_number', 'en-US', 106, 'person', 106, 'Other Phone Number', 'Other Phone Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('phone_number', 'main_phone_number', 'en-US', 110, 'organization', 110, 'Main Phone Number', 'Main Phone Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('fax_number', 'home_fax_number', 'en-US', 201, 'person', 201, 'Home Fax Number', 'Home Fax Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('fax_number', 'work_fax_number', 'en-US', 202, 'person', 202, 'Work Fax Number', 'Work Fax Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('fax_number', 'other_fax_number', 'en-US', 203, 'person', 203, 'Other Fax Number', 'Other Fax Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('fax_number', 'main_fax_number', 'en-US', 210, 'organization', 210, 'Main Fax Number', 'Main Fax Number');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('email_address', 'personal_email_address', 'en-US', 301, 'person', 301, 'Personal E-mail Address', 'Personal E-mail Address');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('email_address', 'work_email_address', 'en-US', 302, 'person', 302, 'Work E-mail Address', 'Work E-mail Address');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('email_address', 'school_email_address', 'en-US', 303, 'person', 303, 'School E-mail Address', 'School E-mail Address');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('email_address', 'other_email_address', 'en-US', 304, 'person', 304, 'Other E-mail Address', 'Other E-mail Address');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('email_address', 'main_email_address', 'en-US', 310, 'organization', 310, 'Main E-mail Address', 'Main E-mail Address');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('social_media', 'whatsapp_user_id', 'en-US', 401, 'person', 401, 'WhatsApp User ID', 'WhatsApp User ID');
-INSERT INTO reference.contact_mechanism_sub_types (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
-  VALUES ('social_media', 'twitter_id', 'en-US', 402, 'person', 402, 'Twitter ID', 'Twitter ID');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('mobile_number', 'personal_mobile_number', 'en-US', 100, 'person', 100, 'Personal Mobile Number', 'Personal Mobile Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('mobile_number', 'work_mobile_number', 'en-US', 101, 'person', 101, 'Work Mobile Number', 'Work Mobile Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('mobile_number', 'other_mobile_number', 'en-US', 102, 'person', 102, 'Other Mobile Number', 'Other Mobile Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('mobile_number', 'main_mobile_number', 'en-US', 110, 'organization', 110, 'Main Mobile Number', 'Main Mobile Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'home_phone_number', 'en-US', 200, 'person', 200, 'Home Phone Number', 'Home Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'work_phone_number', 'en-US', 201, 'person', 201, 'Work Phone Number', 'Work Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'school_phone_number', 'en-US', 202, 'person', 202, 'School Phone Number', 'School Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'pager_phone_number', 'en-US', 203, 'person', 203, 'Pager Phone Number', 'Pager Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'other_phone_number', 'en-US', 204, 'person', 204, 'Other Phone Number', 'Other Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'main_phone_number', 'en-US', 210, 'organization', 210, 'Main Phone Number', 'Main Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'home_fax_number', 'en-US', 300, 'person', 300, 'Home Fax Number', 'Home Fax Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'work_fax_number', 'en-US', 301, 'person', 301, 'Work Fax Number', 'Work Fax Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'other_fax_number', 'en-US', 302, 'person', 302, 'Other Fax Number', 'Other Fax Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'main_fax_number', 'en-US', 310, 'organization', 310, 'Main Fax Number', 'Main Fax Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'personal_email_address', 'en-US', 400, 'person', 400, 'Personal E-mail Address', 'Personal E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'work_email_address', 'en-US', 401, 'person', 401, 'Work E-mail Address', 'Work E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'school_email_address', 'en-US', 402, 'person', 402, 'School E-mail Address', 'School E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'other_email_address', 'en-US', 403, 'person', 403, 'Other E-mail Address', 'Other E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'main_email_address', 'en-US', 410, 'organization', 410, 'Main E-mail Address', 'Main E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('social_media', 'whatsapp_user_id', 'en-US', 500, 'person', 500, 'WhatsApp User ID', 'WhatsApp User ID');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('social_media', 'twitter_id', 'en-US', 501, 'person', 501, 'Twitter ID', 'Twitter ID');
 
-
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('mobile_number', 'personal_mobile_number', 'en-ZA', 100, 'person', 100, 'Personal Mobile Number', 'Personal Mobile Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('mobile_number', 'work_mobile_number', 'en-ZA', 101, 'person', 101, 'Work Mobile Number', 'Work Mobile Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('mobile_number', 'other_mobile_number', 'en-ZA', 102, 'person', 102, 'Other Mobile Number', 'Other Mobile Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('mobile_number', 'main_mobile_number', 'en-ZA', 110, 'organization', 110, 'Main Mobile Number', 'Main Mobile Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'home_phone_number', 'en-ZA', 200, 'person', 200, 'Home Phone Number', 'Home Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'work_phone_number', 'en-ZA', 201, 'person', 201, 'Work Phone Number', 'Work Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'school_phone_number', 'en-ZA', 202, 'person', 202, 'School Phone Number', 'School Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'pager_phone_number', 'en-ZA', 203, 'person', 203, 'Pager Phone Number', 'Pager Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'other_phone_number', 'en-ZA', 204, 'person', 204, 'Other Phone Number', 'Other Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('phone_number', 'main_phone_number', 'en-ZA', 210, 'organization', 210, 'Main Phone Number', 'Main Phone Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'home_fax_number', 'en-ZA', 300, 'person', 300, 'Home Fax Number', 'Home Fax Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'work_fax_number', 'en-ZA', 301, 'person', 301, 'Work Fax Number', 'Work Fax Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'other_fax_number', 'en-ZA', 302, 'person', 302, 'Other Fax Number', 'Other Fax Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('fax_number', 'main_fax_number', 'en-ZA', 310, 'organization', 310, 'Main Fax Number', 'Main Fax Number');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'personal_email_address', 'en-ZA', 400, 'person', 400, 'Personal E-mail Address', 'Personal E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'work_email_address', 'en-ZA', 401, 'person', 401, 'Work E-mail Address', 'Work E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'school_email_address', 'en-ZA', 402, 'person', 402, 'School E-mail Address', 'School E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'other_email_address', 'en-ZA', 403, 'person', 403, 'Other E-mail Address', 'Other E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('email_address', 'main_email_address', 'en-ZA', 410, 'organization', 410, 'Main E-mail Address', 'Main E-mail Address');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('social_media', 'whatsapp_user_id', 'en-ZA', 500, 'person', 500, 'WhatsApp User ID', 'WhatsApp User ID');
+INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, numeric_code, party_type, sort_index, name, description)
+  VALUES ('social_media', 'twitter_id', 'en-ZA', 501, 'person', 501, 'Twitter ID', 'Twitter ID');
+  
+  
 
 INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AF', 'en-US', 1, 'Afghanistan', 'Afghanistan', 'Afghanistan', 'AF', 'Afghan');

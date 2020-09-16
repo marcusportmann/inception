@@ -19,25 +19,25 @@ package digital.inception.party;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.WritingConverter;
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>ContactMechanismSubTypeToStringConverter</code> class implements the Spring converter
- * that converts a <code>ContactMechanismSubType</code> type into a <code>String</code> type.
+ * The <code>StringToContactMechanismPurposeConverter</code> class implements the Spring converter
+ * that converts a <code>String</code> type into a <code>ContactMechanismPurpose</code> type.
  *
  * @author Marcus Portmann
  */
 @Component
-@WritingConverter
-public class ContactMechanismSubTypeToStringConverter
-    implements Converter<ContactMechanismSubType, String> {
+@ReadingConverter
+public class StringToContactMechanismPurposeConverter
+    implements Converter<String, ContactMechanismPurpose> {
 
-  /** Constructs a new <code>ContactMechanismSubTypeToStringConverter</code>. */
-  public ContactMechanismSubTypeToStringConverter() {}
+  /** Constructs a new <code>StringToContactMechanismPurposeConverter</code>. */
+  public StringToContactMechanismPurposeConverter() {}
 
   @Override
-  public String convert(ContactMechanismSubType source) {
-    return source.code();
+  public ContactMechanismPurpose convert(String source) {
+    return ContactMechanismPurpose.fromCode(source);
   }
 }

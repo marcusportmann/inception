@@ -69,16 +69,16 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the contact mechanism sub types.
+   * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
-   *     mechanism sub types for or <code>null</code> to retrieve the contact mechanism sub types
-   *     for all locales
-   * @return the contact mechanism sub types
+   *     mechanism purposes for or <code>null</code> to retrieve the contact mechanism purposes for
+   *     all locales
+   * @return the contact mechanism purposes
    */
   @Operation(
-      summary = "Retrieve the contact mechanism sub types",
-      description = "Retrieve the contact mechanism sub types")
+      summary = "Retrieve the contact mechanism purposes",
+      description = "Retrieve the contact mechanism purposes")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -92,21 +92,21 @@ public class ReferenceRestController extends SecureRestController {
                     schema = @Schema(implementation = RestControllerError.class)))
       })
   @RequestMapping(
-      value = "/contact-mechanism-sub-types",
+      value = "/contact-mechanism-purposes",
       method = RequestMethod.GET,
       produces = "application/json")
   @ResponseStatus(HttpStatus.OK)
   // @PreAuthorize("isAuthenticated()")
-  public List<ContactMechanismSubType> getContactMechanismSubTypes(
+  public List<ContactMechanismPurpose> getContactMechanismPurposes(
       @Parameter(
               name = "localeId",
               description =
-                  "The optional Unicode locale identifier identifying the locale to retrieve the contact mechanism sub types for",
+                  "The optional Unicode locale identifier identifying the locale to retrieve the contact mechanism purposes for",
               example = "en-US")
           @RequestParam(value = "localeId", required = false)
           String localeId)
       throws ReferenceServiceException {
-    return referenceService.getContactMechanismSubTypes(localeId);
+    return referenceService.getContactMechanismPurposes(localeId);
   }
 
   /**

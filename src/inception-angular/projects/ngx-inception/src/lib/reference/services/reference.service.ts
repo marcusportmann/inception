@@ -45,7 +45,7 @@ import {Title} from './title';
 import {VerificationStatus} from './verification-status';
 import {VerificationMethod} from './verification-method';
 import {ContactMechanismType} from "./contact-mechanism-type";
-import {ContactMechanismSubType} from "./contact-mechanism-sub-type";
+import {ContactMechanismPurpose} from "./contact-mechanism-purpose";
 
 /**
  * The Reference Service implementation.
@@ -70,24 +70,24 @@ export class ReferenceService {
   }
 
   /**
-   * Retrieve the contact mechanism sub types.
+   * Retrieve the contact mechanism purposes.
    *
-   * @return The contact mechanism sub types.
+   * @return The contact mechanism purposes.
    */
-  getContactMechanismSubTypes(): Observable<ContactMechanismSubType[]> {
+  getContactMechanismPurposes(): Observable<ContactMechanismPurpose[]> {
     let params = new HttpParams();
 
     params = params.append('localeId', this.localeId);
 
-    return this.httpClient.get<ContactMechanismSubType[]>(this.config.referenceApiUrlPrefix + '/contact-mechanism-sub-types',
+    return this.httpClient.get<ContactMechanismPurpose[]>(this.config.referenceApiUrlPrefix + '/contact-mechanism-purposes',
       {params, reportProgress: true})
-    .pipe(map((contactMechanismTypes: ContactMechanismSubType[]) => {
-      return contactMechanismTypes;
+    .pipe(map((contactMechanismPurposes: ContactMechanismPurpose[]) => {
+      return contactMechanismPurposes;
     }), catchError((httpErrorResponse: HttpErrorResponse) => {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the contact mechanism sub types.', apiError));
+        return throwError(new ReferenceServiceError('Failed to retrieve the contact mechanism purposes.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {

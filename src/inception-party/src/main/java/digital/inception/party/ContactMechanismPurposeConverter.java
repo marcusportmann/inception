@@ -22,14 +22,14 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>ContactMechanismSubTypeConverter</code> class implements the custom JPA converter for
- * the <code>ContactMechanismSubType</code> enumeration.
+ * The <code>ContactMechanismPurposeConverter</code> class implements the custom JPA converter for
+ * the <code>ContactMechanismPurpose</code> enumeration.
  *
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class ContactMechanismSubTypeConverter
-    implements AttributeConverter<ContactMechanismSubType, Integer> {
+public class ContactMechanismPurposeConverter
+    implements AttributeConverter<ContactMechanismPurpose, Integer> {
 
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
@@ -39,8 +39,8 @@ public class ContactMechanismSubTypeConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(ContactMechanismSubType attribute) {
-    return ContactMechanismSubType.toNumericCode(attribute);
+  public Integer convertToDatabaseColumn(ContactMechanismPurpose attribute) {
+    return ContactMechanismPurpose.toNumericCode(attribute);
   }
 
   /**
@@ -53,7 +53,7 @@ public class ContactMechanismSubTypeConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public ContactMechanismSubType convertToEntityAttribute(Integer dbData) {
-    return ContactMechanismSubType.fromNumericCode(dbData);
+  public ContactMechanismPurpose convertToEntityAttribute(Integer dbData) {
+    return ContactMechanismPurpose.fromNumericCode(dbData);
   }
 }

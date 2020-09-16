@@ -109,7 +109,7 @@ export * from './lib/reporting/views/reporting-views.module';
 
 // Reference
 export * from './lib/reference/services/reference.service';
-export * from './lib/reference/services/contact-mechanism-sub-type';
+export * from './lib/reference/services/contact-mechanism-purpose';
 export * from './lib/reference/services/contact-mechanism-type';
 export * from './lib/reference/services/country';
 export * from './lib/reference/services/employment-status';

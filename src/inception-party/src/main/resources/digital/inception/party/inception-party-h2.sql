@@ -131,12 +131,12 @@ COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (
 CREATE TABLE party.contact_mechanisms (
   party_id UUID         NOT NULL,
   type     INTEGER      NOT NULL,
-  sub_type INTEGER      NOT NULL,
+  purpose  INTEGER      NOT NULL,
   value    VARCHAR(200) NOT NULL,
   created  TIMESTAMP    NOT NULL,
   updated  TIMESTAMP,
 
-  PRIMARY KEY (party_id, type, sub_type),
+  PRIMARY KEY (party_id, type, purpose),
   CONSTRAINT contact_mechanisms_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
@@ -146,7 +146,7 @@ COMMENT ON COLUMN party.contact_mechanisms.party_id IS 'The Universally Unique I
 
 COMMENT ON COLUMN party.contact_mechanisms.type IS 'The code identifying the contact mechanism type';
 
-COMMENT ON COLUMN party.contact_mechanisms.sub_type IS 'The optional code identifying the contact mechanism sub type';
+COMMENT ON COLUMN party.contact_mechanisms.purpose IS 'The code identifying the contact mechanism purpose';
 
 COMMENT ON COLUMN party.contact_mechanisms.value IS 'The value for the contact mechanism';
 

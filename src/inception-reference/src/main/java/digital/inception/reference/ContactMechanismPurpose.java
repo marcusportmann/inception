@@ -36,8 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>ContactMechanismSubType</code> class holds the information for a possible contact
- * mechanism sub type.
+ * The <code>ContactMechanismPurpose</code> class holds the information for a possible contact
+ * mechanism purpose.
  *
  * @author Marcus Portmann
  */
@@ -55,9 +55,9 @@ import javax.xml.bind.annotation.XmlType;
   "name",
   "description"
 })
-@XmlRootElement(name = "ContactMechanismSubType", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "ContactMechanismPurpose", namespace = "http://reference.inception.digital")
 @XmlType(
-    name = "ContactMechanismSubType",
+    name = "ContactMechanismPurpose",
     namespace = "http://reference.inception.digital",
     propOrder = {
       "type",
@@ -71,14 +71,14 @@ import javax.xml.bind.annotation.XmlType;
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "contact_mechanism_sub_types")
-@IdClass(ContactMechanismSubTypeId.class)
-public class ContactMechanismSubType implements Serializable {
+@Table(schema = "reference", name = "contact_mechanism_purposes")
+@IdClass(ContactMechanismPurposeId.class)
+public class ContactMechanismPurpose implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the contact mechanism sub type. */
-  @Schema(description = "The code for the contact mechanism sub type", required = true)
+  /** The code for the contact mechanism purpose. */
+  @Schema(description = "The code for the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -87,8 +87,8 @@ public class ContactMechanismSubType implements Serializable {
   @Column(name = "code", nullable = false)
   private String code;
 
-  /** The description for the contact mechanism sub type. */
-  @Schema(description = "The description for the contact mechanism sub type", required = true)
+  /** The description for the contact mechanism purpose. */
+  @Schema(description = "The description for the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -96,9 +96,9 @@ public class ContactMechanismSubType implements Serializable {
   @Column(name = "description", nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the contact mechanism sub type. */
+  /** The Unicode locale identifier for the contact mechanism purpose. */
   @Schema(
-      description = "The Unicode locale identifier for the contact mechanism sub type",
+      description = "The Unicode locale identifier for the contact mechanism purpose",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -108,8 +108,8 @@ public class ContactMechanismSubType implements Serializable {
   @Column(name = "locale_id", nullable = false)
   private String localeId;
 
-  /** The name of the contact mechanism sub type. */
-  @Schema(description = "The name of the contact mechanism sub type", required = true)
+  /** The name of the contact mechanism purpose. */
+  @Schema(description = "The name of the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -117,17 +117,17 @@ public class ContactMechanismSubType implements Serializable {
   @Column(name = "name", nullable = false)
   private String name;
 
-  /** The numeric code for the contact mechanism sub type. */
-  @Schema(description = "The numeric code for the contact mechanism sub type", required = true)
+  /** The numeric code for the contact mechanism purpose. */
+  @Schema(description = "The numeric code for the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "NumericCode", required = true)
   @NotNull
   @Column(name = "numeric_code", nullable = false)
   private Integer numericCode;
 
-  /** The code for the party type the contact mechanism sub type is associated with. */
+  /** The code for the party type the contact mechanism purpose is associated with. */
   @Schema(
-      description = "The code for the party type the contact mechanism sub type is associated with",
+      description = "The code for the party type the contact mechanism purpose is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "PartyType", required = true)
@@ -136,18 +136,18 @@ public class ContactMechanismSubType implements Serializable {
   @Column(name = "party_type", nullable = false)
   private String partyType;
 
-  /** The sort index for the contact mechanism sub type. */
-  @Schema(description = "The sort index for the contact mechanism sub type", required = true)
+  /** The sort index for the contact mechanism purpose. */
+  @Schema(description = "The sort index for the contact mechanism purpose", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** The code for the contact mechanism type the contact mechanism sub type is associated with. */
+  /** The code for the contact mechanism type the contact mechanism purpose is associated with. */
   @Schema(
       description =
-          "The code for the contact mechanism type the contact mechanism sub type is associated with",
+          "The code for the contact mechanism type the contact mechanism purpose is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
@@ -157,8 +157,8 @@ public class ContactMechanismSubType implements Serializable {
   @Column(name = "type", nullable = false)
   private String type;
 
-  /** Constructs a new <code>ContactMechanismSubType</code>. */
-  public ContactMechanismSubType() {}
+  /** Constructs a new <code>ContactMechanismPurpose</code>. */
+  public ContactMechanismPurpose() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -181,7 +181,7 @@ public class ContactMechanismSubType implements Serializable {
       return false;
     }
 
-    ContactMechanismSubType other = (ContactMechanismSubType) object;
+    ContactMechanismPurpose other = (ContactMechanismPurpose) object;
 
     return Objects.equals(type, other.type)
         && Objects.equals(code, other.code)
@@ -189,73 +189,73 @@ public class ContactMechanismSubType implements Serializable {
   }
 
   /**
-   * Returns the code for the contact mechanism sub type.
+   * Returns the code for the contact mechanism purpose.
    *
-   * @return the code for the contact mechanism sub type
+   * @return the code for the contact mechanism purpose
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the contact mechanism sub type.
+   * Returns the description for the contact mechanism purpose.
    *
-   * @return the description for the contact mechanism sub type
+   * @return the description for the contact mechanism purpose
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the contact mechanism sub type.
+   * Returns the Unicode locale identifier for the contact mechanism purpose.
    *
-   * @return the Unicode locale identifier for the contact mechanism sub type
+   * @return the Unicode locale identifier for the contact mechanism purpose
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the contact mechanism sub type.
+   * Returns the name of the contact mechanism purpose.
    *
-   * @return the name of the contact mechanism sub type
+   * @return the name of the contact mechanism purpose
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the numeric code for the contact mechanism sub type.
+   * Returns the numeric code for the contact mechanism purpose.
    *
-   * @return the numeric code for the contact mechanism sub type
+   * @return the numeric code for the contact mechanism purpose
    */
   public Integer getNumericCode() {
     return numericCode;
   }
 
   /**
-   * Returns the code for the party type the contact mechanism sub type is associated with.
+   * Returns the code for the party type the contact mechanism purpose is associated with.
    *
-   * @return the code for the party type the contact mechanism sub type is associated with
+   * @return the code for the party type the contact mechanism purpose is associated with
    */
   public String getPartyType() {
     return partyType;
   }
 
   /**
-   * Returns the sort index for the contact mechanism sub type.
+   * Returns the sort index for the contact mechanism purpose.
    *
-   * @return the sort index for the contact mechanism sub type
+   * @return the sort index for the contact mechanism purpose
    */
   public Integer getSortIndex() {
     return sortIndex;
   }
 
   /**
-   * Returns the code for the contact mechanism type the contact mechanism sub type is associated
+   * Returns the code for the contact mechanism type the contact mechanism purpose is associated
    * with.
    *
-   * @return the code for the contact mechanism type the contact mechanism sub type is associated
+   * @return the code for the contact mechanism type the contact mechanism purpose is associated
    *     with
    */
   public String getType() {
@@ -275,72 +275,72 @@ public class ContactMechanismSubType implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism sub type.
+   * Set the code for the contact mechanism purpose.
    *
-   * @param code the code for the contact mechanism sub type
+   * @param code the code for the contact mechanism purpose
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the contact mechanism sub type.
+   * Set the description for the contact mechanism purpose.
    *
-   * @param description the description for the contact mechanism sub type
+   * @param description the description for the contact mechanism purpose
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the contact mechanism sub type.
+   * Set the Unicode locale identifier for the contact mechanism purpose.
    *
-   * @param localeId the Unicode locale identifier for the contact mechanism sub type
+   * @param localeId the Unicode locale identifier for the contact mechanism purpose
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the contact mechanism sub type.
+   * Set the name of the contact mechanism purpose.
    *
-   * @param name the name of the contact mechanism sub type
+   * @param name the name of the contact mechanism purpose
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the numeric code for the contact mechanism sub type.
+   * Set the numeric code for the contact mechanism purpose.
    *
-   * @param numericCode the numeric code for the contact mechanism sub type
+   * @param numericCode the numeric code for the contact mechanism purpose
    */
   public void setNumericCode(Integer numericCode) {
     this.numericCode = numericCode;
   }
 
   /**
-   * Set the code for the party type the contact mechanism sub type is associated with.
+   * Set the code for the party type the contact mechanism purpose is associated with.
    *
-   * @param partyType the code for the party type the contact mechanism sub type is associated with
+   * @param partyType the code for the party type the contact mechanism purpose is associated with
    */
   public void setPartyType(String partyType) {
     this.partyType = partyType;
   }
 
   /**
-   * Set the sort index for the contact mechanism sub type.
+   * Set the sort index for the contact mechanism purpose.
    *
-   * @param sortIndex the sort index for the contact mechanism sub type
+   * @param sortIndex the sort index for the contact mechanism purpose
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;
   }
 
   /**
-   * Set the code for the contact mechanism type the contact mechanism sub type is associated with.
+   * Set the code for the contact mechanism type the contact mechanism purpose is associated with.
    *
-   * @param type the code for the contact mechanism type the contact mechanism sub type is
+   * @param type the code for the contact mechanism type the contact mechanism purpose is
    *     associated with
    */
   public void setType(String type) {

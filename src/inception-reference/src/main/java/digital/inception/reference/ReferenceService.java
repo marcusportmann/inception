@@ -40,7 +40,7 @@ public class ReferenceService implements IReferenceService {
   private static final Logger logger = LoggerFactory.getLogger(ReferenceService.class);
 
   /** The Contact Mechanism Sub Type Repository. */
-  private final ContactMechanismSubTypeRepository contactMechanismSubTypeRepository;
+  private final ContactMechanismPurposeRepository contactMechanismPurposeRepository;
 
   /** The Contact Mechanism Type Repository. */
   private final ContactMechanismTypeRepository contactMechanismTypeRepository;
@@ -111,7 +111,7 @@ public class ReferenceService implements IReferenceService {
   /**
    * Constructs a new <code>ReferenceService</code>.
    *
-   * @param contactMechanismSubTypeRepository the Contact Mechanism Sub Type Repository
+   * @param contactMechanismPurposeRepository the Contact Mechanism Sub Type Repository
    * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
    * @param countryRepository the Country Repository
    * @param employmentStatusRepository the Employment Status Repository
@@ -136,7 +136,7 @@ public class ReferenceService implements IReferenceService {
    * @param verificationStatusRepository the Verification Status Repository
    */
   public ReferenceService(
-      ContactMechanismSubTypeRepository contactMechanismSubTypeRepository,
+      ContactMechanismPurposeRepository contactMechanismPurposeRepository,
       ContactMechanismTypeRepository contactMechanismTypeRepository,
       CountryRepository countryRepository,
       EmploymentStatusRepository employmentStatusRepository,
@@ -159,7 +159,7 @@ public class ReferenceService implements IReferenceService {
       TitleRepository titleRepository,
       VerificationMethodRepository verificationMethodRepository,
       VerificationStatusRepository verificationStatusRepository) {
-    this.contactMechanismSubTypeRepository = contactMechanismSubTypeRepository;
+    this.contactMechanismPurposeRepository = contactMechanismPurposeRepository;
     this.contactMechanismTypeRepository = contactMechanismTypeRepository;
     this.countryRepository = countryRepository;
     this.employmentStatusRepository = employmentStatusRepository;
@@ -185,37 +185,37 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Retrieve all the contact mechanism sub types.
+   * Retrieve all the contact mechanism purposes.
    *
-   * @return the contact mechanism sub types
+   * @return the contact mechanism purposes
    */
   @Override
-  public List<ContactMechanismSubType> getContactMechanismSubTypes()
+  public List<ContactMechanismPurpose> getContactMechanismPurposes()
       throws ReferenceServiceException {
-    return getContactMechanismSubTypes(null);
+    return getContactMechanismPurposes(null);
   }
 
   /**
-   * Retrieve the contact mechanism sub types.
+   * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
-   *     mechanism sub types for or <code>null</code> to retrieve the contact mechanism sub types
+   *     mechanism purposes for or <code>null</code> to retrieve the contact mechanism purposes
    *     for all locales
-   * @return the contact mechanism sub types
+   * @return the contact mechanism purposes
    */
   @Override
-  public List<ContactMechanismSubType> getContactMechanismSubTypes(String localeId)
+  public List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
       throws ReferenceServiceException {
     try {
       if (StringUtils.isEmpty(localeId)) {
-        return contactMechanismSubTypeRepository.findAll(
+        return contactMechanismPurposeRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
-        return contactMechanismSubTypeRepository.findByLocaleIdIgnoreCase(
+        return contactMechanismPurposeRepository.findByLocaleIdIgnoreCase(
             localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
       }
     } catch (Throwable e) {
-      throw new ReferenceServiceException("Failed to retrieve the contact mechanism sub types", e);
+      throw new ReferenceServiceException("Failed to retrieve the contact mechanism purposes", e);
     }
   }
 

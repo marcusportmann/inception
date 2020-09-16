@@ -15,65 +15,65 @@
  */
 
 /**
- * The ContactMechanismSubType class holds the information for a contact mechanism sub type.
+ * The ContactMechanismPurpose class holds the information for a contact mechanism purpose.
  *
  * @author Marcus Portmann
  */
-export class ContactMechanismSubType {
+export class ContactMechanismPurpose {
 
   /**
-   * The code for the contact mechanism sub type.
+   * The code for the contact mechanism purpose.
    */
   code: string;
 
   /**
-   * The description for the contact mechanism sub type.
+   * The description for the contact mechanism purpose.
    */
   description: string;
 
   /**
-   * The Unicode locale identifier for the contact mechanism sub type.
+   * The Unicode locale identifier for the contact mechanism purpose.
    */
   localeId: string;
 
   /**
-   * The name of the contact mechanism sub type.
+   * The name of the contact mechanism purpose.
    */
   name: string;
 
   /**
-   * The numeric code for the contact mechanism sub type.
+   * The numeric code for the contact mechanism purpose.
    */
   numericCode: number;
 
   /**
-   * The code for the party type the contact mechanism sub type is associated with.
+   * The code for the party type the contact mechanism purpose is associated with.
    */
   partyType: string;
 
   /**
-   * The sort index for the contact mechanism sub type.
+   * The sort index for the contact mechanism purpose.
    */
   sortIndex: number;
 
   /**
-   * The code for the contact mechanism type the contact mechanism sub type is associated with.
+   * The code for the contact mechanism type the contact mechanism purpose is associated with.
    */
   type: string;
 
   /**
-   * Constructs a new ContactMechanismSubType.
+   * Constructs a new ContactMechanismPurpose.
    *
-   * @param type        The code for the contact mechanism type the contact mechanism sub type is
+   * @param type        The code for the contact mechanism type the contact mechanism purpose is
    *                    associated with.
-   * @param code        The code for the contact mechanism sub type.
-   * @param localeId    The Unicode locale identifier for the contact mechanism sub type.
-   * @param numericCode The numeric code for the contact mechanism sub type.
-   * @param partyType   The code for the party type the contact mechanism sub type is associated
+   * @param code        The code for the contact mechanism purpose.
+   * @param localeId    The Unicode locale identifier for the contact mechanism purpose.
+   * @param numericCode The numeric code for the contact mechanism purpose.
+   * @param partyType   The code for the party type the contact mechanism purpose is associated
    *                    with.
-   * @param sortIndex   The sort index for the contact mechanism sub type.
-   * @param name        The name of the contact mechanism sub type.
-   * @param description The description for the contact mechanism sub type.
+   * @param sortIndex   The sort index for the contact mechanism purpose.
+   * @param name        The name of the contact mechanism purpose.
+   * @param description The description for the contact mechanism purpose.
    */
   constructor(type: string, code: string, localeId: string, numericCode: number, partyType: string,
               sortIndex: number, name: string, description: string) {

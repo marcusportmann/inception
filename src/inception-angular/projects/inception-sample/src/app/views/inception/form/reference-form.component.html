@@ -4,15 +4,15 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Contact Mechanism Sub Type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('contactMechanismSubType')" required="true" [matAutocomplete]="contactMechanismSubTypeAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #contactMechanismSubTypeAutocomplete="matAutocomplete" [displayWith]="displayContactMechanismSubType">
-              <mat-option *ngFor="let contactMechanismSubType of filteredContactMechanismSubTypes$ | async" [value]="contactMechanismSubType">
-                {{contactMechanismSubType.name}}
+            <mat-label>Contact Mechanism Purpose</mat-label>
+            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('contactMechanismPurpose')" required="true" [matAutocomplete]="contactMechanismPurposeAutocomplete">
+            <mat-autocomplete autoActiveFirstOption #contactMechanismPurposeAutocomplete="matAutocomplete" [displayWith]="displayContactMechanismPurpose">
+              <mat-option *ngFor="let contactMechanismPurpose of filteredContactMechanismPurposes$ | async" [value]="contactMechanismPurpose">
+                {{contactMechanismPurpose.name}}
               </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="referenceForm.controls['contactMechanismSubType'].errors && !referenceForm.controls['contactMechanismSubType'].untouched">
-              <span *ngIf="referenceForm.controls['contactMechanismSubType'].errors?.required">A contact mechanism sub type is required.</span>
+            <mat-error *ngIf="referenceForm.controls['contactMechanismPurpose'].errors && !referenceForm.controls['contactMechanismPurpose'].untouched">
+              <span *ngIf="referenceForm.controls['contactMechanismPurpose'].errors?.required">A contact mechanism purpose is required.</span>
             </mat-error>
           </mat-form-field>
         </div>

@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlEnum
 @XmlType(name = "ContactMechanismType", namespace = "http://party.inception.digital")
 public enum ContactMechanismType {
+  @XmlEnumValue("MobileNumber")
+  MOBILE_NUMBER("mobile_number", "Mobile Number"),
   @XmlEnumValue("PhoneNumber")
   PHONE_NUMBER("phone_number", "Phone Number"),
   @XmlEnumValue("FaxNumber")
@@ -59,6 +61,9 @@ public enum ContactMechanismType {
   @JsonCreator
   public static ContactMechanismType fromCode(String code) {
     switch (code) {
+      case "mobile_number":
+        return ContactMechanismType.MOBILE_NUMBER;
+
       case "phone_number":
         return ContactMechanismType.PHONE_NUMBER;
 
@@ -86,12 +91,14 @@ public enum ContactMechanismType {
   public static ContactMechanismType fromNumericCode(int numericCode) {
     switch (numericCode) {
       case 1:
-        return ContactMechanismType.PHONE_NUMBER;
+        return ContactMechanismType.MOBILE_NUMBER;
       case 2:
-        return ContactMechanismType.FAX_NUMBER;
+        return ContactMechanismType.PHONE_NUMBER;
       case 3:
-        return ContactMechanismType.EMAIL_ADDRESS;
+        return ContactMechanismType.FAX_NUMBER;
       case 4:
+        return ContactMechanismType.EMAIL_ADDRESS;
+      case 5:
         return ContactMechanismType.SOCIAL_MEDIA;
       default:
         throw new RuntimeException(
@@ -109,14 +116,16 @@ public enum ContactMechanismType {
    */
   public static int toNumericCode(ContactMechanismType contactMechanismTypeCategory) {
     switch (contactMechanismTypeCategory) {
-      case PHONE_NUMBER:
+      case MOBILE_NUMBER:
         return 1;
-      case FAX_NUMBER:
+      case PHONE_NUMBER:
         return 2;
-      case EMAIL_ADDRESS:
+      case FAX_NUMBER:
         return 3;
-      case SOCIAL_MEDIA:
+      case EMAIL_ADDRESS:
         return 4;
+      case SOCIAL_MEDIA:
+        return 5;
       default:
         throw new RuntimeException(
             "Failed to determine the numeric code for the contact mechanism type ("

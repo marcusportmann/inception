@@ -41,7 +41,7 @@ import {TaxNumberType} from "ngx-inception";
 import {Title} from "ngx-inception";
 import {VerificationMethod} from "ngx-inception";
 import {VerificationStatus} from "ngx-inception";
-import {ContactMechanismSubType} from "ngx-inception";
+import {ContactMechanismPurpose} from "ngx-inception";
 import {ContactMechanismType} from "ngx-inception";
 
 /**
@@ -56,7 +56,7 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
 
   referenceForm: FormGroup;
 
-  filteredContactMechanismSubTypes$: Subject<ContactMechanismSubType[]> = new ReplaySubject<ContactMechanismSubType[]>();
+  filteredContactMechanismPurposes$: Subject<ContactMechanismPurpose[]> = new ReplaySubject<ContactMechanismPurpose[]>();
 
   filteredContactMechanismTypes$: Subject<ContactMechanismType[]> = new ReplaySubject<ContactMechanismType[]>();
 
@@ -111,7 +111,7 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       // hideRequired: false,
       // floatLabel: 'auto',
       // tslint:disable-next-line
-      contactMechanismSubType: ['', Validators.required],
+      contactMechanismPurpose: ['', Validators.required],
       contactMechanismType: ['', Validators.required],
       country: ['', Validators.required],
       employmentStatus: ['', Validators.required],
@@ -137,9 +137,9 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  displayContactMechanismSubType(contactMechanismSubType: ContactMechanismSubType): string {
-    if (!!contactMechanismSubType) {
-      return contactMechanismSubType.name;
+  displayContactMechanismPurpose(contactMechanismPurpose: ContactMechanismPurpose): string {
+    if (!!contactMechanismPurpose) {
+      return contactMechanismPurpose.name;
     } else {
       return '';
     }
@@ -322,20 +322,20 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.referenceService.getContactMechanismSubTypes().pipe(first()).subscribe((contactMechanismSubTypes: ContactMechanismSubType[]) => {
-      const contactMechanismSubTypeControl = this.referenceForm.get('contactMechanismSubType');
+    this.referenceService.getContactMechanismPurposes().pipe(first()).subscribe((contactMechanismPurposes: ContactMechanismPurpose[]) => {
+      const contactMechanismPurposeControl = this.referenceForm.get('contactMechanismPurpose');
 
-      if (contactMechanismSubTypeControl) {
-        this.subscriptions.add(contactMechanismSubTypeControl.valueChanges.pipe(
+      if (contactMechanismPurposeControl) {
+        this.subscriptions.add(contactMechanismPurposeControl.valueChanges.pipe(
           startWith(''),
           debounceTime(500),
-          map((value: string | ContactMechanismSubType) => {
+          map((value: string | ContactMechanismPurpose) => {
             if (typeof (value) === 'string') {
-              this.filteredContactMechanismSubTypes$.next(contactMechanismSubTypes.filter(
-                contactMechanismSubType => contactMechanismSubType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
+              this.filteredContactMechanismPurposes$.next(contactMechanismPurposes.filter(
+                contactMechanismPurpose => contactMechanismPurpose.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
             } else {
-              this.filteredContactMechanismSubTypes$.next(contactMechanismSubTypes.filter(
-                contactMechanismSubType => contactMechanismSubType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
+              this.filteredContactMechanismPurposes$.next(contactMechanismPurposes.filter(
+                contactMechanismPurpose => contactMechanismPurpose.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
             }
           })).subscribe());
       }
@@ -762,7 +762,7 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   }
 
   ok(): void {
-    console.log('Contact Mechanism Sub Type = ', this.referenceForm.get('contactMechanismSubType')!.value);
+    console.log('Contact Mechanism Sub Type = ', this.referenceForm.get('contactMechanismPurpose')!.value);
     console.log('Contact Mechanism Type = ', this.referenceForm.get('contactMechanismType')!.value);
     console.log('Country = ', this.referenceForm.get('country')!.value);
     console.log('Employment Status = ', this.referenceForm.get('employmentStatus')!.value);

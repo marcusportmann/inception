@@ -16,13 +16,8 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlElement;
 
 /**
  * The <code>ContactMechanismId</code> class implements the ID class for the <code>ContactMechanism
@@ -37,8 +32,8 @@ public class ContactMechanismId implements Serializable {
   /** The party the contact mechanism is associated with. */
   private Party party;
 
-  /** The contact mechanism sub type. */
-  private ContactMechanismSubType subType;
+  /** The contact mechanism purpose. */
+  private ContactMechanismPurpose purpose;
 
   /** The contact mechanism type. */
   private ContactMechanismType type;
@@ -51,13 +46,13 @@ public class ContactMechanismId implements Serializable {
    *
    * @param party the party the contact mechanism is associated with
    * @param type the contact mechanism type
-   * @param subType the contact mechanism sub type
+   * @param purpose the contact mechanism purpose
    */
   public ContactMechanismId(
-      Party party, ContactMechanismType type, ContactMechanismSubType subType) {
+      Party party, ContactMechanismType type, ContactMechanismPurpose purpose) {
     this.party = party;
     this.type = type;
-    this.subType = subType;
+    this.purpose = purpose;
   }
 
   /**
@@ -85,7 +80,7 @@ public class ContactMechanismId implements Serializable {
 
     return Objects.equals(party, other.party)
         && Objects.equals(type, other.type)
-        && Objects.equals(subType, other.subType);
+        && Objects.equals(purpose, other.purpose);
   }
 
   /**
@@ -97,6 +92,6 @@ public class ContactMechanismId implements Serializable {
   public int hashCode() {
     return ((party == null) ? 0 : party.hashCode())
         + ((type == null) ? 0 : type.hashCode())
-        + ((subType == null) ? 0 : subType.hashCode());
+        + ((purpose == null) ? 0 : purpose.hashCode());
   }
 }

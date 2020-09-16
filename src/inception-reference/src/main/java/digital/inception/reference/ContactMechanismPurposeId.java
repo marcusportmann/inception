@@ -22,13 +22,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>ContactMechanismSubTypeId</code> class implements the ID class for the <code>
- * ContactMechanismSubType</code> class.
+ * The <code>ContactMechanismPurposeId</code> class implements the ID class for the <code>
+ * ContactMechanismPurpose</code> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class ContactMechanismSubTypeId implements Serializable {
+public class ContactMechanismPurposeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
@@ -38,21 +38,21 @@ public class ContactMechanismSubTypeId implements Serializable {
   /** The Unicode locale identifier for the contact mechanism type. */
   private String localeId;
 
-  /** The code for the contact mechanism type the contact mechanism sub type is associated with. */
+  /** The code for the contact mechanism type the contact mechanism purpose is associated with. */
   private String type;
 
-  /** Constructs a new <code>ContactMechanismSubTypeId</code>. */
-  public ContactMechanismSubTypeId() {}
+  /** Constructs a new <code>ContactMechanismPurposeId</code>. */
+  public ContactMechanismPurposeId() {}
 
   /**
-   * Constructs a new <code>ContactMechanismSubTypeId</code>.
+   * Constructs a new <code>ContactMechanismPurposeId</code>.
    *
-   * @param type the code for the contact mechanism type the contact mechanism sub type is
+   * @param type the code for the contact mechanism type the contact mechanism purpose is
    *     associated with
    * @param code the code for the contact mechanism type
    * @param localeId the Unicode locale identifier for the contact mechanism type
    */
-  public ContactMechanismSubTypeId(String type, String code, String localeId) {
+  public ContactMechanismPurposeId(String type, String code, String localeId) {
     this.type = type;
     this.code = code;
     this.localeId = localeId;
@@ -79,7 +79,7 @@ public class ContactMechanismSubTypeId implements Serializable {
       return false;
     }
 
-    ContactMechanismSubTypeId other = (ContactMechanismSubTypeId) object;
+    ContactMechanismPurposeId other = (ContactMechanismPurposeId) object;
 
     return Objects.equals(type, other.type)
         && Objects.equals(code, other.code)
@@ -105,10 +105,10 @@ public class ContactMechanismSubTypeId implements Serializable {
   }
 
   /**
-   * Returns the code for the contact mechanism type the contact mechanism sub type is associated
+   * Returns the code for the contact mechanism type the contact mechanism purpose is associated
    * with.
    *
-   * @return the code for the contact mechanism type the contact mechanism sub type is associated
+   * @return the code for the contact mechanism type the contact mechanism purpose is associated
    *     with
    */
   public String getType() {
@@ -146,9 +146,9 @@ public class ContactMechanismSubTypeId implements Serializable {
   }
 
   /**
-   * Set the code for the contact mechanism type the contact mechanism sub type is associated with.
+   * Set the code for the contact mechanism type the contact mechanism purpose is associated with.
    *
-   * @param type the code for the contact mechanism type the contact mechanism sub type is
+   * @param type the code for the contact mechanism type the contact mechanism purpose is
    *     associated with
    */
   public void setType(String type) {

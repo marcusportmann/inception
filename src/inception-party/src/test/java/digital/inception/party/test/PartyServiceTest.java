@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.party.ContactMechanism;
-import digital.inception.party.ContactMechanismSubType;
+import digital.inception.party.ContactMechanismPurpose;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
@@ -140,17 +140,16 @@ public class PartyServiceTest {
 
     person.addIdentityDocument(zaidcIdentityDocument);
 
-
     ContactMechanism mobilePhoneNumberContactMechanism = new ContactMechanism();
     mobilePhoneNumberContactMechanism.setType(ContactMechanismType.PHONE_NUMBER);
-    mobilePhoneNumberContactMechanism.setSubType(ContactMechanismSubType.MOBILE_PHONE_NUMBER);
+    mobilePhoneNumberContactMechanism.setPurpose(ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER);
     mobilePhoneNumberContactMechanism.setValue("+27835551234");
 
     person.addContactMechanism(mobilePhoneNumberContactMechanism);
 
     ContactMechanism personalEmailAddressContactMechanism = new ContactMechanism();
     personalEmailAddressContactMechanism.setType(ContactMechanismType.EMAIL_ADDRESS);
-    personalEmailAddressContactMechanism.setSubType(ContactMechanismSubType.PERSONAL_EMAIL_ADDRESS);
+    personalEmailAddressContactMechanism.setPurpose(ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS);
     personalEmailAddressContactMechanism.setValue("test@test.com");
 
     person.addContactMechanism(personalEmailAddressContactMechanism);
@@ -450,7 +449,7 @@ public class PartyServiceTest {
         if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
             && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
             && Objects.equals(
-                person1ContactMechanism.getSubType(), person2ContactMechanism.getSubType())) {
+                person1ContactMechanism.getPurpose(), person2ContactMechanism.getPurpose())) {
           assertEquals(
               "The values for the two contact mechanisms do not match",
               person1ContactMechanism.getValue(),
@@ -465,7 +464,7 @@ public class PartyServiceTest {
             "Failed to find the contact mechanism ("
                 + person1ContactMechanism.getType()
                 + ")("
-                + person1ContactMechanism.getSubType()
+                + person1ContactMechanism.getPurpose()
                 + ")");
       }
     }

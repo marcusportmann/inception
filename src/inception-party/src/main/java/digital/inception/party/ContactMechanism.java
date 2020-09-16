@@ -50,12 +50,12 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A mechanism that can be used to contact a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "subType", "value"})
+@JsonPropertyOrder({"type", "purpose", "value"})
 @XmlRootElement(name = "ContactMechanism", namespace = "http://party.inception.digital")
 @XmlType(
     name = "ContactMechanism",
     namespace = "http://party.inception.digital",
-    propOrder = {"type", "subType", "value"})
+    propOrder = {"type", "purpose", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "contact_mechanisms")
@@ -79,14 +79,14 @@ public class ContactMechanism implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   private Party party;
 
-  /** The contact mechanism sub type. */
-  @Schema(description = "The contact mechanism sub type", required = true)
+  /** The contact mechanism purpose. */
+  @Schema(description = "The contact mechanism purpose", required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "SubType", required = true)
+  @XmlElement(name = "Purpose", required = true)
   @NotNull
   @Id
-  @Column(name = "sub_type", nullable = false)
-  private ContactMechanismSubType subType;
+  @Column(name = "purpose", nullable = false)
+  private ContactMechanismPurpose purpose;
 
   /** The contact mechanism type. */
   @Schema(description = "The contact mechanism type", required = true)
@@ -141,7 +141,7 @@ public class ContactMechanism implements Serializable {
 
     return Objects.equals(party, other.party)
         && Objects.equals(type, other.type)
-        && Objects.equals(subType, other.subType);
+        && Objects.equals(purpose, other.purpose);
   }
 
   /**
@@ -164,12 +164,12 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Returns the contact mechanism sub type.
+   * Returns the contact mechanism purpose.
    *
-   * @return the contact mechanism sub type
+   * @return the contact mechanism purpose
    */
-  public ContactMechanismSubType getSubType() {
-    return subType;
+  public ContactMechanismPurpose getPurpose() {
+    return purpose;
   }
 
   /**
@@ -208,18 +208,8 @@ public class ContactMechanism implements Serializable {
   public int hashCode() {
     return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
         + ((type == null) ? 0 : type.hashCode())
-        + ((subType == null) ? 0 : subType.hashCode());
+        + ((purpose == null) ? 0 : purpose.hashCode());
   }
-
-  //  /**
-  //   * Set the Universally Unique Identifier (UUID) uniquely identifying the contact mechanism.
-  //   *
-  //   * @param id the Universally Unique Identifier (UUID) uniquely identifying the contact
-  // mechanism
-  //   */
-  //  public void setId(UUID id) {
-  //    this.id = id;
-  //  }
 
   /**
    * Set the party the contact mechanism is associated with.
@@ -232,12 +222,12 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the contact mechanism sub type.
+   * Set the contact mechanism purpose.
    *
-   * @param subType the contact mechanism sub type
+   * @param purpose the contact mechanism purpose
    */
-  public void setSubType(ContactMechanismSubType subType) {
-    this.subType = subType;
+  public void setPurpose(ContactMechanismPurpose purpose) {
+    this.purpose = purpose;
   }
 
   /**

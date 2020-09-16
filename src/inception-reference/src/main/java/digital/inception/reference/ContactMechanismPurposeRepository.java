@@ -30,8 +30,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author Marcus Portmann
  */
-public interface ContactMechanismSubTypeRepository
-    extends JpaRepository<ContactMechanismSubType, ContactMechanismSubTypeId> {
+public interface ContactMechanismPurposeRepository
+    extends JpaRepository<ContactMechanismPurpose, ContactMechanismPurposeId> {
 
-  List<ContactMechanismSubType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
+  List<ContactMechanismPurpose> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }
