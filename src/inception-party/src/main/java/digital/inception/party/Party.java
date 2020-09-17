@@ -152,7 +152,7 @@ public class Party implements Serializable {
   public void addContactMechanism(ContactMechanism contactMechanism) {
     contactMechanism.setParty(this);
 
-    this.contactMechanisms.add(contactMechanism);
+    contactMechanisms.add(contactMechanism);
   }
 
   /**
@@ -179,6 +179,25 @@ public class Party implements Serializable {
     Party other = (Party) object;
 
     return Objects.equals(id, other.id);
+  }
+
+  /**
+   * Retrieve the contact mechanism with the specified type and purpose for the party.
+   *
+   * @param type the contact mechanism type
+   * @param purpose the contact mechanism purpose
+   * @return the contact mechanism with the specified type and purpose for the party or <code>null
+   *     </code> if the contact mechanism could not be found
+   */
+  public ContactMechanism getContactMechanism(
+      ContactMechanismType type, ContactMechanismPurpose purpose) {
+    return contactMechanisms.stream()
+        .filter(
+            contactMechanism ->
+                Objects.equals(contactMechanism.getType(), type)
+                    && Objects.equals(contactMechanism.getPurpose(), purpose))
+        .findFirst()
+        .get();
   }
 
   /**
@@ -243,6 +262,19 @@ public class Party implements Serializable {
   @Override
   public int hashCode() {
     return ((id == null) ? 0 : id.hashCode());
+  }
+
+  /**
+   * Remove the contact mechanism with the specified type and purpose for the party.
+   *
+   * @param type the contact mechanism type
+   * @param purpose the contact mechanism purpose
+   */
+  public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
+    contactMechanisms.removeIf(
+        contactMechanism ->
+            Objects.equals(contactMechanism.getType(), type)
+                && Objects.equals(contactMechanism.getPurpose(), purpose));
   }
 
   /**

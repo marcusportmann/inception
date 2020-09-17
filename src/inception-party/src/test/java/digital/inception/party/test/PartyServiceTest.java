@@ -131,28 +131,19 @@ public class PartyServiceTest {
     person.setSurname("Surname" + personCount);
     person.setTitle("1");
 
-    IdentityDocument zaidcIdentityDocument = new IdentityDocument();
-    zaidcIdentityDocument.setId(UuidCreator.getShortPrefixComb());
-    zaidcIdentityDocument.setType("ZAIDCARD");
-    zaidcIdentityDocument.setCountryOfIssue("ZA");
-    zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
-    zaidcIdentityDocument.setNumber("8904085800089");
+    person.addIdentityDocument(
+        new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
-    person.addIdentityDocument(zaidcIdentityDocument);
-
-    ContactMechanism mobilePhoneNumberContactMechanism = new ContactMechanism();
-    mobilePhoneNumberContactMechanism.setType(ContactMechanismType.PHONE_NUMBER);
-    mobilePhoneNumberContactMechanism.setPurpose(ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER);
-    mobilePhoneNumberContactMechanism.setValue("+27835551234");
-
-    person.addContactMechanism(mobilePhoneNumberContactMechanism);
-
-    ContactMechanism personalEmailAddressContactMechanism = new ContactMechanism();
-    personalEmailAddressContactMechanism.setType(ContactMechanismType.EMAIL_ADDRESS);
-    personalEmailAddressContactMechanism.setPurpose(ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS);
-    personalEmailAddressContactMechanism.setValue("test@test.com");
-
-    person.addContactMechanism(personalEmailAddressContactMechanism);
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.MOBILE_NUMBER,
+            ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER,
+            "+27835551234"));
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS,
+            ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS,
+            "test@test.com"));
 
     return person;
   }
@@ -165,14 +156,8 @@ public class PartyServiceTest {
     person.setId(UuidCreator.getShortPrefixComb());
     person.setName("Full Name " + personCount);
 
-    IdentityDocument zaidcIdentityDocument = new IdentityDocument();
-    zaidcIdentityDocument.setId(UuidCreator.getShortPrefixComb());
-    zaidcIdentityDocument.setType("ZAIDCARD");
-    zaidcIdentityDocument.setCountryOfIssue("ZA");
-    zaidcIdentityDocument.setDateOfIssue(LocalDate.of(2012, 5, 1));
-    zaidcIdentityDocument.setNumber("8904085800089");
-
-    person.addIdentityDocument(zaidcIdentityDocument);
+    person.addIdentityDocument(
+        new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     return person;
   }
@@ -298,15 +283,25 @@ public class PartyServiceTest {
     person.setSurname(person.getSurname() + " Updated");
     person.setTitle("5");
 
-    IdentityDocument passportIdentityDocument = new IdentityDocument();
-    passportIdentityDocument.setId(UuidCreator.getShortPrefixComb());
-    passportIdentityDocument.setType("PASSPORT");
-    passportIdentityDocument.setDateOfIssue(LocalDate.of(2016, 10, 7));
-    passportIdentityDocument.setDateOfExpiry(LocalDate.of(2025, 9, 1));
-    passportIdentityDocument.setCountryOfIssue("ZA");
-    passportIdentityDocument.setNumber("A1234567890");
+    person.addIdentityDocument(
+        new IdentityDocument(
+            "PASSPORT", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890"));
 
-    person.addIdentityDocument(passportIdentityDocument);
+    person.removeIdentityDocumentByType("ZAIDCARD");
+
+    person.removeContactMechanism(
+        ContactMechanismType.MOBILE_NUMBER, ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER);
+
+    person
+        .getContactMechanism(
+            ContactMechanismType.EMAIL_ADDRESS, ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS)
+        .setValue("test.updated@test.com");
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.PHONE_NUMBER,
+            ContactMechanismPurpose.HOME_PHONE_NUMBER,
+            "0115551234"));
 
     partyService.updatePerson(person);
 
@@ -416,7 +411,14 @@ public class PartyServiceTest {
       boolean foundIdentityDocument = false;
 
       for (IdentityDocument person2IdentityDocument : person2.getIdentityDocuments()) {
-        if (person1IdentityDocument.getId().equals(person2IdentityDocument.getId())) {
+        if (person1IdentityDocument.getType().equals(person2IdentityDocument.getType())
+            && person1IdentityDocument
+                .getCountryOfIssue()
+                .equals(person2IdentityDocument.getCountryOfIssue())
+            && person1IdentityDocument
+                .getDateOfIssue()
+                .equals(person2IdentityDocument.getDateOfIssue())) {
+
           assertEquals(
               "The dates of issue for the two identity documents do not match",
               person1IdentityDocument.getDateOfIssue(),
@@ -432,7 +434,14 @@ public class PartyServiceTest {
       }
 
       if (!foundIdentityDocument) {
-        fail("Failed to find the identity document (" + person1IdentityDocument.getId() + ")");
+        fail(
+            "Failed to find the identity document ("
+                + person1IdentityDocument.getType()
+                + ")("
+                + person1IdentityDocument.getCountryOfIssue()
+                + ")("
+                + person1IdentityDocument.getDateOfIssue()
+                + ")");
       }
     }
 

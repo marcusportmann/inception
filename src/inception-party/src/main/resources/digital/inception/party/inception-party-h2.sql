@@ -83,7 +83,6 @@ COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code identifyi
 
 
 CREATE TABLE party.identity_documents (
-  id               UUID        NOT NULL,
   person_id        UUID        NOT NULL,
   type             VARCHAR(10) NOT NULL,
   date_of_issue    DATE        NOT NULL,
@@ -93,13 +92,11 @@ CREATE TABLE party.identity_documents (
   created          TIMESTAMP   NOT NULL,
   updated          TIMESTAMP,
 
-  PRIMARY KEY (id),
+  PRIMARY KEY (person_id, type, country_of_issue, date_of_issue),
   CONSTRAINT identity_documents_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
 );
 
 CREATE INDEX identity_documents_person_id_ix ON party.identity_documents(person_id);
-
-COMMENT ON COLUMN party.identity_documents.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the identity document';
 
 COMMENT ON COLUMN party.identity_documents.person_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the person the identity document is associated with';
 

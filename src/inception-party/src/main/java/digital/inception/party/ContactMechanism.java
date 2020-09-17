@@ -117,6 +117,20 @@ public class ContactMechanism implements Serializable {
   public ContactMechanism() {}
 
   /**
+   * Constructs a new <code>ContactMechanism</code>.
+   *
+   * @param type the contact mechanism type
+   * @param purpose the contact mechanism purpose
+   * @param value the value for the contact mechanism
+   */
+  public ContactMechanism(
+      ContactMechanismType type, ContactMechanismPurpose purpose, String value) {
+    this.type = type;
+    this.purpose = purpose;
+    this.value = value;
+  }
+
+  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare

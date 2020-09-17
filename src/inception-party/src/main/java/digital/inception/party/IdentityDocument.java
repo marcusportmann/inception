@@ -26,11 +26,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -53,15 +53,16 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A legal document which may be used to verify aspects of a person's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
+@JsonPropertyOrder({"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlRootElement(name = "IdentityDocument", namespace = "http://party.inception.digital")
 @XmlType(
     name = "IdentityDocument",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
+    propOrder = {"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "party", name = "identity_documents")
+@IdClass(IdentityDocumentId.class)
 public class IdentityDocument implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -74,6 +75,7 @@ public class IdentityDocument implements Serializable {
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
   @Size(min = 1, max = 10)
+  @Id
   @Column(name = "country_of_issue", nullable = false)
   private String countryOfIssue;
 
@@ -96,20 +98,9 @@ public class IdentityDocument implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "DateOfIssue", required = true)
   @NotNull
+  @Id
   @Column(name = "date_of_issue", nullable = false)
   private LocalDate dateOfIssue;
-
-  /** The Universally Unique Identifier (UUID) uniquely identifying the identity document. */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the identity document",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @NotNull
-  @Id
-  @Column(name = "id", nullable = false)
-  private UUID id;
 
   /** The number for the identity document. */
   @Schema(description = "The number for the identity document", required = true)
@@ -124,6 +115,7 @@ public class IdentityDocument implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference
   @XmlTransient
+  @Id
   @ManyToOne(fetch = FetchType.LAZY)
   private Person person;
 
@@ -133,6 +125,7 @@ public class IdentityDocument implements Serializable {
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 10)
+  @Id
   @Column(name = "type", nullable = false)
   private String type;
 
@@ -145,6 +138,44 @@ public class IdentityDocument implements Serializable {
 
   /** Constructs a new <code>IdentityDocument</code>. */
   public IdentityDocument() {}
+
+  /**
+   * Constructs a new <code>IdentityDocument</code>.
+   *
+   * @param type the code identifying the type of identity document
+   * @param countryOfIssue the code identifying the country of issue for the identity document
+   * @param dateOfIssue the date of issue for the identity document
+   * @param number the number for the identity document
+   */
+  public IdentityDocument(
+      String type, String countryOfIssue, LocalDate dateOfIssue, String number) {
+    this.type = type;
+    this.countryOfIssue = countryOfIssue;
+    this.dateOfIssue = dateOfIssue;
+    this.number = number;
+  }
+
+  /**
+   * Constructs a new <code>IdentityDocument</code>.
+   *
+   * @param type the code identifying the type of identity document
+   * @param countryOfIssue the code identifying the country of issue for the identity document
+   * @param dateOfIssue the date of issue for the identity document
+   * @param dateOfExpiry the optional date of expiry for the identity document
+   * @param number thge number for the identity document
+   */
+  public IdentityDocument(
+      String type,
+      String countryOfIssue,
+      LocalDate dateOfIssue,
+      LocalDate dateOfExpiry,
+      String number) {
+    this.type = type;
+    this.countryOfIssue = countryOfIssue;
+    this.dateOfIssue = dateOfIssue;
+    this.dateOfExpiry = dateOfExpiry;
+    this.number = number;
+  }
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -169,7 +200,10 @@ public class IdentityDocument implements Serializable {
 
     IdentityDocument other = (IdentityDocument) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(id, other.id);
+    return Objects.equals(person, other.person)
+        && Objects.equals(type, other.type)
+        && Objects.equals(countryOfIssue, other.countryOfIssue)
+        && Objects.equals(dateOfIssue, other.dateOfIssue);
   }
 
   /**
@@ -206,15 +240,6 @@ public class IdentityDocument implements Serializable {
    */
   public LocalDate getDateOfIssue() {
     return dateOfIssue;
-  }
-
-  /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the identity document.
-   *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the identity document
-   */
-  public UUID getId() {
-    return id;
   }
 
   /**
@@ -261,8 +286,10 @@ public class IdentityDocument implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
-        + ((id == null) ? 0 : id.hashCode());
+    return ((person == null) ? 0 : person.hashCode())
+        + ((type == null) ? 0 : type.hashCode())
+        + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
+        + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());
   }
 
   /**
@@ -290,15 +317,6 @@ public class IdentityDocument implements Serializable {
    */
   public void setDateOfIssue(LocalDate dateOfIssue) {
     this.dateOfIssue = dateOfIssue;
-  }
-
-  /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the identity document.
-   *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the identity document
-   */
-  public void setId(UUID id) {
-    this.id = id;
   }
 
   /**

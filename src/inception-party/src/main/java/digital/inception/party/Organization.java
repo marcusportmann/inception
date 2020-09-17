@@ -126,6 +126,17 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
+   * Remove the contact mechanism with the specified type and purpose for the organization.
+   *
+   * @param type the contact mechanism type
+   * @param purpose the contact mechanism purpose
+   */
+  @Override
+  public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
+    super.removeContactMechanism(type, purpose);
+  }
+
+  /**
    * Set the contact mechanisms for the organization.
    *
    * @param contactMechanisms the contact mechanisms for the organization

@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -244,6 +245,16 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Add the contact mechanism for the person.
+   *
+   * @param contactMechanism the contact mechanism
+   */
+  @Override
+  public void addContactMechanism(ContactMechanism contactMechanism) {
+    super.addContactMechanism(contactMechanism);
+  }
+
+  /**
    * Add the identity document for the person.
    *
    * @param identityDocument the identity document
@@ -251,7 +262,18 @@ public class Person extends Party implements Serializable {
   public void addIdentityDocument(IdentityDocument identityDocument) {
     identityDocument.setPerson(this);
 
-    this.identityDocuments.add(identityDocument);
+    identityDocuments.add(identityDocument);
+  }
+
+  /**
+   * Returns the contact mechanisms for the person.
+   *
+   * @return the contact mechanisms for the person
+   */
+  @Schema(description = "The contact mechanisms for the person")
+  @Override
+  public Set<ContactMechanism> getContactMechanisms() {
+    return super.getContactMechanisms();
   }
 
   /**
@@ -443,6 +465,37 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Remove the contact mechanism with the specified type and purpose for the person.
+   *
+   * @param type the contact mechanism type
+   * @param purpose the contact mechanism purpose
+   */
+  @Override
+  public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
+    super.removeContactMechanism(type, purpose);
+  }
+
+  /**
+   * Remove the identity document with the specified type for the person.
+   *
+   * @param type the code identifying the type of identity document
+   */
+  public void removeIdentityDocumentByType(String type) {
+    identityDocuments.removeIf(
+        identityDocument -> Objects.equals(identityDocument.getType(), type));
+  }
+
+  /**
+   * Set the contact mechanisms for the person.
+   *
+   * @param contactMechanisms the contact mechanisms for the person
+   */
+  @Override
+  public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
+    super.setContactMechanisms(contactMechanisms);
+  }
+
+  /**
    * Set the optional code identifying the country of birth for the person.
    *
    * @param countryOfBirth the optional code identifying the country of birth for the person
@@ -605,36 +658,5 @@ public class Person extends Party implements Serializable {
    */
   public void setTitle(String title) {
     this.title = title;
-  }
-
-  /**
-   * Add the contact mechanism for the person.
-   *
-   * @param contactMechanism the contact mechanism
-   */
-  @Override
-  public void addContactMechanism(ContactMechanism contactMechanism) {
-    super.addContactMechanism(contactMechanism);
-  }
-
-  /**
-   * Set the contact mechanisms for the person.
-   *
-   * @param contactMechanisms the contact mechanisms for the person
-   */
-  @Override
-  public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
-    super.setContactMechanisms(contactMechanisms);
-  }
-
-  /**
-   * Returns the contact mechanisms for the party.
-   *
-   * @return the contact mechanisms for the party
-   */
-  @Schema(description = "The contact mechanisms for the person")
-  @Override
-  public Set<ContactMechanism> getContactMechanisms() {
-    return super.getContactMechanisms();
   }
 }
