@@ -35,7 +35,9 @@ public enum PartyType {
   @XmlEnumValue("Organization")
   ORGANIZATION("organization", "Organization"),
   @XmlEnumValue("Person")
-  PERSON("person", "Person");
+  PERSON("person", "Person"),
+  @XmlEnumValue("Unknown")
+  UNKNOWN("unknown", "Unknown");
 
   private final String code;
 
@@ -75,6 +77,8 @@ public enum PartyType {
    */
   public static PartyType fromNumericCode(int numericCode) {
     switch (numericCode) {
+      case 0:
+        return PartyType.UNKNOWN;
       case 1:
         return PartyType.ORGANIZATION;
       case 2:
@@ -93,6 +97,8 @@ public enum PartyType {
    */
   public static int toNumericCode(PartyType partyType) {
     switch (partyType) {
+      case UNKNOWN:
+        return 1;
       case ORGANIZATION:
         return 1;
       case PERSON:

@@ -164,22 +164,6 @@
       <div class="row">
         <div class="col-sm">
           <mat-form-field>
-            <mat-label>Minor type</mat-label>
-            <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('minorType')" required="true" [matAutocomplete]="minorTypeAutocomplete">
-            <mat-autocomplete autoActiveFirstOption #minorTypeAutocomplete="matAutocomplete" [displayWith]="displayMinorType">
-              <mat-option *ngFor="let minorType of filteredMinorTypes$ | async" [value]="minorType">
-                {{minorType.name}}
-              </mat-option>
-            </mat-autocomplete>
-            <mat-error *ngIf="referenceForm.controls['minorType'].errors && !referenceForm.controls['minorType'].untouched">
-              <span *ngIf="referenceForm.controls['minorType'].errors?.required">A minor type is required.</span>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <mat-form-field>
             <mat-label>Next of kin type</mat-label>
             <input type="text" matInput autocompleteSelectionRequired [formControl]="referenceForm.get('nextOfKinType')" required="true" [matAutocomplete]="nextOfKinTypeAutocomplete">
             <mat-autocomplete autoActiveFirstOption #nextOfKinTypeAutocomplete="matAutocomplete" [displayWith]="displayNextOfKinType">

@@ -195,22 +195,6 @@ public interface IReferenceService {
   List<MarriageType> getMarriageTypes(String localeId) throws ReferenceServiceException;
 
   /**
-   * Retrieve all the minor types.
-   *
-   * @return the minor types
-   */
-  List<MinorType> getMinorTypes() throws ReferenceServiceException;
-
-  /**
-   * Retrieve the minor types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the minor
-   *     types for or <code>null</code> to retrieve the minor types for all locales
-   * @return the minor types
-   */
-  List<MinorType> getMinorTypes(String localeId) throws ReferenceServiceException;
-
-  /**
    * Retrieve all the next of kin types.
    *
    * @return the next of kin types

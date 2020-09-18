@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -42,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
         "An organised group of people with a particular purpose, such as a business or government department")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"type"})
-@JsonPropertyOrder({"id", "name"})
+@JsonPropertyOrder({"id", "name", "contactMechanisms", "physicalAddresses"})
 @XmlRootElement(name = "Organization", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Organization",
@@ -50,6 +51,7 @@ import javax.xml.bind.annotation.XmlType;
     propOrder = {})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
+@DiscriminatorValue("1")
 @Table(schema = "party", name = "organizations")
 public class Organization extends Party implements Serializable {
 
@@ -68,6 +70,16 @@ public class Organization extends Party implements Serializable {
   @Override
   public void addContactMechanism(ContactMechanism contactMechanism) {
     super.addContactMechanism(contactMechanism);
+  }
+
+  /**
+   * Add the physical address for the organization.
+   *
+   * @param physicalAddress the physical address
+   */
+  @Override
+  public void addPhysicalAddress(PhysicalAddress physicalAddress) {
+    super.addPhysicalAddress(physicalAddress);
   }
 
   /**
@@ -116,6 +128,17 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
+   * Returns the physical addresses for the organization.
+   *
+   * @return the physical addresses for the organization
+   */
+  @Schema(description = "The physical addresses for the organization")
+  @Override
+  public Set<PhysicalAddress> getPhysicalAddresses() {
+    return super.getPhysicalAddresses();
+  }
+
+  /**
    * Returns the date and time the organization was last updated.
    *
    * @return the date and time the organization was last updated
@@ -134,6 +157,17 @@ public class Organization extends Party implements Serializable {
   @Override
   public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
     super.removeContactMechanism(type, purpose);
+  }
+
+  /**
+   * Remove the physical address with the specified type and purpose for the organization.
+   *
+   * @param type the physical address type
+   * @param purpose the physical address purpose
+   */
+  @Override
+  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+    super.removePhysicalAddress(type, purpose);
   }
 
   /**
@@ -164,5 +198,15 @@ public class Organization extends Party implements Serializable {
   @Override
   public void setName(String name) {
     super.setName(name);
+  }
+
+  /**
+   * Set the physical addresses for the organization.
+   *
+   * @param physicalAddresses the physical addresses for the organization
+   */
+  @Override
+  public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
+    super.setPhysicalAddresses(physicalAddresses);
   }
 }

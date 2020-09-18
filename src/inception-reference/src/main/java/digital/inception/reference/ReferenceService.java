@@ -69,9 +69,6 @@ public class ReferenceService implements IReferenceService {
   /** The Marriage Type Repository. */
   private final MarriageTypeRepository marriageTypeRepository;
 
-  /** The Minor Type Repository. */
-  private final MinorTypeRepository minorTypeRepository;
-
   /** The Next Of Kin Type Repository. */
   private final NextOfKinTypeRepository nextOfKinTypeRepository;
 
@@ -121,7 +118,6 @@ public class ReferenceService implements IReferenceService {
    * @param languageRepository the Language Repository
    * @param maritalStatusRepository the Marital Status Repository
    * @param marriageTypeRepository the Marriage Type Repository
-   * @param minorTypeRepository the Minor Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
    * @param occupationRepository the Occupation Repository
    * @param raceRepository the Race Repository
@@ -146,7 +142,6 @@ public class ReferenceService implements IReferenceService {
       LanguageRepository languageRepository,
       MaritalStatusRepository maritalStatusRepository,
       MarriageTypeRepository marriageTypeRepository,
-      MinorTypeRepository minorTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
       OccupationRepository occupationRepository,
       RaceRepository raceRepository,
@@ -169,7 +164,6 @@ public class ReferenceService implements IReferenceService {
     this.languageRepository = languageRepository;
     this.maritalStatusRepository = maritalStatusRepository;
     this.marriageTypeRepository = marriageTypeRepository;
-    this.minorTypeRepository = minorTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
     this.occupationRepository = occupationRepository;
     this.raceRepository = raceRepository;
@@ -502,37 +496,6 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the marriage types", e);
-    }
-  }
-
-  /**
-   * Retrieve all the minor types.
-   *
-   * @return the minor types
-   */
-  @Override
-  public List<MinorType> getMinorTypes() throws ReferenceServiceException {
-    return getMinorTypes(null);
-  }
-
-  /**
-   * Retrieve the minor types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the minor
-   *     types for or <code>null</code> to retrieve the minor types for all locales
-   * @return the minor types
-   */
-  @Override
-  public List<MinorType> getMinorTypes(String localeId) throws ReferenceServiceException {
-    try {
-      if (StringUtils.isEmpty(localeId)) {
-        return minorTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      } else {
-        return minorTypeRepository.findByLocaleIdIgnoreCase(
-            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
-      }
-    } catch (Throwable e) {
-      throw new ReferenceServiceException("Failed to retrieve the minor types", e);
     }
   }
 

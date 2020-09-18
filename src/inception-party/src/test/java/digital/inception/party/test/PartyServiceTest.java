@@ -36,6 +36,9 @@ import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PersonSortBy;
 import digital.inception.party.Persons;
+import digital.inception.party.PhysicalAddress;
+import digital.inception.party.PhysicalAddressPurpose;
+import digital.inception.party.PhysicalAddressType;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.security.SecureRandom;
@@ -109,6 +112,7 @@ public class PartyServiceTest {
 
     person.setCountryOfBirth("US");
     person.setDateOfBirth(LocalDate.of(1976, 3, 7));
+    person.setEmploymentStatus("O");
     person.setGender("M");
     person.setGivenName("GivenName" + personCount);
     person.setId(UuidCreator.getShortPrefixComb());
@@ -144,6 +148,11 @@ public class PartyServiceTest {
             ContactMechanismType.EMAIL_ADDRESS,
             ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS,
             "test@test.com"));
+
+    person.addPhysicalAddress(
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL));
+    person.addPhysicalAddress(
+        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.POSTAL));
 
     return person;
   }
@@ -181,6 +190,15 @@ public class PartyServiceTest {
 
     organization.setName(organization.getName() + " Updated");
 
+    organization.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.PHONE_NUMBER,
+            ContactMechanismPurpose.MAIN_PHONE_NUMBER,
+            "0115551234"));
+
+    organization.addPhysicalAddress(
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.MAIN));
+
     partyService.updateOrganization(organization);
 
     filteredOrganizations = partyService.getOrganizations("", SortDirection.ASCENDING, 0, 100);
@@ -198,6 +216,29 @@ public class PartyServiceTest {
         "The correct number of filtered parties was not retrieved",
         1,
         filteredParties.getParties().size());
+
+    partyService.deleteOrganization(organization.getId());
+  }
+
+  /** Test the party inheritance functionality. */
+  @Test
+  public void partyInheritanceTest() throws Exception {
+    Organization organization = getTestOrganizationDetails();
+
+    partyService.createOrganization(organization);
+
+    Person person = getTestCompletePersonDetails();
+
+    partyService.createPerson(person);
+
+    Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
+
+    assertEquals(
+        "The correct number of filtered parties was not retrieved",
+        2,
+        filteredParties.getParties().size());
+
+    partyService.deletePerson(person.getId());
 
     partyService.deleteOrganization(organization.getId());
   }
@@ -267,11 +308,17 @@ public class PartyServiceTest {
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
+    person.setCorrespondenceLanguage("EN");
     person.setCountryOfBirth("UK");
+    person.setCountryOfResidence("ZA");
     person.setDateOfBirth(LocalDate.of(1985, 5, 1));
     person.setDateOfDeath(LocalDate.of(2200, 1, 1));
+    person.setEmancipatedMinor(Boolean.TRUE);
+    person.setEmploymentStatus("E");
+    person.setEmploymentType("F");
     person.setGender("F");
     person.setGivenName(person.getGivenName() + " Updated");
+    person.setHomeLanguage("AF");
     person.setInitials(person.getInitials() + " Updated");
     person.setMaidenName(person.getMaidenName() + " Updated");
     person.setMaritalStatus("D");
@@ -280,6 +327,7 @@ public class PartyServiceTest {
     person.setName(person.getName() + " Updated");
     person.setPreferredName(person.getPreferredName() + " Updated");
     person.setRace("B");
+    person.setResidencyStatus("C");
     person.setSurname(person.getSurname() + " Updated");
     person.setTitle("5");
 
@@ -334,6 +382,68 @@ public class PartyServiceTest {
         "The name values for the two organizations do not match",
         organization1.getName(),
         organization2.getName());
+
+    assertEquals(
+        "The number of contact mechanisms for the two persons do not match",
+        organization1.getContactMechanisms().size(),
+        organization2.getContactMechanisms().size());
+
+    for (ContactMechanism person1ContactMechanism : organization1.getContactMechanisms()) {
+      boolean foundContactMechanism = false;
+
+      for (ContactMechanism person2ContactMechanism : organization2.getContactMechanisms()) {
+
+        if (Objects.equals(person1ContactMechanism.getParty(), person2ContactMechanism.getParty())
+            && Objects.equals(person1ContactMechanism.getType(), person2ContactMechanism.getType())
+            && Objects.equals(
+                person1ContactMechanism.getPurpose(), person2ContactMechanism.getPurpose())) {
+          assertEquals(
+              "The values for the two contact mechanisms do not match",
+              person1ContactMechanism.getValue(),
+              person2ContactMechanism.getValue());
+
+          foundContactMechanism = true;
+        }
+      }
+
+      if (!foundContactMechanism) {
+        fail(
+            "Failed to find the contact mechanism ("
+                + person1ContactMechanism.getType()
+                + ")("
+                + person1ContactMechanism.getPurpose()
+                + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of physical addresses for the two persons do not match",
+        organization1.getPhysicalAddresses().size(),
+        organization2.getPhysicalAddresses().size());
+
+    for (PhysicalAddress person1PhysicalAddress : organization1.getPhysicalAddresses()) {
+      boolean foundPhysicalAddress = false;
+
+      for (PhysicalAddress person2PhysicalAddress : organization2.getPhysicalAddresses()) {
+
+        if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
+            && Objects.equals(person1PhysicalAddress.getType(), person2PhysicalAddress.getType())
+            && Objects.equals(
+                person1PhysicalAddress.getPurpose(), person2PhysicalAddress.getPurpose())) {
+
+          foundPhysicalAddress = true;
+        }
+      }
+
+      if (!foundPhysicalAddress) {
+        fail(
+            "Failed to find the physical address ("
+                + person1PhysicalAddress.getType()
+                + ")("
+                + person1PhysicalAddress.getPurpose()
+                + ")");
+      }
+    }
   }
 
   private void compareParties(Party party1, Party party2) {
@@ -344,17 +454,37 @@ public class PartyServiceTest {
 
   private void comparePersons(Person person1, Person person2) {
     assertEquals(
+        "The correspondence language values for the two persons do not match",
+        person1.getCorrespondenceLanguage(),
+        person2.getCorrespondenceLanguage());
+    assertEquals(
         "The country of birth values for the two persons do not match",
         person1.getCountryOfBirth(),
         person2.getCountryOfBirth());
+    assertEquals(
+        "The country of residence values for the two persons do not match",
+        person1.getCountryOfResidence(),
+        person2.getCountryOfResidence());
     assertEquals(
         "The date of birth values for the two persons do not match",
         person1.getDateOfBirth(),
         person2.getDateOfBirth());
     assertEquals(
         "The date of death values for the two persons do not match",
-        person1.getDateOfBirth(),
-        person2.getDateOfBirth());
+        person1.getDateOfDeath(),
+        person2.getDateOfDeath());
+    assertEquals(
+        "The emancipated minor values for the two persons do not match",
+        person1.getEmancipatedMinor(),
+        person2.getEmancipatedMinor());
+    assertEquals(
+        "The employment status values for the two persons do not match",
+        person1.getEmploymentStatus(),
+        person2.getEmploymentStatus());
+    assertEquals(
+        "The employment type values for the two persons do not match",
+        person1.getEmploymentType(),
+        person2.getEmploymentType());
     assertEquals(
         "The gender values for the two persons do not match",
         person1.getGender(),
@@ -363,6 +493,10 @@ public class PartyServiceTest {
         "The given name values for the two persons do not match",
         person1.getGivenName(),
         person2.getGivenName());
+    assertEquals(
+        "The home language values for the two persons do not match",
+        person1.getHomeLanguage(),
+        person2.getHomeLanguage());
     assertEquals(
         "The ID values for the two persons do not match", person1.getId(), person2.getId());
     assertEquals(
@@ -394,6 +528,10 @@ public class PartyServiceTest {
     assertEquals(
         "The race values for the two persons do not match", person1.getRace(), person2.getRace());
     assertEquals(
+        "The residency status values for the two persons do not match",
+        person1.getResidencyStatus(),
+        person2.getResidencyStatus());
+    assertEquals(
         "The surname values for the two persons do not match",
         person1.getSurname(),
         person2.getSurname());
@@ -401,7 +539,6 @@ public class PartyServiceTest {
         "The title values for the two persons do not match",
         person1.getTitle(),
         person2.getTitle());
-
     assertEquals(
         "The number of identity documents for the two persons do not match",
         person1.getIdentityDocuments().size(),
@@ -420,14 +557,13 @@ public class PartyServiceTest {
                 .equals(person2IdentityDocument.getDateOfIssue())) {
 
           assertEquals(
-              "The dates of issue for the two identity documents do not match",
-              person1IdentityDocument.getDateOfIssue(),
-              person2IdentityDocument.getDateOfIssue());
-
+              "The date of expiry for the two identity documents do not match",
+              person1IdentityDocument.getDateOfExpiry(),
+              person2IdentityDocument.getDateOfExpiry());
           assertEquals(
-              "The types for the two identity documents do not match",
-              person1IdentityDocument.getType(),
-              person2IdentityDocument.getType());
+              "The numbers for the two identity documents do not match",
+              person1IdentityDocument.getNumber(),
+              person2IdentityDocument.getNumber());
 
           foundIdentityDocument = true;
         }
@@ -477,5 +613,37 @@ public class PartyServiceTest {
                 + ")");
       }
     }
+
+    assertEquals(
+        "The number of physical addresses for the two persons do not match",
+        person1.getPhysicalAddresses().size(),
+        person2.getPhysicalAddresses().size());
+
+    for (PhysicalAddress person1PhysicalAddress : person1.getPhysicalAddresses()) {
+      boolean foundPhysicalAddress = false;
+
+      for (PhysicalAddress person2PhysicalAddress : person2.getPhysicalAddresses()) {
+
+        if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
+            && Objects.equals(person1PhysicalAddress.getType(), person2PhysicalAddress.getType())
+            && Objects.equals(
+                person1PhysicalAddress.getPurpose(), person2PhysicalAddress.getPurpose())) {
+
+          foundPhysicalAddress = true;
+        }
+      }
+
+      if (!foundPhysicalAddress) {
+        fail(
+            "Failed to find the physical address ("
+                + person1PhysicalAddress.getType()
+                + ")("
+                + person1PhysicalAddress.getPurpose()
+                + ")");
+      }
+    }
   }
+
+
+
 }

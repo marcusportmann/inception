@@ -27,7 +27,6 @@ import digital.inception.reference.IdentityDocumentType;
 import digital.inception.reference.Language;
 import digital.inception.reference.MaritalStatus;
 import digital.inception.reference.MarriageType;
-import digital.inception.reference.MinorType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
 import digital.inception.reference.Race;
@@ -294,24 +293,6 @@ public class LiquibaseChangelogInsertsTest {
             "      <column name=\"name\" value=\"" + marriageType.getName() + "\"/>");
         System.out.println(
             "      <column name=\"description\" value=\"" + marriageType.getDescription() + "\"/>");
-        System.out.println("    </insert>");
-      }
-
-      System.out.println();
-    }
-
-    if (createMinorTypeInserts) {
-      for (MinorType minorType : referenceService.getMinorTypes("en-US")) {
-
-        System.out.println("    <insert schemaName=\"reference\" tableName=\"minor_types\">");
-        System.out.println("      <column name=\"code\" value=\"" + minorType.getCode() + "\"/>");
-        System.out.println(
-            "      <column name=\"locale_id\" value=\"" + minorType.getLocaleId() + "\"/>");
-        System.out.println(
-            "      <column name=\"sort_index\" value=\"" + minorType.getSortIndex() + "\"/>");
-        System.out.println("      <column name=\"name\" value=\"" + minorType.getName() + "\"/>");
-        System.out.println(
-            "      <column name=\"description\" value=\"" + minorType.getDescription() + "\"/>");
         System.out.println("    </insert>");
       }
 

@@ -28,7 +28,6 @@ import {Gender} from "ngx-inception";
 import {Language} from "ngx-inception";
 import {MaritalStatus} from "ngx-inception";
 import {MarriageType} from "ngx-inception";
-import {MinorType} from "ngx-inception";
 import {NextOfKinType} from "ngx-inception";
 import {Occupation} from "ngx-inception";
 import {Race} from "ngx-inception";
@@ -75,8 +74,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   filteredMaritalStatuses$: Subject<MaritalStatus[]> = new ReplaySubject<MaritalStatus[]>();
 
   filteredMarriageTypes$: Subject<MarriageType[]> = new ReplaySubject<MarriageType[]>();
-
-  filteredMinorTypes$: Subject<MinorType[]> = new ReplaySubject<MinorType[]>();
 
   filteredNextOfKinTypes$: Subject<NextOfKinType[]> = new ReplaySubject<NextOfKinType[]>();
 
@@ -212,14 +209,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
   displayMarriageType(marriageType: MarriageType): string {
     if (!!marriageType) {
       return marriageType.name;
-    } else {
-      return '';
-    }
-  }
-
-  displayMinorType(minorType: MinorType): string {
-    if (!!minorType) {
-      return minorType.name;
     } else {
       return '';
     }
@@ -513,25 +502,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.referenceService.getMinorTypes().pipe(first()).subscribe((minorTypes: MinorType[]) => {
-      const minorTypeControl = this.referenceForm.get('minorType');
-
-      if (minorTypeControl) {
-        this.subscriptions.add(minorTypeControl.valueChanges.pipe(
-          startWith(''),
-          debounceTime(500),
-          map((value: string | MinorType) => {
-            if (typeof (value) === 'string') {
-              this.filteredMinorTypes$.next(minorTypes.filter(
-                minorType => minorType.name.toLowerCase().indexOf(value.toLowerCase()) === 0));
-            } else {
-              this.filteredMinorTypes$.next(minorTypes.filter(
-                minorType => minorType.name.toLowerCase().indexOf(value.name.toLowerCase()) === 0));
-            }
-          })).subscribe());
-      }
-    });
-
     this.referenceService.getNextOfKinTypes().pipe(first()).subscribe((nextOfKinTypes: NextOfKinType[]) => {
       const nextOfKinTypeControl = this.referenceForm.get('nextOfKinType');
 
@@ -772,7 +742,6 @@ export class ReferenceFormComponent implements OnInit, OnDestroy {
     console.log('Language = ', this.referenceForm.get('language')!.value);
     console.log('Marital Status = ', this.referenceForm.get('maritalStatus')!.value);
     console.log('Marriage Type = ', this.referenceForm.get('marriageType')!.value);
-    console.log('Minor Type = ', this.referenceForm.get('minorType')!.value);
     console.log('Next Of Kin Type = ', this.referenceForm.get('nextOfKinType')!.value);
     console.log('Occupation = ', this.referenceForm.get('occupation')!.value);
     console.log('Race = ', this.referenceForm.get('race')!.value);

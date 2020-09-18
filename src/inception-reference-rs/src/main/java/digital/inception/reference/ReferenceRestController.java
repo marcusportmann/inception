@@ -455,41 +455,6 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the minor types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the minor
-   *     types for or <code>null</code> to retrieve the minor types for all locales
-   * @return the minor types
-   */
-  @Operation(summary = "Retrieve the minor types", description = "Retrieve the minor types")
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(
-            responseCode = "500",
-            description =
-                "An error has occurred and the request could not be processed at this time",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = RestControllerError.class)))
-      })
-  @RequestMapping(value = "/minor-types", method = RequestMethod.GET, produces = "application/json")
-  @ResponseStatus(HttpStatus.OK)
-  // @PreAuthorize("isAuthenticated()")
-  public List<MinorType> getMinorTypes(
-      @Parameter(
-              name = "localeId",
-              description =
-                  "The optional Unicode locale identifier identifying the locale to retrieve the minor types for",
-              example = "en-US")
-          @RequestParam(value = "localeId", required = false)
-          String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getMinorTypes(localeId);
-  }
-
-  /**
    * Retrieve the next of kin types.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the next of

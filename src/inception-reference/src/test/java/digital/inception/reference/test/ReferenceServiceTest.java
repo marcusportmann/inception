@@ -29,7 +29,6 @@ import digital.inception.reference.IdentityDocumentType;
 import digital.inception.reference.Language;
 import digital.inception.reference.MaritalStatus;
 import digital.inception.reference.MarriageType;
-import digital.inception.reference.MinorType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
 import digital.inception.reference.Race;
@@ -243,20 +242,6 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of marriage types was not retrieved", 4, retrievedMarriageTypes.size());
-  }
-
-  /** Test the minor type reference functionality. */
-  @Test
-  public void minorTypeTest() throws Exception {
-    List<MinorType> retrievedMinorTypes = referenceService.getMinorTypes();
-
-    assertEquals(
-        "The correct number of minor types was not retrieved", 8, retrievedMinorTypes.size());
-
-    retrievedMinorTypes = referenceService.getMinorTypes("en-US");
-
-    assertEquals(
-        "The correct number of minor types was not retrieved", 4, retrievedMinorTypes.size());
   }
 
   /** Test the next of kin type reference functionality. */

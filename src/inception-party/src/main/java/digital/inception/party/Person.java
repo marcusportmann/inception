@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -58,47 +59,64 @@ import javax.xml.bind.annotation.XmlType;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"type"})
 @JsonPropertyOrder({
-  "id",
-  "name",
-  "preferredName",
-  "title",
-  "givenName",
-  "middleNames",
-  "initials",
-  "surname",
-  "maidenName",
-  "gender",
-  "race",
-  "maritalStatus",
-  "marriageType",
+  "correspondenceLanguage",
+  "countryOfBirth",
+  "countryOfResidence",
   "dateOfBirth",
   "dateOfDeath",
-  "countryOfBirth",
-  "identityDocuments"
+  "emancipatedMinor",
+  "employmentStatus",
+  "employmentType",
+  "gender",
+  "givenName",
+  "homeLanguage",
+  "id",
+  "initials",
+  "maidenName",
+  "maritalStatus",
+  "marriageType",
+  "middleNames",
+  "name",
+  "preferredName",
+  "race",
+  "residencyStatus",
+  "surname",
+  "title",
+  "contactMechanisms",
+  "identityDocuments",
+  "physicalAddresses"
 })
 @XmlRootElement(name = "Person", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Person",
     namespace = "http://party.inception.digital",
     propOrder = {
-      "preferredName",
-      "title",
-      "givenName",
-      "middleNames",
-      "initials",
-      "surname",
-      "maidenName",
-      "gender",
-      "race",
-      "maritalStatus",
-      "marriageType",
+      "correspondenceLanguage",
+      "countryOfBirth",
+      "countryOfResidence",
       "dateOfBirth",
       "dateOfDeath",
-      "countryOfBirth",
+      "emancipatedMinor",
+      "employmentStatus",
+      "employmentType",
+      "gender",
+      "givenName",
+      "homeLanguage",
+      "initials",
+      "maidenName",
+      "maritalStatus",
+      "marriageType",
+      "middleNames",
+      "preferredName",
+      "race",
+      "residencyStatus",
+      "surname",
+      "title",
       "identityDocuments"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
+@DiscriminatorValue("2")
 @Table(schema = "party", name = "persons")
 public class Person extends Party implements Serializable {
 
@@ -120,6 +138,14 @@ public class Person extends Party implements Serializable {
       nullable = false)
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
+  /** The optional code identifying the correspondence language for the person. */
+  @Schema(description = "The optional code identifying the correspondence language for the person")
+  @JsonProperty
+  @XmlElement(name = "CorrespondenceLanguage")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "correspondence_language")
+  private String correspondenceLanguage;
+
   /** The optional code identifying the country of birth for the person. */
   @Schema(description = "The optional code identifying the country of birth for the person")
   @JsonProperty
@@ -127,6 +153,14 @@ public class Person extends Party implements Serializable {
   @Size(min = 1, max = 10)
   @Column(table = "persons", name = "country_of_birth", length = 10)
   private String countryOfBirth;
+
+  /** The optional code identifying the country of residence for the person. */
+  @Schema(description = "The optional code identifying the country of residence for the person")
+  @JsonProperty
+  @XmlElement(name = "CountryOfResidence")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "country_of_residence", length = 10)
+  private String countryOfResidence;
 
   /** The optional date of birth for the person. */
   @Schema(description = "The optional date of birth for the person")
@@ -141,6 +175,31 @@ public class Person extends Party implements Serializable {
   @XmlElement(name = "DateOfDeath")
   @Column(table = "persons", name = "date_of_death")
   private LocalDate dateOfDeath;
+
+  /** The optional boolean flag indicating whether the person is an emancipated minor. */
+  @Schema(
+      description =
+          "The optional boolean flag indicating whether the person is an emancipated minor")
+  @JsonProperty
+  @XmlElement(name = "EmancipatedMinor")
+  @Column(table = "persons", name = "emancipated_minor")
+  private Boolean emancipatedMinor;
+
+  /** The optional code identifying the employment status for the person. */
+  @Schema(description = "The optional code identifying the employment status for the person")
+  @JsonProperty
+  @XmlElement(name = "EmploymentStatus")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "employment_status")
+  private String employmentStatus;
+
+  /** The optional code identifying the employment type for the person. */
+  @Schema(description = "The optional code identifying the employment type for the person")
+  @JsonProperty
+  @XmlElement(name = "EmploymentType")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "employment_type")
+  private String employmentType;
 
   /** The optional code identifying the gender for the person. */
   @Schema(description = "The optional code identifying the gender for the person")
@@ -159,6 +218,14 @@ public class Person extends Party implements Serializable {
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "given_name", length = 100)
   private String givenName;
+
+  /** The optional code identifying the home language for the person. */
+  @Schema(description = "The optional code identifying the home language for the person")
+  @JsonProperty
+  @XmlElement(name = "HomeLanguage")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "home_language")
+  private String homeLanguage;
 
   /** The optional initials for the person. */
   @Schema(description = "The optional initials for the person")
@@ -223,6 +290,14 @@ public class Person extends Party implements Serializable {
   @Column(table = "persons", name = "race")
   private String race;
 
+  /** The optional code identifying the residency status for the person. */
+  @Schema(description = "The optional code identifying the residency status for the person")
+  @JsonProperty
+  @XmlElement(name = "ResidencyStatus")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "residency_status")
+  private String residencyStatus;
+
   /** The optional surname, last name, or family name for the person. */
   @Schema(description = "The optional surname, last name, or family name for the person")
   @JsonProperty
@@ -266,6 +341,16 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Add the physical address for the person.
+   *
+   * @param physicalAddress the physical address
+   */
+  @Override
+  public void addPhysicalAddress(PhysicalAddress physicalAddress) {
+    super.addPhysicalAddress(physicalAddress);
+  }
+
+  /**
    * Returns the contact mechanisms for the person.
    *
    * @return the contact mechanisms for the person
@@ -277,12 +362,30 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Returns the optional code identifying the correspondence language for the person.
+   *
+   * @return the optional code identifying the correspondence language for the person
+   */
+  public String getCorrespondenceLanguage() {
+    return correspondenceLanguage;
+  }
+
+  /**
    * Returns the optional code identifying the country of birth for the person.
    *
    * @return the optional code identifying the country of birth for the person
    */
   public String getCountryOfBirth() {
     return countryOfBirth;
+  }
+
+  /**
+   * Returns the optional code identifying the country of residence for the person.
+   *
+   * @return the optional code identifying the country of residence for the person
+   */
+  public String getCountryOfResidence() {
+    return countryOfResidence;
   }
 
   /**
@@ -314,6 +417,33 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Returns the optional boolean flag indicating whether the person is an emancipated minor.
+   *
+   * @return the optional boolean flag indicating whether the person is an emancipated minor
+   */
+  public Boolean getEmancipatedMinor() {
+    return emancipatedMinor;
+  }
+
+  /**
+   * Returns the optional code identifying the employment status for the person.
+   *
+   * @return the optional code identifying the employment status for the person
+   */
+  public String getEmploymentStatus() {
+    return employmentStatus;
+  }
+
+  /**
+   * Returns the optional code identifying the employment type for the person.
+   *
+   * @return the optional code identifying the employment type for the person
+   */
+  public String getEmploymentType() {
+    return employmentType;
+  }
+
+  /**
    * Returns the optional code identifying the gender for the person.
    *
    * @return the optional code identifying the gender for the person
@@ -329,6 +459,15 @@ public class Person extends Party implements Serializable {
    */
   public String getGivenName() {
     return givenName;
+  }
+
+  /**
+   * Returns the optional code identifying the home language for the person.
+   *
+   * @return the optional code identifying the home language for the person
+   */
+  public String getHomeLanguage() {
+    return homeLanguage;
   }
 
   /**
@@ -416,6 +555,17 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Returns the physical addresses for the person.
+   *
+   * @return the physical addresses for the person
+   */
+  @Schema(description = "The physical addresses for the person")
+  @Override
+  public Set<PhysicalAddress> getPhysicalAddresses() {
+    return super.getPhysicalAddresses();
+  }
+
+  /**
    * Returns the optional preferred name for the person.
    *
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
@@ -434,6 +584,15 @@ public class Person extends Party implements Serializable {
    */
   public String getRace() {
     return race;
+  }
+
+  /**
+   * Returns the optional code identifying the residency status for the person.
+   *
+   * @return the optional code identifying the residency status for the person
+   */
+  public String getResidencyStatus() {
+    return residencyStatus;
   }
 
   /**
@@ -486,6 +645,17 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Remove the physical address with the specified type and purpose for the person.
+   *
+   * @param type the physical address type
+   * @param purpose the physical address purpose
+   */
+  @Override
+  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+    super.removePhysicalAddress(type, purpose);
+  }
+
+  /**
    * Set the contact mechanisms for the person.
    *
    * @param contactMechanisms the contact mechanisms for the person
@@ -496,12 +666,31 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Set the optional code identifying the correspondence language for the person.
+   *
+   * @param correspondenceLanguage the optional code identifying the correspondence language for the
+   *     person
+   */
+  public void setCorrespondenceLanguage(String correspondenceLanguage) {
+    this.correspondenceLanguage = correspondenceLanguage;
+  }
+
+  /**
    * Set the optional code identifying the country of birth for the person.
    *
    * @param countryOfBirth the optional code identifying the country of birth for the person
    */
   public void setCountryOfBirth(String countryOfBirth) {
     this.countryOfBirth = countryOfBirth;
+  }
+
+  /**
+   * Set the optional code identifying the country of residence for the person.
+   *
+   * @param countryOfResidence the optional code identifying the country of residence for the person
+   */
+  public void setCountryOfResidence(String countryOfResidence) {
+    this.countryOfResidence = countryOfResidence;
   }
 
   /**
@@ -523,6 +712,34 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Set the optional boolean flag indicating whether the person is an emancipated minor.
+   *
+   * @param emancipatedMinor the optional boolean flag indicating whether the person is an
+   *     emancipated minor
+   */
+  public void setEmancipatedMinor(Boolean emancipatedMinor) {
+    this.emancipatedMinor = emancipatedMinor;
+  }
+
+  /**
+   * Set the optional code identifying the employment status for the person.
+   *
+   * @param employmentStatus the optional code identifying the employment status for the person
+   */
+  public void setEmploymentStatus(String employmentStatus) {
+    this.employmentStatus = employmentStatus;
+  }
+
+  /**
+   * Set the optional code identifying the employment type for the person.
+   *
+   * @param employmentType the optional code identifying the employment type for the person
+   */
+  public void setEmploymentType(String employmentType) {
+    this.employmentType = employmentType;
+  }
+
+  /**
    * Set the optional code identifying the gender for the person.
    *
    * @param gender the optional code identifying the gender for the person
@@ -538,6 +755,15 @@ public class Person extends Party implements Serializable {
    */
   public void setGivenName(String givenName) {
     this.givenName = givenName;
+  }
+
+  /**
+   * Set the optional code identifying the home language for the person.
+   *
+   * @param homeLanguage the optional code identifying the home language for the person
+   */
+  public void setHomeLanguage(String homeLanguage) {
+    this.homeLanguage = homeLanguage;
   }
 
   /**
@@ -622,6 +848,16 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Set the physical addresses for the person.
+   *
+   * @param physicalAddresses the physical addresses for the person
+   */
+  @Override
+  public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
+    super.setPhysicalAddresses(physicalAddresses);
+  }
+
+  /**
    * Set the optional preferred name for the person.
    *
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
@@ -640,6 +876,15 @@ public class Person extends Party implements Serializable {
    */
   public void setRace(String race) {
     this.race = race;
+  }
+
+  /**
+   * Set the optional code identifying the residency status for the person.
+   *
+   * @param residencyStatus the optional code identifying the residency status for the person
+   */
+  public void setResidencyStatus(String residencyStatus) {
+    this.residencyStatus = residencyStatus;
   }
 
   /**

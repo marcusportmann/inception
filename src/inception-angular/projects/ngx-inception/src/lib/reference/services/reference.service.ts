@@ -31,7 +31,6 @@ import {IdentityDocumentType} from './identity-document-type';
 import {Language} from './language';
 import {MaritalStatus} from './marital-status';
 import {MarriageType} from './marriage-type';
-import {MinorType} from './minor-type';
 import {NextOfKinType} from './next-of-kin-type';
 import {Occupation} from './occupation';
 import {ResidencePermitType} from './residence-permit-type';
@@ -331,33 +330,6 @@ export class ReferenceService {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
         return throwError(new ReferenceServiceError('Failed to retrieve the marriage types.', apiError));
-      } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
-        return throwError(new CommunicationError(httpErrorResponse));
-      } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
-      }
-    }));
-  }
-
-  /**
-   * Retrieve the minor types.
-   *
-   * @return The minor types.
-   */
-  getMinorTypes(): Observable<MinorType[]> {
-    let params = new HttpParams();
-
-    params = params.append('localeId', this.localeId);
-
-    return this.httpClient.get<MinorType[]>(this.config.referenceApiUrlPrefix + '/minor-types',
-      {params, reportProgress: true})
-    .pipe(map((minorTypes: MinorType[]) => {
-      return minorTypes;
-    }), catchError((httpErrorResponse: HttpErrorResponse) => {
-      if (ApiError.isApiError(httpErrorResponse)) {
-        const apiError: ApiError = new ApiError(httpErrorResponse);
-
-        return throwError(new ReferenceServiceError('Failed to retrieve the minor types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {

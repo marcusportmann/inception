@@ -30,6 +30,9 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -49,6 +52,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Polymorphism;
+import org.hibernate.annotations.PolymorphismType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
@@ -60,15 +65,17 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A person or organization")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "name"})
+@JsonPropertyOrder({"id", "type", "name", "contactMechanisms", "physicalAddresses"})
 @XmlRootElement(name = "Party", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Party",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "type", "name"})
+    propOrder = {"id", "type", "name", "contactMechanisms", "physicalAddresses"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorValue("0")
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER)
 @Table(schema = "party", name = "parties")
 public class Party implements Serializable {
 
@@ -89,6 +96,22 @@ public class Party implements Serializable {
       updatable = false,
       nullable = false)
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
+
+  /** The physical addresses for the party. */
+  @Schema(description = "The physical addresses for the party")
+  @JsonProperty
+  @JsonManagedReference
+  @XmlElementWrapper(name = "PhysicalAddresses")
+  @XmlElement(name = "PhysicalAddress")
+  @Valid
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+  @JoinColumn(
+      name = "party_id",
+      referencedColumnName = "id",
+      insertable = false,
+      updatable = false,
+      nullable = false)
+  private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
   /** The date and time the party was created. */
   @JsonIgnore
@@ -129,7 +152,7 @@ public class Party implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type", nullable = false)
+  @Column(name = "type", nullable = false, insertable = false, updatable = false)
   private PartyType type;
 
   /** Constructs a new <code>Party</code>. */
@@ -153,6 +176,17 @@ public class Party implements Serializable {
     contactMechanism.setParty(this);
 
     contactMechanisms.add(contactMechanism);
+  }
+
+  /**
+   * Add the physical for the party.
+   *
+   * @param physicalAddress the physical address
+   */
+  public void addPhysicalAddress(PhysicalAddress physicalAddress) {
+    physicalAddress.setParty(this);
+
+    physicalAddresses.add(physicalAddress);
   }
 
   /**
@@ -237,6 +271,34 @@ public class Party implements Serializable {
   }
 
   /**
+   * Retrieve the physical address with the specified type and purpose for the party.
+   *
+   * @param type the physical address type
+   * @param purpose the physical address purpose
+   * @return the physical address with the specified type and purpose for the party or <code>null
+   *     </code> if the physical address could not be found
+   */
+  public PhysicalAddress getPhysicalAddress(
+      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+    return physicalAddresses.stream()
+        .filter(
+            physicalAddress ->
+                Objects.equals(physicalAddress.getType(), type)
+                    && Objects.equals(physicalAddress.getPurpose(), purpose))
+        .findFirst()
+        .get();
+  }
+
+  /**
+   * Returns the physical addresses for the party.
+   *
+   * @return the physical addresses for the party
+   */
+  public Set<PhysicalAddress> getPhysicalAddresses() {
+    return physicalAddresses;
+  }
+
+  /**
    * Returns the type of party.
    *
    * @return the type of party
@@ -278,6 +340,19 @@ public class Party implements Serializable {
   }
 
   /**
+   * Remove the physical address with the specified type and purpose for the party.
+   *
+   * @param type the physical address type
+   * @param purpose the physical address purpose
+   */
+  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+    contactMechanisms.removeIf(
+        physicalAddress ->
+            Objects.equals(physicalAddress.getType(), type)
+                && Objects.equals(physicalAddress.getPurpose(), purpose));
+  }
+
+  /**
    * Set the contact mechanisms for the party.
    *
    * @param contactMechanisms the contact mechanisms for the party
@@ -303,6 +378,16 @@ public class Party implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the physical addresses for the party.
+   *
+   * @param physicalAddresses the physical addresses for the party
+   */
+  public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
+    this.physicalAddresses.clear();
+    this.physicalAddresses.addAll(physicalAddresses);
   }
 
   /**

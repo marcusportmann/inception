@@ -19,9 +19,7 @@ package digital.inception.party;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
-import java.util.List;
 import java.util.UUID;
-import org.hibernate.dialect.Oracle8iDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

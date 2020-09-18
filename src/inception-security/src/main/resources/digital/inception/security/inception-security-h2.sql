@@ -74,7 +74,7 @@ COMMENT ON COLUMN security.user_directories.updated IS 'The date and time the us
 
 CREATE TABLE security.user_directory_to_tenant_map (
   user_directory_id UUID NOT NULL,
-  tenant_id   UUID NOT NULL,
+  tenant_id         UUID NOT NULL,
 
   PRIMARY KEY (user_directory_id, tenant_id),
   CONSTRAINT user_directory_to_tenant_map_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE,
