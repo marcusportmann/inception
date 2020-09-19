@@ -346,7 +346,7 @@ public class Party implements Serializable {
    * @param purpose the physical address purpose
    */
   public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    contactMechanisms.removeIf(
+    physicalAddresses.removeIf(
         physicalAddress ->
             Objects.equals(physicalAddress.getType(), type)
                 && Objects.equals(physicalAddress.getPurpose(), purpose));
