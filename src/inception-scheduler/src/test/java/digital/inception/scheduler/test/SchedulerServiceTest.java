@@ -206,6 +206,10 @@ public class SchedulerServiceTest {
 
     job.removeParameter(job.getParameters().iterator().next().getName());
 
+    JobParameter jobParameter = job.getParameters().iterator().next();
+
+    jobParameter.setName(jobParameter.getName() + " Updated");
+
     schedulerService.updateJob(job);
 
     Job updatedJob = schedulerService.getJob(job.getId());

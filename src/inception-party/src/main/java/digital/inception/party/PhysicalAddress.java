@@ -30,6 +30,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -76,6 +77,7 @@ public class PhysicalAddress implements Serializable {
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "party_id")
   private Party party;
 
   /** The physical address purpose. */

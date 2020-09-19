@@ -38,7 +38,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -52,8 +51,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Polymorphism;
-import org.hibernate.annotations.PolymorphismType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
@@ -88,13 +85,11 @@ public class Party implements Serializable {
   @XmlElementWrapper(name = "ContactMechanisms")
   @XmlElement(name = "ContactMechanism")
   @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(
-      name = "party_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false,
-      nullable = false)
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
   /** The physical addresses for the party. */
@@ -104,13 +99,11 @@ public class Party implements Serializable {
   @XmlElementWrapper(name = "PhysicalAddresses")
   @XmlElement(name = "PhysicalAddress")
   @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(
-      name = "party_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false,
-      nullable = false)
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
   /** The date and time the party was created. */

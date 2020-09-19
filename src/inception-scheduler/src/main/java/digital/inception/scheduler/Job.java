@@ -35,7 +35,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -107,13 +106,11 @@ public class Job implements Serializable {
   @XmlElementWrapper(name = "Parameters")
   @XmlElement(name = "Parameter")
   @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(
-      name = "job_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false,
-      nullable = false)
+  @OneToMany(
+      mappedBy = "job",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
   private final Set<JobParameter> parameters = new HashSet<>();
 
   /** The date and time the job was created. */

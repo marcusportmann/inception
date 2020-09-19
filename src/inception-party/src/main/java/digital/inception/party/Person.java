@@ -34,7 +34,6 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
@@ -127,13 +126,11 @@ public class Person extends Party implements Serializable {
   @XmlElementWrapper(name = "IdentityDocuments")
   @XmlElement(name = "IdentityDocument")
   @Valid
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JoinColumn(
-      name = "person_id",
-      referencedColumnName = "id",
-      insertable = false,
-      updatable = false,
-      nullable = false)
+  @OneToMany(
+      mappedBy = "person",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
   /** The optional code identifying the correspondence language for the person. */

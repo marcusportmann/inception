@@ -31,6 +31,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -117,6 +118,7 @@ public class IdentityDocument implements Serializable {
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "person_id")
   private Person person;
 
   /** The code identifying the type of identity document. */
