@@ -108,27 +108,6 @@ public class PartyService implements IPartyService {
   }
 
   /**
-   * Create the new party.
-   *
-   * @param party the party
-   */
-  @Override
-  @Transactional
-  public void createParty(Party party) throws DuplicatePartyException, PartyServiceException {
-    try {
-      if (partyRepository.existsById(party.getId())) {
-        throw new DuplicatePartyException(party.getId());
-      }
-
-      partyRepository.saveAndFlush(party);
-    } catch (DuplicatePartyException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new PartyServiceException("Failed to create the party (" + party.getId() + ")", e);
-    }
-  }
-
-  /**
    * Create the new person.
    *
    * @param person the person
@@ -397,27 +376,6 @@ public class PartyService implements IPartyService {
     } catch (Throwable e) {
       throw new PartyServiceException(
           "Failed to update the organization (" + organization.getId() + ")", e);
-    }
-  }
-
-  /**
-   * Update the party.
-   *
-   * @param party the party
-   */
-  @Override
-  @Transactional
-  public void updateParty(Party party) throws PartyNotFoundException, PartyServiceException {
-    try {
-      if (!partyRepository.existsById(party.getId())) {
-        throw new PartyNotFoundException(party.getId());
-      }
-
-      partyRepository.saveAndFlush(party);
-    } catch (PartyNotFoundException e) {
-      throw e;
-    } catch (Throwable e) {
-      throw new PartyServiceException("Failed to update the party (" + party.getId() + ")", e);
     }
   }
 

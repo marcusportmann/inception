@@ -39,13 +39,6 @@ public interface IPartyService {
       throws DuplicateOrganizationException, PartyServiceException;
 
   /**
-   * Create the new party.
-   *
-   * @param party the party
-   */
-  void createParty(Party party) throws DuplicatePartyException, PartyServiceException;
-
-  /**
    * Create the new person.
    *
    * @param person the person
@@ -126,13 +119,6 @@ public interface IPartyService {
    */
   void updateOrganization(Organization organization)
       throws OrganizationNotFoundException, PartyServiceException;
-
-  /**
-   * Update the party.
-   *
-   * @param party the party
-   */
-  void updateParty(Party party) throws PartyNotFoundException, PartyServiceException;
 
   /**
    * Update the person.

@@ -238,41 +238,9 @@ public class PartyServiceTest {
         2,
         filteredParties.getParties().size());
 
-    partyService.deletePerson(person.getId());
+    partyService.deleteParty(person.getId());
 
-    partyService.deleteOrganization(organization.getId());
-  }
-
-  /** Test the party functionality. */
-  @Test
-  public void partyTest() throws Exception {
-    Party party = getTestPartyDetails();
-
-    partyService.createParty(party);
-
-    Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
-
-    assertEquals(
-        "The correct number of filtered parties was not retrieved",
-        1,
-        filteredParties.getParties().size());
-
-    compareParties(party, filteredParties.getParties().get(0));
-
-    party.setName(party.getName() + " Updated");
-
-    partyService.updateParty(party);
-
-    filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
-
-    assertEquals(
-        "The correct number of filtered parties was not retrieved",
-        1,
-        filteredParties.getParties().size());
-
-    compareParties(party, filteredParties.getParties().get(0));
-
-    partyService.deleteParty(party.getId());
+    partyService.deleteParty(organization.getId());
   }
 
   /** Test the person functionality. */
