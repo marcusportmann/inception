@@ -313,7 +313,6 @@ public class PartyServiceTest {
     person.setCountryOfResidence("ZA");
     person.setDateOfBirth(LocalDate.of(1985, 5, 1));
     person.setDateOfDeath(LocalDate.of(2200, 1, 1));
-    person.setEmancipatedMinor(Boolean.TRUE);
     person.setEmploymentStatus("E");
     person.setEmploymentType("F");
     person.setGender("F");
@@ -473,10 +472,6 @@ public class PartyServiceTest {
         "The date of death values for the two persons do not match",
         person1.getDateOfDeath(),
         person2.getDateOfDeath());
-    assertEquals(
-        "The emancipated minor values for the two persons do not match",
-        person1.getEmancipatedMinor(),
-        person2.getEmancipatedMinor());
     assertEquals(
         "The employment status values for the two persons do not match",
         person1.getEmploymentStatus(),

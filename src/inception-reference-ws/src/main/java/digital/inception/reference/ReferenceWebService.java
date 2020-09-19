@@ -170,20 +170,6 @@ public class ReferenceWebService {
   }
 
   /**
-   * Retrieve the minor types.
-   *
-   * @param localeId the Unicode locale identifier identifying the locale to retrieve the minor
-   *     types for or <code>null</code> to retrieve the minor types for all locales
-   * @return the minor types
-   */
-  @WebMethod(operationName = "GetMinorTypes")
-  public List<MinorType> getMinorTypes(
-      @WebParam(name = "LocaleId") @XmlElement(required = true) String localeId)
-      throws ReferenceServiceException {
-    return referenceService.getMinorTypes(localeId);
-  }
-
-  /**
    * Retrieve the next of kin types.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the next of

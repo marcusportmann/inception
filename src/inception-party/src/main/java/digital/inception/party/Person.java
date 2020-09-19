@@ -64,7 +64,6 @@ import javax.xml.bind.annotation.XmlType;
   "countryOfResidence",
   "dateOfBirth",
   "dateOfDeath",
-  "emancipatedMinor",
   "employmentStatus",
   "employmentType",
   "gender",
@@ -96,7 +95,6 @@ import javax.xml.bind.annotation.XmlType;
       "countryOfResidence",
       "dateOfBirth",
       "dateOfDeath",
-      "emancipatedMinor",
       "employmentStatus",
       "employmentType",
       "gender",
@@ -175,15 +173,6 @@ public class Person extends Party implements Serializable {
   @XmlElement(name = "DateOfDeath")
   @Column(table = "persons", name = "date_of_death")
   private LocalDate dateOfDeath;
-
-  /** The optional boolean flag indicating whether the person is an emancipated minor. */
-  @Schema(
-      description =
-          "The optional boolean flag indicating whether the person is an emancipated minor")
-  @JsonProperty
-  @XmlElement(name = "EmancipatedMinor")
-  @Column(table = "persons", name = "emancipated_minor")
-  private Boolean emancipatedMinor;
 
   /** The optional code identifying the employment status for the person. */
   @Schema(description = "The optional code identifying the employment status for the person")
@@ -414,15 +403,6 @@ public class Person extends Party implements Serializable {
    */
   public LocalDate getDateOfDeath() {
     return dateOfDeath;
-  }
-
-  /**
-   * Returns the optional boolean flag indicating whether the person is an emancipated minor.
-   *
-   * @return the optional boolean flag indicating whether the person is an emancipated minor
-   */
-  public Boolean getEmancipatedMinor() {
-    return emancipatedMinor;
   }
 
   /**
@@ -709,16 +689,6 @@ public class Person extends Party implements Serializable {
    */
   public void setDateOfDeath(LocalDate dateOfDeath) {
     this.dateOfDeath = dateOfDeath;
-  }
-
-  /**
-   * Set the optional boolean flag indicating whether the person is an emancipated minor.
-   *
-   * @param emancipatedMinor the optional boolean flag indicating whether the person is an
-   *     emancipated minor
-   */
-  public void setEmancipatedMinor(Boolean emancipatedMinor) {
-    this.emancipatedMinor = emancipatedMinor;
   }
 
   /**

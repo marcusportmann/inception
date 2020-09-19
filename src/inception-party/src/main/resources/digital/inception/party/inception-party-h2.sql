@@ -34,7 +34,6 @@ CREATE TABLE party.persons (
   country_of_residence    VARCHAR(10),
   date_of_birth           DATE,
   date_of_death           DATE,
-  emancipated_minor       BOOLEAN,
   employment_status       VARCHAR(10),
   employment_type         VARCHAR(10),
   gender                  VARCHAR(10),
@@ -67,8 +66,6 @@ COMMENT ON COLUMN party.persons.country_of_residence IS 'The optional code ident
 COMMENT ON COLUMN party.persons.date_of_birth IS 'The optional date of birth for the person';
 
 COMMENT ON COLUMN party.persons.date_of_death IS 'The optional date of death for the person';
-
-COMMENT ON COLUMN party.persons.emancipated_minor IS 'The optional boolean flag indicating whether the person is an emancipated minor';
 
 COMMENT ON COLUMN party.persons.employment_status IS 'The optional code identifying the employment status for the person';
 

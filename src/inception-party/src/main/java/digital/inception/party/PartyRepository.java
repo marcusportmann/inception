@@ -35,6 +35,9 @@ import org.springframework.data.repository.query.Param;
  */
 public interface PartyRepository extends JpaRepository<Party, UUID> {
 
+  @Query("select p from Party p")
+  Page<Party> findAll(Pageable pageable);
+
   @Query("select p from Party p where (lower(p.name) like lower(:filter))")
   Page<Party> findFiltered(@Param("filter") String filter, Pageable pageable);
 }
