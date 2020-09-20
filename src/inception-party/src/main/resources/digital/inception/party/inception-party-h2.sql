@@ -196,6 +196,29 @@ COMMENT ON COLUMN party.physical_addresses.updated IS 'The date and time the phy
 
 
 
+-- CREATE TABLE party.relationships (
+--   created          TIMESTAMP   NOT NULL,
+--   party_id         UUID        NOT NULL,
+--   related_party_id UUID        NOT NULL,
+--   type             VARCHAR(10) NOT NULL,
+--   updated          TIMESTAMP,
+--
+--   PRIMARY KEY (party_id, related_party_id, purpose),
+--   CONSTRAINT relationships_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE,
+--   CONSTRAINT relationships_related_party_fk FOREIGN KEY (related_party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+-- );
+--
+-- CREATE INDEX relationships_party_id_ix ON party.relationships(party_id);
+--
+-- CREATE INDEX relationships_related_party_id_ix ON party.relationships(related_party_id);
+--
+-- COMMENT ON COLUMN party.relationships.created IS 'The date and time the relationship was created';
+--
+-- COMMENT ON COLUMN party.relationships.party_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party the relationship is associated with';
+--
+-- COMMENT ON COLUMN party.relationships.related_party_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party the relationship is associated with';
+
+
 
 
 -- -------------------------------------------------------------------------------------------------
