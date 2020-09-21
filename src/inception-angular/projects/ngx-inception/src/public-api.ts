@@ -119,7 +119,6 @@ export * from './lib/reference/services/identity-document-type';
 export * from './lib/reference/services/language';
 export * from './lib/reference/services/marital-status';
 export * from './lib/reference/services/marriage-type';
-export * from './lib/reference/services/minor-type';
 export * from './lib/reference/services/next-of-kin-type';
 export * from './lib/reference/services/occupation';
 export * from './lib/reference/services/residence-permit-type';
