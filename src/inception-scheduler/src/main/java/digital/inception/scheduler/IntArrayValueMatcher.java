@@ -29,11 +29,10 @@ import java.util.List;
  * @author Carlo Pelliccia
  * @author Marcus Portmann
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class IntArrayValueMatcher implements ValueMatcher {
 
   /** The accepted values. */
-  private int[] values;
+  private final int[] values;
 
   /**
    * Builds the ValueMatcher.

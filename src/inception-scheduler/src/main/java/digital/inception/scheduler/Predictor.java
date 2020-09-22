@@ -53,7 +53,7 @@ import java.util.TimeZone;
 public class Predictor {
 
   /** The scheduling pattern on which the predictor works. */
-  private SchedulingPattern schedulingPattern;
+  private final SchedulingPattern schedulingPattern;
 
   /** The start time for the next prediction. */
   private long time;

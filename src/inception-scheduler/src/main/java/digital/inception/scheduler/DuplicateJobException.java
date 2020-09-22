@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * A <code>DuplicateJobException</code> is thrown to indicate that a security operation failed as a
+ * A <code>DuplicateJobException</code> is thrown to indicate that a scheduler operation failed as a
  * result of a duplicate job.
  *
  * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current

@@ -61,7 +61,7 @@ public class BackgroundJobExecutor implements InitializingBean {
   private Executor jobProcessor;
 
   /** The Scheduler Service. */
-  private ISchedulerService schedulerService;
+  private final ISchedulerService schedulerService;
 
   /**
    * Constructs a new <code>BackgroundJobExecutor</code>.
@@ -87,15 +87,20 @@ public class BackgroundJobExecutor implements InitializingBean {
               TimeUnit.MINUTES,
               new LinkedBlockingQueue<>(DEFAULT_MAXIMUM_PROCESSING_QUEUE_LENGTH));
 
-      /*
-       * Reset any locks for jobs that were previously being executed.
-       */
+      // Reset any locks for jobs that were previously being executed
       try {
         logger.info("Resetting the locks for the jobs being executed");
 
         schedulerService.resetJobLocks(JobStatus.EXECUTING, JobStatus.SCHEDULED);
       } catch (Throwable e) {
         logger.error("Failed to reset the locks for the jobs being executed", e);
+      }
+
+      // Schedule any unscheduled jobs
+      try {
+      while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
+      } catch (Throwable e) {
+        logger.error("Failed to schedule the unscheduled jobs for execution");
       }
     } else {
       logger.error(
