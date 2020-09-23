@@ -39,7 +39,7 @@ export const routes: Routes = [{
     ],
     data: {
       title: 'Dashboard',
-      authorities: ['ROLE_Administrator', 'FUNCTION_Application.Dashboard']
+      authorities: ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard']
     },
     loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
   }, {

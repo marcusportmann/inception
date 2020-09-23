@@ -423,12 +423,12 @@
     </insert>
 
     <insert schemaName="security" tableName="functions">
-      <column name="code" value="Application.Dashboard"/>
+      <column name="code" value="Dashboard.Dashboard"/>
       <column name="name" value="Dashboard"/>
       <column name="description" value="Dashboard"/>
     </insert>
     <insert schemaName="security" tableName="functions">
-      <column name="code" value="Application.SecureHome"/>
+      <column name="code" value="SecureHome.SecureHome"/>
       <column name="name" value="Secure Home"/>
       <column name="description" value="Secure Home"/>
     </insert>
@@ -540,11 +540,11 @@
     </insert>
 
     <insert schemaName="security" tableName="function_to_role_map">
-      <column name="function_code" value="Application.SecureHome"/>
+      <column name="function_code" value="SecureHome.SecureHome"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
-      <column name="function_code" value="Application.Dashboard"/>
+      <column name="function_code" value="Dashboard.Dashboard"/>
       <column name="role_code" value="TenantAdministrator"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
@@ -569,11 +569,11 @@
     </insert>
 
     <insert schemaName="security" tableName="function_to_role_map">
-      <column name="function_code" value="Application.SecureHome"/>
+      <column name="function_code" value="SecureHome.SecureHome"/>
       <column name="role_code" value="PasswordResetter"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
-      <column name="function_code" value="Application.Dashboard"/>
+      <column name="function_code" value="Dashboard.Dashboard"/>
       <column name="role_code" value="PasswordResetter"/>
     </insert>
     <insert schemaName="security" tableName="function_to_role_map">
