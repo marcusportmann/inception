@@ -651,7 +651,7 @@ Complete the following steps to create a new application based on the Inception 
            const navigation: NavigationItem[] = [];
 
            navigation.push(new NavigationItem('fa fa-tachometer-alt', 'Dashboard', '/dashboard',
-             ['ROLE_Administrator', 'FUNCTION_Application.Dashboard'], undefined, undefined, undefined));
+             ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard'], undefined, undefined, undefined));
 
            navigation.push(new NavigationItem('fa fa-cogs', 'Administration', '/administration',
              ['ROLE_Administrator', 'FUNCTION_Codes.CodeAdministration', 'FUNCTION_Configuration.ConfigurationAdministration',
@@ -1063,7 +1063,7 @@ Complete the following steps to create a new application based on the Inception 
            ],
            data: {
              title: 'Dashboard',
-             authorities: ['ROLE_Administrator', 'FUNCTION_Application.Dashboard']
+             authorities: ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard']
            },
            loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
          }, {
