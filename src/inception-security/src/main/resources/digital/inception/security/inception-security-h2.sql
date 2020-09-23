@@ -331,9 +331,9 @@ INSERT INTO security.user_to_group_map (user_id, group_id)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO security.functions (code, name, description)
-  VALUES ('Dashboard.Dashboard', 'Dashboard', 'Dashboard');
+  VALUES ('Application.Dashboard', 'Dashboard', 'Dashboard');
 INSERT INTO security.functions (code, name, description)
-  VALUES ('SecureHome.SecureHome', 'Secure Home', 'Secure Home');
+  VALUES ('Application.SecureHome', 'Secure Home', 'Secure Home');
 INSERT INTO security.functions (code, name, description)
   VALUES ('Codes.CodeAdministration', 'Code Administration', 'Code Administration');
 INSERT INTO security.functions (code, name, description)
@@ -379,9 +379,9 @@ INSERT INTO security.roles (code, name, description)
   VALUES ('TenantAdministrator', 'Tenant Administrator', 'Tenant Administrator');
 
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('SecureHome.SecureHome', 'TenantAdministrator');
+  VALUES ('Application.SecureHome', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Dashboard.Dashboard', 'TenantAdministrator');
+  VALUES ('Application.Dashboard', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Reporting.ViewReport', 'TenantAdministrator');
 INSERT INTO security.function_to_role_map (function_code, role_code)
@@ -394,9 +394,9 @@ INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Security.GroupAdministration', 'TenantAdministrator');
 
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('SecureHome.SecureHome', 'PasswordResetter');
+  VALUES ('Application.SecureHome', 'PasswordResetter');
 INSERT INTO security.function_to_role_map (function_code, role_code)
-  VALUES ('Dashboard.Dashboard', 'PasswordResetter');
+  VALUES ('Application.Dashboard', 'PasswordResetter');
 INSERT INTO security.function_to_role_map (function_code, role_code)
   VALUES ('Security.ResetUserPassword', 'PasswordResetter');
 

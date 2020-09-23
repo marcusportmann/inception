@@ -82,7 +82,7 @@ export class AppModule extends InceptionAppModule {
     const navigation: NavigationItem[] = [];
 
     navigation.push(new NavigationItem('fa fa-tachometer-alt', 'Dashboard', '/dashboard',
-      ['ROLE_Administrator', 'FUNCTION_Dashboard.Dashboard'], undefined, undefined, undefined,
+      ['ROLE_Administrator', 'FUNCTION_Application.Dashboard'], undefined, undefined, undefined,
       new NavigationBadge('info', 'NEW')));
 
     navigation.push(new NavigationItem('fa fa-layer-group', 'Inception', '/inception', [], [

@@ -138,8 +138,8 @@ export * from './lib/scheduler/services/job-parameter';
 export * from './lib/scheduler/services/job-status';
 export * from './lib/scheduler/services/scheduler.service.errors';
 export * from './lib/scheduler/services/scheduler.service';
-export * from '../../../../../../cep-self-service/src/main/frontend/src/app/views/runner/scheduler-title-resolver';
-export * from '../../../../../../cep-self-service/src/main/frontend/src/app/views/runner/scheduler-views.module';
+export * from './lib/scheduler/views/scheduler-title-resolver';
+export * from './lib/scheduler/views/scheduler-views.module';
 
 // Security
 export * from './lib/security/directives/security-directives.module';
