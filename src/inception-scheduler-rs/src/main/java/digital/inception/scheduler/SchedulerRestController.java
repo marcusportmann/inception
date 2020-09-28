@@ -192,7 +192,7 @@ public class SchedulerRestController extends SecureRestController {
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID uniquely identifying the code job
+   * @param jobId the ID uniquely identifying the job
    * @return the job
    */
   @Operation(summary = "Retrieve the job", description = "Retrieve the job")
@@ -231,7 +231,7 @@ public class SchedulerRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
           + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public Job getJob(
-      @Parameter(name = "job", description = "The ID uniquely identifying the job", required = true)
+      @Parameter(name = "jobId", description = "The ID uniquely identifying the job", required = true)
           @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
