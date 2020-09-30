@@ -123,7 +123,7 @@ public class GroupMembers implements Serializable {
           "The Universally Unique Identifier (UUID) uniquely identifying the user directory the group members are associated with",
       required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "Total", required = true)
+  @XmlElement(name = "UserDirectoryId", required = true)
   private UUID userDirectoryId;
 
   /** Constructs a new <code>GroupMembers</code>. */

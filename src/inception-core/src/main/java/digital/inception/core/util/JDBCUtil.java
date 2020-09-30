@@ -291,16 +291,16 @@ public class JDBCUtil {
    * @return the binary data for the BLOB
    */
   public static byte[] readBlob(ResultSet rs, int index) throws SQLException {
-    try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BufferedInputStream in = new BufferedInputStream(rs.getBinaryStream(index))) {
       int noBytes;
       byte[] tmpBuffer = new byte[1024];
 
       while ((noBytes = in.read(tmpBuffer)) != -1) {
-        bos.write(tmpBuffer, 0, noBytes);
+        baos.write(tmpBuffer, 0, noBytes);
       }
 
-      return bos.toByteArray();
+      return baos.toByteArray();
     } catch (IOException e) {
       throw new SQLException(
           "An IO error occurred while reading the BLOB from the database: " + e.getMessage());
