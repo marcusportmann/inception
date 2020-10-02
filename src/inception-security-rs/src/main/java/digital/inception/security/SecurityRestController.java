@@ -2778,7 +2778,7 @@ public class SecurityRestController extends SecureRestController {
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    * @param filter the optional filter to apply to the users
-   * @param sortBy The optional method used to sort the users e.g. by name.
+   * @param sortBy the optional method used to sort the users e.g. by name.
    * @param sortDirection the optional sort direction to apply to the users
    * @param pageIndex the optional page index
    * @param pageSize the optional page size

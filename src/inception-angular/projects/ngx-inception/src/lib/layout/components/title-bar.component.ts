@@ -78,7 +78,8 @@ export class TitleBarComponent implements OnInit {
   navigateBack(backNavigation: BackNavigation): void {
     if (backNavigation) {
       // noinspection JSIgnoredPromiseFromCall
-      this.router.navigate(backNavigation.commands, backNavigation.extras);
+      this.router.navigate(backNavigation.commands, backNavigation.extras).then(navigationResult => {
+      });
     }
   }
 

@@ -15,7 +15,7 @@
  */
 
 /**
- * The SortDirection enumeration defines the possible methods used to sort a list of users.
+ * The UserSortBy enumeration defines the possible methods used to sort a list of users.
  *
  * @author Marcus Portmann
  */
