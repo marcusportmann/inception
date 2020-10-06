@@ -291,6 +291,8 @@ public class ApplicationDataSourceConfiguration {
 
           try (Statement statement = connection.createStatement()) {
             statement.execute(sqlStatement);
+          } catch (Throwable e) {
+            throw e;
           }
         }
       }

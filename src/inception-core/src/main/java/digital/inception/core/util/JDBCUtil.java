@@ -31,7 +31,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import javax.sql.DataSource;
 import org.springframework.util.StringUtils;
 
@@ -209,64 +208,36 @@ public class JDBCUtil {
           // If the line contains a SQL comment then only process the portion before the comment
           if (line.contains("--")) {
             line = line.substring(0, line.indexOf("--"));
+            line = line.trim();
           }
 
           /*
-           * If we have already built up part of the multi-line SQL statement then add spacing
-           * between this and the next part of the SQL statement on the current line.
+           * NOTE: Removed support for handling multiple SQL statements on a single line that are
+           *       terminated by a ';' delimiter. This is because correctly handling the delimiter
+           *       in single or double quotes is Very Hard (TM).
            */
-          if (multiLineBuffer != null) {
-            multiLineBuffer.append(" ");
-          }
-
-          /*
-           * If the line contains a ';' then one of the following is true:
-           * - The line contains one or more single-line SQL statements
-           * - The line contains the end of a multi-line SQL statement
-           * - The line contains both of the above
-           */
-          if (line.contains(";")) {
-            StringTokenizer tokens = new StringTokenizer(line, ";");
-
-            while (tokens.hasMoreTokens()) {
-              String token = tokens.nextToken().trim();
-
-              // If we are currently processing a multi-line buffer
-              if (multiLineBuffer != null) {
-                multiLineBuffer.append(token);
-                sqlStatements.add(multiLineBuffer.toString());
-                multiLineBuffer = null;
-              } else {
-                if (tokens.hasMoreTokens()) {
-                  sqlStatements.add(token);
-                } else {
-                  if (line.endsWith(";")) {
-                    sqlStatements.add(token);
-                  } else {
-                    multiLineBuffer = new StringBuilder();
-                    multiLineBuffer.append(token);
-                  }
-                }
-              }
+            if (line.endsWith(";")) {
+            if (multiLineBuffer != null) {
+              multiLineBuffer.append(" ");
+              multiLineBuffer.append(line);
+              sqlStatements.add(multiLineBuffer.toString());
+              multiLineBuffer = null;
+            } else {
+              sqlStatements.add(line);
             }
-          }
-
-          /*
-           * The line does not contain the end of a SQL statement which means it is either
-           * the start of a new multi-line SQL statement or the continuation of an existing
-           * multi-line SQL statement.
-           */
-          else {
+          } else {
             /*
-             * If this is a new multi-line SQL statement then initialize the buffer
-             * that will be used to concatenate the individual lines of the statement into
-             * a single-line SQL statement.
+             * The line does not contain the end of a SQL statement which means it is either
+             * the start of a new multi-line SQL statement or the continuation of an existing
+             * multi-line SQL statement.
              */
-            if (multiLineBuffer == null) {
+            if (multiLineBuffer != null) {
+              multiLineBuffer.append(" ");
+              multiLineBuffer.append(line);
+            } else {
               multiLineBuffer = new StringBuilder();
+              multiLineBuffer.append(line);
             }
-
-            multiLineBuffer.append(line);
           }
         }
       }
@@ -459,9 +430,6 @@ public class JDBCUtil {
       throw new NullPointerException("Failed to clean the null SQL string");
     }
 
-    // Strip whitespace from the beginning and end of the text
-    text = text.trim();
-
     // If this is an empty string then stop here
     if (text.length() == 0) {
       return text;
@@ -487,6 +455,9 @@ public class JDBCUtil {
 
     // Replace tabs with a single space
     text = text.replaceAll("\t", " ");
+
+    // Strip whitespace from the beginning and end of the text
+    text = text.trim();
 
     return text;
   }

@@ -239,7 +239,7 @@ INSERT INTO codes.codes (id, code_category_id, name, value, created)
 INSERT INTO codes.codes (id, code_category_id, name, value, created)
   VALUES ('TestCode112', 'TestCodeCategory11', 'Test Code Name 11.2', 'Test Code Value 2', NOW());
 INSERT INTO codes.codes (id, code_category_id, name, value, created)
-  VALUES ('TestCode113', 'TestCodeCategory11', 'Test Code Name 11.3', 'Test Code Value 3', NOW());
+  VALUES ('TestCode113', 'TestCodeCategory11', 'Test Code Name 11.3', 'Test Code Value 3;', NOW());
 
 
 --INSERT INTO configuration.configuration (key, value, description) VALUES ('TestKey', 'TestValue', 'TestDescription');
