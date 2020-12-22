@@ -56,8 +56,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 /**
  * The <code>Party</code> class holds the information for a party.
  *
- * <p>See: https://spec.edmcouncil.org/fibo/ontology/FND/Parties/Parties/IndependentParty
- *
  * @author Marcus Portmann
  */
 @Schema(description = "A person or organization")
