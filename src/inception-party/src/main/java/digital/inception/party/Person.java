@@ -125,6 +125,15 @@ public class Person extends Party implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The contact mechanisms for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
+
   /** The identity documents for the person. */
   @Valid
   @OneToMany(
@@ -133,6 +142,15 @@ public class Person extends Party implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
+
+  /** The physical addresses for the person. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
   /** The optional code identifying the correspondence language for the person. */
   @Size(min = 1, max = 10)
@@ -247,9 +265,10 @@ public class Person extends Party implements Serializable {
    *
    * @param contactMechanism the contact mechanism
    */
-  @Override
   public void addContactMechanism(ContactMechanism contactMechanism) {
-    super.addContactMechanism(contactMechanism);
+    contactMechanism.setParty(this);
+
+    contactMechanisms.add(contactMechanism);
   }
 
   /**
@@ -268,9 +287,29 @@ public class Person extends Party implements Serializable {
    *
    * @param physicalAddress the physical address
    */
-  @Override
   public void addPhysicalAddress(PhysicalAddress physicalAddress) {
-    super.addPhysicalAddress(physicalAddress);
+    physicalAddress.setParty(this);
+
+    physicalAddresses.add(physicalAddress);
+  }
+
+  /**
+   * Retrieve the contact mechanism with the specified type and purpose for the person.
+   *
+   * @param type the contact mechanism type
+   * @param purpose the contact mechanism purpose
+   * @return the contact mechanism with the specified type and purpose for the person or <code>null
+   *     </code> if the contact mechanism could not be found
+   */
+  public ContactMechanism getContactMechanism(
+      ContactMechanismType type, ContactMechanismPurpose purpose) {
+    return contactMechanisms.stream()
+        .filter(
+            contactMechanism ->
+                Objects.equals(contactMechanism.getType(), type)
+                    && Objects.equals(contactMechanism.getPurpose(), purpose))
+        .findFirst()
+        .get();
   }
 
   /**
@@ -283,9 +322,8 @@ public class Person extends Party implements Serializable {
   @JsonManagedReference("contactMechanismReference")
   @XmlElementWrapper(name = "ContactMechanisms")
   @XmlElement(name = "ContactMechanism")
-  @Override
   public Set<ContactMechanism> getContactMechanisms() {
-    return super.getContactMechanisms();
+    return contactMechanisms;
   }
 
   /**
@@ -531,6 +569,25 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Retrieve the physical address with the specified type and purpose for the person.
+   *
+   * @param type the physical address type
+   * @param purpose the physical address purpose
+   * @return the physical address with the specified type and purpose for the person or <code>null
+   *     </code> if the physical address could not be found
+   */
+  public PhysicalAddress getPhysicalAddress(
+      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+    return physicalAddresses.stream()
+        .filter(
+            physicalAddress ->
+                Objects.equals(physicalAddress.getType(), type)
+                    && Objects.equals(physicalAddress.getPurpose(), purpose))
+        .findFirst()
+        .get();
+  }
+
+  /**
    * Returns the physical addresses for the person.
    *
    * @return the physical addresses for the person
@@ -540,9 +597,8 @@ public class Person extends Party implements Serializable {
   @JsonManagedReference("physicalAddressReference")
   @XmlElementWrapper(name = "PhysicalAddresses")
   @XmlElement(name = "PhysicalAddress")
-  @Override
   public Set<PhysicalAddress> getPhysicalAddresses() {
-    return super.getPhysicalAddresses();
+    return physicalAddresses;
   }
 
   /**
@@ -638,9 +694,11 @@ public class Person extends Party implements Serializable {
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
    */
-  @Override
   public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
-    super.removeContactMechanism(type, purpose);
+    contactMechanisms.removeIf(
+        contactMechanism ->
+            Objects.equals(contactMechanism.getType(), type)
+                && Objects.equals(contactMechanism.getPurpose(), purpose));
   }
 
   /**
@@ -659,9 +717,11 @@ public class Person extends Party implements Serializable {
    * @param type the physical address type
    * @param purpose the physical address purpose
    */
-  @Override
   public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    super.removePhysicalAddress(type, purpose);
+    physicalAddresses.removeIf(
+        physicalAddress ->
+            Objects.equals(physicalAddress.getType(), type)
+                && Objects.equals(physicalAddress.getPurpose(), purpose));
   }
 
   /**
@@ -669,9 +729,9 @@ public class Person extends Party implements Serializable {
    *
    * @param contactMechanisms the contact mechanisms for the person
    */
-  @Override
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
-    super.setContactMechanisms(contactMechanisms);
+    this.contactMechanisms.clear();
+    this.contactMechanisms.addAll(contactMechanisms);
   }
 
   /**
@@ -851,9 +911,9 @@ public class Person extends Party implements Serializable {
    *
    * @param physicalAddresses the physical addresses for the person
    */
-  @Override
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
-    super.setPhysicalAddresses(physicalAddresses);
+    this.physicalAddresses.clear();
+    this.physicalAddresses.addAll(physicalAddresses);
   }
 
   /**

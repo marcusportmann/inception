@@ -24,23 +24,17 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -78,24 +72,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Party implements Serializable {
 
   private static final long serialVersionUID = 1000000;
-
-  /** The contact mechanisms for the party. */
-  @Valid
-  @OneToMany(
-      mappedBy = "party",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
-  private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
-
-  /** The physical addresses for the party. */
-  @Valid
-  @OneToMany(
-      mappedBy = "party",
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true)
-  private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
   /** The date and time the party was created. */
   @CreationTimestamp
@@ -137,28 +113,6 @@ public class Party implements Serializable {
   }
 
   /**
-   * Add the contact mechanism for the party.
-   *
-   * @param contactMechanism the contact mechanism
-   */
-  public void addContactMechanism(ContactMechanism contactMechanism) {
-    contactMechanism.setParty(this);
-
-    contactMechanisms.add(contactMechanism);
-  }
-
-  /**
-   * Add the physical for the party.
-   *
-   * @param physicalAddress the physical address
-   */
-  public void addPhysicalAddress(PhysicalAddress physicalAddress) {
-    physicalAddress.setParty(this);
-
-    physicalAddresses.add(physicalAddress);
-  }
-
-  /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
@@ -182,35 +136,6 @@ public class Party implements Serializable {
     Party other = (Party) object;
 
     return Objects.equals(id, other.id);
-  }
-
-  /**
-   * Retrieve the contact mechanism with the specified type and purpose for the party.
-   *
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
-   * @return the contact mechanism with the specified type and purpose for the party or <code>null
-   *     </code> if the contact mechanism could not be found
-   */
-  public ContactMechanism getContactMechanism(
-      ContactMechanismType type, ContactMechanismPurpose purpose) {
-    return contactMechanisms.stream()
-        .filter(
-            contactMechanism ->
-                Objects.equals(contactMechanism.getType(), type)
-                    && Objects.equals(contactMechanism.getPurpose(), purpose))
-        .findFirst()
-        .get();
-  }
-
-  /**
-   * Returns the contact mechanisms for the party.
-   *
-   * @return the contact mechanisms for the party
-   */
-  @XmlTransient
-  public Set<ContactMechanism> getContactMechanisms() {
-    return contactMechanisms;
   }
 
   /**
@@ -251,35 +176,6 @@ public class Party implements Serializable {
   }
 
   /**
-   * Retrieve the physical address with the specified type and purpose for the party.
-   *
-   * @param type the physical address type
-   * @param purpose the physical address purpose
-   * @return the physical address with the specified type and purpose for the party or <code>null
-   *     </code> if the physical address could not be found
-   */
-  public PhysicalAddress getPhysicalAddress(
-      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    return physicalAddresses.stream()
-        .filter(
-            physicalAddress ->
-                Objects.equals(physicalAddress.getType(), type)
-                    && Objects.equals(physicalAddress.getPurpose(), purpose))
-        .findFirst()
-        .get();
-  }
-
-  /**
-   * Returns the physical addresses for the party.
-   *
-   * @return the physical addresses for the party
-   */
-  @XmlTransient
-  public Set<PhysicalAddress> getPhysicalAddresses() {
-    return physicalAddresses;
-  }
-
-  /**
    * Returns the type of party.
    *
    * @return the type of party
@@ -313,42 +209,6 @@ public class Party implements Serializable {
   }
 
   /**
-   * Remove the contact mechanism with the specified type and purpose for the party.
-   *
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
-   */
-  public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
-    contactMechanisms.removeIf(
-        contactMechanism ->
-            Objects.equals(contactMechanism.getType(), type)
-                && Objects.equals(contactMechanism.getPurpose(), purpose));
-  }
-
-  /**
-   * Remove the physical address with the specified type and purpose for the party.
-   *
-   * @param type the physical address type
-   * @param purpose the physical address purpose
-   */
-  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    physicalAddresses.removeIf(
-        physicalAddress ->
-            Objects.equals(physicalAddress.getType(), type)
-                && Objects.equals(physicalAddress.getPurpose(), purpose));
-  }
-
-  /**
-   * Set the contact mechanisms for the party.
-   *
-   * @param contactMechanisms the contact mechanisms for the party
-   */
-  public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
-    this.contactMechanisms.clear();
-    this.contactMechanisms.addAll(contactMechanisms);
-  }
-
-  /**
    * Set the Universally Unique Identifier (UUID) uniquely identifying the party.
    *
    * @param id the Universally Unique Identifier (UUID) uniquely identifying the party
@@ -364,16 +224,6 @@ public class Party implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Set the physical addresses for the party.
-   *
-   * @param physicalAddresses the physical addresses for the party
-   */
-  public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
-    this.physicalAddresses.clear();
-    this.physicalAddresses.addAll(physicalAddresses);
   }
 
   /**

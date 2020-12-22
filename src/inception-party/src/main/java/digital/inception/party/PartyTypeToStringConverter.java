@@ -23,8 +23,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>PartyTypeToStringConverter</code> class implements the Spring converter that converts
- * a <code>PartyType</code> type into a <code>String</code> type.
+ * The <code>PartyTypeToStringConverter</code> class implements the Spring converter that converts a
+ * <code>PartyType</code> type into a <code>String</code> type.
  *
  * @author Marcus Portmann
  */

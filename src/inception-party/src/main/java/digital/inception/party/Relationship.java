@@ -1,2 +1,3 @@
-package digital.inception.party;public class Relationship {
-}
+package digital.inception.party;
+
+public class Relationship {}

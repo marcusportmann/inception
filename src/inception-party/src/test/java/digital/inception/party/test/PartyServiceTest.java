@@ -162,7 +162,8 @@ public class PartyServiceTest {
     person.addPhysicalAddress(
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL));
     person.addPhysicalAddress(
-        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.CORRESPONDENCE));
+        new PhysicalAddress(
+            PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.CORRESPONDENCE));
 
     return person;
   }
@@ -277,7 +278,8 @@ public class PartyServiceTest {
     partyService.createPerson(person);
 
     try (Connection connection = dataSource.getConnection()) {
-      try (PreparedStatement statement = connection.prepareStatement("SELECT type, purpose FROM party.contact_mechanisms")) {
+      try (PreparedStatement statement =
+          connection.prepareStatement("SELECT type, purpose FROM party.contact_mechanisms")) {
         try (ResultSet rs = statement.executeQuery()) {
           while (rs.next()) {
             Integer contactMechanismType = rs.getInt(1);
@@ -290,9 +292,9 @@ public class PartyServiceTest {
       }
     }
 
-
     try (Connection connection = dataSource.getConnection()) {
-      try (PreparedStatement statement = connection.prepareStatement("SELECT type, purpose FROM party.physical_addresses")) {
+      try (PreparedStatement statement =
+          connection.prepareStatement("SELECT type, purpose FROM party.physical_addresses")) {
         try (ResultSet rs = statement.executeQuery()) {
           while (rs.next()) {
             Integer physicalAddressType = rs.getInt(1);
@@ -304,7 +306,6 @@ public class PartyServiceTest {
         }
       }
     }
-
 
     filteredPersons =
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
@@ -646,7 +647,4 @@ public class PartyServiceTest {
       }
     }
   }
-
-
-
 }

@@ -34,31 +34,36 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "PhysicalAddressPurpose", namespace = "http://party.inception.digital")
 public enum PhysicalAddressPurpose {
   @XmlEnumValue("Billing")
-  BILLING("billing", new PartyType[]{PartyType.ORGANIZATION, PartyType.PERSON}, "Billing Address"),
+  BILLING("billing", new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON}, "Billing Address"),
   @XmlEnumValue("Business")
-  BUSINESS("business", new PartyType[]{PartyType.ORGANIZATION}, "Business Address"),
+  BUSINESS("business", new PartyType[] {PartyType.ORGANIZATION}, "Business Address"),
   @XmlEnumValue("Correspondence")
-  CORRESPONDENCE("correspondence", new PartyType[]{PartyType.ORGANIZATION, PartyType.PERSON}, "Correspondence Address"),
+  CORRESPONDENCE(
+      "correspondence",
+      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
+      "Correspondence Address"),
   @XmlEnumValue("Delivery")
-  DELIVERY("delivery", new PartyType[]{PartyType.ORGANIZATION, PartyType.PERSON}, "Delivery Address"),
+  DELIVERY(
+      "delivery", new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON}, "Delivery Address"),
   @XmlEnumValue("Home")
-  HOME("home", new PartyType[]{PartyType.PERSON}, "Home Address"),
+  HOME("home", new PartyType[] {PartyType.PERSON}, "Home Address"),
   @XmlEnumValue("Main")
-  MAIN("main", new PartyType[]{PartyType.ORGANIZATION}, "Main Address"),
+  MAIN("main", new PartyType[] {PartyType.ORGANIZATION}, "Main Address"),
   @XmlEnumValue("Permanent")
-  PERMANENT("permanent", new PartyType[]{PartyType.PERSON}, "Permanent Address"),
+  PERMANENT("permanent", new PartyType[] {PartyType.PERSON}, "Permanent Address"),
   @XmlEnumValue("RegisteredOffice")
-  REGISTERED_OFFICE("registered_office", new PartyType[]{PartyType.ORGANIZATION}, "Registered Office Address"),
+  REGISTERED_OFFICE(
+      "registered_office", new PartyType[] {PartyType.ORGANIZATION}, "Registered Office Address"),
   @XmlEnumValue("Residential")
-  RESIDENTIAL("residential", new PartyType[]{PartyType.PERSON}, "Residential Address"),
+  RESIDENTIAL("residential", new PartyType[] {PartyType.PERSON}, "Residential Address"),
   @XmlEnumValue("Service")
-  SERVICE("service", new PartyType[]{PartyType.ORGANIZATION, PartyType.PERSON}, "Service Address"),
+  SERVICE("service", new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON}, "Service Address"),
   @XmlEnumValue("SoleTrader")
-  SOLE_TRADER("sole_trader", new PartyType[]{PartyType.PERSON}, "Sole Trader Address"),
+  SOLE_TRADER("sole_trader", new PartyType[] {PartyType.PERSON}, "Sole Trader Address"),
   @XmlEnumValue("Temporary")
-  TEMPORARY("temporary", new PartyType[]{PartyType.PERSON}, "Temporary Address"),
+  TEMPORARY("temporary", new PartyType[] {PartyType.PERSON}, "Temporary Address"),
   @XmlEnumValue("Work")
-  WORK("work", new PartyType[]{PartyType.PERSON}, "Work Address");
+  WORK("work", new PartyType[] {PartyType.PERSON}, "Work Address");
 
   private final String code;
 

@@ -76,6 +76,25 @@ public class PartyWebService {
   }
 
   /**
+   * Retrieve the parties.
+   *
+   * @param filter the optional filter to apply to the parties
+   * @param sortDirection the optional sort direction to apply to the parties
+   * @param pageIndex the optional page index
+   * @param pageSize the optional page size
+   * @return the parties
+   */
+  @WebMethod(operationName = "GetParties")
+  public Parties getParties(
+      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
+      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
+      throws PartyServiceException {
+    return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
+  }
+
+  /**
    * Retrieve the persons.
    *
    * @param filter the optional filter to apply to the persons
