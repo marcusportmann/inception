@@ -114,7 +114,7 @@ public class IdentityDocument implements Serializable {
 
   /** The person the identity document is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference
+  @JsonBackReference("identityDocumentReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)

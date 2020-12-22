@@ -16,8 +16,11 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
@@ -29,7 +32,10 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -48,8 +54,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
     name = "Organization",
     namespace = "http://party.inception.digital",
-    propOrder = {})
-@XmlAccessorType(XmlAccessType.FIELD)
+    propOrder = {"id", "name", "contactMechanisms", "physicalAddresses"})
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
 @DiscriminatorValue("1")
 @Table(schema = "party", name = "organizations")
@@ -88,6 +94,10 @@ public class Organization extends Party implements Serializable {
    * @return the contact mechanisms for the organization
    */
   @Schema(description = "The contact mechanisms for the organization")
+  @JsonProperty
+  @JsonManagedReference("contactMechanismReference")
+  @XmlElementWrapper(name = "ContactMechanisms")
+  @XmlElement(name = "ContactMechanism")
   @Override
   public Set<ContactMechanism> getContactMechanisms() {
     return super.getContactMechanisms();
@@ -98,6 +108,8 @@ public class Organization extends Party implements Serializable {
    *
    * @return the date and time the organization was created
    */
+  @JsonIgnore
+  @XmlTransient
   @Override
   public LocalDateTime getCreated() {
     return created;
@@ -111,6 +123,8 @@ public class Organization extends Party implements Serializable {
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the organization")
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @Override
   public UUID getId() {
     return super.getId();
@@ -122,6 +136,8 @@ public class Organization extends Party implements Serializable {
    * @return the name of the organization
    */
   @Schema(description = "The name of the organization")
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @Override
   public String getName() {
     return super.getName();
@@ -133,9 +149,25 @@ public class Organization extends Party implements Serializable {
    * @return the physical addresses for the organization
    */
   @Schema(description = "The physical addresses for the organization")
+  @JsonProperty
+  @JsonManagedReference
+  @XmlElementWrapper(name = "PhysicalAddresses")
+  @XmlElement(name = "PhysicalAddress")
   @Override
   public Set<PhysicalAddress> getPhysicalAddresses() {
     return super.getPhysicalAddresses();
+  }
+
+  /**
+   * Returns the type of party for the organization.
+   *
+   * @return the type of party for the organization
+   */
+  @JsonIgnore
+  @XmlTransient
+  @Override
+  public PartyType getType() {
+    return super.getType();
   }
 
   /**
@@ -143,6 +175,8 @@ public class Organization extends Party implements Serializable {
    *
    * @return the date and time the organization was last updated
    */
+  @JsonIgnore
+  @XmlTransient
   @Override
   public LocalDateTime getUpdated() {
     return super.getUpdated();

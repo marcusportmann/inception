@@ -80,7 +80,7 @@ public class PhysicalAddress implements Serializable {
 
   /** The party the physical address is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference
+  @JsonBackReference("physicalAddressReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)

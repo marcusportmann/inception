@@ -17,8 +17,8 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,7 +46,6 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -56,17 +55,21 @@ import org.hibernate.annotations.UpdateTimestamp;
 /**
  * The <code>Party</code> class holds the information for a party.
  *
+ * <p>NOTE: JSON and XML annotations are on properties (getters) and not fields to support JPA
+ * inheritance and prevent base class relationships from being serialized.
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "A person or organization")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "name", "contactMechanisms", "physicalAddresses"})
+@JsonIgnoreProperties({"contactMechanisms", "physicalAddresses"})
+@JsonPropertyOrder({"id", "type", "name"})
 @XmlRootElement(name = "Party", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Party",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "type", "name", "contactMechanisms", "physicalAddresses"})
-@XmlAccessorType(XmlAccessType.FIELD)
+    propOrder = {"id", "type", "name"})
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorValue("0")
@@ -77,11 +80,6 @@ public class Party implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The contact mechanisms for the party. */
-  @Schema(description = "The contact mechanisms for the party")
-  @JsonProperty
-  @JsonManagedReference
-  @XmlElementWrapper(name = "ContactMechanisms")
-  @XmlElement(name = "ContactMechanism")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -91,11 +89,6 @@ public class Party implements Serializable {
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
   /** The physical addresses for the party. */
-  @Schema(description = "The physical addresses for the party")
-  @JsonProperty
-  @JsonManagedReference
-  @XmlElementWrapper(name = "PhysicalAddresses")
-  @XmlElement(name = "PhysicalAddress")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -105,43 +98,28 @@ public class Party implements Serializable {
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
   /** The date and time the party was created. */
-  @JsonIgnore
-  @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   protected LocalDateTime created;
 
   /** The date and time the party was last updated. */
-  @JsonIgnore
-  @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   protected LocalDateTime updated;
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the party. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the party",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
 
   /** The name of the party. */
-  @Schema(description = "The name of the party", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /** The type of party. */
-  @Schema(description = "The type of party", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
   @NotNull
   @Column(name = "type", nullable = false, insertable = false, updatable = false)
   private PartyType type;
@@ -230,6 +208,7 @@ public class Party implements Serializable {
    *
    * @return the contact mechanisms for the party
    */
+  @XmlTransient
   public Set<ContactMechanism> getContactMechanisms() {
     return contactMechanisms;
   }
@@ -239,6 +218,8 @@ public class Party implements Serializable {
    *
    * @return the date and time the party was created
    */
+  @JsonIgnore
+  @XmlTransient
   public LocalDateTime getCreated() {
     return created;
   }
@@ -248,6 +229,11 @@ public class Party implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the party
    */
+  @Schema(
+      description = "The Universally Unique Identifier (UUID) uniquely identifying the party",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   public UUID getId() {
     return id;
   }
@@ -257,6 +243,9 @@ public class Party implements Serializable {
    *
    * @return the name of the party
    */
+  @Schema(description = "The name of the party", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   public String getName() {
     return name;
   }
@@ -285,6 +274,7 @@ public class Party implements Serializable {
    *
    * @return the physical addresses for the party
    */
+  @XmlTransient
   public Set<PhysicalAddress> getPhysicalAddresses() {
     return physicalAddresses;
   }
@@ -294,6 +284,9 @@ public class Party implements Serializable {
    *
    * @return the type of party
    */
+  @Schema(description = "The type of party", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
   public PartyType getType() {
     return type;
   }
@@ -303,6 +296,8 @@ public class Party implements Serializable {
    *
    * @return the date and time the party was last updated
    */
+  @JsonIgnore
+  @XmlTransient
   public LocalDateTime getUpdated() {
     return updated;
   }

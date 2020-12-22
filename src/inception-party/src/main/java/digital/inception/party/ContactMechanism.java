@@ -81,7 +81,7 @@ public class ContactMechanism implements Serializable {
 
   /** The party the contact mechanism is associated with. */
   @Schema(hidden = true)
-  @JsonBackReference
+  @JsonBackReference("contactMechanismReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
