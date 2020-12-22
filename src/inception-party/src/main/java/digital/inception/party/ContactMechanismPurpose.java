@@ -42,126 +42,142 @@ public enum ContactMechanismPurpose {
   PERSONAL_MOBILE_NUMBER(
       "personal_mobile_number",
       ContactMechanismType.MOBILE_NUMBER,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "Personal Mobile Number"),
   @XmlEnumValue("WorkMobileNumber")
   WORK_MOBILE_NUMBER(
       "work_mobile_number",
       ContactMechanismType.MOBILE_NUMBER,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "Work Mobile Number"),
   @XmlEnumValue("OtherMobileNumber")
   OTHER_MOBILE_NUMBER(
       "other_mobile_number",
       ContactMechanismType.MOBILE_NUMBER,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
       "Other Mobile Number"),
   @XmlEnumValue("MainMobileNumber")
   MAIN_MOBILE_NUMBER(
       "main_mobile_number",
       ContactMechanismType.MOBILE_NUMBER,
-      PartyType.ORGANIZATION,
+      new PartyType[] {PartyType.ORGANIZATION},
       "Main Mobile Number"),
   @XmlEnumValue("HomePhoneNumber")
   HOME_PHONE_NUMBER(
       "home_phone_number",
       ContactMechanismType.PHONE_NUMBER,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "Home Phone Number"),
   @XmlEnumValue("WorkPhoneNumber")
   WORK_PHONE_NUMBER(
       "work_phone_number",
       ContactMechanismType.PHONE_NUMBER,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "Work Phone Number"),
   @XmlEnumValue("SchoolPhoneNumber")
   SCHOOL_PHONE_NUMBER(
       "school_phone_number",
       ContactMechanismType.PHONE_NUMBER,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "School Phone Number"),
   @XmlEnumValue("PagerPhoneNumber")
   PAGER_PHONE_NUMBER(
       "pager_phone_number",
       ContactMechanismType.PHONE_NUMBER,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "Pager Phone Number"),
   @XmlEnumValue("OtherPhoneNumber")
   OTHER_PHONE_NUMBER(
       "other_phone_number",
       ContactMechanismType.PHONE_NUMBER,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
       "Other Phone Number"),
   @XmlEnumValue("MainPhoneNumber")
   MAIN_PHONE_NUMBER(
       "main_phone_number",
       ContactMechanismType.PHONE_NUMBER,
-      PartyType.ORGANIZATION,
+      new PartyType[] {PartyType.ORGANIZATION},
       "Main Phone Number"),
   @XmlEnumValue("HomeFaxNumber")
   HOME_FAX_NUMBER(
-      "home_fax_number", ContactMechanismType.FAX_NUMBER, PartyType.PERSON, "Home Fax Number"),
+      "home_fax_number",
+      ContactMechanismType.FAX_NUMBER,
+      new PartyType[] {PartyType.PERSON},
+      "Home Fax Number"),
   @XmlEnumValue("WorkFaxNumber")
   WORK_FAX_NUMBER(
-      "work_fax_number", ContactMechanismType.FAX_NUMBER, PartyType.PERSON, "Work Fax Number"),
+      "work_fax_number",
+      ContactMechanismType.FAX_NUMBER,
+      new PartyType[] {PartyType.PERSON},
+      "Work Fax Number"),
   @XmlEnumValue("OtherFaxNumber")
   OTHER_FAX_NUMBER(
-      "other_fax_number", ContactMechanismType.FAX_NUMBER, PartyType.PERSON, "Other Fax Number"),
+      "other_fax_number",
+      ContactMechanismType.FAX_NUMBER,
+      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
+      "Other Fax Number"),
   @XmlEnumValue("MainFaxNumber")
   MAIN_FAX_NUMBER(
       "main_fax_number",
       ContactMechanismType.FAX_NUMBER,
-      PartyType.ORGANIZATION,
+      new PartyType[] {PartyType.ORGANIZATION},
       "Main Fax Number"),
   @XmlEnumValue("PersonalEmailAddress")
   PERSONAL_EMAIL_ADDRESS(
       "personal_email_address",
       ContactMechanismType.EMAIL_ADDRESS,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "Personal E-mail Address"),
   @XmlEnumValue("WorkEmailAddress")
   WORK_EMAIL_ADDRESS(
       "work_email_address",
       ContactMechanismType.EMAIL_ADDRESS,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "Work E-mail Address"),
   @XmlEnumValue("SchoolEmailAddress")
   SCHOOL_EMAIL_ADDRESS(
       "school_email_address",
       ContactMechanismType.EMAIL_ADDRESS,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.PERSON},
       "School E-mail Address"),
   @XmlEnumValue("OtherEmailAddress")
   OTHER_EMAIL_ADDRESS(
       "other_email_address",
       ContactMechanismType.EMAIL_ADDRESS,
-      PartyType.PERSON,
+      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
       "Other E-mail Address"),
   @XmlEnumValue("MainEmailAddress")
   MAIN_EMAIL_ADDRESS(
       "main_email_address",
       ContactMechanismType.EMAIL_ADDRESS,
-      PartyType.ORGANIZATION,
+      new PartyType[] {PartyType.ORGANIZATION},
       "Main E-mail Address"),
   @XmlEnumValue("WhatsAppUserID")
   WHATSAPP_USER_ID(
-      "whatsapp_user_id", ContactMechanismType.SOCIAL_MEDIA, PartyType.PERSON, "WhatsApp User ID"),
+      "whatsapp_user_id",
+      ContactMechanismType.SOCIAL_MEDIA,
+      new PartyType[] {PartyType.PERSON},
+      "WhatsApp User ID"),
   @XmlEnumValue("TwitterID")
-  TWITTER_ID("twitter_id", ContactMechanismType.SOCIAL_MEDIA, PartyType.PERSON, "Twitter ID");
+  TWITTER_ID(
+      "twitter_id",
+      ContactMechanismType.SOCIAL_MEDIA,
+      new PartyType[] {PartyType.PERSON},
+      "Twitter ID");
 
   private final String code;
 
   private final String description;
 
-  private final PartyType partyType;
+  private final PartyType[] partyTypes;
 
   private final ContactMechanismType type;
 
   ContactMechanismPurpose(
-      String code, ContactMechanismType type, PartyType partyType, String description) {
+      String code, ContactMechanismType type, PartyType[] partyTypes, String description) {
     this.code = code;
     this.type = type;
-    this.partyType = partyType;
+    this.partyTypes = partyTypes;
     this.description = description;
   }
 
@@ -381,12 +397,12 @@ public enum ContactMechanismPurpose {
   }
 
   /**
-   * Returns the party type the contact mechanism purpose is associated with.
+   * Returns the party types the contact mechanism purpose is associated with.
    *
-   * @return the party type the contact mechanism purpose is associated with
+   * @return the party types the contact mechanism purpose is associated with
    */
-  public PartyType partyType() {
-    return partyType;
+  public PartyType[] partyTypes() {
+    return partyTypes;
   }
 
   /**

@@ -130,22 +130,22 @@ public class InceptionWebServiceConfiguration {
       endpoint.publish("/" + name);
 
       if (isWSSX509CertificateTokenProfileEnabled) {
-        if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStoreType)) {
+        if (!StringUtils.hasText(wssX509CertificateTokenProfileKeyStoreType)) {
           throw new ConfigurationException(
               "The type was not specified for the server SSL key store");
         }
 
-        if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStorePath)) {
+        if (!StringUtils.hasText(wssX509CertificateTokenProfileKeyStorePath)) {
           throw new ConfigurationException(
               "The path was not specified for the server SSL key store");
         }
 
-        if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStorePassword)) {
+        if (!StringUtils.hasText(wssX509CertificateTokenProfileKeyStorePassword)) {
           throw new ConfigurationException(
               "The password was not specified for the server SSL key store");
         }
 
-        if (StringUtils.isEmpty(wssX509CertificateTokenProfileKeyStoreAlias)) {
+        if (!StringUtils.hasText(wssX509CertificateTokenProfileKeyStoreAlias)) {
           throw new ConfigurationException(
               "The alias was not specified for the server SSL key store");
         }
@@ -167,20 +167,20 @@ public class InceptionWebServiceConfiguration {
 
         KeyStore trustStore = keyStore;
 
-        if ((!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStoreType))
-            || (!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePath))
-            || (!StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePassword))) {
-          if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStoreType)) {
+        if ((StringUtils.hasText(wssX509CertificateTokenProfileTrustStoreType))
+            || (StringUtils.hasText(wssX509CertificateTokenProfileTrustStorePath))
+            || (StringUtils.hasText(wssX509CertificateTokenProfileTrustStorePassword))) {
+          if (!StringUtils.hasText(wssX509CertificateTokenProfileTrustStoreType)) {
             throw new ConfigurationException(
                 "The type was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
           }
 
-          if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePath)) {
+          if (!StringUtils.hasText(wssX509CertificateTokenProfileTrustStorePath)) {
             throw new ConfigurationException(
                 "The path was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
           }
 
-          if (StringUtils.isEmpty(wssX509CertificateTokenProfileTrustStorePassword)) {
+          if (!StringUtils.hasText(wssX509CertificateTokenProfileTrustStorePassword)) {
             throw new ConfigurationException(
                 "The password was not specified for the Web Services Security X.509 Certificate Token Profile trust store");
           }

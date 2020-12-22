@@ -33,10 +33,10 @@ import java.util.UUID;
 public abstract class WbxmlMessageData {
 
   /** The UUID identifying the type of message the message data is associated with. */
-  private UUID messageTypeId;
+  private final UUID messageTypeId;
 
   /** The priority for the message type the message data is associated with. */
-  private MessagePriority messageTypePriority;
+  private final MessagePriority messageTypePriority;
 
   /**
    * Constructs a new <code>WbxmlMessageData</code>.

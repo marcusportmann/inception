@@ -170,7 +170,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
 
     rootElement.addContent(new Element("ErrorCode", Integer.toString(errorCode)));
     rootElement.addContent(
-        new Element("ErrorMessage", StringUtils.isEmpty(errorMessage) ? "" : errorMessage));
+        new Element("ErrorMessage", StringUtils.hasText(errorMessage) ? errorMessage : ""));
 
     if (codeCategory != null) {
       rootElement.addContent(codeCategory.toElement());

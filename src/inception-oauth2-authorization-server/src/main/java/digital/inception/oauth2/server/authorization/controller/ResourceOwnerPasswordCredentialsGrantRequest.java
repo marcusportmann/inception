@@ -74,7 +74,7 @@ public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
    */
   public static boolean isValid(Map<String, String> parameters) {
 
-    if (StringUtils.isEmpty(parameters.get(GRANT_TYPE_PARAMETER))) {
+    if (!StringUtils.hasText(parameters.get(GRANT_TYPE_PARAMETER))) {
       return false;
     }
 
@@ -82,11 +82,11 @@ public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
       return false;
     }
 
-    if (StringUtils.isEmpty(parameters.get(USERNAME_PARAMETER))) {
+    if (!StringUtils.hasText(parameters.get(USERNAME_PARAMETER))) {
       return false;
     }
 
-    return !StringUtils.isEmpty(parameters.get(PASSWORD_PARAMETER));
+    return StringUtils.hasText(parameters.get(PASSWORD_PARAMETER));
   }
 
   /**

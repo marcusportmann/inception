@@ -46,6 +46,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 /**
  * The <code>PhysicalAddress</code> class holds the information for a physical address.
  *
+ * <p><b>NOTE:</b> The JPA 2.2 spec (10.6) does not support attribute converters for attributes
+ * annotated with @Id. If Enum types are used for these attributes then the ordinal value is always
+ * used. As a result, the type and purpose attributes for this class are Integers and the Getter and
+ * Setters (a.k.a. Accessors and Mutators) convert to and from the Enum types. A consequence of this
+ * is that the attributes are marked as @JsonIgnore and @XmlTransient and the Getters are annotated
+ * with @JsonProperty and @XmlElement.
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "A physical address associated with a party")
@@ -81,22 +88,20 @@ public class PhysicalAddress implements Serializable {
   private Party party;
 
   /** The physical address purpose. */
-  @Schema(description = "The physical address purpose", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Purpose", required = true)
+  @JsonIgnore
+  @XmlTransient
   @NotNull
   @Id
   @Column(name = "purpose", nullable = false)
-  private PhysicalAddressPurpose purpose;
+  private Integer purpose;
 
   /** The physical address type. */
-  @Schema(description = "The physical address type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
+  @JsonIgnore
+  @XmlTransient
   @NotNull
   @Id
   @Column(name = "type", nullable = false)
-  private PhysicalAddressType type;
+  private Integer type;
 
   /** The date and time the physical address was last updated. */
   @JsonIgnore
@@ -115,8 +120,8 @@ public class PhysicalAddress implements Serializable {
    * @param purpose the physical address purpose
    */
   public PhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    this.type = type;
-    this.purpose = purpose;
+    this.type = PhysicalAddressType.toNumericCode(type);
+    this.purpose = PhysicalAddressPurpose.toNumericCode(purpose);
   }
 
   /**
@@ -171,8 +176,11 @@ public class PhysicalAddress implements Serializable {
    *
    * @return the physical address purpose
    */
+  @Schema(description = "The physical address purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Purpose", required = true)
   public PhysicalAddressPurpose getPurpose() {
-    return purpose;
+    return PhysicalAddressPurpose.fromNumericCode(purpose);
   }
 
   /**
@@ -180,8 +188,11 @@ public class PhysicalAddress implements Serializable {
    *
    * @return the physical address type
    */
+  @Schema(description = "The physical address type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
   public PhysicalAddressType getType() {
-    return type;
+    return PhysicalAddressType.fromNumericCode(type);
   }
 
   /**
@@ -221,7 +232,7 @@ public class PhysicalAddress implements Serializable {
    * @param purpose the physical address purpose
    */
   public void setPurpose(PhysicalAddressPurpose purpose) {
-    this.purpose = purpose;
+    this.purpose = PhysicalAddressPurpose.toNumericCode(purpose);
   }
 
   /**
@@ -230,6 +241,6 @@ public class PhysicalAddress implements Serializable {
    * @param type the physical address type
    */
   public void setType(PhysicalAddressType type) {
-    this.type = type;
+    this.type = PhysicalAddressType.toNumericCode(type);
   }
 }

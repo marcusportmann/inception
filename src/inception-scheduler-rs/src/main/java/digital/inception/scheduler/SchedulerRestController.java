@@ -182,7 +182,7 @@ public class SchedulerRestController extends SecureRestController {
           @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
-    if (StringUtils.isEmpty(jobId)) {
+    if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
 
@@ -231,11 +231,14 @@ public class SchedulerRestController extends SecureRestController {
       "hasRole('Administrator') or hasAuthority('FUNCTION_Scheduler.SchedulerAdministration') "
           + "or hasAuthority('FUNCTION_Scheduler.JobAdministration')")
   public Job getJob(
-      @Parameter(name = "jobId", description = "The ID uniquely identifying the job", required = true)
+      @Parameter(
+              name = "jobId",
+              description = "The ID uniquely identifying the job",
+              required = true)
           @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
-    if (StringUtils.isEmpty(jobId)) {
+    if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
 
@@ -291,7 +294,7 @@ public class SchedulerRestController extends SecureRestController {
           @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
-    if (StringUtils.isEmpty(jobId)) {
+    if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
 
@@ -379,7 +382,7 @@ public class SchedulerRestController extends SecureRestController {
           @RequestBody
           Job job)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
-    if (StringUtils.isEmpty(jobId)) {
+    if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
 

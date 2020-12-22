@@ -42,11 +42,16 @@ import digital.inception.party.PhysicalAddressType;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.security.SecureRandom;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.Objects;
+import javax.sql.DataSource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -78,6 +83,11 @@ public class PartyServiceTest {
   private static int partyCount;
 
   private static int personCount;
+
+  /** The data source used to provide connections to the application database. */
+  @Autowired
+  @Qualifier("applicationDataSource")
+  DataSource dataSource;
 
   /** The Party Service. */
   @Autowired private IPartyService partyService;
@@ -152,7 +162,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL));
     person.addPhysicalAddress(
-        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.POSTAL));
+        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.CORRESPONDENCE));
 
     return person;
   }
@@ -265,6 +275,36 @@ public class PartyServiceTest {
     person = getTestCompletePersonDetails();
 
     partyService.createPerson(person);
+
+    try (Connection connection = dataSource.getConnection()) {
+      try (PreparedStatement statement = connection.prepareStatement("SELECT type, purpose FROM party.contact_mechanisms")) {
+        try (ResultSet rs = statement.executeQuery()) {
+          while (rs.next()) {
+            Integer contactMechanismType = rs.getInt(1);
+            Integer contactMechanismPurpose = rs.getInt(2);
+
+            int xxx = 0;
+            xxx++;
+          }
+        }
+      }
+    }
+
+
+    try (Connection connection = dataSource.getConnection()) {
+      try (PreparedStatement statement = connection.prepareStatement("SELECT type, purpose FROM party.physical_addresses")) {
+        try (ResultSet rs = statement.executeQuery()) {
+          while (rs.next()) {
+            Integer physicalAddressType = rs.getInt(1);
+            Integer physicalAddressPurpose = rs.getInt(2);
+
+            int xxx = 0;
+            xxx++;
+          }
+        }
+      }
+    }
+
 
     filteredPersons =
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);

@@ -35,16 +35,16 @@ public class CodeData implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The ID uniquely identifying the category the code is associated with. */
-  private String codeCategoryId;
+  private final String codeCategoryId;
 
   /** The ID uniquely identifying the code. */
-  private String id;
+  private final String id;
 
   /** The name of the code. */
-  private String name;
+  private final String name;
 
   /** The value for the code. */
-  private String value;
+  private final String value;
 
   /**
    * Constructs a new <code>CodeData</code>.
@@ -68,9 +68,9 @@ public class CodeData implements Serializable {
       this.id = element.getChildText("Id");
       this.codeCategoryId = element.getChildText("CodeCategoryId");
       this.name =
-          StringUtils.isEmpty(element.getChildText("Name")) ? "" : element.getChildText("Name");
+          StringUtils.hasText(element.getChildText("Name")) ? element.getChildText("Name") : "";
       this.value =
-          StringUtils.isEmpty(element.getChildText("Value")) ? "" : element.getChildText("Value");
+          StringUtils.hasText(element.getChildText("Value")) ? element.getChildText("Value") : "";
     } catch (Throwable e) {
       throw new RuntimeException("Failed to extract the code data from the WBXML", e);
     }
@@ -120,10 +120,10 @@ public class CodeData implements Serializable {
   Element toElement() {
     Element codeElement = new Element("Code");
 
-    codeElement.addContent(new Element("Id", StringUtils.isEmpty(id) ? "" : id));
+    codeElement.addContent(new Element("Id", StringUtils.hasText(id) ? id : ""));
     codeElement.addContent(new Element("CodeCategoryId", codeCategoryId));
-    codeElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
-    codeElement.addContent(new Element("Value", StringUtils.isEmpty(value) ? "" : value));
+    codeElement.addContent(new Element("Name", StringUtils.hasText(name) ? name : ""));
+    codeElement.addContent(new Element("Value", StringUtils.hasText(value) ? value : ""));
 
     return codeElement;
   }

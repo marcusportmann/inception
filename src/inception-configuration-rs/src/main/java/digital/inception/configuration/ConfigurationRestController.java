@@ -127,7 +127,7 @@ public class ConfigurationRestController extends SecureRestController {
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (StringUtils.isEmpty(key)) {
+    if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
 
@@ -182,7 +182,7 @@ public class ConfigurationRestController extends SecureRestController {
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (StringUtils.isEmpty(key)) {
+    if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
 
@@ -239,7 +239,7 @@ public class ConfigurationRestController extends SecureRestController {
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (StringUtils.isEmpty(key)) {
+    if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
 

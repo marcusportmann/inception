@@ -20,12 +20,12 @@ package digital.inception.cache;
 
 import com.hazelcast.config.AwsConfig;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.EvictionConfig;
 import com.hazelcast.config.EvictionPolicy;
-import com.hazelcast.config.GroupConfig;
 import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.JoinConfig;
 import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MaxSizeConfig;
+import com.hazelcast.config.MaxSizePolicy;
 import com.hazelcast.config.MulticastConfig;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.config.TcpIpConfig;
@@ -84,7 +84,6 @@ public class HazelcastServerCacheConfiguration {
    *
    * @return the Hazelcast configuration
    */
-  @SuppressWarnings("deprecation")
   @Bean(name = "hazelcastConfig")
   public Config hazelcastConfig() {
     Config config = new Config();
@@ -126,9 +125,7 @@ public class HazelcastServerCacheConfiguration {
 
     config.setProperty("hazelcast.application.validation.token", getCluster().getPassword());
 
-    GroupConfig groupConfig = config.getGroupConfig();
-    groupConfig.setName(getCluster().getName());
-    groupConfig.setPassword(getCluster().getPassword());
+    config.setClusterName(getCluster().getName());
 
     // Initialise the caches
     for (CacheConfig cacheConfig : getCaches()) {
@@ -137,19 +134,18 @@ public class HazelcastServerCacheConfiguration {
       mapConfig.setInMemoryFormat(
           Enum.valueOf(InMemoryFormat.class, cacheConfig.getInMemoryFormat()));
 
-      mapConfig.setEvictionPolicy(
+      EvictionConfig evictionConfig = new EvictionConfig();
+      evictionConfig.setEvictionPolicy(
           Enum.valueOf(EvictionPolicy.class, cacheConfig.getEvictionPolicy()));
+      evictionConfig.setMaxSizePolicy(
+          Enum.valueOf(MaxSizePolicy.class, cacheConfig.getMaxSizePolicy()));
+      evictionConfig.setSize(cacheConfig.getMaxSize());
+
+      mapConfig.setEvictionConfig(evictionConfig);
 
       mapConfig.setStatisticsEnabled(cacheConfig.getStatisticsEnabled());
 
       mapConfig.setMaxIdleSeconds(cacheConfig.getMaxIdleSeconds());
-
-      MaxSizeConfig maxSizeConfig = new MaxSizeConfig();
-      maxSizeConfig.setMaxSizePolicy(
-          Enum.valueOf(MaxSizeConfig.MaxSizePolicy.class, cacheConfig.getMaxSizePolicy()));
-      maxSizeConfig.setSize(cacheConfig.getMaxSize());
-
-      mapConfig.setMaxSizeConfig(maxSizeConfig);
 
       mapConfig.setBackupCount(cacheConfig.getBackupCount());
 

@@ -195,7 +195,7 @@ public class UserDirectory implements Serializable {
       buffer.append("<name>").append(parameter.getName()).append("</name>");
       buffer
           .append("<value>")
-          .append(StringUtils.isEmpty(parameter.getValue()) ? "" : parameter.getValue())
+          .append(StringUtils.hasText(parameter.getValue()) ? parameter.getValue() : "")
           .append("</value>");
       buffer.append("</parameter>");
     }

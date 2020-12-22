@@ -169,7 +169,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -279,7 +279,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -490,7 +490,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -498,7 +498,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("passwordChange");
     }
 
-    if (StringUtils.isEmpty(passwordChange.getNewPassword())) {
+    if (!StringUtils.hasText(passwordChange.getNewPassword())) {
       throw new InvalidArgumentException("passwordChange");
     }
 
@@ -607,7 +607,7 @@ public class SecurityRestController extends SecureRestController {
           UserLockedException, SecurityServiceException {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -653,14 +653,14 @@ public class SecurityRestController extends SecureRestController {
             "Insufficient access to change the password for the user (" + username + ")");
       }
     } else if (passwordChange.getReason() == PasswordChangeReason.USER) {
-      if (StringUtils.isEmpty(passwordChange.getPassword())) {
+      if (!StringUtils.hasText(passwordChange.getPassword())) {
         throw new InvalidArgumentException("passwordChange");
       }
 
       securityService.changePassword(
           username, passwordChange.getPassword(), passwordChange.getNewPassword());
     } else if (passwordChange.getReason() == PasswordChangeReason.RESET) {
-      if (StringUtils.isEmpty(passwordChange.getSecurityCode())) {
+      if (!StringUtils.hasText(passwordChange.getSecurityCode())) {
         throw new InvalidArgumentException("passwordChange");
       }
 
@@ -1057,7 +1057,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -1187,7 +1187,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -1321,7 +1321,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -1468,7 +1468,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -1643,7 +1643,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -1722,7 +1722,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -1826,7 +1826,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -2136,7 +2136,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -2760,7 +2760,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -2940,7 +2940,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -2948,7 +2948,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("memberType");
     }
 
-    if (StringUtils.isEmpty(memberName)) {
+    if (!StringUtils.hasText(memberName)) {
       throw new InvalidArgumentException("memberName");
     }
 
@@ -3034,11 +3034,11 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (StringUtils.isEmpty(roleCode)) {
+    if (!StringUtils.hasText(roleCode)) {
       throw new InvalidArgumentException("roleCode");
     }
 
@@ -3190,11 +3190,11 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "resetPasswordUrl")
           String resetPasswordUrl)
       throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (StringUtils.isEmpty(resetPasswordUrl)) {
+    if (!StringUtils.hasText(resetPasswordUrl)) {
       throw new InvalidArgumentException("resetPasswordUrl");
     }
 
@@ -3270,7 +3270,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -3452,7 +3452,7 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 

@@ -33,27 +33,13 @@ public class PhysicalAddressId implements Serializable {
   private Party party;
 
   /** The physical address purpose. */
-  private PhysicalAddressPurpose purpose;
+  private Integer purpose;
 
   /** The physical address type. */
-  private PhysicalAddressType type;
+  private Integer type;
 
   /** Constructs a new <code>PhysicalAddressId</code>. */
   public PhysicalAddressId() {}
-
-  /**
-   * Constructs a new <code>PhysicalAddressId</code>.
-   *
-   * @param party the party the physical address is associated with
-   * @param type the physical address type
-   * @param purpose the physical address purpose
-   */
-  public PhysicalAddressId(
-      Party party, PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    this.party = party;
-    this.type = type;
-    this.purpose = purpose;
-  }
 
   /**
    * Indicates whether some other object is "equal to" this one.

@@ -83,7 +83,7 @@ public class InvalidArgumentError {
     this.when = LocalDateTime.now();
     this.message = (cause.getMessage() != null) ? cause.getMessage() : "Invalid Argument";
     this.name =
-        (!StringUtils.isEmpty(cause.getName()))
+        (StringUtils.hasText(cause.getName()))
             ? ValidationError.capitalizePropertyName(cause.getName())
             : "Unknown";
 

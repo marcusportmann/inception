@@ -47,6 +47,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 /**
  * The <code>ContactMechanism</code> class holds the information for a contact mechanism.
  *
+ * <p><b>NOTE:</b> The JPA 2.2 spec (10.6) does not support attribute converters for attributes
+ * annotated with @Id. If Enum types are used for these attributes then the ordinal value is always
+ * used. As a result, the type and purpose attributes for this class are Integers and the Getter and
+ * Setters (a.k.a. Accessors and Mutators) convert to and from the Enum types. A consequence of this
+ * is that the attributes are marked as @JsonIgnore and @XmlTransient and the Getters are annotated
+ * with @JsonProperty and @XmlElement.
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "A mechanism that can be used to contact a party")
@@ -82,22 +89,20 @@ public class ContactMechanism implements Serializable {
   private Party party;
 
   /** The contact mechanism purpose. */
-  @Schema(description = "The contact mechanism purpose", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Purpose", required = true)
+  @JsonIgnore
+  @XmlTransient
   @NotNull
   @Id
   @Column(name = "purpose", nullable = false)
-  private ContactMechanismPurpose purpose;
+  private Integer purpose;
 
   /** The contact mechanism type. */
-  @Schema(description = "The contact mechanism type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
+  @JsonIgnore
+  @XmlTransient
   @NotNull
   @Id
   @Column(name = "type", nullable = false)
-  private ContactMechanismType type;
+  private Integer type;
 
   /** The date and time the contact mechanism was last updated. */
   @JsonIgnore
@@ -127,8 +132,8 @@ public class ContactMechanism implements Serializable {
    */
   public ContactMechanism(
       ContactMechanismType type, ContactMechanismPurpose purpose, String value) {
-    this.type = type;
-    this.purpose = purpose;
+    this.type = ContactMechanismType.toNumericCode(type);
+    this.purpose = ContactMechanismPurpose.toNumericCode(purpose);
     this.value = value;
   }
 
@@ -184,8 +189,11 @@ public class ContactMechanism implements Serializable {
    *
    * @return the contact mechanism purpose
    */
+  @Schema(description = "The contact mechanism purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Purpose", required = true)
   public ContactMechanismPurpose getPurpose() {
-    return purpose;
+    return ContactMechanismPurpose.fromNumericCode(purpose);
   }
 
   /**
@@ -193,8 +201,11 @@ public class ContactMechanism implements Serializable {
    *
    * @return the contact mechanism type
    */
+  @Schema(description = "The contact mechanism type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
   public ContactMechanismType getType() {
-    return type;
+    return ContactMechanismType.fromNumericCode(type);
   }
 
   /**
@@ -243,7 +254,7 @@ public class ContactMechanism implements Serializable {
    * @param purpose the contact mechanism purpose
    */
   public void setPurpose(ContactMechanismPurpose purpose) {
-    this.purpose = purpose;
+    this.purpose = ContactMechanismPurpose.toNumericCode(purpose);
   }
 
   /**
@@ -252,7 +263,7 @@ public class ContactMechanism implements Serializable {
    * @param type the contact mechanism type
    */
   public void setType(ContactMechanismType type) {
-    this.type = type;
+    this.type = ContactMechanismType.toNumericCode(type);
   }
 
   /**

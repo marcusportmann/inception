@@ -355,7 +355,7 @@ public class ReportingRestController extends SecureRestController {
           String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (StringUtils.isEmpty(reportDefinitionId)) {
+    if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
 
@@ -411,7 +411,7 @@ public class ReportingRestController extends SecureRestController {
           String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (StringUtils.isEmpty(reportDefinitionId)) {
+    if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
 

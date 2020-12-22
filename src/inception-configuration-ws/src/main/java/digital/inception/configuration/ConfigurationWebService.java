@@ -73,7 +73,7 @@ public class ConfigurationWebService {
   public void deleteConfiguration(@WebParam(name = "Key") @XmlElement(required = true) String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (StringUtils.isEmpty(key)) {
+    if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
 
@@ -92,7 +92,7 @@ public class ConfigurationWebService {
       @WebParam(name = "Key") @XmlElement(required = true) String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (StringUtils.isEmpty(key)) {
+    if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
 
@@ -111,7 +111,7 @@ public class ConfigurationWebService {
       @WebParam(name = "Key") @XmlElement(required = true) String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (StringUtils.isEmpty(key)) {
+    if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
 

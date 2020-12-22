@@ -214,12 +214,12 @@ public class XmlUtil {
    * @return the <code>javax.xml.namespace.QName</code> instance for the specified QName
    */
   public static QName getQName(Document document, String qname) {
-    qname = StringUtils.isEmpty(qname) ? "" : qname.trim();
+    qname = StringUtils.hasText(qname) ? qname.trim() : "";
 
     String[] nameParts = qname.split(":");
 
     if (nameParts.length == 1) {
-      if (!StringUtils.isEmpty(document.getNamespaceURI())) {
+      if (StringUtils.hasText(document.getNamespaceURI())) {
         return new QName(document.getNamespaceURI(), nameParts[0]);
       } else {
         return new QName(XMLConstants.NULL_NS_URI, nameParts[0], XMLConstants.DEFAULT_NS_PREFIX);

@@ -1193,19 +1193,19 @@ public class SecurityService implements ISecurityService, InitializingBean {
     try {
       Page<Tenant> tenantPage;
 
-      if (StringUtils.isEmpty(filter)) {
-        if (sortDirection == SortDirection.ASCENDING) {
-          tenantPage = tenantRepository.findAllByOrderByNameAsc(pageRequest);
-        } else {
-          tenantPage = tenantRepository.findAllByOrderByNameDesc(pageRequest);
-        }
-      } else {
+      if (StringUtils.hasText(filter)) {
         if (sortDirection == SortDirection.ASCENDING) {
           tenantPage =
               tenantRepository.findByNameContainingIgnoreCaseOrderByNameAsc(filter, pageRequest);
         } else {
           tenantPage =
               tenantRepository.findByNameContainingIgnoreCaseOrderByNameDesc(filter, pageRequest);
+        }
+      } else {
+        if (sortDirection == SortDirection.ASCENDING) {
+          tenantPage = tenantRepository.findAllByOrderByNameAsc(pageRequest);
+        } else {
+          tenantPage = tenantRepository.findAllByOrderByNameDesc(pageRequest);
         }
       }
 
@@ -1219,7 +1219,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (Throwable e) {
       String message = "Failed to retrieve the tenants";
 
-      if (!StringUtils.isEmpty(filter)) {
+      if (StringUtils.hasText(filter)) {
         message += String.format(" matching the filter \"%s\"", filter);
       }
 
@@ -1325,13 +1325,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     try {
       Page<UserDirectory> userDirectoryPage;
 
-      if (StringUtils.isEmpty(filter)) {
-        if (sortDirection == SortDirection.ASCENDING) {
-          userDirectoryPage = userDirectoryRepository.findAllByOrderByNameAsc(pageRequest);
-        } else {
-          userDirectoryPage = userDirectoryRepository.findAllByOrderByNameDesc(pageRequest);
-        }
-      } else {
+      if (StringUtils.hasText(filter)) {
         if (sortDirection == SortDirection.ASCENDING) {
           userDirectoryPage =
               userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
@@ -1340,6 +1334,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
           userDirectoryPage =
               userDirectoryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
                   filter, pageRequest);
+        }
+      } else {
+        if (sortDirection == SortDirection.ASCENDING) {
+          userDirectoryPage = userDirectoryRepository.findAllByOrderByNameAsc(pageRequest);
+        } else {
+          userDirectoryPage = userDirectoryRepository.findAllByOrderByNameDesc(pageRequest);
         }
       }
 
@@ -1601,15 +1601,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     try {
       Page<UserDirectorySummary> userDirectorySummaryPage;
 
-      if (StringUtils.isEmpty(filter)) {
-        if (sortDirection == SortDirection.ASCENDING) {
-          userDirectorySummaryPage =
-              userDirectorySummaryRepository.findAllByOrderByNameAsc(pageRequest);
-        } else {
-          userDirectorySummaryPage =
-              userDirectorySummaryRepository.findAllByOrderByNameDesc(pageRequest);
-        }
-      } else {
+      if (StringUtils.hasText(filter)) {
         if (sortDirection == SortDirection.ASCENDING) {
           userDirectorySummaryPage =
               userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameAsc(
@@ -1618,6 +1610,14 @@ public class SecurityService implements ISecurityService, InitializingBean {
           userDirectorySummaryPage =
               userDirectorySummaryRepository.findByNameContainingIgnoreCaseOrderByNameDesc(
                   filter, pageRequest);
+        }
+      } else {
+        if (sortDirection == SortDirection.ASCENDING) {
+          userDirectorySummaryPage =
+              userDirectorySummaryRepository.findAllByOrderByNameAsc(pageRequest);
+        } else {
+          userDirectorySummaryPage =
+              userDirectorySummaryRepository.findAllByOrderByNameDesc(pageRequest);
         }
       }
 
@@ -1824,8 +1824,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
       User user = userDirectory.getUser(username);
 
-      if (!StringUtils.isEmpty(user.getEmail())) {
-        if (StringUtils.isEmpty(securityCode)) {
+      if (StringUtils.hasText(user.getEmail())) {
+        if (!StringUtils.hasText(securityCode)) {
           securityCode = securityCodeGenerator.nextString();
         }
 
@@ -2317,7 +2317,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   private void sendPasswordResetEmail(User user, String resetPasswordUrl, String securityCode)
       throws SecurityServiceException {
     try {
-      if (!StringUtils.isEmpty(user.getEmail())) {
+      if (StringUtils.hasText(user.getEmail())) {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("preferredName", user.getPreferredName().toUpperCase());
         parameters.put("securityCode", securityCode);

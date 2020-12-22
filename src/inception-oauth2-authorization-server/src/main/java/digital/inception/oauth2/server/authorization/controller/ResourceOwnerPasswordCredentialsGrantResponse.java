@@ -111,11 +111,11 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
       jsonGenerator.writeStringField("token_type", "bearer");
       jsonGenerator.writeNumberField("expires_in", expiresIn);
 
-      if (!StringUtils.isEmpty(refreshToken)) {
+      if (StringUtils.hasText(refreshToken)) {
         jsonGenerator.writeStringField("refresh_token", refreshToken);
       }
 
-      if (!StringUtils.isEmpty(scope)) {
+      if (StringUtils.hasText(scope)) {
         jsonGenerator.writeStringField("scope", scope);
       }
 

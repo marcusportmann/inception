@@ -297,14 +297,14 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
     rootElement.addContent(new Element("ApplicationId", applicationId));
     rootElement.addContent(new Element("ApplicationVersion", applicationVersion));
     rootElement.addContent(
-        new Element("Description", StringUtils.isEmpty(description) ? "" : description));
-    rootElement.addContent(new Element("Detail", StringUtils.isEmpty(detail) ? "" : detail));
-    rootElement.addContent(new Element("Feedback", StringUtils.isEmpty(feedback) ? "" : feedback));
+        new Element("Description", StringUtils.hasText(description) ? description : ""));
+    rootElement.addContent(new Element("Detail", StringUtils.hasText(detail) ? detail : ""));
+    rootElement.addContent(new Element("Feedback", StringUtils.hasText(feedback) ? feedback : ""));
     rootElement.addContent(
         new Element(
             "Created",
             (created == null) ? ISO8601Util.now() : ISO8601Util.fromLocalDateTime(created)));
-    rootElement.addContent(new Element("Who", StringUtils.isEmpty(who) ? "" : who));
+    rootElement.addContent(new Element("Who", StringUtils.hasText(who) ? who : ""));
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
 
     if (data != null) {

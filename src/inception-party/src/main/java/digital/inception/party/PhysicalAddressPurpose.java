@@ -34,25 +34,41 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "PhysicalAddressPurpose", namespace = "http://party.inception.digital")
 public enum PhysicalAddressPurpose {
   @XmlEnumValue("Billing")
-  BILLING("billing", PartyType.PERSON, "Billing Address"),
+  BILLING("billing", new PartyType[]{PartyType.ORGANIZATION, PartyType.PERSON}, "Billing Address"),
+  @XmlEnumValue("Business")
+  BUSINESS("business", new PartyType[]{PartyType.ORGANIZATION}, "Business Address"),
+  @XmlEnumValue("Correspondence")
+  CORRESPONDENCE("correspondence", new PartyType[]{PartyType.ORGANIZATION, PartyType.PERSON}, "Correspondence Address"),
   @XmlEnumValue("Delivery")
-  DELIVERY("delivery", PartyType.PERSON, "Delivery Address"),
+  DELIVERY("delivery", new PartyType[]{PartyType.ORGANIZATION, PartyType.PERSON}, "Delivery Address"),
+  @XmlEnumValue("Home")
+  HOME("home", new PartyType[]{PartyType.PERSON}, "Home Address"),
   @XmlEnumValue("Main")
-  MAIN("main", PartyType.ORGANIZATION, "Main Address"),
-  @XmlEnumValue("Postal")
-  POSTAL("postal", PartyType.PERSON, "Postal Address"),
+  MAIN("main", new PartyType[]{PartyType.ORGANIZATION}, "Main Address"),
+  @XmlEnumValue("Permanent")
+  PERMANENT("permanent", new PartyType[]{PartyType.PERSON}, "Permanent Address"),
+  @XmlEnumValue("RegisteredOffice")
+  REGISTERED_OFFICE("registered_office", new PartyType[]{PartyType.ORGANIZATION}, "Registered Office Address"),
   @XmlEnumValue("Residential")
-  RESIDENTIAL("residential", PartyType.PERSON, "Residential Address");
+  RESIDENTIAL("residential", new PartyType[]{PartyType.PERSON}, "Residential Address"),
+  @XmlEnumValue("Service")
+  SERVICE("service", new PartyType[]{PartyType.ORGANIZATION, PartyType.PERSON}, "Service Address"),
+  @XmlEnumValue("SoleTrader")
+  SOLE_TRADER("sole_trader", new PartyType[]{PartyType.PERSON}, "Sole Trader Address"),
+  @XmlEnumValue("Temporary")
+  TEMPORARY("temporary", new PartyType[]{PartyType.PERSON}, "Temporary Address"),
+  @XmlEnumValue("Work")
+  WORK("work", new PartyType[]{PartyType.PERSON}, "Work Address");
 
   private final String code;
 
   private final String description;
 
-  private final PartyType partyType;
+  private final PartyType[] partyTypes;
 
-  PhysicalAddressPurpose(String code, PartyType partyType, String description) {
+  PhysicalAddressPurpose(String code, PartyType[] partyTypes, String description) {
     this.code = code;
-    this.partyType = partyType;
+    this.partyTypes = partyTypes;
     this.description = description;
   }
 
@@ -68,17 +84,41 @@ public enum PhysicalAddressPurpose {
       case "billing":
         return PhysicalAddressPurpose.BILLING;
 
+      case "business":
+        return PhysicalAddressPurpose.BUSINESS;
+
+      case "correspondence":
+        return PhysicalAddressPurpose.CORRESPONDENCE;
+
       case "delivery":
         return PhysicalAddressPurpose.DELIVERY;
+
+      case "home":
+        return PhysicalAddressPurpose.HOME;
 
       case "main":
         return PhysicalAddressPurpose.MAIN;
 
-      case "postal":
-        return PhysicalAddressPurpose.POSTAL;
+      case "permanent":
+        return PhysicalAddressPurpose.PERMANENT;
+
+      case "registered_office":
+        return PhysicalAddressPurpose.REGISTERED_OFFICE;
 
       case "residential":
         return PhysicalAddressPurpose.RESIDENTIAL;
+
+      case "service":
+        return PhysicalAddressPurpose.SERVICE;
+
+      case "sole_trader":
+        return PhysicalAddressPurpose.SOLE_TRADER;
+
+      case "temporary":
+        return PhysicalAddressPurpose.TEMPORARY;
+
+      case "work":
+        return PhysicalAddressPurpose.WORK;
 
       default:
         throw new RuntimeException(
@@ -99,13 +139,29 @@ public enum PhysicalAddressPurpose {
       case 1:
         return PhysicalAddressPurpose.BILLING;
       case 2:
-        return PhysicalAddressPurpose.DELIVERY;
+        return PhysicalAddressPurpose.BUSINESS;
       case 3:
-        return PhysicalAddressPurpose.POSTAL;
+        return PhysicalAddressPurpose.CORRESPONDENCE;
       case 4:
+        return PhysicalAddressPurpose.DELIVERY;
+      case 5:
+        return PhysicalAddressPurpose.HOME;
+      case 6:
+        return PhysicalAddressPurpose.MAIN;
+      case 7:
+        return PhysicalAddressPurpose.PERMANENT;
+      case 8:
+        return PhysicalAddressPurpose.REGISTERED_OFFICE;
+      case 9:
         return PhysicalAddressPurpose.RESIDENTIAL;
       case 10:
-        return PhysicalAddressPurpose.MAIN;
+        return PhysicalAddressPurpose.SERVICE;
+      case 11:
+        return PhysicalAddressPurpose.SOLE_TRADER;
+      case 12:
+        return PhysicalAddressPurpose.TEMPORARY;
+      case 13:
+        return PhysicalAddressPurpose.WORK;
 
       default:
         throw new RuntimeException(
@@ -125,14 +181,30 @@ public enum PhysicalAddressPurpose {
     switch (contactMechanismPurpose) {
       case BILLING:
         return 1;
-      case DELIVERY:
+      case BUSINESS:
         return 2;
-      case POSTAL:
+      case CORRESPONDENCE:
         return 3;
-      case RESIDENTIAL:
+      case DELIVERY:
         return 4;
+      case HOME:
+        return 5;
       case MAIN:
+        return 6;
+      case PERMANENT:
+        return 7;
+      case REGISTERED_OFFICE:
+        return 8;
+      case RESIDENTIAL:
+        return 9;
+      case SERVICE:
         return 10;
+      case SOLE_TRADER:
+        return 11;
+      case TEMPORARY:
+        return 12;
+      case WORK:
+        return 13;
       default:
         throw new RuntimeException(
             "Failed to determine the numeric code for the physical address purpose ("
@@ -161,11 +233,11 @@ public enum PhysicalAddressPurpose {
   }
 
   /**
-   * Returns the party type the physical address purpose is associated with.
+   * Returns the party types the physical address purpose is associated with.
    *
-   * @return the party type the physical address purpose is associated with
+   * @return the party types the physical address purpose is associated with
    */
-  public PartyType partyType() {
-    return partyType;
+  public PartyType[] partyTypes() {
+    return partyTypes;
   }
 }

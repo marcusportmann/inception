@@ -41,7 +41,7 @@ public final class StringToZonedDateTimeConverter implements Converter<String, Z
 
   @Override
   public ZonedDateTime convert(String source) {
-    if (StringUtils.isEmpty(source)) {
+    if (!StringUtils.hasText(source)) {
       return null;
     }
 

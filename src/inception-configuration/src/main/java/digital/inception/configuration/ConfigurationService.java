@@ -277,7 +277,7 @@ public class ConfigurationService implements IConfigurationService {
   public List<ConfigurationSummary> getFilteredConfigurationSummaries(String filter)
       throws ConfigurationServiceException {
     try {
-      if (!StringUtils.isEmpty(filter)) {
+      if (StringUtils.hasText(filter)) {
         return configurationSummaryRepository.findByKeyIgnoreCaseContaining(filter);
       } else {
         return configurationSummaryRepository.findAllByOrderByKeyDesc();
@@ -298,7 +298,7 @@ public class ConfigurationService implements IConfigurationService {
   public List<Configuration> getFilteredConfigurations(String filter)
       throws ConfigurationServiceException {
     try {
-      if (!StringUtils.isEmpty(filter)) {
+      if (StringUtils.hasText(filter)) {
         return configurationRepository.findByKeyIgnoreCaseContaining(filter);
       } else {
         return configurationRepository.findAllByOrderByKeyDesc();

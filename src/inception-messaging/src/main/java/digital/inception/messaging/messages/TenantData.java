@@ -50,7 +50,7 @@ public class TenantData implements Serializable {
     try {
       this.id = UUID.fromString(element.getChildText("Id"));
       this.name =
-          StringUtils.isEmpty(element.getChildText("Name")) ? "" : element.getChildText("Name");
+          StringUtils.hasText(element.getChildText("Name")) ? element.getChildText("Name") : "";
     } catch (Throwable e) {
       throw new RuntimeException("Failed to extract the tenant data from the WBXML", e);
     }
@@ -111,7 +111,7 @@ public class TenantData implements Serializable {
     Element tenantElement = new Element("Tenant");
 
     tenantElement.addContent(new Element("Id", id.toString()));
-    tenantElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
+    tenantElement.addContent(new Element("Name", StringUtils.hasText(name) ? name : ""));
 
     return tenantElement;
   }

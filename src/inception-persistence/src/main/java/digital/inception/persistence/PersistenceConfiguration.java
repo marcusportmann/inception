@@ -149,7 +149,7 @@ public class PersistenceConfiguration {
 
     packagesToScanForEntities.add("digital.inception");
 
-    if (!StringUtils.isEmpty(this.packagesToScanForEntities)) {
+    if (StringUtils.hasText(this.packagesToScanForEntities)) {
       String[] packagesToScan = this.packagesToScanForEntities.split(",");
 
       Collections.addAll(packagesToScanForEntities, StringUtils.trimArrayElements(packagesToScan));

@@ -40,7 +40,7 @@ public class RestUtil {
    * @return a String correctly formatted for insertion in a JSON text
    */
   public static String quote(String string) {
-    if (StringUtils.isEmpty(string)) {
+    if (!StringUtils.hasText(string)) {
       return "\"\"";
     }
 

@@ -76,7 +76,7 @@ public class ErrorService implements IErrorService {
 
       errorReport.setDescription(description);
 
-      String detail = StringUtils.isEmpty(errorReport.getDetail()) ? "" : errorReport.getDetail();
+      String detail = StringUtils.hasText(errorReport.getDetail()) ? errorReport.getDetail() : "";
 
       if (detail.length() > 4000) {
         detail = detail.substring(0, 4000);

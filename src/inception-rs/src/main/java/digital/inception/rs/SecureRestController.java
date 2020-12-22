@@ -142,7 +142,7 @@ public abstract class SecureRestController {
    *     specified authority or <code>false</code> otherwise
    */
   protected boolean hasAuthority(Authentication authentication, String authority) {
-    if ((authentication == null) || (StringUtils.isEmpty(authority))) {
+    if ((authentication == null) || (!StringUtils.hasText(authority))) {
       return false;
     }
 

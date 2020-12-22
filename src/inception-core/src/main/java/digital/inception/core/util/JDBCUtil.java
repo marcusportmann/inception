@@ -242,7 +242,7 @@ public class JDBCUtil {
         }
       }
 
-      if ((multiLineBuffer != null) && (!StringUtils.isEmpty(multiLineBuffer.toString()))) {
+      if ((multiLineBuffer != null) && (StringUtils.hasText(multiLineBuffer.toString()))) {
         throw new IOException(
             "Failed to process the last SQL statement from the file ("
                 + url.getPath()
@@ -314,9 +314,9 @@ public class JDBCUtil {
     try (ResultSet rs = metaData.getSchemas()) {
       while (rs.next()) {
         String tmpCatalog =
-            StringUtils.isEmpty(rs.getString("TABLE_CATALOG")) ? "" : rs.getString("TABLE_CATALOG");
+            StringUtils.hasText(rs.getString("TABLE_CATALOG")) ? rs.getString("TABLE_CATALOG") : "";
         String tmpSchema =
-            StringUtils.isEmpty(rs.getString("TABLE_SCHEM")) ? "" : rs.getString("TABLE_SCHEM");
+            StringUtils.hasText(rs.getString("TABLE_SCHEM")) ? rs.getString("TABLE_SCHEM") : "";
 
         if ((catalog == null) || catalog.equalsIgnoreCase(tmpCatalog)) {
           if (tmpSchema.equalsIgnoreCase(schema)) {
@@ -392,7 +392,7 @@ public class JDBCUtil {
     try (ResultSet rs = metaData.getTables(catalog, schema, table, new String[] {"TABLE"})) {
       while (rs.next()) {
         String tmpTable =
-            StringUtils.isEmpty(rs.getString("TABLE_NAME")) ? "" : rs.getString("TABLE_NAME");
+            StringUtils.hasText(rs.getString("TABLE_NAME")) ? rs.getString("TABLE_NAME") : "";
 
         if (table.equals(tmpTable)) {
           return true;

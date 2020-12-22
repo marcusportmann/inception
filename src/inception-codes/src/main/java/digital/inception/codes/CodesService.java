@@ -377,7 +377,7 @@ public class CodesService implements ICodesService, InitializingBean {
         if (codeProvider.codeCategoryExists(codeCategoryId)) {
           String codeProviderData = codeProvider.getCodeCategoryData(codeCategoryId);
 
-          return StringUtils.isEmpty(codeProviderData) ? "" : codeProviderData;
+          return StringUtils.hasText(codeProviderData) ? codeProviderData : "";
         }
       }
 
@@ -418,7 +418,7 @@ public class CodesService implements ICodesService, InitializingBean {
           String codeProviderData =
               codeProvider.getCodeCategoryDataWithParameters(codeCategoryId, parameters);
 
-          return StringUtils.isEmpty(codeProviderData) ? "" : codeProviderData;
+          return StringUtils.hasText(codeProviderData) ? codeProviderData : "";
         }
       }
 

@@ -184,7 +184,7 @@ public class CryptoUtil {
       // Attempt to retrieve the private key from the key store
       Key privateKey =
           ks.getKey(
-              alias, StringUtils.isEmpty(password) ? "".toCharArray() : password.toCharArray());
+              alias, StringUtils.hasText(password) ? password.toCharArray() : "".toCharArray());
 
       if (privateKey == null) {
         throw new GeneralSecurityException(

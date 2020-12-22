@@ -26,10 +26,10 @@ package digital.inception.messaging.handler;
 public abstract class MessageHandler implements IMessageHandler {
 
   /** The configuration information for the message handler. */
-  private MessageHandlerConfig messageHandlerConfig;
+  private final MessageHandlerConfig messageHandlerConfig;
 
   /** The name of the message handler. */
-  private String name;
+  private final String name;
 
   /**
    * Constructs a new <code>MessageHandler</code>.

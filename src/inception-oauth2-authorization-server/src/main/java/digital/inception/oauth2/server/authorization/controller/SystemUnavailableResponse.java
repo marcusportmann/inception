@@ -114,13 +114,13 @@ public class SystemUnavailableResponse extends Response {
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField("timestamp", ISO8601Util.fromLocalDateTime(timestamp));
       jsonGenerator.writeStringField("message", message);
-      if (!StringUtils.isEmpty(detail)) {
+      if (StringUtils.hasText(detail)) {
         jsonGenerator.writeStringField("detail", detail);
       }
-      if (!StringUtils.isEmpty(exception)) {
+      if (StringUtils.hasText(exception)) {
         jsonGenerator.writeStringField("exception", exception);
       }
-      if (!StringUtils.isEmpty(stackTrace)) {
+      if (StringUtils.hasText(stackTrace)) {
         jsonGenerator.writeStringField("exception", stackTrace);
       }
 

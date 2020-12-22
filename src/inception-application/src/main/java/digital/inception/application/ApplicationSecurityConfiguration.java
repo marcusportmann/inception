@@ -76,9 +76,9 @@ public class ApplicationSecurityConfiguration {
    * </code> otherwise
    */
   public boolean hasKeyStoreConfiguration() {
-    return ((!StringUtils.isEmpty(keyStoreType))
-        && (!StringUtils.isEmpty(keyStorePath))
-        && (!StringUtils.isEmpty(keyStorePassword)));
+    return ((StringUtils.hasText(keyStoreType))
+        && (StringUtils.hasText(keyStorePath))
+        && (StringUtils.hasText(keyStorePassword)));
   }
 
   /**
@@ -88,7 +88,7 @@ public class ApplicationSecurityConfiguration {
    * </code> otherwise
    */
   public boolean hasTrustStoreConfiguration() {
-    return ((!StringUtils.isEmpty(trustStoreType)) && (!StringUtils.isEmpty(trustStorePath)));
+    return ((StringUtils.hasText(trustStoreType)) && (StringUtils.hasText(trustStorePath)));
   }
 
   /**
@@ -99,17 +99,17 @@ public class ApplicationSecurityConfiguration {
   @Bean(name = "applicationKeyStore")
   public KeyStore keyStore() {
     try {
-      if (StringUtils.isEmpty(keyStoreType)) {
+      if (!StringUtils.hasText(keyStoreType)) {
         throw new ConfigurationException(
             "The type was not specified for the application key store");
       }
 
-      if (StringUtils.isEmpty(keyStorePath)) {
+      if (!StringUtils.hasText(keyStorePath)) {
         throw new ConfigurationException(
             "The path was not specified for the application key store");
       }
 
-      if (StringUtils.isEmpty(keyStorePassword)) {
+      if (!StringUtils.hasText(keyStorePassword)) {
         throw new ConfigurationException(
             "The password was not specified for the application key store");
       }
@@ -138,17 +138,17 @@ public class ApplicationSecurityConfiguration {
   @Bean(name = "applicationTrustStore")
   public KeyStore trustStore() {
     try {
-      if (StringUtils.isEmpty(trustStoreType)) {
+      if (!StringUtils.hasText(trustStoreType)) {
         throw new ConfigurationException(
             "The type was not specified for the application trust store");
       }
 
-      if (StringUtils.isEmpty(trustStorePath)) {
+      if (!StringUtils.hasText(trustStorePath)) {
         throw new ConfigurationException(
             "The path was not specified for the application trust store");
       }
 
-      trustStorePassword = StringUtils.isEmpty(trustStorePassword) ? "" : trustStorePassword;
+      trustStorePassword = StringUtils.hasText(trustStorePassword) ? trustStorePassword : "";
 
       return CryptoUtil.loadTrustStore(trustStoreType, trustStorePath, trustStorePassword);
     } catch (Throwable e) {

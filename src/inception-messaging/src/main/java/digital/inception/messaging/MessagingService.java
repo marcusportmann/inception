@@ -414,9 +414,9 @@ public class MessagingService implements IMessagingService, InitializingBean {
       byte[] decryptedData =
           MessageTranslator.decryptMessageData(
               userEncryptionKey,
-              StringUtils.isEmpty(message.getEncryptionIV())
-                  ? new byte[0]
-                  : Base64Util.decode(message.getEncryptionIV()),
+              StringUtils.hasText(message.getEncryptionIV())
+                  ? Base64Util.decode(message.getEncryptionIV())
+                  : new byte[0],
               message.getData());
 
       // Verify the data hash for the unencrypted data
@@ -801,7 +801,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
        * download attempts.
        */
       for (Message message : messages) {
-        if (!StringUtils.isEmpty(message.getLockName())) {
+        if (StringUtils.hasText(message.getLockName())) {
           if (!message.getLockName().equals(instanceName)) {
             if (logger.isDebugEnabled()) {
               logger.debug(
@@ -1367,7 +1367,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /** Initialize the configuration for the Messaging Service. */
   private void initConfiguration() throws MessagingServiceException {
     try {
-      if (StringUtils.isEmpty(encryptionKeyBase64)) {
+      if (!StringUtils.hasText(encryptionKeyBase64)) {
         throw new MessagingServiceException(
             "No inception.messaging.encryptionKey configuration value found");
       } else {

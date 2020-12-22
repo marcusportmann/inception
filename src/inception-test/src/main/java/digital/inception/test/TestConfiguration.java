@@ -236,7 +236,7 @@ public class TestConfiguration {
            * for the Inception framework.
            */
           for (Resource databaseInitResource : inMemoryInitResources) {
-            if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
+            if ((StringUtils.hasText(databaseInitResource.getFilename()))
                 && databaseInitResource.getFilename().startsWith("inception-")) {
               loadSQL(dataSource, databaseInitResource);
             }
@@ -247,7 +247,7 @@ public class TestConfiguration {
            * resources.
            */
           for (Resource databaseInitResource : inMemoryInitResources) {
-            if ((!StringUtils.isEmpty(databaseInitResource.getFilename()))
+            if ((StringUtils.hasText(databaseInitResource.getFilename()))
                 && (!databaseInitResource.getFilename().startsWith("inception-"))) {
               loadSQL(dataSource, databaseInitResource);
             }

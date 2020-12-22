@@ -104,11 +104,11 @@ public class CodesWebService {
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId)) {
+    if (!StringUtils.hasText(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -124,7 +124,7 @@ public class CodesWebService {
   public void deleteCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -144,11 +144,11 @@ public class CodesWebService {
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId)) {
+    if (!StringUtils.hasText(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -177,7 +177,7 @@ public class CodesWebService {
   public CodeCategory getCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -195,13 +195,13 @@ public class CodesWebService {
   public String getCodeCategoryData(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
     String data = codesService.getCodeCategoryData(codeCategoryId);
 
-    return StringUtils.isEmpty(data) ? "" : data;
+    return StringUtils.hasText(data) ? data : "";
   }
 
   /**
@@ -215,7 +215,7 @@ public class CodesWebService {
   public String getCodeCategoryName(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -244,7 +244,7 @@ public class CodesWebService {
   public Date getCodeCategoryUpdated(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -268,11 +268,11 @@ public class CodesWebService {
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId)) {
+    if (!StringUtils.hasText(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -290,7 +290,7 @@ public class CodesWebService {
   public List<Code> getCodesForCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 

@@ -260,7 +260,7 @@ public class AuthenticateResponseData extends WbxmlMessageData {
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(
-        new Element("ErrorMessage", StringUtils.isEmpty(errorMessage) ? "" : errorMessage));
+        new Element("ErrorMessage", StringUtils.hasText(errorMessage) ? errorMessage : ""));
     rootElement.addContent(new Element("UserEncryptionKey", userEncryptionKey));
 
     if ((tenants != null) && (tenants.size() > 0)) {

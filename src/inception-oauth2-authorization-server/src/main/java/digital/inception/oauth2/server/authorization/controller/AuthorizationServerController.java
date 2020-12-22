@@ -110,7 +110,7 @@ public class AuthorizationServerController {
     String grantType = parameters.get(GrantRequest.GRANT_TYPE_PARAMETER);
 
     // If no grant type is specified return an error
-    if (StringUtils.isEmpty(grantType)) {
+    if (!StringUtils.hasText(grantType)) {
       return new InvalidRequestErrorResponse(
           "Missing '" + GrantRequest.GRANT_TYPE_PARAMETER + "' parameter");
     }

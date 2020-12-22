@@ -38,7 +38,7 @@ public class BackgroundMessageProcessor implements InitializingBean {
   private static final Logger logger = LoggerFactory.getLogger(BackgroundMessageProcessor.class);
 
   /** The Messaging Service. */
-  private IMessagingService messagingService;
+  private final IMessagingService messagingService;
 
   /**
    * Constructs a new <code>BackgroundMessageProcessor</code>.

@@ -63,7 +63,7 @@ public class RefreshAccessTokenGrantRequest extends GrantRequest {
    */
   public static boolean isValid(Map<String, String> parameters) {
 
-    if (StringUtils.isEmpty(parameters.get(GRANT_TYPE_PARAMETER))) {
+    if (!StringUtils.hasText(parameters.get(GRANT_TYPE_PARAMETER))) {
       return false;
     }
 
@@ -71,7 +71,7 @@ public class RefreshAccessTokenGrantRequest extends GrantRequest {
       return false;
     }
 
-    return !StringUtils.isEmpty(parameters.get(REFRESH_TOKEN_PARAMETER));
+    return StringUtils.hasText(parameters.get(REFRESH_TOKEN_PARAMETER));
   }
 
   /**

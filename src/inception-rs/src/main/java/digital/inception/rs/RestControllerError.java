@@ -131,7 +131,7 @@ public class RestControllerError implements Serializable {
         // Use the HTTP response status specified through the @ResponseStatus annotation
         responseStatus = annotation.value();
 
-        if (!StringUtils.isEmpty(annotation.reason())) {
+        if (StringUtils.hasText(annotation.reason())) {
           this.message = annotation.reason();
           this.detail = cause.getMessage();
         } else {

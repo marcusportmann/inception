@@ -303,7 +303,7 @@ public class MailRestController extends SecureRestController {
           @PathVariable
           String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
-    if (StringUtils.isEmpty(mailTemplateId)) {
+    if (!StringUtils.hasText(mailTemplateId)) {
       throw new InvalidArgumentException("mailTemplateId");
     }
 

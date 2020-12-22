@@ -212,7 +212,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   public List<Job> getFilteredJobs(String filter) throws SchedulerServiceException {
     try {
-      if (!StringUtils.isEmpty(filter)) {
+      if (StringUtils.hasText(filter)) {
         return jobRepository.findFiltered("%" + filter + "%");
       } else {
         return jobRepository.findAll();

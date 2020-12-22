@@ -69,6 +69,8 @@ create table CAMUNDA.ACT_GE_SCHEMA_LOG (
 
 insert into CAMUNDA.ACT_GE_SCHEMA_LOG
 values ('0', CURRENT_TIMESTAMP, '7.13.0');
+insert into CAMUNDA.ACT_GE_SCHEMA_LOG
+values ('300', CURRENT_TIMESTAMP, '7.14.0');
 
 create table CAMUNDA.ACT_RE_DEPLOYMENT (
     ID_ varchar(64),
@@ -215,6 +217,7 @@ create table CAMUNDA.ACT_RU_VARIABLE (
     CASE_EXECUTION_ID_ varchar(64),
     CASE_INST_ID_ varchar(64),
     TASK_ID_ varchar(64),
+    BATCH_ID_ varchar(64),
     BYTEARRAY_ID_ varchar(64),
     DOUBLE_ double,
     LONG_ bigint,
@@ -346,6 +349,8 @@ create index ACT_IDX_EVENT_SUBSCR_CONFIG_ on CAMUNDA.ACT_RU_EVENT_SUBSCR(CONFIGU
 create index ACT_IDX_EVENT_SUBSCR_TENANT_ID on CAMUNDA.ACT_RU_EVENT_SUBSCR(TENANT_ID_);
 create index ACT_IDX_VARIABLE_TASK_ID on CAMUNDA.ACT_RU_VARIABLE(TASK_ID_);
 create index ACT_IDX_VARIABLE_TENANT_ID on CAMUNDA.ACT_RU_VARIABLE(TENANT_ID_);
+create index ACT_IDX_VARIABLE_TASK_NAME_TYPE on CAMUNDA.ACT_RU_VARIABLE(TASK_ID_, NAME_, TYPE_);
+
 create index ACT_IDX_ATHRZ_PROCEDEF on CAMUNDA.ACT_RU_IDENTITYLINK(PROC_DEF_ID_);
 create index ACT_IDX_INC_CONFIGURATION on CAMUNDA.ACT_RU_INCIDENT(CONFIGURATION_);
 create index ACT_IDX_INC_TENANT_ID on CAMUNDA.ACT_RU_INCIDENT(TENANT_ID_);
@@ -541,6 +546,12 @@ alter table CAMUNDA.ACT_RU_BATCH
     add constraint ACT_FK_BATCH_JOB_DEF
     foreign key (BATCH_JOB_DEF_ID_)
     references CAMUNDA.ACT_RU_JOBDEF (ID_);
+
+create index ACT_IDX_BATCH_ID ON CAMUNDA.ACT_RU_VARIABLE(BATCH_ID_);
+alter table CAMUNDA.ACT_RU_VARIABLE
+    add constraint ACT_FK_VAR_BATCH
+    foreign key (BATCH_ID_)
+    references CAMUNDA.ACT_RU_BATCH (ID_);
 
 -- indices for history cleanup: https://jira.camunda.com/browse/CAM-11616
 create index ACT_IDX_AUTH_ROOT_PI on CAMUNDA.ACT_RU_AUTHORIZATION(ROOT_PROC_INST_ID_);

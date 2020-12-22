@@ -82,7 +82,7 @@ public class SMSServiceTest {
   /** Test the get number of SMS credits remaining functionality. */
   @Test
   public void getNumberOfSMSCreditsRemainingTest() throws Exception {
-    if ((!StringUtils.isEmpty(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
+    if ((StringUtils.hasText(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
       int numberOfSMSCreditsRemaining = smsService.getNumberOfSMSCreditsRemaining();
     }
   }
@@ -95,7 +95,7 @@ public class SMSServiceTest {
   /** Test the send SMS functionality. */
   @Test
   public void sendSMSTest() throws Exception {
-    if ((!StringUtils.isEmpty(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
+    if ((StringUtils.hasText(smsPortalClientSecret)) && (!smsPortalClientId.equals("CLIENT_ID"))) {
       smsService.sendSMS("0832763107", "Testing 1.. 2.. 3..");
 
       Thread.sleep(100000L);

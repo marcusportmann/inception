@@ -157,7 +157,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(
-        new Element("ErrorMessage", StringUtils.isEmpty(errorMessage) ? "" : errorMessage));
+        new Element("ErrorMessage", StringUtils.hasText(errorMessage) ? errorMessage : ""));
     rootElement.addContent(new Element("ErrorReportId", errorReportId.toString()));
 
     Document document = new Document(rootElement);
@@ -180,7 +180,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
         + "errorCode=\""
         + errorCode
         + "\", errorMessage=\""
-        + (StringUtils.isEmpty(errorMessage) ? "" : errorMessage)
+        + (StringUtils.hasText(errorMessage) ? errorMessage : "")
         + "\"}";
   }
 }

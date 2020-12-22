@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <code>ContactMechanismPurpose</code> class holds the information for a possible contact
@@ -50,7 +51,7 @@ import javax.xml.bind.annotation.XmlType;
   "code",
   "localeId",
   "numericCode",
-  "partyType",
+  "partyTypes",
   "sortIndex",
   "name",
   "description"
@@ -64,7 +65,7 @@ import javax.xml.bind.annotation.XmlType;
       "code",
       "localeId",
       "numericCode",
-      "partyType",
+      "partyTypes",
       "sortIndex",
       "name",
       "description"
@@ -125,16 +126,13 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "numeric_code", nullable = false)
   private Integer numericCode;
 
-  /** The code for the party type the contact mechanism purpose is associated with. */
-  @Schema(
-      description = "The code for the party type the contact mechanism purpose is associated with",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "PartyType", required = true)
+  /**
+   * The comma-delimited codes for the party types the contact mechanism purpose is associated with.
+   */
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "party_type", nullable = false)
-  private String partyType;
+  @Size(min = 1, max = 300)
+  @Column(name = "party_types", nullable = false)
+  private String partyTypes;
 
   /** The sort index for the contact mechanism purpose. */
   @Schema(description = "The sort index for the contact mechanism purpose", required = true)
@@ -234,12 +232,18 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Returns the code for the party type the contact mechanism purpose is associated with.
+   * Returns the codes for the party types the contact mechanism purpose is associated with.
    *
-   * @return the code for the party type the contact mechanism purpose is associated with
+   * @return the codes for the party types the contact mechanism purpose is associated with
    */
-  public String getPartyType() {
-    return partyType;
+  @Schema(
+      description =
+          "The codes for the party types the contact mechanism purpose is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PartyTypes", required = true)
+  public String[] getPartyTypes() {
+    return StringUtils.commaDelimitedListToStringArray(partyTypes);
   }
 
   /**
@@ -320,12 +324,13 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Set the code for the party type the contact mechanism purpose is associated with.
+   * Set the codes for the party types the contact mechanism purpose is associated with.
    *
-   * @param partyType the code for the party type the contact mechanism purpose is associated with
+   * @param partyTypes the codes for the party types the contact mechanism purpose is associated
+   *     with
    */
-  public void setPartyType(String partyType) {
-    this.partyType = partyType;
+  public void setPartyType(String[] partyTypes) {
+    this.partyTypes = StringUtils.arrayToDelimitedString(partyTypes, ",");
   }
 
   /**
@@ -340,8 +345,8 @@ public class ContactMechanismPurpose implements Serializable {
   /**
    * Set the code for the contact mechanism type the contact mechanism purpose is associated with.
    *
-   * @param type the code for the contact mechanism type the contact mechanism purpose is
-   *     associated with
+   * @param type the code for the contact mechanism type the contact mechanism purpose is associated
+   *     with
    */
   public void setType(String type) {
     this.type = type;

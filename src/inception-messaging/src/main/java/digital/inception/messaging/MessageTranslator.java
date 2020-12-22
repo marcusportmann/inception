@@ -40,7 +40,7 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings({"WeakerAccess"})
 public class MessageTranslator {
 
-  private static ThreadLocal<MessageDigest> threadLocalMessageDigest =
+  private static final ThreadLocal<MessageDigest> threadLocalMessageDigest =
       ThreadLocal.withInitial(
           () -> {
             try {
@@ -54,13 +54,13 @@ public class MessageTranslator {
    * The Universally Unique Identifier (UUID) uniquely identifying the device the message originated
    * from.
    */
-  private UUID deviceId;
+  private final UUID deviceId;
 
   /** The encryption key used to encrypt or decrypt the message data. */
-  private byte[] encryptionKey;
+  private final byte[] encryptionKey;
 
   /** The username uniquely identifying the username responsible for the message. */
-  private String username;
+  private final String username;
 
   /**
    * Constructs a new <code>MessageTranslator</code>.
@@ -162,9 +162,9 @@ public class MessageTranslator {
       data =
           decryptMessageData(
               encryptionKey,
-              StringUtils.isEmpty(message.getEncryptionIV())
-                  ? new byte[0]
-                  : Base64Util.decode(message.getEncryptionIV()),
+              StringUtils.hasText(message.getEncryptionIV())
+                  ? Base64Util.decode(message.getEncryptionIV())
+                  : new byte[0],
               message.getData());
 
       // Retrieve the SHA-256 hash of the unencrypted message data
@@ -212,7 +212,7 @@ public class MessageTranslator {
    */
   public Message toMessage(WbxmlMessageData messageData, UUID correlationId)
       throws MessagingServiceException {
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new MessagingServiceException(
           String.format(
               "Failed to create the message with type (%s): A username has not been specified",

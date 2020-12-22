@@ -172,7 +172,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
 
     rootElement.addContent(new Element("ErrorCode", String.valueOf(errorCode)));
     rootElement.addContent(
-        new Element("ErrorMessage", StringUtils.isEmpty(errorMessage) ? "" : errorMessage));
+        new Element("ErrorMessage", StringUtils.hasText(errorMessage) ? errorMessage : ""));
     rootElement.addContent(new Element("UserExists", String.valueOf(userExists)));
 
     Document document = new Document(rootElement);

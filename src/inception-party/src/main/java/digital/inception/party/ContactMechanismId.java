@@ -33,27 +33,10 @@ public class ContactMechanismId implements Serializable {
   private Party party;
 
   /** The contact mechanism purpose. */
-  private ContactMechanismPurpose purpose;
+  private Integer purpose;
 
   /** The contact mechanism type. */
-  private ContactMechanismType type;
-
-  /** Constructs a new <code>ContactMechanismId</code>. */
-  public ContactMechanismId() {}
-
-  /**
-   * Constructs a new <code>ContactMechanismId</code>.
-   *
-   * @param party the party the contact mechanism is associated with
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
-   */
-  public ContactMechanismId(
-      Party party, ContactMechanismType type, ContactMechanismPurpose purpose) {
-    this.party = party;
-    this.type = type;
-    this.purpose = purpose;
-  }
+  private Integer type;
 
   /**
    * Indicates whether some other object is "equal to" this one.

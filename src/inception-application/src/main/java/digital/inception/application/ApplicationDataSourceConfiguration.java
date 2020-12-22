@@ -149,20 +149,20 @@ public class ApplicationDataSourceConfiguration {
       Properties agroalProperties = new Properties();
       agroalProperties.setProperty(AgroalPropertiesReader.JDBC_URL, url);
 
-      if (!StringUtils.isEmpty(username)) {
+      if (StringUtils.hasText(username)) {
         agroalProperties.setProperty(AgroalPropertiesReader.PRINCIPAL, username);
       }
 
-      if (!StringUtils.isEmpty(password)) {
+      if (StringUtils.hasText(password)) {
         agroalProperties.setProperty(AgroalPropertiesReader.CREDENTIAL, password);
       }
 
       if (recoveryEnabled) {
-        if (!StringUtils.isEmpty(recoveryUsername)) {
+        if (StringUtils.hasText(recoveryUsername)) {
           agroalProperties.setProperty(AgroalPropertiesReader.RECOVERY_PRINCIPAL, recoveryUsername);
         }
 
-        if (!StringUtils.isEmpty(recoveryPassword)) {
+        if (StringUtils.hasText(recoveryPassword)) {
           agroalProperties.setProperty(
               AgroalPropertiesReader.RECOVERY_CREDENTIAL, recoveryPassword);
         }
@@ -250,7 +250,7 @@ public class ApplicationDataSourceConfiguration {
          * for the Inception framework.
          */
         for (Resource inMemoryInitResource : inMemoryInitResources) {
-          if ((!StringUtils.isEmpty(inMemoryInitResource.getFilename()))
+          if ((StringUtils.hasText(inMemoryInitResource.getFilename()))
               && inMemoryInitResource.getFilename().contains("inception-")) {
             loadSQL(dataSource, inMemoryInitResource);
           }
@@ -261,7 +261,7 @@ public class ApplicationDataSourceConfiguration {
          * resources for the application.
          */
         for (Resource inMemoryInitResource : inMemoryInitResources) {
-          if ((!StringUtils.isEmpty(inMemoryInitResource.getFilename()))
+          if ((StringUtils.hasText(inMemoryInitResource.getFilename()))
               && (!inMemoryInitResource.getFilename().contains("inception-"))) {
             loadSQL(dataSource, inMemoryInitResource);
           }
@@ -291,8 +291,6 @@ public class ApplicationDataSourceConfiguration {
 
           try (Statement statement = connection.createStatement()) {
             statement.execute(sqlStatement);
-          } catch (Throwable e) {
-            throw e;
           }
         }
       }

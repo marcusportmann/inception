@@ -150,7 +150,7 @@ public class ReportingService implements IReportingService {
 
       Map<String, Object> localParameters = new HashMap<>();
 
-      if (StringUtils.isEmpty(getLocalReportFolderPath())) {
+      if (!StringUtils.hasText(getLocalReportFolderPath())) {
         localParameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
       }
 
@@ -199,7 +199,7 @@ public class ReportingService implements IReportingService {
       localParameters.put(JRXPathQueryExecuterFactory.XML_LOCALE, Locale.ENGLISH);
       localParameters.put(JRParameter.REPORT_LOCALE, Locale.US);
 
-      if (StringUtils.isEmpty(getLocalReportFolderPath())) {
+      if (!StringUtils.hasText(getLocalReportFolderPath())) {
         localParameters.put("SUBREPORT_DIR", getLocalReportFolderPath());
       }
 

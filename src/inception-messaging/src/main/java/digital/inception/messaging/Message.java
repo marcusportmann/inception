@@ -287,7 +287,8 @@ public class Message {
     }
 
     this.priority =
-        MessagePriority.fromNumericCode(Integer.parseInt(rootElement.getAttributeValue("priority")));
+        MessagePriority.fromNumericCode(
+            Integer.parseInt(rootElement.getAttributeValue("priority")));
     this.data = rootElement.getOpaque();
 
     if (rootElement.hasAttribute("dataHash")) {
@@ -404,7 +405,7 @@ public class Message {
     this.data = data;
     this.dataHash = dataHash;
 
-    if (StringUtils.isEmpty(dataHash.length())) {
+    if (!StringUtils.hasText(dataHash)) {
       throw new RuntimeException(
           "Unable to initialize a message with encrypted data using a blank data hash");
     }
@@ -445,7 +446,7 @@ public class Message {
     this.data = data;
     this.dataHash = dataHash;
 
-    if (StringUtils.isEmpty(dataHash.length())) {
+    if (!StringUtils.hasText(dataHash)) {
       throw new RuntimeException(
           "Unable to initialize a message with encrypted data using a blank data hash");
     }
@@ -727,7 +728,7 @@ public class Message {
    *     otherwise
    */
   public boolean isEncrypted() {
-    return (!StringUtils.isEmpty(dataHash));
+    return (StringUtils.hasText(dataHash));
   }
 
   /**
@@ -977,7 +978,7 @@ public class Message {
       rootElement.setAttribute("downloadAttempts", Integer.toString(downloadAttempts));
     }
 
-    if (!StringUtils.isEmpty(dataHash)) {
+    if (StringUtils.hasText(dataHash)) {
       rootElement.setAttribute("dataHash", dataHash);
     } else {
       rootElement.setAttribute("dataHash", "");

@@ -811,12 +811,12 @@ public class InternalUserDirectory extends UserDirectoryBase {
               "name");
 
       Page<Group> groupPage;
-      if (StringUtils.isEmpty(filter)) {
-        groupPage = getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageRequest);
-      } else {
+      if (StringUtils.hasText(filter)) {
         groupPage =
             getGroupRepository()
                 .findFiltered(getUserDirectoryId(), "%" + filter + "%", pageRequest);
+      } else {
+        groupPage = getGroupRepository().findByUserDirectoryId(getUserDirectoryId(), pageRequest);
       }
 
       return new Groups(
@@ -951,15 +951,15 @@ public class InternalUserDirectory extends UserDirectoryBase {
 
       Page<String> usernamesForGroupPage;
 
-      if (StringUtils.isEmpty(filter)) {
-        usernamesForGroupPage =
-            getGroupRepository()
-                .getUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get(), pageRequest);
-      } else {
+      if (StringUtils.hasText(filter)) {
         usernamesForGroupPage =
             getGroupRepository()
                 .getFilteredUsernamesForGroup(
                     getUserDirectoryId(), groupIdOptional.get(), "%" + filter + "%", pageRequest);
+      } else {
+        usernamesForGroupPage =
+            getGroupRepository()
+                .getUsernamesForGroup(getUserDirectoryId(), groupIdOptional.get(), pageRequest);
       }
 
       List<GroupMember> groupMembers = new ArrayList<>();
@@ -1144,10 +1144,10 @@ public class InternalUserDirectory extends UserDirectoryBase {
           getUserRepository()
               .getNameByUserDirectoryIdAndUsernameIgnoreCase(getUserDirectoryId(), username);
 
-      if (StringUtils.isEmpty(userName)) {
-        throw new UserNotFoundException(username);
-      } else {
+      if (StringUtils.hasText(userName)) {
         return userName;
+      } else {
+        throw new UserNotFoundException(username);
       }
     } catch (UserNotFoundException e) {
       throw e;
@@ -1236,11 +1236,11 @@ public class InternalUserDirectory extends UserDirectoryBase {
       }
 
       Page<User> userPage;
-      if (StringUtils.isEmpty(filter)) {
-        userPage = getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageRequest);
-      } else {
+      if (StringUtils.hasText(filter)) {
         userPage =
             getUserRepository().findFiltered(getUserDirectoryId(), "%" + filter + "%", pageRequest);
+      } else {
+        userPage = getUserRepository().findByUserDirectoryId(getUserDirectoryId(), pageRequest);
       }
 
       return new Users(
@@ -1554,7 +1554,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
         existingUser.setMobileNumber(user.getMobileNumber());
       }
 
-      if (!StringUtils.isEmpty(user.getPassword())) {
+      if (StringUtils.hasText(user.getPassword())) {
         existingUser.setPassword(PasswordUtil.createPasswordHash(user.getPassword()));
       }
 

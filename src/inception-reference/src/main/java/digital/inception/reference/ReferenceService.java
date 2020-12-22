@@ -201,7 +201,7 @@ public class ReferenceService implements IReferenceService {
   public List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return contactMechanismPurposeRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
@@ -235,7 +235,7 @@ public class ReferenceService implements IReferenceService {
   public List<ContactMechanismType> getContactMechanismTypes(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return contactMechanismTypeRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
@@ -267,7 +267,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<Country> getCountries(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return countryRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return countryRepository.findByLocaleIdIgnoreCase(
@@ -299,7 +299,7 @@ public class ReferenceService implements IReferenceService {
   public List<EmploymentStatus> getEmploymentStatuses(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return employmentStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return employmentStatusRepository.findByLocaleIdIgnoreCase(
@@ -330,7 +330,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<EmploymentType> getEmploymentTypes(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return employmentTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return employmentTypeRepository.findByLocaleIdIgnoreCase(
@@ -351,7 +351,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<Gender> getGenders(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return genderRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return genderRepository.findByLocaleIdIgnoreCase(
@@ -394,7 +394,7 @@ public class ReferenceService implements IReferenceService {
   public List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return identityDocumentTypeRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
@@ -426,7 +426,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<Language> getLanguages(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return languageRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return languageRepository.findByLocaleIdIgnoreCase(
@@ -457,7 +457,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<MaritalStatus> getMaritalStatuses(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return maritalStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return maritalStatusRepository.findByLocaleIdIgnoreCase(
@@ -488,7 +488,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<MarriageType> getMarriageTypes(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return marriageTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return marriageTypeRepository.findByLocaleIdIgnoreCase(
@@ -519,7 +519,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<NextOfKinType> getNextOfKinTypes(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return nextOfKinTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return nextOfKinTypeRepository.findByLocaleIdIgnoreCase(
@@ -550,7 +550,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<Occupation> getOccupations(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return occupationRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return occupationRepository.findByLocaleIdIgnoreCase(
@@ -581,7 +581,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<Race> getRaces(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return raceRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return raceRepository.findByLocaleIdIgnoreCase(
@@ -612,7 +612,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<Region> getRegions(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return regionRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return regionRepository.findByLocaleIdIgnoreCase(
@@ -645,7 +645,7 @@ public class ReferenceService implements IReferenceService {
   public List<ResidencePermitType> getResidencePermitTypes(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return residencePermitTypeRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
@@ -678,7 +678,7 @@ public class ReferenceService implements IReferenceService {
   public List<ResidencyStatus> getResidencyStatuses(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return residencyStatusRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return residencyStatusRepository.findByLocaleIdIgnoreCase(
@@ -711,7 +711,7 @@ public class ReferenceService implements IReferenceService {
   public List<ResidentialType> getResidentialTypes(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return residentialTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return residentialTypeRepository.findByLocaleIdIgnoreCase(
@@ -742,7 +742,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return sourceOfFundsRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return sourceOfFundsRepository.findByLocaleIdIgnoreCase(
@@ -773,7 +773,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<TaxNumberType> getTaxNumberTypes(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return taxNumberTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return taxNumberTypeRepository.findByLocaleIdIgnoreCase(
@@ -804,7 +804,7 @@ public class ReferenceService implements IReferenceService {
   @Override
   public List<Title> getTitles(String localeId) throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return titleRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
         return titleRepository.findByLocaleIdIgnoreCase(
@@ -837,7 +837,7 @@ public class ReferenceService implements IReferenceService {
   public List<VerificationMethod> getVerificationMethods(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return verificationMethodRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {
@@ -871,7 +871,7 @@ public class ReferenceService implements IReferenceService {
   public List<VerificationStatus> getVerificationStatuses(String localeId)
       throws ReferenceServiceException {
     try {
-      if (StringUtils.isEmpty(localeId)) {
+      if (!StringUtils.hasText(localeId)) {
         return verificationStatusRepository.findAll(
             Sort.by(Direction.ASC, "localeId", "sortIndex"));
       } else {

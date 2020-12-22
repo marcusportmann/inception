@@ -138,7 +138,7 @@ public class ValidationError implements Serializable, Cloneable {
    * @return the capitalized string
    */
   public static String capitalizePropertyName(String str) {
-    if (StringUtils.isEmpty(str)) {
+    if (!StringUtils.hasText(str)) {
       return str;
     }
 

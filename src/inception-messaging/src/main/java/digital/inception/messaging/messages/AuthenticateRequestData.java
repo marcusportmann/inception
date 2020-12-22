@@ -147,8 +147,8 @@ public class AuthenticateRequestData extends WbxmlMessageData {
     Element rootElement = new Element("AuthenticateRequest");
 
     rootElement.addContent(new Element("DeviceId", deviceId.toString()));
-    rootElement.addContent(new Element("Password", StringUtils.isEmpty(password) ? "" : password));
-    rootElement.addContent(new Element("Username", StringUtils.isEmpty(username) ? "" : username));
+    rootElement.addContent(new Element("Password", StringUtils.hasText(password) ? password : ""));
+    rootElement.addContent(new Element("Username", StringUtils.hasText(username) ? username : ""));
 
     Document document = new Document(rootElement);
 

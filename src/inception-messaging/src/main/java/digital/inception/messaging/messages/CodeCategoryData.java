@@ -44,19 +44,19 @@ public class CodeCategoryData implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The XML or JSON data for the code category. */
-  private String codeData;
+  private final String codeData;
 
   /** The codes for the code category. */
-  private List<CodeData> codes;
+  private final List<CodeData> codes;
 
   /** The ID uniquely identifying the code category. */
-  private String id;
+  private final String id;
 
   /** The date and time the code category was last updated. */
-  private LocalDateTime lastUpdated;
+  private final LocalDateTime lastUpdated;
 
   /** The name of the code category. */
-  private String name;
+  private final String name;
 
   /**
    * Constructs a new <code>CodeCategoryData</code>.
@@ -111,7 +111,7 @@ public class CodeCategoryData implements Serializable {
     this.id = codeCategory.getId();
     this.name = codeCategory.getName();
     this.lastUpdated = codeCategory.getUpdated();
-    this.codeData = StringUtils.isEmpty(codeData) ? "" : codeData;
+    this.codeData = StringUtils.hasText(codeData) ? codeData : "";
     this.codes = new ArrayList<>();
 
     if (codes != null) {
@@ -224,7 +224,7 @@ public class CodeCategoryData implements Serializable {
     Element codeCategoryElement = new Element("CodeCategory");
 
     codeCategoryElement.addContent(new Element("Id", id));
-    codeCategoryElement.addContent(new Element("Name", StringUtils.isEmpty(name) ? "" : name));
+    codeCategoryElement.addContent(new Element("Name", StringUtils.hasText(name) ? name : ""));
     codeCategoryElement.addContent(
         new Element(
             "LastUpdated",

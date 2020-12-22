@@ -111,11 +111,11 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (StringUtils.isEmpty(roleCode)) {
+    if (!StringUtils.hasText(roleCode)) {
       throw new InvalidArgumentException("roleCode");
     }
 
@@ -165,7 +165,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -173,7 +173,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("passwordChange");
     }
 
-    if (StringUtils.isEmpty(passwordChange.getNewPassword())) {
+    if (!StringUtils.hasText(passwordChange.getNewPassword())) {
       throw new InvalidArgumentException("passwordChange");
     }
 
@@ -209,7 +209,7 @@ public class SecurityWebService {
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           AuthenticationFailedException, InvalidSecurityCodeException, ExistingPasswordException,
           UserLockedException, SecurityServiceException {
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -242,14 +242,14 @@ public class SecurityWebService {
               && passwordChange.getResetPasswordHistory(),
           passwordChange.getReason());
     } else if (passwordChange.getReason() == PasswordChangeReason.USER) {
-      if (StringUtils.isEmpty(passwordChange.getPassword())) {
+      if (!StringUtils.hasText(passwordChange.getPassword())) {
         throw new InvalidArgumentException("passwordChange");
       }
 
       securityService.changePassword(
           username, passwordChange.getPassword(), passwordChange.getNewPassword());
     } else if (passwordChange.getReason() == PasswordChangeReason.RESET) {
-      if (StringUtils.isEmpty(passwordChange.getSecurityCode())) {
+      if (!StringUtils.hasText(passwordChange.getSecurityCode())) {
         throw new InvalidArgumentException("passwordChange");
       }
 
@@ -340,7 +340,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -379,7 +379,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -422,7 +422,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -467,7 +467,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -527,7 +527,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -554,7 +554,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -591,7 +591,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -691,7 +691,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -884,7 +884,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
@@ -962,11 +962,11 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
-    if (StringUtils.isEmpty(roleCode)) {
+    if (!StringUtils.hasText(roleCode)) {
       throw new InvalidArgumentException("roleCode");
     }
 
@@ -1008,11 +1008,11 @@ public class SecurityWebService {
       @WebParam(name = "Username") @XmlElement(required = true) String username,
       @WebParam(name = "ResetPasswordUrl") @XmlElement(required = true) String resetPasswordUrl)
       throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
-    if (StringUtils.isEmpty(username)) {
+    if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
-    if (StringUtils.isEmpty(resetPasswordUrl)) {
+    if (!StringUtils.hasText(resetPasswordUrl)) {
       throw new InvalidArgumentException("resetPasswordUrl");
     }
 
@@ -1099,7 +1099,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (StringUtils.isEmpty(groupName)) {
+    if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
     }
 
@@ -1107,7 +1107,7 @@ public class SecurityWebService {
       throw new InvalidArgumentException("memberType");
     }
 
-    if (StringUtils.isEmpty(memberName)) {
+    if (!StringUtils.hasText(memberName)) {
       throw new InvalidArgumentException("memberName");
     }
   }

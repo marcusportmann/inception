@@ -81,7 +81,7 @@ public abstract class ErrorResponse extends Response {
 
       jsonGenerator.writeStartObject();
       jsonGenerator.writeStringField("error", error);
-      if (!StringUtils.isEmpty(errorDescription)) {
+      if (StringUtils.hasText(errorDescription)) {
         jsonGenerator.writeStringField("error_description", errorDescription);
       }
       jsonGenerator.writeEndObject();

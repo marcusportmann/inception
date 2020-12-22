@@ -54,14 +54,14 @@ public class MessagePartDownloadResponse {
    * The result code. A result code of 0 is used to indicate that the message part download request
    * was processed successfully.
    */
-  private long code;
+  private final long code;
 
   /**
    * The user-friendly text description of the result of processing the message part download
    * request. The <code>detail</code> field may be blank if the message download request was
    * processed successfully.
    */
-  private String detail;
+  private final String detail;
 
   /**
    * The flattened information for the exception that resulted from processing the message part

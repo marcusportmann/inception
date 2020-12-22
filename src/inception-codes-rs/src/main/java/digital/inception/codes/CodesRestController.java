@@ -137,7 +137,7 @@ public class CodesRestController extends SecureRestController {
           Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
           CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -273,11 +273,11 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId)) {
+    if (!StringUtils.hasText(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -332,7 +332,7 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -394,11 +394,11 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId)) {
+    if (!StringUtils.hasText(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -480,7 +480,7 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -536,13 +536,13 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
     String data = codesService.getCodeCategoryData(codeCategoryId);
 
-    return RestUtil.quote(StringUtils.isEmpty(data) ? "" : data);
+    return RestUtil.quote(StringUtils.hasText(data) ? data : "");
   }
 
   /**
@@ -594,7 +594,7 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -680,7 +680,7 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -745,11 +745,11 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId)) {
+    if (!StringUtils.hasText(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -805,7 +805,7 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
@@ -871,11 +871,11 @@ public class CodesRestController extends SecureRestController {
           @RequestBody
           Code code)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 
-    if (StringUtils.isEmpty(codeId)) {
+    if (!StringUtils.hasText(codeId)) {
       throw new InvalidArgumentException("codeId");
     }
 
@@ -955,7 +955,7 @@ public class CodesRestController extends SecureRestController {
           @RequestBody
           CodeCategory codeCategory)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (StringUtils.isEmpty(codeCategoryId)) {
+    if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
 

@@ -341,7 +341,7 @@ public class SMSService implements ISMSService {
   public boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
       throws SMSServiceException {
     try {
-      if (StringUtils.isEmpty(message)) {
+      if (!StringUtils.hasText(message)) {
         logger.info("Failed to send the empty SMS message to (" + mobileNumber + ")");
 
         return true;
@@ -550,7 +550,7 @@ public class SMSService implements ISMSService {
   }
 
   private String formatMobileNumber(String mobileNumber) {
-    if (StringUtils.isEmpty(mobileNumber)) {
+    if (!StringUtils.hasText(mobileNumber)) {
       return "";
     }
 
@@ -644,7 +644,7 @@ public class SMSService implements ISMSService {
 
         throw new RuntimeException(
             "The MyMobileAPI service returned an error: "
-                + (StringUtils.isEmpty(error) ? "UNKNOWN" : error));
+                + (StringUtils.hasText(error) ? error : "UNKNOWN"));
       }
 
       return apiResultElement;

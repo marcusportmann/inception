@@ -32,10 +32,10 @@ import java.util.UUID;
 public class MessageHandlerConfig {
 
   /** The fully qualified name of the class that implements the message handler. */
-  private String className;
+  private final String className;
 
   /** The configuration information for the messages the handler is capable of processing. */
-  private List<MessageConfig> messagesConfig;
+  private final List<MessageConfig> messagesConfig;
 
   /** The name of the message handler. */
   private String name;
@@ -194,26 +194,26 @@ public class MessageHandlerConfig {
   public class MessageConfig {
 
     /** Should messages of the supported message type be archived? */
-    private boolean isArchivable;
+    private final boolean isArchivable;
 
     /**
      * Is the handler capable of asynchronously processing messages of the supported message type.
      */
-    private boolean isAsynchronous;
+    private final boolean isAsynchronous;
 
     /**
      * Should the messages of the supported message type be processed securely i.e. should these
      * messages be encrypted?
      */
-    private boolean isSecure;
+    private final boolean isSecure;
 
     /**
      * Is the handler capable of synchronously processing messages of the supported message type.
      */
-    private boolean isSynchronous;
+    private final boolean isSynchronous;
 
     /** The Universally Unique Identifier (UUID) uniquely identifying the message type. */
-    private UUID messageTypeId;
+    private final UUID messageTypeId;
 
     /**
      * Constructs a new <code>MessageConfig</code>.

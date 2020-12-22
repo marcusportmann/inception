@@ -108,7 +108,7 @@ public class TestRequestData extends WbxmlMessageData {
     Element rootElement = new Element("TestRequest");
 
     rootElement.addContent(
-        new Element("TestValue", StringUtils.isEmpty(testValue) ? "" : testValue));
+        new Element("TestValue", StringUtils.hasText(testValue) ? testValue : ""));
 
     Document document = new Document(rootElement);
 

@@ -38,13 +38,13 @@ public class MessagePartReceivedRequest {
    * The Universally Unique Identifier (UUID) uniquely identifying the device the message part
    * received request originated from.
    */
-  private UUID deviceId;
+  private final UUID deviceId;
 
   /**
    * The Universally Unique Identifier (UUID) uniquely identifying the message part that was
    * successfully downloaded.
    */
-  private UUID messagePartId;
+  private final UUID messagePartId;
 
   /**
    * Constructs a new <code>MessagePartReceivedRequest</code> and populates it from the information

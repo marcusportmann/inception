@@ -41,7 +41,7 @@ public final class StringToLocalDateConverter implements Converter<String, Local
 
   @Override
   public LocalDate convert(String source) {
-    if (StringUtils.isEmpty(source)) {
+    if (!StringUtils.hasText(source)) {
       return null;
     }
 

@@ -220,10 +220,10 @@ public class PartyService implements IPartyService {
 
     try {
       Page<Organization> organizationPage;
-      if (StringUtils.isEmpty(filter)) {
-        organizationPage = organizationRepository.findAll(pageRequest);
-      } else {
+      if (StringUtils.hasText(filter)) {
         organizationPage = organizationRepository.findFiltered("%" + filter + "%", pageRequest);
+      } else {
+        organizationPage = organizationRepository.findAll(pageRequest);
       }
 
       return new Organizations(
@@ -265,10 +265,10 @@ public class PartyService implements IPartyService {
     try {
 
       Page<Party> partyPage;
-      if (StringUtils.isEmpty(filter)) {
-        partyPage = partyRepository.findAll(pageRequest);
-      } else {
+      if (StringUtils.hasText(filter)) {
         partyPage = partyRepository.findFiltered("%" + filter + "%", pageRequest);
+      } else {
+        partyPage = partyRepository.findAll(pageRequest);
       }
 
       return new Parties(
@@ -337,10 +337,10 @@ public class PartyService implements IPartyService {
       }
 
       Page<Person> personPage;
-      if (StringUtils.isEmpty(filter)) {
-        personPage = personRepository.findAll(pageRequest);
-      } else {
+      if (StringUtils.hasText(filter)) {
         personPage = personRepository.findFiltered("%" + filter + "%", pageRequest);
+      } else {
+        personPage = personRepository.findAll(pageRequest);
       }
 
       return new Persons(

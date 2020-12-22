@@ -811,11 +811,11 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       attributes.put(new BasicAttribute(groupNameAttribute, group.getName()));
 
-      if (!StringUtils.isEmpty(groupDescriptionAttribute)) {
+      if (StringUtils.hasText(groupDescriptionAttribute)) {
         attributes.put(
             new BasicAttribute(
                 groupDescriptionAttribute,
-                StringUtils.isEmpty(group.getDescription()) ? "" : group.getDescription()));
+                StringUtils.hasText(group.getDescription()) ? group.getDescription() : ""));
       }
 
       dirContext.bind(groupDN, dirContext, attributes);
@@ -877,32 +877,32 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       attributes.put(new BasicAttribute(userUsernameAttribute, user.getUsername()));
 
-      if ((!StringUtils.isEmpty(userNameAttribute)) && (!StringUtils.isEmpty(user.getName()))) {
+      if ((StringUtils.hasText(userNameAttribute)) && (StringUtils.hasText(user.getName()))) {
         attributes.put(new BasicAttribute(userNameAttribute, user.getName()));
       }
 
-      if ((!StringUtils.isEmpty(userPreferredNameAttribute))
-          && (!StringUtils.isEmpty(user.getPreferredName()))) {
+      if ((StringUtils.hasText(userPreferredNameAttribute))
+          && (StringUtils.hasText(user.getPreferredName()))) {
         attributes.put(new BasicAttribute(userPreferredNameAttribute, user.getPreferredName()));
       }
 
-      if ((!StringUtils.isEmpty(userEmailAttribute)) && (!StringUtils.isEmpty(user.getEmail()))) {
+      if ((StringUtils.hasText(userEmailAttribute)) && (StringUtils.hasText(user.getEmail()))) {
         attributes.put(new BasicAttribute(userEmailAttribute, user.getEmail()));
       }
 
-      if ((!StringUtils.isEmpty(userPhoneNumberAttribute))
-          && (!StringUtils.isEmpty(user.getPhoneNumber()))) {
+      if ((StringUtils.hasText(userPhoneNumberAttribute))
+          && (StringUtils.hasText(user.getPhoneNumber()))) {
         attributes.put(new BasicAttribute(userPhoneNumberAttribute, user.getPhoneNumber()));
       }
 
-      if ((!StringUtils.isEmpty(userMobileNumberAttribute))
-          && (!StringUtils.isEmpty(user.getMobileNumber()))) {
+      if ((StringUtils.hasText(userMobileNumberAttribute))
+          && (StringUtils.hasText(user.getMobileNumber()))) {
         attributes.put(new BasicAttribute(userMobileNumberAttribute, user.getMobileNumber()));
       }
 
       attributes.put(
           new BasicAttribute(
-              "userPassword", StringUtils.isEmpty(user.getPassword()) ? "" : user.getPassword()));
+              "userPassword", StringUtils.hasText(user.getPassword()) ? user.getPassword() : ""));
 
       userDN =
           new LdapName(
@@ -1428,13 +1428,12 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       String searchFilter;
 
-      if (StringUtils.isEmpty(filter)) {
-        searchFilter = String.format("(objectClass=%s)", groupObjectClass);
-
-      } else {
+      if (StringUtils.hasText(filter)) {
         searchFilter =
             String.format(
                 "(&(objectClass=%s)(%s=*%s*))", groupObjectClass, groupNameAttribute, filter);
+      } else {
+        searchFilter = String.format("(objectClass=%s)", groupObjectClass);
       }
 
       SearchControls searchControls = new SearchControls();
@@ -1628,7 +1627,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     try {
       dirContext = getDirContext(bindDN, bindPassword);
 
-      if (!StringUtils.isEmpty(filter)) {
+      if (StringUtils.hasText(filter)) {
         filter = filter.toLowerCase();
       }
 
@@ -1655,7 +1654,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
             for (Rdn rdn : groupMemberDn.getRdns()) {
               if (rdn.getType().equalsIgnoreCase(userUsernameAttribute)) {
-                if (StringUtils.isEmpty(filter)) {
+                if (!StringUtils.hasText(filter)) {
                   groupMembers.add(
                       new GroupMember(
                           getUserDirectoryId(),
@@ -1949,7 +1948,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       StringBuilder buffer = new StringBuilder(user.getName());
 
-      if (!StringUtils.isEmpty(user.getPreferredName())) {
+      if (StringUtils.hasText(user.getPreferredName())) {
         if (buffer.length() > 0) {
           buffer.append(" ");
         }
@@ -2036,9 +2035,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       String searchFilter;
 
-      if (StringUtils.isEmpty(filter)) {
-        searchFilter = String.format("(objectClass=%s)", userObjectClass);
-      } else {
+      if (StringUtils.hasText(filter)) {
         searchFilter =
             String.format(
                 "(&(objectClass=%s)(|(%s=*%s*)(%s=*%s*)(%s=*%s*)))",
@@ -2049,6 +2046,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
                 filter,
                 userPreferredNameAttribute,
                 filter);
+      } else {
+        searchFilter = String.format("(objectClass=%s)", userObjectClass);
       }
 
       SearchControls searchControls = new SearchControls();
@@ -2448,13 +2447,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (!StringUtils.isEmpty(groupDescriptionAttribute)) {
+      if (StringUtils.hasText(groupDescriptionAttribute)) {
         modificationItems.add(
             new ModificationItem(
                 DirContext.REPLACE_ATTRIBUTE,
                 new BasicAttribute(
                     groupDescriptionAttribute,
-                    StringUtils.isEmpty(group.getDescription()) ? "" : group.getDescription())));
+                    StringUtils.hasText(group.getDescription()) ? group.getDescription() : "")));
       }
 
       if (modificationItems.size() > 0) {
@@ -2518,72 +2517,72 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       List<ModificationItem> modificationItems = new ArrayList<>();
 
-      if (!StringUtils.isEmpty(userNameAttribute)) {
-        if (StringUtils.isEmpty(user.getName())) {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userNameAttribute)));
-        } else {
+      if (StringUtils.hasText(userNameAttribute)) {
+        if (StringUtils.hasText(user.getName())) {
           modificationItems.add(
               new ModificationItem(
                   DirContext.REPLACE_ATTRIBUTE,
                   new BasicAttribute(userNameAttribute, user.getName())));
+        } else {
+          modificationItems.add(
+              new ModificationItem(
+                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userNameAttribute)));
         }
       }
 
-      if (!StringUtils.isEmpty(userPreferredNameAttribute)) {
-        if (StringUtils.isEmpty(user.getPreferredName())) {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userPreferredNameAttribute)));
-        } else {
+      if (StringUtils.hasText(userPreferredNameAttribute)) {
+        if (StringUtils.hasText(user.getPreferredName())) {
           modificationItems.add(
               new ModificationItem(
                   DirContext.REPLACE_ATTRIBUTE,
                   new BasicAttribute(userPreferredNameAttribute, user.getPreferredName())));
+        } else {
+          modificationItems.add(
+              new ModificationItem(
+                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userPreferredNameAttribute)));
         }
       }
 
-      if (!StringUtils.isEmpty(userEmailAttribute)) {
-        if (StringUtils.isEmpty(user.getEmail())) {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userEmailAttribute)));
-        } else {
+      if (StringUtils.hasText(userEmailAttribute)) {
+        if (StringUtils.hasText(user.getEmail())) {
           modificationItems.add(
               new ModificationItem(
                   DirContext.REPLACE_ATTRIBUTE,
                   new BasicAttribute(userEmailAttribute, user.getEmail())));
+        } else {
+          modificationItems.add(
+              new ModificationItem(
+                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userEmailAttribute)));
         }
       }
 
-      if (!StringUtils.isEmpty(userPhoneNumberAttribute)) {
-        if (StringUtils.isEmpty(user.getPhoneNumber())) {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userPhoneNumberAttribute)));
-        } else {
+      if (StringUtils.hasText(userPhoneNumberAttribute)) {
+        if (StringUtils.hasText(user.getPhoneNumber())) {
           modificationItems.add(
               new ModificationItem(
                   DirContext.REPLACE_ATTRIBUTE,
                   new BasicAttribute(userPhoneNumberAttribute, user.getPhoneNumber())));
+        } else {
+          modificationItems.add(
+              new ModificationItem(
+                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userPhoneNumberAttribute)));
         }
       }
 
-      if (!StringUtils.isEmpty(userMobileNumberAttribute)) {
-        if (StringUtils.isEmpty(user.getMobileNumber())) {
-          modificationItems.add(
-              new ModificationItem(
-                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userMobileNumberAttribute)));
-        } else {
+      if (StringUtils.hasText(userMobileNumberAttribute)) {
+        if (StringUtils.hasText(user.getMobileNumber())) {
           modificationItems.add(
               new ModificationItem(
                   DirContext.REPLACE_ATTRIBUTE,
                   new BasicAttribute(userMobileNumberAttribute, user.getMobileNumber())));
+        } else {
+          modificationItems.add(
+              new ModificationItem(
+                  DirContext.REPLACE_ATTRIBUTE, new BasicAttribute(userMobileNumberAttribute)));
         }
       }
 
-      if (!StringUtils.isEmpty(user.getPassword())) {
+      if (StringUtils.hasText(user.getPassword())) {
         modificationItems.add(
             new ModificationItem(
                 DirContext.REPLACE_ATTRIBUTE,
@@ -2617,7 +2616,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     group.setId(null);
     group.setUserDirectoryId(getUserDirectoryId());
 
-    if ((!StringUtils.isEmpty(groupDescriptionAttribute))
+    if ((StringUtils.hasText(groupDescriptionAttribute))
         && (attributes.get(groupDescriptionAttribute) != null)) {
       group.setDescription(String.valueOf(attributes.get(groupDescriptionAttribute).get()));
     } else {
@@ -2640,34 +2639,34 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     user.setStatus(UserStatus.ACTIVE);
     user.setPassword("");
 
-    if ((!StringUtils.isEmpty(userNameAttribute)) && (attributes.get(userNameAttribute) != null)) {
+    if ((StringUtils.hasText(userNameAttribute)) && (attributes.get(userNameAttribute) != null)) {
       user.setName(String.valueOf(attributes.get(userNameAttribute).get()));
     } else {
       user.setName("");
     }
 
-    if ((!StringUtils.isEmpty(userPreferredNameAttribute))
+    if ((StringUtils.hasText(userPreferredNameAttribute))
         && (attributes.get(userPreferredNameAttribute) != null)) {
       user.setPreferredName(String.valueOf(attributes.get(userPreferredNameAttribute).get()));
     } else {
       user.setPreferredName("");
     }
 
-    if ((!StringUtils.isEmpty(userPhoneNumberAttribute))
+    if ((StringUtils.hasText(userPhoneNumberAttribute))
         && (attributes.get(userPhoneNumberAttribute) != null)) {
       user.setPhoneNumber(String.valueOf(attributes.get(userPhoneNumberAttribute).get()));
     } else {
       user.setPhoneNumber("");
     }
 
-    if ((!StringUtils.isEmpty(userMobileNumberAttribute))
+    if ((StringUtils.hasText(userMobileNumberAttribute))
         && (attributes.get(userMobileNumberAttribute) != null)) {
       user.setMobileNumber(String.valueOf(attributes.get(userMobileNumberAttribute).get()));
     } else {
       user.setMobileNumber("");
     }
 
-    if ((!StringUtils.isEmpty(userEmailAttribute))
+    if ((StringUtils.hasText(userEmailAttribute))
         && (attributes.get(userEmailAttribute) != null)) {
       user.setEmail(String.valueOf(attributes.get(userEmailAttribute).get()));
     } else {

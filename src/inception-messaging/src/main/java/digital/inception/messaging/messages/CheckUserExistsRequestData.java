@@ -108,7 +108,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData {
   public byte[] toMessageData() {
     Element rootElement = new Element("CheckUserExistsRequest");
 
-    rootElement.addContent(new Element("Username", StringUtils.isEmpty(username) ? "" : username));
+    rootElement.addContent(new Element("Username", StringUtils.hasText(username) ? username : ""));
 
     Document document = new Document(rootElement);
 
