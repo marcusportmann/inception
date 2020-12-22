@@ -16,7 +16,6 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -24,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -41,7 +39,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -60,8 +57,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
     name = "Organization",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "name", "contactMechanisms", "physicalAddresses"})
-@XmlAccessorType(XmlAccessType.PROPERTY)
+    propOrder = {"contactMechanisms", "physicalAddresses"})
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @DiscriminatorValue("1")
 @Table(schema = "party", name = "organizations")
@@ -70,6 +67,11 @@ public class Organization extends Party implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The contact mechanisms for the organization. */
+  @Schema(description = "The contact mechanisms for the organization")
+  @JsonProperty
+  @JsonManagedReference("contactMechanismReference")
+  @XmlElementWrapper(name = "ContactMechanisms")
+  @XmlElement(name = "ContactMechanism")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -79,6 +81,11 @@ public class Organization extends Party implements Serializable {
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
   /** The physical addresses for the organization. */
+  @Schema(description = "The physical addresses for the organization")
+  @JsonProperty
+  @JsonManagedReference("physicalAddressReference")
+  @XmlElementWrapper(name = "PhysicalAddresses")
+  @XmlElement(name = "PhysicalAddress")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -139,25 +146,8 @@ public class Organization extends Party implements Serializable {
    *
    * @return the contact mechanisms for the organization
    */
-  @Schema(description = "The contact mechanisms for the organization")
-  @JsonProperty
-  @JsonManagedReference("contactMechanismReference")
-  @XmlElementWrapper(name = "ContactMechanisms")
-  @XmlElement(name = "ContactMechanism")
   public Set<ContactMechanism> getContactMechanisms() {
     return contactMechanisms;
-  }
-
-  /**
-   * Returns the date and time the organization was created.
-   *
-   * @return the date and time the organization was created
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public LocalDateTime getCreated() {
-    return created;
   }
 
   /**
@@ -168,8 +158,6 @@ public class Organization extends Party implements Serializable {
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) uniquely identifying the organization")
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
   @Override
   public UUID getId() {
     return super.getId();
@@ -181,8 +169,6 @@ public class Organization extends Party implements Serializable {
    * @return the name of the organization
    */
   @Schema(description = "The name of the organization")
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
   @Override
   public String getName() {
     return super.getName();
@@ -212,37 +198,8 @@ public class Organization extends Party implements Serializable {
    *
    * @return the physical addresses for the organization
    */
-  @Schema(description = "The physical addresses for the organization")
-  @JsonProperty
-  @JsonManagedReference("physicalAddressReference")
-  @XmlElementWrapper(name = "PhysicalAddresses")
-  @XmlElement(name = "PhysicalAddress")
   public Set<PhysicalAddress> getPhysicalAddresses() {
     return physicalAddresses;
-  }
-
-  /**
-   * Returns the type of party for the organization.
-   *
-   * @return the type of party for the organization
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public PartyType getType() {
-    return super.getType();
-  }
-
-  /**
-   * Returns the date and time the organization was last updated.
-   *
-   * @return the date and time the organization was last updated
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public LocalDateTime getUpdated() {
-    return super.getUpdated();
   }
 
   /**

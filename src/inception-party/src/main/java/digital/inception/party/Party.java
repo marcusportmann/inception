@@ -49,21 +49,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 /**
  * The <code>Party</code> class holds the information for a party.
  *
- * <p>NOTE: JSON and XML annotations are on properties (getters) and not fields to support JPA
- * inheritance and prevent base class relationships from being serialized.
- *
  * @author Marcus Portmann
  */
 @Schema(description = "A person or organization")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({"contactMechanisms", "physicalAddresses"})
 @JsonPropertyOrder({"id", "type", "name"})
 @XmlRootElement(name = "Party", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Party",
     namespace = "http://party.inception.digital",
     propOrder = {"id", "type", "name"})
-@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorValue("0")
@@ -74,28 +70,43 @@ public class Party implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The date and time the party was created. */
+  @JsonIgnore
+  @XmlTransient
   @CreationTimestamp
   @Column(name = "created", nullable = false, updatable = false)
   protected LocalDateTime created;
 
   /** The date and time the party was last updated. */
+  @JsonIgnore
+  @XmlTransient
   @UpdateTimestamp
   @Column(name = "updated", insertable = false)
   protected LocalDateTime updated;
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the party. */
+  @Schema(
+      description = "The Universally Unique Identifier (UUID) uniquely identifying the party",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
 
   /** The name of the party. */
+  @Schema(description = "The name of the party", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
   /** The type of party. */
+  @Schema(description = "The type of party", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
   @NotNull
   @Column(name = "type", nullable = false, insertable = false, updatable = false)
   private PartyType type;
@@ -143,8 +154,6 @@ public class Party implements Serializable {
    *
    * @return the date and time the party was created
    */
-  @JsonIgnore
-  @XmlTransient
   public LocalDateTime getCreated() {
     return created;
   }
@@ -154,11 +163,6 @@ public class Party implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) uniquely identifying the party
    */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the party",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
   public UUID getId() {
     return id;
   }
@@ -168,9 +172,6 @@ public class Party implements Serializable {
    *
    * @return the name of the party
    */
-  @Schema(description = "The name of the party", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
   public String getName() {
     return name;
   }
@@ -180,9 +181,6 @@ public class Party implements Serializable {
    *
    * @return the type of party
    */
-  @Schema(description = "The type of party", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
   public PartyType getType() {
     return type;
   }
@@ -192,8 +190,6 @@ public class Party implements Serializable {
    *
    * @return the date and time the party was last updated
    */
-  @JsonIgnore
-  @XmlTransient
   public LocalDateTime getUpdated() {
     return updated;
   }
