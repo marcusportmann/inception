@@ -526,7 +526,7 @@ public class ReportingRestController extends SecureRestController {
   public void updateReportDefinition(
       @Parameter(
               name = "reportDefinitionId",
-              description = "The ID uniquely identifying the reportDefinition",
+              description = "The ID uniquely identifying the report definition",
               required = true)
           @PathVariable
           String reportDefinitionId,

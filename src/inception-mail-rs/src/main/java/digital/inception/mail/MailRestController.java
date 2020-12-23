@@ -477,7 +477,7 @@ public class MailRestController extends SecureRestController {
   public void updateMailTemplate(
       @Parameter(
               name = "mailTemplateId",
-              description = "The ID uniquely identifying the mailTemplate",
+              description = "The ID uniquely identifying the mail template",
               required = true)
           @PathVariable
           String mailTemplateId,

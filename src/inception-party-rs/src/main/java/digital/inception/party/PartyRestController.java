@@ -462,4 +462,150 @@ public class PartyRestController extends SecureRestController {
       throws PartyServiceException {
     return partyService.getPersons(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
+
+  /**
+   * Update the organization.
+   *
+   * @param organizationId the ID uniquely identifying the organization
+   * @param organization the organization
+   */
+  @Operation(summary = "Update the organization", description = "Update the organization")
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "204",
+            description = "The organization was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The organization could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/organizations/{organizationId}",
+      method = RequestMethod.PUT,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
+  // hasAuthority('FUNCTION_Party.OrganizationAdministration')")
+  public void updateOrganization(
+      @Parameter(
+              name = "organizationId",
+              description = "The ID uniquely identifying the organization",
+              required = true)
+          @PathVariable
+          UUID organizationId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The organization to update",
+              required = true)
+          @RequestBody
+          Organization organization)
+      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException {
+    if (organization == null) {
+      throw new InvalidArgumentException("organization");
+    }
+
+    if (!organization.getId().equals(organizationId)) {
+      throw new InvalidArgumentException("organizationId");
+    }
+
+    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "organization", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    partyService.updateOrganization(organization);
+  }
+
+  /**
+   * Update the person.
+   *
+   * @param personId the ID uniquely identifying the person
+   * @param person the person
+   */
+  @Operation(summary = "Update the person", description = "Update the person")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "204", description = "The person was updated successfully"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The person could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/persons/{personId}",
+      method = RequestMethod.PUT,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration') or
+  // hasAuthority('FUNCTION_Party.PersonAdministration')")
+  public void updatePerson(
+      @Parameter(
+              name = "personId",
+              description = "The ID uniquely identifying the person",
+              required = true)
+          @PathVariable
+          UUID personId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+              description = "The person to update",
+              required = true)
+          @RequestBody
+          Person person)
+      throws InvalidArgumentException, PersonNotFoundException, PartyServiceException {
+    if (person == null) {
+      throw new InvalidArgumentException("person");
+    }
+
+    if (!person.getId().equals(personId)) {
+      throw new InvalidArgumentException("personId");
+    }
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "person", ValidationError.toValidationErrors(constraintViolations));
+    }
+
+    partyService.updatePerson(person);
+  }
 }
