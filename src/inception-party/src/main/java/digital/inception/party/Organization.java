@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
         "An organised group of people with a particular purpose, such as a business or government department")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"type"})
-@JsonPropertyOrder({"id", "name", "contactMechanisms", "physicalAddresses"})
+@JsonPropertyOrder({"id", "tenantId", "name", "contactMechanisms", "physicalAddresses"})
 @XmlRootElement(name = "Organization", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Organization",

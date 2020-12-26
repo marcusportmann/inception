@@ -363,7 +363,7 @@
 
     <insert schemaName="security" tableName="tenants">
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
-      <column name="name" value="Administration"/>
+      <column name="name" value="Default"/>
       <column name="status" value="1"/>
       <column name="created" value="${now}"/>
     </insert>
@@ -382,7 +382,7 @@
     <insert schemaName="security" tableName="user_directories">
       <column name="id" value="00000000-0000-0000-0000-000000000000"/>
       <column name="type" value="InternalUserDirectory"/>
-      <column name="name" value="Administration Internal User Directory"/>
+      <column name="name" value="Default Internal User Directory"/>
       <column name="configuration">
         <![CDATA[<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>]]></column>
       <column name="created" value="${now}"/>

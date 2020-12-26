@@ -47,6 +47,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 import javax.sql.DataSource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -99,6 +100,7 @@ public class PartyServiceTest {
 
     organization.setId(UuidCreator.getShortPrefixComb());
     organization.setName("Organization Name " + organizationCount);
+    organization.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 
     return organization;
   }
@@ -109,8 +111,9 @@ public class PartyServiceTest {
     Party party = new Party();
 
     party.setId(UuidCreator.getShortPrefixComb());
-    party.setType(PartyType.ORGANIZATION);
     party.setName("Party Name " + partyCount);
+    party.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+    party.setType(PartyType.ORGANIZATION);
 
     return party;
   }
@@ -143,6 +146,7 @@ public class PartyServiceTest {
     person.setPreferredName("PreferredName" + personCount);
     person.setRace("W");
     person.setSurname("Surname" + personCount);
+    person.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
     person.setTitle("1");
 
     person.addIdentityDocument(
@@ -175,6 +179,7 @@ public class PartyServiceTest {
 
     person.setId(UuidCreator.getShortPrefixComb());
     person.setName("Full Name " + personCount);
+    person.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 
     person.addIdentityDocument(
         new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
@@ -227,6 +232,10 @@ public class PartyServiceTest {
         "The correct number of filtered parties was not retrieved",
         1,
         filteredParties.getParties().size());
+
+    Organization retrievedOrganization = partyService.getOrganization(organization.getId());
+
+    compareOrganizations(organization, retrievedOrganization);
 
     partyService.deleteOrganization(organization.getId());
   }
@@ -370,6 +379,10 @@ public class PartyServiceTest {
         filteredPersons.getPersons().size());
 
     comparePersons(person, filteredPersons.getPersons().get(0));
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
 
     Parties filteredParties = partyService.getParties("", SortDirection.ASCENDING, 0, 100);
 

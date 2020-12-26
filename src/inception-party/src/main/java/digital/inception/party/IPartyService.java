@@ -69,6 +69,16 @@ public interface IPartyService {
   void deletePerson(UUID personId) throws PersonNotFoundException, PartyServiceException;
 
   /**
+   * Retrieve the organization.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
+   * @return the organization
+   */
+  Organization getOrganization(UUID organizationId)
+      throws OrganizationNotFoundException, PartyServiceException;
+
+  /**
    * Retrieve the organizations.
    *
    * @param filter the optional filter to apply to the organizations
@@ -93,6 +103,22 @@ public interface IPartyService {
   Parties getParties(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws PartyServiceException;
+
+  /**
+   * Retrieve the party.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @return the party
+   */
+  Party getParty(UUID partyId) throws PartyNotFoundException, PartyServiceException;
+
+  /**
+   * Retrieve the person.
+   *
+   * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @return the person
+   */
+  Person getPerson(UUID personId) throws PersonNotFoundException, PartyServiceException;
 
   /**
    * Retrieve the persons.

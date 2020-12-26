@@ -81,6 +81,7 @@ import javax.xml.bind.annotation.XmlType;
   "race",
   "residencyStatus",
   "surname",
+  "tenantId",
   "title",
   "contactMechanisms",
   "identityDocuments",

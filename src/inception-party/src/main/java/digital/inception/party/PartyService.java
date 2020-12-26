@@ -19,6 +19,7 @@ package digital.inception.party;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
+import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -195,6 +196,32 @@ public class PartyService implements IPartyService {
   }
 
   /**
+   * Retrieve the organization.
+   *
+   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   *     organization
+   * @return the organization
+   */
+  @Override
+  public Organization getOrganization(UUID organizationId)
+      throws OrganizationNotFoundException, PartyServiceException {
+    try {
+      Optional<Organization> organizationOptional = organizationRepository.findById(organizationId);
+
+      if (organizationOptional.isPresent()) {
+        return organizationOptional.get();
+      } else {
+        throw new OrganizationNotFoundException(organizationId);
+      }
+    } catch (OrganizationNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new PartyServiceException(
+          "Failed to retrieve the organization (" + organizationId + ")", e);
+    }
+  }
+
+  /**
    * Retrieve the organizations.
    *
    * @param filter the optional filter to apply to the organizations
@@ -284,6 +311,52 @@ public class PartyService implements IPartyService {
   }
 
   /**
+   * Retrieve the party.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @return the party
+   */
+  @Override
+  public Party getParty(UUID partyId) throws PartyNotFoundException, PartyServiceException {
+    try {
+      Optional<Party> partyOptional = partyRepository.findById(partyId);
+
+      if (partyOptional.isPresent()) {
+        return partyOptional.get();
+      } else {
+        throw new PartyNotFoundException(partyId);
+      }
+    } catch (PartyNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new PartyServiceException("Failed to retrieve the party (" + partyId + ")", e);
+    }
+  }
+
+  /**
+   * Retrieve the person.
+   *
+   * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @return the person
+   */
+  @Override
+  public Person getPerson(UUID personId) throws PersonNotFoundException, PartyServiceException {
+    try {
+      Optional<Person> personOptional = personRepository.findById(personId);
+
+      if (personOptional.isPresent()) {
+        return personOptional.get();
+      } else {
+        throw new PersonNotFoundException(personId);
+      }
+    } catch (PersonNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new PartyServiceException("Failed to retrieve the person (" + personId + ")", e);
+    }
+  }
+
+  /**
    * Retrieve the persons.
    *
    * @param filter the optional filter to apply to the persons
@@ -306,7 +379,7 @@ public class PartyService implements IPartyService {
     }
 
     try {
-      PageRequest pageRequest = null;
+      PageRequest pageRequest;
 
       if (pageIndex == null) {
         pageIndex = 0;
@@ -316,16 +389,7 @@ public class PartyService implements IPartyService {
         pageSize = MAX_FILTERED_PERSONS;
       }
 
-      if (sortBy == PersonSortBy.NAME) {
-        pageRequest =
-            PageRequest.of(
-                pageIndex,
-                (pageSize > MAX_FILTERED_PERSONS) ? MAX_FILTERED_PERSONS : pageSize,
-                (sortDirection == SortDirection.ASCENDING)
-                    ? Sort.Direction.ASC
-                    : Sort.Direction.DESC,
-                "name");
-      } else if (sortBy == PersonSortBy.PREFERRED_NAME) {
+      if (sortBy == PersonSortBy.PREFERRED_NAME) {
         pageRequest =
             PageRequest.of(
                 pageIndex,
@@ -334,6 +398,15 @@ public class PartyService implements IPartyService {
                     ? Sort.Direction.ASC
                     : Sort.Direction.DESC,
                 "preferredName");
+      } else {
+        pageRequest =
+            PageRequest.of(
+                pageIndex,
+                (pageSize > MAX_FILTERED_PERSONS) ? MAX_FILTERED_PERSONS : pageSize,
+                (sortDirection == SortDirection.ASCENDING)
+                    ? Sort.Direction.ASC
+                    : Sort.Direction.DESC,
+                "name");
       }
 
       Page<Person> personPage;

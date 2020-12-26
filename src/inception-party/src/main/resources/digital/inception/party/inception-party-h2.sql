@@ -8,20 +8,25 @@ CREATE SCHEMA party;
 -- CREATE TABLES
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE party.parties (
-  created TIMESTAMP    NOT NULL,
-  id      UUID         NOT NULL,
-  name    VARCHAR(100) NOT NULL,
-  type    INTEGER      NOT NULL,
-  updated TIMESTAMP,
+  created   TIMESTAMP    NOT NULL,
+  id        UUID         NOT NULL,
+  name      VARCHAR(100) NOT NULL,
+  tenant_id UUID         NOT NULL,
+  type      INTEGER      NOT NULL,
+  updated   TIMESTAMP,
 
   PRIMARY KEY (id)
 );
+
+CREATE INDEX parties_tenant_id_ix ON party.parties(tenant_id);
 
 COMMENT ON COLUMN party.parties.created IS 'The date and time the party was created';
 
 COMMENT ON COLUMN party.parties.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party';
 
 COMMENT ON COLUMN party.parties.name IS 'The name of the party';
+
+COMMENT ON COLUMN party.parties.tenant_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the tenant the party is associated with';
 
 COMMENT ON COLUMN party.parties.type IS 'The code identifying the type of party';
 

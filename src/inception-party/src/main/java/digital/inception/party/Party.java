@@ -17,7 +17,6 @@
 package digital.inception.party;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -53,12 +52,12 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A person or organization")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "type", "name"})
+@JsonPropertyOrder({"id", "tenantId", "type", "name"})
 @XmlRootElement(name = "Party", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Party",
     namespace = "http://party.inception.digital",
-    propOrder = {"id", "type", "name"})
+    propOrder = {"id", "tenantId", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -102,6 +101,20 @@ public class Party implements Serializable {
   @Size(min = 1, max = 100)
   @Column(name = "name", nullable = false, length = 100)
   private String name;
+
+  /**
+   * The Universally Unique Identifier (UUID) uniquely identifying the tenant the party is
+   * associated with.
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) uniquely identifying the tenant the party is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  @NotNull
+  @Column(name = "tenant_id", nullable = false)
+  private UUID tenantId;
 
   /** The type of party. */
   @Schema(description = "The type of party", required = true)
@@ -177,6 +190,17 @@ public class Party implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) uniquely identifying the tenant the party is
+   * associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) uniquely identifying the tenant the party is
+   *     associated with
+   */
+  public UUID getTenantId() {
+    return tenantId;
+  }
+
+  /**
    * Returns the type of party.
    *
    * @return the type of party
@@ -220,6 +244,17 @@ public class Party implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) uniquely identifying the tenant the party is
+   * associated with.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant the
+   *     party is associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
   }
 
   /**

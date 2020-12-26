@@ -308,7 +308,7 @@ COMMENT ON COLUMN security.password_resets.expired IS 'The date and time the pas
 -- POPULATE TABLES
 -- -------------------------------------------------------------------------------------------------
 INSERT INTO security.tenants (id, name, status, created)
-  VALUES ('00000000-0000-0000-0000-000000000000', 'Administration', 1, NOW());
+  VALUES ('00000000-0000-0000-0000-000000000000', 'Default', 1, NOW());
 
 INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('InternalUserDirectory', 'Internal User Directory', 'digital.inception.security.InternalUserDirectory');
@@ -316,7 +316,7 @@ INSERT INTO security.user_directory_types (code, name, user_directory_class)
   VALUES ('LDAPUserDirectory', 'LDAP User Directory', 'digital.inception.security.LDAPUserDirectory');
 
 INSERT INTO security.user_directories (id, type, name, configuration, created)
-  VALUES ('00000000-0000-0000-0000-000000000000', 'InternalUserDirectory', 'Administration Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>', NOW());
+  VALUES ('00000000-0000-0000-0000-000000000000', 'InternalUserDirectory', 'Default Internal User Directory', '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE userDirectory SYSTEM "UserDirectoryConfiguration.dtd"><userDirectory><parameter><name>MaxPasswordAttempts</name><value>5</value></parameter><parameter><name>PasswordExpiryMonths</name><value>12</value></parameter><parameter><name>PasswordHistoryMonths</name><value>24</value></parameter><parameter><name>MaxFilteredUsers</name><value>100</value></parameter><parameter><name>MaxFilteredGroups</name><value>100</value></parameter></userDirectory>', NOW());
 
 INSERT INTO security.user_directory_to_tenant_map (user_directory_id, tenant_id)
   VALUES ('00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');

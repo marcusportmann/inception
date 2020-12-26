@@ -255,7 +255,7 @@ public class PartyRestController extends SecureRestController {
       throw new InvalidArgumentException("organizationId");
     }
 
-    return null;
+    return partyService.getOrganization(organizationId);
   }
 
   /**
@@ -353,6 +353,64 @@ public class PartyRestController extends SecureRestController {
   }
 
   /**
+   * Retrieve the party.
+   *
+   * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @return the party
+   */
+  @Operation(summary = "Retrieve the party", description = "Retrieve the party")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The party could not be found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/parties/{partyId}",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  //  @PreAuthorize(
+  //      "hasRole('Administrator') or hasAuthority('FUNCTION_Party.PartyAdministration')")
+  public Party getParty(
+      @Parameter(
+              name = "partyId",
+              description =
+                  "The Universally Unique Identifier (UUID) uniquely identifying the party",
+              required = true)
+          @PathVariable
+          UUID partyId)
+      throws InvalidArgumentException, PartyNotFoundException, PartyServiceException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
+    return partyService.getParty(partyId);
+  }
+
+  /**
    * Retrieve the person.
    *
    * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
@@ -408,7 +466,7 @@ public class PartyRestController extends SecureRestController {
       throw new InvalidArgumentException("personId");
     }
 
-    return null;
+    return partyService.getPerson(personId);
   }
 
   /**
