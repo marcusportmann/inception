@@ -30,6 +30,9 @@
           <mat-form-field>
             <mat-label i18n="@@codes_new_code_component_label_value">Value</mat-label>
             <textarea matInput formControlName="value" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4"></textarea>
+            <mat-error *ngIf="valueFormControl.errors && !valueFormControl.untouched">
+              <span *ngIf="valueFormControl.errors?.required" i18n="@@codes_new_code_component_error_value_required">A value is required.</span>
+            </mat-error>
           </mat-form-field>
         </div>
       </div>

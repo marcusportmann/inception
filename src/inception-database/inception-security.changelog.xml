@@ -161,15 +161,21 @@
     <addForeignKeyConstraint constraintName="users_user_directory_fk" baseTableSchemaName="security"
       baseTableName="users" baseColumnNames="user_directory_id" referencedTableSchemaName="security"
       referencedTableName="user_directories" referencedColumnNames="id"/>
-    <createIndex indexName="users_user_directory_id_ix" schemaName="security" tableName="users">
-      <column name="user_directory_id"/>
-    </createIndex>
     <createIndex indexName="users_username_ix" schemaName="security" tableName="users"
       unique="true">
       <column name="username"/>
     </createIndex>
+    <createIndex indexName="users_email_ix" schemaName="security" tableName="users" unique="false">
+      <column name="email"/>
+    </createIndex>
+    <createIndex indexName="users_mobile_number_ix" schemaName="security" tableName="users" unique="false">
+      <column name="mobile_number"/>
+    </createIndex>
     <createIndex indexName="users_name_ix" schemaName="security" tableName="users" unique="false">
       <column name="name"/>
+    </createIndex>
+    <createIndex indexName="users_user_directory_id_ix" schemaName="security" tableName="users">
+      <column name="user_directory_id"/>
     </createIndex>
 
     <createTable schemaName="security" tableName="users_password_history"

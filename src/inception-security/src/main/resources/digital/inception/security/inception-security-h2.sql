@@ -110,11 +110,15 @@ CREATE TABLE security.users (
   CONSTRAINT users_user_directory_fk FOREIGN KEY (user_directory_id) REFERENCES security.user_directories(id) ON DELETE CASCADE
 );
 
-CREATE INDEX users_user_directory_id_ix ON security.users(user_directory_id);
-
 CREATE UNIQUE INDEX users_username_ix ON security.users(username);
 
-CREATE UNIQUE INDEX users_name_ix ON security.users(name);
+CREATE INDEX users_email_ix ON security.users(email);
+
+CREATE INDEX users_mobile_number_ix ON security.users(mobile_number);
+
+CREATE INDEX users_name_ix ON security.users(name);
+
+CREATE INDEX users_user_directory_id_ix ON security.users(user_directory_id);
 
 COMMENT ON COLUMN security.users.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the user';
 

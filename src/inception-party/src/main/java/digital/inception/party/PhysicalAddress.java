@@ -61,12 +61,62 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Schema(description = "A physical address associated with a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "purpose", "city"})
+@JsonPropertyOrder({
+  "type",
+  "purpose",
+  "buildingName",
+  "buildingFloor",
+  "buildingRoom",
+  "complexName",
+  "complexUnitNumber",
+  "farmNumber",
+  "farmName",
+  "farmDescription",
+  "siteBlock",
+  "siteNumber",
+  "streetNumber",
+  "streetName",
+  "line1",
+  "line2",
+  "line3",
+  "suburb",
+  "city",
+  "region",
+  "country",
+  "postalCode",
+  "latitude",
+  "longitude"
+})
 @XmlRootElement(name = "PhysicalAddress", namespace = "http://party.inception.digital")
 @XmlType(
     name = "PhysicalAddress",
     namespace = "http://party.inception.digital",
-    propOrder = {"type", "purpose", "city"})
+    propOrder = {
+      "type",
+      "purpose",
+      "buildingName",
+      "buildingFloor",
+      "buildingRoom",
+      "complexName",
+      "complexUnitNumber",
+      "farmNumber",
+      "farmName",
+      "farmDescription",
+      "siteBlock",
+      "siteNumber",
+      "streetNumber",
+      "streetName",
+      "line1",
+      "line2",
+      "line3",
+      "suburb",
+      "city",
+      "region",
+      "country",
+      "postalCode",
+      "latitude",
+      "longitude"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidPhysicalAddress
 @Entity
