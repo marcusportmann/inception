@@ -18,6 +18,8 @@ package digital.inception.codes;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import digital.inception.core.xml.DtdJarResolver;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
@@ -29,6 +31,9 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
@@ -74,6 +79,9 @@ public class CodesService implements ICodesService, InitializingBean {
   /** The Code Repository. */
   private final CodeRepository codeRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /**
    * The configuration information for the code providers read from the code provider configuration
    * files (META-INF/code-providers.xml) on the classpath.
@@ -87,16 +95,19 @@ public class CodesService implements ICodesService, InitializingBean {
    * Constructs a new <code>CodesService</code>.
    *
    * @param applicationContext the Spring application context
+   * @param validator the JSR-303 validator
    * @param codeCategoryRepository the Code Category Repository
    * @param codeCategorySummaryRepository the Code Category Summary Repository
    * @param codeRepository the Code Repository
    */
   public CodesService(
       ApplicationContext applicationContext,
+      Validator validator,
       CodeCategoryRepository codeCategoryRepository,
       CodeCategorySummaryRepository codeCategorySummaryRepository,
       CodeRepository codeRepository) {
     this.applicationContext = applicationContext;
+    this.validator = validator;
     this.codeCategoryRepository = codeCategoryRepository;
     this.codeCategorySummaryRepository = codeCategorySummaryRepository;
     this.codeRepository = codeRepository;
@@ -127,7 +138,12 @@ public class CodesService implements ICodesService, InitializingBean {
    * @return <code>true</code> if the code category exists or <code>false</code> otherwise
    */
   @Override
-  public boolean codeCategoryExists(String codeCategoryId) throws CodesServiceException {
+  public boolean codeCategoryExists(String codeCategoryId)
+      throws InvalidArgumentException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       return codeCategoryRepository.existsById(codeCategoryId);
     } catch (Throwable e) {
@@ -144,7 +160,16 @@ public class CodesService implements ICodesService, InitializingBean {
    * @return <code>true</code> if the code exists or <code>false</code> otherwise
    */
   @Override
-  public boolean codeExists(String codeCategoryId, String codeId) throws CodesServiceException {
+  public boolean codeExists(String codeCategoryId, String codeId)
+      throws InvalidArgumentException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    if (!StringUtils.hasText(codeId)) {
+      throw new InvalidArgumentException("codeId");
+    }
+
     try {
       return codeRepository.existsById(new CodeId(codeCategoryId, codeId));
     } catch (Throwable e) {
@@ -166,7 +191,10 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void createCode(Code code)
-      throws DuplicateCodeException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
+          CodesServiceException {
+    validateCode(code);
+
     try {
       if (codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId()))) {
         throw new DuplicateCodeException(code.getCodeCategoryId(), code.getId());
@@ -199,7 +227,9 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void createCodeCategory(CodeCategory codeCategory)
-      throws DuplicateCodeCategoryException, CodesServiceException {
+      throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException {
+    validateCodeCategory(codeCategory);
+
     try {
       if (codeCategoryRepository.existsById(codeCategory.getId())) {
         throw new DuplicateCodeCategoryException(codeCategory.getId());
@@ -223,7 +253,15 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void deleteCode(String codeCategoryId, String codeId)
-      throws CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    if (!StringUtils.hasText(codeId)) {
+      throw new InvalidArgumentException("codeId");
+    }
+
     try {
       CodeId id = new CodeId(codeCategoryId, codeId);
 
@@ -253,7 +291,11 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void deleteCodeCategory(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       if (!codeCategoryRepository.existsById(codeCategoryId)) {
         throw new CodeCategoryNotFoundException(codeCategoryId);
@@ -277,7 +319,15 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public Code getCode(String codeCategoryId, String codeId)
-      throws CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    if (!StringUtils.hasText(codeId)) {
+      throw new InvalidArgumentException("codeId");
+    }
+
     try {
       Optional<Code> codeOptional = codeRepository.findById(new CodeId(codeCategoryId, codeId));
 
@@ -328,7 +378,11 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public CodeCategory getCodeCategory(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       Optional<CodeCategory> codeCategoryOptional = codeCategoryRepository.findById(codeCategoryId);
 
@@ -364,7 +418,11 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public String getCodeCategoryData(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       Optional<String> dataOptional = codeCategoryRepository.getDataById(codeCategoryId);
 
@@ -404,7 +462,11 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   public String getCodeCategoryDataWithParameters(
       String codeCategoryId, Map<String, String> parameters)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       Optional<String> dataOptional = codeCategoryRepository.getDataById(codeCategoryId);
 
@@ -439,7 +501,11 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public String getCodeCategoryName(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       Optional<String> nameOptional = codeCategoryRepository.getNameById(codeCategoryId);
 
@@ -486,7 +552,11 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       Optional<LocalDateTime> updatedOptional =
           codeCategoryRepository.getUpdatedById(codeCategoryId);
@@ -523,7 +593,15 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public String getCodeName(String codeCategoryId, String codeId)
-      throws CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
+    if (!StringUtils.hasText(codeId)) {
+      throw new InvalidArgumentException("codeId");
+    }
+
     try {
       Optional<String> nameOptional = codeRepository.getNameById(codeCategoryId, codeId);
 
@@ -564,7 +642,11 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public List<Code> getCodesForCodeCategory(String codeCategoryId)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       if (codeCategoryRepository.existsById(codeCategoryId)) {
         return codeRepository.findByCodeCategoryId(codeCategoryId);
@@ -600,7 +682,11 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   public List<Code> getCodesForCodeCategoryWithParameters(
       String codeCategoryId, Map<String, String> parameters)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       if (codeCategoryRepository.existsById(codeCategoryId)) {
         return codeRepository.findByCodeCategoryId(codeCategoryId);
@@ -628,7 +714,10 @@ public class CodesService implements ICodesService, InitializingBean {
    * @param code the <code>Code</code> instance containing the updated information for the code
    */
   @Override
-  public void updateCode(Code code) throws CodeNotFoundException, CodesServiceException {
+  public void updateCode(Code code)
+      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+    validateCode(code);
+
     try {
       if (!codeRepository.existsById(new CodeId(code.getCodeCategoryId(), code.getId()))) {
         throw new CodeNotFoundException(code.getCodeCategoryId(), code.getId());
@@ -650,7 +739,9 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public void updateCodeCategory(CodeCategory codeCategory)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    validateCodeCategory(codeCategory);
+
     try {
       if (!codeCategoryRepository.existsById(codeCategory.getId())) {
         throw new CodeCategoryNotFoundException(codeCategory.getId());
@@ -674,7 +765,11 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void updateCodeCategoryData(String codeCategoryId, String data)
-      throws CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+    if (!StringUtils.hasText(codeCategoryId)) {
+      throw new InvalidArgumentException("codeCategoryId");
+    }
+
     try {
       if (!codeCategoryRepository.existsById(codeCategoryId)) {
         throw new CodeCategoryNotFoundException(codeCategoryId);
@@ -796,6 +891,32 @@ public class CodesService implements ICodesService, InitializingBean {
       }
     } catch (Throwable e) {
       throw new CodesServiceException("Failed to read the code provider configuration files", e);
+    }
+  }
+
+  private void validateCode(Code code) throws InvalidArgumentException {
+    if (code == null) {
+      throw new InvalidArgumentException("code");
+    }
+
+    Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "code", ValidationError.toValidationErrors(constraintViolations));
+    }
+  }
+
+  private void validateCodeCategory(CodeCategory codeCategory) throws InvalidArgumentException {
+    if (codeCategory == null) {
+      throw new InvalidArgumentException("codeCategory");
+    }
+
+    Set<ConstraintViolation<CodeCategory>> constraintViolations = validator.validate(codeCategory);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "codeCategory", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

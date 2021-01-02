@@ -24,7 +24,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import digital.inception.configuration.Configuration;
-import digital.inception.configuration.ConfigurationNotFoundException;
 import digital.inception.configuration.ConfigurationServiceException;
 import digital.inception.configuration.IConfigurationService;
 import digital.inception.test.TestClassRunner;
@@ -96,8 +95,7 @@ public class ConfigurationServiceTest {
 
   /** Test the <code>Binary</code> configuration. */
   @Test
-  public void binaryConfigurationTest()
-      throws ConfigurationServiceException, ConfigurationNotFoundException {
+  public void binaryConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_BINARY_KEY)) {
       fail("Found the Binary configuration key (" + TEST_BINARY_KEY + ") that should not exist");
     }
@@ -145,8 +143,7 @@ public class ConfigurationServiceTest {
 
   /** Test the <code>Boolean</code> configuration. */
   @Test
-  public void booleanConfigurationTest()
-      throws ConfigurationServiceException, ConfigurationNotFoundException {
+  public void booleanConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_BOOLEAN_KEY)) {
       fail("Found the Boolean configuration key (" + TEST_BOOLEAN_KEY + ") that should not exist");
     }
@@ -194,8 +191,7 @@ public class ConfigurationServiceTest {
 
   /** Test the <code>Configuration</code> configuration. */
   @Test
-  public void configurationConfigurationTest()
-      throws ConfigurationServiceException, ConfigurationNotFoundException {
+  public void configurationConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_CONFIGURATION_KEY)) {
       fail("Found the configuration key (" + TEST_BINARY_KEY + ") that should not exist");
     }
@@ -233,8 +229,7 @@ public class ConfigurationServiceTest {
 
   /** Test the <code>Double</code> configuration. */
   @Test
-  public void doubleConfigurationTest()
-      throws ConfigurationServiceException, ConfigurationNotFoundException {
+  public void doubleConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_DOUBLE_KEY)) {
       fail("Found the Double configuration key (" + TEST_DOUBLE_KEY + ") that should not exist");
     }
@@ -285,7 +280,7 @@ public class ConfigurationServiceTest {
 
   /** Test the filtered configurations. */
   @Test
-  public void filteredConfigurationsTest() throws ConfigurationServiceException {
+  public void filteredConfigurationsTest() throws Exception {
     configurationService.setConfiguration(TEST_FILTERED_KEY, TEST_STRING_VALUE, TEST_DESCRIPTION);
 
     if (!configurationService.keyExists(TEST_FILTERED_KEY)) {
@@ -308,8 +303,7 @@ public class ConfigurationServiceTest {
 
   /** Test the <code>Integer</code> configuration. */
   @Test
-  public void integerConfigurationTest()
-      throws ConfigurationServiceException, ConfigurationNotFoundException {
+  public void integerConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_INTEGER_KEY)) {
       fail("Found the Integer configuration key (" + TEST_INTEGER_KEY + ") that should not exist");
     }
@@ -359,8 +353,7 @@ public class ConfigurationServiceTest {
 
   /** Test the <code>Long</code> configuration. */
   @Test
-  public void longConfigurationTest()
-      throws ConfigurationServiceException, ConfigurationNotFoundException {
+  public void longConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_LONG_KEY)) {
       fail("Found the Long configuration key (" + TEST_LONG_KEY + ") that should not exist");
     }
@@ -408,8 +401,7 @@ public class ConfigurationServiceTest {
 
   /** Test the <code>String</code> configuration. */
   @Test
-  public void stringConfigurationTest()
-      throws ConfigurationServiceException, ConfigurationNotFoundException {
+  public void stringConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_STRING_KEY)) {
       fail("Found the String configuration key (" + TEST_STRING_KEY + ") that should not exist");
     }

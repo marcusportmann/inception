@@ -18,19 +18,15 @@ package digital.inception.codes;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.InvalidArgumentException;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 import org.springframework.util.StringUtils;
 
@@ -52,18 +48,13 @@ public class CodesWebService {
   /** The Codes Service. */
   private final ICodesService codesService;
 
-  /** The JSR-303 Validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>CodesRestController</code>.
    *
    * @param codesService the Codes Service
-   * @param validator the JSR-303 validator
    */
-  public CodesWebService(ICodesService codesService, Validator validator) {
+  public CodesWebService(ICodesService codesService) {
     this.codesService = codesService;
-    this.validator = validator;
   }
 
   /**
@@ -75,8 +66,6 @@ public class CodesWebService {
   public void createCode(@WebParam(name = "Code") @XmlElement(required = true) Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
           CodesServiceException {
-    validateCode(code);
-
     codesService.createCode(code);
   }
 
@@ -89,8 +78,6 @@ public class CodesWebService {
   public void createCodeCategory(
       @WebParam(name = "CodeCategory") @XmlElement(required = true) CodeCategory codeCategory)
       throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException {
-    validateCodeCategory(codeCategory);
-
     codesService.createCodeCategory(codeCategory);
   }
 
@@ -104,14 +91,6 @@ public class CodesWebService {
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    if (!StringUtils.hasText(codeId)) {
-      throw new InvalidArgumentException("codeId");
-    }
-
     codesService.deleteCode(codeCategoryId, codeId);
   }
 
@@ -124,10 +103,6 @@ public class CodesWebService {
   public void deleteCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     codesService.deleteCodeCategory(codeCategoryId);
   }
 
@@ -144,14 +119,6 @@ public class CodesWebService {
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    if (!StringUtils.hasText(codeId)) {
-      throw new InvalidArgumentException("codeId");
-    }
-
     return codesService.getCode(codeCategoryId, codeId);
   }
 
@@ -177,10 +144,6 @@ public class CodesWebService {
   public CodeCategory getCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     return codesService.getCodeCategory(codeCategoryId);
   }
 
@@ -195,10 +158,6 @@ public class CodesWebService {
   public String getCodeCategoryData(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     String data = codesService.getCodeCategoryData(codeCategoryId);
 
     return StringUtils.hasText(data) ? data : "";
@@ -215,10 +174,6 @@ public class CodesWebService {
   public String getCodeCategoryName(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     return codesService.getCodeCategoryName(codeCategoryId);
   }
 
@@ -244,10 +199,6 @@ public class CodesWebService {
   public Date getCodeCategoryUpdated(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     return Date.from(
         codesService
             .getCodeCategoryUpdated(codeCategoryId)
@@ -268,14 +219,6 @@ public class CodesWebService {
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    if (!StringUtils.hasText(codeId)) {
-      throw new InvalidArgumentException("codeId");
-    }
-
     return codesService.getCodeName(codeCategoryId, codeId);
   }
 
@@ -290,10 +233,6 @@ public class CodesWebService {
   public List<Code> getCodesForCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     return codesService.getCodesForCodeCategory(codeCategoryId);
   }
 
@@ -305,8 +244,6 @@ public class CodesWebService {
   @WebMethod(operationName = "UpdateCode")
   public void updateCode(@WebParam(name = "Code") @XmlElement(required = true) Code code)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    validateCode(code);
-
     codesService.updateCode(code);
   }
 
@@ -319,34 +256,6 @@ public class CodesWebService {
   public void updateCodeCategory(
       @WebParam(name = "CodeCategory") @XmlElement(required = true) CodeCategory codeCategory)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    validateCodeCategory(codeCategory);
-
     codesService.updateCodeCategory(codeCategory);
-  }
-
-  private void validateCode(Code code) throws InvalidArgumentException {
-    if (code == null) {
-      throw new InvalidArgumentException("code");
-    }
-
-    Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "code", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateCodeCategory(CodeCategory codeCategory) throws InvalidArgumentException {
-    if (codeCategory == null) {
-      throw new InvalidArgumentException("codeCategory");
-    }
-
-    Set<ConstraintViolation<CodeCategory>> constraintViolations = validator.validate(codeCategory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "codeCategory", ValidationError.toValidationErrors(constraintViolations));
-    }
   }
 }

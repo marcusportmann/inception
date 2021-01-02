@@ -18,6 +18,8 @@ package digital.inception.mail;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import freemarker.cache.TemplateLookupContext;
 import freemarker.cache.TemplateLookupResult;
 import freemarker.cache.TemplateLookupStrategy;
@@ -29,8 +31,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -42,6 +47,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -69,21 +75,27 @@ public class MailService implements IMailService, InitializingBean {
   /** The Mail Template Summary Repository. */
   private final MailTemplateSummaryRepository mailTemplateSummaryRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /** The Java mail sender. */
-  JavaMailSender javaMailSender;
+  private JavaMailSender javaMailSender;
 
   /**
    * Constructs a new <code>MailService</code>.
    *
    * @param applicationContext the Spring application context
+   * @param validator the JSR-303 validator
    * @param mailTemplateRepository the Mail Template Repository
    * @param mailTemplateSummaryRepository the Mail Template Summary Repository
    */
   public MailService(
       ApplicationContext applicationContext,
+      Validator validator,
       MailTemplateRepository mailTemplateRepository,
       MailTemplateSummaryRepository mailTemplateSummaryRepository) {
     this.applicationContext = applicationContext;
+    this.validator = validator;
     this.mailTemplateRepository = mailTemplateRepository;
     this.mailTemplateSummaryRepository = mailTemplateSummaryRepository;
 
@@ -123,7 +135,9 @@ public class MailService implements IMailService, InitializingBean {
   @Override
   @Transactional
   public void createMailTemplate(MailTemplate mailTemplate)
-      throws DuplicateMailTemplateException, MailServiceException {
+      throws InvalidArgumentException, DuplicateMailTemplateException, MailServiceException {
+    validateMailTemplate(mailTemplate);
+
     try {
       if (mailTemplateRepository.existsById(mailTemplate.getId())) {
         throw new DuplicateMailTemplateException(mailTemplate.getId());
@@ -147,7 +161,11 @@ public class MailService implements IMailService, InitializingBean {
   @Transactional
   @CacheEvict(value = "mailTemplates", key = "#mailTemplateId")
   public void deleteMailTemplate(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
     try {
       if (!mailTemplateRepository.existsById(mailTemplateId)) {
         throw new MailTemplateNotFoundException(mailTemplateId);
@@ -178,7 +196,11 @@ public class MailService implements IMailService, InitializingBean {
   @Override
   @Cacheable("mailTemplates")
   public MailTemplate getMailTemplate(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
     try {
       Optional<MailTemplate> mailTemplateOptional = mailTemplateRepository.findById(mailTemplateId);
 
@@ -203,7 +225,11 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public String getMailTemplateName(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
     try {
       Optional<String> nameOptional = mailTemplateRepository.getNameById(mailTemplateId);
 
@@ -242,7 +268,11 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public MailTemplateSummary getMailTemplateSummary(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
     try {
       Optional<MailTemplateSummary> mailTemplateSummaryOptional =
           mailTemplateSummaryRepository.findById(mailTemplateId);
@@ -268,7 +298,11 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public LocalDateTime getMailTemplateUpdated(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
     try {
       Optional<LocalDateTime> updatedOptional =
           mailTemplateRepository.getUpdatedById(mailTemplateId);
@@ -310,7 +344,12 @@ public class MailService implements IMailService, InitializingBean {
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
   @Override
-  public boolean mailTemplateExists(String mailTemplateId) throws MailServiceException {
+  public boolean mailTemplateExists(String mailTemplateId)
+      throws InvalidArgumentException, MailServiceException {
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
     try {
       return mailTemplateRepository.existsById(mailTemplateId);
     } catch (Throwable e) {
@@ -328,7 +367,15 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public String processMailTemplate(String mailTemplateId, Map<String, String> templateParameters)
-      throws MailServiceException {
+      throws InvalidArgumentException, MailServiceException {
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
+    if (templateParameters == null) {
+      throw new InvalidArgumentException("templateParameters");
+    }
+
     try {
       Template template = freeMarkerConfiguration.getTemplate(mailTemplateId);
 
@@ -359,7 +406,31 @@ public class MailService implements IMailService, InitializingBean {
       String fromName,
       String mailTemplateId,
       Map<String, String> mailTemplateParameters)
-      throws MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (to == null) {
+      throw new InvalidArgumentException("to");
+    }
+
+    if (!StringUtils.hasText(subject)) {
+      throw new InvalidArgumentException("subject");
+    }
+
+    if (!StringUtils.hasText(from)) {
+      throw new InvalidArgumentException("from");
+    }
+
+    if (!StringUtils.hasText(fromName)) {
+      throw new InvalidArgumentException("fromName");
+    }
+
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
+    if (mailTemplateParameters == null) {
+      throw new InvalidArgumentException("mailTemplateParameters");
+    }
+
     try {
       // Retrieve the mail template
       Optional<MailTemplate> mailTemplateOptional = mailTemplateRepository.findById(mailTemplateId);
@@ -407,7 +478,9 @@ public class MailService implements IMailService, InitializingBean {
   @Transactional
   @CacheEvict(value = "mailTemplates", key = "#mailTemplate.id")
   public void updateMailTemplate(MailTemplate mailTemplate)
-      throws MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    validateMailTemplate(mailTemplate);
+
     try {
       if (!mailTemplateRepository.existsById(mailTemplate.getId())) {
         throw new MailTemplateNotFoundException(mailTemplate.getId());
@@ -426,6 +499,19 @@ public class MailService implements IMailService, InitializingBean {
     } catch (Throwable e) {
       throw new MailServiceException(
           "Failed to update the mail template (" + mailTemplate.getId() + ")", e);
+    }
+  }
+
+  private void validateMailTemplate(MailTemplate mailTemplate) throws InvalidArgumentException {
+    if (mailTemplate == null) {
+      throw new InvalidArgumentException("mailTemplate");
+    }
+
+    Set<ConstraintViolation<MailTemplate>> constraintViolations = validator.validate(mailTemplate);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "mailTemplate", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

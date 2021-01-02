@@ -41,18 +41,15 @@ import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-import java.security.SecureRandom;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
-import javax.sql.DataSource;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -77,7 +74,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     })
 public class PartyServiceTest {
 
-  private static final SecureRandom random = new SecureRandom();
+  //  private static final SecureRandom random = new SecureRandom();
 
   private static int organizationCount;
 
@@ -85,13 +82,16 @@ public class PartyServiceTest {
 
   private static int personCount;
 
-  /** The data source used to provide connections to the application database. */
-  @Autowired
-  @Qualifier("applicationDataSource")
-  DataSource dataSource;
+  //  /** The data source used to provide connections to the application database. */
+  //  @Autowired
+  //  @Qualifier("applicationDataSource")
+  //  private DataSource dataSource;
 
   /** The Party Service. */
   @Autowired private IPartyService partyService;
+
+  /** The JSR-303 validator. */
+  @Autowired private Validator validator;
 
   private static synchronized Organization getTestOrganizationDetails() {
     organizationCount++;
@@ -163,11 +163,29 @@ public class PartyServiceTest {
             ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS,
             "test@test.com"));
 
-    person.addPhysicalAddress(
-        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL));
-    person.addPhysicalAddress(
+    PhysicalAddress residentialAddress =
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL);
+    residentialAddress.setStreetNumber("1");
+    residentialAddress.setStreetName("Discovery Place");
+    residentialAddress.setSuburb("Sandhurst");
+    residentialAddress.setCity("Sandton");
+    residentialAddress.setRegion("GP");
+    residentialAddress.setCountry("ZA");
+    residentialAddress.setPostalCode("2194");
+
+    person.addPhysicalAddress(residentialAddress);
+
+    PhysicalAddress correspondenceAddress =
         new PhysicalAddress(
-            PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.CORRESPONDENCE));
+            PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.CORRESPONDENCE);
+
+    correspondenceAddress.setLine1("1 Apple Park Way");
+    correspondenceAddress.setCity("Cupertino");
+    correspondenceAddress.setRegion("CA");
+    correspondenceAddress.setCountry("US");
+    correspondenceAddress.setPostalCode("CA 95014");
+
+    person.addPhysicalAddress(correspondenceAddress);
 
     return person;
   }
@@ -185,6 +203,377 @@ public class PartyServiceTest {
         new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     return person;
+  }
+
+  /** Test the invalid building address verification functionality. */
+  @Test
+  public void invalidBuildingAddressTest() {
+    // Validate an empty invalid address
+    // Required: Building Name, Street Name, City, Country Code, Postal Code
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressPurpose.RESIDENTIAL);
+    person.addPhysicalAddress(invalidAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid building address",
+        5,
+        constraintViolations.size());
+
+    // Validate a fully populated invalid address
+    person = getTestBasicPersonDetails();
+
+    invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressPurpose.RESIDENTIAL);
+    invalidAddress.setBuildingFloor("Building Floor");
+    invalidAddress.setBuildingName("Building Name");
+    invalidAddress.setBuildingRoom("Building Room");
+    invalidAddress.setCity("City");
+    invalidAddress.setComplexName("Complex Name");
+    invalidAddress.setComplexUnitNumber("Complex Unit Number");
+    invalidAddress.setCountry("Country");
+    invalidAddress.setFarmDescription("Farm Description");
+    invalidAddress.setFarmName("Farm Name");
+    invalidAddress.setFarmNumber("Farm Number");
+    invalidAddress.setLine1("Line 1");
+    invalidAddress.setLine2("Line 2");
+    invalidAddress.setLine3("Line 3");
+    invalidAddress.setPostalCode("Postal Code");
+    invalidAddress.setRegion("Region");
+    invalidAddress.setSiteBlock("Site Block");
+    invalidAddress.setSiteNumber("Site Number");
+    invalidAddress.setStreetName("Street Name");
+    invalidAddress.setStreetNumber("Street Number");
+    invalidAddress.setSuburb("Suburb");
+    person.addPhysicalAddress(invalidAddress);
+
+    constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid building address",
+        10,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid complex address verification functionality. */
+  @Test
+  public void invalidComplexAddressTest() {
+    // Validate an empty invalid address
+    // Required: Complex Name, Complex Unit Number, Street Name, City, Country Code, Postal Code
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.COMPLEX, PhysicalAddressPurpose.RESIDENTIAL);
+    person.addPhysicalAddress(invalidAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid complex address",
+        6,
+        constraintViolations.size());
+
+    // Validate a fully populated invalid address
+    person = getTestBasicPersonDetails();
+
+    invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.COMPLEX, PhysicalAddressPurpose.RESIDENTIAL);
+    invalidAddress.setBuildingFloor("Building Floor");
+    invalidAddress.setBuildingName("Building Name");
+    invalidAddress.setBuildingRoom("Building Room");
+    invalidAddress.setCity("City");
+    invalidAddress.setComplexName("Complex Name");
+    invalidAddress.setComplexUnitNumber("Complex Unit Number");
+    invalidAddress.setCountry("Country");
+    invalidAddress.setFarmDescription("Farm Description");
+    invalidAddress.setFarmName("Farm Name");
+    invalidAddress.setFarmNumber("Farm Number");
+    invalidAddress.setLine1("Line 1");
+    invalidAddress.setLine2("Line 2");
+    invalidAddress.setLine3("Line 3");
+    invalidAddress.setPostalCode("Postal Code");
+    invalidAddress.setRegion("Region");
+    invalidAddress.setSiteBlock("Site Block");
+    invalidAddress.setSiteNumber("Site Number");
+    invalidAddress.setStreetName("Street Name");
+    invalidAddress.setStreetNumber("Street Number");
+    invalidAddress.setSuburb("Suburb");
+    person.addPhysicalAddress(invalidAddress);
+
+    constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid complex address",
+        11,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid farm address verification functionality. */
+  @Test
+  public void invalidFarmAddressTest() {
+    // Validate an empty invalid address
+    // Required: Farm Number, Country Code, Postal Code
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.FARM, PhysicalAddressPurpose.RESIDENTIAL);
+    person.addPhysicalAddress(invalidAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid farm address",
+        3,
+        constraintViolations.size());
+
+    // Validate a fully populated invalid address
+    person = getTestBasicPersonDetails();
+
+    invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.FARM, PhysicalAddressPurpose.RESIDENTIAL);
+    invalidAddress.setBuildingFloor("Building Floor");
+    invalidAddress.setBuildingName("Building Name");
+    invalidAddress.setBuildingRoom("Building Room");
+    invalidAddress.setCity("City");
+    invalidAddress.setComplexName("Complex Name");
+    invalidAddress.setComplexUnitNumber("Complex Unit Number");
+    invalidAddress.setCountry("Country");
+    invalidAddress.setFarmDescription("Farm Description");
+    invalidAddress.setFarmName("Farm Name");
+    invalidAddress.setFarmNumber("Farm Number");
+    invalidAddress.setLine1("Line 1");
+    invalidAddress.setLine2("Line 2");
+    invalidAddress.setLine3("Line 3");
+    invalidAddress.setPostalCode("Postal Code");
+    invalidAddress.setRegion("Region");
+    invalidAddress.setSiteBlock("Site Block");
+    invalidAddress.setSiteNumber("Site Number");
+    invalidAddress.setStreetName("Street Name");
+    invalidAddress.setStreetNumber("Street Number");
+    invalidAddress.setSuburb("Suburb");
+    person.addPhysicalAddress(invalidAddress);
+
+    constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid farm address",
+        10,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid international address verification functionality. */
+  @Test
+  public void invalidInternationalAddressTest() {
+    // Validate an empty invalid address
+    // Required: Line 1, Country Code, Postal Code
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.INTERNATIONAL, PhysicalAddressPurpose.RESIDENTIAL);
+    person.addPhysicalAddress(invalidAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid international address",
+        3,
+        constraintViolations.size());
+
+    // Validate a fully populated invalid address
+    person = getTestBasicPersonDetails();
+
+    invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.INTERNATIONAL, PhysicalAddressPurpose.RESIDENTIAL);
+    invalidAddress.setBuildingFloor("Building Floor");
+    invalidAddress.setBuildingName("Building Name");
+    invalidAddress.setBuildingRoom("Building Room");
+    invalidAddress.setCity("City");
+    invalidAddress.setComplexName("Complex Name");
+    invalidAddress.setComplexUnitNumber("Complex Unit Number");
+    invalidAddress.setCountry("Country");
+    invalidAddress.setFarmDescription("Farm Description");
+    invalidAddress.setFarmName("Farm Name");
+    invalidAddress.setFarmNumber("Farm Number");
+    invalidAddress.setLine1("Line 1");
+    invalidAddress.setLine2("Line 2");
+    invalidAddress.setLine3("Line 3");
+    invalidAddress.setPostalCode("Postal Code");
+    invalidAddress.setRegion("Region");
+    invalidAddress.setSiteBlock("Site Block");
+    invalidAddress.setSiteNumber("Site Number");
+    invalidAddress.setStreetName("Street Name");
+    invalidAddress.setStreetNumber("Street Number");
+    invalidAddress.setSuburb("Suburb");
+    person.addPhysicalAddress(invalidAddress);
+
+    constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid international address",
+        13,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid site address verification functionality. */
+  @Test
+  public void invalidSiteAddressTest() {
+    // Validate an empty invalid address
+    // Required: Site Block, Site Number, City, Country Code, Postal Code
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.SITE, PhysicalAddressPurpose.RESIDENTIAL);
+    person.addPhysicalAddress(invalidAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid site address",
+        5,
+        constraintViolations.size());
+
+    // Validate a fully populated invalid address
+    person = getTestBasicPersonDetails();
+
+    invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.SITE, PhysicalAddressPurpose.RESIDENTIAL);
+    invalidAddress.setBuildingFloor("Building Floor");
+    invalidAddress.setBuildingName("Building Name");
+    invalidAddress.setBuildingRoom("Building Room");
+    invalidAddress.setCity("City");
+    invalidAddress.setComplexName("Complex Name");
+    invalidAddress.setComplexUnitNumber("Complex Unit Number");
+    invalidAddress.setCountry("Country");
+    invalidAddress.setFarmDescription("Farm Description");
+    invalidAddress.setFarmName("Farm Name");
+    invalidAddress.setFarmNumber("Farm Number");
+    invalidAddress.setLine1("Line 1");
+    invalidAddress.setLine2("Line 2");
+    invalidAddress.setLine3("Line 3");
+    invalidAddress.setPostalCode("Postal Code");
+    invalidAddress.setRegion("Region");
+    invalidAddress.setSiteBlock("Site Block");
+    invalidAddress.setSiteNumber("Site Number");
+    invalidAddress.setStreetName("Street Name");
+    invalidAddress.setStreetNumber("Street Number");
+    invalidAddress.setSuburb("Suburb");
+    person.addPhysicalAddress(invalidAddress);
+
+    constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid site address",
+        11,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid street address verification functionality. */
+  @Test
+  public void invalidStreetAddressTest() {
+    // Validate an empty invalid address
+    // Required: Street Name, City, Country Code, Postal Code
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL);
+    person.addPhysicalAddress(invalidAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid street address",
+        4,
+        constraintViolations.size());
+
+    // Validate a fully populated invalid address
+    person = getTestBasicPersonDetails();
+
+    invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL);
+    invalidAddress.setBuildingFloor("Building Floor");
+    invalidAddress.setBuildingName("Building Name");
+    invalidAddress.setBuildingRoom("Building Room");
+    invalidAddress.setCity("City");
+    invalidAddress.setComplexName("Complex Name");
+    invalidAddress.setComplexUnitNumber("Complex Unit Number");
+    invalidAddress.setCountry("Country");
+    invalidAddress.setFarmDescription("Farm Description");
+    invalidAddress.setFarmName("Farm Name");
+    invalidAddress.setFarmNumber("Farm Number");
+    invalidAddress.setLine1("Line 1");
+    invalidAddress.setLine2("Line 2");
+    invalidAddress.setLine3("Line 3");
+    invalidAddress.setPostalCode("Postal Code");
+    invalidAddress.setRegion("Region");
+    invalidAddress.setSiteBlock("Site Block");
+    invalidAddress.setSiteNumber("Site Number");
+    invalidAddress.setStreetName("Street Name");
+    invalidAddress.setStreetNumber("Street Number");
+    invalidAddress.setSuburb("Suburb");
+    person.addPhysicalAddress(invalidAddress);
+
+    constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid street address",
+        13,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid unstructured address verification functionality. */
+  @Test
+  public void invalidUnstructuredAddressTest() {
+    // Validate an empty invalid address
+    // Required: Line 1, Country Code, Postal Code
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.RESIDENTIAL);
+    person.addPhysicalAddress(invalidAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid unstructured address",
+        3,
+        constraintViolations.size());
+
+    // Validate a fully populated invalid address
+    person = getTestBasicPersonDetails();
+
+    invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.RESIDENTIAL);
+    invalidAddress.setBuildingFloor("Building Floor");
+    invalidAddress.setBuildingName("Building Name");
+    invalidAddress.setBuildingRoom("Building Room");
+    invalidAddress.setCity("City");
+    invalidAddress.setComplexName("Complex Name");
+    invalidAddress.setComplexUnitNumber("Complex Unit Number");
+    invalidAddress.setCountry("Country");
+    invalidAddress.setFarmDescription("Farm Description");
+    invalidAddress.setFarmName("Farm Name");
+    invalidAddress.setFarmNumber("Farm Number");
+    invalidAddress.setLine1("Line 1");
+    invalidAddress.setLine2("Line 2");
+    invalidAddress.setLine3("Line 3");
+    invalidAddress.setPostalCode("Postal Code");
+    invalidAddress.setRegion("Region");
+    invalidAddress.setSiteBlock("Site Block");
+    invalidAddress.setSiteNumber("Site Number");
+    invalidAddress.setStreetName("Street Name");
+    invalidAddress.setStreetNumber("Street Number");
+    invalidAddress.setSuburb("Suburb");
+    person.addPhysicalAddress(invalidAddress);
+
+    constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid unstructured address",
+        13,
+        constraintViolations.size());
   }
 
   /** Test the organization functionality. */
@@ -212,8 +601,17 @@ public class PartyServiceTest {
             ContactMechanismPurpose.MAIN_PHONE_NUMBER,
             "0115551234"));
 
-    organization.addPhysicalAddress(
-        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.MAIN));
+    PhysicalAddress mainAddress =
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.MAIN);
+    mainAddress.setStreetNumber("1");
+    mainAddress.setStreetName("Discovery Place");
+    mainAddress.setSuburb("Sandhurst");
+    mainAddress.setCity("Sandton");
+    mainAddress.setRegion("GP");
+    mainAddress.setCountry("ZA");
+    mainAddress.setPostalCode("2194");
+
+    organization.addPhysicalAddress(mainAddress);
 
     partyService.updateOrganization(organization);
 
@@ -263,6 +661,104 @@ public class PartyServiceTest {
     partyService.deleteParty(organization.getId());
   }
 
+  /** Test the party physical address functionality. */
+  @Test
+  public void partyPhysicalAddressTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress buildingAddress =
+        new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressPurpose.RESIDENTIAL);
+    buildingAddress.setBuildingName("Burj Khalifa");
+    buildingAddress.setBuildingFloor("108");
+    buildingAddress.setBuildingRoom("Room 1081");
+    buildingAddress.setStreetNumber("1");
+    buildingAddress.setStreetName("1 Mohammed Bin Rashid Boulevard");
+    buildingAddress.setSuburb("Downtown Dubai");
+    buildingAddress.setCity("Dubai");
+    buildingAddress.setCountry("AE");
+    buildingAddress.setPostalCode("800 BURJ");
+    person.addPhysicalAddress(buildingAddress);
+
+    PhysicalAddress complexAddress =
+        new PhysicalAddress(PhysicalAddressType.COMPLEX, PhysicalAddressPurpose.RESIDENTIAL);
+    complexAddress.setComplexName("Secret Hideaway");
+    complexAddress.setComplexUnitNumber("10");
+    complexAddress.setStreetNumber("56");
+    complexAddress.setStreetName("First Road");
+    complexAddress.setSuburb("Sandhurst");
+    complexAddress.setCity("Sandton");
+    complexAddress.setCountry("ZA");
+    complexAddress.setPostalCode("2194");
+    person.addPhysicalAddress(complexAddress);
+
+    PhysicalAddress farmAddress =
+        new PhysicalAddress(PhysicalAddressType.FARM, PhysicalAddressPurpose.RESIDENTIAL);
+    farmAddress.setFarmNumber("S935");
+    farmAddress.setFarmName("My Geluk");
+    farmAddress.setFarmDescription("My Geluk");
+    farmAddress.setCity("Koffiefontein");
+    farmAddress.setRegion("FS");
+    farmAddress.setCountry("ZA");
+    farmAddress.setPostalCode("9986");
+    person.addPhysicalAddress(farmAddress);
+
+    PhysicalAddress internationalAddress =
+        new PhysicalAddress(PhysicalAddressType.INTERNATIONAL, PhysicalAddressPurpose.RESIDENTIAL);
+    internationalAddress.setLine1("Address Line 1");
+    internationalAddress.setLine2("Address Line 2");
+    internationalAddress.setLine3("Address Line 3");
+    internationalAddress.setCity("Johannesburg");
+    internationalAddress.setCountry("ZA");
+    internationalAddress.setPostalCode("2194");
+    person.addPhysicalAddress(internationalAddress);
+
+    PhysicalAddress siteAddress =
+        new PhysicalAddress(PhysicalAddressType.SITE, PhysicalAddressPurpose.RESIDENTIAL);
+    siteAddress.setSiteBlock("CC");
+    siteAddress.setSiteNumber("25436");
+    siteAddress.setCity("Soshanguve");
+    siteAddress.setRegion("GP");
+    siteAddress.setCountry("ZA");
+    siteAddress.setPostalCode("0152");
+    person.addPhysicalAddress(siteAddress);
+
+    PhysicalAddress streetAddress =
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.WORK);
+    streetAddress.setStreetNumber("1");
+    streetAddress.setStreetName("Discovery Place");
+    streetAddress.setSuburb("Sandhurst");
+    streetAddress.setCity("Sandton");
+    streetAddress.setRegion("GP");
+    streetAddress.setCountry("ZA");
+    streetAddress.setPostalCode("2194");
+    person.addPhysicalAddress(streetAddress);
+
+    PhysicalAddress unstructuredAddress =
+        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.RESIDENTIAL);
+    unstructuredAddress.setLine1("Address Line 1");
+    unstructuredAddress.setLine2("Address Line 2");
+    unstructuredAddress.setLine3("Address Line 3");
+    // unstructuredAddress.setCity("Johannesburg");
+    unstructuredAddress.setCountry("ZA");
+    unstructuredAddress.setPostalCode("2194");
+    person.addPhysicalAddress(unstructuredAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found",
+        0,
+        constraintViolations.size());
+
+    partyService.createPerson(person);
+
+    Person retrievedPerson = partyService.getPerson(person.getId());
+
+    comparePersons(person, retrievedPerson);
+
+    partyService.deleteParty(person.getId());
+  }
+
   /** Test the person functionality. */
   @Test
   public void personTest() throws Exception {
@@ -286,35 +782,35 @@ public class PartyServiceTest {
 
     partyService.createPerson(person);
 
-    try (Connection connection = dataSource.getConnection()) {
-      try (PreparedStatement statement =
-          connection.prepareStatement("SELECT type, purpose FROM party.contact_mechanisms")) {
-        try (ResultSet rs = statement.executeQuery()) {
-          while (rs.next()) {
-            Integer contactMechanismType = rs.getInt(1);
-            Integer contactMechanismPurpose = rs.getInt(2);
-
-            int xxx = 0;
-            xxx++;
-          }
-        }
-      }
-    }
-
-    try (Connection connection = dataSource.getConnection()) {
-      try (PreparedStatement statement =
-          connection.prepareStatement("SELECT type, purpose FROM party.physical_addresses")) {
-        try (ResultSet rs = statement.executeQuery()) {
-          while (rs.next()) {
-            Integer physicalAddressType = rs.getInt(1);
-            Integer physicalAddressPurpose = rs.getInt(2);
-
-            int xxx = 0;
-            xxx++;
-          }
-        }
-      }
-    }
+    //    try (Connection connection = dataSource.getConnection()) {
+    //      try (PreparedStatement statement =
+    //          connection.prepareStatement("SELECT type, purpose FROM party.contact_mechanisms")) {
+    //        try (ResultSet rs = statement.executeQuery()) {
+    //          while (rs.next()) {
+    //            Integer contactMechanismType = rs.getInt(1);
+    //            Integer contactMechanismPurpose = rs.getInt(2);
+    //
+    //            int xxx = 0;
+    //            xxx++;
+    //          }
+    //        }
+    //      }
+    //    }
+    //
+    //    try (Connection connection = dataSource.getConnection()) {
+    //      try (PreparedStatement statement =
+    //          connection.prepareStatement("SELECT type, purpose FROM party.physical_addresses")) {
+    //        try (ResultSet rs = statement.executeQuery()) {
+    //          while (rs.next()) {
+    //            Integer physicalAddressType = rs.getInt(1);
+    //            Integer physicalAddressPurpose = rs.getInt(2);
+    //
+    //            int xxx = 0;
+    //            xxx++;
+    //          }
+    //        }
+    //      }
+    //    }
 
     filteredPersons =
         partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
@@ -403,6 +899,10 @@ public class PartyServiceTest {
         "The name values for the two organizations do not match",
         organization1.getName(),
         organization2.getName());
+    assertEquals(
+        "The tenant ID values for the two organizations do not match",
+        organization1.getTenantId(),
+        organization2.getTenantId());
 
     assertEquals(
         "The number of contact mechanisms for the two persons do not match",
@@ -452,6 +952,8 @@ public class PartyServiceTest {
             && Objects.equals(
                 person1PhysicalAddress.getPurpose(), person2PhysicalAddress.getPurpose())) {
 
+          comparePhysicalAddresses(person1PhysicalAddress, person2PhysicalAddress);
+
           foundPhysicalAddress = true;
         }
       }
@@ -469,6 +971,12 @@ public class PartyServiceTest {
 
   private void compareParties(Party party1, Party party2) {
     assertEquals("The ID values for the two parties do not match", party1.getId(), party2.getId());
+    assertEquals(
+        "The tenant ID values for the two parties do not match",
+        party1.getTenantId(),
+        party2.getTenantId());
+    assertEquals(
+        "The type values for the two parties do not match", party1.getType(), party2.getType());
     assertEquals(
         "The name values for the two parties do not match", party1.getName(), party2.getName());
   }
@@ -552,6 +1060,10 @@ public class PartyServiceTest {
         "The surname values for the two persons do not match",
         person1.getSurname(),
         person2.getSurname());
+    assertEquals(
+        "The tenant ID values for the two persons do not match",
+        person1.getTenantId(),
+        person2.getTenantId());
     assertEquals(
         "The title values for the two persons do not match",
         person1.getTitle(),
@@ -646,6 +1158,8 @@ public class PartyServiceTest {
             && Objects.equals(
                 person1PhysicalAddress.getPurpose(), person2PhysicalAddress.getPurpose())) {
 
+          comparePhysicalAddresses(person1PhysicalAddress, person2PhysicalAddress);
+
           foundPhysicalAddress = true;
         }
       }
@@ -659,5 +1173,89 @@ public class PartyServiceTest {
                 + ")");
       }
     }
+  }
+
+  private void comparePhysicalAddresses(
+      PhysicalAddress physicalAddress1, PhysicalAddress physicalAddress2) {
+    assertEquals(
+        "The building floor values for the two physical addresses do not match",
+        physicalAddress1.getBuildingFloor(),
+        physicalAddress2.getBuildingFloor());
+    assertEquals(
+        "The building name values for the two physical addresses do not match",
+        physicalAddress1.getBuildingName(),
+        physicalAddress2.getBuildingName());
+    assertEquals(
+        "The building room values for the two physical addresses do not match",
+        physicalAddress1.getBuildingRoom(),
+        physicalAddress2.getBuildingRoom());
+    assertEquals(
+        "The city values for the two physical addresses do not match",
+        physicalAddress1.getCity(),
+        physicalAddress2.getCity());
+    assertEquals(
+        "The complex name values for the two physical addresses do not match",
+        physicalAddress1.getComplexName(),
+        physicalAddress2.getComplexName());
+    assertEquals(
+        "The complex unit number values for the two physical addresses do not match",
+        physicalAddress1.getComplexUnitNumber(),
+        physicalAddress2.getComplexUnitNumber());
+    assertEquals(
+        "The farm description values for the two physical addresses do not match",
+        physicalAddress1.getFarmDescription(),
+        physicalAddress2.getFarmDescription());
+    assertEquals(
+        "The farm name values for the two physical addresses do not match",
+        physicalAddress1.getFarmName(),
+        physicalAddress2.getFarmName());
+    assertEquals(
+        "The farm number values for the two physical addresses do not match",
+        physicalAddress1.getFarmNumber(),
+        physicalAddress2.getFarmNumber());
+    assertEquals(
+        "The line 1 values for the two physical addresses do not match",
+        physicalAddress1.getLine1(),
+        physicalAddress2.getLine1());
+    assertEquals(
+        "The line 2 values for the two physical addresses do not match",
+        physicalAddress1.getLine2(),
+        physicalAddress2.getLine2());
+    assertEquals(
+        "The line 3 values for the two physical addresses do not match",
+        physicalAddress1.getLine3(),
+        physicalAddress2.getLine3());
+    assertEquals(
+        "The purpose values for the two physical addresses do not match",
+        physicalAddress1.getPurpose(),
+        physicalAddress2.getPurpose());
+    assertEquals(
+        "The region values for the two physical addresses do not match",
+        physicalAddress1.getRegion(),
+        physicalAddress2.getRegion());
+    assertEquals(
+        "The site block values for the two physical addresses do not match",
+        physicalAddress1.getSiteBlock(),
+        physicalAddress2.getSiteBlock());
+    assertEquals(
+        "The site number values for the two physical addresses do not match",
+        physicalAddress1.getSiteNumber(),
+        physicalAddress2.getSiteNumber());
+    assertEquals(
+        "The street name values for the two physical addresses do not match",
+        physicalAddress1.getStreetName(),
+        physicalAddress2.getStreetName());
+    assertEquals(
+        "The street number values for the two physical addresses do not match",
+        physicalAddress1.getStreetNumber(),
+        physicalAddress2.getStreetNumber());
+    assertEquals(
+        "The suburb values for the two physical addresses do not match",
+        physicalAddress1.getSuburb(),
+        physicalAddress2.getSuburb());
+    assertEquals(
+        "The type values for the two physical addresses do not match",
+        physicalAddress1.getType(),
+        physicalAddress2.getType());
   }
 }

@@ -22,10 +22,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.core.service.ServiceException;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -61,6 +62,18 @@ public class RestControllerError implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
+  /** The HTTP status-code for the error. */
+  @JsonProperty private final int status;
+
+  /** The HTTP reason-phrase for the HTTP status-code for the error. */
+  @JsonProperty private final String statusText;
+
+  /** The date and time the error occurred. */
+  @JsonProperty private final LocalDateTime timestamp;
+
+  /** The URI for the HTTP request that resulted in the error. */
+  @JsonProperty private final String uri;
+
   /** The optional code identifying the error. */
   @JsonProperty private String code;
 
@@ -82,20 +95,8 @@ public class RestControllerError implements Serializable {
   /** The optional stack trace associated with the error. */
   @JsonProperty private String stackTrace;
 
-  /** The HTTP status-code for the error. */
-  @JsonProperty private int status;
-
-  /** The HTTP reason-phrase for the HTTP status-code for the error. */
-  @JsonProperty private String statusText;
-
-  /** The date and time the error occurred. */
-  @JsonProperty private LocalDateTime timestamp;
-
-  /** The URI for the HTTP request that resulted in the error. */
-  @JsonProperty private String uri;
-
   /** The optional validation errors associated with the error. */
-  @JsonProperty private List<Object> validationErrors;
+  @JsonProperty private List<ValidationError> validationErrors;
 
   /**
    * Constructs a new <code>RestControllerError</code>.
@@ -114,7 +115,6 @@ public class RestControllerError implements Serializable {
    * @param responseStatus the HTTP response status
    * @param cause the exception
    */
-  @SuppressWarnings("unchecked")
   public RestControllerError(
       HttpServletRequest request, HttpStatus responseStatus, Throwable cause) {
     this.timestamp = LocalDateTime.now();
@@ -163,21 +163,8 @@ public class RestControllerError implements Serializable {
       }
 
       try {
-        if (cause
-            .getClass()
-            .getName()
-            .equals("digital.inception.validation.InvalidArgumentException")) {
-          Method getNameMethod = cause.getClass().getMethod("getName");
-
-          if (getNameMethod != null) {
-            this.name = (String) getNameMethod.invoke(cause);
-          }
-
-          Method getValidationErrorsMethod = cause.getClass().getMethod("getValidationErrors");
-
-          if (getValidationErrorsMethod != null) {
-            validationErrors = (List<Object>) getValidationErrorsMethod.invoke(cause);
-          }
+        if (cause instanceof InvalidArgumentException) {
+          validationErrors = ((InvalidArgumentException) cause).getValidationErrors();
         }
       } catch (Throwable ignored) {
       }
@@ -286,7 +273,7 @@ public class RestControllerError implements Serializable {
    *
    * @return the optional validation errors associated with the error
    */
-  public List<Object> getValidationErrors() {
+  public List<ValidationError> getValidationErrors() {
     return validationErrors;
   }
 }

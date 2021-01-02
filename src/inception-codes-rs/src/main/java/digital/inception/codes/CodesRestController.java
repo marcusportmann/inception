@@ -19,11 +19,10 @@ package digital.inception.codes;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ISO8601Util;
+import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,9 +31,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
@@ -63,18 +59,13 @@ public class CodesRestController extends SecureRestController {
   /** The Codes Service. */
   private final ICodesService codesService;
 
-  /** The JSR-303 Validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>CodesRestController</code>.
    *
    * @param codesService the Codes Service
-   * @param validator the JSR-303 validator
    */
-  public CodesRestController(ICodesService codesService, Validator validator) {
+  public CodesRestController(ICodesService codesService) {
     this.codesService = codesService;
-    this.validator = validator;
   }
 
   /**
@@ -137,23 +128,12 @@ public class CodesRestController extends SecureRestController {
           Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
           CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     if (code == null) {
       throw new InvalidArgumentException("code");
     }
 
     if (!code.getCodeCategoryId().equals(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "code", ValidationError.toValidationErrors(constraintViolations));
     }
 
     codesService.createCode(code);
@@ -206,17 +186,6 @@ public class CodesRestController extends SecureRestController {
               required = true)
           CodeCategory codeCategory)
       throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException {
-    if (codeCategory == null) {
-      throw new InvalidArgumentException("codeCategory");
-    }
-
-    Set<ConstraintViolation<CodeCategory>> constraintViolations = validator.validate(codeCategory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "codeCategory", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     codesService.createCodeCategory(codeCategory);
   }
 
@@ -273,14 +242,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    if (!StringUtils.hasText(codeId)) {
-      throw new InvalidArgumentException("codeId");
-    }
-
     codesService.deleteCode(codeCategoryId, codeId);
   }
 
@@ -332,10 +293,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     codesService.deleteCodeCategory(codeCategoryId);
   }
 
@@ -394,14 +351,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    if (!StringUtils.hasText(codeId)) {
-      throw new InvalidArgumentException("codeId");
-    }
-
     return codesService.getCode(codeCategoryId, codeId);
   }
 
@@ -480,10 +429,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     return codesService.getCodeCategory(codeCategoryId);
   }
 
@@ -536,10 +481,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     String data = codesService.getCodeCategoryData(codeCategoryId);
 
     return RestUtil.quote(StringUtils.hasText(data) ? data : "");
@@ -594,10 +535,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     return RestUtil.quote(codesService.getCodeCategoryName(codeCategoryId));
   }
 
@@ -680,10 +617,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     return RestUtil.quote(
         ISO8601Util.fromLocalDateTime(codesService.getCodeCategoryUpdated(codeCategoryId)));
   }
@@ -745,14 +678,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    if (!StringUtils.hasText(codeId)) {
-      throw new InvalidArgumentException("codeId");
-    }
-
     return RestUtil.quote(codesService.getCodeName(codeCategoryId, codeId));
   }
 
@@ -805,10 +730,6 @@ public class CodesRestController extends SecureRestController {
           @PathVariable
           String codeCategoryId)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
-    if (!StringUtils.hasText(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
     return codesService.getCodesForCodeCategory(codeCategoryId);
   }
 
@@ -883,19 +804,12 @@ public class CodesRestController extends SecureRestController {
       throw new InvalidArgumentException("code");
     }
 
-    if (!code.getCodeCategoryId().equals(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
+    if (!codeCategoryId.equals(code.getCodeCategoryId())) {
+      throw new InvalidArgumentException("code");
     }
 
-    if (!code.getId().equals(codeId)) {
-      throw new InvalidArgumentException("codeId");
-    }
-
-    Set<ConstraintViolation<Code>> constraintViolations = validator.validate(code);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "code", ValidationError.toValidationErrors(constraintViolations));
+    if (!codeId.equals(code.getId())) {
+      throw new InvalidArgumentException("code");
     }
 
     codesService.updateCode(code);
@@ -963,15 +877,8 @@ public class CodesRestController extends SecureRestController {
       throw new InvalidArgumentException("codeCategory");
     }
 
-    if (!codeCategory.getId().equals(codeCategoryId)) {
-      throw new InvalidArgumentException("codeCategoryId");
-    }
-
-    Set<ConstraintViolation<CodeCategory>> constraintViolations = validator.validate(codeCategory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "codeCategory", ValidationError.toValidationErrors(constraintViolations));
+    if (!codeCategoryId.equals(codeCategory.getId())) {
+      throw new InvalidArgumentException("codeCategory");
     }
 
     codesService.updateCodeCategory(codeCategory);

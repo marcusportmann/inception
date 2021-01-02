@@ -22,6 +22,8 @@ import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.PasswordUtil;
 import digital.inception.core.util.RandomStringGenerator;
 import digital.inception.core.util.ResourceUtil;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import digital.inception.mail.IMailService;
 import digital.inception.mail.MailTemplate;
 import digital.inception.mail.MailTemplateContentType;
@@ -34,8 +36,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -55,7 +60,7 @@ import org.springframework.web.util.UriUtils;
  * @author Marcus Portmann
  */
 @Service
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
 public class SecurityService implements ISecurityService, InitializingBean {
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the Administration tenant. */
@@ -150,6 +155,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /** The User Repository. */
   private final UserRepository userRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /** The user directories. */
   private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
 
@@ -157,6 +165,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * Constructs a new <code>SecurityService</code>.
    *
    * @param applicationContext the Spring application context
+   * @param validator the JSR-303 validator
    * @param mailService the Mail Service
    * @param functionRepository the Function Repository
    * @param groupRepository the Group Repository
@@ -170,6 +179,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   public SecurityService(
       ApplicationContext applicationContext,
+      Validator validator,
       IMailService mailService,
       FunctionRepository functionRepository,
       GroupRepository groupRepository,
@@ -181,6 +191,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       UserDirectoryTypeRepository userDirectoryTypeRepository,
       UserRepository userRepository) {
     this.applicationContext = applicationContext;
+    this.validator = validator;
     this.mailService = mailService;
     this.functionRepository = functionRepository;
     this.groupRepository = groupRepository;
@@ -206,8 +217,24 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void addMemberToGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-          ExistingGroupMemberException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          UserNotFoundException, ExistingGroupMemberException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (memberType == null) {
+      throw new InvalidArgumentException("memberType");
+    }
+
+    if (!StringUtils.hasText(memberName)) {
+      throw new InvalidArgumentException("memberName");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -228,8 +255,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, RoleNotFoundException,
-          ExistingGroupRoleException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (!StringUtils.hasText(roleCode)) {
+      throw new InvalidArgumentException("roleCode");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -249,8 +288,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
-      throws TenantNotFoundException, UserDirectoryNotFoundException,
+      throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
           ExistingTenantUserDirectoryException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     try {
       if (!tenantRepository.existsById(tenantId)) {
         throw new TenantNotFoundException(tenantId);
@@ -291,8 +338,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void addUserToGroup(UUID userDirectoryId, String groupName, String username)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          UserNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -324,7 +383,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
       boolean lockUser,
       boolean resetPasswordHistory,
       PasswordChangeReason reason)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (!StringUtils.hasText(newPassword)) {
+      throw new InvalidArgumentException("newPassword");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -371,8 +443,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public UUID authenticate(String username, String password)
-      throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-          UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
+          ExpiredPasswordException, UserNotFoundException, SecurityServiceException {
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (!StringUtils.hasText(password)) {
+      throw new InvalidArgumentException("password");
+    }
+
     try {
       // First check if this is an internal user and if so determine the user directory ID
       UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
@@ -434,8 +514,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public UUID changePassword(String username, String password, String newPassword)
-      throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-          ExistingPasswordException, SecurityServiceException {
+      throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
+          UserNotFoundException, ExistingPasswordException, SecurityServiceException {
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (!StringUtils.hasText(password)) {
+      throw new InvalidArgumentException("password");
+    }
+
+    if (!StringUtils.hasText(newPassword)) {
+      throw new InvalidArgumentException("newPassword");
+    }
+
     try {
       // First check if this is an internal user and if so determine the user directory ID
       UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
@@ -495,7 +587,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void createFunction(Function function)
-      throws DuplicateFunctionException, SecurityServiceException {
+      throws InvalidArgumentException, DuplicateFunctionException, SecurityServiceException {
+    validateFunction(function);
+
     try {
       if (functionRepository.existsById(function.getCode())) {
         throw new DuplicateFunctionException(function.getCode());
@@ -518,7 +612,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void createGroup(Group group)
-      throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
+          SecurityServiceException {
+    validateGroup(group);
+
     IUserDirectory userDirectory = userDirectories.get(group.getUserDirectoryId());
 
     if (userDirectory == null) {
@@ -539,7 +636,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
-      throws DuplicateTenantException, SecurityServiceException {
+      throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException {
+    validateTenant(tenant);
+
     UserDirectory userDirectory = null;
 
     try {
@@ -583,7 +682,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
-      throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
+          SecurityServiceException {
+    validateUser(user);
+
     IUserDirectory userDirectory = userDirectories.get(user.getUserDirectoryId());
 
     if (userDirectory == null) {
@@ -605,7 +707,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void createUserDirectory(UserDirectory userDirectory)
-      throws DuplicateUserDirectoryException, SecurityServiceException {
+      throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException {
+    validateUserDirectory(userDirectory);
+
     try {
       if ((userDirectory.getId() != null)
           && userDirectoryRepository.existsById(userDirectory.getId())) {
@@ -639,7 +743,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void deleteFunction(String functionCode)
-      throws FunctionNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException {
+    if (!StringUtils.hasText(functionCode)) {
+      throw new InvalidArgumentException("functionCode");
+    }
+
     try {
       if (!functionRepository.existsById(functionCode)) {
         throw new FunctionNotFoundException(functionCode);
@@ -663,8 +771,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void deleteGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
-          SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          ExistingGroupMembersException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -681,7 +797,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   @Transactional
-  public void deleteTenant(UUID tenantId) throws TenantNotFoundException, SecurityServiceException {
+  public void deleteTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       if (!tenantRepository.existsById(tenantId)) {
         throw new TenantNotFoundException(tenantId);
@@ -705,7 +826,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void deleteUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -724,7 +854,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void deleteUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     try {
       if (!userDirectoryRepository.existsById(userDirectoryId)) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -755,7 +889,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
-      throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, InvalidAttributeException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (attributes == null) {
+      throw new InvalidArgumentException("attributes");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -773,7 +916,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public Function getFunction(String functionCode)
-      throws FunctionNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException {
+    if (!StringUtils.hasText(functionCode)) {
+      throw new InvalidArgumentException("functionCode");
+    }
+
     try {
       Optional<Function> functionOptional = functionRepository.findById(functionCode);
 
@@ -800,7 +947,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -834,7 +990,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public Group getGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -853,7 +1018,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<String> getGroupNames(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -873,7 +1042,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -892,7 +1070,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<Group> getGroups(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -920,7 +1102,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -940,7 +1126,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -960,7 +1155,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -991,7 +1195,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1011,7 +1224,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<String> getRoleCodesForGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1031,7 +1253,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1065,7 +1296,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1082,7 +1322,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the tenant
    */
   @Override
-  public Tenant getTenant(UUID tenantId) throws TenantNotFoundException, SecurityServiceException {
+  public Tenant getTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       Optional<Tenant> tenantOptional = tenantRepository.findById(tenantId);
 
@@ -1109,7 +1354,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     try {
       if (!userDirectoryRepository.existsById(userDirectoryId)) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1135,7 +1384,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public String getTenantName(UUID tenantId)
-      throws TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       Optional<String> nameOptional = tenantRepository.getNameById(tenantId);
 
@@ -1244,7 +1497,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<Tenant> getTenantsForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     try {
       if (!userDirectoryRepository.existsById(userDirectoryId)) {
         throw new UserDirectoryNotFoundException(userDirectoryId);
@@ -1272,7 +1529,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public User getUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1363,7 +1629,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UserDirectory> getUserDirectoriesForTenant(UUID tenantId)
-      throws TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       if (!tenantRepository.existsById(tenantId)) {
         throw new TenantNotFoundException(tenantId);
@@ -1388,7 +1658,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public UserDirectory getUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     try {
       Optional<UserDirectory> userDirectoryOptional =
           userDirectoryRepository.findById(userDirectoryId);
@@ -1415,7 +1689,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1435,7 +1713,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *     cannot be found
    */
   @Override
-  public UUID getUserDirectoryIdForUser(String username) throws SecurityServiceException {
+  public UUID getUserDirectoryIdForUser(String username)
+      throws InvalidArgumentException, SecurityServiceException {
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     try {
       // First check if this is an internal user and if so determine the user directory ID
       UUID internalUserDirectoryId = getInternalUserDirectoryIdForUser(username);
@@ -1477,7 +1760,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
-      throws TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       if (!tenantRepository.existsById(tenantId)) {
         throw new TenantNotFoundException(tenantId);
@@ -1507,7 +1794,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UUID> getUserDirectoryIdsForUser(String username)
-      throws UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     try {
       List<UUID> userDirectoryIdsForUser = new ArrayList<>();
 
@@ -1555,7 +1846,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public String getUserDirectoryName(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     try {
       Optional<String> nameOptional = userDirectoryRepository.getNameById(userDirectoryId);
 
@@ -1642,7 +1937,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UserDirectorySummary> getUserDirectorySummariesForTenant(UUID tenantId)
-      throws TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
     try {
       if (!tenantRepository.existsById(tenantId)) {
         throw new TenantNotFoundException(tenantId);
@@ -1670,8 +1969,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, UserDirectoryTypeNotFoundException,
-          SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException,
+          UserDirectoryTypeNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     try {
       Optional<String> typeOptional =
           userDirectoryRepository.getTypeForUserDirectoryById(userDirectoryId);
@@ -1723,7 +2026,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public String getUserName(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1742,7 +2054,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<User> getUsers(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1772,7 +2088,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     if (sortBy == null) {
       sortBy = UserSortBy.NAME;
     }
@@ -1796,7 +2116,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
-      throws UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
     initiatePasswordReset(username, resetPasswordUrl, sendEmail, null);
   }
 
@@ -1812,7 +2132,15 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void initiatePasswordReset(
       String username, String resetPasswordUrl, boolean sendEmail, String securityCode)
-      throws UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (!StringUtils.hasText(resetPasswordUrl)) {
+      throw new InvalidArgumentException("resetPasswordUrl");
+    }
+
     try {
       UUID userDirectoryId = getUserDirectoryIdForUser(username);
 
@@ -1863,7 +2191,15 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public boolean isExistingUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1884,8 +2220,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          GroupNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1996,8 +2344,24 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void removeMemberFromGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, GroupMemberNotFoundException,
-          SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          GroupMemberNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (memberType == null) {
+      throw new InvalidArgumentException("memberType");
+    }
+
+    if (!StringUtils.hasText(memberName)) {
+      throw new InvalidArgumentException("memberName");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -2018,8 +2382,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, GroupRoleNotFoundException,
-          SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          GroupRoleNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (!StringUtils.hasText(roleCode)) {
+      throw new InvalidArgumentException("roleCode");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -2039,8 +2415,16 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
-      throws TenantNotFoundException, TenantUserDirectoryNotFoundException,
-          SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException,
+          TenantUserDirectoryNotFoundException, SecurityServiceException {
+    if (tenantId == null) {
+      throw new InvalidArgumentException("tenantId");
+    }
+
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
     try {
       if (!tenantRepository.existsById(tenantId)) {
         throw new TenantNotFoundException(tenantId);
@@ -2075,8 +2459,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          UserNotFoundException, SecurityServiceException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    if (!StringUtils.hasText(groupName)) {
+      throw new InvalidArgumentException("groupName");
+    }
+
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -2096,8 +2492,20 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void resetPassword(String username, String newPassword, String securityCode)
-      throws UserNotFoundException, UserLockedException, InvalidSecurityCodeException,
-          ExistingPasswordException, SecurityServiceException {
+      throws InvalidArgumentException, UserNotFoundException, UserLockedException,
+          InvalidSecurityCodeException, ExistingPasswordException, SecurityServiceException {
+    if (!StringUtils.hasText(username)) {
+      throw new InvalidArgumentException("username");
+    }
+
+    if (!StringUtils.hasText(newPassword)) {
+      throw new InvalidArgumentException("newPassword");
+    }
+
+    if (!StringUtils.hasText(securityCode)) {
+      throw new InvalidArgumentException("securityCode");
+    }
+
     try {
       UUID userDirectoryId = getUserDirectoryIdForUser(username);
 
@@ -2141,7 +2549,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void updateFunction(Function function)
-      throws FunctionNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException {
+    validateFunction(function);
+
     try {
       if (!functionRepository.existsById(function.getCode())) {
         throw new FunctionNotFoundException(function.getCode());
@@ -2164,7 +2574,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void updateGroup(Group group)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException {
+    validateGroup(group);
+
     IUserDirectory userDirectory = userDirectories.get(group.getUserDirectoryId());
 
     if (userDirectory == null) {
@@ -2181,7 +2594,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   @Transactional
-  public void updateTenant(Tenant tenant) throws TenantNotFoundException, SecurityServiceException {
+  public void updateTenant(Tenant tenant)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+    validateTenant(tenant);
+
     try {
       Optional<Tenant> tenantOptional = tenantRepository.findById(tenant.getId());
 
@@ -2212,7 +2628,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException {
+    validateUser(user);
+
     IUserDirectory userDirectory = userDirectories.get(user.getUserDirectoryId());
 
     if (userDirectory == null) {
@@ -2230,7 +2649,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void updateUserDirectory(UserDirectory userDirectory)
-      throws UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    validateUserDirectory(userDirectory);
+
     try {
       if (!userDirectoryRepository.existsById(userDirectory.getId())) {
         throw new UserDirectoryNotFoundException(userDirectory.getId());
@@ -2339,6 +2760,72 @@ public class SecurityService implements ISecurityService, InitializingBean {
       }
     } catch (Throwable e) {
       throw new SecurityServiceException("Failed to send the password reset e-mail", e);
+    }
+  }
+
+  private void validateFunction(Function function) throws InvalidArgumentException {
+    if (function == null) {
+      throw new InvalidArgumentException("function");
+    }
+
+    Set<ConstraintViolation<Function>> constraintViolations = validator.validate(function);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "function", ValidationError.toValidationErrors(constraintViolations));
+    }
+  }
+
+  private void validateGroup(Group group) throws InvalidArgumentException {
+    if (group == null) {
+      throw new InvalidArgumentException("group");
+    }
+
+    Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "group", ValidationError.toValidationErrors(constraintViolations));
+    }
+  }
+
+  private void validateTenant(Tenant tenant) throws InvalidArgumentException {
+    if (tenant == null) {
+      throw new InvalidArgumentException("tenant");
+    }
+
+    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "tenant", ValidationError.toValidationErrors(constraintViolations));
+    }
+  }
+
+  private void validateUser(User user) throws InvalidArgumentException {
+    if (user == null) {
+      throw new InvalidArgumentException("user");
+    }
+
+    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "user", ValidationError.toValidationErrors(constraintViolations));
+    }
+  }
+
+  private void validateUserDirectory(UserDirectory userDirectory) throws InvalidArgumentException {
+    if (userDirectory == null) {
+      throw new InvalidArgumentException("userDirectory");
+    }
+
+    Set<ConstraintViolation<UserDirectory>> constraintViolations =
+        validator.validate(userDirectory);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "userDirectory", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

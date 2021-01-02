@@ -18,6 +18,7 @@ package digital.inception.sms;
 
 // ~--- JDK imports ------------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import java.util.UUID;
 
 /**
@@ -34,14 +35,15 @@ public interface ISMSService {
    *
    * @param sms the <code>SMS</code> instance containing the information for the SMS
    */
-  void createSMS(SMS sms) throws SMSServiceException;
+  void createSMS(SMS sms) throws InvalidArgumentException, SMSServiceException;
 
   /**
    * Delete the existing SMS.
    *
    * @param smsId the ID uniquely identifying the SMS
    */
-  void deleteSMS(UUID smsId) throws SMSNotFoundException, SMSServiceException;
+  void deleteSMS(UUID smsId)
+      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
 
   /**
    * Returns the maximum number of send attempts for a SMS.
@@ -73,7 +75,7 @@ public interface ISMSService {
    * @param smsId the ID uniquely identifying the SMS
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
-  SMS getSMS(UUID smsId) throws SMSNotFoundException, SMSServiceException;
+  SMS getSMS(UUID smsId) throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
 
   /**
    * Reset the SMS locks.
@@ -91,7 +93,8 @@ public interface ISMSService {
    * @param mobileNumber the mobile number
    * @param message the message
    */
-  void sendSMS(String mobileNumber, String message) throws SMSServiceException;
+  void sendSMS(String mobileNumber, String message)
+      throws InvalidArgumentException, SMSServiceException;
 
   /**
    * Send the SMS synchronously.
@@ -104,7 +107,7 @@ public interface ISMSService {
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
    */
   boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
-      throws SMSServiceException;
+      throws InvalidArgumentException, SMSServiceException;
 
   /**
    * Set the status for the SMS.
@@ -112,7 +115,8 @@ public interface ISMSService {
    * @param smsId the ID uniquely identifying the SMS
    * @param status the new status for the SMS
    */
-  void setSMSStatus(UUID smsId, SMSStatus status) throws SMSNotFoundException, SMSServiceException;
+  void setSMSStatus(UUID smsId, SMSStatus status)
+      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
 
   /**
    * Unlock the SMS.
@@ -120,5 +124,6 @@ public interface ISMSService {
    * @param smsId the ID uniquely identifying the SMS
    * @param status the new status for the unlocked SMS
    */
-  void unlockSMS(UUID smsId, SMSStatus status) throws SMSNotFoundException, SMSServiceException;
+  void unlockSMS(UUID smsId, SMSStatus status)
+      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
 }

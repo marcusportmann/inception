@@ -18,11 +18,11 @@ package digital.inception.reporting;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -141,18 +141,6 @@ public class ReportingRestController extends SecureRestController {
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, DuplicateReportDefinitionException,
           ReportingServiceException {
-    if (reportDefinition == null) {
-      throw new InvalidArgumentException("reportDefinition");
-    }
-
-    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
-        validator.validate(reportDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     reportingService.createReportDefinition(reportDefinition);
   }
 
@@ -206,10 +194,6 @@ public class ReportingRestController extends SecureRestController {
           String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (reportDefinitionId == null) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
     reportingService.deleteReportDefinition(reportDefinitionId);
   }
 
@@ -355,10 +339,6 @@ public class ReportingRestController extends SecureRestController {
           String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
     return reportingService.getReportDefinition(reportDefinitionId);
   }
 
@@ -411,10 +391,6 @@ public class ReportingRestController extends SecureRestController {
           String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (!StringUtils.hasText(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
     return RestUtil.quote(reportingService.getReportDefinitionName(reportDefinitionId));
   }
 
@@ -537,20 +513,16 @@ public class ReportingRestController extends SecureRestController {
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
     if (reportDefinition == null) {
       throw new InvalidArgumentException("reportDefinition");
     }
 
-    if (!reportDefinition.getId().equals(reportDefinitionId)) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
-    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
-        validator.validate(reportDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
+    if (!reportDefinitionId.equals(reportDefinition.getId())) {
+      throw new InvalidArgumentException("reportDefinition");
     }
 
     reportingService.updateReportDefinition(reportDefinition);

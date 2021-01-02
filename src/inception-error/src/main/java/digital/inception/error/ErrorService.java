@@ -18,9 +18,14 @@ package digital.inception.error;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -45,15 +50,21 @@ public class ErrorService implements IErrorService {
   /** The Error Report Summary Repository. */
   private final ErrorReportSummaryRepository errorReportSummaryRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /**
    * Constructs a new <code>ErrorService</code>.
    *
+   * @param validator the JSR-303 validator
    * @param errorReportRepository the Error Report Repository
    * @param errorReportSummaryRepository the Error Report Summary Repository
    */
   public ErrorService(
+      Validator validator,
       ErrorReportRepository errorReportRepository,
       ErrorReportSummaryRepository errorReportSummaryRepository) {
+    this.validator = validator;
     this.errorReportRepository = errorReportRepository;
     this.errorReportSummaryRepository = errorReportSummaryRepository;
   }
@@ -66,7 +77,26 @@ public class ErrorService implements IErrorService {
    */
   @Override
   @Transactional
-  public void createErrorReport(ErrorReport errorReport) throws ErrorServiceException {
+  public void createErrorReport(ErrorReport errorReport)
+      throws InvalidArgumentException, ErrorServiceException {
+    if (errorReport == null) {
+      throw new InvalidArgumentException("errorReport");
+    }
+
+    // Truncate the detail if required
+    if ((errorReport.getDetail() != null)
+        && (errorReport.getDetail().length() > ErrorReport.MAX_DETAIL_SIZE)) {
+      errorReport.setDetail(
+          errorReport.getDetail().substring(0, ErrorReport.MAX_DETAIL_SIZE - 3) + "...");
+    }
+
+    Set<ConstraintViolation<ErrorReport>> constraintViolations = validator.validate(errorReport);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "errorReport", ValidationError.toValidationErrors(constraintViolations));
+    }
+
     try {
       String description = errorReport.getDescription();
 
@@ -116,7 +146,11 @@ public class ErrorService implements IErrorService {
    */
   @Override
   public ErrorReport getErrorReport(UUID errorReportId)
-      throws ErrorReportNotFoundException, ErrorServiceException {
+      throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException {
+    if (errorReportId == null) {
+      throw new InvalidArgumentException("errorReportId");
+    }
+
     try {
       Optional<ErrorReport> errorReportOptional = errorReportRepository.findById(errorReportId);
 
@@ -143,7 +177,11 @@ public class ErrorService implements IErrorService {
    */
   @Override
   public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-      throws ErrorReportNotFoundException, ErrorServiceException {
+      throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException {
+    if (errorReportId == null) {
+      throw new InvalidArgumentException("errorReportId");
+    }
+
     try {
       Optional<ErrorReportSummary> errorReportSummaryOptional =
           errorReportSummaryRepository.findById(errorReportId);
@@ -170,7 +208,11 @@ public class ErrorService implements IErrorService {
    */
   @Override
   public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-      throws ErrorServiceException {
+      throws InvalidArgumentException, ErrorServiceException {
+    if (maximumNumberOfEntries < 0) {
+      throw new InvalidArgumentException("maximumNumberOfEntries");
+    }
+
     try {
       PageRequest pageRequest =
           PageRequest.of(0, maximumNumberOfEntries, Sort.Direction.DESC, "created");

@@ -18,19 +18,15 @@ package digital.inception.error;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.SecureRestController;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -58,18 +54,13 @@ public class ErrorRestController extends SecureRestController {
   /** The Error Service. */
   private final IErrorService errorService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>ErrorRestController</code>.
    *
    * @param errorService the Error Service
-   * @param validator the JSR-303 validator
    */
-  public ErrorRestController(IErrorService errorService, Validator validator) {
+  public ErrorRestController(IErrorService errorService) {
     this.errorService = errorService;
-    this.validator = validator;
   }
 
   /**
@@ -115,24 +106,10 @@ public class ErrorRestController extends SecureRestController {
       throw new InvalidArgumentException("errorReport");
     }
 
-    // Truncate the detail if required
-    if ((errorReport.getDetail() != null)
-        && (errorReport.getDetail().length() > ErrorReport.MAX_DETAIL_SIZE)) {
-      errorReport.setDetail(
-          errorReport.getDetail().substring(0, ErrorReport.MAX_DETAIL_SIZE - 3) + "...");
-    }
-
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if (authentication != null) {
       errorReport.setWho(authentication.getPrincipal().toString());
-    }
-
-    Set<ConstraintViolation<ErrorReport>> constraintViolations = validator.validate(errorReport);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "errorReport", ValidationError.toValidationErrors(constraintViolations));
     }
 
     errorService.createErrorReport(errorReport);

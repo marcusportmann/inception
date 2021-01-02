@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
 // ~--- JDK imports ------------------------------------------------------------
@@ -124,25 +125,30 @@ public abstract class SecureRestController {
    * Confirm that the user associated with the authenticated request has access to the specified
    * function.
    *
-   * @param authentication the authenticated principal associated with the authenticated request
    * @param functionCode the code uniquely identifying the function
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *     the function identified by the specified function code or <code>false</code> otherwise
    */
-  protected boolean hasAccessToFunction(Authentication authentication, String functionCode) {
-    return hasAuthority(authentication, "FUNCTION_" + functionCode);
+  protected boolean hasAccessToFunction(String functionCode) {
+    return hasAuthority("FUNCTION_" + functionCode);
   }
 
   /**
    * Confirm that the user associated with the authenticated request has the specified authority.
    *
-   * @param authentication the authenticated principal associated with the authenticated request
    * @param authority the authority
    * @return <code>true</code> if the user associated with the authenticated request has the
    *     specified authority or <code>false</code> otherwise
    */
-  protected boolean hasAuthority(Authentication authentication, String authority) {
-    if ((authentication == null) || (!StringUtils.hasText(authority))) {
+  protected boolean hasAuthority(String authority) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    // Could not retrieve the currently authenticated principal
+    if (authentication == null) {
+      return false;
+    }
+
+    if (!StringUtils.hasText(authority)) {
       return false;
     }
 
@@ -162,12 +168,11 @@ public abstract class SecureRestController {
   /**
    * Confirm that the user associated with the authenticated request has the specified role.
    *
-   * @param authentication the authenticated principal associated with the authenticated request
    * @param roleName the name of the role
    * @return <code>true</code> if the user associated with the authenticated request has the
    *     specified role or <code>false</code> otherwise
    */
-  protected boolean hasRole(Authentication authentication, String roleName) {
-    return hasAuthority(authentication, "ROLE_" + roleName);
+  protected boolean hasRole(String roleName) {
+    return hasAuthority("ROLE_" + roleName);
   }
 }

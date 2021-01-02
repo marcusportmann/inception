@@ -82,13 +82,13 @@ public class ProcessServiceTest {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ProcessServiceTest.class);
 
+  /** The Case Service. */
+  @Autowired private ICaseService caseService;
+
   /** The data source used to provide connections to the application database. */
   @Autowired
   @Qualifier("applicationDataSource")
-  DataSource dataSource;
-
-  /** The Case Service. */
-  @Autowired private ICaseService caseService;
+  private DataSource dataSource;
 
   /** The Camunda Process Engine. */
   @Autowired private ProcessEngine processEngine;

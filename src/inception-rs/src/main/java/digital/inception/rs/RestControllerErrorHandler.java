@@ -18,6 +18,7 @@ package digital.inception.rs;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpHeaders;
@@ -72,7 +73,13 @@ public class RestControllerErrorHandler {
             new RestControllerError(request, HttpStatus.FORBIDDEN, cause),
             new HttpHeaders(),
             HttpStatus.FORBIDDEN);
-      } else {
+      } else if (cause instanceof InvalidArgumentException) {
+        return new ResponseEntity<>(
+            new RestControllerError(request, HttpStatus.BAD_REQUEST, cause),
+            new HttpHeaders(),
+            HttpStatus.BAD_REQUEST);
+      }
+      else {
         return new ResponseEntity<>(
             new RestControllerError(request, HttpStatus.INTERNAL_SERVER_ERROR, cause),
             new HttpHeaders(),

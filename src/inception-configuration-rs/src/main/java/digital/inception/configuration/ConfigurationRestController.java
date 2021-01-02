@@ -18,11 +18,10 @@ package digital.inception.configuration;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,12 +30,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -62,19 +57,13 @@ public class ConfigurationRestController extends SecureRestController {
   /** The Configuration Service. */
   private final IConfigurationService configurationService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>ConfigurationRestController</code>.
    *
    * @param configurationService the Configuration Service
-   * @param validator the JSR-303 validator
    */
-  public ConfigurationRestController(
-      IConfigurationService configurationService, Validator validator) {
+  public ConfigurationRestController(IConfigurationService configurationService) {
     this.configurationService = configurationService;
-    this.validator = validator;
   }
 
   /**
@@ -127,10 +116,6 @@ public class ConfigurationRestController extends SecureRestController {
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
-    }
-
     configurationService.deleteConfiguration(key);
   }
 
@@ -182,10 +167,6 @@ public class ConfigurationRestController extends SecureRestController {
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
-    }
-
     return configurationService.getConfiguration(key);
   }
 
@@ -239,10 +220,6 @@ public class ConfigurationRestController extends SecureRestController {
           String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
-    }
-
     return RestUtil.quote(configurationService.getString(key));
   }
 
@@ -315,14 +292,6 @@ public class ConfigurationRestController extends SecureRestController {
           @RequestBody
           Configuration configuration)
       throws InvalidArgumentException, ConfigurationServiceException {
-    Set<ConstraintViolation<Configuration>> constraintViolations =
-        validator.validate(configuration);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "configuration", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     configurationService.setConfiguration(configuration);
   }
 }

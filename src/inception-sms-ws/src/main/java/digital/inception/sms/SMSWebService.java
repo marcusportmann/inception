@@ -20,7 +20,6 @@ package digital.inception.sms;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.validation.Validator;
 
 /**
  * The <code>SMSWebService</code> class.
@@ -38,17 +37,12 @@ public class SMSWebService {
   /** The SMS Service. */
   private final ISMSService smsService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>SMSWebService</code>.
    *
    * @param smsService the SMS Service
-   * @param validator the JSR-303 validator
    */
-  public SMSWebService(ISMSService smsService, Validator validator) {
+  public SMSWebService(ISMSService smsService) {
     this.smsService = smsService;
-    this.validator = validator;
   }
 }

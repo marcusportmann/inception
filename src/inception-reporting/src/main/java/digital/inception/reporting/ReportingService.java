@@ -18,6 +18,8 @@ package digital.inception.reporting;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -25,7 +27,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import javax.sql.DataSource;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -62,20 +67,26 @@ public class ReportingService implements IReportingService {
   /** The Report Definition Summary Repository. */
   private final ReportDefinitionSummaryRepository reportDefinitionSummaryRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /* The real path to the folder where the local Jasper reports are stored. */
   private String localReportFolderPath;
 
   /**
    * Constructs a new <code>ReportingService</code>.
    *
+   * @param validator the JSR-303 validator
    * @param dataSource the data source used to provide connections to the application database
    * @param reportDefinitionRepository the Report Definition Repository
    * @param reportDefinitionSummaryRepository the Report Definition Summary Repository
    */
   public ReportingService(
+      Validator validator,
       @Qualifier("applicationDataSource") DataSource dataSource,
       ReportDefinitionRepository reportDefinitionRepository,
       ReportDefinitionSummaryRepository reportDefinitionSummaryRepository) {
+    this.validator = validator;
     this.dataSource = dataSource;
     this.reportDefinitionRepository = reportDefinitionRepository;
     this.reportDefinitionSummaryRepository = reportDefinitionSummaryRepository;
@@ -90,7 +101,10 @@ public class ReportingService implements IReportingService {
   @Override
   @Transactional
   public void createReportDefinition(ReportDefinition reportDefinition)
-      throws DuplicateReportDefinitionException, ReportingServiceException {
+      throws InvalidArgumentException, DuplicateReportDefinitionException,
+          ReportingServiceException {
+    validateReportDefinition(reportDefinition);
+
     try {
       if (reportDefinitionRepository.existsById(reportDefinition.getId())) {
         throw new DuplicateReportDefinitionException(reportDefinition.getId());
@@ -114,7 +128,16 @@ public class ReportingService implements IReportingService {
    */
   @Override
   public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
-      throws ReportDefinitionNotFoundException, ReportingServiceException {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
+    if (parameters == null) {
+      throw new InvalidArgumentException("parameters");
+    }
+
     try (Connection connection = dataSource.getConnection()) {
       return createReportPDF(reportDefinitionId, parameters, connection);
     } catch (ReportDefinitionNotFoundException e) {
@@ -139,7 +162,20 @@ public class ReportingService implements IReportingService {
   @Override
   public byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Connection connection)
-      throws ReportDefinitionNotFoundException, ReportingServiceException {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
+    if (parameters == null) {
+      throw new InvalidArgumentException("parameters");
+    }
+
+    if (connection == null) {
+      throw new InvalidArgumentException("connection");
+    }
+
     try {
       Optional<ReportDefinition> reportDefinitionOptional =
           reportDefinitionRepository.findById(reportDefinitionId);
@@ -187,7 +223,20 @@ public class ReportingService implements IReportingService {
   @Override
   public byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Document document)
-      throws ReportDefinitionNotFoundException, ReportingServiceException {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
+    if (parameters == null) {
+      throw new InvalidArgumentException("parameters");
+    }
+
+    if (document == null) {
+      throw new InvalidArgumentException("document");
+    }
+
     try {
       ReportDefinition reportDefinition = getReportDefinition(reportDefinitionId);
 
@@ -231,7 +280,12 @@ public class ReportingService implements IReportingService {
   @Override
   @Transactional
   public void deleteReportDefinition(String reportDefinitionId)
-      throws ReportDefinitionNotFoundException, ReportingServiceException {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
     try {
       if (!reportDefinitionRepository.existsById(reportDefinitionId)) {
         throw new ReportDefinitionNotFoundException(reportDefinitionId);
@@ -263,7 +317,12 @@ public class ReportingService implements IReportingService {
    */
   @Override
   public ReportDefinition getReportDefinition(String reportDefinitionId)
-      throws ReportDefinitionNotFoundException, ReportingServiceException {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
     try {
       Optional<ReportDefinition> reportDefinitionOptional =
           reportDefinitionRepository.findById(reportDefinitionId);
@@ -289,7 +348,12 @@ public class ReportingService implements IReportingService {
    */
   @Override
   public String getReportDefinitionName(String reportDefinitionId)
-      throws ReportDefinitionNotFoundException, ReportingServiceException {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
     try {
       Optional<String> nameOptional = reportDefinitionRepository.getNameById(reportDefinitionId);
 
@@ -330,7 +394,12 @@ public class ReportingService implements IReportingService {
    */
   @Override
   public ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
-      throws ReportDefinitionNotFoundException, ReportingServiceException {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
     try {
       Optional<ReportDefinitionSummary> reportDefinitionSummaryOptional =
           reportDefinitionSummaryRepository.findById(reportDefinitionId);
@@ -371,7 +440,11 @@ public class ReportingService implements IReportingService {
    */
   @Override
   public boolean reportDefinitionExists(String reportDefinitionId)
-      throws ReportingServiceException {
+      throws InvalidArgumentException, ReportingServiceException {
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
+    }
+
     try {
       return reportDefinitionRepository.existsById(reportDefinitionId);
     } catch (Throwable e) {
@@ -399,7 +472,10 @@ public class ReportingService implements IReportingService {
   @Override
   @Transactional
   public void updateReportDefinition(ReportDefinition reportDefinition)
-      throws ReportDefinitionNotFoundException, ReportingServiceException {
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ReportingServiceException {
+    validateReportDefinition(reportDefinition);
+
     try {
       if (!reportDefinitionRepository.existsById(reportDefinition.getId())) {
         throw new ReportDefinitionNotFoundException(reportDefinition.getId());
@@ -411,6 +487,21 @@ public class ReportingService implements IReportingService {
     } catch (Throwable e) {
       throw new ReportingServiceException(
           "Failed to update the report definition (" + reportDefinition.getId() + ")", e);
+    }
+  }
+
+  private void validateReportDefinition(ReportDefinition reportDefinition)
+      throws InvalidArgumentException {
+    if (reportDefinition == null) {
+      throw new InvalidArgumentException("reportDefinition");
+    }
+
+    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
+        validator.validate(reportDefinition);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

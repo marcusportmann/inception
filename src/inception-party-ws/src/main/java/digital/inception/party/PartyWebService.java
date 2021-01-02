@@ -19,11 +19,11 @@ package digital.inception.party;
 // ~--- JDK imports ------------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.validation.InvalidArgumentException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -42,18 +42,13 @@ public class PartyWebService {
   /** The Party Service. */
   private final IPartyService partyService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>PartyWebService</code>.
    *
    * @param partyService the Party Service
-   * @param validator the JSR-303 validator
    */
-  public PartyWebService(IPartyService partyService, Validator validator) {
+  public PartyWebService(IPartyService partyService) {
     this.partyService = partyService;
-    this.validator = validator;
   }
 
   /**
@@ -67,11 +62,11 @@ public class PartyWebService {
    */
   @WebMethod(operationName = "GetOrganizations")
   public Organizations getOrganizations(
-      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
-      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
-      throws PartyServiceException {
+      @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
+      throws InvalidArgumentException, PartyServiceException {
     return partyService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -86,11 +81,11 @@ public class PartyWebService {
    */
   @WebMethod(operationName = "GetParties")
   public Parties getParties(
-      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
-      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
-      throws PartyServiceException {
+      @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
+      throws InvalidArgumentException, PartyServiceException {
     return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -105,12 +100,12 @@ public class PartyWebService {
    */
   @WebMethod(operationName = "GetPersons")
   public Persons getPersons(
-      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
-      @WebParam(name = "SortBy") @XmlElement(required = false) PersonSortBy sortBy,
-      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
-      throws PartyServiceException {
+      @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortBy") @XmlElement PersonSortBy sortBy,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
+      throws InvalidArgumentException, PartyServiceException {
     return partyService.getPersons(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

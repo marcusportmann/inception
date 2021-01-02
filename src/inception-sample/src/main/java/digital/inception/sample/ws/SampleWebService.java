@@ -21,7 +21,7 @@ package digital.inception.sample.ws;
 import digital.inception.sample.model.Data;
 import digital.inception.sample.model.ISampleService;
 import digital.inception.sample.model.SampleServiceException;
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.ValidationError;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;

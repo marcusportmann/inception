@@ -18,6 +18,7 @@ package digital.inception.reporting;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public interface IReportingService {
    *     for the new report definition
    */
   void createReportDefinition(ReportDefinition reportDefinition)
-      throws DuplicateReportDefinitionException, ReportingServiceException;
+      throws InvalidArgumentException, DuplicateReportDefinitionException, ReportingServiceException;
 
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
@@ -54,7 +55,7 @@ public interface IReportingService {
    * @return the PDF data for the report
    */
   byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
-      throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Create the PDF for the report.
@@ -66,7 +67,7 @@ public interface IReportingService {
    */
   byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Connection connection)
-      throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Create the PDF for the report.
@@ -78,7 +79,7 @@ public interface IReportingService {
    */
   byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Document document)
-      throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Delete the existing report definition.
@@ -86,7 +87,7 @@ public interface IReportingService {
    * @param reportDefinitionId the ID uniquely identifying the report definition
    */
   void deleteReportDefinition(String reportDefinitionId)
-      throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Returns the real path to the folder where the local Jasper reports are stored.
@@ -102,7 +103,7 @@ public interface IReportingService {
    * @return the report definition
    */
   ReportDefinition getReportDefinition(String reportDefinitionId)
-      throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Retrieve the name of the report definition.
@@ -111,7 +112,7 @@ public interface IReportingService {
    * @return the name of the report definition
    */
   String getReportDefinitionName(String reportDefinitionId)
-      throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Returns the summaries for all the report definitions.
@@ -127,7 +128,7 @@ public interface IReportingService {
    * @return the summary for the report definition
    */
   ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
-      throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
 
   /**
    * Returns all the report definitions.
@@ -142,7 +143,7 @@ public interface IReportingService {
    * @param reportDefinitionId the ID uniquely identifying the report definition
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
-  boolean reportDefinitionExists(String reportDefinitionId) throws ReportingServiceException;
+  boolean reportDefinitionExists(String reportDefinitionId) throws InvalidArgumentException, ReportingServiceException;
 
   /**
    * Set the real path to the folder where the local Jasper reports are stored.
@@ -159,5 +160,5 @@ public interface IReportingService {
    *     information for the report definition
    */
   void updateReportDefinition(ReportDefinition reportDefinition)
-      throws ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
 }

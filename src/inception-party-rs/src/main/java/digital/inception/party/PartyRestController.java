@@ -19,10 +19,9 @@ package digital.inception.party;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.SecureRestController;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,10 +29,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.Set;
 import java.util.UUID;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,18 +59,13 @@ public class PartyRestController extends SecureRestController {
   /** The Party Service. */
   private final IPartyService partyService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>PartyRestController</code>.
    *
    * @param partyService the Party Service
-   * @param validator the JSR-303 validator
    */
-  public PartyRestController(IPartyService partyService, Validator validator) {
+  public PartyRestController(IPartyService partyService) {
     this.partyService = partyService;
-    this.validator = validator;
   }
 
   /**
@@ -126,17 +117,6 @@ public class PartyRestController extends SecureRestController {
           @RequestBody
           Organization organization)
       throws InvalidArgumentException, DuplicateOrganizationException, PartyServiceException {
-    if (organization == null) {
-      throw new InvalidArgumentException("organization");
-    }
-
-    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "organization", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     partyService.createOrganization(organization);
   }
 
@@ -184,17 +164,6 @@ public class PartyRestController extends SecureRestController {
           @RequestBody
           Person person)
       throws InvalidArgumentException, DuplicatePersonException, PartyServiceException {
-    if (person == null) {
-      throw new InvalidArgumentException("person");
-    }
-
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "person", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     partyService.createPerson(person);
   }
 
@@ -249,12 +218,6 @@ public class PartyRestController extends SecureRestController {
           @PathVariable
           UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (organizationId == null) {
-      throw new InvalidArgumentException("organizationId");
-    }
-
     return partyService.getOrganization(organizationId);
   }
 
@@ -303,7 +266,7 @@ public class PartyRestController extends SecureRestController {
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
           @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
-      throws PartyServiceException {
+      throws InvalidArgumentException, PartyServiceException {
     return partyService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -348,7 +311,7 @@ public class PartyRestController extends SecureRestController {
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
           @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
-      throws PartyServiceException {
+      throws InvalidArgumentException, PartyServiceException {
     return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -401,12 +364,6 @@ public class PartyRestController extends SecureRestController {
           @PathVariable
           UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, PartyServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (partyId == null) {
-      throw new InvalidArgumentException("partyId");
-    }
-
     return partyService.getParty(partyId);
   }
 
@@ -460,12 +417,6 @@ public class PartyRestController extends SecureRestController {
           @PathVariable
           UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, PartyServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (personId == null) {
-      throw new InvalidArgumentException("personId");
-    }
-
     return partyService.getPerson(personId);
   }
 
@@ -517,7 +468,7 @@ public class PartyRestController extends SecureRestController {
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
           @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
-      throws PartyServiceException {
+      throws InvalidArgumentException, PartyServiceException {
     return partyService.getPersons(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 
@@ -577,19 +528,16 @@ public class PartyRestController extends SecureRestController {
           @RequestBody
           Organization organization)
       throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException {
+    if (organizationId == null) {
+      throw new InvalidArgumentException("organizationId");
+    }
+
     if (organization == null) {
       throw new InvalidArgumentException("organization");
     }
 
-    if (!organization.getId().equals(organizationId)) {
-      throw new InvalidArgumentException("organizationId");
-    }
-
-    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "organization", ValidationError.toValidationErrors(constraintViolations));
+    if (!organizationId.equals(organization.getId())) {
+      throw new InvalidArgumentException("organization");
     }
 
     partyService.updateOrganization(organization);
@@ -649,19 +597,16 @@ public class PartyRestController extends SecureRestController {
           @RequestBody
           Person person)
       throws InvalidArgumentException, PersonNotFoundException, PartyServiceException {
+    if (personId == null) {
+      throw new InvalidArgumentException("personId");
+    }
+
     if (person == null) {
       throw new InvalidArgumentException("person");
     }
 
-    if (!person.getId().equals(personId)) {
-      throw new InvalidArgumentException("personId");
-    }
-
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "person", ValidationError.toValidationErrors(constraintViolations));
+    if (!personId.equals(person.getId())) {
+      throw new InvalidArgumentException("person");
     }
 
     partyService.updatePerson(person);

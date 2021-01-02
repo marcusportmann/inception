@@ -21,6 +21,8 @@ package digital.inception.sms;
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.Debug;
 import digital.inception.core.util.ServiceUtil;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import digital.inception.core.xml.XmlParserErrorHandler;
 import digital.inception.core.xml.XmlUtil;
 import java.io.StringReader;
@@ -31,9 +33,12 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.slf4j.Logger;
@@ -79,6 +84,9 @@ public class SMSService implements ISMSService {
   /** The SMS Repository. */
   private final SMSRepository smsRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /** The web client builder. */
   private final WebClient.Builder webClientBuilder;
 
@@ -117,14 +125,17 @@ public class SMSService implements ISMSService {
    * Constructs a new <code>SMSService</code>.
    *
    * @param applicationContext the Spring application context
+   * @param validator the JSR-303 validator
    * @param webClientBuilder the web client builder
    * @param smsRepository the SMS repository
    */
   public SMSService(
       ApplicationContext applicationContext,
+      Validator validator,
       WebClient.Builder webClientBuilder,
       SMSRepository smsRepository) {
     this.applicationContext = applicationContext;
+    this.validator = validator;
     this.webClientBuilder = webClientBuilder;
     this.smsRepository = smsRepository;
   }
@@ -136,7 +147,9 @@ public class SMSService implements ISMSService {
    */
   @Override
   @Transactional
-  public void createSMS(SMS sms) throws SMSServiceException {
+  public void createSMS(SMS sms) throws InvalidArgumentException, SMSServiceException {
+    validateSMS(sms);
+
     try {
       if (sms.getId() == null) {
         sms.setId(UuidCreator.getShortPrefixComb());
@@ -155,7 +168,12 @@ public class SMSService implements ISMSService {
    */
   @Override
   @Transactional
-  public void deleteSMS(UUID smsId) throws SMSNotFoundException, SMSServiceException {
+  public void deleteSMS(UUID smsId)
+      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException {
+    if (smsId == null) {
+      throw new InvalidArgumentException("smsId");
+    }
+
     try {
       if (!smsRepository.existsById(smsId)) {
         throw new SMSNotFoundException(smsId);
@@ -268,7 +286,12 @@ public class SMSService implements ISMSService {
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   @Override
-  public SMS getSMS(UUID smsId) throws SMSNotFoundException, SMSServiceException {
+  public SMS getSMS(UUID smsId)
+      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException {
+    if (smsId == null) {
+      throw new InvalidArgumentException("smsId");
+    }
+
     try {
       Optional<SMS> smsOptional = smsRepository.findById(smsId);
 
@@ -315,7 +338,16 @@ public class SMSService implements ISMSService {
    * @param mobileNumber the mobile number
    * @param message the message
    */
-  public void sendSMS(String mobileNumber, String message) throws SMSServiceException {
+  public void sendSMS(String mobileNumber, String message)
+      throws InvalidArgumentException, SMSServiceException {
+    if (!StringUtils.hasText(mobileNumber)) {
+      throw new InvalidArgumentException("mobileNumber");
+    }
+
+    if (!StringUtils.hasText(message)) {
+      throw new InvalidArgumentException("message");
+    }
+
     try {
       SMS sms = new SMS(mobileNumber, message, SMSStatus.QUEUED_FOR_SENDING);
 
@@ -339,7 +371,19 @@ public class SMSService implements ISMSService {
    * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
    */
   public boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
-      throws SMSServiceException {
+      throws InvalidArgumentException, SMSServiceException {
+    if (smsId == null) {
+      throw new InvalidArgumentException("smsId");
+    }
+
+    if (!StringUtils.hasText(mobileNumber)) {
+      throw new InvalidArgumentException("mobileNumber");
+    }
+
+    if (!StringUtils.hasText(message)) {
+      throw new InvalidArgumentException("message");
+    }
+
     try {
       if (!StringUtils.hasText(message)) {
         logger.info("Failed to send the empty SMS message to (" + mobileNumber + ")");
@@ -464,7 +508,11 @@ public class SMSService implements ISMSService {
   @Override
   @Transactional
   public void setSMSStatus(UUID smsId, SMSStatus status)
-      throws SMSNotFoundException, SMSServiceException {
+      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException {
+    if (smsId == null) {
+      throw new InvalidArgumentException("smsId");
+    }
+
     try {
       if (!smsRepository.existsById(smsId)) {
         throw new SMSNotFoundException(smsId);
@@ -493,7 +541,11 @@ public class SMSService implements ISMSService {
   @Override
   @Transactional
   public void unlockSMS(UUID smsId, SMSStatus status)
-      throws SMSNotFoundException, SMSServiceException {
+      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException {
+    if (smsId == null) {
+      throw new InvalidArgumentException("smsId");
+    }
+
     try {
       if (!smsRepository.existsById(smsId)) {
         throw new SMSNotFoundException(smsId);
@@ -574,6 +626,17 @@ public class SMSService implements ISMSService {
     return mobileNumber;
   }
 
+  private String getSMSPortalToken() throws SMSServiceException {
+    try {
+      // WebClient webClient = WebClient.builder()
+
+      return "";
+
+    } catch (Throwable e) {
+      throw new SMSServiceException("Failed to retrieve the SMS Portal token", e);
+    }
+  }
+
   /*
   private APISoap getMyMobileAPIService() {
     // Retrieve the proxy for the MyMobileAPI service
@@ -593,17 +656,6 @@ public class SMSService implements ISMSService {
     return apiSoap;
   }
   */
-
-  private String getSMSPortalToken() throws SMSServiceException {
-    try {
-      // WebClient webClient = WebClient.builder()
-
-      return "";
-
-    } catch (Throwable e) {
-      throw new SMSServiceException("Failed to retrieve the SMS Portal token", e);
-    }
-  }
 
   private Element parseAPIResultXML(String xml) {
     try {
@@ -650,6 +702,19 @@ public class SMSService implements ISMSService {
       return apiResultElement;
     } catch (Throwable e) {
       throw new RuntimeException("Failed to parse the API result XML", e);
+    }
+  }
+
+  private void validateSMS(SMS sms) throws InvalidArgumentException {
+    if (sms == null) {
+      throw new InvalidArgumentException("sms");
+    }
+
+    Set<ConstraintViolation<SMS>> constraintViolations = validator.validate(sms);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "sms", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

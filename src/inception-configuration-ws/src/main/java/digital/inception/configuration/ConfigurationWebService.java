@@ -18,19 +18,14 @@ package digital.inception.configuration;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
-import java.util.Set;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
-import org.springframework.util.StringUtils;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -50,18 +45,13 @@ public class ConfigurationWebService {
   /** The Configuration Service. */
   private final IConfigurationService configurationService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>ConfigurationWebService</code>.
    *
    * @param configurationService the Configuration Service
-   * @param validator the JSR-303 validator
    */
-  public ConfigurationWebService(IConfigurationService configurationService, Validator validator) {
+  public ConfigurationWebService(IConfigurationService configurationService) {
     this.configurationService = configurationService;
-    this.validator = validator;
   }
 
   /**
@@ -73,10 +63,6 @@ public class ConfigurationWebService {
   public void deleteConfiguration(@WebParam(name = "Key") @XmlElement(required = true) String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
-    }
-
     configurationService.deleteConfiguration(key);
   }
 
@@ -92,10 +78,6 @@ public class ConfigurationWebService {
       @WebParam(name = "Key") @XmlElement(required = true) String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
-    }
-
     return configurationService.getConfiguration(key);
   }
 
@@ -111,10 +93,6 @@ public class ConfigurationWebService {
       @WebParam(name = "Key") @XmlElement(required = true) String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException {
-    if (!StringUtils.hasText(key)) {
-      throw new InvalidArgumentException("key");
-    }
-
     return configurationService.getString(key);
   }
 
@@ -138,14 +116,6 @@ public class ConfigurationWebService {
   public void setConfiguration(
       @WebParam(name = "Configuration") @XmlElement(required = true) Configuration configuration)
       throws InvalidArgumentException, ConfigurationServiceException {
-    Set<ConstraintViolation<Configuration>> constraintViolations =
-        validator.validate(configuration);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "configuration", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     configurationService.setConfiguration(configuration);
   }
 }

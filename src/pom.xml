@@ -494,11 +494,6 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-validation</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-ws</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -554,7 +549,6 @@
     <module>inception-sms-ws</module>
     <module>inception-test</module>
     <module>inception-transaction</module>
-    <module>inception-validation</module>
     <module>inception-ws</module>
   </modules>
 

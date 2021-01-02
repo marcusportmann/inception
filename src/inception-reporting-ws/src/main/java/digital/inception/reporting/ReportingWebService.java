@@ -18,23 +18,20 @@ package digital.inception.reporting;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.InvalidArgumentException;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.sql.DataSource;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.StringUtils;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -57,23 +54,17 @@ public class ReportingWebService {
   /** The Reporting Service. */
   private final IReportingService reportingService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>ReportingWebService</code>.
    *
    * @param dataSource the data source used to provide connections to the application database
    * @param reportingService the Reporting Service
-   * @param validator the JSR-303 validator
    */
   public ReportingWebService(
       @Qualifier("applicationDataSource") DataSource dataSource,
-      IReportingService reportingService,
-      Validator validator) {
+      IReportingService reportingService) {
     this.dataSource = dataSource;
     this.reportingService = reportingService;
-    this.validator = validator;
   }
 
   /**
@@ -87,18 +78,6 @@ public class ReportingWebService {
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, DuplicateReportDefinitionException,
           ReportingServiceException {
-    if (reportDefinition == null) {
-      throw new InvalidArgumentException("reportDefinition");
-    }
-
-    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
-        validator.validate(reportDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     reportingService.createReportDefinition(reportDefinition);
   }
 
@@ -112,10 +91,6 @@ public class ReportingWebService {
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (reportDefinitionId == null) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
     reportingService.deleteReportDefinition(reportDefinitionId);
   }
 
@@ -134,8 +109,8 @@ public class ReportingWebService {
           List<ReportParameter> reportParameters)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (reportDefinitionId == null) {
-      throw new InvalidArgumentException("reportDefinition");
+    if (!StringUtils.hasText(reportDefinitionId)) {
+      throw new InvalidArgumentException("reportDefinitionId");
     }
 
     Map<String, Object> parameters = new HashMap<>();
@@ -165,10 +140,6 @@ public class ReportingWebService {
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (reportDefinitionId == null) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
     return reportingService.getReportDefinition(reportDefinitionId);
   }
 
@@ -184,10 +155,6 @@ public class ReportingWebService {
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (reportDefinitionId == null) {
-      throw new InvalidArgumentException("reportDefinitionId");
-    }
-
     return reportingService.getReportDefinitionName(reportDefinitionId);
   }
 
@@ -225,18 +192,6 @@ public class ReportingWebService {
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
           ReportingServiceException {
-    if (reportDefinition == null) {
-      throw new InvalidArgumentException("reportDefinition");
-    }
-
-    Set<ConstraintViolation<ReportDefinition>> constraintViolations =
-        validator.validate(reportDefinition);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "reportDefinition", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     reportingService.updateReportDefinition(reportDefinition);
   }
 }

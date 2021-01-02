@@ -19,8 +19,13 @@ package digital.inception.configuration;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.Base64Util;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -42,15 +47,21 @@ public class ConfigurationService implements IConfigurationService {
   /** The Configuration Summary Repository. */
   private final ConfigurationSummaryRepository configurationSummaryRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /**
    * Constructs a new <code>ConfigurationService</code>.
    *
+   * @param validator the JSR-303 validator
    * @param configurationRepository the Configuration Repository
    * @param configurationSummaryRepository the Configuration Summary Repository
    */
   public ConfigurationService(
+      Validator validator,
       ConfigurationRepository configurationRepository,
       ConfigurationSummaryRepository configurationSummaryRepository) {
+    this.validator = validator;
     this.configurationRepository = configurationRepository;
     this.configurationSummaryRepository = configurationSummaryRepository;
   }
@@ -63,7 +74,12 @@ public class ConfigurationService implements IConfigurationService {
   @Override
   @Transactional
   public void deleteConfiguration(String key)
-      throws ConfigurationNotFoundException, ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       if (!configurationRepository.existsByKeyIgnoreCase(key)) {
         throw new ConfigurationNotFoundException(key);
@@ -86,7 +102,12 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public byte[] getBinary(String key)
-      throws ConfigurationNotFoundException, ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -111,7 +132,12 @@ public class ConfigurationService implements IConfigurationService {
    * @return the binary configuration or the default value if the configuration does not exist
    */
   @Override
-  public byte[] getBinary(String key, byte[] defaultValue) throws ConfigurationServiceException {
+  public byte[] getBinary(String key, byte[] defaultValue)
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -130,7 +156,12 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public boolean getBoolean(String key)
-      throws ConfigurationNotFoundException, ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -156,7 +187,12 @@ public class ConfigurationService implements IConfigurationService {
    *     does not exist
    */
   @Override
-  public boolean getBoolean(String key, boolean defaultValue) throws ConfigurationServiceException {
+  public boolean getBoolean(String key, boolean defaultValue)
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -175,7 +211,12 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public Configuration getConfiguration(String key)
-      throws ConfigurationNotFoundException, ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<Configuration> configurationOptional =
           configurationRepository.findByKeyIgnoreCase(key);
@@ -230,7 +271,12 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public Double getDouble(String key)
-      throws ConfigurationNotFoundException, ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -256,7 +302,12 @@ public class ConfigurationService implements IConfigurationService {
    *     does not exist
    */
   @Override
-  public double getDouble(String key, double defaultValue) throws ConfigurationServiceException {
+  public double getDouble(String key, double defaultValue)
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -317,7 +368,12 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public Integer getInteger(String key)
-      throws ConfigurationNotFoundException, ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -343,7 +399,12 @@ public class ConfigurationService implements IConfigurationService {
    *     does not exist
    */
   @Override
-  public int getInteger(String key, int defaultValue) throws ConfigurationServiceException {
+  public int getInteger(String key, int defaultValue)
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -362,7 +423,12 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public Long getLong(String key)
-      throws ConfigurationNotFoundException, ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -388,7 +454,12 @@ public class ConfigurationService implements IConfigurationService {
    *     does not exist
    */
   @Override
-  public long getLong(String key, long defaultValue) throws ConfigurationServiceException {
+  public long getLong(String key, long defaultValue)
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -407,7 +478,12 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public String getString(String key)
-      throws ConfigurationNotFoundException, ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException,
+          ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -433,7 +509,12 @@ public class ConfigurationService implements IConfigurationService {
    *     configuration does not exist
    */
   @Override
-  public String getString(String key, String defaultValue) throws ConfigurationServiceException {
+  public String getString(String key, String defaultValue)
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       Optional<String> valueOptional = configurationRepository.getValueByKeyIgnoreCase(key);
 
@@ -452,7 +533,12 @@ public class ConfigurationService implements IConfigurationService {
    * </code> otherwise
    */
   @Override
-  public boolean keyExists(String key) throws ConfigurationServiceException {
+  public boolean keyExists(String key)
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
     try {
       return configurationRepository.existsByKeyIgnoreCase(key);
     } catch (Throwable e) {
@@ -468,7 +554,20 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   @Transactional
-  public void setConfiguration(Configuration configuration) throws ConfigurationServiceException {
+  public void setConfiguration(Configuration configuration)
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (configuration == null) {
+      throw new InvalidArgumentException("configuration");
+    }
+
+    Set<ConstraintViolation<Configuration>> constraintViolations =
+        validator.validate(configuration);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "configuration", ValidationError.toValidationErrors(constraintViolations));
+    }
+
     try {
       configurationRepository.saveAndFlush(configuration);
     } catch (Throwable e) {
@@ -487,7 +586,19 @@ public class ConfigurationService implements IConfigurationService {
   @Override
   @Transactional
   public void setConfiguration(String key, Object value, String description)
-      throws ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationServiceException {
+    if (!StringUtils.hasText(key)) {
+      throw new InvalidArgumentException("key");
+    }
+
+    if (value == null) {
+      throw new InvalidArgumentException("value");
+    }
+
+    if (description == null) {
+      throw new InvalidArgumentException("description");
+    }
+
     try {
       String stringValue;
 

@@ -22,7 +22,7 @@ import digital.inception.sample.model.Data;
 import digital.inception.sample.model.ISampleService;
 import digital.inception.sample.model.SampleServiceException;
 import digital.inception.sms.smsportal.AuthenticationResponse;
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

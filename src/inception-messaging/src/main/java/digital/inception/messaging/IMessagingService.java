@@ -18,6 +18,7 @@ package digital.inception.messaging;
 
 // ~--- JDK imports ------------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,14 +40,14 @@ public interface IMessagingService {
    *     <code>false</code> otherwise
    */
   boolean allMessagePartsForMessageQueuedForAssembly(UUID messageId, int totalParts)
-      throws MessagingServiceException;
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Archive the message.
    *
    * @param message the message to archive
    */
-  void archiveMessage(Message message) throws MessagingServiceException;
+  void archiveMessage(Message message) throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Assemble the message from the message parts that have been queued for assembly.
@@ -54,7 +55,8 @@ public interface IMessagingService {
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
    * @param totalParts the total number of parts for the message
    */
-  void assembleMessage(UUID messageId, int totalParts) throws MessagingServiceException;
+  void assembleMessage(UUID messageId, int totalParts)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Returns <code>true</code> if the message processor is capable of processing the specified
@@ -81,7 +83,7 @@ public interface IMessagingService {
    *
    * @param message the <code>Message</code> instance containing the information for the message
    */
-  void createMessage(Message message) throws MessagingServiceException;
+  void createMessage(Message message) throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Create the new message part.
@@ -89,7 +91,8 @@ public interface IMessagingService {
    * @param messagePart the <code>MessagePart</code> instance containing the information for the
    *     message part
    */
-  void createMessagePart(MessagePart messagePart) throws MessagingServiceException;
+  void createMessagePart(MessagePart messagePart)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Decrypt the message.
@@ -105,14 +108,16 @@ public interface IMessagingService {
    *
    * @param message the message to delete
    */
-  void deleteMessage(Message message) throws MessageNotFoundException, MessagingServiceException;
+  void deleteMessage(Message message)
+      throws InvalidArgumentException, MessageNotFoundException, MessagingServiceException;
 
   /**
    * Delete the message.
    *
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
    */
-  void deleteMessage(UUID messageId) throws MessageNotFoundException, MessagingServiceException;
+  void deleteMessage(UUID messageId)
+      throws InvalidArgumentException, MessageNotFoundException, MessagingServiceException;
 
   /**
    * Delete the message part.
@@ -121,14 +126,15 @@ public interface IMessagingService {
    *     part
    */
   void deleteMessagePart(UUID messagePartId)
-      throws MessagePartNotFoundException, MessagingServiceException;
+      throws InvalidArgumentException, MessagePartNotFoundException, MessagingServiceException;
 
   /**
    * Delete the message parts for the message.
    *
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
    */
-  void deleteMessagePartsForMessage(UUID messageId) throws MessagingServiceException;
+  void deleteMessagePartsForMessage(UUID messageId)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Derive the user-device encryption key.
@@ -162,7 +168,8 @@ public interface IMessagingService {
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
    * @return the message
    */
-  Message getMessage(UUID messageId) throws MessageNotFoundException, MessagingServiceException;
+  Message getMessage(UUID messageId)
+      throws InvalidArgumentException, MessageNotFoundException, MessagingServiceException;
 
   /**
    * Retrieve the message parts queued for assembly for the message.
@@ -173,7 +180,7 @@ public interface IMessagingService {
    * @return the message parts queued for assembly for the message
    */
   List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
-      throws MessagingServiceException;
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Get the message parts for a user that have been queued for download by a particular remote
@@ -184,7 +191,7 @@ public interface IMessagingService {
    * @return the message parts that have been queued for download by a particular remote device
    */
   List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
-      throws MessagingServiceException;
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
@@ -195,7 +202,7 @@ public interface IMessagingService {
    *     device
    */
   List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
-      throws MessagingServiceException;
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Retrieve the next message that has been queued for processing.
@@ -231,7 +238,8 @@ public interface IMessagingService {
    * @return <code>true</code> if the message has already been archived or <code>false</code>
    *     otherwise
    */
-  boolean isMessageArchived(UUID messageId) throws MessagingServiceException;
+  boolean isMessageArchived(UUID messageId)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Has the message part already been queued for assembly?
@@ -241,7 +249,8 @@ public interface IMessagingService {
    * @return <code>true</code> if the message part has already been queued for assembly or <code>
    * false</code> otherwise
    */
-  boolean isMessagePartQueuedForAssembly(UUID messagePartId) throws MessagingServiceException;
+  boolean isMessagePartQueuedForAssembly(UUID messagePartId)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Should the specified message be be processed securely?
@@ -266,21 +275,24 @@ public interface IMessagingService {
    * @param message the message to process
    * @return the response message or <code>null</code> if no response message exists
    */
-  Message processMessage(Message message) throws MessagingServiceException;
+  Message processMessage(Message message)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Queue the specified message for download by a remote device.
    *
    * @param message the message to queue
    */
-  void queueMessageForDownload(Message message) throws MessagingServiceException;
+  void queueMessageForDownload(Message message)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Queue the specified message for processing.
    *
    * @param message the message to queue
    */
-  void queueMessageForProcessing(Message message) throws MessagingServiceException;
+  void queueMessageForProcessing(Message message)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Queue the specified message for processing and process the message using the Background Message
@@ -288,14 +300,16 @@ public interface IMessagingService {
    *
    * @param message the message to queue
    */
-  void queueMessageForProcessingAndProcessMessage(Message message) throws MessagingServiceException;
+  void queueMessageForProcessingAndProcessMessage(Message message)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Queue the specified message part for assembly.
    *
    * @param messagePart the message part to queue
    */
-  void queueMessagePartForAssembly(MessagePart messagePart) throws MessagingServiceException;
+  void queueMessagePartForAssembly(MessagePart messagePart)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Queue the specified message part for assembly and if all the parts of the message have been
@@ -305,7 +319,7 @@ public interface IMessagingService {
    * @param messagePart the message part to queue
    */
   void queueMessagePartForAssemblyAndAssembleAndProcessMessage(MessagePart messagePart)
-      throws MessagingServiceException;
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Reset the locks for the messages.
@@ -333,7 +347,7 @@ public interface IMessagingService {
    * @param status the new status
    */
   void setMessagePartStatus(UUID messagePartId, MessagePartStatus status)
-      throws MessagingServiceException;
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Set the status for a message.
@@ -341,7 +355,8 @@ public interface IMessagingService {
    * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
    * @param status the new status
    */
-  void setMessageStatus(UUID messageId, MessageStatus status) throws MessagingServiceException;
+  void setMessageStatus(UUID messageId, MessageStatus status)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Unlock the message.
@@ -349,7 +364,8 @@ public interface IMessagingService {
    * @param message the message to unlock
    * @param status the new status for the unlocked message
    */
-  void unlockMessage(Message message, MessageStatus status) throws MessagingServiceException;
+  void unlockMessage(Message message, MessageStatus status)
+      throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Unlock a locked message part.
@@ -359,5 +375,5 @@ public interface IMessagingService {
    * @param status the new status for the unlocked message part
    */
   void unlockMessagePart(UUID messagePartId, MessagePartStatus status)
-      throws MessagingServiceException;
+      throws InvalidArgumentException, MessagingServiceException;
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.validation;
+package digital.inception.core.validation;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
@@ -22,8 +22,6 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 // ~--- JDK imports ------------------------------------------------------------
 
@@ -36,7 +34,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author Marcus Portmann
  */
-@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid argument")
 @WebFault(
     name = "InvalidArgumentException",
     targetNamespace = "http://validation.inception.digital",
@@ -48,10 +45,10 @@ public class InvalidArgumentException extends Exception {
   private static final long serialVersionUID = 1000000;
 
   /** The invalid argument error information. */
-  private InvalidArgumentError invalidArgumentError;
+  private final InvalidArgumentError invalidArgumentError;
 
   /** The name of the invalid argument. */
-  private String name;
+  private final String name;
 
   /** The validation errors associated with the invalid argument. */
   private List<ValidationError> validationErrors;

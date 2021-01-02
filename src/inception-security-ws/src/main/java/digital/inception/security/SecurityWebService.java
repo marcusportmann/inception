@@ -19,8 +19,8 @@ package digital.inception.security;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -87,8 +87,6 @@ public class SecurityWebService {
       @WebParam(name = "MemberName") @XmlElement(required = true) String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           UserNotFoundException, ExistingGroupMemberException, SecurityServiceException {
-    validateGroupMember(userDirectoryId, groupName, memberType, memberName);
-
     securityService.addMemberToGroup(userDirectoryId, groupName, memberType, memberName);
   }
 
@@ -107,18 +105,6 @@ public class SecurityWebService {
       @WebParam(name = "RoleCode") @XmlElement(required = true) String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!StringUtils.hasText(roleCode)) {
-      throw new InvalidArgumentException("roleCode");
-    }
-
     securityService.addRoleToGroup(userDirectoryId, groupName, roleCode);
   }
 
@@ -135,14 +121,6 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
           ExistingTenantUserDirectoryException, SecurityServiceException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     securityService.addUserDirectoryToTenant(tenantId, userDirectoryId);
   }
 
@@ -161,14 +139,6 @@ public class SecurityWebService {
       @WebParam(name = "PasswordChange") @XmlElement(required = true) PasswordChange passwordChange)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
     if (passwordChange == null) {
       throw new InvalidArgumentException("passwordChange");
     }
@@ -267,8 +237,6 @@ public class SecurityWebService {
   public void createGroup(@WebParam(name = "Group") @XmlElement(required = true) Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
           SecurityServiceException {
-    validateGroup(group);
-
     securityService.createGroup(group);
   }
 
@@ -284,8 +252,6 @@ public class SecurityWebService {
       @WebParam(name = "CreateUserDirectory") @XmlElement(required = true)
           Boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException {
-    validateTenant(tenant);
-
     securityService.createTenant(tenant, (createUserDirectory != null) && createUserDirectory);
   }
 
@@ -303,8 +269,6 @@ public class SecurityWebService {
       @WebParam(name = "UserLocked") @XmlElement(required = true) Boolean userLocked)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
           SecurityServiceException {
-    validateUser(user);
-
     securityService.createUser(
         user, (expiredPassword != null) && expiredPassword, (userLocked != null) && userLocked);
   }
@@ -318,8 +282,6 @@ public class SecurityWebService {
   public void createUserDirectory(
       @WebParam(name = "UserDirectory") @XmlElement(required = true) UserDirectory userDirectory)
       throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException {
-    validateUserDirectory(userDirectory);
-
     securityService.createUserDirectory(userDirectory);
   }
 
@@ -336,14 +298,6 @@ public class SecurityWebService {
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           ExistingGroupMembersException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
     securityService.deleteGroup(userDirectoryId, groupName);
   }
 
@@ -355,10 +309,6 @@ public class SecurityWebService {
   @WebMethod(operationName = "DeleteTenant")
   public void deleteTenant(@WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     securityService.deleteTenant(tenantId);
   }
 
@@ -375,14 +325,6 @@ public class SecurityWebService {
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
     securityService.deleteUser(userDirectoryId, username);
   }
 
@@ -396,10 +338,6 @@ public class SecurityWebService {
   public void deleteUserDirectory(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     securityService.deleteUserDirectory(userDirectoryId);
   }
 
@@ -418,14 +356,6 @@ public class SecurityWebService {
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
     return securityService.getGroup(userDirectoryId, groupName);
   }
 
@@ -441,10 +371,6 @@ public class SecurityWebService {
   public List<String> getGroupNames(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getGroupNames(userDirectoryId);
   }
 
@@ -463,14 +389,6 @@ public class SecurityWebService {
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
     return securityService.getGroupNamesForUser(userDirectoryId, username);
   }
 
@@ -489,15 +407,11 @@ public class SecurityWebService {
   @WebResult(name = "Groups")
   public Groups getGroups(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
-      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
-      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
+      @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getGroups(userDirectoryId, filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -517,20 +431,12 @@ public class SecurityWebService {
   public GroupMembers getMembersForGroup(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName,
-      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
-      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
+      @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
     return securityService.getMembersForGroup(
         userDirectoryId, groupName, filter, sortDirection, pageIndex, pageSize);
   }
@@ -550,14 +456,6 @@ public class SecurityWebService {
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
     return securityService.getRoleCodesForGroup(userDirectoryId, groupName);
   }
 
@@ -608,10 +506,6 @@ public class SecurityWebService {
   @WebResult(name = "Tenant")
   public Tenant getTenant(@WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     return securityService.getTenant(tenantId);
   }
 
@@ -626,10 +520,6 @@ public class SecurityWebService {
   public String getTenantName(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     return securityService.getTenantName(tenantId);
   }
 
@@ -645,10 +535,10 @@ public class SecurityWebService {
   @WebMethod(operationName = "GetTenants")
   @WebResult(name = "Tenant")
   public Tenants getTenants(
-      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
-      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
+      @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws SecurityServiceException {
     return securityService.getTenants(filter, sortDirection, pageIndex, pageSize);
   }
@@ -665,10 +555,6 @@ public class SecurityWebService {
   public List<Tenant> getTenantsForUserDirectory(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getTenantsForUserDirectory(userDirectoryId);
   }
 
@@ -687,14 +573,6 @@ public class SecurityWebService {
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
     User user = securityService.getUser(userDirectoryId, username);
 
     // Remove the password information
@@ -735,7 +613,7 @@ public class SecurityWebService {
   @WebResult(name = "UserDirectory")
   public List<UserDirectory> getUserDirectoriesForTenant(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
-      throws TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
     return securityService.getUserDirectoriesForTenant(tenantId);
   }
 
@@ -751,10 +629,6 @@ public class SecurityWebService {
   public UserDirectory getUserDirectory(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getUserDirectory(userDirectoryId);
   }
 
@@ -770,10 +644,6 @@ public class SecurityWebService {
   public UserDirectoryCapabilities getUserDirectoryCapabilities(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getUserDirectoryCapabilities(userDirectoryId);
   }
 
@@ -789,10 +659,6 @@ public class SecurityWebService {
   public String getUserDirectoryName(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getUserDirectoryName(userDirectoryId);
   }
 
@@ -827,10 +693,6 @@ public class SecurityWebService {
   public List<UserDirectorySummary> getUserDirectorySummariesForTenant(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     return securityService.getUserDirectorySummariesForTenant(tenantId);
   }
 
@@ -847,10 +709,6 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException,
           UserDirectoryTypeNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId);
   }
 
@@ -880,14 +738,6 @@ public class SecurityWebService {
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
     return securityService.getUserName(userDirectoryId, username);
   }
 
@@ -907,16 +757,12 @@ public class SecurityWebService {
   @WebResult(name = "Users")
   public Users getUsers(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
-      @WebParam(name = "Filter") @XmlElement(required = false) String filter,
-      @WebParam(name = "SortBy") @XmlElement(required = false) UserSortBy sortBy,
-      @WebParam(name = "SortDirection") @XmlElement(required = false) SortDirection sortDirection,
-      @WebParam(name = "PageIndex") @XmlElement(required = false) Integer pageIndex,
-      @WebParam(name = "PageSize") @XmlElement(required = false) Integer pageSize)
+      @WebParam(name = "Filter") @XmlElement String filter,
+      @WebParam(name = "SortBy") @XmlElement UserSortBy sortBy,
+      @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
+      @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
+      @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getUsers(
         userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
@@ -938,8 +784,6 @@ public class SecurityWebService {
       @WebParam(name = "MemberName") @XmlElement(required = true) String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           GroupMemberNotFoundException, SecurityServiceException {
-    validateGroupMember(userDirectoryId, groupName, memberType, memberName);
-
     securityService.removeMemberFromGroup(userDirectoryId, groupName, memberType, memberName);
   }
 
@@ -958,18 +802,6 @@ public class SecurityWebService {
       @WebParam(name = "RoleCode") @XmlElement(required = true) String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           GroupRoleNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!StringUtils.hasText(roleCode)) {
-      throw new InvalidArgumentException("roleCode");
-    }
-
     securityService.removeRoleFromGroup(userDirectoryId, groupName, roleCode);
   }
 
@@ -986,14 +818,6 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException,
           TenantUserDirectoryNotFoundException, SecurityServiceException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     securityService.removeUserDirectoryFromTenant(tenantId, userDirectoryId);
   }
 
@@ -1008,14 +832,6 @@ public class SecurityWebService {
       @WebParam(name = "Username") @XmlElement(required = true) String username,
       @WebParam(name = "ResetPasswordUrl") @XmlElement(required = true) String resetPasswordUrl)
       throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (!StringUtils.hasText(resetPasswordUrl)) {
-      throw new InvalidArgumentException("resetPasswordUrl");
-    }
-
     securityService.initiatePasswordReset(username, resetPasswordUrl, true);
   }
 
@@ -1028,8 +844,6 @@ public class SecurityWebService {
   public void updateGroup(@WebParam(name = "Group") @XmlElement(required = true) Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    validateGroup(group);
-
     securityService.updateGroup(group);
   }
 
@@ -1041,8 +855,6 @@ public class SecurityWebService {
   @WebMethod(operationName = "UpdateTenant")
   public void updateTenant(@WebParam(name = "Tenant") @XmlElement(required = true) Tenant tenant)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    validateTenant(tenant);
-
     securityService.updateTenant(tenant);
   }
 
@@ -1060,8 +872,6 @@ public class SecurityWebService {
       @WebParam(name = "LockUser") @XmlElement(required = true) boolean lockUser)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    validateUser(user);
-
     securityService.updateUser(user, expirePassword, lockUser);
   }
 
@@ -1074,81 +884,6 @@ public class SecurityWebService {
   public void updateUserDirectory(
       @WebParam(name = "UserDirectory") @XmlElement(required = true) UserDirectory userDirectory)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    validateUserDirectory(userDirectory);
-
     securityService.updateUserDirectory(userDirectory);
-  }
-
-  private void validateGroup(Group group) throws InvalidArgumentException {
-    if (group == null) {
-      throw new InvalidArgumentException("group");
-    }
-
-    Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "group", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateGroupMember(
-      UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
-      throws InvalidArgumentException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (memberType == null) {
-      throw new InvalidArgumentException("memberType");
-    }
-
-    if (!StringUtils.hasText(memberName)) {
-      throw new InvalidArgumentException("memberName");
-    }
-  }
-
-  private void validateTenant(Tenant tenant) throws InvalidArgumentException {
-    if (tenant == null) {
-      throw new InvalidArgumentException("tenant");
-    }
-
-    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "tenant", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateUser(User user) throws InvalidArgumentException {
-    if (user == null) {
-      throw new InvalidArgumentException("user");
-    }
-
-    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "user", ValidationError.toValidationErrors(constraintViolations));
-    }
-  }
-
-  private void validateUserDirectory(UserDirectory userDirectory) throws InvalidArgumentException {
-    if (userDirectory == null) {
-      throw new InvalidArgumentException("userDirectory");
-    }
-
-    Set<ConstraintViolation<UserDirectory>> constraintViolations =
-        validator.validate(userDirectory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "userDirectory", ValidationError.toValidationErrors(constraintViolations));
-    }
   }
 }

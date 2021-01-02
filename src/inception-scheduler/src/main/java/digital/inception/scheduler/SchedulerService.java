@@ -19,14 +19,19 @@ package digital.inception.scheduler;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.util.ServiceUtil;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -60,6 +65,9 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /** The Job Repository. */
   private final JobRepository jobRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
@@ -80,9 +88,12 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * Constructs a new <code>SchedulerService</code>.
    *
    * @param applicationContext the Spring application context
+   * @param validator the JSR-303 validator
    * @param jobRepository the Job Repository
    */
-  public SchedulerService(ApplicationContext applicationContext, JobRepository jobRepository) {
+  public SchedulerService(
+      ApplicationContext applicationContext, Validator validator, JobRepository jobRepository) {
+    this.validator = validator;
     this.applicationContext = applicationContext;
     this.jobRepository = jobRepository;
   }
@@ -100,7 +111,10 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    */
   @Override
   @Transactional
-  public void createJob(Job job) throws DuplicateJobException, SchedulerServiceException {
+  public void createJob(Job job)
+      throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException {
+    validateJob(job);
+
     try {
       if (jobRepository.existsById(job.getId())) {
         throw new DuplicateJobException(job.getId());
@@ -121,7 +135,12 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    */
   @Override
   @Transactional
-  public void deleteJob(String jobId) throws JobNotFoundException, SchedulerServiceException {
+  public void deleteJob(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+    if (!StringUtils.hasText(jobId)) {
+      throw new InvalidArgumentException("jobId");
+    }
+
     try {
       if (!jobRepository.existsById(jobId)) {
         throw new JobNotFoundException(jobId);
@@ -141,7 +160,9 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * @param job the job
    */
   @Override
-  public void executeJob(Job job) throws SchedulerServiceException {
+  public void executeJob(Job job) throws InvalidArgumentException, SchedulerServiceException {
+    validateJob(job);
+
     Class<?> jobClass;
 
     // Load the job class.
@@ -230,7 +251,12 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * @return the job
    */
   @Override
-  public Job getJob(String jobId) throws JobNotFoundException, SchedulerServiceException {
+  public Job getJob(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+    if (!StringUtils.hasText(jobId)) {
+      throw new InvalidArgumentException("jobId");
+    }
+
     try {
       Optional<Job> jobOptional = jobRepository.findById(jobId);
 
@@ -253,7 +279,12 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * @return the name of the job
    */
   @Override
-  public String getJobName(String jobId) throws JobNotFoundException, SchedulerServiceException {
+  public String getJobName(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+    if (!StringUtils.hasText(jobId)) {
+      throw new InvalidArgumentException("jobId");
+    }
+
     try {
       Optional<String> nameOptional = jobRepository.getNameById(jobId);
 
@@ -363,7 +394,15 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void rescheduleJob(String jobId, String schedulingPattern)
-      throws SchedulerServiceException {
+      throws InvalidArgumentException, SchedulerServiceException {
+    if (!StringUtils.hasText(jobId)) {
+      throw new InvalidArgumentException("jobId");
+    }
+
+    if (!StringUtils.hasText(schedulingPattern)) {
+      throw new InvalidArgumentException("schedulingPattern");
+    }
+
     try {
       Predictor predictor = new Predictor(schedulingPattern, System.currentTimeMillis());
 
@@ -462,7 +501,11 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void setJobStatus(String jobId, JobStatus status)
-      throws JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+    if (!StringUtils.hasText(jobId)) {
+      throw new InvalidArgumentException("jobId");
+    }
+
     try {
       if (!jobRepository.existsById(jobId)) {
         throw new JobNotFoundException(jobId);
@@ -486,7 +529,11 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void unlockJob(String jobId, JobStatus status)
-      throws JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+    if (!StringUtils.hasText(jobId)) {
+      throw new InvalidArgumentException("jobId");
+    }
+
     try {
       if (!jobRepository.existsById(jobId)) {
         throw new JobNotFoundException(jobId);
@@ -507,7 +554,10 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * @param job the <code>Job</code> instance containing the updated information for the job
    */
   @Override
-  public void updateJob(Job job) throws JobNotFoundException, SchedulerServiceException {
+  public void updateJob(Job job)
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+    validateJob(job);
+
     try {
       Optional<Job> jobOptional = jobRepository.findById(job.getId());
 
@@ -534,6 +584,19 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
       throw e;
     } catch (Throwable e) {
       throw new SchedulerServiceException("Failed to update the job (" + job.getId() + ")", e);
+    }
+  }
+
+  private void validateJob(Job job) throws InvalidArgumentException {
+    if (job == null) {
+      throw new InvalidArgumentException("job");
+    }
+
+    Set<ConstraintViolation<Job>> constraintViolations = validator.validate(job);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "job", ValidationError.toValidationErrors(constraintViolations));
     }
   }
 }

@@ -19,6 +19,7 @@ package digital.inception.security;
 // ~--- JDK imports ------------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,8 +42,8 @@ public interface ISecurityService {
    */
   void addMemberToGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-          ExistingGroupMemberException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          UserNotFoundException, ExistingGroupMemberException, SecurityServiceException;
 
   /**
    * Add the role to the group.
@@ -53,8 +54,8 @@ public interface ISecurityService {
    * @param roleCode the code uniquely identifying the role
    */
   void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, RoleNotFoundException,
-          ExistingGroupRoleException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException;
 
   /**
    * Add the user directory to the tenant.
@@ -64,7 +65,7 @@ public interface ISecurityService {
    *     directory
    */
   void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
-      throws TenantNotFoundException, UserDirectoryNotFoundException,
+      throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
           ExistingTenantUserDirectoryException, SecurityServiceException;
 
   /**
@@ -76,8 +77,8 @@ public interface ISecurityService {
    * @param username the username identifying the user
    */
   void addUserToGroup(UUID userDirectoryId, String groupName, String username)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-          SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          UserNotFoundException, SecurityServiceException;
 
   /**
    * Administratively change the password for the user.
@@ -99,7 +100,8 @@ public interface ISecurityService {
       boolean lockUser,
       boolean resetPasswordHistory,
       PasswordChangeReason reason)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Authenticate the user.
@@ -109,8 +111,8 @@ public interface ISecurityService {
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
    */
   UUID authenticate(String username, String password)
-      throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-          UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
+          ExpiredPasswordException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Change the password for the user.
@@ -121,8 +123,8 @@ public interface ISecurityService {
    * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
    */
   UUID changePassword(String username, String password, String newPassword)
-      throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-          ExistingPasswordException, SecurityServiceException;
+      throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
+          UserNotFoundException, ExistingPasswordException, SecurityServiceException;
 
   /**
    * Create the new authorised function.
@@ -130,7 +132,7 @@ public interface ISecurityService {
    * @param function the function
    */
   void createFunction(Function function)
-      throws DuplicateFunctionException, SecurityServiceException;
+      throws InvalidArgumentException, DuplicateFunctionException, SecurityServiceException;
 
   /**
    * Create the new group.
@@ -138,7 +140,8 @@ public interface ISecurityService {
    * @param group the group
    */
   void createGroup(Group group)
-      throws UserDirectoryNotFoundException, DuplicateGroupException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
+          SecurityServiceException;
 
   /**
    * Create the new tenant.
@@ -149,7 +152,7 @@ public interface ISecurityService {
    * </code> if no user directory was created
    */
   UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
-      throws DuplicateTenantException, SecurityServiceException;
+      throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException;
 
   /**
    * Create the new user.
@@ -159,7 +162,8 @@ public interface ISecurityService {
    * @param userLocked create the user locked
    */
   void createUser(User user, boolean expiredPassword, boolean userLocked)
-      throws UserDirectoryNotFoundException, DuplicateUserException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
+          SecurityServiceException;
 
   /**
    * Create the new user directory.
@@ -167,7 +171,7 @@ public interface ISecurityService {
    * @param userDirectory the user directory
    */
   void createUserDirectory(UserDirectory userDirectory)
-      throws DuplicateUserDirectoryException, SecurityServiceException;
+      throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException;
 
   /**
    * Delete the authorised function.
@@ -175,7 +179,7 @@ public interface ISecurityService {
    * @param functionCode the code uniquely identifying the function
    */
   void deleteFunction(String functionCode)
-      throws FunctionNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException;
 
   /**
    * Delete the group.
@@ -185,15 +189,16 @@ public interface ISecurityService {
    * @param groupName the name identifying the group
    */
   void deleteGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, ExistingGroupMembersException,
-          SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          ExistingGroupMembersException, SecurityServiceException;
 
   /**
    * Delete the tenant.
    *
    * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    */
-  void deleteTenant(UUID tenantId) throws TenantNotFoundException, SecurityServiceException;
+  void deleteTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
    * Delete the user.
@@ -203,7 +208,8 @@ public interface ISecurityService {
    * @param username the username identifying the user
    */
   void deleteUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Delete the user directory.
@@ -212,7 +218,7 @@ public interface ISecurityService {
    *     directory
    */
   void deleteUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the users matching the attribute criteria.
@@ -223,7 +229,8 @@ public interface ISecurityService {
    * @return the users whose attributes match the attribute criteria
    */
   List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
-      throws UserDirectoryNotFoundException, InvalidAttributeException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, InvalidAttributeException,
+          SecurityServiceException;
 
   /**
    * Retrieve the authorised function.
@@ -232,7 +239,7 @@ public interface ISecurityService {
    * @return the authorised function
    */
   Function getFunction(String functionCode)
-      throws FunctionNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the authorised function codes for the user.
@@ -243,7 +250,8 @@ public interface ISecurityService {
    * @return the authorised function codes for the user
    */
   List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve all the authorised functions.
@@ -261,7 +269,8 @@ public interface ISecurityService {
    * @return the group
    */
   Group getGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve all the group names.
@@ -271,7 +280,7 @@ public interface ISecurityService {
    * @return the group names
    */
   List<String> getGroupNames(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the names identifying the groups the user is a member of.
@@ -282,7 +291,8 @@ public interface ISecurityService {
    * @return the names identifying the groups the user is a member of
    */
   List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve all the groups.
@@ -292,7 +302,7 @@ public interface ISecurityService {
    * @return the groups
    */
   List<Group> getGroups(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the groups.
@@ -311,7 +321,7 @@ public interface ISecurityService {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the groups the user is a member of.
@@ -322,7 +332,8 @@ public interface ISecurityService {
    * @return the groups the user is a member of
    */
   List<Group> getGroupsForUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve the group members for the group.
@@ -333,7 +344,8 @@ public interface ISecurityService {
    * @return the group members for the group
    */
   List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve the group members for the group.
@@ -354,7 +366,8 @@ public interface ISecurityService {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
@@ -365,7 +378,8 @@ public interface ISecurityService {
    * @return the codes for the roles that have been assigned to the group
    */
   List<String> getRoleCodesForGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve the codes for the roles that the user has been assigned.
@@ -376,7 +390,8 @@ public interface ISecurityService {
    * @return the codes for the roles that the user has been assigned
    */
   List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve all the roles.
@@ -394,7 +409,8 @@ public interface ISecurityService {
    * @return the roles that have been assigned to the group
    */
   List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve the tenant.
@@ -402,7 +418,8 @@ public interface ISecurityService {
    * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @return the tenant
    */
-  Tenant getTenant(UUID tenantId) throws TenantNotFoundException, SecurityServiceException;
+  Tenant getTenant(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user
@@ -414,7 +431,7 @@ public interface ISecurityService {
    *     directory is associated with
    */
   List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the name of the tenant.
@@ -422,7 +439,8 @@ public interface ISecurityService {
    * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
    * @return the name of the tenant
    */
-  String getTenantName(UUID tenantId) throws TenantNotFoundException, SecurityServiceException;
+  String getTenantName(UUID tenantId)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the tenants.
@@ -452,7 +470,7 @@ public interface ISecurityService {
    * @return the tenants the user directory is associated with
    */
   List<Tenant> getTenantsForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user.
@@ -463,7 +481,8 @@ public interface ISecurityService {
    * @return the user
    */
   User getUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve the user directories.
@@ -492,7 +511,7 @@ public interface ISecurityService {
    * @return the user directories the tenant is associated with
    */
   List<UserDirectory> getUserDirectoriesForTenant(UUID tenantId)
-      throws TenantNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user directory.
@@ -502,7 +521,7 @@ public interface ISecurityService {
    * @return the user directory
    */
   UserDirectory getUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the capabilities the user directory supports.
@@ -512,7 +531,7 @@ public interface ISecurityService {
    * @return the capabilities the user directory supports
    */
   UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the Universally Unique Identifier (UUID) uniquely identifying the user directory that
@@ -523,7 +542,8 @@ public interface ISecurityService {
    *     the user with the specified username is associated with or <code>null</code> if the user
    *     cannot be found
    */
-  UUID getUserDirectoryIdForUser(String username) throws SecurityServiceException;
+  UUID getUserDirectoryIdForUser(String username)
+      throws InvalidArgumentException, SecurityServiceException;
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
@@ -534,7 +554,7 @@ public interface ISecurityService {
    *     the tenant is associated with
    */
   List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
-      throws TenantNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
@@ -547,7 +567,7 @@ public interface ISecurityService {
    *     the user is associated with
    */
   List<UUID> getUserDirectoryIdsForUser(String username)
-      throws UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the name of the user directory.
@@ -557,7 +577,7 @@ public interface ISecurityService {
    * @return the name of the user directory
    */
   String getUserDirectoryName(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the summaries for the user directories.
@@ -579,7 +599,7 @@ public interface ISecurityService {
    * @return the summaries for the user directories the tenant is associated with
    */
   List<UserDirectorySummary> getUserDirectorySummariesForTenant(UUID tenantId)
-      throws TenantNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user directory type for the user directory.
@@ -589,8 +609,8 @@ public interface ISecurityService {
    * @return the user directory type for the user directory
    */
   UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, UserDirectoryTypeNotFoundException,
-          SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException,
+          UserDirectoryTypeNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the user directory types.
@@ -608,7 +628,8 @@ public interface ISecurityService {
    * @return the name of the user
    */
   String getUserName(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Retrieve all the users.
@@ -618,7 +639,7 @@ public interface ISecurityService {
    * @return the users
    */
   List<User> getUsers(UUID userDirectoryId)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Retrieve the users.
@@ -639,7 +660,7 @@ public interface ISecurityService {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Initiate the password reset process for the user.
@@ -649,7 +670,7 @@ public interface ISecurityService {
    * @param sendEmail should the password reset e-mail be sent to the user
    */
   void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
-      throws UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Initiate the password reset process for the user.
@@ -661,7 +682,7 @@ public interface ISecurityService {
    */
   void initiatePasswordReset(
       String username, String resetPasswordUrl, boolean sendEmail, String securityCode)
-      throws UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException;
 
   /**
    * Does the user with the specified username exist?
@@ -673,7 +694,7 @@ public interface ISecurityService {
    *     otherwise
    */
   boolean isExistingUser(UUID userDirectoryId, String username)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Is the user in the group?
@@ -685,8 +706,8 @@ public interface ISecurityService {
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
    */
   boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
-      throws UserDirectoryNotFoundException, UserNotFoundException, GroupNotFoundException,
-          SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          GroupNotFoundException, SecurityServiceException;
 
   /** Reload the user directories. */
   void reloadUserDirectories() throws SecurityServiceException;
@@ -702,8 +723,8 @@ public interface ISecurityService {
    */
   void removeMemberFromGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, GroupMemberNotFoundException,
-          SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          GroupMemberNotFoundException, SecurityServiceException;
 
   /**
    * Remove the role from the group.
@@ -714,8 +735,8 @@ public interface ISecurityService {
    * @param roleCode the code uniquely identifying the role
    */
   void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, GroupRoleNotFoundException,
-          SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          GroupRoleNotFoundException, SecurityServiceException;
 
   /**
    * Remove the user directory from the tenant.
@@ -725,8 +746,8 @@ public interface ISecurityService {
    *     directory
    */
   void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
-      throws TenantNotFoundException, TenantUserDirectoryNotFoundException,
-          SecurityServiceException;
+      throws InvalidArgumentException, TenantNotFoundException,
+          TenantUserDirectoryNotFoundException, SecurityServiceException;
 
   /**
    * Remove the user from the group.
@@ -737,8 +758,8 @@ public interface ISecurityService {
    * @param username the username identifying the user
    */
   void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, UserNotFoundException,
-          SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          UserNotFoundException, SecurityServiceException;
 
   /**
    * Reset the password for the user.
@@ -748,15 +769,16 @@ public interface ISecurityService {
    * @param securityCode the security code
    */
   void resetPassword(String username, String newPassword, String securityCode)
-      throws UserNotFoundException, UserLockedException, InvalidSecurityCodeException,
-          ExistingPasswordException, SecurityServiceException;
+      throws InvalidArgumentException, UserNotFoundException, UserLockedException,
+          InvalidSecurityCodeException, ExistingPasswordException, SecurityServiceException;
 
   /**
    * Update the authorised function.
    *
    * @param function the function
    */
-  void updateFunction(Function function) throws FunctionNotFoundException, SecurityServiceException;
+  void updateFunction(Function function)
+      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException;
 
   /**
    * Update the group.
@@ -764,14 +786,16 @@ public interface ISecurityService {
    * @param group the group
    */
   void updateGroup(Group group)
-      throws UserDirectoryNotFoundException, GroupNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
+          SecurityServiceException;
 
   /**
    * Update the tenant.
    *
    * @param tenant the tenant
    */
-  void updateTenant(Tenant tenant) throws TenantNotFoundException, SecurityServiceException;
+  void updateTenant(Tenant tenant)
+      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
    * Update the user.
@@ -781,7 +805,8 @@ public interface ISecurityService {
    * @param lockUser lock the user as part of the update
    */
   void updateUser(User user, boolean expirePassword, boolean lockUser)
-      throws UserDirectoryNotFoundException, UserNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
+          SecurityServiceException;
 
   /**
    * Update the user directory.
@@ -789,5 +814,5 @@ public interface ISecurityService {
    * @param userDirectory the user directory
    */
   void updateUserDirectory(UserDirectory userDirectory)
-      throws UserDirectoryNotFoundException, SecurityServiceException;
+      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 }

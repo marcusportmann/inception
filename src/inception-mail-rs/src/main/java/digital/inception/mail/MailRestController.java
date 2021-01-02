@@ -18,11 +18,10 @@ package digital.inception.mail;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,9 +30,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -67,18 +63,13 @@ public class MailRestController extends SecureRestController {
   /** The Mail Service. */
   private final IMailService mailService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>MailRestController</code>.
    *
    * @param mailService the Mail Service
-   * @param validator the JSR-303 validator
    */
-  public MailRestController(IMailService mailService, Validator validator) {
+  public MailRestController(IMailService mailService) {
     this.mailService = mailService;
-    this.validator = validator;
   }
 
   /**
@@ -129,17 +120,6 @@ public class MailRestController extends SecureRestController {
           @RequestBody
           MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, MailServiceException {
-    if (mailTemplate == null) {
-      throw new InvalidArgumentException("mailTemplate");
-    }
-
-    Set<ConstraintViolation<MailTemplate>> constraintViolations = validator.validate(mailTemplate);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "mailTemplate", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     mailService.createMailTemplate(mailTemplate);
   }
 
@@ -192,10 +172,6 @@ public class MailRestController extends SecureRestController {
           @PathVariable
           String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
-    if (mailTemplateId == null) {
-      throw new InvalidArgumentException("mailTemplateId");
-    }
-
     mailService.deleteMailTemplate(mailTemplateId);
   }
 
@@ -246,10 +222,6 @@ public class MailRestController extends SecureRestController {
           @PathVariable
           String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
-    if (mailTemplateId == null) {
-      throw new InvalidArgumentException("mailTemplateId");
-    }
-
     return mailService.getMailTemplate(mailTemplateId);
   }
 
@@ -303,10 +275,6 @@ public class MailRestController extends SecureRestController {
           @PathVariable
           String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
-    if (!StringUtils.hasText(mailTemplateId)) {
-      throw new InvalidArgumentException("mailTemplateId");
-    }
-
     return RestUtil.quote(mailService.getMailTemplateName(mailTemplateId));
   }
 
@@ -413,7 +381,8 @@ public class MailRestController extends SecureRestController {
   @PreAuthorize(
       "hasRole('Administrator') or hasAuthority('FUNCTION_Mail.MailTemplateAdministration')")
   public void sendMailTest()
-      throws DuplicateMailTemplateException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, DuplicateMailTemplateException,
+          MailTemplateNotFoundException, MailServiceException {
     MailTemplate mailTemplate = new MailTemplate();
     mailTemplate.setId("TestMailTemplate");
     mailTemplate.setName("Test Mail Template");
@@ -487,19 +456,16 @@ public class MailRestController extends SecureRestController {
           @RequestBody
           MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+    if (!StringUtils.hasText(mailTemplateId)) {
+      throw new InvalidArgumentException("mailTemplateId");
+    }
+
     if (mailTemplate == null) {
       throw new InvalidArgumentException("mailTemplate");
     }
 
-    if (!mailTemplate.getId().equals(mailTemplateId)) {
-      throw new InvalidArgumentException("mailTemplateId");
-    }
-
-    Set<ConstraintViolation<MailTemplate>> constraintViolations = validator.validate(mailTemplate);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "mailTemplate", ValidationError.toValidationErrors(constraintViolations));
+    if (!mailTemplateId.equals(mailTemplate.getId())) {
+      throw new InvalidArgumentException("mailTemplate");
     }
 
     mailService.updateMailTemplate(mailTemplate);

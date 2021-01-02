@@ -19,8 +19,13 @@ package digital.inception.party;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -66,20 +71,26 @@ public class PartyService implements IPartyService {
   /** The Person Repository. */
   private final PersonRepository personRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /**
    * Constructs a new <code>PartyService</code>.
    *
    * @param applicationContext the Spring application context
+   * @param validator the JSR-303 validator
    * @param partyRepository the Party Repository
    * @param personRepository the Person Repository
    * @param organizationRepository the Organization Repository
    */
   public PartyService(
       ApplicationContext applicationContext,
+      Validator validator,
       PartyRepository partyRepository,
       PersonRepository personRepository,
       OrganizationRepository organizationRepository) {
     this.applicationContext = applicationContext;
+    this.validator = validator;
     this.partyRepository = partyRepository;
     this.personRepository = personRepository;
     this.organizationRepository = organizationRepository;
@@ -93,7 +104,18 @@ public class PartyService implements IPartyService {
   @Override
   @Transactional
   public void createOrganization(Organization organization)
-      throws DuplicateOrganizationException, PartyServiceException {
+      throws InvalidArgumentException, DuplicateOrganizationException, PartyServiceException {
+    if (organization == null) {
+      throw new InvalidArgumentException("organization");
+    }
+
+    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "organization", ValidationError.toValidationErrors(constraintViolations));
+    }
+
     try {
       if (organizationRepository.existsById(organization.getId())) {
         throw new DuplicateOrganizationException(organization.getId());
@@ -115,7 +137,19 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
-  public void createPerson(Person person) throws DuplicatePersonException, PartyServiceException {
+  public void createPerson(Person person)
+      throws InvalidArgumentException, DuplicatePersonException, PartyServiceException {
+    if (person == null) {
+      throw new InvalidArgumentException("person");
+    }
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "person", ValidationError.toValidationErrors(constraintViolations));
+    }
+
     try {
       if (personRepository.existsById(person.getId())) {
         throw new DuplicatePersonException(person.getId());
@@ -138,7 +172,11 @@ public class PartyService implements IPartyService {
   @Override
   @Transactional
   public void deleteOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, PartyServiceException {
+      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException {
+    if (organizationId == null) {
+      throw new InvalidArgumentException("organizationId");
+    }
+
     try {
       if (!organizationRepository.existsById(organizationId)) {
         throw new OrganizationNotFoundException(organizationId);
@@ -160,7 +198,12 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
-  public void deleteParty(UUID partyId) throws PartyNotFoundException, PartyServiceException {
+  public void deleteParty(UUID partyId)
+      throws InvalidArgumentException, PartyNotFoundException, PartyServiceException {
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
     try {
       if (!partyRepository.existsById(partyId)) {
         throw new PartyNotFoundException(partyId);
@@ -181,7 +224,12 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
-  public void deletePerson(UUID personId) throws PersonNotFoundException, PartyServiceException {
+  public void deletePerson(UUID personId)
+      throws InvalidArgumentException, PersonNotFoundException, PartyServiceException {
+    if (personId == null) {
+      throw new InvalidArgumentException("personId");
+    }
+
     try {
       if (!personRepository.existsById(personId)) {
         throw new PersonNotFoundException(personId);
@@ -204,7 +252,11 @@ public class PartyService implements IPartyService {
    */
   @Override
   public Organization getOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, PartyServiceException {
+      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException {
+    if (organizationId == null) {
+      throw new InvalidArgumentException("organizationId");
+    }
+
     try {
       Optional<Organization> organizationOptional = organizationRepository.findById(organizationId);
 
@@ -233,7 +285,7 @@ public class PartyService implements IPartyService {
   @Override
   public Organizations getOrganizations(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws PartyServiceException {
+      throws InvalidArgumentException, PartyServiceException {
     PageRequest pageRequest;
 
     if ((pageIndex != null) && (pageSize != null)) {
@@ -277,7 +329,7 @@ public class PartyService implements IPartyService {
   @Override
   public Parties getParties(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws PartyServiceException {
+      throws InvalidArgumentException, PartyServiceException {
 
     PageRequest pageRequest;
 
@@ -317,7 +369,12 @@ public class PartyService implements IPartyService {
    * @return the party
    */
   @Override
-  public Party getParty(UUID partyId) throws PartyNotFoundException, PartyServiceException {
+  public Party getParty(UUID partyId)
+      throws InvalidArgumentException, PartyNotFoundException, PartyServiceException {
+    if (partyId == null) {
+      throw new InvalidArgumentException("partyId");
+    }
+
     try {
       Optional<Party> partyOptional = partyRepository.findById(partyId);
 
@@ -340,7 +397,12 @@ public class PartyService implements IPartyService {
    * @return the person
    */
   @Override
-  public Person getPerson(UUID personId) throws PersonNotFoundException, PartyServiceException {
+  public Person getPerson(UUID personId)
+      throws InvalidArgumentException, PersonNotFoundException, PartyServiceException {
+    if (personId == null) {
+      throw new InvalidArgumentException("personId");
+    }
+
     try {
       Optional<Person> personOptional = personRepository.findById(personId);
 
@@ -373,7 +435,7 @@ public class PartyService implements IPartyService {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws PartyServiceException {
+      throws InvalidArgumentException, PartyServiceException {
     if (sortBy == null) {
       sortBy = PersonSortBy.NAME;
     }
@@ -437,7 +499,18 @@ public class PartyService implements IPartyService {
   @Override
   @Transactional
   public void updateOrganization(Organization organization)
-      throws OrganizationNotFoundException, PartyServiceException {
+      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException {
+    if (organization == null) {
+      throw new InvalidArgumentException("organization");
+    }
+
+    Set<ConstraintViolation<Organization>> constraintViolations = validator.validate(organization);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "organization", ValidationError.toValidationErrors(constraintViolations));
+    }
+
     try {
       if (!organizationRepository.existsById(organization.getId())) {
         throw new OrganizationNotFoundException(organization.getId());
@@ -459,7 +532,19 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
-  public void updatePerson(Person person) throws PersonNotFoundException, PartyServiceException {
+  public void updatePerson(Person person)
+      throws InvalidArgumentException, PersonNotFoundException, PartyServiceException {
+    if (person == null) {
+      throw new InvalidArgumentException("person");
+    }
+
+    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+
+    if (!constraintViolations.isEmpty()) {
+      throw new InvalidArgumentException(
+          "person", ValidationError.toValidationErrors(constraintViolations));
+    }
+
     try {
       if (!personRepository.existsById(person.getId())) {
         throw new PersonNotFoundException(person.getId());

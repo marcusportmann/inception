@@ -22,10 +22,6 @@
       <groupId>digital.inception</groupId>
       <artifactId>inception-rs</artifactId>
     </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-validation</artifactId>
-    </dependency>
 
     <!-- Test Dependencies -->
     <dependency>

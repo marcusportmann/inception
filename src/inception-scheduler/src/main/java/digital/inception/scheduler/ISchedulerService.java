@@ -18,6 +18,7 @@ package digital.inception.scheduler;
 
 // ~--- JDK imports ------------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 
 /**
@@ -34,21 +35,21 @@ public interface ISchedulerService {
    *
    * @param job the <code>Job</code> instance containing the information for the job
    */
-  void createJob(Job job) throws DuplicateJobException, SchedulerServiceException;
+  void createJob(Job job) throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException;
 
   /**
    * Delete the job
    *
    * @param jobId the ID uniquely identifying the job
    */
-  void deleteJob(String jobId) throws JobNotFoundException, SchedulerServiceException;
+  void deleteJob(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Execute the job.
    *
    * @param job the job
    */
-  void executeJob(Job job) throws SchedulerServiceException;
+  void executeJob(Job job) throws InvalidArgumentException, SchedulerServiceException;
 
   /**
    * Retrieve the filtered jobs.
@@ -64,7 +65,7 @@ public interface ISchedulerService {
    * @param jobId the ID uniquely identifying the job
    * @return the job
    */
-  Job getJob(String jobId) throws JobNotFoundException, SchedulerServiceException;
+  Job getJob(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Retrieve the name of the job.
@@ -72,7 +73,7 @@ public interface ISchedulerService {
    * @param jobId the ID uniquely identifying the job
    * @return the name of the job
    */
-  String getJobName(String jobId) throws JobNotFoundException, SchedulerServiceException;
+  String getJobName(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Retrieve the jobs.
@@ -113,7 +114,7 @@ public interface ISchedulerService {
    *     next execution time
    */
   void rescheduleJob(String jobId, String schedulingPattern)
-      throws JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Reset the job locks.
@@ -138,7 +139,7 @@ public interface ISchedulerService {
    * @param status the new status for the job
    */
   void setJobStatus(String jobId, JobStatus status)
-      throws JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Unlock a locked job.
@@ -147,12 +148,12 @@ public interface ISchedulerService {
    * @param status the new status for the unlocked job
    */
   void unlockJob(String jobId, JobStatus status)
-      throws JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Update the job.
    *
    * @param job the <code>Job</code> instance containing the updated information for the job
    */
-  void updateJob(Job job) throws JobNotFoundException, SchedulerServiceException;
+  void updateJob(Job job) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 }

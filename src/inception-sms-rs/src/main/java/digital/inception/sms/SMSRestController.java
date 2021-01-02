@@ -20,7 +20,6 @@ package digital.inception.sms;
 
 import digital.inception.rs.SecureRestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.validation.Validator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,17 +41,12 @@ public class SMSRestController extends SecureRestController {
   /** The SMS Service. */
   private final ISMSService smsService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>SMSRestController</code>.
    *
    * @param smsService the SMS Service
-   * @param validator the JSR-303 validator
    */
-  public SMSRestController(ISMSService smsService, Validator validator) {
+  public SMSRestController(ISMSService smsService) {
     this.smsService = smsService;
-    this.validator = validator;
   }
 }

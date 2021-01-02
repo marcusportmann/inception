@@ -20,7 +20,6 @@ package digital.inception.messaging;
 
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.validation.Validator;
 
 /**
  * The <code>MessagingWebService</code> class.
@@ -38,17 +37,12 @@ public class MessagingWebService {
   /** The Messaging Service. */
   private final IMessagingService messagingService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>MessagingWebService</code>.
    *
    * @param messagingService the Messaging Service
-   * @param validator the JSR-303 validator
    */
-  public MessagingWebService(IMessagingService messagingService, Validator validator) {
+  public MessagingWebService(IMessagingService messagingService) {
     this.messagingService = messagingService;
-    this.validator = validator;
   }
 }

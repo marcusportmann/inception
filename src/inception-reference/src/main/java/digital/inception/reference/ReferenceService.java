@@ -19,6 +19,7 @@ package digital.inception.reference;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import java.util.List;
+import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -99,6 +100,9 @@ public class ReferenceService implements IReferenceService {
   /** The Title Repository. */
   private final TitleRepository titleRepository;
 
+  /** The JSR-303 validator. */
+  private final Validator validator;
+
   /** The Verification Method Repository. */
   private final VerificationMethodRepository verificationMethodRepository;
 
@@ -108,6 +112,7 @@ public class ReferenceService implements IReferenceService {
   /**
    * Constructs a new <code>ReferenceService</code>.
    *
+   * @param validator the JSR-303 validator
    * @param contactMechanismPurposeRepository the Contact Mechanism Sub Type Repository
    * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
    * @param countryRepository the Country Repository
@@ -132,6 +137,7 @@ public class ReferenceService implements IReferenceService {
    * @param verificationStatusRepository the Verification Status Repository
    */
   public ReferenceService(
+      Validator validator,
       ContactMechanismPurposeRepository contactMechanismPurposeRepository,
       ContactMechanismTypeRepository contactMechanismTypeRepository,
       CountryRepository countryRepository,
@@ -154,6 +160,7 @@ public class ReferenceService implements IReferenceService {
       TitleRepository titleRepository,
       VerificationMethodRepository verificationMethodRepository,
       VerificationStatusRepository verificationStatusRepository) {
+    this.validator = validator;
     this.contactMechanismPurposeRepository = contactMechanismPurposeRepository;
     this.contactMechanismTypeRepository = contactMechanismTypeRepository;
     this.countryRepository = countryRepository;
@@ -193,8 +200,8 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
-   *     mechanism purposes for or <code>null</code> to retrieve the contact mechanism purposes
-   *     for all locales
+   *     mechanism purposes for or <code>null</code> to retrieve the contact mechanism purposes for
+   *     all locales
    * @return the contact mechanism purposes
    */
   @Override

@@ -18,11 +18,10 @@ package digital.inception.scheduler;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,9 +30,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
@@ -62,18 +58,13 @@ public class SchedulerRestController extends SecureRestController {
   /** The Scheduler Service. */
   private final ISchedulerService schedulerService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>SchedulerRestController</code>.
    *
    * @param schedulerService the Scheduler Service
-   * @param validator the JSR-303 validator
    */
-  public SchedulerRestController(ISchedulerService schedulerService, Validator validator) {
+  public SchedulerRestController(ISchedulerService schedulerService) {
     this.schedulerService = schedulerService;
-    this.validator = validator;
   }
 
   /**
@@ -120,17 +111,6 @@ public class SchedulerRestController extends SecureRestController {
           @RequestBody
           Job job)
       throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException {
-    if (job == null) {
-      throw new InvalidArgumentException("job");
-    }
-
-    Set<ConstraintViolation<Job>> constraintViolations = validator.validate(job);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "job", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     schedulerService.createJob(job);
   }
 
@@ -182,10 +162,6 @@ public class SchedulerRestController extends SecureRestController {
           @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
     schedulerService.deleteJob(jobId);
   }
 
@@ -238,10 +214,6 @@ public class SchedulerRestController extends SecureRestController {
           @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
     return schedulerService.getJob(jobId);
   }
 
@@ -294,10 +266,6 @@ public class SchedulerRestController extends SecureRestController {
           @PathVariable
           String jobId)
       throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
-    if (!StringUtils.hasText(jobId)) {
-      throw new InvalidArgumentException("jobId");
-    }
-
     return RestUtil.quote(schedulerService.getJobName(jobId));
   }
 
@@ -386,15 +354,12 @@ public class SchedulerRestController extends SecureRestController {
       throw new InvalidArgumentException("jobId");
     }
 
-    if (!job.getId().equals(jobId)) {
-      throw new InvalidArgumentException("jobId");
+    if (job == null) {
+      throw new InvalidArgumentException("job");
     }
 
-    Set<ConstraintViolation<Job>> constraintViolations = validator.validate(job);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "job", ValidationError.toValidationErrors(constraintViolations));
+    if (!jobId.equals(job.getId())) {
+      throw new InvalidArgumentException("job");
     }
 
     schedulerService.updateJob(job);

@@ -176,11 +176,33 @@ COMMENT ON COLUMN party.contact_mechanisms.value IS 'The value for the contact m
 
 
 CREATE TABLE party.physical_addresses (
-  created  TIMESTAMP    NOT NULL,
-  party_id UUID         NOT NULL,
-  purpose  INTEGER      NOT NULL,
-  type     INTEGER      NOT NULL,
-  updated  TIMESTAMP,
+  building_floor      VARCHAR(20),
+  building_name       VARCHAR(50),
+  building_room       VARCHAR(20),
+  city                VARCHAR(50),
+  complex_name        VARCHAR(50),
+  complex_unit_number VARCHAR(20),
+  created             TIMESTAMP    NOT NULL,
+  country             VARCHAR(10)  NOT NULL,
+  farm_description    VARCHAR(50),
+  farm_name           VARCHAR(50),
+  farm_number         VARCHAR(50),
+  line1               VARCHAR(100),
+  line2               VARCHAR(100),
+  line3               VARCHAR(100),
+  latitude            VARCHAR(50),
+  longitude           VARCHAR(50),
+  party_id            UUID         NOT NULL,
+  postal_code         VARCHAR(30)  NOT NULL,
+  purpose             INTEGER      NOT NULL,
+  region              VARCHAR(10),
+  site_block          VARCHAR(50),
+  site_number         VARCHAR(50),
+  street_name         VARCHAR(100),
+  street_number       VARCHAR(30),
+  suburb              VARCHAR(50),
+  type                INTEGER      NOT NULL,
+  updated             TIMESTAMP,
 
   PRIMARY KEY (party_id, type, purpose),
   CONSTRAINT physical_addresses_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
@@ -188,11 +210,56 @@ CREATE TABLE party.physical_addresses (
 
 CREATE INDEX physical_addresses_party_id_ix ON party.physical_addresses(party_id);
 
+
+COMMENT ON COLUMN party.physical_addresses.building_floor IS 'The building floor for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.building_name IS 'The building name for the physical address that is required for a building address';
+
+COMMENT ON COLUMN party.physical_addresses.building_room IS 'The building room for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.city IS 'The town or town or city for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.complex_name IS 'The complex name for the physical address that is required for a complex address';
+
+COMMENT ON COLUMN party.physical_addresses.complex_unit_number IS 'The complex unit number for the physical address that is required for a complex address';
+
 COMMENT ON COLUMN party.physical_addresses.created IS 'The date and time the physical address was created';
+
+COMMENT ON COLUMN party.physical_addresses.country IS 'The ISO 3166-1 alpha-2 code for the country for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.farm_description IS 'The farm description for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.farm_name IS 'The farm name for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.farm_number IS 'The farm number for the physical address that is required for a farm address';
+
+COMMENT ON COLUMN party.physical_addresses.line1 IS 'The address line 1 for the physical address that is required for an international or unstructured address';
+
+COMMENT ON COLUMN party.physical_addresses.line2 IS 'The address line 2 for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.line3 IS 'The address line 3 for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.latitude IS 'The optional GPS latitude for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.longitude IS 'The optional GPS longitude for the physical address';
 
 COMMENT ON COLUMN party.physical_addresses.party_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party the physical address is associated with';
 
+COMMENT ON COLUMN party.physical_addresses.postal_code IS 'The postal code for the physical address';
+
 COMMENT ON COLUMN party.physical_addresses.purpose IS 'The code identifying the physical address purpose';
+
+COMMENT ON COLUMN party.physical_addresses.region IS 'The optional code identifying the region for the physical address';
+
+COMMENT ON COLUMN party.physical_addresses.site_block IS 'The site block for the physical address that is required for a site address';
+
+COMMENT ON COLUMN party.physical_addresses.site_number IS 'The site number for the physical address that is required for a site address';
+
+COMMENT ON COLUMN party.physical_addresses.street_name IS 'The street name for the physical address that is required for a street address';
+
+COMMENT ON COLUMN party.physical_addresses.street_number IS 'The street number for the physical address that is required for a street address';
+
+COMMENT ON COLUMN party.physical_addresses.suburb IS 'The optional suburb for the physical address';
 
 COMMENT ON COLUMN party.physical_addresses.type IS 'The code identifying the physical address type';
 

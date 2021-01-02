@@ -18,6 +18,7 @@ package digital.inception.mail;
 
 // ~--- JDK imports ------------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public interface IMailService {
    *     new mail template
    */
   void createMailTemplate(MailTemplate mailTemplate)
-      throws DuplicateMailTemplateException, MailServiceException;
+      throws InvalidArgumentException, DuplicateMailTemplateException, MailServiceException;
 
   /**
    * Delete the existing mail template.
@@ -46,7 +47,7 @@ public interface IMailService {
    * @param mailTemplateId the ID uniquely identifying the mail template
    */
   void deleteMailTemplate(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException;
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Retrieve the mail template.
@@ -55,7 +56,7 @@ public interface IMailService {
    * @return the mail template
    */
   MailTemplate getMailTemplate(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException;
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Retrieve the name of the mail template.
@@ -64,7 +65,7 @@ public interface IMailService {
    * @return the name of the mail template
    */
   String getMailTemplateName(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException;
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Returns the summaries for all the mail templates.
@@ -80,7 +81,7 @@ public interface IMailService {
    * @return the summary for the mail template
    */
   MailTemplateSummary getMailTemplateSummary(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException;
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Returns the date and time the mail template was last updated.
@@ -89,7 +90,7 @@ public interface IMailService {
    * @return the date and time the mail template was last updated
    */
   LocalDateTime getMailTemplateUpdated(String mailTemplateId)
-      throws MailTemplateNotFoundException, MailServiceException;
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Returns all the mail templates.
@@ -104,7 +105,8 @@ public interface IMailService {
    * @param mailTemplateId the ID uniquely identifying the mail template
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
-  boolean mailTemplateExists(String mailTemplateId) throws MailServiceException;
+  boolean mailTemplateExists(String mailTemplateId)
+      throws InvalidArgumentException, MailServiceException;
 
   /**
    * Process the mail template.
@@ -114,7 +116,7 @@ public interface IMailService {
    * @return the output of processing the template
    */
   String processMailTemplate(String mailTemplateId, Map<String, String> templateParameters)
-      throws MailServiceException;
+      throws InvalidArgumentException, MailServiceException;
 
   /**
    * Send a mail.
@@ -133,7 +135,7 @@ public interface IMailService {
       String fromName,
       String mailTemplateId,
       Map<String, String> mailTemplateParameters)
-      throws MailTemplateNotFoundException, MailServiceException;
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException;
 
   /**
    * Update the mail template.
@@ -142,5 +144,5 @@ public interface IMailService {
    *     for the mail template
    */
   void updateMailTemplate(MailTemplate mailTemplate)
-      throws MailTemplateNotFoundException, MailServiceException;
+      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException;
 }

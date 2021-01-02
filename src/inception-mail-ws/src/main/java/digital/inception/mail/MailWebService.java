@@ -18,17 +18,13 @@ package digital.inception.mail;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
-import java.util.Set;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 
 // ~--- JDK imports ------------------------------------------------------------
@@ -49,18 +45,13 @@ public class MailWebService {
   /** The Mail Service. */
   private final IMailService mailService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>MailWebService</code>.
    *
    * @param mailService the Mail Service
-   * @param validator the JSR-303 validator
    */
-  public MailWebService(IMailService mailService, Validator validator) {
+  public MailWebService(IMailService mailService) {
     this.mailService = mailService;
-    this.validator = validator;
   }
 
   /**
@@ -72,17 +63,6 @@ public class MailWebService {
   public void createMailTemplate(
       @WebParam(name = "MailTemplate") @XmlElement(required = true) MailTemplate mailTemplate)
       throws InvalidArgumentException, DuplicateMailTemplateException, MailServiceException {
-    if (mailTemplate == null) {
-      throw new InvalidArgumentException("mailTemplate");
-    }
-
-    Set<ConstraintViolation<MailTemplate>> constraintViolations = validator.validate(mailTemplate);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "mailTemplate", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     mailService.createMailTemplate(mailTemplate);
   }
 
@@ -95,10 +75,6 @@ public class MailWebService {
   public void deleteMailTemplate(
       @WebParam(name = "MailTemplateId") @XmlElement(required = true) String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
-    if (mailTemplateId == null) {
-      throw new InvalidArgumentException("mailTemplateId");
-    }
-
     mailService.deleteMailTemplate(mailTemplateId);
   }
 
@@ -113,10 +89,6 @@ public class MailWebService {
   public MailTemplate getMailTemplate(
       @WebParam(name = "MailTemplateId") @XmlElement(required = true) String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
-    if (mailTemplateId == null) {
-      throw new InvalidArgumentException("mailTemplateId");
-    }
-
     return mailService.getMailTemplate(mailTemplateId);
   }
 
@@ -131,10 +103,6 @@ public class MailWebService {
   public String getMailTemplateName(
       @WebParam(name = "MailTemplateId") @XmlElement(required = true) String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
-    if (mailTemplateId == null) {
-      throw new InvalidArgumentException("mailTemplateId");
-    }
-
     return mailService.getMailTemplateName(mailTemplateId);
   }
 
@@ -169,17 +137,6 @@ public class MailWebService {
   public void updateMailTemplate(
       @WebParam(name = "MailTemplate") @XmlElement(required = true) MailTemplate mailTemplate)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
-    if (mailTemplate == null) {
-      throw new InvalidArgumentException("mailTemplate");
-    }
-
-    Set<ConstraintViolation<MailTemplate>> constraintViolations = validator.validate(mailTemplate);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "mailTemplate", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     mailService.updateMailTemplate(mailTemplate);
   }
 }

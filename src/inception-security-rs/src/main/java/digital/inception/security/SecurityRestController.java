@@ -22,8 +22,8 @@ import digital.inception.core.sorting.SortDirection;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
-import digital.inception.validation.InvalidArgumentException;
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -163,10 +163,9 @@ public class SecurityRestController extends SecureRestController {
           GroupMember groupMember)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           UserNotFoundException, ExistingGroupMemberException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (!StringUtils.hasText(groupName)) {
@@ -183,11 +182,6 @@ public class SecurityRestController extends SecureRestController {
 
     if (!groupName.equals(groupMember.getGroupName())) {
       throw new InvalidArgumentException("groupMember");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     Set<ConstraintViolation<GroupMember>> constraintViolations = validator.validate(groupMember);
@@ -273,10 +267,9 @@ public class SecurityRestController extends SecureRestController {
           GroupRole groupRole)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (!StringUtils.hasText(groupName)) {
@@ -295,11 +288,6 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("groupRole");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
     Set<ConstraintViolation<GroupRole>> constraintViolations = validator.validate(groupRole);
 
     if (!constraintViolations.isEmpty()) {
@@ -308,7 +296,7 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (groupRole.getRoleCode().equalsIgnoreCase(SecurityService.ADMINISTRATOR_ROLE_CODE)
-        && (!hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE))) {
+        && (!hasRole(SecurityService.ADMINISTRATOR_ROLE_CODE))) {
       throw new AccessDeniedException(
           "Insufficient authority to add the "
               + SecurityService.ADMINISTRATOR_ROLE_CODE
@@ -484,10 +472,9 @@ public class SecurityRestController extends SecureRestController {
           PasswordChange passwordChange)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (!StringUtils.hasText(username)) {
@@ -500,11 +487,6 @@ public class SecurityRestController extends SecureRestController {
 
     if (!StringUtils.hasText(passwordChange.getNewPassword())) {
       throw new InvalidArgumentException("passwordChange");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     Set<ConstraintViolation<PasswordChange>> constraintViolations =
@@ -605,13 +587,15 @@ public class SecurityRestController extends SecureRestController {
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           AuthenticationFailedException, InvalidSecurityCodeException, ExistingPasswordException,
           UserLockedException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
 
     if (passwordChange == null) {
+      throw new InvalidArgumentException("passwordChange");
+    }
+
+    if (!StringUtils.hasText(passwordChange.getNewPassword())) {
       throw new InvalidArgumentException("passwordChange");
     }
 
@@ -630,15 +614,15 @@ public class SecurityRestController extends SecureRestController {
     }
 
     if (passwordChange.getReason() == PasswordChangeReason.ADMINISTRATIVE) {
-      if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+      if (!hasAccessToUserDirectory(userDirectoryId)) {
         throw new AccessDeniedException(
             "Access denied to the user directory (" + userDirectoryId + ")");
       }
 
-      if (hasRole(authentication, "Administrator")
-          || hasAccessToFunction(authentication, "Security.TenantAdministration")
-          || hasAccessToFunction(authentication, "Security.UserAdministration")
-          || hasAccessToFunction(authentication, "Security.ResetUserPassword")) {
+      if (hasRole(SecurityService.ADMINISTRATOR_ROLE_CODE)
+          || hasAccessToFunction("Security.TenantAdministration")
+          || hasAccessToFunction("Security.UserAdministration")
+          || hasAccessToFunction("Security.ResetUserPassword")) {
         securityService.adminChangePassword(
             userDirectoryId,
             username,
@@ -732,30 +716,17 @@ public class SecurityRestController extends SecureRestController {
           Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (group == null) {
       throw new InvalidArgumentException("group");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
-    Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "group", ValidationError.toValidationErrors(constraintViolations));
-    }
-
-    if (!group.getUserDirectoryId().equals(userDirectoryId)) {
-      throw new InvalidArgumentException("userDirectoryId");
+    if (!userDirectoryId.equals(group.getUserDirectoryId())) {
+      throw new InvalidArgumentException("group");
     }
 
     securityService.createGroup(group);
@@ -810,17 +781,6 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "createUserDirectory", required = false)
           Boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException {
-    if (tenant == null) {
-      throw new InvalidArgumentException("tenant");
-    }
-
-    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "tenant", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     securityService.createTenant(tenant, (createUserDirectory != null) && createUserDirectory);
   }
 
@@ -897,26 +857,17 @@ public class SecurityRestController extends SecureRestController {
           Boolean userLocked)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (user == null) {
       throw new InvalidArgumentException("user");
     }
 
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
-    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "user", ValidationError.toValidationErrors(constraintViolations));
+    if (!userDirectoryId.equals(user.getUserDirectoryId())) {
+      throw new InvalidArgumentException("user");
     }
 
     securityService.createUser(
@@ -971,18 +922,6 @@ public class SecurityRestController extends SecureRestController {
           @RequestBody
           UserDirectory userDirectory)
       throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException {
-    if (userDirectory == null) {
-      throw new InvalidArgumentException("userDirectory");
-    }
-
-    Set<ConstraintViolation<UserDirectory>> constraintViolations =
-        validator.validate(userDirectory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "userDirectory", ValidationError.toValidationErrors(constraintViolations));
-    }
-
     securityService.createUserDirectory(userDirectory);
   }
 
@@ -1051,17 +990,7 @@ public class SecurityRestController extends SecureRestController {
           String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           ExistingGroupMembersException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1117,10 +1046,6 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     securityService.deleteTenant(tenantId);
   }
 
@@ -1181,17 +1106,7 @@ public class SecurityRestController extends SecureRestController {
           String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1250,10 +1165,6 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     securityService.deleteUserDirectory(userDirectoryId);
   }
 
@@ -1315,17 +1226,7 @@ public class SecurityRestController extends SecureRestController {
           String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1383,18 +1284,7 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1462,17 +1352,7 @@ public class SecurityRestController extends SecureRestController {
           String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1548,13 +1428,7 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1637,17 +1511,7 @@ public class SecurityRestController extends SecureRestController {
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1716,17 +1580,7 @@ public class SecurityRestController extends SecureRestController {
           String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1820,17 +1674,7 @@ public class SecurityRestController extends SecureRestController {
           String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -1887,12 +1731,6 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     return securityService.getTenant(tenantId);
   }
 
@@ -1947,12 +1785,6 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     return RestUtil.quote(securityService.getTenantName(tenantId));
   }
 
@@ -2051,18 +1883,7 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!authentication.isAuthenticated()) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -2130,17 +1951,7 @@ public class SecurityRestController extends SecureRestController {
           String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -2258,22 +2069,16 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     List<UserDirectory> userDirectories = securityService.getUserDirectoriesForTenant(tenantId);
 
-    if (hasRole(authentication, "Administrator")
-        || hasAccessToFunction(authentication, "Security.TenantAdministration")) {
+    if (hasRole(SecurityService.ADMINISTRATOR_ROLE_CODE)
+        || hasAccessToFunction("Security.TenantAdministration")) {
       return new ResponseEntity<>(userDirectories, HttpStatus.OK);
     } else {
       List<UserDirectory> filteredUserDirectories = new ArrayList<>();
 
       for (UserDirectory userDirectory : userDirectories) {
-        if (hasAccessToUserDirectory(authentication, userDirectory.getId())) {
+        if (hasAccessToUserDirectory(userDirectory.getId())) {
           filteredUserDirectories.add(userDirectory);
         }
       }
@@ -2332,12 +2137,6 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return securityService.getUserDirectory(userDirectoryId);
   }
 
@@ -2393,13 +2192,7 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -2459,12 +2252,6 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     return RestUtil.quote(securityService.getUserDirectoryName(userDirectoryId));
   }
 
@@ -2571,23 +2358,17 @@ public class SecurityRestController extends SecureRestController {
           @PathVariable
           UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
     List<UserDirectorySummary> userDirectorySummaries =
         securityService.getUserDirectorySummariesForTenant(tenantId);
 
-    if (hasRole(authentication, "Administrator")
-        || hasAccessToFunction(authentication, "Security.TenantAdministration")) {
+    if (hasRole( "Administrator")
+        || hasAccessToFunction("Security.TenantAdministration")) {
       return new ResponseEntity<>(userDirectorySummaries, HttpStatus.OK);
     } else {
       List<UserDirectorySummary> filteredUserDirectorySummaries = new ArrayList<>();
 
       for (UserDirectorySummary userDirectorySummary : userDirectorySummaries) {
-        if (hasAccessToUserDirectory(authentication, userDirectorySummary.getId())) {
+        if (hasAccessToUserDirectory(userDirectorySummary.getId())) {
           filteredUserDirectorySummaries.add(userDirectorySummary);
         }
       }
@@ -2649,13 +2430,7 @@ public class SecurityRestController extends SecureRestController {
           UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException,
           UserDirectoryTypeNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -2754,17 +2529,7 @@ public class SecurityRestController extends SecureRestController {
           String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -2846,13 +2611,7 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "pageSize", required = false)
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -2934,25 +2693,7 @@ public class SecurityRestController extends SecureRestController {
           String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           GroupMemberNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (memberType == null) {
-      throw new InvalidArgumentException("memberType");
-    }
-
-    if (!StringUtils.hasText(memberName)) {
-      throw new InvalidArgumentException("memberName");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
@@ -3028,27 +2769,13 @@ public class SecurityRestController extends SecureRestController {
           String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           GroupRoleNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    if (!StringUtils.hasText(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!StringUtils.hasText(roleCode)) {
-      throw new InvalidArgumentException("roleCode");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (roleCode.equalsIgnoreCase(SecurityService.ADMINISTRATOR_ROLE_CODE)
-        && (!hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE))) {
+        && (!hasRole(SecurityService.ADMINISTRATOR_ROLE_CODE))) {
       throw new AccessDeniedException(
           "Insufficient authority to remove the "
               + SecurityService.ADMINISTRATOR_ROLE_CODE
@@ -3124,16 +2851,6 @@ public class SecurityRestController extends SecureRestController {
           UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException,
           TenantUserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (tenantId == null) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
     securityService.removeUserDirectoryFromTenant(tenantId, userDirectoryId);
   }
 
@@ -3190,14 +2907,6 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "resetPasswordUrl")
           String resetPasswordUrl)
       throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
-    if (!StringUtils.hasText(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (!StringUtils.hasText(resetPasswordUrl)) {
-      throw new InvalidArgumentException("resetPasswordUrl");
-    }
-
     securityService.initiatePasswordReset(username, resetPasswordUrl, true);
   }
 
@@ -3264,10 +2973,9 @@ public class SecurityRestController extends SecureRestController {
           Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (!StringUtils.hasText(groupName)) {
@@ -3278,20 +2986,8 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("group");
     }
 
-    if (!group.getName().equals(groupName)) {
-      throw new InvalidArgumentException("groupName");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
-    Set<ConstraintViolation<Group>> constraintViolations = validator.validate(group);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "group", ValidationError.toValidationErrors(constraintViolations));
+    if (!groupName.equals(group.getName())) {
+      throw new InvalidArgumentException("group");
     }
 
     securityService.updateGroup(group);
@@ -3351,8 +3047,6 @@ public class SecurityRestController extends SecureRestController {
           @RequestBody
           Tenant tenant)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -3361,15 +3055,8 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("tenant");
     }
 
-    if (!tenant.getId().equals(tenantId)) {
-      throw new InvalidArgumentException("tenantId");
-    }
-
-    Set<ConstraintViolation<Tenant>> constraintViolations = validator.validate(tenant);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "tenant", ValidationError.toValidationErrors(constraintViolations));
+    if (!tenantId.equals(tenant.getId())) {
+      throw new InvalidArgumentException("tenant");
     }
 
     securityService.updateTenant(tenant);
@@ -3446,10 +3133,9 @@ public class SecurityRestController extends SecureRestController {
           Boolean lockUser)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-    if (userDirectoryId == null) {
-      throw new InvalidArgumentException("userDirectoryId");
+    if (!hasAccessToUserDirectory(userDirectoryId)) {
+      throw new AccessDeniedException(
+          "Access denied to the user directory (" + userDirectoryId + ")");
     }
 
     if (!StringUtils.hasText(username)) {
@@ -3460,20 +3146,8 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("user");
     }
 
-    if (!user.getUsername().equals(username)) {
-      throw new InvalidArgumentException("username");
-    }
-
-    if (!hasAccessToUserDirectory(authentication, userDirectoryId)) {
-      throw new AccessDeniedException(
-          "Access denied to the user directory (" + userDirectoryId + ")");
-    }
-
-    Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "user", ValidationError.toValidationErrors(constraintViolations));
+    if (!username.equals(user.getUsername())) {
+      throw new InvalidArgumentException("user");
     }
 
     securityService.updateUser(
@@ -3537,8 +3211,6 @@ public class SecurityRestController extends SecureRestController {
           @RequestBody
           UserDirectory userDirectory)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -3547,16 +3219,8 @@ public class SecurityRestController extends SecureRestController {
       throw new InvalidArgumentException("userDirectory");
     }
 
-    if (!userDirectory.getId().equals(userDirectoryId)) {
-      throw new InvalidArgumentException("userDirectoryId");
-    }
-
-    Set<ConstraintViolation<UserDirectory>> constraintViolations =
-        validator.validate(userDirectory);
-
-    if (!constraintViolations.isEmpty()) {
-      throw new InvalidArgumentException(
-          "userDirectory", ValidationError.toValidationErrors(constraintViolations));
+    if (!userDirectoryId.equals(userDirectory.getId())) {
+      throw new InvalidArgumentException("userDirectory");
     }
 
     securityService.updateUserDirectory(userDirectory);
@@ -3566,13 +3230,23 @@ public class SecurityRestController extends SecureRestController {
    * Confirm that the user associated with the authenticated request has access to the user
    * directory.
    *
-   * @param authentication the authenticated principal
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *     the user directory or <code>false</code> otherwise
    */
-  protected boolean hasAccessToUserDirectory(Authentication authentication, UUID userDirectoryId) {
+  protected boolean hasAccessToUserDirectory(UUID userDirectoryId)  throws InvalidArgumentException {
+    if (userDirectoryId == null) {
+      throw new InvalidArgumentException("userDirectoryId");
+    }
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    // Could not retrieve the currently authenticated principal
+    if (authentication == null) {
+      return false;
+    }
+
     try {
       // If the user is not authenticated then they cannot have access
       if (!authentication.isAuthenticated()) {
@@ -3580,7 +3254,7 @@ public class SecurityRestController extends SecureRestController {
       }
 
       // If the user has the "Administrator" role they always have access
-      if (hasRole(authentication, SecurityService.ADMINISTRATOR_ROLE_CODE)) {
+      if (hasRole(SecurityService.ADMINISTRATOR_ROLE_CODE)) {
         return true;
       }
 

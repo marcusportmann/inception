@@ -19,6 +19,7 @@ package digital.inception.party;
 // ~--- JDK imports ------------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.validation.InvalidArgumentException;
 import java.util.UUID;
 
 /**
@@ -36,14 +37,15 @@ public interface IPartyService {
    * @param organization the organization
    */
   void createOrganization(Organization organization)
-      throws DuplicateOrganizationException, PartyServiceException;
+      throws InvalidArgumentException, DuplicateOrganizationException, PartyServiceException;
 
   /**
    * Create the new person.
    *
    * @param person the person
    */
-  void createPerson(Person person) throws DuplicatePersonException, PartyServiceException;
+  void createPerson(Person person)
+      throws InvalidArgumentException, DuplicatePersonException, PartyServiceException;
 
   /**
    * Delete the organization.
@@ -52,21 +54,23 @@ public interface IPartyService {
    *     organization
    */
   void deleteOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, PartyServiceException;
+      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException;
 
   /**
    * Delete the party.
    *
    * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
    */
-  void deleteParty(UUID partyId) throws PartyNotFoundException, PartyServiceException;
+  void deleteParty(UUID partyId)
+      throws InvalidArgumentException, PartyNotFoundException, PartyServiceException;
 
   /**
    * Delete the person.
    *
    * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
    */
-  void deletePerson(UUID personId) throws PersonNotFoundException, PartyServiceException;
+  void deletePerson(UUID personId)
+      throws InvalidArgumentException, PersonNotFoundException, PartyServiceException;
 
   /**
    * Retrieve the organization.
@@ -76,7 +80,7 @@ public interface IPartyService {
    * @return the organization
    */
   Organization getOrganization(UUID organizationId)
-      throws OrganizationNotFoundException, PartyServiceException;
+      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException;
 
   /**
    * Retrieve the organizations.
@@ -89,7 +93,7 @@ public interface IPartyService {
    */
   Organizations getOrganizations(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws PartyServiceException;
+      throws InvalidArgumentException, PartyServiceException;
 
   /**
    * Retrieve the parties.
@@ -102,7 +106,7 @@ public interface IPartyService {
    */
   Parties getParties(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws PartyServiceException;
+      throws InvalidArgumentException, PartyServiceException;
 
   /**
    * Retrieve the party.
@@ -110,7 +114,8 @@ public interface IPartyService {
    * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
    * @return the party
    */
-  Party getParty(UUID partyId) throws PartyNotFoundException, PartyServiceException;
+  Party getParty(UUID partyId)
+      throws InvalidArgumentException, PartyNotFoundException, PartyServiceException;
 
   /**
    * Retrieve the person.
@@ -118,7 +123,8 @@ public interface IPartyService {
    * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
    * @return the person
    */
-  Person getPerson(UUID personId) throws PersonNotFoundException, PartyServiceException;
+  Person getPerson(UUID personId)
+      throws InvalidArgumentException, PersonNotFoundException, PartyServiceException;
 
   /**
    * Retrieve the persons.
@@ -136,7 +142,7 @@ public interface IPartyService {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws PartyServiceException;
+      throws InvalidArgumentException, PartyServiceException;
 
   /**
    * Update the organization.
@@ -144,12 +150,13 @@ public interface IPartyService {
    * @param organization the organization
    */
   void updateOrganization(Organization organization)
-      throws OrganizationNotFoundException, PartyServiceException;
+      throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException;
 
   /**
    * Update the person.
    *
    * @param person the person
    */
-  void updatePerson(Person person) throws PersonNotFoundException, PartyServiceException;
+  void updatePerson(Person person)
+      throws InvalidArgumentException, PersonNotFoundException, PartyServiceException;
 }

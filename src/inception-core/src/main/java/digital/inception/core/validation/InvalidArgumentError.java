@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package digital.inception.validation;
+package digital.inception.core.validation;
 
 // ~--- non-JDK imports --------------------------------------------------------
 

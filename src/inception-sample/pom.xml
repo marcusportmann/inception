@@ -129,10 +129,6 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-validation</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>digital.inception</groupId>
       <artifactId>inception-ws</artifactId>
     </dependency>
 

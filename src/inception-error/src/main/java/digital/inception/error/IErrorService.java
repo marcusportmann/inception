@@ -18,6 +18,7 @@ package digital.inception.error;
 
 // ~--- JDK imports ------------------------------------------------------------
 
+import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,7 +36,8 @@ public interface IErrorService {
    * @param errorReport the <code>ErrorReport</code> instance containing the information for the
    *     error report
    */
-  void createErrorReport(ErrorReport errorReport) throws ErrorServiceException;
+  void createErrorReport(ErrorReport errorReport)
+      throws InvalidArgumentException, ErrorServiceException;
 
   /**
    * Retrieve the error report.
@@ -45,7 +47,7 @@ public interface IErrorService {
    * @return the error report or <code>null</code> if the error report could not be found
    */
   ErrorReport getErrorReport(UUID errorReportId)
-      throws ErrorReportNotFoundException, ErrorServiceException;
+      throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException;
 
   /**
    * Retrieve the summary for the error report.
@@ -56,7 +58,7 @@ public interface IErrorService {
    *     found
    */
   ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-      throws ErrorReportNotFoundException, ErrorServiceException;
+      throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException;
 
   /**
    * Retrieve the summaries for the most recent error reports.
@@ -66,5 +68,5 @@ public interface IErrorService {
    * @return the summaries for the most recent error reports
    */
   List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-      throws ErrorServiceException;
+      throws InvalidArgumentException, ErrorServiceException;
 }

@@ -114,11 +114,11 @@ public class SecurityServiceTest {
     user.setUserDirectoryId(userDirectoryId);
     user.setUsername("Numbered Test Username " + number);
     user.setStatus(UserStatus.ACTIVE);
-    user.setEmail("Numbered Test E-Mail " + number);
+    user.setEmail("testing" + String.format("%03d" , number) + "@inception.digital");
     user.setName("Numbered Test Name " + number);
     user.setPreferredName("Numbered Test Preferred Name " + number);
     user.setPhoneNumber("Numbered Test Phone Number " + number);
-    user.setMobileNumber("Numbered Test Mobile Number " + number);
+    user.setMobileNumber("+2782666" + String.format("%03d" , number));
     user.setPassword("Numbered Test Password " + number);
 
     return user;
@@ -168,11 +168,11 @@ public class SecurityServiceTest {
     user.setUserDirectoryId(userDirectoryId);
     user.setUsername("Test User Username " + userCount);
     user.setStatus(UserStatus.ACTIVE);
-    user.setEmail("Test User E-Mail " + userCount);
+    user.setEmail("test" + String.format("%03d" , userCount) + "@inception.digital");
     user.setName("Test User Name " + userCount);
     user.setPreferredName("Test User Preferred Name " + userCount);
     user.setPhoneNumber("Test User Phone Number " + userCount);
-    user.setMobileNumber("Test User Mobile Number " + userCount);
+    user.setMobileNumber("+2782555" + String.format("%03d" , userCount));
     user.setPassword("Test User Password " + userCount);
 
     return user;
@@ -580,10 +580,10 @@ public class SecurityServiceTest {
     List<Attribute> attributes = new ArrayList<>();
 
     attributes.add(new Attribute("status", "active"));
-    attributes.add(new Attribute("email", "E-Mail 1"));
+    attributes.add(new Attribute("email", "testing0"));
     attributes.add(new Attribute("name", "Name 1"));
     attributes.add(new Attribute("preferredName", "Preferred Name 1"));
-    attributes.add(new Attribute("mobileNumber", "Mobile Number 1"));
+    attributes.add(new Attribute("mobileNumber", "+2782666"));
     attributes.add(new Attribute("username", "Username 1"));
 
     try {
@@ -858,7 +858,7 @@ public class SecurityServiceTest {
 
     securityService.createUser(user, false, false);
 
-    securityService.initiatePasswordReset(user.getUsername(), "", false, "Testing123");
+    securityService.initiatePasswordReset(user.getUsername(), "XXX", false, "Testing123");
 
     securityService.resetPassword(user.getUsername(), "New Password", "Testing123");
 
@@ -1382,11 +1382,11 @@ public class SecurityServiceTest {
     user.setPassword("Test Updated Password");
     user.setPasswordExpiry(passwordExpiry);
     user.setPasswordAttempts(2);
-    user.setEmail("Test Updated E-Mail");
+    user.setEmail("updated" + user.getEmail());
     user.setName("Test Updated Name");
     user.setPreferredName("Test Updated Preferred Name");
     user.setPhoneNumber("Test Updated Phone Number");
-    user.setMobileNumber("Test Updated Mobile Number");
+    user.setMobileNumber(user.getMobileNumber().replace("+2782", "+2783"));
 
     securityService.updateUser(user, false, false);
 

@@ -18,7 +18,7 @@ package digital.inception.sample.model;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import digital.inception.validation.ValidationError;
+import digital.inception.core.validation.ValidationError;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

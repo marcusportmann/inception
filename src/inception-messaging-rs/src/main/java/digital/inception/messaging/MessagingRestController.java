@@ -20,7 +20,6 @@ package digital.inception.messaging;
 
 import digital.inception.rs.SecureRestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import javax.validation.Validator;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,17 +41,12 @@ public class MessagingRestController extends SecureRestController {
   /** The Messaging Service. */
   private final IMessagingService messagingService;
 
-  /** The JSR-303 validator. */
-  private final Validator validator;
-
   /**
    * Constructs a new <code>MessagingRestController</code>.
    *
    * @param messagingService the Messaging Service
-   * @param validator the JSR-303 validator
    */
-  public MessagingRestController(IMessagingService messagingService, Validator validator) {
+  public MessagingRestController(IMessagingService messagingService) {
     this.messagingService = messagingService;
-    this.validator = validator;
   }
 }
