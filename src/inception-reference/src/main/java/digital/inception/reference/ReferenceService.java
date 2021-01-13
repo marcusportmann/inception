@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class ReferenceService implements IReferenceService {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(ReferenceService.class);
 
-  /** The Contact Mechanism Sub Type Repository. */
+  /** The Contact Mechanism Purpose Repository. */
   private final ContactMechanismPurposeRepository contactMechanismPurposeRepository;
 
   /** The Contact Mechanism Type Repository. */
@@ -75,6 +75,12 @@ public class ReferenceService implements IReferenceService {
 
   /** The Occupation Repository. */
   private final OccupationRepository occupationRepository;
+
+  /** The Physical Address Purpose Repository. */
+  private final PhysicalAddressPurposeRepository physicalAddressPurposeRepository;
+
+  /** The Physical Address Type Repository. */
+  private final PhysicalAddressTypeRepository physicalAddressTypeRepository;
 
   /** The Race Repository. */
   private final RaceRepository raceRepository;
@@ -113,7 +119,7 @@ public class ReferenceService implements IReferenceService {
    * Constructs a new <code>ReferenceService</code>.
    *
    * @param validator the JSR-303 validator
-   * @param contactMechanismPurposeRepository the Contact Mechanism Sub Type Repository
+   * @param contactMechanismPurposeRepository the Contact Mechanism Purpose Repository
    * @param contactMechanismTypeRepository the Contact Mechanism Type Repository
    * @param countryRepository the Country Repository
    * @param employmentStatusRepository the Employment Status Repository
@@ -125,6 +131,8 @@ public class ReferenceService implements IReferenceService {
    * @param marriageTypeRepository the Marriage Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
    * @param occupationRepository the Occupation Repository
+   * @param physicalAddressPurposeRepository the Physical Address Purpose Repository
+   * @param physicalAddressTypeRepository the Physical Address Type Repository
    * @param raceRepository the Race Repository
    * @param regionRepository the Region Repository
    * @param residencePermitTypeRepository the Residence Permit Type Repository*
@@ -150,6 +158,8 @@ public class ReferenceService implements IReferenceService {
       MarriageTypeRepository marriageTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
       OccupationRepository occupationRepository,
+      PhysicalAddressPurposeRepository physicalAddressPurposeRepository,
+      PhysicalAddressTypeRepository physicalAddressTypeRepository,
       RaceRepository raceRepository,
       RegionRepository regionRepository,
       ResidencePermitTypeRepository residencePermitTypeRepository,
@@ -173,6 +183,8 @@ public class ReferenceService implements IReferenceService {
     this.marriageTypeRepository = marriageTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
     this.occupationRepository = occupationRepository;
+    this.physicalAddressPurposeRepository = physicalAddressPurposeRepository;
+    this.physicalAddressTypeRepository = physicalAddressTypeRepository;
     this.raceRepository = raceRepository;
     this.regionRepository = regionRepository;
     this.residencePermitTypeRepository = residencePermitTypeRepository;
@@ -565,6 +577,75 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the occupations", e);
+    }
+  }
+
+  /**
+   * Retrieve all the physical address purposes.
+   *
+   * @return the physical address purposes
+   */
+  @Override
+  public List<PhysicalAddressPurpose> getPhysicalAddressPurposes()
+      throws ReferenceServiceException {
+    return getPhysicalAddressPurposes(null);
+  }
+
+  /**
+   * Retrieve the physical address purposes.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the physical
+   *     address purposes for or <code>null</code> to retrieve the physical address purposes for all
+   *     locales
+   * @return the physical address purposes
+   */
+  @Override
+  public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return physicalAddressPurposeRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return physicalAddressPurposeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the physical address purposes", e);
+    }
+  }
+
+  /**
+   * Retrieve all the physical address types.
+   *
+   * @return the physical address types
+   */
+  @Override
+  public List<PhysicalAddressType> getPhysicalAddressTypes() throws ReferenceServiceException {
+    return getPhysicalAddressTypes(null);
+  }
+
+  /**
+   * Retrieve the physical address types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the physical
+   *     address types for or <code>null</code> to retrieve the physical address types for all
+   *     locales
+   * @return the physical address types
+   */
+  @Override
+  public List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return physicalAddressTypeRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return physicalAddressTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the physical address types", e);
     }
   }
 

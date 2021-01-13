@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,12 +47,12 @@ import javax.xml.bind.annotation.XmlType;
 @JsonPropertyOrder({"name", "value"})
 @XmlRootElement(name = "Attribute", namespace = "http://security.inception.digital")
 @XmlType(
-    name = "Attribute",
+    name = "UserAttribute",
     namespace = "http://security.inception.digital",
     propOrder = {"name", "value"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class Attribute implements Serializable {
+public class UserAttribute implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
@@ -73,7 +73,7 @@ public class Attribute implements Serializable {
   private String value;
 
   /** Constructs a new <code>Attribute</code>. */
-  public Attribute() {}
+  public UserAttribute() {}
 
   /**
    * Constructs a new <code>Attribute</code>.
@@ -81,7 +81,7 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>BigDecimal</code> value for the attribute
    */
-  public Attribute(String name, BigDecimal value) {
+  public UserAttribute(String name, BigDecimal value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -92,7 +92,7 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the binary value for the attribute
    */
-  public Attribute(String name, BinaryBuffer value) {
+  public UserAttribute(String name, BinaryBuffer value) {
     this.name = name;
     this.value = Base64Util.encodeBytes(value.getData());
   }
@@ -103,7 +103,7 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the binary value for the attribute
    */
-  public Attribute(String name, byte[] value) {
+  public UserAttribute(String name, byte[] value) {
     this.name = name;
     this.value = Base64Util.encodeBytes(value);
   }
@@ -114,7 +114,7 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>double</code> value for the attribute
    */
-  public Attribute(String name, double value) {
+  public UserAttribute(String name, double value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -125,7 +125,7 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>long</code> value for the attribute
    */
-  public Attribute(String name, long value) {
+  public UserAttribute(String name, long value) {
     this.name = name;
     this.value = String.valueOf(value);
   }
@@ -136,7 +136,7 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>String</code> value for the attribute
    */
-  public Attribute(String name, String value) {
+  public UserAttribute(String name, String value) {
     this.name = name;
     this.value = value;
   }
@@ -151,9 +151,9 @@ public class Attribute implements Serializable {
    * @return <code>true</code> if the list of <code>Attribute</code> instances contains an instance
    *     whose name matches the specified name or <code>false</code> otherwise
    */
-  public static boolean contains(List<Attribute> list, String name) {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
+  public static boolean contains(List<UserAttribute> list, String name) {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
         return true;
       }
     }
@@ -171,20 +171,22 @@ public class Attribute implements Serializable {
    * @return the binary value for the <code>Attribute</code> instance with the specified name in the
    *     specified list
    */
-  public static byte[] getBinaryValue(List<Attribute> list, String name) throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
+  public static byte[] getBinaryValue(List<UserAttribute> list, String name)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
         try {
-          return Base64Util.decode(attribute.value);
+          return Base64Util.decode(userAttribute.value);
         } catch (Throwable e) {
-          throw new AttributeException(
+          throw new UserAttributeException(
               String.format(
-                  "Failed to retrieve the binary value for the attribute (%s)", attribute.name));
+                  "Failed to retrieve the binary value for the attribute (%s)",
+                  userAttribute.name));
         }
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to retrieve the binary value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -201,21 +203,22 @@ public class Attribute implements Serializable {
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance with the
    *     specified name in the specified list
    */
-  public static BigDecimal getDecimalValue(List<Attribute> list, String name)
-      throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
+  public static BigDecimal getDecimalValue(List<UserAttribute> list, String name)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
         try {
-          return new BigDecimal(attribute.value);
+          return new BigDecimal(userAttribute.value);
         } catch (Throwable e) {
-          throw new AttributeException(
+          throw new UserAttributeException(
               String.format(
-                  "Failed to retrieve the decimal value for the attribute (%s)", attribute.name));
+                  "Failed to retrieve the decimal value for the attribute (%s)",
+                  userAttribute.name));
         }
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to retrieve the decimal value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -232,20 +235,22 @@ public class Attribute implements Serializable {
    * @return the <code>double</code> value for the <code>Attribute</code> instance with the
    *     specified name in the specified list
    */
-  public static double getDoubleValue(List<Attribute> list, String name) throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
+  public static double getDoubleValue(List<UserAttribute> list, String name)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
         try {
-          return Double.parseDouble(attribute.value);
+          return Double.parseDouble(userAttribute.value);
         } catch (Throwable e) {
-          throw new AttributeException(
+          throw new UserAttributeException(
               String.format(
-                  "Failed to retrieve the double value for the attribute (%s)", attribute.name));
+                  "Failed to retrieve the double value for the attribute (%s)",
+                  userAttribute.name));
         }
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to retrieve the double value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -262,20 +267,22 @@ public class Attribute implements Serializable {
    * @return the <code>int</code> value for the <code>Attribute</code> instance with the specified
    *     name in the specified list
    */
-  public static int getIntegerValue(List<Attribute> list, String name) throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
+  public static int getIntegerValue(List<UserAttribute> list, String name)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
         try {
-          return Integer.parseInt(attribute.value);
+          return Integer.parseInt(userAttribute.value);
         } catch (Throwable e) {
-          throw new AttributeException(
+          throw new UserAttributeException(
               String.format(
-                  "Failed to retrieve the integer value for the attribute (%s)", attribute.name));
+                  "Failed to retrieve the integer value for the attribute (%s)",
+                  userAttribute.name));
         }
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to retrieve the integer value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -292,20 +299,21 @@ public class Attribute implements Serializable {
    * @return the <code>long</code> value for the <code>Attribute</code> instance with the specified
    *     name in the specified list
    */
-  public static long getLongValue(List<Attribute> list, String name) throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
+  public static long getLongValue(List<UserAttribute> list, String name)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
         try {
-          return Long.parseLong(attribute.value);
+          return Long.parseLong(userAttribute.value);
         } catch (Throwable e) {
-          throw new AttributeException(
+          throw new UserAttributeException(
               String.format(
-                  "Failed to retrieve the long value for the attribute (%s)", attribute.name));
+                  "Failed to retrieve the long value for the attribute (%s)", userAttribute.name));
         }
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to retrieve the long value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -322,14 +330,15 @@ public class Attribute implements Serializable {
    * @return the <code>String</code> value for the <code>Attribute</code> instance with the
    *     specified name in the specified list
    */
-  public static String getStringValue(List<Attribute> list, String name) throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
-        return attribute.value;
+  public static String getStringValue(List<UserAttribute> list, String name)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
+        return userAttribute.value;
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to retrieve the string value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -345,8 +354,8 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the binary value for the attribute
    */
-  public static void setBinaryValue(List<Attribute> list, String name, BinaryBuffer value)
-      throws AttributeException {
+  public static void setBinaryValue(List<UserAttribute> list, String name, BinaryBuffer value)
+      throws UserAttributeException {
     setBinaryValue(list, name, value.getData());
   }
 
@@ -359,17 +368,17 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the binary value for the attribute
    */
-  public static void setBinaryValue(List<Attribute> list, String name, byte[] value)
-      throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
-        attribute.setBinaryValue(value);
+  public static void setBinaryValue(List<UserAttribute> list, String name, byte[] value)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
+        userAttribute.setBinaryValue(value);
 
         return;
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to set the binary value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -385,17 +394,17 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>BigDecimal</code> value for the attribute
    */
-  public static void setDecimalValue(List<Attribute> list, String name, BigDecimal value)
-      throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
-        attribute.setDecimalValue(value);
+  public static void setDecimalValue(List<UserAttribute> list, String name, BigDecimal value)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
+        userAttribute.setDecimalValue(value);
 
         return;
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to set the decimal value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -411,17 +420,17 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>double</code> value for the attribute
    */
-  public static void setDoubleValue(List<Attribute> list, String name, double value)
-      throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
-        attribute.setDoubleValue(value);
+  public static void setDoubleValue(List<UserAttribute> list, String name, double value)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
+        userAttribute.setDoubleValue(value);
 
         return;
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to set the double value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -437,17 +446,17 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>int</code> value for the attribute
    */
-  public static void setIntegerValue(List<Attribute> list, String name, int value)
-      throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
-        attribute.setIntegerValue(value);
+  public static void setIntegerValue(List<UserAttribute> list, String name, int value)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
+        userAttribute.setIntegerValue(value);
 
         return;
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to set the integer value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -463,17 +472,17 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>long</code> value for the attribute
    */
-  public static void setLongValue(List<Attribute> list, String name, long value)
-      throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
-        attribute.setLongValue(value);
+  public static void setLongValue(List<UserAttribute> list, String name, long value)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
+        userAttribute.setLongValue(value);
 
         return;
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to set the long value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -489,17 +498,17 @@ public class Attribute implements Serializable {
    * @param name the name for the attribute
    * @param value the <code>String</code> value for the attribute
    */
-  public static void setStringValue(List<Attribute> list, String name, String value)
-      throws AttributeException {
-    for (Attribute attribute : list) {
-      if (attribute.name.equalsIgnoreCase(name)) {
-        attribute.setStringValue(value);
+  public static void setStringValue(List<UserAttribute> list, String name, String value)
+      throws UserAttributeException {
+    for (UserAttribute userAttribute : list) {
+      if (userAttribute.name.equalsIgnoreCase(name)) {
+        userAttribute.setStringValue(value);
 
         return;
       }
     }
 
-    throw new AttributeException(
+    throw new UserAttributeException(
         String.format(
             "Failed to set the string value for the attribute (%s): "
                 + "The attribute could not be found",
@@ -511,11 +520,11 @@ public class Attribute implements Serializable {
    *
    * @return the binary value for the <code>Attribute</code> instance
    */
-  public byte[] getBinaryValue() throws AttributeException {
+  public byte[] getBinaryValue() throws UserAttributeException {
     try {
       return Base64Util.decode(value);
     } catch (Throwable e) {
-      throw new AttributeException(
+      throw new UserAttributeException(
           String.format("Failed to retrieve the binary value for the attribute (%s)", name));
     }
   }
@@ -525,11 +534,11 @@ public class Attribute implements Serializable {
    *
    * @return the <code>BigDecimal</code> value for the <code>Attribute</code> instance
    */
-  public BigDecimal getDecimalValue() throws AttributeException {
+  public BigDecimal getDecimalValue() throws UserAttributeException {
     try {
       return new BigDecimal(value);
     } catch (Throwable e) {
-      throw new AttributeException(
+      throw new UserAttributeException(
           String.format("Failed to retrieve the decimal value for the attribute (%s)", name));
     }
   }
@@ -539,11 +548,11 @@ public class Attribute implements Serializable {
    *
    * @return the <code>double</code> value for the <code>Attribute</code> instance
    */
-  public double getDoubleValue() throws AttributeException {
+  public double getDoubleValue() throws UserAttributeException {
     try {
       return Double.parseDouble(value);
     } catch (Throwable e) {
-      throw new AttributeException(
+      throw new UserAttributeException(
           String.format("Failed to retrieve the double value for the attribute (%s)", name));
     }
   }
@@ -553,11 +562,11 @@ public class Attribute implements Serializable {
    *
    * @return the <code>int</code> value for the <code>Attribute</code> instance
    */
-  public int getIntegerValue() throws AttributeException {
+  public int getIntegerValue() throws UserAttributeException {
     try {
       return Integer.parseInt(value);
     } catch (Throwable e) {
-      throw new AttributeException(
+      throw new UserAttributeException(
           String.format("Failed to retrieve the integer value for the attribute (%s)", name));
     }
   }
@@ -567,11 +576,11 @@ public class Attribute implements Serializable {
    *
    * @return the <code>long</code> value for the <code>Attribute</code> instance
    */
-  public long getLongValue() throws AttributeException {
+  public long getLongValue() throws UserAttributeException {
     try {
       return Long.parseLong(value);
     } catch (Throwable e) {
-      throw new AttributeException(
+      throw new UserAttributeException(
           String.format("Failed to retrieve the long value for the attribute (%s)", name));
     }
   }

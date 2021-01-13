@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,19 +33,19 @@ import java.util.UUID;
 public abstract class UserDirectoryBase implements IUserDirectory {
 
   /** The Group Repository. */
-  private GroupRepository groupRepository;
+  private final GroupRepository groupRepository;
 
   /** The parameters for the user directory. */
-  private List<UserDirectoryParameter> parameters;
+  private final List<UserDirectoryParameter> parameters;
 
   /** The Role Repository. */
-  private RoleRepository roleRepository;
+  private final RoleRepository roleRepository;
 
   /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
-  private UUID userDirectoryId;
+  private final UUID userDirectoryId;
 
   /** The User Repository. */
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
   /**
    * Constructs a new <code>UserDirectoryBase</code>.

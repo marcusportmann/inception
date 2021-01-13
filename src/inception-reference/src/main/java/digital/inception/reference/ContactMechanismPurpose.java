@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,9 +42,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Marcus Portmann
  */
-@Schema(
-    description =
-        "A type of person under a certain age, usually the age of majority in a given jurisdiction, which legally demarcates childhood from adulthood")
+@Schema(description = "A contact mechanism purpose")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
   "type",

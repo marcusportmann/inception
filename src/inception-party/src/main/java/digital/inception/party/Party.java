@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -61,8 +58,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorValue("0")
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER)
+// @DiscriminatorValue("0")
+// @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER)
 @Table(schema = "party", name = "parties")
 public class Party implements Serializable {
 
@@ -93,7 +90,10 @@ public class Party implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The name of the party. */
+  /**
+   * The name of the party, e.g. the full legal name of a person, the legal name of an organization,
+   * the name of a family, etc.
+   */
   @Schema(description = "The name of the party", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
@@ -121,7 +121,8 @@ public class Party implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type", nullable = false, insertable = false, updatable = false)
+  // @Column(name = "type", nullable = false, insertable = false, updatable = false)
+  @Column(name = "type", nullable = false)
   private PartyType type;
 
   /** Constructs a new <code>Party</code>. */

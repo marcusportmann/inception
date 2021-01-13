@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -880,22 +880,22 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the users matching the attribute criteria.
+   * Retrieve the users matching the user attribute criteria.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
-   * @param attributes the attribute criteria used to select the users
-   * @return the users whose attributes match the attribute criteria
+   * @param userAttributes the user attribute criteria used to select the users
+   * @return the users whose attributes match the user attribute criteria
    */
   @Override
-  public List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
+  public List<User> findUsers(UUID userDirectoryId, List<UserAttribute> userAttributes)
       throws InvalidArgumentException, UserDirectoryNotFoundException, InvalidAttributeException,
           SecurityServiceException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
-    if (attributes == null) {
+    if (userAttributes == null) {
       throw new InvalidArgumentException("attributes");
     }
 
@@ -905,7 +905,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       throw new UserDirectoryNotFoundException(userDirectoryId);
     }
 
-    return userDirectory.findUsers(attributes);
+    return userDirectory.findUsers(userAttributes);
   }
 
   /**
@@ -1107,6 +1107,14 @@ public class SecurityService implements ISecurityService, InitializingBean {
       throw new InvalidArgumentException("userDirectoryId");
     }
 
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
 
     if (userDirectory == null) {
@@ -1203,6 +1211,14 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
     if (!StringUtils.hasText(groupName)) {
       throw new InvalidArgumentException("groupName");
+    }
+
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
     }
 
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);
@@ -1431,7 +1447,15 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public Tenants getTenants(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
     PageRequest pageRequest;
 
     if ((pageIndex != null) && (pageSize != null)) {
@@ -1574,7 +1598,15 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public UserDirectories getUserDirectories(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
     PageRequest pageRequest;
 
     if ((pageIndex != null) && (pageSize != null)) {
@@ -1879,7 +1911,15 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public UserDirectorySummaries getUserDirectorySummaries(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
     PageRequest pageRequest;
 
     if ((pageIndex != null) && (pageSize != null)) {
@@ -2095,6 +2135,18 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
     if (sortBy == null) {
       sortBy = UserSortBy.NAME;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
+    }
+
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
     }
 
     IUserDirectory userDirectory = userDirectories.get(userDirectoryId);

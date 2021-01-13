@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -221,14 +221,14 @@ public interface ISecurityService {
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the users matching the attribute criteria.
+   * Retrieve the users matching the user attribute criteria.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
    *     directory
-   * @param attributes the attribute criteria used to select the users
-   * @return the users whose attributes match the attribute criteria
+   * @param userAttributes the user attribute criteria used to select the users
+   * @return the users whose attributes match the user attribute criteria
    */
-  List<User> findUsers(UUID userDirectoryId, List<Attribute> attributes)
+  List<User> findUsers(UUID userDirectoryId, List<UserAttribute> userAttributes)
       throws InvalidArgumentException, UserDirectoryNotFoundException, InvalidAttributeException,
           SecurityServiceException;
 
@@ -460,7 +460,7 @@ public interface ISecurityService {
    */
   Tenants getTenants(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException;
+      throws InvalidArgumentException, SecurityServiceException;
 
   /**
    * Retrieve the tenants the user directory is associated with.
@@ -502,7 +502,7 @@ public interface ISecurityService {
    */
   UserDirectories getUserDirectories(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException;
+      throws InvalidArgumentException, SecurityServiceException;
 
   /**
    * Retrieve the user directories the tenant is associated with.
@@ -590,7 +590,7 @@ public interface ISecurityService {
    */
   UserDirectorySummaries getUserDirectorySummaries(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException;
+      throws InvalidArgumentException, SecurityServiceException;
 
   /**
    * Retrieve the summaries for the user directories the tenant is associated with.

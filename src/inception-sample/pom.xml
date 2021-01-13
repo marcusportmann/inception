@@ -37,6 +37,14 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-banking-rs</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
+      <artifactId>inception-banking-ws</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>digital.inception</groupId>
       <artifactId>inception-codes-rs</artifactId>
     </dependency>
     <dependency>

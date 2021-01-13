@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,12 +132,12 @@ interface IUserDirectory {
   void deleteUser(String username) throws UserNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the users matching the attribute criteria.
+   * Retrieve the users matching the user attribute criteria.
    *
-   * @param attributes the attribute criteria used to select the users
-   * @return the users whose attributes match the attribute criteria
+   * @param userAttributes the user attribute criteria used to select the users
+   * @return the users whose attributes match the user attribute criteria
    */
-  List<User> findUsers(List<Attribute> attributes)
+  List<User> findUsers(List<UserAttribute> userAttributes)
       throws InvalidAttributeException, SecurityServiceException;
 
   /**

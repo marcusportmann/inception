@@ -34,27 +34,32 @@ COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last
 
 
 CREATE TABLE party.persons (
-  correspondence_language VARCHAR(10),
-  country_of_birth        VARCHAR(10),
-  country_of_residence    VARCHAR(10),
-  date_of_birth           DATE,
-  date_of_death           DATE,
-  employment_status       VARCHAR(10),
-  employment_type         VARCHAR(10),
-  gender                  VARCHAR(10),
-  given_name              VARCHAR(100),
-  home_language           VARCHAR(10),
-  id                      UUID          NOT NULL,
-  initials                VARCHAR(20),
-  maiden_name             VARCHAR(100),
-  marital_status          VARCHAR(10),
-  marriage_type           VARCHAR(10),
-  middle_names            VARCHAR(100),
-  preferred_name          VARCHAR(100),
-  race                    VARCHAR(10),
-  residency_status        VARCHAR(10),
-  surname                 VARCHAR(100),
-  title                   VARCHAR(10),
+  correspondence_language  VARCHAR(10),
+  country_of_birth         VARCHAR(10),
+  country_of_residence     VARCHAR(10),
+  country_of_tax_residence VARCHAR(10),
+  date_of_birth            DATE,
+  date_of_death            DATE,
+  employment_status        VARCHAR(10),
+  employment_type          VARCHAR(10),
+  gender                   VARCHAR(10),
+  given_name               VARCHAR(100),
+  home_language            VARCHAR(10),
+  id                       UUID          NOT NULL,
+  initials                 VARCHAR(20),
+  maiden_name              VARCHAR(100),
+  marital_status           VARCHAR(10),
+  marriage_type            VARCHAR(10),
+  middle_names             VARCHAR(100),
+  occupation               VARCHAR(10),
+  preferred_name           VARCHAR(100),
+  race                     VARCHAR(10),
+  residency_status         VARCHAR(10),
+  residential_type         VARCHAR(10),
+  surname                  VARCHAR(100),
+  tax_number               VARCHAR(30),
+  tax_number_type          VARCHAR(10),
+  title                    VARCHAR(10),
 
   PRIMARY KEY (id),
   CONSTRAINT persons_party_fk FOREIGN KEY (id) REFERENCES party.parties(id) ON DELETE CASCADE
@@ -67,6 +72,8 @@ COMMENT ON COLUMN party.persons.correspondence_language IS 'The optional code id
 COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code identifying the country of birth for the person';
 
 COMMENT ON COLUMN party.persons.country_of_residence IS 'The optional code identifying the country of residence for the person';
+
+COMMENT ON COLUMN party.persons.country_of_tax_residence IS 'The optional code identifying the country of tax residence for the person';
 
 COMMENT ON COLUMN party.persons.date_of_birth IS 'The optional date of birth for the person';
 
@@ -94,13 +101,21 @@ COMMENT ON COLUMN party.persons.marriage_type IS 'The optional code identifying 
 
 COMMENT ON COLUMN party.persons.middle_names IS 'The optional middle names for the person';
 
+COMMENT ON COLUMN party.persons.occupation IS 'The optional code identifying the occupation for the person';
+
 COMMENT ON COLUMN party.persons.preferred_name IS 'The optional preferred name for the person';
 
 COMMENT ON COLUMN party.persons.race IS 'The optional code identifying the race for the person';
 
 COMMENT ON COLUMN party.persons.residency_status IS 'The optional code identifying the residency status for the person';
 
+COMMENT ON COLUMN party.persons.residential_type IS 'The optional code identifying the residential type for the person';
+
 COMMENT ON COLUMN party.persons.surname IS 'The optional surname for the person';
+
+COMMENT ON COLUMN party.persons.tax_number IS 'The optional tax number for the person';
+
+COMMENT ON COLUMN party.persons.tax_number_type IS 'The optional code identifying the tax number type for the person';
 
 COMMENT ON COLUMN party.persons.title IS 'The optional code identifying the title for the person';
 
@@ -110,7 +125,7 @@ CREATE TABLE party.identity_documents (
   created          TIMESTAMP   NOT NULL,
   date_of_expiry   DATE,
   date_of_issue    DATE        NOT NULL,
-  number           VARCHAR(50) NOT NULL,
+  number           VARCHAR(30) NOT NULL,
   person_id        UUID        NOT NULL,
   type             VARCHAR(10) NOT NULL,
   updated          TIMESTAMP,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * An <code>AttributeException</code> is thrown to indicate an invalid operation was performed on an
- * <code>Attribute</code> instance.
+ * An <code>UserAttributeException</code> is thrown to indicate an invalid operation was performed
+ * on a <code>UserAttribute</code> instance.
  *
  * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
  * transaction.
@@ -40,21 +40,21 @@ import org.springframework.web.bind.annotation.ResponseStatus;
     value = HttpStatus.INTERNAL_SERVER_ERROR,
     reason = "An error has occurred and the request could not be processed at this time")
 @WebFault(
-    name = "AttributeException",
+    name = "UserAttributeException",
     targetNamespace = "http://security.inception.digital",
     faultBean = "digital.inception.core.service.ServiceError")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @SuppressWarnings({"unused", "WeakerAccess"})
-public class AttributeException extends ServiceException {
+public class UserAttributeException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>AttributeException</code> with the specified message.
+   * Constructs a new <code>UserAttributeException</code> with the specified message.
    *
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
-  public AttributeException(String message) {
-    super("AttributeError", message);
+  public UserAttributeException(String message) {
+    super("UserAttributeError", message);
   }
 }

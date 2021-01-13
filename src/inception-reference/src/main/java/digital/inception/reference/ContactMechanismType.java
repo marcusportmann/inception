@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,15 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A type of contact mechanism")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "numericCode", "sortIndex", "name", "plural", "description"})
+@JsonPropertyOrder({
+  "code",
+  "localeId",
+  "numericCode",
+  "sortIndex",
+  "name",
+  "plural",
+  "description"
+})
 @XmlRootElement(name = "ContactMechanismType", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "ContactMechanismType",

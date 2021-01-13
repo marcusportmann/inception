@@ -5,7 +5,6 @@
 #   openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:65537 | openssl pkcs8 -topk8 -nocrypt -outform pem > rsa-2048-private-key.p8
 #   openssl pkey -pubout -inform pem -outform pem -in rsa-2048-private-key.p8 -out rsa-2048-public-key.p8
 
-
 server:
   port: 8080
 
@@ -142,20 +141,3 @@ spring:
       resourceserver:
         jwt:
           public-key-location: classpath:META-INF/oauth2-jwt-key.pub
-
----
-spring:
-    profiles: development
-
----
-spring:
-    profiles: production
-
-
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#    test-connection: false

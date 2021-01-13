@@ -358,29 +358,63 @@ COMMENT ON COLUMN reference.occupations.name IS 'The name of the occupation';
 COMMENT ON COLUMN reference.occupations.description IS 'The description for the occupation';
 
 
+CREATE TABLE reference.physical_address_types (
+   code         VARCHAR(30)  NOT NULL,
+   locale_id    VARCHAR(10)  NOT NULL,
+   numeric_code INTEGER      NOT NULL,
+   sort_index   INTEGER      NOT NULL,
+   name         VARCHAR(50)  NOT NULL,
+   description  VARCHAR(200) NOT NULL DEFAULT '',
 
--- CREATE TABLE reference.physical_address_types (
---   code        VARCHAR(10)  NOT NULL,
---   locale_id   VARCHAR(10)  NOT NULL,
---   sort_index  INTEGER      NOT NULL,
---   name        VARCHAR(50)  NOT NULL,
---   description VARCHAR(200) NOT NULL DEFAULT '',
---
---   PRIMARY KEY (code, locale_id)
--- );
---
--- CREATE INDEX physical_address_types_locale_id_ix ON reference.physical_address_types(locale_id);
---
--- COMMENT ON COLUMN reference.physical_address_types.code IS 'The code for the physical address type';
---
--- COMMENT ON COLUMN reference.physical_address_types.locale_id IS 'The Unicode locale identifier for the physical address type';
---
--- COMMENT ON COLUMN reference.physical_address_types.sort_index IS 'The sort index for the physical address type';
---
--- COMMENT ON COLUMN reference.physical_address_types.name IS 'The name of the physical address type';
---
--- COMMENT ON COLUMN reference.physical_address_types.description IS 'The description for the physical address type';
+   PRIMARY KEY (code, locale_id)
+);
 
+CREATE INDEX physical_address_types_locale_id_ix ON reference.physical_address_types(locale_id);
+
+CREATE UNIQUE INDEX physical_address_types_locale_id_numeric_code_ix ON reference.physical_address_types(locale_id, numeric_code);
+
+COMMENT ON COLUMN reference.physical_address_types.code IS 'The code for the physical address type';
+
+COMMENT ON COLUMN reference.physical_address_types.locale_id IS 'The Unicode locale identifier for the physical address type';
+
+COMMENT ON COLUMN reference.physical_address_types.numeric_code IS 'The numeric code for the physical address type';
+
+COMMENT ON COLUMN reference.physical_address_types.sort_index IS 'The sort index for the physical address type';
+
+COMMENT ON COLUMN reference.physical_address_types.name IS 'The name of the physical address type';
+
+COMMENT ON COLUMN reference.physical_address_types.description IS 'The description for the physical address type';
+
+
+CREATE TABLE reference.physical_address_purposes (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  numeric_code INTEGER      NOT NULL,
+  party_types  VARCHAR(300) NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX physical_address_purposes_locale_id_ix ON reference.physical_address_purposes(locale_id);
+
+CREATE UNIQUE INDEX physical_address_purposes_locale_id_code_ix ON reference.physical_address_purposes(locale_id, code);
+
+COMMENT ON COLUMN reference.physical_address_purposes.code IS 'The code for the physical address purpose';
+
+COMMENT ON COLUMN reference.physical_address_purposes.locale_id IS 'The Unicode locale identifier for the physical address purpose';
+
+COMMENT ON COLUMN reference.physical_address_purposes.numeric_code IS 'The numeric code for the physical address purpose';
+
+COMMENT ON COLUMN reference.physical_address_purposes.party_types IS 'The comma-delimited list of codes for the party types the physical address purpose is associated with';
+
+COMMENT ON COLUMN reference.physical_address_purposes.sort_index IS 'The sort index for the physical address purpose';
+
+COMMENT ON COLUMN reference.physical_address_purposes.name IS 'The name of the physical address purpose';
+
+COMMENT ON COLUMN reference.physical_address_purposes.description IS 'The description for the physical address purpose';
 
 
 CREATE TABLE reference.races (
@@ -2529,35 +2563,93 @@ INSERT INTO reference.occupations (code, locale_id, sort_index, name, descriptio
 
 
 
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('B', 'en-US', 1, 'Building', 'Building');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('C', 'en-US', 2, 'Complex', 'Complex');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('F', 'en-US', 3, 'Farm', 'Farm');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('I', 'en-US', 4, 'International', 'International');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('T', 'en-US', 5, 'Site/Township', 'Site/Township');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('S', 'en-US', 6, 'Street', 'Street');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('U', 'en-US', 99, 'Unstructured', 'Unstructured');
---
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('B', 'en-ZA', 1, 'Building', 'Building');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('C', 'en-ZA', 2, 'Complex', 'Complex');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('F', 'en-ZA', 3, 'Farm', 'Farm');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('I', 'en-ZA', 4, 'International', 'International');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('T', 'en-ZA', 5, 'Site/Township', 'Site/Township');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('S', 'en-ZA', 6, 'Street', 'Street');
--- INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
---   VALUES ('U', 'en-ZA', 99, 'Unstructured', 'Unstructured');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('building', 'en-US', 1, 1, 'Building', 'Building');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('complex', 'en-US', 2, 2, 'Complex', 'Complex');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('farm', 'en-US', 3, 3, 'Farm', 'Farm');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('international', 'en-US', 4, 4, 'International', 'International');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('site', 'en-US', 5, 5, 'Site', 'Site');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('street', 'en-US', 6, 6, 'Street', 'Street');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('unstructured', 'en-US', 99, 99, 'Unstructured', 'Unstructured');
+
+
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('building', 'en-ZA', 1, 1, 'Building', 'Building');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('complex', 'en-ZA', 2, 2, 'Complex', 'Complex');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('farm', 'en-ZA', 3, 3, 'Farm', 'Farm');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('international', 'en-ZA', 4, 4, 'International', 'International');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('site', 'en-ZA', 5, 5, 'Site', 'Site');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('street', 'en-ZA', 6, 6, 'Street', 'Street');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('unstructured', 'en-ZA', 99, 99, 'Unstructured', 'Unstructured');
+
+
+
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('billing', 'en-US', 1, 'organization,person', 1, 'Billing', 'Billing Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('business', 'en-US', 2, 'organization', 2, 'Business', 'Business Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('correspondence', 'en-US', 3, 'organization,person', 3, 'Correspondence', 'Correspondence Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('delivery', 'en-US', 4, 'organization,person', 4, 'Delivery', 'Delivery Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('home', 'en-US', 5, 'person', 5, 'Home', 'Home Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('main', 'en-US', 6, 'organization', 6, 'Main', 'Main Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('permanent', 'en-US', 7, 'person', 7, 'Permanent', 'Permanent Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('registered_office', 'en-US', 8, 'organization', 8, 'Registered Office', 'Registered Office Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('residential', 'en-US', 9, 'person', 9, 'Residential', 'Residential Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('service', 'en-US', 10, 'organization,person', 10, 'Service', 'Service Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('sole_trader', 'en-US', 11, 'person', 11, 'Sole Trader', 'Sole Trader Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('temporary', 'en-US', 12, 'person', 12, 'Temporary', 'Temporary Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('work', 'en-US', 13, 'person', 13, 'Work', 'Work Address');
+
+
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('billing', 'en-ZA', 1, 'organization,person', 1, 'Billing', 'Billing Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('business', 'en-ZA', 2, 'organization', 2, 'Business', 'Business Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('correspondence', 'en-ZA', 3, 'organization,person', 3, 'Correspondence', 'Correspondence Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('delivery', 'en-ZA', 4, 'organization,person', 4, 'Delivery', 'Delivery Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('home', 'en-ZA', 5, 'person', 5, 'Home', 'Home Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('main', 'en-ZA', 6, 'organization', 6, 'Main', 'Main Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('permanent', 'en-ZA', 7, 'person', 7, 'Permanent', 'Permanent Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('registered_office', 'en-ZA', 8, 'organization', 8, 'Registered Office', 'Registered Office Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('residential', 'en-ZA', 9, 'person', 9, 'Residential', 'Residential Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('service', 'en-ZA', 10, 'organization,person', 10, 'Service', 'Service Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('sole_trader', 'en-ZA', 11, 'person', 11, 'Sole Trader', 'Sole Trader Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+ VALUES ('temporary', 'en-ZA', 12, 'person', 12, 'Temporary', 'Temporary Address');
+INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
+  VALUES ('work', 'en-ZA', 13, 'person', 13, 'Work', 'Work Address');
 
 
 

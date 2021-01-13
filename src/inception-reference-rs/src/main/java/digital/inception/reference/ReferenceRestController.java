@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -527,6 +527,88 @@ public class ReferenceRestController extends SecureRestController {
           String localeId)
       throws ReferenceServiceException {
     return referenceService.getOccupations(localeId);
+  }
+
+  /**
+   * Retrieve the physical address purposes.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
+   *     mechanism purposes for or <code>null</code> to retrieve the physical address purposes for
+   *     all locales
+   * @return the physical address purposes
+   */
+  @Operation(
+      summary = "Retrieve the physical address purposes",
+      description = "Retrieve the physical address purposes")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/physical-address-purposes",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier identifying the locale to retrieve the physical address purposes for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getPhysicalAddressPurposes(localeId);
+  }
+
+  /**
+   * Retrieve the physical address types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
+   *     mechanism types for or <code>null</code> to retrieve the physical address types for all
+   *     locales
+   * @return the physical address types
+   */
+  @Operation(
+      summary = "Retrieve the physical address types",
+      description = "Retrieve the physical address types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/physical-address-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<PhysicalAddressType> getPhysicalAddressTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier identifying the locale to retrieve the physical address types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getPhysicalAddressTypes(localeId);
   }
 
   /**

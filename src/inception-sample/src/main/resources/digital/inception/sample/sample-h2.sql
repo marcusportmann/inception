@@ -51,7 +51,7 @@ INSERT INTO security.user_directory_to_tenant_map (user_directory_id, tenant_id)
 INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'joe', 1, 'Joe Bloggs', 'Joe', '', '', 'joe@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
 INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'sally', 1, 'Sally Smith', 'Sally', '', '', 'sally@sample.guru', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'sally', 1, 'Sally Smith', 'Sally', '', '', 'sally@sample.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
 INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry, created)
   VALUES ('01166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', LOWER('Bob.Smith@peoples.com'), 1, 'Bob Smith', 'Bob', '', '', 'Bob.Smith@peoples.com', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
 INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry, created)
@@ -312,4 +312,42 @@ INSERT INTO security.role_to_group_map (role_code, group_id)
 
 
 INSERT INTO scheduler.jobs (id, name, scheduling_pattern, job_class, enabled, status, created)
-   VALUES ('SampleJob', 'Sample Job', '* * * * *', 'digital.inception.sample.job.SampleJob', true, 1, NOW());
+  VALUES ('SampleJob', 'Sample Job', '* * * * *', 'digital.inception.sample.job.SampleJob', true, 1, NOW());
+
+
+
+
+
+
+INSERT INTO party.parties(id, tenant_id, type, name, created)
+  VALUES ('54166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 2, 'Joe Bloggs', NOW());
+INSERT INTO party.persons(id, title, initials, given_name, surname, preferred_name, gender, race, date_of_birth, home_language, correspondence_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, marriage_type, occupation, residency_status, residential_type, country_of_tax_residence, tax_number_type, tax_number)
+  VALUES ('54166574-6564-468a-b845-8a5c127a4345', '1', 'J', 'Joe', 'Bloggs', 'Joe', 'M', 'W', '1976-03-07', 'EN', 'EN', 'ZA', 'ZA', 'E', 'F', 'M', '3', '3', 'C', 'O', 'ZA', 'ZAITN', '1234567890');
+INSERT INTO party.identity_documents(person_id, type, number, date_of_issue, country_of_issue, created)
+  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'ZAIDBOOK', '7603079236083', '2007-08-04', 'ZA', NOW());
+INSERT INTO party.contact_mechanisms(party_id, type, purpose, value, created)
+  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 4, 400, 'joe@sample.com', NOW());
+INSERT INTO party.physical_addresses (party_id, type, purpose, line1, line2, city, region, country, postal_code, created)
+  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 7, 5, '145 Apple Street', 'Fairland', 'Johannesburg', 'GP', 'ZA', '2170', NOW());
+
+
+
+INSERT INTO party.parties (id, tenant_id, type, name, created)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 2, 'Sally Smith', NOW());
+INSERT INTO party.persons (id, title, initials, given_name, surname, gender, race, date_of_birth, home_language, correspondence_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, occupation, residency_status, residential_type)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', '2', 'S', 'Sally', 'Smith', 'F', 'A', '1985-05-01', 'EN', 'EN', 'GB', 'ZA', 'O', 'U', 'S', '50', 'C', 'C');
+INSERT INTO party.identity_documents (person_id, type, number, date_of_issue, country_of_issue, created)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'ZAIDCARD', '8505016777088', '2015-02-17', 'ZA', NOW());
+INSERT INTO party.contact_mechanisms (party_id, type, purpose, value, created)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 4, 400, 'sally@sample.com', NOW());
+INSERT INTO party.physical_addresses (party_id, type, purpose, complex_name, complex_unit_number, street_number, street_name, suburb, city, region, country, postal_code, latitude, longitude, created)
+  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 2, 5, 'Happy Place', '7', '15', 'Fifth Avenue', 'Linden', 'Johannesburg', 'GP', 'ZA', '2195', '-26.137005,', '27.969069', NOW());
+
+
+
+
+
+-- INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry, created)
+-- VALUES ('54166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'joe', 1, 'Joe Bloggs', 'Joe', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
+-- INSERT INTO security.users (id, user_directory_id, username, status, name, preferred_name, phone_number, mobile_number, email, password, password_attempts, password_expiry, created)
+-- VALUES ('00166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'sally', 1, 'Sally Smith', 'Sally', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());

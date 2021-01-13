@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.party.constraints.ValidOrganization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -28,7 +29,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -59,8 +59,9 @@ import javax.xml.bind.annotation.XmlType;
     namespace = "http://party.inception.digital",
     propOrder = {"contactMechanisms", "physicalAddresses"})
 @XmlAccessorType(XmlAccessType.FIELD)
+@ValidOrganization
 @Entity
-@DiscriminatorValue("1")
+// @DiscriminatorValue("1")
 @Table(schema = "party", name = "organizations")
 public class Organization extends Party implements Serializable {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -595,36 +595,36 @@ public class InternalUserDirectory extends UserDirectoryBase {
   }
 
   /**
-   * Retrieve the users matching the attribute criteria.
+   * Retrieve the users matching the user attribute criteria.
    *
-   * @param attributes the attribute criteria used to select the users
-   * @return the users whose attributes match the attribute criteria
+   * @param userAttributes the user attribute criteria used to select the users
+   * @return the users whose attributes match the user attribute criteria
    */
   @Override
-  public List<User> findUsers(List<Attribute> attributes)
+  public List<User> findUsers(List<UserAttribute> userAttributes)
       throws InvalidAttributeException, SecurityServiceException {
     try {
       User userCriteria = new User();
 
       userCriteria.setUserDirectoryId(getUserDirectoryId());
 
-      for (Attribute attribute : attributes) {
-        if (attribute.getName().equalsIgnoreCase("status")) {
-          userCriteria.setStatus(UserStatus.fromCode(attribute.getValue()));
-        } else if (attribute.getName().equalsIgnoreCase("email")) {
-          userCriteria.setEmail(attribute.getValue());
-        } else if (attribute.getName().equalsIgnoreCase("name")) {
-          userCriteria.setName(attribute.getValue());
-        } else if (attribute.getName().equalsIgnoreCase("preferredName")) {
-          userCriteria.setPreferredName(attribute.getValue());
-        } else if (attribute.getName().equalsIgnoreCase("phoneNumber")) {
-          userCriteria.setPhoneNumber(attribute.getValue());
-        } else if (attribute.getName().equalsIgnoreCase("mobileNumber")) {
-          userCriteria.setMobileNumber(attribute.getValue());
-        } else if (attribute.getName().equalsIgnoreCase("username")) {
-          userCriteria.setUsername(attribute.getValue());
+      for (UserAttribute userAttribute : userAttributes) {
+        if (userAttribute.getName().equalsIgnoreCase("status")) {
+          userCriteria.setStatus(UserStatus.fromCode(userAttribute.getValue()));
+        } else if (userAttribute.getName().equalsIgnoreCase("email")) {
+          userCriteria.setEmail(userAttribute.getValue());
+        } else if (userAttribute.getName().equalsIgnoreCase("name")) {
+          userCriteria.setName(userAttribute.getValue());
+        } else if (userAttribute.getName().equalsIgnoreCase("preferredName")) {
+          userCriteria.setPreferredName(userAttribute.getValue());
+        } else if (userAttribute.getName().equalsIgnoreCase("phoneNumber")) {
+          userCriteria.setPhoneNumber(userAttribute.getValue());
+        } else if (userAttribute.getName().equalsIgnoreCase("mobileNumber")) {
+          userCriteria.setMobileNumber(userAttribute.getValue());
+        } else if (userAttribute.getName().equalsIgnoreCase("username")) {
+          userCriteria.setUsername(userAttribute.getValue());
         } else {
-          throw new InvalidAttributeException(attribute.getName());
+          throw new InvalidAttributeException(userAttribute.getName());
         }
       }
 

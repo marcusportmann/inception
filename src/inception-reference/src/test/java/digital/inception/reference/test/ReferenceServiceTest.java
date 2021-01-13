@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ package digital.inception.reference.test;
 
 import static org.junit.Assert.assertEquals;
 
+import digital.inception.reference.ContactMechanismPurpose;
+import digital.inception.reference.ContactMechanismType;
 import digital.inception.reference.Country;
 import digital.inception.reference.EmploymentStatus;
 import digital.inception.reference.EmploymentType;
@@ -31,6 +33,8 @@ import digital.inception.reference.MaritalStatus;
 import digital.inception.reference.MarriageType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
+import digital.inception.reference.PhysicalAddressPurpose;
+import digital.inception.reference.PhysicalAddressType;
 import digital.inception.reference.Race;
 import digital.inception.reference.Region;
 import digital.inception.reference.ResidencePermitType;
@@ -73,6 +77,24 @@ public class ReferenceServiceTest {
 
   /** The Reference Service. */
   @Autowired private IReferenceService referenceService;
+
+  /** Test the contact mechanism purpose functionality. */
+  @Test
+  public void contactMechanismPurposesTest() throws Exception {
+    List<ContactMechanismPurpose> retrievedContactMechanismPurposes =
+        referenceService.getContactMechanismPurposes();
+
+    retrievedContactMechanismPurposes = referenceService.getContactMechanismPurposes("en-US");
+  }
+
+  /** Test the contact mechanism type functionality. */
+  @Test
+  public void contactMechanismTypeTest() throws Exception {
+    List<ContactMechanismType> retrievedContactMechanismTypes =
+        referenceService.getContactMechanismTypes();
+
+    retrievedContactMechanismTypes = referenceService.getContactMechanismTypes("en-US");
+  }
 
   /** Test the country reference functionality. */
   @Test
@@ -274,6 +296,24 @@ public class ReferenceServiceTest {
 
     assertEquals(
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
+  }
+
+  /** Test the physical address purpose functionality. */
+  @Test
+  public void physicalAddressPurposesTest() throws Exception {
+    List<PhysicalAddressPurpose> retrievedPhysicalAddressPurposes =
+        referenceService.getPhysicalAddressPurposes();
+
+    retrievedPhysicalAddressPurposes = referenceService.getPhysicalAddressPurposes("en-US");
+  }
+
+  /** Test the physical address type functionality. */
+  @Test
+  public void physicalAddressTypeTest() throws Exception {
+    List<PhysicalAddressType> retrievedPhysicalAddressTypes =
+        referenceService.getPhysicalAddressTypes();
+
+    retrievedPhysicalAddressTypes = referenceService.getPhysicalAddressTypes("en-US");
   }
 
   /** Test the race reference functionality. */

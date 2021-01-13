@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -235,6 +233,13 @@ public class PartyRestController extends SecureRestController {
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -261,12 +266,19 @@ public class PartyRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, PartyServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     return partyService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -283,6 +295,13 @@ public class PartyRestController extends SecureRestController {
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
         @ApiResponse(
             responseCode = "500",
             description =
@@ -306,12 +325,19 @@ public class PartyRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, PartyServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -435,6 +461,13 @@ public class PartyRestController extends SecureRestController {
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -463,12 +496,19 @@ public class PartyRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, PartyServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     return partyService.getPersons(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 

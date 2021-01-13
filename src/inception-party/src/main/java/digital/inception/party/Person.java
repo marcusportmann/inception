@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import digital.inception.party.constraints.ValidPerson;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -32,7 +33,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -77,12 +77,17 @@ import javax.xml.bind.annotation.XmlType;
   "marriageType",
   "middleNames",
   "name",
+  "occupation",
   "preferredName",
   "race",
   "residencyStatus",
+  "residentialType",
   "surname",
   "tenantId",
   "title",
+  "countryOfTaxResidence",
+  "taxNumberType",
+  "taxNumber",
   "contactMechanisms",
   "identityDocuments",
   "physicalAddresses"
@@ -107,18 +112,24 @@ import javax.xml.bind.annotation.XmlType;
       "maritalStatus",
       "marriageType",
       "middleNames",
+      "occupation",
       "preferredName",
       "race",
       "residencyStatus",
+      "residentialType",
       "surname",
       "title",
+      "countryOfTaxResidence",
+      "taxNumberType",
+      "taxNumber",
       "contactMechanisms",
       "identityDocuments",
       "physicalAddresses"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
+@ValidPerson
 @Entity
-@DiscriminatorValue("2")
+// @DiscriminatorValue("2")
 @Table(schema = "party", name = "persons")
 public class Person extends Party implements Serializable {
 
@@ -189,6 +200,14 @@ public class Person extends Party implements Serializable {
   @Size(min = 1, max = 10)
   @Column(table = "persons", name = "country_of_residence", length = 10)
   private String countryOfResidence;
+
+  /** The optional code identifying the country of tax residence for the person. */
+  @Schema(description = "The optional code identifying the country of tax residence for the person")
+  @JsonProperty
+  @XmlElement(name = "CountryOfTaxResidence")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "country_of_tax_residence", length = 10)
+  private String countryOfTaxResidence;
 
   /** The optional date of birth for the person. */
   @Schema(description = "The optional date of birth for the person")
@@ -288,6 +307,14 @@ public class Person extends Party implements Serializable {
   @Column(table = "persons", name = "middle_names", length = 100)
   private String middleNames;
 
+  /** The optional code identifying the occupation for the person. */
+  @Schema(description = "The optional code identifying the occupation for the person")
+  @JsonProperty
+  @XmlElement(name = "Occupation")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "occupation")
+  private String occupation;
+
   /**
    * The optional preferred name for the person.
    *
@@ -317,6 +344,14 @@ public class Person extends Party implements Serializable {
   @Column(table = "persons", name = "residency_status")
   private String residencyStatus;
 
+  /** The optional code identifying the residential type for the person. */
+  @Schema(description = "The optional code identifying the residential type for the person")
+  @JsonProperty
+  @XmlElement(name = "ResidentialType")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "residential_type")
+  private String residentialType;
+
   /** The optional surname, last name, or family name for the person. */
   @Schema(description = "The optional surname, last name, or family name for the person")
   @JsonProperty
@@ -324,6 +359,22 @@ public class Person extends Party implements Serializable {
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "surname", length = 100)
   private String surname;
+
+  /** The optional tax number for the person. */
+  @Schema(description = "The optional tax number for the person")
+  @JsonProperty
+  @XmlElement(name = "TaxNumber")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "tax_number", length = 30)
+  private String taxNumber;
+
+  /** The optional code identifying the tax number type for the person. */
+  @Schema(description = "The optional code identifying the tax number type for the person")
+  @JsonProperty
+  @XmlElement(name = "TaxNumberType")
+  @Size(min = 1, max = 10)
+  @Column(table = "persons", name = "tax_number_type")
+  private String taxNumberType;
 
   /** The optional code identifying the title for the person. */
   @Schema(description = "The optional code identifying the title for the person")
@@ -424,6 +475,15 @@ public class Person extends Party implements Serializable {
    */
   public String getCountryOfResidence() {
     return countryOfResidence;
+  }
+
+  /**
+   * Returns the optional code identifying the country of tax residence for the person.
+   *
+   * @return the optional code identifying the country of tax residence for the person
+   */
+  public String getCountryOfTaxResidence() {
+    return countryOfTaxResidence;
   }
 
   /**
@@ -574,6 +634,15 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Returns the optional code identifying the occupation for the person.
+   *
+   * @return the optional code identifying the occupation for the person
+   */
+  public String getOccupation() {
+    return occupation;
+  }
+
+  /**
    * Retrieve the physical address with the specified type and purpose for the person.
    *
    * @param type the physical address type
@@ -632,12 +701,39 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Returns the optional code identifying the residential type for the person.
+   *
+   * @return the optional code identifying the residential type for the person
+   */
+  public String getResidentialType() {
+    return residentialType;
+  }
+
+  /**
    * Returns the optional surname, last name, or family name for the person.
    *
    * @return the optional surname, last name, or family name for the person
    */
   public String getSurname() {
     return surname;
+  }
+
+  /**
+   * Returns the optional tax number for the person.
+   *
+   * @return the optional tax number for the person
+   */
+  public String getTaxNumber() {
+    return taxNumber;
+  }
+
+  /**
+   * Returns the optional code identifying the tax number type for the person.
+   *
+   * @return the optional code identifying the tax number type for the person
+   */
+  public String getTaxNumberType() {
+    return taxNumberType;
   }
 
   /**
@@ -745,6 +841,16 @@ public class Person extends Party implements Serializable {
    */
   public void setCountryOfResidence(String countryOfResidence) {
     this.countryOfResidence = countryOfResidence;
+  }
+
+  /**
+   * Set the optional code identifying the country of tax residence for the person.
+   *
+   * @param countryOfTaxResidence the optional code identifying the country of tax residence for the
+   *     person
+   */
+  public void setCountryOfTaxResidence(String countryOfTaxResidence) {
+    this.countryOfTaxResidence = countryOfTaxResidence;
   }
 
   /**
@@ -892,6 +998,15 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Set the optional code identifying the occupation for the person.
+   *
+   * @param occupation the optional code identifying the occupation for the person
+   */
+  public void setOccupation(String occupation) {
+    this.occupation = occupation;
+  }
+
+  /**
    * Set the physical addresses for the person.
    *
    * @param physicalAddresses the physical addresses for the person
@@ -932,12 +1047,39 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Set the optional code identifying the residential type for the person.
+   *
+   * @param residentialType the optional code identifying the residential type for the person
+   */
+  public void setResidentialType(String residentialType) {
+    this.residentialType = residentialType;
+  }
+
+  /**
    * Set the optional surname, last name, or family name for the person.
    *
    * @param surname the optional surname, last name, or family name for the person
    */
   public void setSurname(String surname) {
     this.surname = surname;
+  }
+
+  /**
+   * Set the optional tax number for the person.
+   *
+   * @param taxNumber the optional tax number for the person
+   */
+  public void setTaxNumber(String taxNumber) {
+    this.taxNumber = taxNumber;
+  }
+
+  /**
+   * Set the optional code identifying the tax number type for the person.
+   *
+   * @param taxNumberType the optional code identifying the tax number type for the person
+   */
+  public void setTaxNumberType(String taxNumberType) {
+    this.taxNumberType = taxNumberType;
   }
 
   /**

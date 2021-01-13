@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 // ~--- JDK imports ------------------------------------------------------------
 
 /**
- * The <code>ContactMechanismSubTypeRepository</code> interface declares the repository for the <code>
+ * The <code>ContactMechanismSubTypeRepository</code> interface declares the repository for the
+ * <code>
  * ContactMechanismSubType</code> domain type.
  *
  * @author Marcus Portmann

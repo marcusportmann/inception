@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,8 +108,8 @@ public class IdentityDocument implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Number", required = true)
   @NotNull
-  @Size(min = 1, max = 50)
-  @Column(name = "number", length = 50, nullable = false)
+  @Size(min = 1, max = 30)
+  @Column(name = "number", length = 30, nullable = false)
   private String number;
 
   /** The person the identity document is associated with. */

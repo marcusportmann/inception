@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,10 +41,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class SecurityServiceAuthenticationManager implements AuthenticationManager {
 
   /** The Security Service. */
-  private ISecurityService securityService;
+  private final ISecurityService securityService;
 
   /** The User Details Service. */
-  private UserDetailsService userDetailsService;
+  private final UserDetailsService userDetailsService;
 
   /**
    * Constructs a new <code>SecurityServiceAuthenticationManager</code>.

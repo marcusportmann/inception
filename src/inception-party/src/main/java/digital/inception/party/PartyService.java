@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,6 +159,9 @@ public class PartyService implements IPartyService {
     } catch (DuplicatePersonException e) {
       throw e;
     } catch (Throwable e) {
+
+      logger.error("ERROR: " + e.getMessage(), e);
+
       throw new PartyServiceException("Failed to create the person (" + person.getId() + ")", e);
     }
   }
@@ -286,6 +289,14 @@ public class PartyService implements IPartyService {
   public Organizations getOrganizations(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws InvalidArgumentException, PartyServiceException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
     PageRequest pageRequest;
 
     if ((pageIndex != null) && (pageSize != null)) {
@@ -330,6 +341,13 @@ public class PartyService implements IPartyService {
   public Parties getParties(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
       throws InvalidArgumentException, PartyServiceException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
 
     PageRequest pageRequest;
 
@@ -436,8 +454,20 @@ public class PartyService implements IPartyService {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, PartyServiceException {
+    if ((pageIndex != null) && (pageIndex < 0)) {
+      throw new InvalidArgumentException("pageIndex");
+    }
+
+    if ((pageSize != null) && (pageSize <= 0)) {
+      throw new InvalidArgumentException("pageSize");
+    }
+
     if (sortBy == null) {
       sortBy = PersonSortBy.NAME;
+    }
+
+    if (sortDirection == null) {
+      sortDirection = SortDirection.ASCENDING;
     }
 
     try {

@@ -16,7 +16,7 @@
   <dependencies>
     <!-- Inception Dependencies -->
     <dependency>
-      <artifactId>inception-party</artifactId>
+      <artifactId>inception-banking</artifactId>
       <groupId>digital.inception</groupId>
     </dependency>
     <dependency>

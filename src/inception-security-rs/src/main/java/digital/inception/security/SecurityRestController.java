@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ package digital.inception.security;
 // ~--- non-JDK imports --------------------------------------------------------
 
 import digital.inception.core.sorting.SortDirection;
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.RestUtil;
 import digital.inception.rs.SecureRestController;
-import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.core.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -1422,12 +1422,19 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
@@ -1504,13 +1511,20 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
           SecurityServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
@@ -1802,6 +1816,13 @@ public class SecurityRestController extends SecureRestController {
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -1824,12 +1845,19 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     return securityService.getTenants(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -1982,6 +2010,13 @@ public class SecurityRestController extends SecureRestController {
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -2009,12 +2044,19 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     return securityService.getUserDirectories(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -2271,6 +2313,13 @@ public class SecurityRestController extends SecureRestController {
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(
+            responseCode = "400",
+            description = "Invalid argument",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class))),
+        @ApiResponse(
             responseCode = "500",
             description =
                 "An error has occurred and the request could not be processed at this time",
@@ -2298,12 +2347,19 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     return securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -2361,8 +2417,7 @@ public class SecurityRestController extends SecureRestController {
     List<UserDirectorySummary> userDirectorySummaries =
         securityService.getUserDirectorySummariesForTenant(tenantId);
 
-    if (hasRole( "Administrator")
-        || hasAccessToFunction("Security.TenantAdministration")) {
+    if (hasRole("Administrator") || hasAccessToFunction("Security.TenantAdministration")) {
       return new ResponseEntity<>(userDirectorySummaries, HttpStatus.OK);
     } else {
       List<UserDirectorySummary> filteredUserDirectorySummaries = new ArrayList<>();
@@ -2605,12 +2660,19 @@ public class SecurityRestController extends SecureRestController {
           @RequestParam(value = "sortDirection", required = false)
           SortDirection sortDirection,
       @Parameter(name = "pageIndex", description = "The optional page index", example = "0")
-          @RequestParam(value = "pageIndex", required = false)
+          @RequestParam(value = "pageIndex", required = false, defaultValue = "0")
           Integer pageIndex,
       @Parameter(name = "pageSize", description = "The optional page size", example = "0")
-          @RequestParam(value = "pageSize", required = false)
+          @RequestParam(value = "pageSize", required = false, defaultValue = "10")
           Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+    if (pageIndex == null) {
+      pageIndex = 0;
+    }
+    if (pageSize == null) {
+      pageSize = 10;
+    }
+
     if (!hasAccessToUserDirectory(userDirectoryId)) {
       throw new AccessDeniedException(
           "Access denied to the user directory (" + userDirectoryId + ")");
@@ -3235,7 +3297,7 @@ public class SecurityRestController extends SecureRestController {
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *     the user directory or <code>false</code> otherwise
    */
-  protected boolean hasAccessToUserDirectory(UUID userDirectoryId)  throws InvalidArgumentException {
+  protected boolean hasAccessToUserDirectory(UUID userDirectoryId) throws InvalidArgumentException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }

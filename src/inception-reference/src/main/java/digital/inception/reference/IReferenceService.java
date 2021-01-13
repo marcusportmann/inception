@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,8 +39,8 @@ public interface IReferenceService {
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier identifying the locale to retrieve the contact
-   *     mechanism purposes for or <code>null</code> to retrieve the contact mechanism purposes
-   *     for all locales
+   *     mechanism purposes for or <code>null</code> to retrieve the contact mechanism purposes for
+   *     all locales
    * @return the contact mechanism purposes
    */
   List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
@@ -225,6 +225,42 @@ public interface IReferenceService {
    * @return the occupations
    */
   List<Occupation> getOccupations(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the physical address purposes.
+   *
+   * @return the physical address purposes
+   */
+  List<PhysicalAddressPurpose> getPhysicalAddressPurposes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the physical address purposes.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the physical
+   *     address purposes for or <code>null</code> to retrieve the physical address purposes for all
+   *     locales
+   * @return the physical address purposes
+   */
+  List<PhysicalAddressPurpose> getPhysicalAddressPurposes(String localeId)
+      throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the physical address types.
+   *
+   * @return the physical address types
+   */
+  List<PhysicalAddressType> getPhysicalAddressTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the physical address types.
+   *
+   * @param localeId the Unicode locale identifier identifying the locale to retrieve the physical
+   *     address types for or <code>null</code> to retrieve the physical address types for all
+   *     locales
+   * @return the physical address types
+   */
+  List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
+      throws ReferenceServiceException;
 
   /**
    * Retrieve all the races.

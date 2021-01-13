@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,7 @@ import static org.junit.Assert.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.core.util.BinaryBuffer;
-import digital.inception.security.Attribute;
-import digital.inception.security.AttributeException;
+import digital.inception.security.UserAttribute;
 import digital.inception.security.AuthenticationFailedException;
 import digital.inception.security.DuplicateTenantException;
 import digital.inception.security.Function;
@@ -62,7 +60,6 @@ import digital.inception.security.UserStatus;
 import digital.inception.security.Users;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -273,112 +270,112 @@ public class SecurityServiceTest {
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
-  /** Test the name-value attribute functionality. */
-  @Test
-  public void attributeTest() throws AttributeException {
-    byte[] byteArrayValue = "Hello World".getBytes();
-
-    BigDecimal bigDecimalValue = new BigDecimal(12345.12345);
-
-    double doubleValue = 12345.12345;
-
-    long longValue = 12345L;
-
-    String stringValue = "Hello World";
-
-    List<Attribute> attributes = new ArrayList<>();
-
-    Attribute bigDecimalAttribute = new Attribute("BigDecimal", bigDecimalValue);
-    attributes.add(bigDecimalAttribute);
-
-    Attribute binaryBufferAttribute =
-        new Attribute("BinaryBuffer", new BinaryBuffer(byteArrayValue));
-    attributes.add(binaryBufferAttribute);
-
-    Attribute byteArrayAttribute = new Attribute("ByteArray", byteArrayValue);
-    attributes.add(byteArrayAttribute);
-
-    Attribute doubleAttribute = new Attribute("Double", doubleValue);
-    attributes.add(doubleAttribute);
-
-    Attribute longAttribute = new Attribute("Long", longValue);
-    attributes.add(longAttribute);
-
-    Attribute stringAttribute = new Attribute("String", stringValue);
-    attributes.add(stringAttribute);
-
-    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "ByteArray"));
-
-    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "BinaryBuffer"));
-
-    assertEquals(bigDecimalValue, Attribute.getDecimalValue(attributes, "BigDecimal"));
-
-    assertEquals(doubleValue, Attribute.getDoubleValue(attributes, "Double"), 0);
-
-    assertEquals(longValue, Attribute.getLongValue(attributes, "Long"));
-
-    assertEquals(stringValue, Attribute.getStringValue(attributes, "String"));
-
-    Attribute.setBinaryValue(attributes, "BinaryBuffer", new BinaryBuffer(byteArrayValue));
-
-    Attribute.setBinaryValue(attributes, "ByteArray", byteArrayValue);
-
-    Attribute.setDecimalValue(attributes, "BigDecimal", bigDecimalValue);
-
-    Attribute.setDoubleValue(attributes, "Double", doubleValue);
-
-    Attribute.setLongValue(attributes, "Long", longValue);
-
-    Attribute.setStringValue(attributes, "String", stringValue);
-
-    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
-
-    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
-
-    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
-
-    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
-
-    assertEquals(longValue, longAttribute.getLongValue());
-
-    assertEquals(stringValue, stringAttribute.getStringValue());
-
-    binaryBufferAttribute.setBinaryValue(new BinaryBuffer(byteArrayValue));
-
-    byteArrayAttribute.setBinaryValue(byteArrayValue);
-
-    bigDecimalAttribute.setDecimalValue(bigDecimalValue);
-
-    doubleAttribute.setDoubleValue(doubleValue);
-
-    longAttribute.setLongValue(longValue);
-
-    stringAttribute.setStringValue(stringValue);
-
-    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
-
-    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
-
-    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
-
-    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
-
-    assertEquals(longValue, longAttribute.getLongValue());
-
-    assertEquals(stringValue, stringAttribute.getStringValue());
-
-    assertEquals("BinaryBuffer", binaryBufferAttribute.getName());
-
-    assertEquals("ByteArray", byteArrayAttribute.getName());
-
-    assertEquals("BigDecimal", bigDecimalAttribute.getName());
-
-    assertEquals("Double", doubleAttribute.getName());
-
-    assertEquals("Long", longAttribute.getName());
-
-    assertEquals("String", stringAttribute.getName());
-  }
+//  /** Test the name-value attribute functionality. */
+//  @Test
+//  public void attributeTest() throws AttributeException {
+//    byte[] byteArrayValue = "Hello World".getBytes();
+//
+//    BigDecimal bigDecimalValue = new BigDecimal(12345.12345);
+//
+//    double doubleValue = 12345.12345;
+//
+//    long longValue = 12345L;
+//
+//    String stringValue = "Hello World";
+//
+//    List<Attribute> attributes = new ArrayList<>();
+//
+//    Attribute bigDecimalAttribute = new Attribute("BigDecimal", bigDecimalValue);
+//    attributes.add(bigDecimalAttribute);
+//
+//    Attribute binaryBufferAttribute =
+//        new Attribute("BinaryBuffer", new BinaryBuffer(byteArrayValue));
+//    attributes.add(binaryBufferAttribute);
+//
+//    Attribute byteArrayAttribute = new Attribute("ByteArray", byteArrayValue);
+//    attributes.add(byteArrayAttribute);
+//
+//    Attribute doubleAttribute = new Attribute("Double", doubleValue);
+//    attributes.add(doubleAttribute);
+//
+//    Attribute longAttribute = new Attribute("Long", longValue);
+//    attributes.add(longAttribute);
+//
+//    Attribute stringAttribute = new Attribute("String", stringValue);
+//    attributes.add(stringAttribute);
+//
+//    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "ByteArray"));
+//
+//    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "BinaryBuffer"));
+//
+//    assertEquals(bigDecimalValue, Attribute.getDecimalValue(attributes, "BigDecimal"));
+//
+//    assertEquals(doubleValue, Attribute.getDoubleValue(attributes, "Double"), 0);
+//
+//    assertEquals(longValue, Attribute.getLongValue(attributes, "Long"));
+//
+//    assertEquals(stringValue, Attribute.getStringValue(attributes, "String"));
+//
+//    Attribute.setBinaryValue(attributes, "BinaryBuffer", new BinaryBuffer(byteArrayValue));
+//
+//    Attribute.setBinaryValue(attributes, "ByteArray", byteArrayValue);
+//
+//    Attribute.setDecimalValue(attributes, "BigDecimal", bigDecimalValue);
+//
+//    Attribute.setDoubleValue(attributes, "Double", doubleValue);
+//
+//    Attribute.setLongValue(attributes, "Long", longValue);
+//
+//    Attribute.setStringValue(attributes, "String", stringValue);
+//
+//    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
+//
+//    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
+//
+//    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
+//
+//    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
+//
+//    assertEquals(longValue, longAttribute.getLongValue());
+//
+//    assertEquals(stringValue, stringAttribute.getStringValue());
+//
+//    binaryBufferAttribute.setBinaryValue(new BinaryBuffer(byteArrayValue));
+//
+//    byteArrayAttribute.setBinaryValue(byteArrayValue);
+//
+//    bigDecimalAttribute.setDecimalValue(bigDecimalValue);
+//
+//    doubleAttribute.setDoubleValue(doubleValue);
+//
+//    longAttribute.setLongValue(longValue);
+//
+//    stringAttribute.setStringValue(stringValue);
+//
+//    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
+//
+//    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
+//
+//    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
+//
+//    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
+//
+//    assertEquals(longValue, longAttribute.getLongValue());
+//
+//    assertEquals(stringValue, stringAttribute.getStringValue());
+//
+//    assertEquals("BinaryBuffer", binaryBufferAttribute.getName());
+//
+//    assertEquals("ByteArray", byteArrayAttribute.getName());
+//
+//    assertEquals("BigDecimal", bigDecimalAttribute.getName());
+//
+//    assertEquals("Double", doubleAttribute.getName());
+//
+//    assertEquals("Long", longAttribute.getName());
+//
+//    assertEquals("String", stringAttribute.getName());
+//  }
 
   /** Test the change user password functionality. */
   @Test
@@ -577,17 +574,17 @@ public class SecurityServiceTest {
 
     assertEquals("The correct number of users was not retrieved", 19, retrievedUsersAll.size());
 
-    List<Attribute> attributes = new ArrayList<>();
+    List<UserAttribute> userAttributes = new ArrayList<>();
 
-    attributes.add(new Attribute("status", "active"));
-    attributes.add(new Attribute("email", "testing0"));
-    attributes.add(new Attribute("name", "Name 1"));
-    attributes.add(new Attribute("preferredName", "Preferred Name 1"));
-    attributes.add(new Attribute("mobileNumber", "+2782666"));
-    attributes.add(new Attribute("username", "Username 1"));
+    userAttributes.add(new UserAttribute("status", "active"));
+    userAttributes.add(new UserAttribute("email", "testing0"));
+    userAttributes.add(new UserAttribute("name", "Name 1"));
+    userAttributes.add(new UserAttribute("preferredName", "Preferred Name 1"));
+    userAttributes.add(new UserAttribute("mobileNumber", "+2782666"));
+    userAttributes.add(new UserAttribute("username", "Username 1"));
 
     try {
-      List<User> retrievedUsers = securityService.findUsers(userDirectory.getId(), attributes);
+      List<User> retrievedUsers = securityService.findUsers(userDirectory.getId(), userAttributes);
 
       assertEquals(
           "The correct number of users was not retrieved matching the search criteria",

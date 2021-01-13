@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,8 +143,11 @@ public class PartyServiceTest {
             + " "
             + "Surname"
             + personCount);
+    person.setOccupation("15");
     person.setPreferredName("PreferredName" + personCount);
     person.setRace("W");
+    person.setResidencyStatus("P");
+    person.setResidentialType("R");
     person.setSurname("Surname" + personCount);
     person.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
     person.setTitle("1");
@@ -822,9 +825,9 @@ public class PartyServiceTest {
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
-    person.setCorrespondenceLanguage("EN");
     person.setCountryOfBirth("UK");
     person.setCountryOfResidence("ZA");
+    person.setCountryOfTaxResidence("ZA");
     person.setDateOfBirth(LocalDate.of(1985, 5, 1));
     person.setDateOfDeath(LocalDate.of(2200, 1, 1));
     person.setEmploymentStatus("E");
@@ -837,12 +840,16 @@ public class PartyServiceTest {
     person.setMaritalStatus("D");
     person.setMarriageType(null);
     person.setMiddleNames(person.getMiddleNames() + " Updated");
+    person.setOccupation("3");
     person.setName(person.getName() + " Updated");
     person.setPreferredName(person.getPreferredName() + " Updated");
     person.setRace("B");
     person.setResidencyStatus("C");
+    person.setResidentialType("O");
     person.setSurname(person.getSurname() + " Updated");
     person.setTitle("5");
+    person.setTaxNumber("123456789");
+    person.setTaxNumberType("ZAITN");
 
     person.addIdentityDocument(
         new IdentityDocument(
@@ -995,6 +1002,10 @@ public class PartyServiceTest {
         person1.getCountryOfResidence(),
         person2.getCountryOfResidence());
     assertEquals(
+        "The country of tax residence values for the two persons do not match",
+        person1.getCountryOfTaxResidence(),
+        person2.getCountryOfTaxResidence());
+    assertEquals(
         "The date of birth values for the two persons do not match",
         person1.getDateOfBirth(),
         person2.getDateOfBirth());
@@ -1047,6 +1058,10 @@ public class PartyServiceTest {
     assertEquals(
         "The name values for the two persons do not match", person1.getName(), person2.getName());
     assertEquals(
+        "The occupation values for the two persons do not match",
+        person1.getOccupation(),
+        person2.getOccupation());
+    assertEquals(
         "The preferred name values for the two persons do not match",
         person1.getPreferredName(),
         person2.getPreferredName());
@@ -1057,9 +1072,21 @@ public class PartyServiceTest {
         person1.getResidencyStatus(),
         person2.getResidencyStatus());
     assertEquals(
+        "The residential type values for the two persons do not match",
+        person1.getResidentialType(),
+        person2.getResidentialType());
+    assertEquals(
         "The surname values for the two persons do not match",
         person1.getSurname(),
         person2.getSurname());
+    assertEquals(
+        "The tax number values for the two persons do not match",
+        person1.getTaxNumber(),
+        person2.getTaxNumber());
+    assertEquals(
+        "The tax number type values for the two persons do not match",
+        person1.getTaxNumberType(),
+        person2.getTaxNumberType());
     assertEquals(
         "The tenant ID values for the two persons do not match",
         person1.getTenantId(),

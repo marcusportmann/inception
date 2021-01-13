@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class AuthenticationToken extends AbstractAuthenticationToken {
 
-  private UserDetails userDetails;
+  private final UserDetails userDetails;
 
   /**
    * Constructs a new <code>AuthenticationToken</code>.

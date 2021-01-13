@@ -352,9 +352,9 @@
 	<xsd:complexType name="tConversationLink"> 
 		<xsd:complexContent> 
 			<xsd:extension base="tBaseElement"> 
-				<xsd:attribute name="name" type="xsd:string" use="optional"/> 
-				<xsd:attribute name="sourceRef" type="xsd:QName" use="required"/> 
-				<xsd:attribute name="targetRef" type="xsd:QName" use="required"/> 
+				<xsd:attribute name="name" type="xsd:string" use="optional"/>
+				<xsd:attribute name="sourceRef" type="xsd:QName" use="required"/>
+				<xsd:attribute name="targetRef" type="xsd:QName" use="required"/>
 			</xsd:extension> 
 		</xsd:complexContent> 
 	</xsd:complexType>

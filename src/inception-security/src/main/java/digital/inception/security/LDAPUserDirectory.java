@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1081,13 +1081,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   }
 
   /**
-   * Retrieve the users matching the attribute criteria.
+   * Retrieve the users matching the user attribute criteria.
    *
-   * @param attributes the attribute criteria used to select the users
-   * @return the users whose attributes match the attribute criteria
+   * @param userAttributes the user attribute criteria used to select the users
+   * @return the users whose attributes match the user attribute criteria
    */
   @Override
-  public List<User> findUsers(List<Attribute> attributes)
+  public List<User> findUsers(List<UserAttribute> userAttributes)
       throws InvalidAttributeException, SecurityServiceException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
@@ -1097,19 +1097,19 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       String searchFilter = "(objectClass=" + userObjectClass + ")";
 
-      if (attributes.size() > 0) {
+      if (userAttributes.size() > 0) {
         StringBuilder buffer = new StringBuilder();
 
         buffer.append("(&(objectClass=");
         buffer.append(userObjectClass);
         buffer.append(")");
 
-        for (Attribute attribute : attributes) {
+        for (UserAttribute userAttribute : userAttributes) {
           buffer.append("(");
-          buffer.append(attribute.getName());
+          buffer.append(userAttribute.getName());
           buffer.append("=*");
 
-          buffer.append(attribute.getValue());
+          buffer.append(userAttribute.getValue());
 
           buffer.append("*)");
         }
@@ -2666,8 +2666,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       user.setMobileNumber("");
     }
 
-    if ((StringUtils.hasText(userEmailAttribute))
-        && (attributes.get(userEmailAttribute) != null)) {
+    if ((StringUtils.hasText(userEmailAttribute)) && (attributes.get(userEmailAttribute) != null)) {
       user.setEmail(String.valueOf(attributes.get(userEmailAttribute).get()));
     } else {
       user.setEmail("");

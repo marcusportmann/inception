@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,12 +39,12 @@ public class BackgroundPasswordResetExpiry {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundPasswordResetExpiry.class);
 
+  /** The Password Reset Repository. */
+  private final PasswordResetRepository passwordResetRepository;
+
   /** The password reset expiry in seconds */
   @Value("${application.security.passwordResetExpiry:900}")
   private int passwordResetExpiry;
-
-  /** The Password Reset Repository. */
-  private PasswordResetRepository passwordResetRepository;
 
   /**
    * Constructs a new <code>BackgroundPasswordResetExpiry</code>.

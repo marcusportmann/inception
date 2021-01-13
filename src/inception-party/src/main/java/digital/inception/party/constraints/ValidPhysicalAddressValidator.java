@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,31 +31,6 @@ import org.springframework.util.StringUtils;
  * The <code>ValidPhysicalAddressValidator</code> class implements the custom constraint validator
  * for validating a physical address.
  *
- * @formatter:off
- *     +----------------------+----------+----------+----------+---------------+----------+----------+--------------+
- *     | | Building | Complex | Farm | International | Site | Street | Unstructured |
- *     +----------------------+----------+----------+----------+---------------+----------+----------+--------------+
- *     | Building Floor | Optional | Invalid | Invalid | Invalid | Invalid | Invalid | Invalid | |
- *     Building Name | Required | Invalid | Invalid | Invalid | Invalid | Invalid | Invalid | |
- *     Building Room | Optional | Invalid | Invalid | Invalid | Invalid | Invalid | Invalid | | City
- *     | Required | Required | Optional | Optional | Required | Required | Optional | | Complex Name
- *     | Invalid | Required | Invalid | Invalid | Invalid | Invalid | Invalid | | Complex Unit
- *     Number | Invalid | Required | Invalid | Invalid | Invalid | Invalid | Invalid | | Country |
- *     Required | Required | Required | Required | Required | Required | Required | | Farm
- *     Description | Invalid | Invalid | Optional | Invalid | Invalid | Invalid | Invalid | | Farm
- *     Name | Invalid | Invalid | Optional | Invalid | Invalid | Invalid | Invalid | | Farm Number |
- *     Invalid | Invalid | Required | Invalid | Invalid | Invalid | Invalid | | Line 1 | Invalid |
- *     Invalid | Invalid | Required | Invalid | Invalid | Required | | Line 2 | Invalid | Invalid |
- *     Invalid | Optional | Invalid | Invalid | Optional | | Line 3 | Invalid | Invalid | Invalid |
- *     Optional | Invalid | Invalid | Optional | | Postal Code Required | Required | Required |
- *     Required | Required | Required | Required | Required | | Region | Optional | Optional |
- *     Optional | Optional | Optional | Optional | Optional | | Site Block | Invalid | Invalid |
- *     Invalid | Invalid | Required | Invalid | Invalid | | Site Number | Invalid | Invalid |
- *     Invalid | Invalid | Required | Invalid | Invalid | | Street Name | Required | Required |
- *     Optional | Invalid | Optional | Required | Invalid | | Street Number | Optional | Optional |
- *     Optional | Invalid | Optional | Optional | Invalid | | Suburb | Optional | Optional |
- *     Optional | Invalid | Invalid | Optional | Invalid |
- *     +----------------------+----------+----------+----------+---------------+----------+----------+--------------+
  * @author Marcus Portmann
  */
 public class ValidPhysicalAddressValidator

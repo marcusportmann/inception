@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Marcus Portmann
+ * Copyright 2021 Marcus Portmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -539,7 +539,7 @@ public class SecurityWebService {
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
     return securityService.getTenants(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -599,7 +599,7 @@ public class SecurityWebService {
       @WebParam(name = "SortDirection") @XmlElement(required = true) SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement(required = true) Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement(required = true) Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
     return securityService.getUserDirectories(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -678,7 +678,7 @@ public class SecurityWebService {
       @WebParam(name = "SortDirection") @XmlElement(required = true) SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement(required = true) Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement(required = true) Integer pageSize)
-      throws SecurityServiceException {
+      throws InvalidArgumentException, SecurityServiceException {
     return securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize);
   }
 
