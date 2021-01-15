@@ -51,6 +51,8 @@ public class ValidIndividualCustomerValidator
 
     // TODO: Implement custom IndividualCustomer validation.
 
+    // TODO: Ensure that required attributes on an IndividualCustomer that were optional on a Person are validated
+
     return isValid;
   }
 }

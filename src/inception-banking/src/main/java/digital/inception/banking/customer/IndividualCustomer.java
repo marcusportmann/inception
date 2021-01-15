@@ -538,7 +538,7 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @return the optional code for the tax number type for the individual customer
    */
-  @Schema(description = "The optional tax number type for the individual customer")
+  @Schema(description = "The optional code for the tax number type for the individual customer")
   @Override
   public String getTaxNumberType() {
     return super.getTaxNumberType();
