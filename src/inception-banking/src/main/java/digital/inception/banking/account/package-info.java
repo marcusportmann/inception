@@ -27,8 +27,8 @@
       @javax.xml.bind.annotation.XmlNs(
           prefix = "party",
           namespaceURI = "http://party.inception.digital"),
-        @javax.xml.bind.annotation.XmlNs(
-            prefix = "account",
-            namespaceURI = "http://account.banking.inception.digital")
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "account",
+          namespaceURI = "http://account.banking.inception.digital")
     })
 package digital.inception.banking.account;

@@ -51,8 +51,7 @@ public class DuplicateIndividualCustomerException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateIndividualCustomerException</code>.
    *
-   * @param customerId the Universally Unique Identifier (UUID) uniquely identifying the individual
-   *     customer
+   * @param customerId the Universally Unique Identifier (UUID) for the individual customer
    */
   public DuplicateIndividualCustomerException(UUID customerId) {
     super(

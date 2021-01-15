@@ -18,7 +18,7 @@ CREATE TABLE customer.individual_customers (
 
 COMMENT ON COLUMN customer.individual_customers.emancipated_minor IS 'The optional boolean flag indicating whether the individual customer is an emancipated minor';
 
-COMMENT ON COLUMN customer.individual_customers.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the individual customer';
+COMMENT ON COLUMN customer.individual_customers.id IS 'The Universally Unique Identifier (UUID) for the individual customer';
 
 
 -- -------------------------------------------------------------------------------------------------

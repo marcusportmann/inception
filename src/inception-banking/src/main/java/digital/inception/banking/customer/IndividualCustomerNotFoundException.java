@@ -51,8 +51,8 @@ public class IndividualCustomerNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>IndividualCustomerNotFoundException</code>.
    *
-   * @param individualCustomerId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     individual customer
+   * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
+   *     customer
    */
   public IndividualCustomerNotFoundException(UUID individualCustomerId) {
     super(

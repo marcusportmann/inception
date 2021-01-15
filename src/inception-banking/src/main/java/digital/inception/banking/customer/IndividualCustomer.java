@@ -157,12 +157,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the correspondence language for the individual customer.
+   * Returns the code for the correspondence language for the individual customer.
    *
-   * @return the code identifying the correspondence language for the individual customer
+   * @return the code for the correspondence language for the individual customer
    */
   @Schema(
-      description = "The code identifying the correspondence language for the individual customer",
+      description = "The code for the correspondence language for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -171,12 +171,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the country of birth for the individual customer.
+   * Returns the code for the country of birth for the individual customer.
    *
-   * @return the code identifying the country of birth for the individual customer
+   * @return the code for the country of birth for the individual customer
    */
   @Schema(
-      description = "The code identifying the country of birth for the individual customer",
+      description = "The code for the country of birth for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -185,12 +185,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the country of residence for the individual customer.
+   * Returns the code for the country of residence for the individual customer.
    *
-   * @return the code identifying the country of residence for the individual customer
+   * @return the code for the country of residence for the individual customer
    */
   @Schema(
-      description = "The code identifying the country of residence for the individual customer",
+      description = "The code for the country of residence for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -199,13 +199,13 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the optional code identifying the country of tax residence for the individual customer.
+   * Returns the optional code for the country of tax residence for the individual customer.
    *
-   * @return the optional code identifying the country of tax residence for the individual customer
+   * @return the optional code for the country of tax residence for the individual customer
    */
   @Schema(
       description =
-          "The optional code identifying the country of tax residence for the individual customer")
+          "The optional code for the country of tax residence for the individual customer")
   @Override
   public String getCountryOfTaxResidence() {
     return super.getCountryOfTaxResidence();
@@ -247,12 +247,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the employment status for the individual customer.
+   * Returns the code for the employment status for the individual customer.
    *
-   * @return the code identifying the employment status for the individual customer
+   * @return the code for the employment status for the individual customer
    */
   @Schema(
-      description = "The code identifying the employment status for the individual customer",
+      description = "The code for the employment status for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -261,12 +261,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the employment type for the individual customer.
+   * Returns the code for the employment type for the individual customer.
    *
-   * @return the code identifying the employment type for the individual customer
+   * @return the code for the employment type for the individual customer
    */
   @Schema(
-      description = "The code identifying the employment type for the individual customer",
+      description = "The code for the employment type for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -275,13 +275,11 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the gender for the individual customer.
+   * Returns the code for the gender for the individual customer.
    *
-   * @return the code identifying the gender for the individual customer
+   * @return the code for the gender for the individual customer
    */
-  @Schema(
-      description = "The code identifying the gender for the individual customer",
-      required = true)
+  @Schema(description = "The code for the gender for the individual customer", required = true)
   @JsonProperty(required = true)
   @Override
   public String getGender() {
@@ -304,12 +302,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the home language for the individual customer.
+   * Returns the code for the home language for the individual customer.
    *
-   * @return the code identifying the home language for the individual customer
+   * @return the code for the home language for the individual customer
    */
   @Schema(
-      description = "The code identifying the home language for the individual customer",
+      description = "The code for the home language for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -318,13 +316,11 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the individual customer.
+   * Returns the Universally Unique Identifier (UUID) for the individual customer.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the individual customer
+   * @return the Universally Unique Identifier (UUID) for the individual customer
    */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the individual customer")
+  @Schema(description = "The Universally Unique Identifier (UUID) for the individual customer")
   @Override
   public UUID getId() {
     return super.getId();
@@ -365,12 +361,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the marital status for the individual customer.
+   * Returns the code for the marital status for the individual customer.
    *
-   * @return the code identifying the marital status for the individual customer
+   * @return the code for the marital status for the individual customer
    */
   @Schema(
-      description = "The code identifying the marital status for the individual customer",
+      description = "The code for the marital status for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -379,15 +375,15 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the marriage type for the individual customer if the individual
-   * customer is married.
+   * Returns the code for the marriage type for the individual customer if the individual customer
+   * is married.
    *
-   * @return the code identifying the marriage type for the individual customer if the individual
-   *     customer is married
+   * @return the code for the marriage type for the individual customer if the individual customer
+   *     is married
    */
   @Schema(
       description =
-          "The code identifying the marriage type for the individual customer if the person is married")
+          "The code for the marriage type for the individual customer if the person is married")
   @Override
   public String getMarriageType() {
     return super.getMarriageType();
@@ -423,13 +419,11 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the occupation for the individual customer.
+   * Returns the code for the occupation for the individual customer.
    *
-   * @return the code identifying the occupation for the individual customer
+   * @return the code for the occupation for the individual customer
    */
-  @Schema(
-      description = "The code identifying the occupation for the individual customer",
-      required = true)
+  @Schema(description = "The code for the occupation for the individual customer", required = true)
   @JsonProperty(required = true)
   @Override
   public String getOccupation() {
@@ -477,13 +471,11 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * The code identifying the race for the individual customer.
+   * The code for the race for the individual customer.
    *
-   * @return the code identifying the race for the individual customer
+   * @return the code for the race for the individual customer
    */
-  @Schema(
-      description = "The code identifying the race for the individual customer",
-      required = true)
+  @Schema(description = "The code for the race for the individual customer", required = true)
   @JsonProperty(required = true)
   @Override
   public String getRace() {
@@ -491,12 +483,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the residency status for the individual customer.
+   * Returns the code for the residency status for the individual customer.
    *
-   * @return the code identifying the residency status for the individual customer
+   * @return the code for the residency status for the individual customer
    */
   @Schema(
-      description = "The code identifying the residency status for the individual customer",
+      description = "The code for the residency status for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -505,12 +497,12 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the residential type for the individual customer.
+   * Returns the code for the residential type for the individual customer.
    *
-   * @return the code identifying the residential type for the individual customer
+   * @return the code for the residential type for the individual customer
    */
   @Schema(
-      description = "The code identifying the residential type for the individual customer",
+      description = "The code for the residential type for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @Override
@@ -544,9 +536,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the optional code identifying the tax number type for the individual customer.
+   * Returns the optional code for the tax number type for the individual customer.
    *
-   * @return the optional code identifying the tax number type for the individual customer
+   * @return the optional code for the tax number type for the individual customer
    */
   @Schema(description = "The optional tax number type for the individual customer")
   @Override
@@ -555,13 +547,11 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the code identifying the title for the individual customer.
+   * Returns the code for the title for the individual customer.
    *
-   * @return the code identifying the title for the individual customer
+   * @return the code for the title for the individual customer
    */
-  @Schema(
-      description = "The code identifying the title for the individual customer",
-      required = true)
+  @Schema(description = "The code for the title for the individual customer", required = true)
   @JsonProperty(required = true)
   @Override
   public String getTitle() {
@@ -606,7 +596,7 @@ public class IndividualCustomer extends Person implements Serializable {
   /**
    * Remove the identity document with the specified type for the individual customer.
    *
-   * @param type the code identifying the type of identity document
+   * @param type the code for the type of identity document
    */
   @Override
   public void removeIdentityDocumentByType(String type) {
@@ -635,9 +625,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the correspondence language for the individual customer.
+   * Set the code for the correspondence language for the individual customer.
    *
-   * @param correspondenceLanguage the code identifying the correspondence language for the private
+   * @param correspondenceLanguage the code for the correspondence language for the private
    *     individual customer
    */
   public void setCorrespondenceLanguage(String correspondenceLanguage) {
@@ -645,9 +635,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the country of birth for the individual customer.
+   * Set the code for the country of birth for the individual customer.
    *
-   * @param countryOfBirth the code identifying the country of birth for the individual customer
+   * @param countryOfBirth the code for the country of birth for the individual customer
    */
   @Override
   public void setCountryOfBirth(String countryOfBirth) {
@@ -655,10 +645,10 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the country of residence for the individual customer.
+   * Set the code for the country of residence for the individual customer.
    *
-   * @param countryOfResidence the code identifying the country of residence for the private
-   *     individual customer
+   * @param countryOfResidence the code for the country of residence for the private individual
+   *     customer
    */
   @Override
   public void setCountryOfResidence(String countryOfResidence) {
@@ -666,9 +656,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the optional code identifying the country of tax residence for the individual customer.
+   * Set the optional code for the country of tax residence for the individual customer.
    *
-   * @param countryOfTaxResidence the optional code identifying the country of tax residence for the
+   * @param countryOfTaxResidence the optional code for the country of tax residence for the
    *     individual customer
    */
   @Override
@@ -708,9 +698,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the employment status for the individual customer.
+   * Set the code for the employment status for the individual customer.
    *
-   * @param employmentStatus the code identifying the employment status for the individual customer
+   * @param employmentStatus the code for the employment status for the individual customer
    */
   @Override
   public void setEmploymentStatus(String employmentStatus) {
@@ -718,9 +708,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the employment type for the individual customer.
+   * Set the code for the employment type for the individual customer.
    *
-   * @param employmentType the code identifying the employment type for the individual customer
+   * @param employmentType the code for the employment type for the individual customer
    */
   @Override
   public void setEmploymentType(String employmentType) {
@@ -728,9 +718,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the gender for the individual customer.
+   * Set the code for the gender for the individual customer.
    *
-   * @param gender the code identifying the gender for the individual customer
+   * @param gender the code for the gender for the individual customer
    */
   @Override
   public void setGender(String gender) {
@@ -749,9 +739,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the home language for the individual customer.
+   * Set the code for the home language for the individual customer.
    *
-   * @param homeLanguage the code identifying the home language for the individual customer
+   * @param homeLanguage the code for the home language for the individual customer
    */
   @Override
   public void setHomeLanguage(String homeLanguage) {
@@ -759,9 +749,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the individual customer.
+   * Set the Universally Unique Identifier (UUID) for the individual customer.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the individual customer
+   * @param id the Universally Unique Identifier (UUID) for the individual customer
    */
   public void setId(UUID id) {
     super.setId(id);
@@ -798,9 +788,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the marital status for the individual customer.
+   * Set the code for the marital status for the individual customer.
    *
-   * @param maritalStatus the code identifying the marital status for the individual customer
+   * @param maritalStatus the code for the marital status for the individual customer
    */
   @Override
   public void setMaritalStatus(String maritalStatus) {
@@ -808,10 +798,10 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the marriage type for the individual customer if the private
-   * individual customer is married.
+   * Set the code for the marriage type for the individual customer if the private individual
+   * customer is married.
    *
-   * @param marriageType the code identifying the marriage type for the individual customer if the
+   * @param marriageType the code for the marriage type for the individual customer if the
    *     individual customer is married
    */
   @Override
@@ -847,9 +837,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the occupation for the individual customer.
+   * Set the code for the occupation for the individual customer.
    *
-   * @param occupation the code identifying the occupation for the individual customer
+   * @param occupation the code for the occupation for the individual customer
    */
   @Override
   public void setOccupation(String occupation) {
@@ -880,9 +870,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the race for the individual customer.
+   * Set the code for the race for the individual customer.
    *
-   * @param race the code identifying the race for the individual customer
+   * @param race the code for the race for the individual customer
    */
   @Override
   public void setRace(String race) {
@@ -890,9 +880,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the residency status for the individual customer.
+   * Set the code for the residency status for the individual customer.
    *
-   * @param residencyStatus the code identifying the residency status for the individual customer
+   * @param residencyStatus the code for the residency status for the individual customer
    */
   @Override
   public void setResidencyStatus(String residencyStatus) {
@@ -900,9 +890,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the residential type for the individual customer.
+   * Set the code for the residential type for the individual customer.
    *
-   * @param residentialType the code identifying the residential type for the individual customer
+   * @param residentialType the code for the residential type for the individual customer
    */
   @Override
   public void setResidentialType(String residentialType) {
@@ -930,10 +920,10 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the optional code identifying the tax number type for the individual customer.
+   * Set the optional code for the tax number type for the individual customer.
    *
-   * @param taxNumberType the optional code identifying the tax number type for the private
-   *     individual customer
+   * @param taxNumberType the optional code for the tax number type for the private individual
+   *     customer
    */
   @Override
   public void setTaxNumberType(String taxNumberType) {
@@ -941,9 +931,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code identifying the title for the individual customer.
+   * Set the code for the title for the individual customer.
    *
-   * @param title the code identifying the title for the individual customer
+   * @param title the code for the title for the individual customer
    */
   @Override
   public void setTitle(String title) {

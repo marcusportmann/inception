@@ -40,8 +40,8 @@ public interface ICustomerService {
   /**
    * Retrieve the individual customer.
    *
-   * @param individualCustomerId the Universally Unique Identifier (UUID) uniquely identifying the
-   *     individual customer
+   * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
+   *     customer
    * @return the individual customer
    */
   IndividualCustomer getIndividualCustomer(UUID individualCustomerId)
