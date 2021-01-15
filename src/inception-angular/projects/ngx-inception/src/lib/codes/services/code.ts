@@ -45,8 +45,7 @@ export class Code {
    * Constructs a new Code.
    *
    * @param id             The ID for the code.
-   * @param codeCategoryId The ID for the code category the code is
-   *                       associated with.
+   * @param codeCategoryId The ID for the code category the code is associated with.
    * @param name           The name of the code category.
    * @param value          The value for the code.
    */

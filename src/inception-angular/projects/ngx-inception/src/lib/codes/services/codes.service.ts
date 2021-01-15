@@ -118,8 +118,7 @@ export class CodesService {
   /**
    * Delete the code.
    *
-   * @param codeCategoryId The ID for the code category the code is
-   *                       associated with.
+   * @param codeCategoryId The ID for the code category the code is associated with.
    * @param codeId         The ID for the code.
    *
    * @return True if the code was deleted or false otherwise.
@@ -179,8 +178,7 @@ export class CodesService {
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId The ID for the code category the code is
-   *                       associated with.
+   * @param codeCategoryId The ID for the code category the code is associated with.
    * @param codeId         The ID for the code.
    *
    * @return The code.
@@ -292,8 +290,7 @@ export class CodesService {
   /**
    * Retrieve the name of the code.
    *
-   * @param codeCategoryId The ID for the code category the code is
-   *                       associated with.
+   * @param codeCategoryId The ID for the code category the code is associated with.
    * @param codeId         The ID for the code.
    *
    * @return The name of the code.
