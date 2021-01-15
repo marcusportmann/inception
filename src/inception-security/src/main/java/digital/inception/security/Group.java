@@ -178,6 +178,10 @@ public class Group implements Serializable {
    * @param role the role
    */
   public void addRole(Role role) {
+    roles.removeIf(
+        existingRole ->
+            Objects.equals(existingRole.getCode(), role.getCode()));
+
     roles.add(role);
     role.getGroups().add(this);
   }
@@ -188,6 +192,10 @@ public class Group implements Serializable {
    * @param user the user
    */
   public void addUser(User user) {
+    users.removeIf(
+        existingUser ->
+            Objects.equals(existingUser.getId(), user.getId()));
+
     users.add(user);
     user.getGroups().add(this);
   }

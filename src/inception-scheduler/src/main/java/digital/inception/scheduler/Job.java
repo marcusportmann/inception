@@ -261,6 +261,10 @@ public class Job implements Serializable {
    * @param parameter the parameter
    */
   public void addParameter(JobParameter parameter) {
+    parameters.removeIf(
+        existingParameter ->
+            Objects.equals(existingParameter.getName(), parameter.getName()));
+
     parameter.setJob(this);
 
     this.parameters.add(parameter);

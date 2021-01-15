@@ -105,6 +105,12 @@ public class Organization extends Party implements Serializable {
    * @param contactMechanism the contact mechanism
    */
   public void addContactMechanism(ContactMechanism contactMechanism) {
+    contactMechanisms.removeIf(
+        existingContactMechanism ->
+            Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
+                && Objects.equals(
+                existingContactMechanism.getPurpose(), contactMechanism.getPurpose()));
+
     contactMechanism.setParty(this);
 
     contactMechanisms.add(contactMechanism);
@@ -116,6 +122,12 @@ public class Organization extends Party implements Serializable {
    * @param physicalAddress the physical address
    */
   public void addPhysicalAddress(PhysicalAddress physicalAddress) {
+    physicalAddresses.removeIf(
+        existingPhysicalAddress ->
+            Objects.equals(existingPhysicalAddress.getType(), physicalAddress.getType())
+                && Objects.equals(
+                existingPhysicalAddress.getPurpose(), physicalAddress.getPurpose()));
+
     physicalAddress.setParty(this);
 
     physicalAddresses.add(physicalAddress);

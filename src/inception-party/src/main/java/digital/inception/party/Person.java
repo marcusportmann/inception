@@ -60,7 +60,6 @@ import javax.xml.bind.annotation.XmlType;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"type"})
 @JsonPropertyOrder({
-  "correspondenceLanguage",
   "countryOfBirth",
   "countryOfResidence",
   "dateOfBirth",
@@ -98,7 +97,6 @@ import javax.xml.bind.annotation.XmlType;
     name = "Person",
     namespace = "http://party.inception.digital",
     propOrder = {
-      "correspondenceLanguage",
       "countryOfBirth",
       "countryOfResidence",
       "dateOfBirth",
@@ -191,14 +189,6 @@ public class Person extends Party implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<Preference> preferences = new HashSet<>();
-
-  /** The optional code for the correspondence language for the person. */
-  @Schema(description = "The optional code for the correspondence language for the person")
-  @JsonProperty
-  @XmlElement(name = "CorrespondenceLanguage")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "correspondence_language")
-  private String correspondenceLanguage;
 
   /** The optional code for the country of birth for the person. */
   @Schema(description = "The optional code for the country of birth for the person")
@@ -496,15 +486,6 @@ public class Person extends Party implements Serializable {
   }
 
   /**
-   * Returns the optional code for the correspondence language for the person.
-   *
-   * @return the optional code for the correspondence language for the person
-   */
-  public String getCorrespondenceLanguage() {
-    return correspondenceLanguage;
-  }
-
-  /**
    * Returns the optional code for the country of birth for the person.
    *
    * @return the optional code for the country of birth for the person
@@ -642,8 +623,7 @@ public class Person extends Party implements Serializable {
   }
 
   /**
-   * Returns the optional code for the marriage type for the person if the person is
-   * married.
+   * Returns the optional code for the marriage type for the person if the person is married.
    *
    * @return the optional code for the marriage type for the person if the person is married
    */
@@ -879,16 +859,6 @@ public class Person extends Party implements Serializable {
   }
 
   /**
-   * Set the optional code for the correspondence language for the person.
-   *
-   * @param correspondenceLanguage the optional code for the correspondence language for the
-   *     person
-   */
-  public void setCorrespondenceLanguage(String correspondenceLanguage) {
-    this.correspondenceLanguage = correspondenceLanguage;
-  }
-
-  /**
    * Set the optional code for the country of birth for the person.
    *
    * @param countryOfBirth the optional code for the country of birth for the person
@@ -909,8 +879,7 @@ public class Person extends Party implements Serializable {
   /**
    * Set the optional code for the country of tax residence for the person.
    *
-   * @param countryOfTaxResidence the optional code for the country of tax residence for the
-   *     person
+   * @param countryOfTaxResidence the optional code for the country of tax residence for the person
    */
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
     this.countryOfTaxResidence = countryOfTaxResidence;
@@ -1028,8 +997,8 @@ public class Person extends Party implements Serializable {
   /**
    * Set the optional code for the marriage type for the person if the person is married.
    *
-   * @param marriageType the optional code for the marriage type for the person if the
-   *     person is married
+   * @param marriageType the optional code for the marriage type for the person if the person is
+   *     married
    */
   public void setMarriageType(String marriageType) {
     this.marriageType = marriageType;

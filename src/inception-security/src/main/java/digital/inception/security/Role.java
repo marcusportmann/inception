@@ -121,6 +121,10 @@ public class Role implements java.io.Serializable {
    * @param function the function
    */
   public void addFunction(Function function) {
+    functions.removeIf(
+        existingFunction ->
+            Objects.equals(existingFunction.getCode(), function.getCode()));
+
     functions.add(function);
     function.getRoles().add(this);
   }

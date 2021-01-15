@@ -39,6 +39,7 @@ import digital.inception.party.Persons;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
+import digital.inception.party.Preference;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
@@ -79,7 +80,7 @@ public class PartyServiceTest {
   private static int partyCount;
 
   private static int personCount;
-  
+
   /** The Party Service. */
   @Autowired private IPartyService partyService;
 
@@ -182,6 +183,8 @@ public class PartyServiceTest {
     correspondenceAddress.setPostalCode("CA 95014");
 
     person.addPhysicalAddress(correspondenceAddress);
+
+    person.addPreference(new Preference("correspondence_language", "EN"));
 
     return person;
   }
@@ -983,10 +986,6 @@ public class PartyServiceTest {
 
   private void comparePersons(Person person1, Person person2) {
     assertEquals(
-        "The correspondence language values for the two persons do not match",
-        person1.getCorrespondenceLanguage(),
-        person2.getCorrespondenceLanguage());
-    assertEquals(
         "The country of birth values for the two persons do not match",
         person1.getCountryOfBirth(),
         person2.getCountryOfBirth());
@@ -1193,6 +1192,30 @@ public class PartyServiceTest {
                 + ")");
       }
     }
+
+    assertEquals(
+        "The number of preferences for the two persons do not match",
+        person1.getPreferences().size(),
+        person2.getPreferences().size());
+
+    for (Preference person1Preference : person1.getPreferences()) {
+      boolean foundPreference = false;
+
+      for (Preference person2Preference : person2.getPreferences()) {
+
+        if (Objects.equals(person1Preference.getPerson(), person2Preference.getPerson())
+            && Objects.equals(person1Preference.getType(), person2Preference.getType())) {
+
+          comparePreferences(person1Preference, person2Preference);
+
+          foundPreference = true;
+        }
+      }
+
+      if (!foundPreference) {
+        fail("Failed to find the preference (" + person1Preference.getType() + ")");
+      }
+    }
   }
 
   private void comparePhysicalAddresses(
@@ -1277,5 +1300,16 @@ public class PartyServiceTest {
         "The type values for the two physical addresses do not match",
         physicalAddress1.getType(),
         physicalAddress2.getType());
+  }
+
+  private void comparePreferences(Preference preference1, Preference preference2) {
+    assertEquals(
+        "The type values for the two preferences do not match",
+        preference1.getType(),
+        preference2.getType());
+    assertEquals(
+        "The value values for the two preferences do not match",
+        preference1.getValue(),
+        preference2.getValue());
   }
 }

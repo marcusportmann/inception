@@ -14,6 +14,7 @@ import digital.inception.party.Person;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
+import digital.inception.party.Preference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -38,7 +39,6 @@ import javax.xml.bind.annotation.XmlType;
 @Schema(description = "A individual customer")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-  "correspondenceLanguage",
   "countryOfBirth",
   "countryOfResidence",
   "dateOfBirth",
@@ -69,7 +69,8 @@ import javax.xml.bind.annotation.XmlType;
   "taxNumber",
   "contactMechanisms",
   "identityDocuments",
-  "physicalAddresses"
+  "physicalAddresses",
+  "preferences"
 })
 @XmlRootElement(
     name = "IndividualCustomer",
@@ -154,20 +155,6 @@ public class IndividualCustomer extends Person implements Serializable {
   @Override
   public Set<ContactMechanism> getContactMechanisms() {
     return super.getContactMechanisms();
-  }
-
-  /**
-   * Returns the code for the correspondence language for the individual customer.
-   *
-   * @return the code for the correspondence language for the individual customer
-   */
-  @Schema(
-      description = "The code for the correspondence language for the individual customer",
-      required = true)
-  @JsonProperty(required = true)
-  @Override
-  public String getCorrespondenceLanguage() {
-    return super.getCorrespondenceLanguage();
   }
 
   /**
@@ -457,6 +444,17 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
+   * Returns the preferences for the individual customer.
+   *
+   * @return the preferences for the individual customer
+   */
+  @Schema(description = "The preferences for the individual customer")
+  @Override
+  public Set<Preference> getPreferences() {
+    return super.getPreferences();
+  }
+
+  /**
    * Returns the optional preferred name for the individual customer.
    *
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
@@ -622,16 +620,6 @@ public class IndividualCustomer extends Person implements Serializable {
   @Override
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
     super.setContactMechanisms(contactMechanisms);
-  }
-
-  /**
-   * Set the code for the correspondence language for the individual customer.
-   *
-   * @param correspondenceLanguage the code for the correspondence language for the private
-   *     individual customer
-   */
-  public void setCorrespondenceLanguage(String correspondenceLanguage) {
-    super.setCorrespondenceLanguage(correspondenceLanguage);
   }
 
   /**
@@ -854,6 +842,16 @@ public class IndividualCustomer extends Person implements Serializable {
   @Override
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
     super.setPhysicalAddresses(physicalAddresses);
+  }
+
+  /**
+   * Set the preferences for the individual customer.
+   *
+   * @param preferences the preferences for the individual customer
+   */
+  @Override
+  public void setPreferences(Set<Preference> preferences) {
+    super.setPreferences(preferences);
   }
 
   /**
