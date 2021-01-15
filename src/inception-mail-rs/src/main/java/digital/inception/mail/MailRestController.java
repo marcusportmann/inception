@@ -126,7 +126,7 @@ public class MailRestController extends SecureRestController {
   /**
    * Delete the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    */
   @Operation(summary = "Delete the mail template", description = "Delete the mail template")
   @ApiResponses(
@@ -167,7 +167,7 @@ public class MailRestController extends SecureRestController {
   public void deleteMailTemplate(
       @Parameter(
               name = "mailTemplateId",
-              description = "The ID uniquely identifying the mail template",
+              description = "The ID for the mail template",
               required = true)
           @PathVariable
           String mailTemplateId)
@@ -178,7 +178,7 @@ public class MailRestController extends SecureRestController {
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    */
   @Operation(summary = "Retrieve the mail template", description = "Retrieve the mail template")
   @ApiResponses(
@@ -217,7 +217,7 @@ public class MailRestController extends SecureRestController {
   public MailTemplate getMailTemplate(
       @Parameter(
               name = "mailTemplateId",
-              description = "The ID uniquely identifying the mail template",
+              description = "The ID for the mail template",
               required = true)
           @PathVariable
           String mailTemplateId)
@@ -228,7 +228,7 @@ public class MailRestController extends SecureRestController {
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the name of the mail template
    */
   @Operation(
@@ -270,7 +270,7 @@ public class MailRestController extends SecureRestController {
   public String getMailTemplateName(
       @Parameter(
               name = "mailTemplateId",
-              description = "The ID uniquely identifying the mail template",
+              description = "The ID for the mail template",
               required = true)
           @PathVariable
           String mailTemplateId)
@@ -404,7 +404,7 @@ public class MailRestController extends SecureRestController {
   /**
    * Update the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @param mailTemplate the mail template
    */
   @Operation(summary = "Update the mail template", description = "Update the mail template")
@@ -446,7 +446,7 @@ public class MailRestController extends SecureRestController {
   public void updateMailTemplate(
       @Parameter(
               name = "mailTemplateId",
-              description = "The ID uniquely identifying the mail template",
+              description = "The ID for the mail template",
               required = true)
           @PathVariable
           String mailTemplateId,

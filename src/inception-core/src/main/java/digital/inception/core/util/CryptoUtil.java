@@ -110,7 +110,7 @@ public class CryptoUtil {
   /**
    * Load a key store.
    *
-   * @param type the type of key store e.g. JKS, PKCS12, etc
+   * @param type the key store type e.g. JKS, PKCS12, etc
    * @param path the path to the key store
    * @param password the key store password
    * @return the key store that was loaded
@@ -153,7 +153,7 @@ public class CryptoUtil {
   /**
    * Load a key store and query it to confirm a key pair with the specified alias is present.
    *
-   * @param type the type of key store e.g. JKS, PKCS12, etc
+   * @param type the key store type e.g. JKS, PKCS12, etc
    * @param path the path to the key store
    * @param password the key store password
    * @param alias the alias for the key pair in the key store that should be retrieved
@@ -229,7 +229,7 @@ public class CryptoUtil {
   /**
    * Load the trust store.
    *
-   * @param type the type of trust store e.g. JKS, PKCS12, etc
+   * @param type the trust store type e.g. JKS, PKCS12, etc
    * @param path the path to the trust store
    * @param password the trust store password
    * @return the trust store that was loaded

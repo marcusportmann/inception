@@ -51,7 +51,7 @@ public class DuplicatePartyException extends ServiceException {
   /**
    * Constructs a new <code>DuplicatePartyException</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @param id the Universally Unique Identifier (UUID) for the party
    */
   public DuplicatePartyException(UUID id) {
     super("DuplicatePartyError", "The party with the ID (" + id + ") already exists");

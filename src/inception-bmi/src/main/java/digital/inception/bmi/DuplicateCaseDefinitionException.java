@@ -52,7 +52,7 @@ public class DuplicateCaseDefinitionException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateCaseDefinitionException</code>.
    *
-   * @param caseDefinitionId the ID uniquely identifying the case definition
+   * @param caseDefinitionId the ID for the case definition
    */
   public DuplicateCaseDefinitionException(String caseDefinitionId) {
     super(

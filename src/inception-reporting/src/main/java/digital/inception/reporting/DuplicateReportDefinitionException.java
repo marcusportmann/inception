@@ -52,7 +52,7 @@ public class DuplicateReportDefinitionException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateReportDefinitionException</code>.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    */
   public DuplicateReportDefinitionException(String reportDefinitionId) {
     super(

@@ -66,8 +66,8 @@ public class Function implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code uniquely identifying the function. */
-  @Schema(description = "The code uniquely identifying the function", required = true)
+  /** The code for the function. */
+  @Schema(description = "The code for the function", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -105,7 +105,7 @@ public class Function implements java.io.Serializable {
   /**
    * Constructs a new <code>Function</code>.
    *
-   * @param code the code uniquely identifying the function
+   * @param code the code for the function
    * @param name the name of the function
    * @param description the description for the function
    */
@@ -142,9 +142,9 @@ public class Function implements java.io.Serializable {
   }
 
   /**
-   * Returns the code uniquely identifying the function.
+   * Returns the code for the function.
    *
-   * @return the code uniquely identifying the function
+   * @return the code for the function
    */
   public String getCode() {
     return code;
@@ -188,9 +188,9 @@ public class Function implements java.io.Serializable {
   }
 
   /**
-   * Set the code uniquely identifying the function.
+   * Set the code for the function.
    *
-   * @param code the code uniquely identifying the function
+   * @param code the code for the function
    */
   public void setCode(String code) {
     this.code = code;

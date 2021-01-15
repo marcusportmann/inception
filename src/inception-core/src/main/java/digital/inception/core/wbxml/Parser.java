@@ -140,7 +140,7 @@ public class Parser {
             "Invalid string table offset for attribute name: " + attributeNameOffset);
       }
 
-      // Read the byte giving the type of value for this attribute
+      // Read the byte giving the value type for this attribute
       tmpValue = readByte();
 
       // We can only handle inline string attribute values

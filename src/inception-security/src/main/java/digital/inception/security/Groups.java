@@ -104,12 +104,12 @@ public class Groups implements Serializable {
   private long total;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the groups are
+   * The Universally Unique Identifier (UUID) for the user directory the groups are
    * associated with.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the user directory the groups are associated with",
+          "The Universally Unique Identifier (UUID) for the user directory the groups are associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -121,7 +121,7 @@ public class Groups implements Serializable {
   /**
    * Constructs a new <code>Groups</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory the groups are associated with
    * @param groups the groups
    * @param total the total number of groups
@@ -202,10 +202,10 @@ public class Groups implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * Returns the Universally Unique Identifier (UUID) for the user directory the
    * groups are associated with.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * @return the Universally Unique Identifier (UUID) for the user directory the
    *     groups are associated with
    */
   public UUID getUserDirectoryId() {

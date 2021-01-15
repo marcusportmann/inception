@@ -84,7 +84,7 @@ public class CodesWebService {
   /**
    * Delete the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    */
   @WebMethod(operationName = "DeleteCode")
   public void deleteCode(
@@ -97,7 +97,7 @@ public class CodesWebService {
   /**
    * Delete the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    */
   @WebMethod(operationName = "DeleteCodeCategory")
   public void deleteCodeCategory(
@@ -109,8 +109,8 @@ public class CodesWebService {
   /**
    * Retrieve the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID for the code category the code is associated with
+   * @param codeId the ID for the code
    * @return the code
    */
   @WebMethod(operationName = "GetCode")
@@ -136,7 +136,7 @@ public class CodesWebService {
   /**
    * Retrieve the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the code category
    */
   @WebMethod(operationName = "GetCodeCategory")
@@ -150,7 +150,7 @@ public class CodesWebService {
   /**
    * Retrieve the XML or JSON data for a code category
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the XML or JSON data for the code category
    */
   @WebMethod(operationName = "GetCodeCategoryData")
@@ -166,7 +166,7 @@ public class CodesWebService {
   /**
    * Retrieve the name of the code category
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the name of the code category
    */
   @WebMethod(operationName = "GetCodeCategoryName")
@@ -191,7 +191,7 @@ public class CodesWebService {
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the date and time the code category was last updated
    */
   @WebMethod(operationName = "GetCodeCategoryUpdated")
@@ -209,8 +209,8 @@ public class CodesWebService {
   /**
    * Retrieve the name of the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID for the code category the code is associated with
+   * @param codeId the ID for the code
    * @return the name of the code
    */
   @WebMethod(operationName = "GetCodeName")
@@ -225,7 +225,7 @@ public class CodesWebService {
   /**
    * Retrieve the codes for a code category
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the codes for the code category
    */
   @WebMethod(operationName = "GetCodes")

@@ -53,8 +53,8 @@ public class CaseDefinitionSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the case definition. */
-  @Schema(description = "The ID uniquely identifying the case definition", required = true)
+  /** The ID for the case definition. */
+  @Schema(description = "The ID for the case definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -75,7 +75,7 @@ public class CaseDefinitionSummary implements Serializable {
   /**
    * Constructs a new <code>CaseDefinitionSummary</code>.
    *
-   * @param id the ID uniquely identifying the case definition
+   * @param id the ID for the case definition
    * @param name the name of the case definition
    */
   public CaseDefinitionSummary(String id, String name) {
@@ -110,9 +110,9 @@ public class CaseDefinitionSummary implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the case definition.
+   * Returns the ID for the case definition.
    *
-   * @return the ID uniquely identifying the case definition
+   * @return the ID for the case definition
    */
   public String getId() {
     return id;

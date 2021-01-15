@@ -57,7 +57,7 @@ public class ConfigurationWebService {
   /**
    * Delete the configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    */
   @WebMethod(operationName = "DeleteConfiguration")
   public void deleteConfiguration(@WebParam(name = "Key") @XmlElement(required = true) String key)
@@ -69,7 +69,7 @@ public class ConfigurationWebService {
   /**
    * Retrieve the configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    * @return the configuration
    */
   @WebMethod(operationName = "GetConfiguration")
@@ -84,7 +84,7 @@ public class ConfigurationWebService {
   /**
    * Retrieve the configuration value.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    * @return the configuration value
    */
   @WebMethod(operationName = "GetConfigurationValue")

@@ -22,7 +22,7 @@
 export class UserDirectorySummary {
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   * The Universally Unique Identifier (UUID) for the user directory.
    */
   id: string;
 
@@ -32,17 +32,17 @@ export class UserDirectorySummary {
   name: string;
 
   /**
-   * The code uniquely identifying the user directory type.
+   * The code for the user directory type.
    */
   type: string;
 
   /**
    * Constructs a new UserDirectorySummary.
    *
-   * @param id   The Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param id   The Universally Unique Identifier (UUID) for the user
    *             directory.
    * @param name The name of the user directory.
-   * @param type The code uniquely identifying the user directory type.
+   * @param type The code for the user directory type.
    */
   constructor(id: string, name: string, type: string) {
     this.id = id;

@@ -36,9 +36,9 @@ import javax.xml.bind.annotation.XmlType;
 @SuppressWarnings({"unused"})
 public class TenantUserDirectory implements Serializable {
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the tenant. */
+  /** The Universally Unique Identifier (UUID) for the tenant. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+      description = "The Universally Unique Identifier (UUID) for the tenant",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -47,10 +47,10 @@ public class TenantUserDirectory implements Serializable {
   @Column(name = "tenantId", nullable = false)
   private UUID tenantId;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
+  /** The Universally Unique Identifier (UUID) for the user directory. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+          "The Universally Unique Identifier (UUID) for the user directory",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -65,8 +65,8 @@ public class TenantUserDirectory implements Serializable {
   /**
    * Constructs a new <code>TenantUserDirectory</code>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    */
   public TenantUserDirectory(UUID tenantId, UUID userDirectoryId) {
@@ -75,36 +75,36 @@ public class TenantUserDirectory implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the tenant.
+   * Returns the Universally Unique Identifier (UUID) for the tenant.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the Universally Unique Identifier (UUID) for the tenant
    */
   public UUID getTenantId() {
     return tenantId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   * Returns the Universally Unique Identifier (UUID) for the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
+   * @return the Universally Unique Identifier (UUID) for the user directory
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the tenant.
+   * Set the Universally Unique Identifier (UUID) for the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   * Set the Universally Unique Identifier (UUID) for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    */
   public void setUserDirectoryId(UUID userDirectoryId) {

@@ -92,9 +92,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param groupMember the group member
    */
   @Operation(
@@ -146,13 +146,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName,
@@ -198,9 +198,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param groupRole the group role
    */
   @Operation(summary = "Add the role to the group", description = "Add the role to the group")
@@ -250,13 +250,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName,
@@ -313,7 +313,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Add the user directory to the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param tenantUserDirectory the tenant user directory
    */
   @Operation(
@@ -365,7 +365,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+                  "The Universally Unique Identifier (UUID) for the tenant",
               required = true)
           @PathVariable
           UUID tenantId,
@@ -408,9 +408,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param passwordChange the password change
    */
   @Operation(
@@ -455,13 +455,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "username",
-              description = "The username identifying the user",
+              description = "The username for the user",
               required = true)
           @PathVariable
           String username,
@@ -511,7 +511,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Change the password for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param passwordChange the password change
    */
   @Operation(
@@ -575,7 +575,7 @@ public class SecurityRestController extends SecureRestController {
   public void changePassword(
       @Parameter(
               name = "username",
-              description = "The username identifying the user",
+              description = "The username for the user",
               required = true)
           @PathVariable
           String username,
@@ -656,7 +656,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Create the new group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param group the group
    */
@@ -705,7 +705,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
@@ -787,7 +787,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Create the new user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param user the user
    * @param expiredPassword create the user with its password expired
@@ -838,7 +838,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
@@ -928,9 +928,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Delete the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    */
   @Operation(summary = "Delete the group", description = "Delete the group")
   @ApiResponses(
@@ -978,13 +978,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName)
@@ -1001,7 +1001,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Delete the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    */
   @Operation(summary = "Delete the tenant", description = "Delete the tenant")
   @ApiResponses(
@@ -1041,7 +1041,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+                  "The Universally Unique Identifier (UUID) for the tenant",
               required = true)
           @PathVariable
           UUID tenantId)
@@ -1052,9 +1052,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    */
   @Operation(summary = "Delete the user", description = "Delete the user")
   @ApiResponses(
@@ -1094,13 +1094,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "username",
-              description = "The username identifying the user",
+              description = "The username for the user",
               required = true)
           @PathVariable
           String username)
@@ -1117,7 +1117,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    */
   @Operation(summary = "Delete the user directory", description = "Delete the user directory")
@@ -1160,7 +1160,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId)
@@ -1171,9 +1171,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the group
    */
   @Operation(summary = "Retrieve the group", description = "Retrieve the group")
@@ -1214,13 +1214,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName)
@@ -1237,7 +1237,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the group names
    */
@@ -1279,7 +1279,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId)
@@ -1293,16 +1293,16 @@ public class SecurityRestController extends SecureRestController {
   }
 
   /**
-   * Retrieve the names identifying the groups the user is a member of.
+   * Retrieve the names of the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
-   * @return the names identifying the groups the user is a member of
+   * @param username the username for the user
+   * @return the names of the groups the user is a member of
    */
   @Operation(
-      summary = "Retrieve the names identifying the groups the user is a member of",
-      description = "Retrieve the names identifying the groups the user is a member of")
+      summary = "Retrieve the names of the groups the user is a member of",
+      description = "Retrieve the names of the groups the user is a member of")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -1340,13 +1340,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "username",
-              description = "The username identifying the user",
+              description = "The username for the user",
               required = true)
           @PathVariable
           String username)
@@ -1363,7 +1363,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param filter the optional filter to apply to the groups
    * @param sortDirection the optional sort direction to apply to the groups
@@ -1409,7 +1409,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
@@ -1446,9 +1446,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the group members.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
    * @param pageIndex the optional page index
@@ -1492,13 +1492,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName,
@@ -1537,9 +1537,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the codes for the roles that have been assigned to the group
    */
   @Operation(
@@ -1582,13 +1582,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName)
@@ -1631,9 +1631,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the roles that have been assigned to the group
    */
   @Operation(
@@ -1676,13 +1676,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName)
@@ -1699,7 +1699,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the tenant
    */
   @Operation(summary = "Retrieve the tenant", description = "Retrieve the tenant")
@@ -1740,7 +1740,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+                  "The Universally Unique Identifier (UUID) for the tenant",
               required = true)
           @PathVariable
           UUID tenantId)
@@ -1751,7 +1751,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the name of the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the name of the tenant
    */
   @Operation(
@@ -1794,7 +1794,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+                  "The Universally Unique Identifier (UUID) for the tenant",
               required = true)
           @PathVariable
           UUID tenantId)
@@ -1864,7 +1864,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the tenants the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the tenants the user directory is associated with
    */
@@ -1906,7 +1906,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId)
@@ -1924,9 +1924,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the user
    */
   @Operation(summary = "Retrieve the user", description = "Retrieve the user")
@@ -1967,13 +1967,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "username",
-              description = "The username identifying the user",
+              description = "The username for the user",
               required = true)
           @PathVariable
           String username)
@@ -2063,7 +2063,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the user directories the tenant is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the user directories the tenant is associated with
    */
   @Operation(
@@ -2106,7 +2106,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+                  "The Universally Unique Identifier (UUID) for the tenant",
               required = true)
           @PathVariable
           UUID tenantId)
@@ -2132,7 +2132,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the user directory
    */
@@ -2174,7 +2174,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId)
@@ -2185,7 +2185,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the capabilities the user directory supports.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the capabilities the user directory supports
    */
@@ -2229,7 +2229,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId)
@@ -2245,7 +2245,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the name of user directory
    */
@@ -2289,7 +2289,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId)
@@ -2366,7 +2366,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the summaries for the user directories the tenant is associated with
    */
   @Operation(
@@ -2409,7 +2409,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+                  "The Universally Unique Identifier (UUID) for the tenant",
               required = true)
           @PathVariable
           UUID tenantId)
@@ -2435,7 +2435,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the user directory type for the user directory
    */
@@ -2479,7 +2479,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId)
@@ -2527,9 +2527,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the name of the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the name of the user
    */
   @Operation(
@@ -2572,13 +2572,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "username",
-              description = "The username identifying the user",
+              description = "The username for the user",
               required = true)
           @PathVariable
           String username)
@@ -2595,7 +2595,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param filter the optional filter to apply to the users
    * @param sortBy the optional method used to sort the users e.g. by name.
@@ -2642,7 +2642,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
@@ -2685,11 +2685,11 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param memberType the group member type
-   * @param memberName the name identifying the group member
+   * @param memberName the name of the group member
    */
   @Operation(
       summary = "Remove the group member from the group",
@@ -2734,13 +2734,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName,
@@ -2749,7 +2749,7 @@ public class SecurityRestController extends SecureRestController {
           GroupMemberType memberType,
       @Parameter(
               name = "memberName",
-              description = "The name identifying the group member",
+              description = "The name of the group member",
               required = true)
           @PathVariable
           String memberName)
@@ -2766,10 +2766,10 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
-   * @param roleCode the code uniquely identifying the role
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
    */
   @Operation(
       summary = "Remove the role from the group",
@@ -2813,19 +2813,19 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName,
       @Parameter(
               name = "roleCode",
-              description = "The code uniquely identifying the role",
+              description = "The code for the role",
               required = true)
           @PathVariable
           String roleCode)
@@ -2854,8 +2854,8 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Remove the user directory from the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    */
   @Operation(
@@ -2900,14 +2900,14 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+                  "The Universally Unique Identifier (UUID) for the tenant",
               required = true)
           @PathVariable
           UUID tenantId,
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId)
@@ -2919,7 +2919,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Initiate the password reset process for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param resetPasswordUrl the reset password URL
    */
   @Operation(
@@ -2961,7 +2961,7 @@ public class SecurityRestController extends SecureRestController {
   public void resetPassword(
       @Parameter(
               name = "username",
-              description = "The username identifying the user",
+              description = "The username for the user",
               required = true)
           @PathVariable
           String username,
@@ -2975,9 +2975,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Update the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param group the group
    */
   @Operation(summary = "Update the group", description = "Update the group")
@@ -3018,13 +3018,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "groupName",
-              description = "The name identifying the group",
+              description = "The name of the group",
               required = true)
           @PathVariable
           String groupName,
@@ -3058,7 +3058,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Update the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param tenant the tenant
    */
   @Operation(summary = "Update the tenant", description = "Update the tenant")
@@ -3099,7 +3099,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "tenantId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the tenant",
+                  "The Universally Unique Identifier (UUID) for the tenant",
               required = true)
           @PathVariable
           UUID tenantId,
@@ -3127,9 +3127,9 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Update the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param user the user
    * @param expirePassword expire the user's password
    * @param lockUser lock the user
@@ -3172,13 +3172,13 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
       @Parameter(
               name = "username",
-              description = "The username identifying the user",
+              description = "The username for the user",
               required = true)
           @PathVariable
           String username,
@@ -3219,7 +3219,7 @@ public class SecurityRestController extends SecureRestController {
   /**
    * Update the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param userDirectory the user directory
    */
@@ -3263,7 +3263,7 @@ public class SecurityRestController extends SecureRestController {
       @Parameter(
               name = "userDirectoryId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+                  "The Universally Unique Identifier (UUID) for the user directory",
               required = true)
           @PathVariable
           UUID userDirectoryId,
@@ -3292,7 +3292,7 @@ public class SecurityRestController extends SecureRestController {
    * Confirm that the user associated with the authenticated request has access to the user
    * directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *     the user directory or <code>false</code> otherwise

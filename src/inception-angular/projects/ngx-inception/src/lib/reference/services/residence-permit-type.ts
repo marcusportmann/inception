@@ -27,7 +27,7 @@ export class ResidencePermitType {
   code: string;
 
   /**
-   * The code identifying the country of issue for the residence permit type.
+   * The code for the country of issue for the residence permit type.
    */
   countryOfIssue: string;
 
@@ -59,7 +59,7 @@ export class ResidencePermitType {
    * @param sortIndex      The sort index for the residence permit type.
    * @param name           The name of the residence permit type.
    * @param description    The description for the residence permit type.
-   * @param countryOfIssue The code identifying the country of issue for the residence permit type.
+   * @param countryOfIssue The code for the country of issue for the residence permit type.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               countryOfIssue: string) {

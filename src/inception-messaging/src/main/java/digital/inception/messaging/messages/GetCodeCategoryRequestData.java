@@ -50,7 +50,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("94d60eb6-a062-492d-b5e7-9fb1f05cf088");
 
-  /** The ID uniquely identifying the code category to retrieve. */
+  /** The ID for the code category to retrieve. */
   private String codeCategoryId;
 
   /** The date and time the code category was last retrieved. */
@@ -70,7 +70,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>GetCodeCategoryRequestData</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category to retrieve
+   * @param codeCategoryId the ID for the code category to retrieve
    * @param lastRetrieved the date and time the code category was last retrieved
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
    *     category is current
@@ -88,7 +88,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>GetCodeCategoryRequestData</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category to retrieve
+   * @param codeCategoryId the ID for the code category to retrieve
    * @param lastRetrieved the date and time the code category was last retrieved
    * @param parameters the parameters
    * @param returnCodesIfCurrent should the codes for the code category be returned if the code
@@ -166,9 +166,9 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the ID uniquely identifying the code category to retrieve.
+   * Returns the ID for the code category to retrieve.
    *
-   * @return the ID uniquely identify the code category to retrieve
+   * @return the ID for the code category to retrieve
    */
   public String getCodeCategoryId() {
     return codeCategoryId;

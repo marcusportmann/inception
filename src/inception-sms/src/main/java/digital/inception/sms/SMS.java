@@ -91,9 +91,9 @@ public class SMS implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the SMS. */
+  /** The Universally Unique Identifier (UUID) for the SMS. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the SMS",
+      description = "The Universally Unique Identifier (UUID) for the SMS",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "id", required = true)
@@ -188,7 +188,7 @@ public class SMS implements Serializable {
   /**
    * Constructs a new <code>SMS</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the SMS
+   * @param id the Universally Unique Identifier (UUID) for the SMS
    * @param mobileNumber the mobile number to send the SMS to
    * @param message the message to send
    * @param status the status of the SMS
@@ -249,9 +249,9 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the SMS.
+   * Returns the Universally Unique Identifier (UUID) for the SMS.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the SMS
+   * @return the Universally Unique Identifier (UUID) for the SMS
    */
   public UUID getId() {
     return id;
@@ -340,9 +340,9 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the SMS.
+   * Set the Universally Unique Identifier (UUID) for the SMS.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the SMS
+   * @param id the Universally Unique Identifier (UUID) for the SMS
    */
   public void setId(UUID id) {
     this.id = id;

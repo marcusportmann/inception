@@ -35,12 +35,12 @@ import java.util.UUID;
 public class MessagePartDownloadRequest {
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the device the message part
+   * The Universally Unique Identifier (UUID) for the device the message part
    * download request originated from.
    */
   private UUID deviceId;
 
-  /** The username identifying the user whose message parts should be downloaded. */
+  /** The username for the user whose message parts should be downloaded. */
   private String username;
 
   /**
@@ -59,9 +59,9 @@ public class MessagePartDownloadRequest {
   /**
    * Constructs a new <code>MessagePartDownloadRequest</code>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message part download request originated from
-   * @param username the username identifying the user whose message parts should be downloaded
+   * @param username the username for the user whose message parts should be downloaded
    */
   public MessagePartDownloadRequest(UUID deviceId, String username) {
     this.deviceId = deviceId;
@@ -86,10 +86,10 @@ public class MessagePartDownloadRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * Returns the Universally Unique Identifier (UUID) for the device the message
    * part download request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * @return the Universally Unique Identifier (UUID) for the device the message
    *     part download request originated from
    */
   public UUID getDeviceId() {
@@ -97,19 +97,19 @@ public class MessagePartDownloadRequest {
   }
 
   /**
-   * Returns the username identifying the user whose message parts should be downloaded.
+   * Returns the username for the user whose message parts should be downloaded.
    *
-   * @return the username identifying the user whose message parts should be downloaded
+   * @return the username for the user whose message parts should be downloaded
    */
   public String getUsername() {
     return username;
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the device the message part
+   * Set the Universally Unique Identifier (UUID) for the device the message part
    * download request originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message part download request originated from
    */
   public void setDeviceId(UUID deviceId) {
@@ -117,9 +117,9 @@ public class MessagePartDownloadRequest {
   }
 
   /**
-   * Set the username identifying the user whose message parts should be downloaded.
+   * Set the username for the user whose message parts should be downloaded.
    *
-   * @param username the username identifying the user whose message parts should be downloaded
+   * @param username the username for the user whose message parts should be downloaded
    */
   public void setUsername(String username) {
     this.username = username;

@@ -52,7 +52,7 @@ public class ExistingGroupMembersException extends ServiceException {
   /**
    * Constructs a new <code>ExistingGroupMembersException</code>.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    */
   public ExistingGroupMembersException(String groupName) {
     super(

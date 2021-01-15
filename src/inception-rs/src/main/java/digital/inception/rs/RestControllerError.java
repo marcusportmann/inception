@@ -74,7 +74,7 @@ public class RestControllerError implements Serializable {
   /** The URI for the HTTP request that resulted in the error. */
   @JsonProperty private final String uri;
 
-  /** The optional code identifying the error. */
+  /** The optional code for the error. */
   @JsonProperty private String code;
 
   /** The optional detail. */
@@ -180,9 +180,9 @@ public class RestControllerError implements Serializable {
   }
 
   /**
-   * Returns the optional code identifying the error.
+   * Returns the optional code for the error.
    *
-   * @return the optional code identifying the error
+   * @return the optional code for the error
    */
   public String getCode() {
     return code;

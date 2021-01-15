@@ -559,9 +559,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the type of party for the individual customer.
+   * Returns the party type for the individual customer.
    *
-   * @return the type of party for the individual customer
+   * @return the party type for the individual customer
    */
   @JsonIgnore
   @XmlTransient
@@ -596,7 +596,7 @@ public class IndividualCustomer extends Person implements Serializable {
   /**
    * Remove the identity document with the specified type for the individual customer.
    *
-   * @param type the code for the type of identity document
+   * @param type the code for the identity document type
    */
   @Override
   public void removeIdentityDocumentByType(String type) {
@@ -820,7 +820,7 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the individual customeral name or full name of the individual customer.
+   * Set the personal name or full name of the individual customer.
    *
    * <p>In Western culture, this is constructed from a combination of the given name (also known as
    * the first name, forename, or Christian name), and the surname (also known as the last name or
@@ -829,7 +829,7 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * <p>See https://en.wikipedia.org/wiki/Personal_name
    *
-   * @param name
+   * @param name the personal name or full name of the individual customer
    */
   @Override
   public void setName(String name) {

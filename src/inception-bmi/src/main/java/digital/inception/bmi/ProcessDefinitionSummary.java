@@ -54,8 +54,8 @@ public class ProcessDefinitionSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the process definition. */
-  @Schema(description = "The ID uniquely identifying the process definition", required = true)
+  /** The ID for the process definition. */
+  @Schema(description = "The ID for the process definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -84,7 +84,7 @@ public class ProcessDefinitionSummary implements Serializable {
   /**
    * Constructs a new <code>ProcessDefinitionSummary</code>.
    *
-   * @param id the ID uniquely identifying the process definition
+   * @param id the ID for the process definition
    * @param name the name of the process definition
    * @param version the version of the process definition
    */
@@ -121,9 +121,9 @@ public class ProcessDefinitionSummary implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the process definition.
+   * Returns the ID for the process definition.
    *
-   * @return the ID uniquely identifying the process definition
+   * @return the ID for the process definition
    */
   public String getId() {
     return id;

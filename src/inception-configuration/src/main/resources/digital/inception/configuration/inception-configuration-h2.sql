@@ -17,7 +17,7 @@ CREATE TABLE configuration.configuration (
   PRIMARY KEY (key)
 );
 
-COMMENT ON COLUMN configuration.configuration.key IS 'The key uniquely identifying the configuration value';
+COMMENT ON COLUMN configuration.configuration.key IS 'The key for the configuration value';
 
 COMMENT ON COLUMN configuration.configuration.value IS 'The value for the configuration value';
 

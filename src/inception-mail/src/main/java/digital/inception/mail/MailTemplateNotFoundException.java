@@ -49,7 +49,7 @@ public class MailTemplateNotFoundException extends ServiceException {
   /**
    * w Constructs a new <code>MailTemplateNotFoundException</code>.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    */
   public MailTemplateNotFoundException(String mailTemplateId) {
     super(

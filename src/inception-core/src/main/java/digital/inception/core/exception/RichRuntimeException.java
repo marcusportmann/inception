@@ -38,7 +38,7 @@ public class RichRuntimeException extends RuntimeException {
   /** The date and time the exception occurred. */
   private final LocalDateTime when;
 
-  /** The optional error code identifying the error. */
+  /** The optional error code. */
   private String code;
 
   /** Constructs a new <code>RichRuntimeException</code> with <code>null</code> as its message. */
@@ -74,7 +74,7 @@ public class RichRuntimeException extends RuntimeException {
   /**
    * Constructs a new <code>RichRuntimeException</code> with the specified code and message.
    *
-   * @param code the error code identifying the error
+   * @param code the error code
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    */
   public RichRuntimeException(String code, String message) {
@@ -98,7 +98,7 @@ public class RichRuntimeException extends RuntimeException {
   /**
    * Constructs a new <code>RichRuntimeException</code> with the specified code, message and cause.
    *
-   * @param code the error code identifying the error
+   * @param code the error code
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
    *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
@@ -110,9 +110,9 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Returns the optional error code identifying the error or NONE if no error code was specified.
+   * Returns the optional error code or NONE if no error code was specified.
    *
-   * @return the optional error code identifying the error or NONE if no error code was specified
+   * @return the optional error code or NONE if no error code was specified
    */
   public String getCode() {
     return (code == null) ? NO_ERROR_CODE : code;

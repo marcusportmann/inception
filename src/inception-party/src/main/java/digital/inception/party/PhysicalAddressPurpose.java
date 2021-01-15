@@ -80,7 +80,7 @@ public enum PhysicalAddressPurpose {
   /**
    * Returns the physical address purpose given by the specified code value.
    *
-   * @param code the code value identifying the physical address purpose
+   * @param code the code for the physical address purpose
    * @return the physical address purpose given by the specified code value
    */
   @JsonCreator
@@ -136,7 +136,7 @@ public enum PhysicalAddressPurpose {
   /**
    * Returns the physical address purpose for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the physical address purpose
+   * @param numericCode the numeric code for the physical address purpose
    * @return the physical address purpose given by the specified numeric code value
    */
   public static PhysicalAddressPurpose fromNumericCode(int numericCode) {

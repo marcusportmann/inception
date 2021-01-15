@@ -63,40 +63,37 @@ import org.springframework.web.util.UriUtils;
 @SuppressWarnings({"unused", "WeakerAccess", "DuplicatedCode"})
 public class SecurityService implements ISecurityService, InitializingBean {
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the Administration tenant. */
+  /** The Universally Unique Identifier (UUID) for the Administration tenant. */
   public static final UUID ADMINISTRATION_TENANT_ID =
       UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the Administration user
-   * directory.
-   */
+  /** The Universally Unique Identifier (UUID) for the Administration user directory. */
   public static final UUID ADMINISTRATION_USER_DIRECTORY_ID =
       UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the Administrators group. */
+  /** The Universally Unique Identifier (UUID) for the Administrators group. */
   public static final UUID ADMINISTRATORS_GROUP_ID =
       UUID.fromString("00000000-0000-0000-0000-000000000000");
 
   /** The name of the Administrators group. */
   public static final String ADMINISTRATORS_GROUP_NAME = "Administrators";
 
-  /** The code uniquely identifying the Administrator role. */
+  /** The code for the Administrator role. */
   public static final String ADMINISTRATOR_ROLE_CODE = "Administrator";
 
   /** The username for the Administrator user. */
   public static final String ADMINISTRATOR_USERNAME = "Administrator";
 
-  /** The code uniquely identifying the internal user directory type. */
+  /** The code for the internal user directory type. */
   public static final String INTERNAL_USER_DIRECTORY_TYPE = "InternalUserDirectory";
 
-  /** The code uniquely identifying the LDAP user directory type. */
+  /** The code for the LDAP user directory type. */
   public static final String LDAP_USER_DIRECTORY_TYPE = "LDAPUserDirectory";
 
-  /** The code uniquely identifying the Password Resetter role. */
+  /** The code for the Password Resetter role. */
   public static final String PASSWORD_RESETTER_ROLE_CODE = "PasswordResetter";
 
-  /** The code uniquely identifying the Tenant Administrator role. */
+  /** The code for the Tenant Administrator role. */
   public static final String TENANT_ADMINISTRATOR_ROLE_CODE = "TenantAdministrator";
 
   /** The maximum number of filtered tenants. */
@@ -105,9 +102,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /** The maximum number of filtered user directories. */
   private static final int MAX_FILTERED_USER_DIRECTORIES = 100;
 
-  /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the password reset mail template.
-   */
+  /** The Universally Unique Identifier (UUID) for the password reset mail template. */
   private static final String PASSWORD_RESET_MAIL_TEMPLATE_ID =
       "Inception.Security.PasswordResetMail";
 
@@ -207,9 +202,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the group member name
    */
@@ -247,10 +241,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
-   * @param roleCode the code uniquely identifying the role
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
    */
   @Override
   @Transactional
@@ -281,9 +274,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Add the user directory to the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   @Override
   @Transactional
@@ -330,10 +322,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Add the user to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
+   * @param username the username for the user
    */
   @Override
   @Transactional
@@ -364,9 +355,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
    * @param newPassword the new password
    * @param expirePassword expire the user's password
    * @param lockUser lock the user
@@ -436,9 +426,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Authenticate the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param password the password being used to authenticate
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
+   * @return the Universally Unique Identifier (UUID) for the user directory
    */
   @Override
   @Transactional
@@ -506,10 +496,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Change the password for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param password the password for the user that is used to authorise the operation
    * @param newPassword the new password
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
+   * @return the Universally Unique Identifier (UUID) for the user directory
    */
   @Override
   @Transactional
@@ -738,7 +728,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Delete the authorised function.
    *
-   * @param functionCode the code uniquely identifying the function
+   * @param functionCode the code for the function
    */
   @Override
   @Transactional
@@ -764,9 +754,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Delete the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
    */
   @Override
   @Transactional
@@ -793,7 +782,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Delete the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    */
   @Override
   @Transactional
@@ -819,9 +808,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
    */
   @Override
   @Transactional
@@ -848,8 +836,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   @Override
   @Transactional
@@ -882,8 +869,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the users matching the user attribute criteria.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param userAttributes the user attribute criteria used to select the users
    * @return the users whose attributes match the user attribute criteria
    */
@@ -911,7 +897,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the authorised function.
    *
-   * @param functionCode the code uniquely identifying the function
+   * @param functionCode the code for the function
    * @return the authorised function
    */
   @Override
@@ -940,9 +926,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the authorised function codes for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
    * @return the authorised function codes for the user
    */
   @Override
@@ -983,9 +968,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
    * @return the group
    */
   @Override
@@ -1012,8 +996,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the group names
    */
   @Override
@@ -1033,12 +1016,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the names identifying the groups the user is a member of.
+   * Retrieve the names of the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
-   * @return the names identifying the groups the user is a member of
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
+   * @return the names of the groups the user is a member of
    */
   @Override
   public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
@@ -1064,8 +1046,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve all the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the groups
    */
   @Override
@@ -1087,8 +1068,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param filter the optional filter to apply to the groups
    * @param sortDirection the optional sort direction to apply to the groups
    * @param pageIndex the optional page index
@@ -1127,9 +1107,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
    * @return the groups the user is a member of
    */
   @Override
@@ -1156,9 +1135,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the group members for the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
    * @return the group members for the group
    */
   @Override
@@ -1185,9 +1163,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the group members for the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
    * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
    * @param pageIndex the optional page index
@@ -1233,9 +1210,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
    * @return the codes for the roles that have been assigned to the group
    */
   @Override
@@ -1262,9 +1238,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the codes for the roles that the user has been assigned.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
    * @return the codes for the roles that the user has been assigned
    */
   @Override
@@ -1305,9 +1280,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
    * @return the roles that have been assigned to the group
    */
   @Override
@@ -1334,7 +1308,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the tenant
    */
   @Override
@@ -1360,13 +1334,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user
-   * directory is associated with.
+   * Retrieve the Universally Unique Identifiers (UUIDs) for the tenants the user directory is
+   * associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user
-   *     directory is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @return the Universally Unique Identifiers (UUIDs) for the tenants the user directory is
+   *     associated with
    */
   @Override
   public List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
@@ -1395,7 +1368,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the name of the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the name of the tenant
    */
   @Override
@@ -1515,8 +1488,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the tenants the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the tenants the user directory is associated with
    */
   @Override
@@ -1546,9 +1518,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
    * @return the user
    */
   @Override
@@ -1656,7 +1627,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the user directories the tenant is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the user directories the tenant is associated with
    */
   @Override
@@ -1684,8 +1655,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the user directory
    */
   @Override
@@ -1715,8 +1685,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the capabilities the user directory supports.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the capabilities the user directory supports
    */
   @Override
@@ -1736,13 +1705,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the Universally Unique Identifier (UUID) uniquely identifying the user directory that
-   * the user with the specified username is associated with.
+   * Retrieve the Universally Unique Identifier (UUID) for the user directory that the user with the
+   * specified username is associated with.
    *
-   * @param username the username identifying the user
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory that
-   *     the user with the specified username is associated with or <code>null</code> if the user
-   *     cannot be found
+   * @param username the username for the user
+   * @return the Universally Unique Identifier (UUID) for the user directory that the user with the
+   *     specified username is associated with or <code>null</code> if the user cannot be found
    */
   @Override
   public UUID getUserDirectoryIdForUser(String username)
@@ -1783,12 +1751,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
-   * the tenant is associated with.
+   * Retrieve the Universally Unique Identifiers (UUIDs) for the user directories the tenant is
+   * associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
-   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
-   *     the tenant is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @return the Universally Unique Identifiers (UUIDs) for the user directories the tenant is
+   *     associated with
    */
   @Override
   public List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
@@ -1815,14 +1783,14 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
-   * the user is associated with. Every user is associated with a user directory, which is in turn
-   * associated with one or more tenants, which are in turn associated with one or more user
-   * directories. The user is therefore associated indirectly with all these user directories.
+   * Retrieve the Universally Unique Identifiers (UUIDs) for the user directories the user is
+   * associated with. Every user is associated with a user directory, which is in turn associated
+   * with one or more tenants, which are in turn associated with one or more user directories. The
+   * user is therefore associated indirectly with all these user directories.
    *
-   * @param username the username identifying the user
-   * @return the Universally Unique Identifiers (UUIDs) uniquely identifying the user directories
-   *     the user is associated with
+   * @param username the username for the user
+   * @return the Universally Unique Identifiers (UUIDs) for the user directories the user is
+   *     associated with
    */
   @Override
   public List<UUID> getUserDirectoryIdsForUser(String username)
@@ -1872,8 +1840,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the name of the user directory
    */
   @Override
@@ -1972,7 +1939,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the summaries for the user directories the tenant is associated with
    */
   @Override
@@ -2003,8 +1970,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the user directory type for the user directory
    */
   @Override
@@ -2059,9 +2025,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the name of the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
    * @return the name of the user
    */
   @Override
@@ -2088,8 +2053,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve all the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the users
    */
   @Override
@@ -2111,8 +2075,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param filter the optional filter to apply to the users
    * @param sortBy the optional method used to sort the users e.g. by name
    * @param sortDirection the optional sort direction to apply to the users
@@ -2161,7 +2124,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Initiate the password reset process for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param resetPasswordUrl the reset password URL
    * @param sendEmail should the password reset e-mail be sent to the user
    */
@@ -2175,7 +2138,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Initiate the password reset process for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param resetPasswordUrl the reset password URL
    * @param sendEmail should the password reset e-mail be sent to the user
    * @param securityCode the pre-generated security code to use
@@ -2235,9 +2198,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Does the user with the specified username exist?
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param username the username for the user
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
    *     otherwise
    */
@@ -2264,10 +2226,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Is the user in the group?
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
+   * @param username the username for the user
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
    */
   @Override
@@ -2386,9 +2347,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the group member name
    */
@@ -2426,10 +2386,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
-   * @param roleCode the code uniquely identifying the role
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
    */
   @Override
   @Transactional
@@ -2460,9 +2419,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Remove the user directory from the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   @Override
   @Transactional
@@ -2503,10 +2461,9 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Remove the user from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory
-   * @param groupName the name identifying the group
-   * @param username the username identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @param groupName the name of the group
+   * @param username the username for the user
    */
   @Override
   @Transactional
@@ -2537,7 +2494,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   /**
    * Reset the password for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param newPassword the new password
    * @param securityCode the security code
    */
@@ -2721,12 +2678,12 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the internal user
-   * directory the internal user with the specified username is associated with.
+   * Returns the Universally Unique Identifier (UUID) for the internal user directory the internal
+   * user with the specified username is associated with.
    *
-   * @param username the username uniquely identifying the internal user
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the internal user
-   *     directory the internal user with the specified username is associated with or <code>null
+   * @param username the username for the internal user
+   * @return the Universally Unique Identifier (UUID) for the internal user directory the internal
+   *     user with the specified username is associated with or <code>null
    * </code> if an internal user with the specified username could not be found
    */
   private UUID getInternalUserDirectoryIdForUser(String username) throws SecurityServiceException {

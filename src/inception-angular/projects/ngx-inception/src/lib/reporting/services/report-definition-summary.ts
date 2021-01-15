@@ -22,7 +22,7 @@
 export class ReportDefinitionSummary {
 
   /**
-   * The ID uniquely identifying the report definition.
+   * The ID for the report definition.
    */
   id: string;
 
@@ -34,7 +34,7 @@ export class ReportDefinitionSummary {
   /**
    * Constructs a new ReportDefinitionSummary.
    *
-   * @param id   The ID uniquely identifying the report definition.
+   * @param id   The ID for the report definition.
    * @param name The name of the report definition.
    */
   constructor(id: string, name: string) {

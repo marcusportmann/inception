@@ -35,7 +35,7 @@ export class Job {
   executionAttempts?: number;
 
   /**
-   * The ID uniquely identifying the job.
+   * The ID for the job.
    */
   id: string;
 
@@ -82,7 +82,7 @@ export class Job {
   /**
    * Constructs a new Job.
    *
-   * @param id                The ID uniquely identifying the job.
+   * @param id                The ID for the job.
    * @param name              The name of the job.
    * @param schedulingPattern The cron-style scheduling pattern for the job.
    * @param jobClass          The fully qualified name of the Java class that implements the job.

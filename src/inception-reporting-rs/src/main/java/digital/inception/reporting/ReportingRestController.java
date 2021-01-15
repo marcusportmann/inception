@@ -147,7 +147,7 @@ public class ReportingRestController extends SecureRestController {
   /**
    * Delete the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    */
   @Operation(summary = "Delete the report definition", description = "Delete the report definition")
   @ApiResponses(
@@ -188,7 +188,7 @@ public class ReportingRestController extends SecureRestController {
   public void deleteReportDefinition(
       @Parameter(
               name = "reportDefinitionId",
-              description = "The ID uniquely identifying the report definition",
+              description = "The ID for the report definition",
               required = true)
           @PathVariable
           String reportDefinitionId)
@@ -291,7 +291,7 @@ public class ReportingRestController extends SecureRestController {
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @return the report definition
    */
   @Operation(
@@ -333,7 +333,7 @@ public class ReportingRestController extends SecureRestController {
   public ReportDefinition getReportDefinition(
       @Parameter(
               name = "reportDefinition",
-              description = "The ID uniquely identifying the report definition",
+              description = "The ID for the report definition",
               required = true)
           @PathVariable
           String reportDefinitionId)
@@ -345,7 +345,7 @@ public class ReportingRestController extends SecureRestController {
   /**
    * Retrieve the name of the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @return the name of the report definition
    */
   @Operation(
@@ -385,7 +385,7 @@ public class ReportingRestController extends SecureRestController {
   public String getReportDefinitionName(
       @Parameter(
               name = "reportDefinitionId",
-              description = "The ID uniquely identifying the report definition",
+              description = "The ID for the report definition",
               required = true)
           @PathVariable
           String reportDefinitionId)
@@ -460,7 +460,7 @@ public class ReportingRestController extends SecureRestController {
   /**
    * Update the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @param reportDefinition the report definition
    */
   @Operation(summary = "Update the report definition", description = "Update the report definition")
@@ -502,7 +502,7 @@ public class ReportingRestController extends SecureRestController {
   public void updateReportDefinition(
       @Parameter(
               name = "reportDefinitionId",
-              description = "The ID uniquely identifying the report definition",
+              description = "The ID for the report definition",
               required = true)
           @PathVariable
           String reportDefinitionId,

@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * The <code>ResidencePermitType</code> class holds the information for a possible residence permit
- * type, which is type of official document giving a foreign national authorization to reside in a
+ * type, which is a type of official document giving a foreign national authorization to reside in a
  * country.
  *
  * @author Marcus Portmann
@@ -70,9 +70,9 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "code", nullable = false)
   private String code;
 
-  /** The code identifying the country of issue for the residence permit type. */
+  /** The code for the country of issue for the residence permit type. */
   @Schema(
-      description = "The code identifying the country of issue for the residence permit type",
+      description = "The code for the country of issue for the residence permit type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
@@ -158,9 +158,9 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Returns the code identifying the country of issue for the residence permit type.
+   * Returns the code for the country of issue for the residence permit type.
    *
-   * @return the code identifying the country of issue for the residence permit type
+   * @return the code for the country of issue for the residence permit type
    */
   public String getCountryOfIssue() {
     return countryOfIssue;
@@ -222,9 +222,9 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the code identifying the country of issue for the residence permit type.
+   * Set the code for the country of issue for the residence permit type.
    *
-   * @param countryOfIssue the code identifying the country of issue for the identity document type
+   * @param countryOfIssue the code for the country of issue for the identity document type
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

@@ -82,9 +82,9 @@ public class GroupMembers implements Serializable {
   @XmlElement(name = "GroupMember", required = true)
   private List<GroupMember> groupMembers;
 
-  /** The name identifying the group the group members are associated with. */
+  /** The name of the group the group members are associated with. */
   @Schema(
-      description = "The name identifying the group the group members are associated with",
+      description = "The name of the group the group members are associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "GroupName", required = true)
@@ -115,12 +115,12 @@ public class GroupMembers implements Serializable {
   private long total;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * The Universally Unique Identifier (UUID) for the user directory the group
    * members are associated with.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the user directory the group members are associated with",
+          "The Universally Unique Identifier (UUID) for the user directory the group members are associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -132,9 +132,9 @@ public class GroupMembers implements Serializable {
   /**
    * Constructs a new <code>GroupMembers</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory the group members are associated with
-   * @param groupName the name identifying the group the group members are associated with
+   * @param groupName the name of the group the group members are associated with
    * @param groupMembers the group members
    * @param total the total number of group members
    * @param filter the optional filter that was applied to the group members
@@ -180,9 +180,9 @@ public class GroupMembers implements Serializable {
   }
 
   /**
-   * Returns the name identifying the group the group members are associated with.
+   * Returns the name of the group the group members are associated with.
    *
-   * @return the name identifying the group the group members are associated with
+   * @return the name of the group the group members are associated with
    */
   public String getGroupName() {
     return groupName;
@@ -225,10 +225,10 @@ public class GroupMembers implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * Returns the Universally Unique Identifier (UUID) for the user directory the
    * group members are associated with.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * @return the Universally Unique Identifier (UUID) for the user directory the
    *     group members are associated with
    */
   public UUID getUserDirectoryId() {

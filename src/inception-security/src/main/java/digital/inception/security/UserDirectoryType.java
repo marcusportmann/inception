@@ -60,8 +60,8 @@ public class UserDirectoryType implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code uniquely identifying the user directory type. */
-  @Schema(description = "The code uniquely identifying the user directory type", required = true)
+  /** The code for the user directory type. */
+  @Schema(description = "The code for the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -100,7 +100,7 @@ public class UserDirectoryType implements java.io.Serializable {
   /**
    * Constructs a new <code>UserDirectoryType</code>.
    *
-   * @param code the code uniquely identifying the user directory type
+   * @param code the code for the user directory type
    * @param name the name of the user directory type
    * @param userDirectoryClassName the fully qualified name of the Java class that implements the
    *     user directory type
@@ -138,9 +138,9 @@ public class UserDirectoryType implements java.io.Serializable {
   }
 
   /**
-   * Returns the code uniquely identifying the user directory type.
+   * Returns the code for the user directory type.
    *
-   * @return the code uniquely identifying the user directory type
+   * @return the code for the user directory type
    */
   public String getCode() {
     return code;

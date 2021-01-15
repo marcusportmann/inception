@@ -80,9 +80,9 @@ public class ErrorReportSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the application that generated the error report. */
+  /** The ID for the application that generated the error report. */
   @Schema(
-      description = "ID uniquely identifying the application that generated the error report",
+      description = "ID for the application that generated the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ApplicationId", required = true)
@@ -122,23 +122,22 @@ public class ErrorReportSummary implements Serializable {
   private String description;
 
   /**
-   * The optional Universally Unique Identifier (UUID) uniquely identifying the device the error
+   * The optional Universally Unique Identifier (UUID) for the device the error
    * report originated from.
    */
   @Schema(
       description =
-          "The optional Universally Unique Identifier (UUID) uniquely identifying "
-              + "the device the error report originated from")
+          "The optional Universally Unique Identifier (UUID) for the device the error report originated from")
   @JsonProperty
   @XmlElement(name = "DeviceId")
   @Size(max = 50)
   @Column(name = "device_id")
   private UUID deviceId;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the error report. */
+  /** The Universally Unique Identifier (UUID) for the error report. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the error report",
+          "The Universally Unique Identifier (UUID) for the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -147,9 +146,9 @@ public class ErrorReportSummary implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The optional username identifying the user associated with the error report. */
+  /** The optional username for the user associated with the error report. */
   @Schema(
-      description = "The optional username identifying the user associated with the error report")
+      description = "The optional username for the user associated with the error report")
   @JsonProperty
   @XmlElement(name = "Who")
   @Size(max = 100)
@@ -162,14 +161,14 @@ public class ErrorReportSummary implements Serializable {
   /**
    * Constructs a new <code>ErrorReportSummary</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
-   * @param applicationId the ID uniquely identifying the application that generated the error
+   * @param id the Universally Unique Identifier (UUID) for the error report
+   * @param applicationId the ID for the application that generated the error
    *     report
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
    * @param created the date and time the error report was created
-   * @param who the optional username identifying the user associated with the error report
-   * @param deviceId the optional Universally Unique Identifier (UUID) uniquely identifying the
+   * @param who the optional username for the user associated with the error report
+   * @param deviceId the optional Universally Unique Identifier (UUID) for the
    *     device the error report originated from
    */
   public ErrorReportSummary(
@@ -216,9 +215,9 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the application that generated the error report.
+   * Returns the ID for the application that generated the error report.
    *
-   * @return the ID uniquely identifying the application that generated the error report
+   * @return the ID for the application that generated the error report
    */
   public String getApplicationId() {
     return applicationId;
@@ -252,10 +251,10 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Returns the optional Universally Unique Identifier (UUID) uniquely identifying the device the
+   * Returns the optional Universally Unique Identifier (UUID) for the device the
    * error report originated from.
    *
-   * @return the optional Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @return the optional Universally Unique Identifier (UUID) for the device the
    *     error report originated from
    */
   public UUID getDeviceId() {
@@ -263,18 +262,18 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the error report.
+   * Returns the Universally Unique Identifier (UUID) for the error report.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the error report
+   * @return the Universally Unique Identifier (UUID) for the error report
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the username identifying the user associated with the error report.
+   * Returns the username for the user associated with the error report.
    *
-   * @return the username identifying the user associated with the error report
+   * @return the username for the user associated with the error report
    */
   public String getWho() {
     return who;

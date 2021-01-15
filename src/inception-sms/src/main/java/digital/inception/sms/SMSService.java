@@ -164,7 +164,7 @@ public class SMSService implements ISMSService {
   /**
    * Delete the existing SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId the ID for the SMS
    */
   @Override
   @Transactional
@@ -282,7 +282,7 @@ public class SMSService implements ISMSService {
   /**
    * Retrieve the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId the ID for the SMS
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   @Override
@@ -502,7 +502,7 @@ public class SMSService implements ISMSService {
   /**
    * Set the status for the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId the ID for the SMS
    * @param status the new status for the SMS
    */
   @Override
@@ -535,7 +535,7 @@ public class SMSService implements ISMSService {
   /**
    * Unlock the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId the ID for the SMS
    * @param status the new status for the unlocked SMS
    */
   @Override

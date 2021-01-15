@@ -65,7 +65,7 @@ public enum MessageStatus {
   /**
    * Returns the message status given by the specified code value.
    *
-   * @param code the code value identifying the message status
+   * @param code the code for the message status
    * @return the message status given by the specified code value
    */
   @JsonCreator
@@ -100,7 +100,7 @@ public enum MessageStatus {
   /**
    * Returns the message status for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the message status
+   * @param numericCode the numeric code for the message status
    * @return the message status given by the specified numeric code value
    */
   public static MessageStatus fromNumericCode(int numericCode) {
@@ -168,9 +168,9 @@ public enum MessageStatus {
   }
 
   /**
-   * Returns the code value identifying the message status.
+   * Returns the code for the message status.
    *
-   * @return the code value identifying the message status
+   * @return the code for the message status
    */
   @JsonValue
   public String code() {

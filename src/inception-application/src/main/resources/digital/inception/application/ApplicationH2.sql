@@ -19,9 +19,9 @@ CREATE TABLE service_registry.service_registry (
   PRIMARY KEY (name)
 );
 
-COMMENT ON COLUMN service_registry.service_registry.name IS 'The name uniquely identifying the web service';
+COMMENT ON COLUMN service_registry.service_registry.name IS 'The name of the web service';
 
-COMMENT ON COLUMN service_registry.service_registry.security_type IS 'The type of security service implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc';
+COMMENT ON COLUMN service_registry.service_registry.security_type IS 'The type of security implemented by the web service i.e. 0 = None, 1 = Mutual SSL, etc';
 
 COMMENT ON COLUMN service_registry.service_registry.supports_compression IS 'Does the web service support compression';
 

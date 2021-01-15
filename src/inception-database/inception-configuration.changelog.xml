@@ -24,7 +24,7 @@
 
     <createTable schemaName="configuration" tableName="configuration" remarks="Configuration">
       <column name="key" type="nvarchar(100)"
-        remarks="The key uniquely identifying the configuration value"/>
+        remarks="The key for the configuration value"/>
       <column name="value" type="nvarchar(4000)" remarks="The value for the configuration value"/>
       <column name="description" type="nvarchar(100)"
         remarks="The description for the configuration value"/>

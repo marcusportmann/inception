@@ -86,15 +86,15 @@ public class Group implements Serializable {
   @Column(name = "description", length = 100)
   private String description;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the group. */
+  /** The Universally Unique Identifier (UUID) for the group. */
   @JsonIgnore
   @XmlTransient
   @Id
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The name identifying the group. */
-  @Schema(description = "The name identifying the group", required = true)
+  /** The name of the group. */
+  @Schema(description = "The name of the group", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -121,12 +121,12 @@ public class Group implements Serializable {
   private LocalDateTime updated;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group is
+   * The Universally Unique Identifier (UUID) for the user directory the group is
    * associated with.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the user directory the "
+          "The Universally Unique Identifier (UUID) for the user directory the "
               + "group is associated with",
       required = true)
   @JsonProperty(required = true)
@@ -152,7 +152,7 @@ public class Group implements Serializable {
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param name the name identifying the group
+   * @param name the name of the group
    */
   public Group(String name) {
     this.name = name;
@@ -161,9 +161,9 @@ public class Group implements Serializable {
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory the group is associated with
-   * @param name the name identifying the group
+   * @param name the name of the group
    * @param description the description for the group
    */
   public Group(UUID userDirectoryId, String name, String description) {
@@ -237,18 +237,18 @@ public class Group implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the group.
+   * Returns the Universally Unique Identifier (UUID) for the group.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the group
+   * @return the Universally Unique Identifier (UUID) for the group
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the name identifying the group.
+   * Returns the name of the group.
    *
-   * @return the name identifying the group
+   * @return the name of the group
    */
   public String getName() {
     return name;
@@ -273,10 +273,10 @@ public class Group implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * Returns the Universally Unique Identifier (UUID) for the user directory the
    * group is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * @return the Universally Unique Identifier (UUID) for the user directory the
    *     group is associated with
    */
   public UUID getUserDirectoryId() {
@@ -332,18 +332,18 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the group.
+   * Set the Universally Unique Identifier (UUID) for the group.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the group
+   * @param id the Universally Unique Identifier (UUID) for the group
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the name identifying the group.
+   * Set the name of the group.
    *
-   * @param name the name identifying the group
+   * @param name the name of the group
    */
   public void setName(String name) {
     this.name = name;
@@ -359,10 +359,10 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * Set the Universally Unique Identifier (UUID) for the user directory the group
    * is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory the group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {

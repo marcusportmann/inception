@@ -44,7 +44,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
       UUID.fromString("d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the device the authentication
+   * The Universally Unique Identifier (UUID) for the device the authentication
    * request originated from.
    */
   private UUID deviceId;
@@ -52,7 +52,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   /** The password used to authenticate the user. */
   private String password;
 
-  /** The username identifying the user associated with the message. */
+  /** The username for the user associated with the message. */
   private String username;
 
   /** Constructs a new <code>AuthenticateRequestData</code>. */
@@ -63,9 +63,9 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>AuthenticateRequestData</code>.
    *
-   * @param username the username identifying the user associated with the message
+   * @param username the username for the user associated with the message
    * @param password the password used to authenticate the user
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     authentication request originated from
    */
   public AuthenticateRequestData(String username, String password, UUID deviceId) {
@@ -107,10 +107,10 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * Returns the Universally Unique Identifier (UUID) for the device the
    * authentication request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @return the Universally Unique Identifier (UUID) for the device the
    *     authentication request originated from
    */
   public UUID getDeviceId() {
@@ -127,9 +127,9 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the username identifying the user associated with the message.
+   * Returns the username for the user associated with the message.
    *
-   * @return the username identifying the user associated with the message
+   * @return the username for the user associated with the message
    */
   public String getUsername() {
     return username;

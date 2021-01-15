@@ -55,7 +55,7 @@ public enum ContactMechanismType {
   /**
    * Returns the contact mechanism type given by the specified code value.
    *
-   * @param code the code value identifying the contact mechanism type
+   * @param code the code for the contact mechanism type
    * @return the contact mechanism type given by the specified code value
    */
   @JsonCreator
@@ -85,7 +85,7 @@ public enum ContactMechanismType {
   /**
    * Returns the contact mechanism type for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the contact mechanism type
+   * @param numericCode the numeric code for the contact mechanism type
    * @return the contact mechanism type given by the specified numeric code value
    */
   public static ContactMechanismType fromNumericCode(int numericCode) {
@@ -135,9 +135,9 @@ public enum ContactMechanismType {
   }
 
   /**
-   * Returns the code value identifying for the contact mechanism type.
+   * Returns the code for the contact mechanism type.
    *
-   * @return the code value identifying for the contact mechanism type
+   * @return the code for the contact mechanism type
    */
   @JsonValue
   public String code() {

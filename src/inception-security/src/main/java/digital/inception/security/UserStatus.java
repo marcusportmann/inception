@@ -79,7 +79,7 @@ public enum UserStatus {
   /**
    * Returns the user status for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the user status
+   * @param numericCode the numeric code for the user status
    * @return the user status given by the specified numeric code value
    */
   public static UserStatus fromNumericCode(int numericCode) {
@@ -103,7 +103,7 @@ public enum UserStatus {
   /**
    * Returns the user status given by the specified code value.
    *
-   * @param code the code value identifying the user status
+   * @param code the code for the user status
    * @return the user status given by the specified code value
    */
   @JsonCreator

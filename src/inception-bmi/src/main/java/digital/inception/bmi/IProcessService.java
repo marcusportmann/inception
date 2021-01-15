@@ -42,7 +42,7 @@ public interface IProcessService {
   /// **
   // * Delete the existing process definition.
   // *
-  // * @param processDefinitionId the ID uniquely identifying the process definition
+  // * @param processDefinitionId the ID for the process definition
   // */
   // void deleteProcessDefinition(String processDefinitionId)
   //  throws ProcessDefinitionNotFoundException, ProcessServiceException;
@@ -50,7 +50,7 @@ public interface IProcessService {
   /// **
   // * Retrieve the process definition.
   // *
-  // * @param processDefinitionId the ID uniquely identifying the process definition
+  // * @param processDefinitionId the ID for the process definition
   // *
   // * @return the process definition
   // */
@@ -60,7 +60,7 @@ public interface IProcessService {
   /// **
   // * Retrieve the name of the process definition.
   // *
-  // * @param processDefinitionId the ID uniquely identifying the process definition
+  // * @param processDefinitionId the ID for the process definition
   // *
   // * @return the name of the process definition
   // */
@@ -77,7 +77,7 @@ public interface IProcessService {
   /**
    * Check whether the process definition exists.
    *
-   * @param processDefinitionId the ID uniquely identifying the process definition
+   * @param processDefinitionId the ID for the process definition
    * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
    */
   boolean processDefinitionExists(String processDefinitionId) throws ProcessServiceException;
@@ -85,7 +85,7 @@ public interface IProcessService {
   /// **
   // * Retrieve the summary for the process definition.
   // *
-  // * @param processDefinitionId the ID uniquely identifying the process definition
+  // * @param processDefinitionId the ID for the process definition
   // *
   // * @return the summary for the process definition
   // */
@@ -103,7 +103,7 @@ public interface IProcessService {
   /**
    * Start a process instance.
    *
-   * @param processDefinitionId the ID uniquely identifying the process definition
+   * @param processDefinitionId the ID for the process definition
    * @param parameters the parameters for the process instance
    */
   void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)

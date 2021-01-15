@@ -41,8 +41,8 @@ public class GenerateReportRequest implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the report definition. */
-  @Schema(description = "The ID uniquely identifying the report definition", required = true)
+  /** The ID for the report definition. */
+  @Schema(description = "The ID for the report definition", required = true)
   @JsonProperty(required = true)
   private String reportDefinitionId;
 
@@ -57,7 +57,7 @@ public class GenerateReportRequest implements Serializable {
   /**
    * Constructs a new <code>GenerateReportRequest</code>.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @param reportParameters the report parameters
    */
   public GenerateReportRequest(String reportDefinitionId, List<ReportParameter> reportParameters) {
@@ -66,9 +66,9 @@ public class GenerateReportRequest implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the report definition.
+   * Returns the ID for the report definition.
    *
-   * @return the ID uniquely identifying the report definition
+   * @return the ID for the report definition
    */
   public String getReportDefinitionId() {
     return reportDefinitionId;
@@ -84,9 +84,9 @@ public class GenerateReportRequest implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the report definition.
+   * Set the ID for the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    */
   public void setReportDefinitionId(String reportDefinitionId) {
     this.reportDefinitionId = reportDefinitionId;

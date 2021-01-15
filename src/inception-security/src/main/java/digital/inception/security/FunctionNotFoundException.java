@@ -50,7 +50,7 @@ public class FunctionNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>FunctionNotFoundException</code>.
    *
-   * @param functionCode the code uniquely identifying the function
+   * @param functionCode the code for the function
    */
   public FunctionNotFoundException(String functionCode) {
     super(

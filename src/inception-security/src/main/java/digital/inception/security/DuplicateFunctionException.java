@@ -52,7 +52,7 @@ public class DuplicateFunctionException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateFunctionException</code>.
    *
-   * @param functionCode the code uniquely identifying the function
+   * @param functionCode the code for the function
    */
   public DuplicateFunctionException(String functionCode) {
     super(

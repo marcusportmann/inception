@@ -69,7 +69,7 @@ public class ConfigurationRestController extends SecureRestController {
   /**
    * Delete the configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    */
   @Operation(summary = "Delete the configuration", description = "Delete the configuration")
   @ApiResponses(
@@ -110,7 +110,7 @@ public class ConfigurationRestController extends SecureRestController {
   public void deleteConfiguration(
       @Parameter(
               name = "key",
-              description = "The key uniquely identifying the configuration",
+              description = "The key for the configuration",
               required = true)
           @PathVariable
           String key)
@@ -122,7 +122,7 @@ public class ConfigurationRestController extends SecureRestController {
   /**
    * Retrieve the configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    * @return the configuration
    */
   @Operation(summary = "Retrieve the configuration", description = "Retrieve the configuration")
@@ -161,7 +161,7 @@ public class ConfigurationRestController extends SecureRestController {
   public Configuration getConfiguration(
       @Parameter(
               name = "key",
-              description = "The key uniquely identifying the configuration",
+              description = "The key for the configuration",
               required = true)
           @PathVariable
           String key)
@@ -173,7 +173,7 @@ public class ConfigurationRestController extends SecureRestController {
   /**
    * Retrieve the configuration value.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    * @return the configuration value
    */
   @Operation(
@@ -214,7 +214,7 @@ public class ConfigurationRestController extends SecureRestController {
   public String getConfigurationValue(
       @Parameter(
               name = "key",
-              description = "The key uniquely identifying the configuration",
+              description = "The key for the configuration",
               required = true)
           @PathVariable
           String key)

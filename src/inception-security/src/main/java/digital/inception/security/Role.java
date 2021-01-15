@@ -68,8 +68,8 @@ public class Role implements java.io.Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code uniquely identifying the role. */
-  @Schema(description = "The code uniquely identifying the role", required = true)
+  /** The code for the role. */
+  @Schema(description = "The code for the role", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -152,9 +152,9 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Returns the code uniquely identifying the role.
+   * Returns the code for the role.
    *
-   * @return the code uniquely identifying the role
+   * @return the code for the role
    */
   public String getCode() {
     return code;
@@ -217,9 +217,9 @@ public class Role implements java.io.Serializable {
   }
 
   /**
-   * Set the code uniquely identifying the role.
+   * Set the code for the role.
    *
-   * @param code the code uniquely identifying the role
+   * @param code the code for the role
    */
   public void setCode(String code) {
     this.code = code;

@@ -142,7 +142,7 @@ public class ProcessService implements IProcessService {
   /**
    * Check whether the process definition exists.
    *
-   * @param processDefinitionId the ID uniquely identifying the process definition
+   * @param processDefinitionId the ID for the process definition
    * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
    */
   @Override
@@ -163,7 +163,7 @@ public class ProcessService implements IProcessService {
   /**
    * Start a process instance.
    *
-   * @param processDefinitionId the ID uniquely identifying the process definition
+   * @param processDefinitionId the ID for the process definition
    * @param parameters the parameters for the process instance
    */
   @Override

@@ -77,8 +77,8 @@ public class CodeCategory implements Serializable {
   @Column(name = "data")
   private String data;
 
-  /** The ID uniquely identifying the code category. */
-  @Schema(description = "The ID uniquely identifying the code category", required = true)
+  /** The ID for the code category. */
+  @Schema(description = "The ID for the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -109,7 +109,7 @@ public class CodeCategory implements Serializable {
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the ID for the code category
    * @param name the name of the code category
    */
   public CodeCategory(String id, String name) {
@@ -120,7 +120,7 @@ public class CodeCategory implements Serializable {
   /**
    * Constructs a new <code>CodeCategory</code>.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the ID for the code category
    * @param name the name of the code category
    * @param data the optional code data for the code category
    */
@@ -175,9 +175,9 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the code category.
+   * Returns the ID for the code category.
    *
-   * @return the ID uniquely identifying the code category
+   * @return the ID for the code category
    */
   public String getId() {
     return id;
@@ -221,9 +221,9 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the code category.
+   * Set the ID for the code category.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the ID for the code category
    */
   public void setId(String id) {
     this.id = id;

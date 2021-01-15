@@ -32,7 +32,7 @@ public interface ICaseService {
   /**
    * Check whether the case definition exists.
    *
-   * @param caseDefinitionId the ID uniquely identifying the case definition
+   * @param caseDefinitionId the ID for the case definition
    * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
    */
   boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException;
@@ -40,7 +40,7 @@ public interface ICaseService {
   //  /**
   //   * Delete the existing case definition.
   //   *
-  //   * @param caseDefinitionId the ID uniquely identifying the case definition
+  //   * @param caseDefinitionId the ID for the case definition
   //   */
   //  void deleteCaseDefinition(String caseDefinitionId)
   //    throws CaseDefinitionNotFoundException, CaseServiceException;
@@ -48,7 +48,7 @@ public interface ICaseService {
   //  /**
   //   * Retrieve the case definition.
   //   *
-  //   * @param caseDefinitionId the ID uniquely identifying the case definition
+  //   * @param caseDefinitionId the ID for the case definition
   //   *
   //   * @return the case definition
   //   */
@@ -58,7 +58,7 @@ public interface ICaseService {
   //  /**
   //   * Retrieve the name of the case definition.
   //   *
-  //   * @param caseDefinitionId the ID uniquely identifying the case definition
+  //   * @param caseDefinitionId the ID for the case definition
   //   *
   //   * @return the name of the case definition
   //   */
@@ -77,7 +77,7 @@ public interface ICaseService {
   //  /**
   //   * Retrieve the summary for the case definition.
   //   *
-  //   * @param caseDefinitionId the ID uniquely identifying the case definition
+  //   * @param caseDefinitionId the ID for the case definition
   //   *
   //   * @return the summary for the case definition
   //   */

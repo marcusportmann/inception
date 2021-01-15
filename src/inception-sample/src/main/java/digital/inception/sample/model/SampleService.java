@@ -68,7 +68,6 @@ public class SampleService implements ISampleService {
     try {
       Data newData = new Data();
       newData.setId(666);
-      newData.setName("New Name");
       newData.setStringValue("New String Value");
       newData.setDateValue(LocalDate.now());
       newData.setTimestampValue(LocalDateTime.now());
@@ -114,7 +113,7 @@ public class SampleService implements ISampleService {
   /**
    * Returns the data.
    *
-   * @param id the ID uniquely identifying the data
+   * @param id the ID for the data
    * @return the data
    */
   @Override

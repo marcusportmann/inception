@@ -23,7 +23,7 @@
     </sql>
 
     <createTable schemaName="sample" tableName="data" remarks="Sample Data">
-      <column name="id" type="bigint" remarks="The ID uniquely identifying the data"/>
+      <column name="id" type="bigint" remarks="The ID for the data"/>
       <column name="name" type="nvarchar(100)" remarks="The name for the data"/>
       <column name="integer_value" type="int" remarks="The integer value for the data"/>
       <column name="string_value" type="nvarchar(4000)" remarks="The string value for the data"/>

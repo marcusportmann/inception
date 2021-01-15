@@ -49,7 +49,7 @@ public class JobNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>JobNotFoundException</code>.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    */
   public JobNotFoundException(String jobId) {
     super("JobNotFoundError", "The job with ID (" + jobId + ") could not be found");

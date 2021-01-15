@@ -51,7 +51,7 @@ public enum PartyType {
   /**
    * Returns the party type given by the specified code value.
    *
-   * @param code the code value identifying the party type
+   * @param code the code for the party type
    * @return the party type given by the specified code value
    */
   @JsonCreator
@@ -72,7 +72,7 @@ public enum PartyType {
   /**
    * Returns the party type for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the party type
+   * @param numericCode the numeric code for the party type
    * @return the party type given by the specified numeric code value
    */
   public static PartyType fromNumericCode(int numericCode) {
@@ -110,9 +110,9 @@ public enum PartyType {
   }
 
   /**
-   * Returns the code value identifying for the party type.
+   * Returns the code for the party type.
    *
-   * @return the code value identifying for the party type
+   * @return the code for the party type
    */
   @JsonValue
   public String code() {

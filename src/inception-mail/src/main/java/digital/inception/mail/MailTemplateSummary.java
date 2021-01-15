@@ -67,8 +67,8 @@ public class MailTemplateSummary implements Serializable {
   @Column(name = "content_type", nullable = false)
   private MailTemplateContentType contentType;
 
-  /** The ID uniquely identifying the mail template. */
-  @Schema(description = "The ID uniquely identifying the mail template", required = true)
+  /** The ID for the mail template. */
+  @Schema(description = "The ID for the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -92,7 +92,7 @@ public class MailTemplateSummary implements Serializable {
   /**
    * Constructs a new <code>MailTemplateSummary</code>.
    *
-   * @param id the ID uniquely identifying the mail template
+   * @param id the ID for the mail template
    * @param name the name of the mail template
    * @param contentType the content type for the mail template
    */
@@ -138,9 +138,9 @@ public class MailTemplateSummary implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the mail template.
+   * Returns the ID for the mail template.
    *
-   * @return the ID uniquely identifying the mail template
+   * @return the ID for the mail template
    */
   public String getId() {
     return id;

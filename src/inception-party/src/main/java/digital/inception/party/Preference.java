@@ -81,8 +81,8 @@ public class Preference implements Serializable {
   @JoinColumn(name = "person_id")
   private Person person;
 
-  /** The code identifying the preference type. */
-  @Schema(description = "The code identifying the preference type", required = true)
+  /** The code for the preference type. */
+  @Schema(description = "The code for the preference type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -168,9 +168,9 @@ public class Preference implements Serializable {
   }
 
   /**
-   * Returns the code identifying the preference type.
+   * Returns the code for the preference type.
    *
-   * @return the code identifying the preference type
+   * @return the code for the preference type
    */
   public String getType() {
     return type;
@@ -216,9 +216,9 @@ public class Preference implements Serializable {
   }
 
   /**
-   * Set the code identifying the preference type.
+   * Set the code for the preference type.
    *
-   * @param type the code identifying the preference type
+   * @param type the code for the preference type
    */
   public void setType(String type) {
     this.type = type;

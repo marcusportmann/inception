@@ -40,7 +40,7 @@ public interface ISMSService {
   /**
    * Delete the existing SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId the ID for the SMS
    */
   void deleteSMS(UUID smsId)
       throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
@@ -72,7 +72,7 @@ public interface ISMSService {
   /**
    * Retrieve the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId the ID for the SMS
    * @return the SMS or <code>null</code> if the SMS could not be found
    */
   SMS getSMS(UUID smsId) throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
@@ -112,7 +112,7 @@ public interface ISMSService {
   /**
    * Set the status for the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId the ID for the SMS
    * @param status the new status for the SMS
    */
   void setSMSStatus(UUID smsId, SMSStatus status)
@@ -121,7 +121,7 @@ public interface ISMSService {
   /**
    * Unlock the SMS.
    *
-   * @param smsId the ID uniquely identifying the SMS
+   * @param smsId the ID for the SMS
    * @param status the new status for the unlocked SMS
    */
   void unlockSMS(UUID smsId, SMSStatus status)

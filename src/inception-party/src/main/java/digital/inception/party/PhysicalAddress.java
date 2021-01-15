@@ -338,8 +338,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "purpose", nullable = false)
   private Integer purpose;
 
-  /** The optional code identifying the region for the physical address. */
-  @Schema(description = "The optional code identifying the region for the physical address")
+  /** The optional code for the region for the physical address. */
+  @Schema(description = "The optional code for the region for the physical address")
   @JsonProperty
   @XmlElement(name = "Region")
   @Size(min = 1, max = 10)
@@ -645,9 +645,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the optional code identifying the region for the physical address.
+   * Returns the optional code for the region for the physical address.
    *
-   * @return the optional code identifying the region for the physical address
+   * @return the optional code for the region for the physical address
    */
   public String getRegion() {
     return region;
@@ -895,9 +895,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the optional code identifying the region for the physical address.
+   * Set the optional code for the region for the physical address.
    *
-   * @param region the optional code identifying the region for the physical address
+   * @param region the optional code for the region for the physical address
    */
   public void setRegion(String region) {
     this.region = region;

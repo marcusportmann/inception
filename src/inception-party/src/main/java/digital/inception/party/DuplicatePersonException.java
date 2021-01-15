@@ -51,7 +51,7 @@ public class DuplicatePersonException extends ServiceException {
   /**
    * Constructs a new <code>DuplicatePersonException</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @param id the Universally Unique Identifier (UUID) for the person
    */
   public DuplicatePersonException(UUID id) {
     super("DuplicatePersonError", "The person with the ID (" + id + ") already exists");

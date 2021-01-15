@@ -57,7 +57,7 @@ public enum PersonSortBy {
   /**
    * Returns the method used to sort a list of persons given by the specified code value.
    *
-   * @param code the code value identifying the method used to sort a list of persons
+   * @param code the code for the method used to sort a list of persons
    * @return the method used to sort a list of persons given by the specified code value
    */
   @JsonCreator
@@ -76,9 +76,9 @@ public enum PersonSortBy {
   }
 
   /**
-   * Returns the code value identifying the method used to sort a list of persons.
+   * Returns the code for the method used to sort a list of persons.
    *
-   * @return the code value identifying the method used to sort a list of persons
+   * @return the code for the method used to sort a list of persons
    */
   @JsonValue
   public String code() {

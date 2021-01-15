@@ -70,7 +70,7 @@
 //    })
 // public class LDAPUserDirectoryTest {
 //  /**
-//   * The Universally Unique Identifier (UUID) uniquely identifying the Sample LDAP user directory.
+//   * The Universally Unique Identifier (UUID) for the Sample LDAP user directory.
 //   */
 //  private static final UUID SAMPLE_LDAP_USER_DIRECTORY_ID =
 //      UUID.fromString("11111111-1111-1111-1111-111111111111");

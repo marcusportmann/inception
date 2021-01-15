@@ -57,7 +57,7 @@ public enum SortDirection {
   /**
    * Returns the sort direction given by the specified code value.
    *
-   * @param code the code value identifying the sort direction
+   * @param code the code for the sort direction
    * @return the sort direction given by the specified code value
    */
   @JsonCreator
@@ -76,9 +76,9 @@ public enum SortDirection {
   }
 
   /**
-   * Returns the code value identifying the sort direction.
+   * Returns the code for the sort direction.
    *
-   * @return the code value identifying the sort direction
+   * @return the code for the sort direction
    */
   @JsonValue
   public String code() {

@@ -35,7 +35,7 @@ public class TenantData implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the tenant. */
+  /** The Universally Unique Identifier (UUID) for the tenant. */
   private UUID id;
 
   /** The name of the tenant. */
@@ -67,9 +67,9 @@ public class TenantData implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the tenant.
+   * Returns the Universally Unique Identifier (UUID) for the tenant.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @return the Universally Unique Identifier (UUID) for the tenant
    */
   public UUID getId() {
     return id;
@@ -85,9 +85,9 @@ public class TenantData implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the tenant.
+   * Set the Universally Unique Identifier (UUID) for the tenant.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param id the Universally Unique Identifier (UUID) for the tenant
    */
   public void setId(UUID id) {
     this.id = id;

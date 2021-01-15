@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class ServiceError {
 
-  /** The code identifying the service error. */
+  /** The code for the service error. */
   @XmlElement(name = "Code", required = true)
   private String code;
 
@@ -70,7 +70,7 @@ public class ServiceError {
   /**
    * Constructs a new <code>ServiceError</code>.
    *
-   * @param code the code identifying the service error
+   * @param code the code for the service error
    * @param cause the cause of the service error
    */
   public ServiceError(String code, Throwable cause) {
@@ -94,9 +94,9 @@ public class ServiceError {
   }
 
   /**
-   * Returns the code identifying the service error.
+   * Returns the code for the service error.
    *
-   * @return the code identifying the service error
+   * @return the code for the service error
    */
   public String getCode() {
     return code;

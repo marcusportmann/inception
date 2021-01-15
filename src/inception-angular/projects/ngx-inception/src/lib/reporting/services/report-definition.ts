@@ -22,7 +22,7 @@
 export class ReportDefinition {
 
   /**
-   * The ID uniquely identifying the report definition.
+   * The ID for the report definition.
    */
   id: string;
 
@@ -39,7 +39,7 @@ export class ReportDefinition {
   /**
    * Constructs a new ReportDefinition.
    *
-   * @param id       The ID uniquely identifying the report definition.
+   * @param id       The ID for the report definition.
    * @param name     The name of the report definition.
    * @param template The base-64 encoded JasperReports template for the report definition.
    */

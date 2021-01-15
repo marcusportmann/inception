@@ -53,7 +53,7 @@ public enum GroupMemberType {
   /**
    * Returns the group member type given by the specified code value.
    *
-   * @param code the code value identifying the group member type
+   * @param code the code for the group member type
    * @return the group member type given by the specified code value
    */
   @JsonCreator
@@ -70,9 +70,9 @@ public enum GroupMemberType {
   }
 
   /**
-   * Returns the code value identifying for the group member type.
+   * Returns the code for the group member type.
    *
-   * @return the code value identifying for the group member type
+   * @return the code for the group member type
    */
   @JsonValue
   public String code() {

@@ -47,7 +47,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("ff638c33-b4f1-4e79-804c-9560da2543d6");
 
-  /** The ID uniquely identifying the application that generated the error report. */
+  /** The ID for the application that generated the error report. */
   private String applicationId;
 
   /** The version of the application that generated the error report. */
@@ -66,7 +66,7 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   private String detail;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the device the error report
+   * The Universally Unique Identifier (UUID) for the device the error report
    * originated from.
    */
   private UUID deviceId;
@@ -74,10 +74,10 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   /** The feedback provided by the user for the error. */
   private String feedback;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the error report. */
+  /** The Universally Unique Identifier (UUID) for the error report. */
   private UUID id;
 
-  /** The username identifying the user associated with the error report. */
+  /** The username for the user associated with the error report. */
   private String who;
 
   /** Constructs a new <code>SubmitErrorReportRequestData</code>. */
@@ -88,16 +88,16 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>SubmitErrorReportRequestData</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
-   * @param applicationId the ID uniquely identifying the application that generated the error
+   * @param id the Universally Unique Identifier (UUID) for the error report
+   * @param applicationId the ID for the application that generated the error
    *     report
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
    * @param detail the error detail
    * @param feedback the feedback provided by the user for the error
    * @param created the date and time the error report was created
-   * @param who the username identifying the user associated with the error report
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param who the username for the user associated with the error report
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     error report originated from
    * @param data the optional Base-64 encoded data associated with the error report
    */
@@ -191,9 +191,9 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the ID uniquely identifying the application that generated the error report.
+   * Returns the ID for the application that generated the error report.
    *
-   * @return the ID uniquely identifying the application that generated the error report
+   * @return the ID for the application that generated the error report
    */
   public String getApplicationId() {
     return applicationId;
@@ -245,10 +245,10 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the error
+   * Returns the Universally Unique Identifier (UUID) for the device the error
    * report originated from.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the error
+   * @return the Universally Unique Identifier (UUID) for the device the error
    *     report originated from
    */
   public UUID getDeviceId() {
@@ -265,18 +265,18 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the error report.
+   * Returns the Universally Unique Identifier (UUID) for the error report.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the error report
+   * @return the Universally Unique Identifier (UUID) for the error report
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the username identifying the user associated with the error report.
+   * Returns the username for the user associated with the error report.
    *
-   * @return the username identifying the user associated with the error report
+   * @return the username for the user associated with the error report
    */
   public String getWho() {
     return who;

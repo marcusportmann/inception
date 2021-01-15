@@ -140,7 +140,7 @@ public class ErrorService implements IErrorService {
   /**
    * Retrieve the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
+   * @param errorReportId the Universally Unique Identifier (UUID) for the error
    *     report
    * @return the error report or <code>null</code> if the error report could not be found
    */
@@ -170,7 +170,7 @@ public class ErrorService implements IErrorService {
   /**
    * Retrieve the summary for the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) uniquely identifying the error
+   * @param errorReportId the Universally Unique Identifier (UUID) for the error
    *     report
    * @return the summary for the error report or <code>null</code> if the error report could not be
    *     found

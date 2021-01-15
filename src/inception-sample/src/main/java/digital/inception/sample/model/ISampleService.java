@@ -52,7 +52,7 @@ public interface ISampleService {
   /**
    * Returns the data.
    *
-   * @param id the ID uniquely identifying the data
+   * @param id the ID for the data
    * @return the data
    */
   Data getData(long id) throws SampleServiceException;

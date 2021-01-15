@@ -22,7 +22,7 @@
 export class ErrorReport {
 
   /**
-   * The ID uniquely identifying the application that generated the error report.
+   * The ID for the application that generated the error report.
    */
   applicationId: string;
 
@@ -52,7 +52,7 @@ export class ErrorReport {
   detail: string;
 
   /**
-   * The optional Universally Unique Identifier (UUID) uniquely identifying the device the
+   * The optional Universally Unique Identifier (UUID) for the device the
    * error report originated from.
    */
   deviceId?: string;
@@ -63,28 +63,25 @@ export class ErrorReport {
   feedback?: string;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the error report.
+   * The Universally Unique Identifier (UUID) for the error report.
    */
   id: string;
 
   /**
-   * The optional username identifying the user associated with the error report.
+   * The optional username for the user associated with the error report.
    */
   who?: string;
 
   /**
    * Constructs a new ErrorReport.
    *
-   * @param id                 The Universally Unique Identifier (UUID) uniquely identifying
-   *                           the error report.
-   * @param applicationId      The ID uniquely identifying the application that generated the
-   *                           error report.
+   * @param id                 The Universally Unique Identifier (UUID) for the error report.
+   * @param applicationId      The ID for the application that generated the error report.
    * @param applicationVersion The version of the application that generated the error report.
    * @param description        The description of the error.
    * @param detail             The error detail.
    * @param created            The date and time the error report was created.
-   * @param who                The optional username identifying the user associated with the error
-   *                           report.
+   * @param who                The optional username for the user associated with the error report.
    * @param feedback           The optional feedback provided by the user for the error.
    * @param data               The optional base-64 encoded data associated with the error report.
    */

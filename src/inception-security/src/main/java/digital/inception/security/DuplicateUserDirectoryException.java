@@ -64,7 +64,7 @@ public class DuplicateUserDirectoryException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateUserDirectoryException</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    */
   public DuplicateUserDirectoryException(UUID userDirectoryId) {

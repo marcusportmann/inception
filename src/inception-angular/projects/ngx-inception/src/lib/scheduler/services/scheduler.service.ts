@@ -109,7 +109,7 @@ export class SchedulerService {
   /**
    * Delete the job.
    *
-   * @param jobId The ID uniquely identifying the job.
+   * @param jobId The ID for the job.
    *
    * @return True if the job was deleted or false otherwise.
    */
@@ -138,7 +138,7 @@ export class SchedulerService {
   /**
    * Retrieve the job.
    *
-   * @param jobId The ID uniquely identifying the job.
+   * @param jobId The ID for the job.
    *
    * @return The job.
    */
@@ -167,7 +167,7 @@ export class SchedulerService {
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId The ID uniquely identifying the job.
+   * @param jobId The ID for the job.
    *
    * @return The name of the job.
    */

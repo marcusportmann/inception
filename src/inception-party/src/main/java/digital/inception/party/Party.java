@@ -77,9 +77,9 @@ public class Party implements Serializable {
   @Column(name = "updated", insertable = false)
   protected LocalDateTime updated;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the party. */
+  /** The Universally Unique Identifier (UUID) for the party. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the party",
+      description = "The Universally Unique Identifier (UUID) for the party",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -101,12 +101,12 @@ public class Party implements Serializable {
   private String name;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the tenant the party is
+   * The Universally Unique Identifier (UUID) for the tenant the party is
    * associated with.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the tenant the party is associated with",
+          "The Universally Unique Identifier (UUID) for the tenant the party is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
@@ -114,8 +114,8 @@ public class Party implements Serializable {
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
 
-  /** The type of party. */
-  @Schema(description = "The type of party", required = true)
+  /** The party type. */
+  @Schema(description = "The party type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -129,7 +129,7 @@ public class Party implements Serializable {
   /**
    * Constructs a new <code>Party</code>.
    *
-   * @param type the type of party
+   * @param type the party type
    */
   public Party(PartyType type) {
     this.type = type;
@@ -171,9 +171,9 @@ public class Party implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the party.
+   * Returns the Universally Unique Identifier (UUID) for the party.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @return the Universally Unique Identifier (UUID) for the party
    */
   public UUID getId() {
     return id;
@@ -189,10 +189,10 @@ public class Party implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the tenant the party is
+   * Returns the Universally Unique Identifier (UUID) for the tenant the party is
    * associated with.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the tenant the party is
+   * @return the Universally Unique Identifier (UUID) for the tenant the party is
    *     associated with
    */
   public UUID getTenantId() {
@@ -200,9 +200,9 @@ public class Party implements Serializable {
   }
 
   /**
-   * Returns the type of party.
+   * Returns the party type.
    *
-   * @return the type of party
+   * @return the party type
    */
   public PartyType getType() {
     return type;
@@ -228,9 +228,9 @@ public class Party implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the party.
+   * Set the Universally Unique Identifier (UUID) for the party.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @param id the Universally Unique Identifier (UUID) for the party
    */
   public void setId(UUID id) {
     this.id = id;
@@ -246,10 +246,10 @@ public class Party implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the tenant the party is
+   * Set the Universally Unique Identifier (UUID) for the tenant the party is
    * associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant the
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the
    *     party is associated with
    */
   public void setTenantId(UUID tenantId) {
@@ -257,9 +257,9 @@ public class Party implements Serializable {
   }
 
   /**
-   * Set the type of party.
+   * Set the party type.
    *
-   * @param type the type of party
+   * @param type the party type
    */
   public void setType(PartyType type) {
     this.type = type;

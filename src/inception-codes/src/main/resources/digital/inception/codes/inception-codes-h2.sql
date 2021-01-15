@@ -17,7 +17,7 @@ CREATE TABLE codes.code_categories (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN codes.code_categories.id IS 'The ID uniquely identifying the code category';
+COMMENT ON COLUMN codes.code_categories.id IS 'The ID for the code category';
 
 COMMENT ON COLUMN codes.code_categories.name IS 'The name of the code category';
 
@@ -42,9 +42,9 @@ CREATE TABLE codes.codes (
 
 CREATE INDEX codes_code_category_id_ix ON codes.codes(code_category_id);
 
-COMMENT ON COLUMN codes.codes.id IS 'The ID uniquely identifying the code';
+COMMENT ON COLUMN codes.codes.id IS 'The ID for the code';
 
-COMMENT ON COLUMN codes.codes.code_category_id IS 'The ID uniquely identifying the code category the code is associated with';
+COMMENT ON COLUMN codes.codes.code_category_id IS 'The ID for the code category the code is associated with';
 
 COMMENT ON COLUMN codes.codes.name IS 'The name of the code';
 

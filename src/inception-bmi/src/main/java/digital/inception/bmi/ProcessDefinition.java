@@ -63,9 +63,9 @@
 //  private byte[] data;
 //
 //  /**
-//   * The ID uniquely identifying the process definition.
+//   * The ID for the process definition.
 //   */
-//  @Schema(description = "The ID uniquely identifying the process definition",
+//  @Schema(description = "The ID for the process definition",
 //      required = true)
 //  @JsonProperty(required = true)
 //  @XmlElement(name = "Id", required = true)
@@ -101,7 +101,7 @@
 //  /**
 //   * Constructs a new <code>ProcessDefinition</code>.
 //   *
-//   * @param id      the ID uniquely identifying the process definition
+//   * @param id      the ID for the process definition
 //   * @param name    the name of the process definition
 //   * @param version the version of the process definition
 //   * @param data    the BPMN XML data for the process definition
@@ -156,10 +156,10 @@
 //  }
 //
 //  /**
-//   * Returns the ID uniquely identifying the process
+//   * Returns the ID for the process
 //   * definition.
 //   *
-//   * @return the ID uniquely identifying the process
+//   * @return the ID for the process
 //   *         definition
 //   */
 //  public String getId()
@@ -211,9 +211,9 @@
 //  }
 //
 //  /**
-//   * Set the ID uniquely identifying the process definition.
+//   * Set the ID for the process definition.
 //   *
-//   * @param id the ID uniquely identifying the process
+//   * @param id the ID for the process
 //   *           definition
 //   */
 //  public void setId(String id)

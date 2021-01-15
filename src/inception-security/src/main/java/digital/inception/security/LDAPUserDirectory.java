@@ -132,7 +132,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Constructs a new <code>LDAPUserDirectory</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param parameters the parameters for the user directory
    * @param groupRepository the Group Repository
@@ -371,7 +371,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Add the group member to the group.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the group member name
    */
@@ -401,8 +401,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Add the role to the group.
    *
-   * @param groupName the name identifying the group
-   * @param roleCode the code uniquely identifying the role
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
    */
   @Override
   public void addRoleToGroup(String groupName, String roleCode)
@@ -466,8 +466,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Add the user to the group.
    *
-   * @param groupName the name identifying the group
-   * @param username the username identifying the user
+   * @param groupName the name of the group
+   * @param username the username for the user
    */
   @Override
   public void addUserToGroup(String groupName, String username)
@@ -541,7 +541,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Administratively change the password for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param newPassword the new password
    * @param expirePassword expire the user's password
    * @param lockUser lock the user
@@ -601,7 +601,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Authenticate the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param password the password being used to authenticate
    */
   @Override
@@ -677,7 +677,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Change the password for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param password the password for the user that is used to authorise the operation
    * @param newPassword the new password
    */
@@ -927,7 +927,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Delete the group.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    */
   @Override
   public void deleteGroup(String groupName)
@@ -992,7 +992,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Delete the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    */
   @Override
   public void deleteUser(String username) throws UserNotFoundException, SecurityServiceException {
@@ -1155,7 +1155,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the authorised function codes for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the authorised function codes for the user
    */
   @Override
@@ -1221,7 +1221,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the group.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the group
    */
   @Override
@@ -1310,10 +1310,10 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   }
 
   /**
-   * Retrieve the names identifying the groups the user is a member of.
+   * Retrieve the names of the groups the user is a member of.
    *
-   * @param username the username identifying the user
-   * @return the names identifying the groups the user is a member of
+   * @param username the username for the user
+   * @return the names of the groups the user is a member of
    */
   @Override
   public List<String> getGroupNamesForUser(String username)
@@ -1357,7 +1357,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       throw e;
     } catch (Throwable e) {
       throw new SecurityServiceException(
-          "Failed to retrieve the names identifying the groups the user ("
+          "Failed to retrieve the names of the groups the user ("
               + username
               + ") is a member of for the user directory ("
               + getUserDirectoryId()
@@ -1480,7 +1480,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the groups the user is a member of.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the groups the user is a member of
    */
   @Override
@@ -1535,7 +1535,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the group members for the group.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the group members for the group
    */
   @Override
@@ -1606,7 +1606,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the group members for the group.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
    * @param pageIndex the optional page index
@@ -1735,7 +1735,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the codes for the roles that have been assigned to the group
    */
   @Override
@@ -1779,7 +1779,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the codes for the roles that the user has been assigned.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the codes for the roles that the user has been assigned
    */
   @Override
@@ -1845,7 +1845,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the roles that have been assigned to the group
    */
   @Override
@@ -1893,7 +1893,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the user
    */
   @Override
@@ -1928,7 +1928,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Retrieve the name of the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the name of the user
    */
   @Override
@@ -2118,7 +2118,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Does the user with the specified username exist?
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return <code>true</code> if a user with specified username exists or <code>false</code>
    *     otherwise
    */
@@ -2158,8 +2158,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Is the user in the group?
    *
-   * @param groupName the name identifying the group
-   * @param username the username identifying the user
+   * @param groupName the name of the group
+   * @param username the username for the user
    * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
    */
   @Override
@@ -2217,7 +2217,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Remove the group member from the group.
    *
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the group member name
    */
@@ -2246,8 +2246,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Remove the role from the group.
    *
-   * @param groupName the name identifying the group
-   * @param roleCode the code uniquely identifying the role
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
    */
   @Override
   public void removeRoleFromGroup(String groupName, String roleCode)
@@ -2294,8 +2294,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Remove the user from the group.
    *
-   * @param groupName the name identifying the group
-   * @param username the username identifying the user
+   * @param groupName the name of the group
+   * @param username the username for the user
    */
   @Override
   public void removeUserFromGroup(String groupName, String username)
@@ -2364,7 +2364,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Reset the password for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param newPassword the new password
    */
   @Override
@@ -2741,7 +2741,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
         throw new SecurityServiceException(
             String.format(
-                "Found multiple groups (%d) with the names identifying the group (%s) with DNs %s",
+                "Found multiple groups (%d) with the name of the group (%s) with DNs %s",
                 groupDNs.size(), groupName, buffer.toString()));
       }
     } catch (Throwable e) {

@@ -122,7 +122,7 @@ public class ReportingService implements IReportingService {
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @param parameters the parameters for the report
    * @return the PDF data for the report
    */
@@ -154,7 +154,7 @@ public class ReportingService implements IReportingService {
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @param parameters the parameters for the report
    * @param connection the database connection used to retrieve the report data
    * @return the PDF data for the report
@@ -215,7 +215,7 @@ public class ReportingService implements IReportingService {
   /**
    * Create the PDF for the report.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @param parameters the parameters for the report
    * @param document the XML document containing the report data
    * @return the PDF data for the report
@@ -275,7 +275,7 @@ public class ReportingService implements IReportingService {
   /**
    * Delete the existing report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    */
   @Override
   @Transactional
@@ -312,7 +312,7 @@ public class ReportingService implements IReportingService {
   /**
    * Retrieve the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @return the report definition
    */
   @Override
@@ -343,7 +343,7 @@ public class ReportingService implements IReportingService {
   /**
    * Retrieve the name of the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @return the name of the report definition
    */
   @Override
@@ -366,7 +366,7 @@ public class ReportingService implements IReportingService {
       throw e;
     } catch (Throwable e) {
       throw new ReportingServiceException(
-          "Failed to retrieve the name for the report definition (" + reportDefinitionId + ")", e);
+          "Failed to retrieve the name of the report definition (" + reportDefinitionId + ")", e);
     }
   }
 
@@ -389,7 +389,7 @@ public class ReportingService implements IReportingService {
   /**
    * Retrieve the summary for the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @return the summary for the report definition
    */
   @Override
@@ -435,7 +435,7 @@ public class ReportingService implements IReportingService {
   /**
    * Check whether the report definition exists.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
    */
   @Override

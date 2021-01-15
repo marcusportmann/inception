@@ -62,7 +62,7 @@ public class DuplicateTenantException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateTenantException</code>.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    */
   public DuplicateTenantException(UUID tenantId) {
     super("DuplicateTenantError", "An tenant with the ID (" + tenantId + ") already exists");

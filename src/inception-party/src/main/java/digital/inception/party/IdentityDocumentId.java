@@ -30,7 +30,7 @@ public class IdentityDocumentId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code identifying the country of issue for the identity document. */
+  /** The code for the country of issue for the identity document. */
   private String countryOfIssue;
 
   /** The date of issue for the identity document. */
@@ -39,7 +39,7 @@ public class IdentityDocumentId implements Serializable {
   /** The person the identity document is associated with. */
   private Person person;
 
-  /** The code identifying the type of identity document. */
+  /** The code for the identity document type. */
   private String type;
 
   /** Constructs a new <code>IdentityDocumentId</code>. */

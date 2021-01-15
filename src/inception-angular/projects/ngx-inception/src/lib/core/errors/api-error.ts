@@ -25,7 +25,7 @@ import {ValidationError} from './validation-error';
 export class ApiError {
 
   /**
-   * The optional code identifying the error.
+   * The optional code for the error.
    */
   code?: string;
 

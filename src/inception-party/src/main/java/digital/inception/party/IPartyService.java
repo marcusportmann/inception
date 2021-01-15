@@ -50,7 +50,7 @@ public interface IPartyService {
   /**
    * Delete the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   * @param organizationId the Universally Unique Identifier (UUID) for the
    *     organization
    */
   void deleteOrganization(UUID organizationId)
@@ -59,7 +59,7 @@ public interface IPartyService {
   /**
    * Delete the party.
    *
-   * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @param partyId the Universally Unique Identifier (UUID) for the party
    */
   void deleteParty(UUID partyId)
       throws InvalidArgumentException, PartyNotFoundException, PartyServiceException;
@@ -67,7 +67,7 @@ public interface IPartyService {
   /**
    * Delete the person.
    *
-   * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @param personId the Universally Unique Identifier (UUID) for the person
    */
   void deletePerson(UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, PartyServiceException;
@@ -75,7 +75,7 @@ public interface IPartyService {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   * @param organizationId the Universally Unique Identifier (UUID) for the
    *     organization
    * @return the organization
    */
@@ -111,7 +111,7 @@ public interface IPartyService {
   /**
    * Retrieve the party.
    *
-   * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the party
    */
   Party getParty(UUID partyId)
@@ -120,7 +120,7 @@ public interface IPartyService {
   /**
    * Retrieve the person.
    *
-   * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @param personId the Universally Unique Identifier (UUID) for the person
    * @return the person
    */
   Person getPerson(UUID personId)

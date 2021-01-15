@@ -125,7 +125,7 @@ public abstract class SecureRestController {
    * Confirm that the user associated with the authenticated request has access to the specified
    * function.
    *
-   * @param functionCode the code uniquely identifying the function
+   * @param functionCode the code for the function
    * @return <code>true</code> if the user associated with the authenticated request has access to
    *     the function identified by the specified function code or <code>false</code> otherwise
    */

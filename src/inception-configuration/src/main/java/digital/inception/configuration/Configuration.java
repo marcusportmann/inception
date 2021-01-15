@@ -48,7 +48,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A configuration value uniquely identified by a key")
+@Schema(description = "A configuration value")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"key", "value", "description"})
 @XmlRootElement(name = "Configuration", namespace = "http://configuration.inception.digital")
@@ -79,8 +79,8 @@ public class Configuration implements Serializable {
   @Column(name = "description", nullable = false, length = 100)
   private String description;
 
-  /** The key uniquely identifying the configuration. */
-  @Schema(description = "The key uniquely identifying the configuration", required = true)
+  /** The key for the configuration. */
+  @Schema(description = "The key for the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Key", required = true)
   @NotNull
@@ -111,7 +111,7 @@ public class Configuration implements Serializable {
   /**
    * Constructs a new <code>Configuration</code>.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    * @param value the value for the configuration
    * @param description the description for the configuration
    */
@@ -166,9 +166,9 @@ public class Configuration implements Serializable {
   }
 
   /**
-   * Returns the key uniquely identifying the configuration.
+   * Returns the key for the configuration.
    *
-   * @return the key uniquely identifying the configuration
+   * @return the key for the configuration
    */
   public String getKey() {
     return key;
@@ -212,9 +212,9 @@ public class Configuration implements Serializable {
   }
 
   /**
-   * Set the key uniquely identifying the configuration.
+   * Set the key for the configuration.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    */
   public void setKey(String key) {
     this.key = key;

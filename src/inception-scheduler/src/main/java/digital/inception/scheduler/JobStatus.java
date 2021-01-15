@@ -63,7 +63,7 @@ public enum JobStatus {
   /**
    * Returns the job status given by the specified code value.
    *
-   * @param code the code value identifying the job status
+   * @param code the code for the job status
    * @return the job status given by the specified code value
    */
   @JsonCreator
@@ -92,7 +92,7 @@ public enum JobStatus {
   /**
    * Returns the job status for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the job status
+   * @param numericCode the numeric code for the job status
    * @return the job status given by the specified numeric code value
    */
   public static JobStatus fromNumericCode(int numericCode) {
@@ -146,9 +146,9 @@ public enum JobStatus {
   }
 
   /**
-   * Returns the code value identifying the job status.
+   * Returns the code for the job status.
    *
-   * @return the code value identifying the job status
+   * @return the code for the job status
    */
   @JsonValue
   public String code() {

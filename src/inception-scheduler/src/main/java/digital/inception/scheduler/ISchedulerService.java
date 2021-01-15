@@ -40,7 +40,7 @@ public interface ISchedulerService {
   /**
    * Delete the job
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    */
   void deleteJob(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
@@ -62,7 +62,7 @@ public interface ISchedulerService {
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @return the job
    */
   Job getJob(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
@@ -70,7 +70,7 @@ public interface ISchedulerService {
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @return the name of the job
    */
   String getJobName(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
@@ -109,7 +109,7 @@ public interface ISchedulerService {
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *     next execution time
    */
@@ -135,7 +135,7 @@ public interface ISchedulerService {
   /**
    * Set the status for the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @param status the new status for the job
    */
   void setJobStatus(String jobId, JobStatus status)
@@ -144,7 +144,7 @@ public interface ISchedulerService {
   /**
    * Unlock a locked job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @param status the new status for the unlocked job
    */
   void unlockJob(String jobId, JobStatus status)

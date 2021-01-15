@@ -9,7 +9,6 @@ CREATE SCHEMA sample;
 -- -------------------------------------------------------------------------------------------------
 CREATE TABLE sample.data (
   id              BIGINT        NOT NULL,
-  name            VARCHAR(100) NOT NULL,
   integer_value   INTEGER,
   string_value    VARCHAR(4000),
   date_value      DATE,
@@ -18,9 +17,7 @@ CREATE TABLE sample.data (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN sample.data.id IS 'The ID uniquely identifying the data';
-
-COMMENT ON COLUMN sample.data.name IS 'The name for the data';
+COMMENT ON COLUMN sample.data.id IS 'The ID for the data';
 
 COMMENT ON COLUMN sample.data.integer_value IS 'The integer value for the data';
 

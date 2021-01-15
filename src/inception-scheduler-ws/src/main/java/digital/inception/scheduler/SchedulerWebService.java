@@ -66,7 +66,7 @@ public class SchedulerWebService {
   /**
    * Delete the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    */
   @WebMethod(operationName = "DeleteJob")
   public void deleteJob(@WebParam(name = "JobId") @XmlElement(required = true) String jobId)
@@ -77,7 +77,7 @@ public class SchedulerWebService {
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @return the job
    */
   @WebMethod(operationName = "GetJob")
@@ -90,7 +90,7 @@ public class SchedulerWebService {
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @return the name of the job
    */
   @WebMethod(operationName = "GetJobName")

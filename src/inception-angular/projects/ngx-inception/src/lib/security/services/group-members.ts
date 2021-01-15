@@ -30,7 +30,7 @@ export class GroupMembers {
   filter?: string;
 
   /**
-   * The name identifying the group the group members are associated with.
+   * The name of the group the group members are associated with.
    */
   groupName: string;
 
@@ -60,7 +60,7 @@ export class GroupMembers {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * The Universally Unique Identifier (UUID) for the user directory the group
    * members are associated with.
    */
   userDirectoryId: string;
@@ -68,9 +68,9 @@ export class GroupMembers {
   /**
    * Constructs a new GroupMembers.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
    *                        user directory the group members are associated with.
-   * @param groupName       The name identifying the group the group members are associated with.
+   * @param groupName       The name of the group the group members are associated with.
    * @param groupMembers    The group members.
    * @param total           The total number of groups.
    * @param filter          The optional filter that was applied to the group members.

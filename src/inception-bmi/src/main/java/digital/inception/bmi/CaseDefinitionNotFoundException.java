@@ -49,7 +49,7 @@ public class CaseDefinitionNotFoundException extends ServiceException {
   /**
    * w Constructs a new <code>CaseDefinitionNotFoundException</code>.
    *
-   * @param caseDefinitionId the ID uniquely identifying the case definition
+   * @param caseDefinitionId the ID for the case definition
    */
   public CaseDefinitionNotFoundException(String caseDefinitionId) {
     super(

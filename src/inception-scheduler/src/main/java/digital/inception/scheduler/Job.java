@@ -135,8 +135,8 @@ public class Job implements Serializable {
   @Column(name = "execution_attempts")
   private Integer executionAttempts;
 
-  /** The ID uniquely identifying the job. */
-  @Schema(description = "The ID uniquely identifying the job", required = true)
+  /** The ID for the job. */
+  @Schema(description = "The ID for the job", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -220,7 +220,7 @@ public class Job implements Serializable {
   /**
    * Constructs a new <code>Job</code>.
    *
-   * @param id the ID uniquely identifying the job
+   * @param id the ID for the job
    * @param name the name of the job
    * @param schedulingPattern the cron-style scheduling pattern for the job
    * @param jobClass the fully qualified name of the Java class that implements the job
@@ -311,9 +311,9 @@ public class Job implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the job.
+   * Returns the ID for the job.
    *
-   * @return the ID uniquely identifying the job
+   * @return the ID for the job
    */
   public String getId() {
     return id;
@@ -464,9 +464,9 @@ public class Job implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the job.
+   * Set the ID for the job.
    *
-   * @param id the ID uniquely identifying the scheduled job
+   * @param id the ID for the scheduled job
    */
   public void setId(String id) {
     this.id = id;

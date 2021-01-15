@@ -43,7 +43,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData {
   public static final UUID MESSAGE_TYPE_ID =
       UUID.fromString("cc005e6a-b01b-48eb-98a0-026297be69f3");
 
-  /** The username identifying the user. */
+  /** The username for the user. */
   private String username;
 
   /** Constructs a new <code>CheckUserExistsRequestData</code>. */
@@ -54,7 +54,7 @@ public class CheckUserExistsRequestData extends WbxmlMessageData {
   /**
    * Constructs a new <code>CheckUserExistsRequestData</code>.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    */
   public CheckUserExistsRequestData(String username) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -89,9 +89,9 @@ public class CheckUserExistsRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the username identifying the user.
+   * Returns the username for the user.
    *
-   * @return the username identifying the user
+   * @return the username for the user
    */
   public String getUsername() {
     return username;

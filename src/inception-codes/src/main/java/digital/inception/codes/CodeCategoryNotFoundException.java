@@ -49,7 +49,7 @@ public class CodeCategoryNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>CodeCategoryNotFoundException</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    */
   public CodeCategoryNotFoundException(String codeCategoryId) {
     super(

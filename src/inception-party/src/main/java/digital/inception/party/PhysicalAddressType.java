@@ -59,7 +59,7 @@ public enum PhysicalAddressType {
   /**
    * Returns the physical address type given by the specified code value.
    *
-   * @param code the code value identifying the physical address type
+   * @param code the code for the physical address type
    * @return the physical address type given by the specified code value
    */
   @JsonCreator
@@ -95,7 +95,7 @@ public enum PhysicalAddressType {
   /**
    * Returns the physical address type for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the physical address type
+   * @param numericCode the numeric code for the physical address type
    * @return the physical address type given by the specified numeric code value
    */
   public static PhysicalAddressType fromNumericCode(int numericCode) {
@@ -153,9 +153,9 @@ public enum PhysicalAddressType {
   }
 
   /**
-   * Returns the code value identifying for the physical address type.
+   * Returns the code for the physical address type.
    *
-   * @return the code value identifying for the physical address type
+   * @return the code for the physical address type
    */
   @JsonValue
   public String code() {

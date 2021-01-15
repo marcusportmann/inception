@@ -51,7 +51,7 @@ public enum MessagePriority {
   /**
    * Returns the message priority given by the specified code value.
    *
-   * @param code the code value identifying the message priority
+   * @param code the code for the message priority
    * @return the message priority given by the specified code value
    */
   @JsonCreator
@@ -72,7 +72,7 @@ public enum MessagePriority {
   /**
    * Returns the message priority for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the message priority
+   * @param numericCode the numeric code for the message priority
    * @return the message priority given by the specified numeric code value
    */
   public static MessagePriority fromNumericCode(int numericCode) {
@@ -112,9 +112,9 @@ public enum MessagePriority {
   }
 
   /**
-   * Returns the code identifying the message priority.
+   * Returns the code for the message priority.
    *
-   * @return the code identifying the message priority
+   * @return the code for the message priority
    */
   @JsonValue
   public String code() {

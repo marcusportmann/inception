@@ -49,7 +49,7 @@ export class ConfigurationService {
   /**
    * Delete the configuration.
    *
-   * @param key The key uniquely identifying the configuration.
+   * @param key The key for the configuration.
    *
    * @return True if the configuration was deleted or false otherwise.
    */
@@ -78,7 +78,7 @@ export class ConfigurationService {
   /**
    * Retrieve the configuration.
    *
-   * @param key The key uniquely identifying the configuration.
+   * @param key The key for the configuration.
    *
    * @return The configuration.
    */
@@ -107,7 +107,7 @@ export class ConfigurationService {
   /**
    * Retrieve the configuration value.
    *
-   * @param key The key uniquely identifying the configuration.
+   * @param key The key for the configuration.
    *
    * @return The configuration value.
    */

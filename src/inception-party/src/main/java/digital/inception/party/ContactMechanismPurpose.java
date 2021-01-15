@@ -184,7 +184,7 @@ public enum ContactMechanismPurpose {
   /**
    * Returns the contact mechanism purpose given by the specified code value.
    *
-   * @param code the code value identifying the contact mechanism purpose
+   * @param code the code for the contact mechanism purpose
    * @return the contact mechanism purpose given by the specified code value
    */
   @JsonCreator
@@ -264,7 +264,7 @@ public enum ContactMechanismPurpose {
   /**
    * Returns the contact mechanism purpose for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the contact mechanism purpose
+   * @param numericCode the numeric code for the contact mechanism purpose
    * @return the contact mechanism purpose given by the specified numeric code value
    */
   public static ContactMechanismPurpose fromNumericCode(int numericCode) {

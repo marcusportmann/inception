@@ -102,7 +102,7 @@ COMMENT ON COLUMN reference.countries.short_name IS 'The short name for the coun
 
 COMMENT ON COLUMN reference.countries.description IS 'The description for the country';
 
-COMMENT ON COLUMN reference.countries.sovereign_state IS 'The code identifying the sovereign state for the country';
+COMMENT ON COLUMN reference.countries.sovereign_state IS 'The code for the sovereign state the country is associated with';
 
 COMMENT ON COLUMN reference.countries.nationality IS 'The nationality for the country';
 
@@ -208,7 +208,7 @@ COMMENT ON COLUMN reference.identity_document_types.name IS 'The name of the ide
 
 COMMENT ON COLUMN reference.identity_document_types.description IS 'The description for the identity document type';
 
-COMMENT ON COLUMN reference.identity_document_types.country_of_issue IS 'The optional code identifying the country of issue for the identity document type';
+COMMENT ON COLUMN reference.identity_document_types.country_of_issue IS 'The optional code for the country of issue for the identity document type';
 
 
 CREATE TABLE reference.languages (
@@ -546,7 +546,7 @@ COMMENT ON COLUMN reference.residence_permit_types.name IS 'The name of the resi
 
 COMMENT ON COLUMN reference.residence_permit_types.description IS 'The description for the residence permit type';
 
-COMMENT ON COLUMN reference.residence_permit_types.country_of_issue IS 'The code identifying the country of issue for the residence permit type';
+COMMENT ON COLUMN reference.residence_permit_types.country_of_issue IS 'The code for the country of issue for the residence permit type';
 
 
 CREATE TABLE reference.residency_statuses (
@@ -694,7 +694,7 @@ COMMENT ON COLUMN reference.tax_number_types.name IS 'The name of the tax number
 
 COMMENT ON COLUMN reference.tax_number_types.description IS 'The description for the tax number type';
 
-COMMENT ON COLUMN reference.tax_number_types.country_of_issue IS 'The code identifying the country of issue for the tax number type';
+COMMENT ON COLUMN reference.tax_number_types.country_of_issue IS 'The code for the country of issue for the tax number type';
 
 
 CREATE TABLE reference.titles (

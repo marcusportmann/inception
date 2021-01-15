@@ -36,7 +36,7 @@ export class Session {
   accessTokenExpiry?: Date;
 
   /**
-   * The codes identifying the functions assigned to the user associated with the user session.
+   * The codes for the functions assigned to the user associated with the user session.
    */
   functionCodes: string[];
 
@@ -51,7 +51,7 @@ export class Session {
   refreshToken?: string;
 
   /**
-   * The codes identifying the roles assigned to the user associated with the user session.
+   * The codes for the roles assigned to the user associated with the user session.
    */
   roleCodes: string[];
 
@@ -66,8 +66,7 @@ export class Session {
   tenant?: Tenant;
 
   /**
-   * The Universally Unique Identifiers (UUIDs) uniquely identifying the tenants the user is
-   * associated with.
+   * The Universally Unique Identifiers (UUIDs) for tenants the user is associated with.
    */
   tenantIds: string[];
 
@@ -77,7 +76,7 @@ export class Session {
   username: string;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the
+   * The Universally Unique Identifier (UUID) for the user directory the
    * user is associated with.
    */
   userDirectoryId: string;
@@ -86,16 +85,16 @@ export class Session {
    * Constructs a new Session.
    *
    * @param username          The username for the user the user session is associated with.
-   * @param userDirectoryId   The Universally Unique Identifier (UUID) uniquely identifying the
+   * @param userDirectoryId   The Universally Unique Identifier (UUID) for the
    *                          user directory the user is associated with.
    * @param name              The name of the user.
    * @param scopes            The OAuth2 scopes for the user session.
-   * @param roleCodes         The codes identifying the roles assigned to the user associated with
+   * @param roleCodes         The codes for the roles assigned to the user associated with
    *                          the user session.
-   * @param functionCodes     The codes identifying the functions assigned to the user associated
+   * @param functionCodes     The codes for the functions assigned to the user associated
    *                          with the user session.
-   * @param tenantIds   The Universally Unique Identifiers (UUIDs) uniquely identifying the
-   *                          tenants the user is associated with.
+   * @param tenantIds         The Universally Unique Identifiers (UUIDs) for the tenants the user
+   *                          is associated with.
    * @param accessToken       The base-64 encoded OAuth2 JWT access token for the user session.
    * @param accessTokenExpiry The string representation of the epoch timestamp giving the date and
    *                          time the OAuth2 JWT access token for the user session will expire.
@@ -147,7 +146,7 @@ export class Session {
   /**
    * Confirm that the user associated with the session has been assigned the required function.
    *
-   * @param requiredFunctionCode The code uniquely identifying the required function.
+   * @param requiredFunctionCode The code for the required function.
    *
    * @return True if the user associated with the session has been assigned the required function
    *         or false otherwise.
@@ -165,7 +164,7 @@ export class Session {
   /**
    * Confirm that the user associated with the session has been assigned the required role.
    *
-   * @param requiredRoleCode The code uniquely identifying the required role.
+   * @param requiredRoleCode The code for the required role.
    *
    * @return True if the user associated with the session has been assigned the required role or
    *         false otherwise.

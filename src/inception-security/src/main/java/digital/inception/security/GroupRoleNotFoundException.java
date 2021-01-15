@@ -50,7 +50,7 @@ public class GroupRoleNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>GroupRoleNotFoundException</code>.
    *
-   * @param roleCode the code uniquely identifying the role
+   * @param roleCode the code for the role
    */
   public GroupRoleNotFoundException(String roleCode) {
     super(

@@ -168,7 +168,7 @@ public class PartyRestController extends SecureRestController {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   * @param organizationId the Universally Unique Identifier (UUID) for the
    *     organization
    * @return the organization
    */
@@ -211,7 +211,7 @@ public class PartyRestController extends SecureRestController {
       @Parameter(
               name = "organizationId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the organization",
+                  "The Universally Unique Identifier (UUID) for the organization",
               required = true)
           @PathVariable
           UUID organizationId)
@@ -344,7 +344,7 @@ public class PartyRestController extends SecureRestController {
   /**
    * Retrieve the party.
    *
-   * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the party
    */
   @Operation(summary = "Retrieve the party", description = "Retrieve the party")
@@ -385,7 +385,7 @@ public class PartyRestController extends SecureRestController {
       @Parameter(
               name = "partyId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the party",
+                  "The Universally Unique Identifier (UUID) for the party",
               required = true)
           @PathVariable
           UUID partyId)
@@ -396,7 +396,7 @@ public class PartyRestController extends SecureRestController {
   /**
    * Retrieve the person.
    *
-   * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @param personId the Universally Unique Identifier (UUID) for the person
    * @return the person
    */
   @Operation(summary = "Retrieve the person", description = "Retrieve the person")
@@ -438,7 +438,7 @@ public class PartyRestController extends SecureRestController {
       @Parameter(
               name = "personId",
               description =
-                  "The Universally Unique Identifier (UUID) uniquely identifying the person",
+                  "The Universally Unique Identifier (UUID) for the person",
               required = true)
           @PathVariable
           UUID personId)
@@ -515,7 +515,7 @@ public class PartyRestController extends SecureRestController {
   /**
    * Update the organization.
    *
-   * @param organizationId the ID uniquely identifying the organization
+   * @param organizationId the ID for the organization
    * @param organization the organization
    */
   @Operation(summary = "Update the organization", description = "Update the organization")
@@ -558,7 +558,7 @@ public class PartyRestController extends SecureRestController {
   public void updateOrganization(
       @Parameter(
               name = "organizationId",
-              description = "The ID uniquely identifying the organization",
+              description = "The ID for the organization",
               required = true)
           @PathVariable
           UUID organizationId,
@@ -586,7 +586,7 @@ public class PartyRestController extends SecureRestController {
   /**
    * Update the person.
    *
-   * @param personId the ID uniquely identifying the person
+   * @param personId the ID for the person
    * @param person the person
    */
   @Operation(summary = "Update the person", description = "Update the person")
@@ -627,7 +627,7 @@ public class PartyRestController extends SecureRestController {
   public void updatePerson(
       @Parameter(
               name = "personId",
-              description = "The ID uniquely identifying the person",
+              description = "The ID for the person",
               required = true)
           @PathVariable
           UUID personId,

@@ -78,10 +78,10 @@ public class UserDirectorySummary implements java.io.Serializable {
       inverseJoinColumns = @JoinColumn(name = "tenant_id", referencedColumnName = "id"))
   private final Set<Tenant> tenants = new HashSet<>();
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
+  /** The Universally Unique Identifier (UUID) for the user directory. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+          "The Universally Unique Identifier (UUID) for the user directory",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -99,8 +99,8 @@ public class UserDirectorySummary implements java.io.Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /** The code uniquely identifying the user directory type. */
-  @Schema(description = "The code uniquely identifying the user directory type", required = true)
+  /** The code for the user directory type. */
+  @Schema(description = "The code for the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -138,9 +138,9 @@ public class UserDirectorySummary implements java.io.Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   * Returns the Universally Unique Identifier (UUID) for the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
+   * @return the Universally Unique Identifier (UUID) for the user directory
    */
   public UUID getId() {
     return id;
@@ -156,9 +156,9 @@ public class UserDirectorySummary implements java.io.Serializable {
   }
 
   /**
-   * Returns the code uniquely identifying the user directory type.
+   * Returns the code for the user directory type.
    *
-   * @return the code uniquely identifying the user directory type
+   * @return the code for the user directory type
    */
   public String getType() {
     return type;

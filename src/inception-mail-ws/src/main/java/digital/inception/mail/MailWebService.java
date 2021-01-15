@@ -69,7 +69,7 @@ public class MailWebService {
   /**
    * Delete the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    */
   @WebMethod(operationName = "DeleteMailTemplate")
   public void deleteMailTemplate(
@@ -81,7 +81,7 @@ public class MailWebService {
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the mail template
    */
   @WebMethod(operationName = "GetMailTemplate")
@@ -95,7 +95,7 @@ public class MailWebService {
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the name of the mail template
    */
   @WebMethod(operationName = "GetMailTemplateName")

@@ -17,7 +17,7 @@ CREATE TABLE reporting.report_definitions (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN reporting.report_definitions.id IS 'The ID uniquely identifying the report definition';
+COMMENT ON COLUMN reporting.report_definitions.id IS 'The ID for the report definition';
 
 COMMENT ON COLUMN reporting.report_definitions.name IS 'The name of the report definition';
 

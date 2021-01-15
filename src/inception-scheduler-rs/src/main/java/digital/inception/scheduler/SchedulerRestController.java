@@ -117,7 +117,7 @@ public class SchedulerRestController extends SecureRestController {
   /**
    * Delete the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    */
   @Operation(summary = "Delete the job", description = "Delete the job")
   @ApiResponses(
@@ -157,7 +157,7 @@ public class SchedulerRestController extends SecureRestController {
   public void deleteJob(
       @Parameter(
               name = "jobId",
-              description = "The ID uniquely identifying the job",
+              description = "The ID for the job",
               required = true)
           @PathVariable
           String jobId)
@@ -168,7 +168,7 @@ public class SchedulerRestController extends SecureRestController {
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @return the job
    */
   @Operation(summary = "Retrieve the job", description = "Retrieve the job")
@@ -209,7 +209,7 @@ public class SchedulerRestController extends SecureRestController {
   public Job getJob(
       @Parameter(
               name = "jobId",
-              description = "The ID uniquely identifying the job",
+              description = "The ID for the job",
               required = true)
           @PathVariable
           String jobId)
@@ -220,7 +220,7 @@ public class SchedulerRestController extends SecureRestController {
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @return the name of the job
    */
   @Operation(summary = "Retrieve the name of the job", description = "Retrieve the name of the job")
@@ -261,7 +261,7 @@ public class SchedulerRestController extends SecureRestController {
   public String getJobName(
       @Parameter(
               name = "jobId",
-              description = "The ID uniquely identifying the job",
+              description = "The ID for the job",
               required = true)
           @PathVariable
           String jobId)
@@ -299,7 +299,7 @@ public class SchedulerRestController extends SecureRestController {
   /**
    * Update the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @param job the job
    */
   @Operation(summary = "Update the job", description = "Update the job")
@@ -340,7 +340,7 @@ public class SchedulerRestController extends SecureRestController {
   public void updateJob(
       @Parameter(
               name = "jobId",
-              description = "The ID uniquely identifying the job",
+              description = "The ID for the job",
               required = true)
           @PathVariable
           String jobId,

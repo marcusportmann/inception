@@ -118,9 +118,9 @@ export class CodesService {
   /**
    * Delete the code.
    *
-   * @param codeCategoryId The ID uniquely identifying the code category the code is
+   * @param codeCategoryId The ID for the code category the code is
    *                       associated with.
-   * @param codeId         The ID uniquely identifying the code.
+   * @param codeId         The ID for the code.
    *
    * @return True if the code was deleted or false otherwise.
    */
@@ -150,7 +150,7 @@ export class CodesService {
   /**
    * Delete the code category.
    *
-   * @param codeCategoryId The ID uniquely identifying the code category.
+   * @param codeCategoryId The ID for the code category.
    *
    * @return True if the code category was deleted or false otherwise.
    */
@@ -179,9 +179,9 @@ export class CodesService {
   /**
    * Retrieve the code.
    *
-   * @param codeCategoryId The ID uniquely identifying the code category the code is
+   * @param codeCategoryId The ID for the code category the code is
    *                       associated with.
-   * @param codeId         The ID uniquely identifying the code.
+   * @param codeId         The ID for the code.
    *
    * @return The code.
    */
@@ -233,7 +233,7 @@ export class CodesService {
   /**
    * Retrieve the code category.
    *
-   * @param codeCategoryId The ID uniquely identifying the code category.
+   * @param codeCategoryId The ID for the code category.
    *
    * @return The code category.
    */
@@ -262,7 +262,7 @@ export class CodesService {
   /**
    * Retrieve the name of the code category.
    *
-   * @param codeCategoryId The ID uniquely identifying the code category.
+   * @param codeCategoryId The ID for the code category.
    *
    * @return The name of the code category.
    */
@@ -292,9 +292,9 @@ export class CodesService {
   /**
    * Retrieve the name of the code.
    *
-   * @param codeCategoryId The ID uniquely identifying the code category the code is
+   * @param codeCategoryId The ID for the code category the code is
    *                       associated with.
-   * @param codeId         The ID uniquely identifying the code.
+   * @param codeId         The ID for the code.
    *
    * @return The name of the code.
    */
@@ -325,7 +325,7 @@ export class CodesService {
   /**
    * Retrieve the codes for the code category.
    *
-   * @param codeCategoryId The ID uniquely identifying the code category.
+   * @param codeCategoryId The ID for the code category.
    *
    * @return the codes for the code category
    */

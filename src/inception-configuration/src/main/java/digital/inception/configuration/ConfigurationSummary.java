@@ -67,8 +67,8 @@ public class ConfigurationSummary implements Serializable {
   @Column(name = "description", nullable = false, length = 100)
   private String description;
 
-  /** The key uniquely identifying the configuration. */
-  @Schema(description = "The key uniquely identifying the configuration", required = true)
+  /** The key for the configuration. */
+  @Schema(description = "The key for the configuration", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Key", required = true)
   @NotNull
@@ -83,7 +83,7 @@ public class ConfigurationSummary implements Serializable {
   /**
    * Constructs a new <code>ConfigurationSummary</code>.
    *
-   * @param key the key uniquely identifying the configuration
+   * @param key the key for the configuration
    * @param description the description for the configuration
    */
   ConfigurationSummary(String key, String description) {
@@ -127,9 +127,9 @@ public class ConfigurationSummary implements Serializable {
   }
 
   /**
-   * Returns the key uniquely identifying the configuration.
+   * Returns the key for the configuration.
    *
-   * @return the key uniquely identifying the configuration
+   * @return the key for the configuration
    */
   public String getKey() {
     return key;

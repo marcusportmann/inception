@@ -169,7 +169,7 @@ public class PartyService implements IPartyService {
   /**
    * Delete the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   * @param organizationId the Universally Unique Identifier (UUID) for the
    *     organization
    */
   @Override
@@ -197,7 +197,7 @@ public class PartyService implements IPartyService {
   /**
    * Delete the party.
    *
-   * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @param partyId the Universally Unique Identifier (UUID) for the party
    */
   @Override
   @Transactional
@@ -223,7 +223,7 @@ public class PartyService implements IPartyService {
   /**
    * Delete the person.
    *
-   * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @param personId the Universally Unique Identifier (UUID) for the person
    */
   @Override
   @Transactional
@@ -249,7 +249,7 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) uniquely identifying the
+   * @param organizationId the Universally Unique Identifier (UUID) for the
    *     organization
    * @return the organization
    */
@@ -383,7 +383,7 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the party.
    *
-   * @param partyId the Universally Unique Identifier (UUID) uniquely identifying the party
+   * @param partyId the Universally Unique Identifier (UUID) for the party
    * @return the party
    */
   @Override
@@ -411,7 +411,7 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the person.
    *
-   * @param personId the Universally Unique Identifier (UUID) uniquely identifying the person
+   * @param personId the Universally Unique Identifier (UUID) for the person
    * @return the person
    */
   @Override

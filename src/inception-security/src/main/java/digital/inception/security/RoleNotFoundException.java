@@ -50,7 +50,7 @@ public class RoleNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>RoleNotFoundException</code>.
    *
-   * @param roleCode the code uniquely identifying the role
+   * @param roleCode the code for the role
    */
   public RoleNotFoundException(String roleCode) {
     super("RoleNotFoundError", "The role (" + roleCode + ") could not be found");

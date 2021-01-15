@@ -50,7 +50,7 @@ public class ExistingGroupRoleException extends ServiceException {
   /**
    * Constructs a new <code>ExistingGroupRoleException</code>.
    *
-   * @param roleCode the code uniquely identifying the role
+   * @param roleCode the code for the role
    */
   public ExistingGroupRoleException(String roleCode) {
     super("ExistingGroupRoleError", "The group role with code (" + roleCode + ") already exists");

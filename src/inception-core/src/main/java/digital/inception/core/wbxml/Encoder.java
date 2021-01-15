@@ -148,7 +148,7 @@ public class Encoder {
   }
 
   private void buildStringTable(Element element) {
-    // Get the name for the element and add it to the string table
+    // Get the name of the element and add it to the string table
     addToStringTable(element.getName());
 
     // Process the attributes for this element

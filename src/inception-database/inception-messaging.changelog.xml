@@ -24,7 +24,7 @@
 
     <createTable schemaName="messaging" tableName="message_types" remarks="Message Types">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the message type"/>
+        remarks="The Universally Unique Identifier (UUID) for the message type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the message type"/>
     </createTable>
     <addPrimaryKey schemaName="messaging" tableName="message_types" columnNames="id"/>
@@ -32,20 +32,20 @@
     <addNotNullConstraint schemaName="messaging" tableName="message_types" columnName="name"/>
 
     <createTable schemaName="messaging" tableName="message_statuses" remarks="Message Statuses">
-      <column name="code" type="int" remarks="The code identifying the message status"/>
+      <column name="code" type="int" remarks="The code for the message status"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the message status"/>
     </createTable>
     <addPrimaryKey schemaName="messaging" tableName="message_statuses" columnNames="code"/>
 
     <createTable schemaName="messaging" tableName="messages" remarks="Messages">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the message"/>
+        remarks="The Universally Unique Identifier (UUID) for the message"/>
       <column name="username" type="nvarchar(100)"
-        remarks="The username identifying the user associated with the message"/>
+        remarks="The username for the user associated with the message"/>
       <column name="device_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the message originated from"/>
+        remarks="The Universally Unique Identifier (UUID) for the device the message originated from"/>
       <column name="type_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of message"/>
+        remarks="The Universally Unique Identifier (UUID) for the message type"/>
       <column name="correlation_id" type="uuid"
         remarks="The optional Universally Unique Identifier (UUID) used to correlate the message"/>
       <column name="priority" type="int" remarks="The message priority"/>
@@ -105,7 +105,7 @@
 
     <createTable schemaName="messaging" tableName="message_parts" remarks="Message Parts">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the message part"/>
+        remarks="The Universally Unique Identifier (UUID) for the message part"/>
       <column name="part_no" type="int"
         remarks="The number of the message part in the set of message parts for the original message"/>
       <column name="total_parts" type="int"
@@ -117,13 +117,13 @@
       <column name="status" type="int"
         remarks="The message part status e.g. Initialised, QueuedForSending, etc"/>
       <column name="message_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the original message"/>
+        remarks="The Universally Unique Identifier (UUID) for the original message"/>
       <column name="message_username" type="nvarchar(100)"
-        remarks="The username identifying the user associated with the original message"/>
+        remarks="The username for the user associated with the original message"/>
       <column name="message_device_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the original message originated from"/>
+        remarks="The Universally Unique Identifier (UUID) for the device the original message originated from"/>
       <column name="message_type_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of the original message"/>
+        remarks="The Universally Unique Identifier (UUID) for the message type for the original message"/>
       <column name="message_correlation_id" type="uuid"
         remarks="The optional Universally Unique Identifier (UUID) used to correlate the original message"/>
       <column name="message_priority" type="int" remarks="The priority for the original message"/>
@@ -185,13 +185,13 @@
 
     <createTable schemaName="messaging" tableName="archived_messages" remarks="Archived Messages">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the message"/>
+        remarks="The Universally Unique Identifier (UUID) for the message"/>
       <column name="username" type="nvarchar(100)"
-        remarks="The username identifying the user associated with the message"/>
+        remarks="The username for the user associated with the message"/>
       <column name="device_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the device the message originated from"/>
+        remarks="The Universally Unique Identifier (UUID) for the device the message originated from"/>
       <column name="type_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the type of message"/>
+        remarks="The Universally Unique Identifier (UUID) for the message type"/>
       <column name="correlation_id" type="uuid"
         remarks="The optional Universally Unique Identifier (UUID) used to correlate the message"/>
       <column name="created" type="timestamp" remarks="The date and time the message was created"/>

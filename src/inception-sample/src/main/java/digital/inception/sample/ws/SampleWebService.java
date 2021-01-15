@@ -18,10 +18,10 @@ package digital.inception.sample.ws;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.ValidationError;
 import digital.inception.sample.model.Data;
 import digital.inception.sample.model.ISampleService;
 import digital.inception.sample.model.SampleServiceException;
-import digital.inception.core.validation.ValidationError;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlElement;
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
 public class SampleWebService {
 
-  private ISampleService sampleService;
+  private final ISampleService sampleService;
 
   /**
    * Constructs a new <code>SampleWebService</code>.
@@ -80,9 +80,7 @@ public class SampleWebService {
   public Data getData() throws SampleServiceException {
     long id = System.currentTimeMillis();
 
-    Data data =
-        new Data(
-            id, "Test Name " + id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
+    Data data = new Data(id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
 
     sampleService.addData(data);
 

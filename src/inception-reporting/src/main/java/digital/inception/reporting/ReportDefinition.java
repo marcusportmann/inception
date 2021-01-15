@@ -71,8 +71,8 @@ public class ReportDefinition implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The ID uniquely identifying the report definition. */
-  @Schema(description = "The ID uniquely identifying the report definition", required = true)
+  /** The ID for the report definition. */
+  @Schema(description = "The ID for the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -112,7 +112,7 @@ public class ReportDefinition implements Serializable {
   /**
    * Constructs a new <code>ReportDefinition</code>.
    *
-   * @param id the ID uniquely identifying the report definition
+   * @param id the ID for the report definition
    * @param name the name of the report definition
    * @param template the JasperReports template for the report definition
    */
@@ -158,9 +158,9 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the report definition.
+   * Returns the ID for the report definition.
    *
-   * @return the ID uniquely identifying the report definition
+   * @return the ID for the report definition
    */
   public String getId() {
     return id;
@@ -204,9 +204,9 @@ public class ReportDefinition implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the report definition.
+   * Set the ID for the report definition.
    *
-   * @param id the ID uniquely identifying the report definition
+   * @param id the ID for the report definition
    */
   public void setId(String id) {
     this.id = id;

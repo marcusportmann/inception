@@ -57,7 +57,7 @@ export class Country {
   sortIndex: number;
 
   /**
-   * The code identifying the sovereign state for the country.
+   * The code for the sovereign state the country is associated with.
    */
   sovereignState: string;
 
@@ -70,7 +70,7 @@ export class Country {
    * @param name           The name of the country.
    * @param shortName      The short name for the country.
    * @param description    The description for the country.
-   * @param sovereignState The code identifying the sovereign state for the country.
+   * @param sovereignState The code for the sovereign state the country is associated with.
    * @param nationality    The nationality for the country.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, shortName: string,

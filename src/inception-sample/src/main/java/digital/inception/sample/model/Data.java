@@ -51,12 +51,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @Schema(description = "Data")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"id", "name", "stringValue", "integerValue", "dateValue", "timestampValue"})
+@JsonPropertyOrder({"id", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlRootElement(name = "Data", namespace = "http://sample.inception.digital")
 @XmlType(
     name = "Data",
     namespace = "http://sample.inception.digital",
-    propOrder = {"id", "name", "stringValue", "integerValue", "dateValue", "timestampValue"})
+    propOrder = {"id", "stringValue", "integerValue", "dateValue", "timestampValue"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "sample", name = "data")
@@ -84,8 +84,8 @@ public class Data implements Serializable {
   @Column(name = "date_value")
   private LocalDate dateValue;
 
-  /** The ID uniquely identifying the data. */
-  @Schema(description = "The ID uniquely identifying the data", required = true)
+  /** The ID for the data. */
+  @Schema(description = "The ID for the data", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -100,14 +100,6 @@ public class Data implements Serializable {
   @Column(name = "integer_value")
   private Integer integerValue;
 
-  /** The name for the data. */
-  @Schema(description = "The name for the data", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
-  @NotNull
-  @Column(name = "name", nullable = false)
-  private String name;
-
   /** The string string value for the data. */
   @Schema(description = "The string string value for the data")
   @JsonProperty
@@ -121,8 +113,7 @@ public class Data implements Serializable {
   /**
    * Constructs a new <code>Data</code>.
    *
-   * @param id the ID uniquely identifying the data
-   * @param name the name for the data
+   * @param id the ID for the data
    * @param integerValue the integer value
    * @param stringValue the string value for the data
    * @param dateValue the date value for the data
@@ -130,13 +121,11 @@ public class Data implements Serializable {
    */
   public Data(
       long id,
-      String name,
       Integer integerValue,
       String stringValue,
       LocalDate dateValue,
       LocalDateTime timestampValue) {
     this.id = id;
-    this.name = name;
     this.integerValue = integerValue;
     this.stringValue = stringValue;
     this.dateValue = dateValue;
@@ -179,9 +168,9 @@ public class Data implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the data.
+   * Returns the ID for the data.
    *
-   * @return the ID uniquely identifying the data
+   * @return the ID for the data
    */
   public long getId() {
     return id;
@@ -194,15 +183,6 @@ public class Data implements Serializable {
    */
   public Integer getIntegerValue() {
     return integerValue;
-  }
-
-  /**
-   * Returns the name for the data.
-   *
-   * @return the name for the data
-   */
-  public String getName() {
-    return name;
   }
 
   /**
@@ -243,9 +223,9 @@ public class Data implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the data.
+   * Set the ID for the data.
    *
-   * @param id the ID uniquely identifying the data
+   * @param id the ID for the data
    */
   public void setId(long id) {
     this.id = id;
@@ -258,15 +238,6 @@ public class Data implements Serializable {
    */
   public void setIntegerValue(Integer integerValue) {
     this.integerValue = integerValue;
-  }
-
-  /**
-   * Set the name for the data.
-   *
-   * @param name the name for the data
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**
@@ -296,8 +267,6 @@ public class Data implements Serializable {
   public String toString() {
     return "Data {id=\""
         + id
-        + "\", name=\""
-        + name
         + "\", integerValue=\""
         + integerValue
         + "\", stringValue=\""

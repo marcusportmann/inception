@@ -67,9 +67,9 @@ public class Code implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the code category the code is associated with. */
+  /** The ID for the code category the code is associated with. */
   @Schema(
-      description = "The ID uniquely identifying the code category the code is associated with",
+      description = "The ID for the code category the code is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CodeCategoryId", required = true)
@@ -86,8 +86,8 @@ public class Code implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The ID uniquely identifying the code. */
-  @Schema(description = "The ID uniquely identifying the code", required = true)
+  /** The ID for the code. */
+  @Schema(description = "The ID for the code", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -127,7 +127,7 @@ public class Code implements Serializable {
   /**
    * Constructs a new <code>Code</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param codeCategoryId the ID for the code category the code is associated with
    */
   public Code(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
@@ -136,8 +136,8 @@ public class Code implements Serializable {
   /**
    * Constructs a new <code>Code</code>.
    *
-   * @param id the ID uniquely identifying the code
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param id the ID for the code
+   * @param codeCategoryId the ID for the code category the code is associated with
    * @param name the name of the code
    * @param value the value for the code
    */
@@ -175,9 +175,9 @@ public class Code implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the code category the code is associated with.
+   * Returns the ID for the code category the code is associated with.
    *
-   * @return the ID uniquely identifying the code category the code is associated with
+   * @return the ID for the code category the code is associated with
    */
   public String getCodeCategoryId() {
     return codeCategoryId;
@@ -193,9 +193,9 @@ public class Code implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the code.
+   * Returns the ID for the code.
    *
-   * @return the ID uniquely identifying the code
+   * @return the ID for the code
    */
   public String getId() {
     return id;
@@ -239,18 +239,18 @@ public class Code implements Serializable {
         + ((id == null) ? 0 : id.hashCode());  }
 
   /**
-   * Set the ID uniquely identifying the code category the code is associated with.
+   * Set the ID for the code category the code is associated with.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
+   * @param codeCategoryId the ID for the code category the code is associated with
    */
   public void setCodeCategoryId(String codeCategoryId) {
     this.codeCategoryId = codeCategoryId;
   }
 
   /**
-   * Set the ID uniquely identifying the code.
+   * Set the ID for the code.
    *
-   * @param id the ID uniquely identifying the code
+   * @param id the ID for the code
    */
   public void setId(String id) {
     this.id = id;

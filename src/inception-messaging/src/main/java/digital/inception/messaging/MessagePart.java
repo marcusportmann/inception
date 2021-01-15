@@ -122,10 +122,10 @@ public class MessagePart {
   @Column(name = "download_attempts")
   private Integer downloadAttempts;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the message part. */
+  /** The Universally Unique Identifier (UUID) for the message part. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the message part",
+          "The Universally Unique Identifier (UUID) for the message part",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -181,12 +181,12 @@ public class MessagePart {
   private String messageDataHash;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the device the original message
+   * The Universally Unique Identifier (UUID) for the device the original message
    * originated from.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the device the original "
+          "The Universally Unique Identifier (UUID) for the device the original "
               + "message originated from",
       required = true)
   @JsonProperty(required = true)
@@ -208,10 +208,10 @@ public class MessagePart {
   @Column(name = "message_encryption_iv", length = 100)
   private String messageEncryptionIV;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the original message. */
+  /** The Universally Unique Identifier (UUID) for the original message. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the original message",
+          "The Universally Unique Identifier (UUID) for the original message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MessageId", required = true)
@@ -228,12 +228,11 @@ public class MessagePart {
   private MessagePriority messagePriority;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the type of the original message.
+   * The Universally Unique Identifier (UUID) for the message type for the original message.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the type of the original "
-              + "message",
+          "The Universally Unique Identifier (UUID) for the message type for the original message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MessageTypeId", required = true)
@@ -241,9 +240,9 @@ public class MessagePart {
   @Column(name = "message_type_id", nullable = false)
   private UUID messageTypeId;
 
-  /** The username identifying the user associated with the original message. */
+  /** The username for the user associated with the original message. */
   @Schema(
-      description = "The username identifying the user associated with the original message",
+      description = "The username for the user associated with the original message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "MessageUsername", required = true)
@@ -361,13 +360,12 @@ public class MessagePart {
    *     message
    * @param totalParts the total number of parts in the set of message parts for the original
    *     message
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the original
+   * @param messageId the Universally Unique Identifier (UUID) for the original
    *     message
-   * @param messageUsername the username identifying the user associated with the original message
-   * @param messageDeviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   * @param messageUsername the username for the user associated with the original message
+   * @param messageDeviceId the Universally Unique Identifier (UUID) for the device
    *     the original message originated from
-   * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *     the original message
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type for the original message
    * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
    *     original message
    * @param messagePriority the priority for the original message
@@ -412,20 +410,19 @@ public class MessagePart {
   /**
    * Constructs a new <code>MessagePart</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the message part
+   * @param id the Universally Unique Identifier (UUID) for the message part
    * @param partNo the number of the message part in the set of message parts for the original
    *     message
    * @param totalParts total number of parts in the set of message parts for the original message
    * @param sendAttempts the number of times that the sending of the message part was attempted
    * @param downloadAttempts the number of times that downloading of the message part was attempted
    * @param status the message part status e.g. Initialized, Sending, etc
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the original
+   * @param messageId the Universally Unique Identifier (UUID) for the original
    *     message
-   * @param messageUsername the username identifying the user associated with the original message
-   * @param messageDeviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   * @param messageUsername the username for the user associated with the original message
+   * @param messageDeviceId the Universally Unique Identifier (UUID) for the device
    *     the original message originated from
-   * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the type of
-   *     the original message
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type for the original message
    * @param messageCorrelationId the Universally Unique Identifier (UUID) used to correlate the
    *     original message
    * @param messagePriority the priority for the original message
@@ -545,9 +542,9 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the message part.
+   * Returns the Universally Unique Identifier (UUID) for the message part.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the message part
+   * @return the Universally Unique Identifier (UUID) for the message part
    */
   public UUID getId() {
     return id;
@@ -599,10 +596,10 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the original
+   * Returns the Universally Unique Identifier (UUID) for the device the original
    * message originated from
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the original
+   * @return the Universally Unique Identifier (UUID) for the device the original
    *     message originated from
    */
   public UUID getMessageDeviceId() {
@@ -621,9 +618,9 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the original message.
+   * Returns the Universally Unique Identifier (UUID) for the original message.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the original message
+   * @return the Universally Unique Identifier (UUID) for the original message
    */
   public UUID getMessageId() {
     return messageId;
@@ -639,10 +636,10 @@ public class MessagePart {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the type of the original
+   * Returns the Universally Unique Identifier (UUID) for the message type for the original
    * message.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the type of the original
+   * @return the Universally Unique Identifier (UUID) for the message type for the original
    *     message
    */
   public UUID getMessageTypeId() {
@@ -650,9 +647,9 @@ public class MessagePart {
   }
 
   /**
-   * Returns the username identifying the user associated with the original message.
+   * Returns the username for the user associated with the original message.
    *
-   * @return the username identifying the user associated with the original message
+   * @return the username for the user associated with the original message
    */
   public String getMessageUsername() {
     return messageUsername;
@@ -743,9 +740,9 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the message part.
+   * Set the Universally Unique Identifier (UUID) for the message part.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the message part
+   * @param id the Universally Unique Identifier (UUID) for the message part
    */
   public void setId(UUID id) {
     this.id = id;
@@ -799,10 +796,10 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the device the original
+   * Set the Universally Unique Identifier (UUID) for the device the original
    * message originated from.
    *
-   * @param messageDeviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   * @param messageDeviceId the Universally Unique Identifier (UUID) for the device
    *     the original message originated from
    */
   public void setMessageDeviceId(UUID messageDeviceId) {
@@ -821,9 +818,9 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the original message.
+   * Set the Universally Unique Identifier (UUID) for the original message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the original
+   * @param messageId the Universally Unique Identifier (UUID) for the original
    *     message
    */
   public void setMessageId(UUID messageId) {
@@ -840,10 +837,10 @@ public class MessagePart {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the type of the original
+   * Set the Universally Unique Identifier (UUID) for the message type for the original
    * message.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the type of
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type for
    *     the original message
    */
   public void setMessageTypeId(UUID messageTypeId) {
@@ -851,9 +848,9 @@ public class MessagePart {
   }
 
   /**
-   * Set the username identifying the user associated with the original message.
+   * Set the username for the user associated with the original message.
    *
-   * @param messageUsername the username identifying the user associated with the original message
+   * @param messageUsername the username for the user associated with the original message
    */
   public void setMessageUsername(String messageUsername) {
     this.messageUsername = messageUsername;

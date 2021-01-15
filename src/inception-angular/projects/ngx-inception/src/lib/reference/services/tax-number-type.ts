@@ -27,7 +27,7 @@ export class TaxNumberType {
   code: string;
 
   /**
-   * The code identifying the country of issue for the tax number type.
+   * The code for the country of issue for the tax number type.
    */
   countryOfIssue: string;
 
@@ -59,7 +59,7 @@ export class TaxNumberType {
    * @param sortIndex      The sort index for the tax number type.
    * @param name           The name of the tax number type.
    * @param description    The description for the tax number type.
-   * @param countryOfIssue The code identifying the country of issue for the tax number type.
+   * @param countryOfIssue The code for the country of issue for the tax number type.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               countryOfIssue: string) {

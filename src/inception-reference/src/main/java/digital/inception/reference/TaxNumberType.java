@@ -66,9 +66,9 @@ public class TaxNumberType implements Serializable {
   @Column(name = "code", nullable = false)
   private String code;
 
-  /** The code identifying the country of issue for the tax number type. */
+  /** The code for the country of issue for the tax number type. */
   @Schema(
-      description = "The code identifying the country of issue for the tax number type",
+      description = "The code for the country of issue for the tax number type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
@@ -152,9 +152,9 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Returns the code identifying the country of issue for the tax number type.
+   * Returns the code for the country of issue for the tax number type.
    *
-   * @return the code identifying the country of issue for the tax number type
+   * @return the code for the country of issue for the tax number type
    */
   public String getCountryOfIssue() {
     return countryOfIssue;
@@ -216,9 +216,9 @@ public class TaxNumberType implements Serializable {
   }
 
   /**
-   * Set the code identifying the country of issue for the tax number type.
+   * Set the code for the country of issue for the tax number type.
    *
-   * @param countryOfIssue the code identifying the country of issue for the tax number type
+   * @param countryOfIssue the code for the country of issue for the tax number type
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

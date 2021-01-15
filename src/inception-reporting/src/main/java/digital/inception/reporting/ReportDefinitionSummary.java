@@ -60,8 +60,8 @@ public class ReportDefinitionSummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the report definition. */
-  @Schema(description = "The ID uniquely identifying the report definition", required = true)
+  /** The ID for the report definition. */
+  @Schema(description = "The ID for the report definition", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -85,7 +85,7 @@ public class ReportDefinitionSummary implements Serializable {
   /**
    * Constructs a new <code>ReportDefinitionSummary</code>.
    *
-   * @param id the ID uniquely identifying the report definition
+   * @param id the ID for the report definition
    * @param name the name of the report definition
    */
   ReportDefinitionSummary(String id, String name) {
@@ -120,9 +120,9 @@ public class ReportDefinitionSummary implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the report definition.
+   * Returns the ID for the report definition.
    *
-   * @return the ID uniquely identifying the report definition
+   * @return the ID for the report definition
    */
   public String getId() {
     return id;

@@ -24,7 +24,7 @@
 
     <createTable schemaName="codes" tableName="code_categories" remarks="Code Categories">
       <column name="id" type="nvarchar(100)"
-        remarks="The ID uniquely identifying the code category"/>
+        remarks="The ID for the code category"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the code category"/>
       <column name="data" type="clob" remarks="The code data for the code category"/>
       <column name="created" type="timestamp"
@@ -38,9 +38,9 @@
     <addNotNullConstraint schemaName="codes" tableName="code_categories" columnName="created"/>
 
     <createTable schemaName="codes" tableName="codes" remarks="Codes">
-      <column name="id" type="nvarchar(100)" remarks="The ID uniquely identifying the code"/>
+      <column name="id" type="nvarchar(100)" remarks="The ID for the code"/>
       <column name="code_category_id" type="nvarchar(100)"
-        remarks="The ID uniquely identifying the code category the code is associated with"/>
+        remarks="The ID for the code category the code is associated with"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the code"/>
       <column name="value" type="nvarchar(4000)" remarks="The value for the code"/>
       <column name="created" type="timestamp" remarks="The date and time the code was created"/>

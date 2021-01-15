@@ -61,7 +61,7 @@ public enum SMSStatus {
   /**
    * Returns the SMS status given by the specified code value.
    *
-   * @param code the code value identifying the SMS status
+   * @param code the code for the SMS status
    * @return the SMS status given by the specified code value
    */
   @JsonCreator
@@ -88,7 +88,7 @@ public enum SMSStatus {
   /**
    * Returns the sms status for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the sms status
+   * @param numericCode the numeric code for the sms status
    * @return the sms status given by the specified numeric code value
    */
   public static SMSStatus fromNumericCode(int numericCode) {
@@ -138,9 +138,9 @@ public enum SMSStatus {
   }
 
   /**
-   * Returns the code value identifying the SMS status.
+   * Returns the code for the SMS status.
    *
-   * @return the code value identifying the SMS status
+   * @return the code for the SMS status
    */
   @JsonValue
   public String code() {

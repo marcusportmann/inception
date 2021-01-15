@@ -61,7 +61,7 @@ public class WebServiceInitializationException extends RichRuntimeException {
    * Constructs a new <code>WebServiceInitializationException</code> with the specified code and
    * message.
    *
-   * @param code the error code identifying the error
+   * @param code the error code
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    */
   public WebServiceInitializationException(String code, String message) {
@@ -84,7 +84,7 @@ public class WebServiceInitializationException extends RichRuntimeException {
    * Constructs a new <code>WebServiceInitializationException</code> with the specified code,
    * message and cause.
    *
-   * @param code the error code identifying the error
+   * @param code the error code
    * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
    *     <code>null</code> value is permitted if the cause is nonexistent or unknown)

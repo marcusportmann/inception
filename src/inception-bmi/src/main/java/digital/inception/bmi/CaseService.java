@@ -72,7 +72,7 @@ public class CaseService implements ICaseService {
   /**
    * Check whether the case definition exists.
    *
-   * @param caseDefinitionId the ID uniquely identifying the case definition
+   * @param caseDefinitionId the ID for the case definition
    * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
    */
   @Override

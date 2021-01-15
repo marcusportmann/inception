@@ -32,7 +32,7 @@ public class PreferenceId implements Serializable {
   /** The person the preference is associated with. */
   private Person person;
 
-  /** The code identifying the preference type. */
+  /** The code for the preference type. */
   private String type;
 
   /** Constructs a new <code>PreferenceId</code>. */

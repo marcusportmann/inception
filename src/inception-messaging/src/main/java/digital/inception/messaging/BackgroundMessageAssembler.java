@@ -79,7 +79,7 @@ public class BackgroundMessageAssembler implements InitializingBean {
   /**
    * Assemble the message from the message parts that have been queued for assembly.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    * @param totalParts the total number of parts for the message
    */
   @Async

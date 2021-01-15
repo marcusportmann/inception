@@ -151,13 +151,13 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the organization.
+   * Returns the Universally Unique Identifier (UUID) for the organization.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the organization
+   * @return the Universally Unique Identifier (UUID) for the organization
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the organization")
+          "The Universally Unique Identifier (UUID) for the organization")
   @Override
   public UUID getId() {
     return super.getId();
@@ -239,9 +239,9 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the organization.
+   * Set the Universally Unique Identifier (UUID) for the organization.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the organization
+   * @param id the Universally Unique Identifier (UUID) for the organization
    */
   @Override
   public void setId(UUID id) {

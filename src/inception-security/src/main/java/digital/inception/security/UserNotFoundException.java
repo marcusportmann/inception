@@ -50,7 +50,7 @@ public class UserNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>UserNotFoundException</code>.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    */
   public UserNotFoundException(String username) {
     super("UserNotFoundError", "The user (" + username + ") could not be found");

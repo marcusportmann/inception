@@ -47,7 +47,7 @@
       <column name="name" type="nvarchar(50)" remarks="The name of the country"/>
       <column name="short_name" type="nvarchar(30)" remarks="The short name for the country"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the country"/>
-      <column name="sovereign_state" type="nvarchar(10)" remarks="The code identifying the sovereign state for the country"/>
+      <column name="sovereign_state" type="nvarchar(10)" remarks="The code for the sovereign state the country is associated with"/>
       <column name="nationality" type="nvarchar(50)" remarks="The nationality for the country"/>
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="countries" columnNames="code,locale_id"/>
@@ -132,7 +132,7 @@
       <column name="sort_index" type="int" remarks="The sort index for the identity document type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the identity document type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the identity document type"/>
-      <column name="country_of_issue" type="nvarchar(10)" remarks="The optional code identifying the country of issue for the identity document type"/>
+      <column name="country_of_issue" type="nvarchar(10)" remarks="The optional code for the country of issue for the identity document type"/>
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="identity_document_types" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="reference" tableName="identity_document_types" columnName="code"/>
@@ -337,7 +337,7 @@
       <column name="sort_index" type="int" remarks="The sort index for the residence permit type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the residence permit type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the residence permit type"/>
-      <column name="country_of_issue" type="nvarchar(10)" remarks="The code identifying the country of issue for the residence permit type"/>
+      <column name="country_of_issue" type="nvarchar(10)" remarks="The code for the country of issue for the residence permit type"/>
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="residence_permit_types" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="reference" tableName="residence_permit_types" columnName="code"/>
@@ -435,7 +435,7 @@
       <column name="sort_index" type="int" remarks="The sort index for the tax number type"/>
       <column name="name" type="nvarchar(50)" remarks="The name of the tax number type"/>
       <column name="description" type="nvarchar(200)" remarks="The description for the tax number type"/>
-      <column name="country_of_issue" type="nvarchar(10)" remarks="The code identifying the country of issue for the tax number type"/>
+      <column name="country_of_issue" type="nvarchar(10)" remarks="The code for the country of issue for the tax number type"/>
     </createTable>
     <addPrimaryKey schemaName="reference" tableName="tax_number_types" columnNames="code,locale_id"/>
     <addNotNullConstraint schemaName="reference" tableName="tax_number_types" columnName="code"/>

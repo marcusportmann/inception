@@ -49,7 +49,7 @@ public class ReportDefinitionNotFoundException extends ServiceException {
   /**
    * w Constructs a new <code>ReportDefinitionNotFoundException</code>.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    */
   public ReportDefinitionNotFoundException(String reportDefinitionId) {
     super(

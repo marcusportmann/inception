@@ -62,9 +62,9 @@ export class GroupMemberDatasource implements DataSource<GroupMember> {
   /**
    * Load the group members.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
    *                        user directory the group is associated with.
-   * @param groupName       The name identifying the group.
+   * @param groupName       The name of the group.
    * @param filter          The optional filter to apply to the group members.
    * @param sortDirection   The optional sort direction to apply to the group members.
    * @param pageIndex       The optional page index.

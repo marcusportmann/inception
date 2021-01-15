@@ -34,10 +34,10 @@ public class CodeData implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the category the code is associated with. */
+  /** The ID for the category the code is associated with. */
   private final String codeCategoryId;
 
-  /** The ID uniquely identifying the code. */
+  /** The ID for the code. */
   private final String id;
 
   /** The name of the code. */
@@ -77,18 +77,18 @@ public class CodeData implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the category the code is associated with.
+   * Returns the ID for the category the code is associated with.
    *
-   * @return the ID uniquely identifying the category the code is associated with
+   * @return the ID for the category the code is associated with
    */
   public String getCodeCategoryId() {
     return codeCategoryId;
   }
 
   /**
-   * Returns the ID uniquely identifying the code.
+   * Returns the ID for the code.
    *
-   * @return the ID uniquely identifying the code
+   * @return the ID for the code
    */
   public String getId() {
     return id;

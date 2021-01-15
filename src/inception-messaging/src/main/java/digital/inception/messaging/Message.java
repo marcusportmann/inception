@@ -149,12 +149,12 @@ public class Message {
   private String dataHash;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the device the message originated
+   * The Universally Unique Identifier (UUID) for the device the message originated
    * from.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the device the message "
+          "The Universally Unique Identifier (UUID) for the device the message "
               + "originated from",
       required = true)
   @JsonProperty(required = true)
@@ -180,9 +180,9 @@ public class Message {
   @Column(name = "encryption_iv", length = 100)
   private String encryptionIV;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the message. */
+  /** The Universally Unique Identifier (UUID) for the message. */
   @Schema(
-      description = "The Universally Unique Identifier (UUID) uniquely identifying the message",
+      description = "The Universally Unique Identifier (UUID) for the message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -243,10 +243,10 @@ public class Message {
   @Column(name = "status", nullable = false)
   private MessageStatus status;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the type of message. */
+  /** The Universally Unique Identifier (UUID) for the message type. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the type of message",
+          "The Universally Unique Identifier (UUID) for the message type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TypeId", required = true)
@@ -254,9 +254,9 @@ public class Message {
   @Column(name = "type_id", nullable = false)
   private UUID typeId;
 
-  /** The username identifying the user associated with the message. */
+  /** The username for the user associated with the message. */
   @Schema(
-      description = "The username identifying the user associated with the message",
+      description = "The username for the user associated with the message",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
@@ -329,10 +329,10 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username the username identifying the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param username the username for the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message originated from
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
    */
@@ -351,10 +351,10 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username the username identifying the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param username the username for the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message originated from
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
@@ -380,10 +380,10 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username the username identifying the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param username the username for the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message originated from
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
    * @param dataHash the hash of the unencrypted data for the message if the message is encrypted
@@ -418,10 +418,10 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param username the username identifying the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param username the username for the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message originated from
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
@@ -459,11 +459,11 @@ public class Message {
   /**
    * Constructs a new <code>Message</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the message
-   * @param username the username identifying the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param id the Universally Unique Identifier (UUID) for the message
+   * @param username the username for the user associated with the message
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message originated from
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
    * @param created the date and time the message was created
@@ -578,10 +578,10 @@ public class Message {
   }
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the device the message originated
+   * The Universally Unique Identifier (UUID) for the device the message originated
    * from.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * @return the Universally Unique Identifier (UUID) for the device the message
    *     originated from
    */
   public UUID getDeviceId() {
@@ -607,9 +607,9 @@ public class Message {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the message.
+   * Returns the Universally Unique Identifier (UUID) for the message.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @return the Universally Unique Identifier (UUID) for the message
    */
   public UUID getId() {
     return id;
@@ -675,18 +675,18 @@ public class Message {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the type of message.
+   * Returns the Universally Unique Identifier (UUID) for the message type.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   * @return the Universally Unique Identifier (UUID) for the message type
    */
   public UUID getTypeId() {
     return typeId;
   }
 
   /**
-   * Returns the username identifying the user associated with the message.
+   * Returns the username for the user associated with the message.
    *
-   * @return the username identifying the user associated with the message
+   * @return the username for the user associated with the message
    */
   public String getUsername() {
     return username;
@@ -768,10 +768,10 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * Set the Universally Unique Identifier (UUID) for the device the message
    * originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message originated from
    */
   public void setDeviceId(UUID deviceId) {
@@ -798,9 +798,9 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the message.
+   * Set the Universally Unique Identifier (UUID) for the message.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param id the Universally Unique Identifier (UUID) for the message
    */
   public void setId(UUID id) {
     this.id = id;
@@ -865,18 +865,18 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the type of message.
+   * Set the Universally Unique Identifier (UUID) for the message type.
    *
-   * @param typeId the Universally Unique Identifier (UUID) uniquely identifying the type of message
+   * @param typeId the Universally Unique Identifier (UUID) for the message type
    */
   public void setTypeId(UUID typeId) {
     this.typeId = typeId;
   }
 
   /**
-   * Set the username identifying the user associated with the message.
+   * Set the username for the user associated with the message.
    *
-   * @param username the username identifying the user associated with the message
+   * @param username the username for the user associated with the message
    */
   public void setUsername(String username) {
     this.username = username;

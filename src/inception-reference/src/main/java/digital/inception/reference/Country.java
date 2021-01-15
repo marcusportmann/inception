@@ -138,8 +138,8 @@ public class Country implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** The code identifying the sovereign state for the country. */
-  @Schema(description = "The code identifying the sovereign state for the country", required = true)
+  /** The code for the sovereign state the country is associated with. */
+  @Schema(description = "The code for the sovereign state the country is associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SovereignState", required = true)
   @NotNull
@@ -240,9 +240,9 @@ public class Country implements Serializable {
   }
 
   /**
-   * Returns the code identifying the sovereign state for the country.
+   * Returns the code for the sovereign state the country is associated with.
    *
-   * @return the code identifying the sovereign state for the country
+   * @return the code for the sovereign state the country is associated with
    */
   public String getSovereignState() {
     return sovereignState;
@@ -322,9 +322,9 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the code identifying the sovereign state for the country.
+   * Set the code for the sovereign state the country is associated with.
    *
-   * @param sovereignState the code identifying the sovereign state for the country
+   * @param sovereignState the code for the sovereign state the country is associated with
    */
   public void setSovereignState(String sovereignState) {
     this.sovereignState = sovereignState;

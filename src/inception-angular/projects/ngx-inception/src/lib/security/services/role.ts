@@ -22,7 +22,7 @@
 export class Role {
 
   /**
-   * The code uniquely identifying the role.
+   * The code for the role.
    */
   code: string;
 
@@ -39,7 +39,7 @@ export class Role {
   /**
    * Constructs a new Role.
    *
-   * @param code        The code uniquely identifying the role.
+   * @param code        The code for the role.
    * @param name        The name of the role.
    * @param description The description for the group.
    */

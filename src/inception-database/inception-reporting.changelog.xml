@@ -24,7 +24,7 @@
 
     <createTable schemaName="reporting" tableName="report_definitions" remarks="Report Definitions">
       <column name="id" type="nvarchar(100)"
-        remarks="The ID uniquely identifying the report definition"/>
+        remarks="The ID for the report definition"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the report definition"/>
       <column name="template" type="${blob_type}"
         remarks="The JasperReports template for the report definition"/>

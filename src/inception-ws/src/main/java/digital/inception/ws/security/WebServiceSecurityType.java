@@ -63,7 +63,7 @@ public enum WebServiceSecurityType {
   /**
    * Returns the web service security type given by the specified code value.
    *
-   * @param code the code value identifying the web service security type
+   * @param code the code for the web service security type
    * @return the web service security type given by the specified code value
    */
   @JsonCreator
@@ -90,9 +90,9 @@ public enum WebServiceSecurityType {
   }
 
   /**
-   * Returns the code value identifying the web service security type.
+   * Returns the code for the web service security type.
    *
-   * @return the code value identifying the web service security type
+   * @return the code for the web service security type
    */
   @JsonValue
   public String code() {

@@ -18,11 +18,11 @@ package digital.inception.sample.rs;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import digital.inception.core.validation.ValidationError;
 import digital.inception.sample.model.Data;
 import digital.inception.sample.model.ISampleService;
 import digital.inception.sample.model.SampleServiceException;
 import digital.inception.sms.smsportal.AuthenticationResponse;
-import digital.inception.core.validation.ValidationError;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -92,9 +92,7 @@ public class SampleRestController {
   public Data getData() throws SampleServiceException {
     long id = System.currentTimeMillis();
 
-    Data data =
-        new Data(
-            id, "Test Name " + id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
+    Data data = new Data(id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
 
     sampleService.addData(data);
 

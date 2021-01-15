@@ -22,12 +22,12 @@
 export class Code {
 
   /**
-   * The ID uniquely identifying the code category the code is associated with.
+   * The ID for the code category the code is associated with.
    */
   codeCategoryId: string;
 
   /**
-   * The ID uniquely identifying the code.
+   * The ID for the code.
    */
   id: string;
 
@@ -44,8 +44,8 @@ export class Code {
   /**
    * Constructs a new Code.
    *
-   * @param id             The ID uniquely identifying the code.
-   * @param codeCategoryId The ID uniquely identifying the code category the code is
+   * @param id             The ID for the code.
+   * @param codeCategoryId The ID for the code category the code is
    *                       associated with.
    * @param name           The name of the code category.
    * @param value          The value for the code.

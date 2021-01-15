@@ -79,8 +79,8 @@ public class MailTemplate implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The ID uniquely identifying the mail template. */
-  @Schema(description = "The ID uniquely identifying the mail template", required = true)
+  /** The ID for the mail template. */
+  @Schema(description = "The ID for the mail template", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -120,7 +120,7 @@ public class MailTemplate implements Serializable {
   /**
    * Constructs a new <code>MailTemplate</code>.
    *
-   * @param id the ID uniquely identifying the mail template
+   * @param id the ID for the mail template
    * @param name the name of the mail template
    * @param contentType the content type for the mail template
    * @param template the Apache FreeMarker template for the mail template
@@ -178,9 +178,9 @@ public class MailTemplate implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the mail template.
+   * Returns the ID for the mail template.
    *
-   * @return the ID uniquely identifying the mail template
+   * @return the ID for the mail template
    */
   public String getId() {
     return id;
@@ -233,9 +233,9 @@ public class MailTemplate implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the mail template.
+   * Set the ID for the mail template.
    *
-   * @param id the ID uniquely identifying the mail template
+   * @param id the ID for the mail template
    */
   public void setId(String id) {
     this.id = id;

@@ -44,7 +44,7 @@ public interface IMailService {
   /**
    * Delete the existing mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    */
   void deleteMailTemplate(String mailTemplateId)
       throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException;
@@ -52,7 +52,7 @@ public interface IMailService {
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the mail template
    */
   MailTemplate getMailTemplate(String mailTemplateId)
@@ -61,7 +61,7 @@ public interface IMailService {
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the name of the mail template
    */
   String getMailTemplateName(String mailTemplateId)
@@ -77,7 +77,7 @@ public interface IMailService {
   /**
    * Retrieve the summary for the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the summary for the mail template
    */
   MailTemplateSummary getMailTemplateSummary(String mailTemplateId)
@@ -86,7 +86,7 @@ public interface IMailService {
   /**
    * Returns the date and time the mail template was last updated.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the date and time the mail template was last updated
    */
   LocalDateTime getMailTemplateUpdated(String mailTemplateId)
@@ -102,7 +102,7 @@ public interface IMailService {
   /**
    * Check whether the mail template exists.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
   boolean mailTemplateExists(String mailTemplateId)
@@ -111,7 +111,7 @@ public interface IMailService {
   /**
    * Process the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @param templateParameters the template parameters
    * @return the output of processing the template
    */
@@ -125,7 +125,7 @@ public interface IMailService {
    * @param subject the subject for the mail
    * @param from the from e-mail address
    * @param fromName the from e-mail name
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @param mailTemplateParameters the parameters to apply to the mail template
    */
   void sendMail(

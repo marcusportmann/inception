@@ -93,10 +93,10 @@ public class UserDirectory implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the user directory. */
+  /** The Universally Unique Identifier (UUID) for the user directory. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the user directory",
+          "The Universally Unique Identifier (UUID) for the user directory",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -129,8 +129,8 @@ public class UserDirectory implements Serializable {
   @ManyToMany(mappedBy = "userDirectories")
   private Set<Tenant> tenants = new HashSet<>();
 
-  /** The code uniquely identifying the user directory type. */
-  @Schema(description = "The code uniquely identifying the user directory type", required = true)
+  /** The code for the user directory type. */
+  @Schema(description = "The code for the user directory type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -215,9 +215,9 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   * Returns the Universally Unique Identifier (UUID) for the user directory.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory
+   * @return the Universally Unique Identifier (UUID) for the user directory
    */
   public UUID getId() {
     return id;
@@ -251,9 +251,9 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Returns the code uniquely identifying the user directory type.
+   * Returns the code for the user directory type.
    *
-   * @return the code uniquely identifying the user directory type
+   * @return the code for the user directory type
    */
   public String getType() {
     return type;
@@ -322,9 +322,9 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory.
+   * Set the Universally Unique Identifier (UUID) for the user directory.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the user directory
+   * @param id the Universally Unique Identifier (UUID) for the user directory
    */
   public void setId(UUID id) {
     this.id = id;
@@ -358,9 +358,9 @@ public class UserDirectory implements Serializable {
   }
 
   /**
-   * Set the code uniquely identifying the user directory type.
+   * Set the code for the user directory type.
    *
-   * @param type the code uniquely identifying the user directory type
+   * @param type the code for the user directory type
    */
   public void setType(String type) {
     this.type = type;

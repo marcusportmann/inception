@@ -53,7 +53,7 @@ public class UserLockedException extends ServiceException {
   /**
    * Constructs a new <code>UserLockedException</code>.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    */
   public UserLockedException(String username) {
     super(

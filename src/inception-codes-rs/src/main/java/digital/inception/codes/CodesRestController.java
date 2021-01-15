@@ -71,7 +71,7 @@ public class CodesRestController extends SecureRestController {
   /**
    * Create the new code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @param code the code to create
    */
   @Operation(summary = "Create the code", description = "Create the code")
@@ -117,7 +117,7 @@ public class CodesRestController extends SecureRestController {
   public void createCode(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId,
@@ -192,8 +192,8 @@ public class CodesRestController extends SecureRestController {
   /**
    * Delete the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID for the code category
+   * @param codeId the ID for the code
    */
   @Operation(summary = "Delete the code", description = "Delete the code")
   @ApiResponses(
@@ -231,13 +231,13 @@ public class CodesRestController extends SecureRestController {
   public void deleteCode(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId,
       @Parameter(
               name = "codeId",
-              description = "The ID uniquely identifying the code",
+              description = "The ID for the code",
               required = true)
           @PathVariable
           String codeId)
@@ -248,7 +248,7 @@ public class CodesRestController extends SecureRestController {
   /**
    * Delete the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    */
   @Operation(summary = "Delete the code category", description = "Delete the code category")
   @ApiResponses(
@@ -288,7 +288,7 @@ public class CodesRestController extends SecureRestController {
   public void deleteCodeCategory(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId)
@@ -299,8 +299,8 @@ public class CodesRestController extends SecureRestController {
   /**
    * Retrieve the code
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID for the code category the code is associated with
+   * @param codeId the ID for the code
    * @return the code
    */
   @Operation(summary = "Retrieve the code", description = "Retrieve the code")
@@ -340,13 +340,13 @@ public class CodesRestController extends SecureRestController {
       @Parameter(
               name = "codeCategoryId",
               description =
-                  "The ID uniquely identifying the code category the code is associated with",
+                  "The ID for the code category the code is associated with",
               required = true)
           @PathVariable
           String codeCategoryId,
       @Parameter(
               name = "codeId",
-              description = "The ID uniquely identifying the code",
+              description = "The ID for the code",
               required = true)
           @PathVariable
           String codeId)
@@ -385,7 +385,7 @@ public class CodesRestController extends SecureRestController {
   /**
    * Retrieve the code category
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the code category
    */
   @Operation(summary = "Retrieve the code category", description = "Retrieve the code category")
@@ -424,7 +424,7 @@ public class CodesRestController extends SecureRestController {
   public CodeCategory getCodeCategory(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId)
@@ -435,7 +435,7 @@ public class CodesRestController extends SecureRestController {
   /**
    * Retrieve the XML or JSON data for a code category
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the XML or JSON data for the code category
    */
   @Operation(
@@ -476,7 +476,7 @@ public class CodesRestController extends SecureRestController {
   public String getCodeCategoryData(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId)
@@ -489,7 +489,7 @@ public class CodesRestController extends SecureRestController {
   /**
    * Retrieve the name of the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the name of the code category
    */
   @Operation(
@@ -530,7 +530,7 @@ public class CodesRestController extends SecureRestController {
   public String getCodeCategoryName(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId)
@@ -571,7 +571,7 @@ public class CodesRestController extends SecureRestController {
   /**
    * Returns the date and time the code category was last updated.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the date and time the code category was last updated
    */
   @Operation(
@@ -612,7 +612,7 @@ public class CodesRestController extends SecureRestController {
   public String getCodeCategoryUpdated(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId)
@@ -624,8 +624,8 @@ public class CodesRestController extends SecureRestController {
   /**
    * Retrieve the name of the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID for the code category the code is associated with
+   * @param codeId the ID for the code
    * @return the name of the code
    */
   @Operation(
@@ -667,13 +667,13 @@ public class CodesRestController extends SecureRestController {
       @Parameter(
               name = "codeCategoryId",
               description =
-                  "The ID uniquely identifying the code category the code is associated with",
+                  "The ID for the code category the code is associated with",
               required = true)
           @PathVariable
           String codeCategoryId,
       @Parameter(
               name = "codeId",
-              description = "The ID uniquely identifying the code",
+              description = "The ID for the code",
               required = true)
           @PathVariable
           String codeId)
@@ -684,7 +684,7 @@ public class CodesRestController extends SecureRestController {
   /**
    * Retrieve the codes for a code category
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @return the codes for the code category
    */
   @Operation(
@@ -725,7 +725,7 @@ public class CodesRestController extends SecureRestController {
   public List<Code> getCodesForCodeCategory(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId)
@@ -736,8 +736,8 @@ public class CodesRestController extends SecureRestController {
   /**
    * Update the code.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
-   * @param codeId the ID uniquely identifying the code
+   * @param codeCategoryId the ID for the code category
+   * @param codeId the ID for the code
    * @param code the code to create
    */
   @Operation(summary = "Update the code", description = "Update the code")
@@ -776,13 +776,13 @@ public class CodesRestController extends SecureRestController {
   public void updateCode(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId,
       @Parameter(
               name = "codeId",
-              description = "The ID uniquely identifying the code",
+              description = "The ID for the code",
               required = true)
           @PathVariable
           String codeId,
@@ -818,7 +818,7 @@ public class CodesRestController extends SecureRestController {
   /**
    * Update the code category.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category
+   * @param codeCategoryId the ID for the code category
    * @param codeCategory the code category
    */
   @Operation(summary = "Update the code category", description = "Update the code category")
@@ -859,7 +859,7 @@ public class CodesRestController extends SecureRestController {
   public void updateCodeCategory(
       @Parameter(
               name = "codeCategoryId",
-              description = "The ID uniquely identifying the code category",
+              description = "The ID for the code category",
               required = true)
           @PathVariable
           String codeCategoryId,

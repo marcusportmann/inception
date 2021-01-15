@@ -50,7 +50,7 @@ public class DuplicateJobException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateJobException</code>.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    */
   public DuplicateJobException(String jobId) {
     super("DuplicateJobError", "A job with the ID (" + jobId + ") already exists");

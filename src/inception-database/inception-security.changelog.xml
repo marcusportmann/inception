@@ -24,7 +24,7 @@
 
     <createTable schemaName="security" tableName="tenants" remarks="Tenants">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the tenant"/>
+        remarks="The Universally Unique Identifier (UUID) for the tenant"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the tenant"/>
       <column name="status" type="int" remarks="The status for the tenant"/>
       <column name="created" type="timestamp"
@@ -44,7 +44,7 @@
     <createTable schemaName="security" tableName="user_directory_types"
       remarks="User Directory Types">
       <column name="code" type="nvarchar(100)"
-        remarks="The code uniquely identifying the user directory type"/>
+        remarks="The code for the user directory type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the user directory type"/>
       <column name="user_directory_class" type="nvarchar(1000)"
         remarks="The fully qualified name of the Java class that implements the user directory type"/>
@@ -57,9 +57,9 @@
 
     <createTable schemaName="security" tableName="user_directories" remarks="User Directories">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory"/>
+        remarks="The Universally Unique Identifier (UUID) for the user directory"/>
       <column name="type" type="nvarchar(100)"
-        remarks="The code uniquely identifying the user directory type"/>
+        remarks="The code for the user directory type"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the user directory"/>
       <column name="configuration" type="nvarchar(4000)"
         remarks="The XML configuration data for the user directory"/>
@@ -87,9 +87,9 @@
     <createTable schemaName="security" tableName="user_directory_to_tenant_map"
       remarks="User Directory To Tenant Mappings">
       <column name="user_directory_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory"/>
+        remarks="The Universally Unique Identifier (UUID) for the user directory"/>
       <column name="tenant_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the tenant"/>
+        remarks="The Universally Unique Identifier (UUID) for the tenant"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="user_directory_to_tenant_map"
       columnNames="user_directory_id, tenant_id"/>
@@ -116,9 +116,9 @@
 
     <createTable schemaName="security" tableName="users" remarks="Users">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
+        remarks="The Universally Unique Identifier (UUID) for the user"/>
       <column name="user_directory_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory the user is associated with"/>
+        remarks="The Universally Unique Identifier (UUID) for the user directory the user is associated with"/>
       <column name="username" type="nvarchar(100)" remarks="The username for the user"/>
       <column name="status" type="int" remarks="The status for the user"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the user"/>
@@ -181,7 +181,7 @@
     <createTable schemaName="security" tableName="users_password_history"
       remarks="User Password History">
       <column name="user_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
+        remarks="The Universally Unique Identifier (UUID) for the user"/>
       <column name="changed" type="timestamp"
         remarks="When the password change took place for the user"/>
       <column name="password" type="nvarchar(100)" remarks="The password for the user"/>
@@ -207,10 +207,10 @@
 
     <createTable schemaName="security" tableName="groups" remarks="Groups">
       <column name="id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
+        remarks="The Universally Unique Identifier (UUID) for the group"/>
       <column name="user_directory_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user directory the group is associated with"/>
-      <column name="name" type="nvarchar(100)" remarks="The name for the group"/>
+        remarks="The Universally Unique Identifier (UUID) for the user directory the group is associated with"/>
+      <column name="name" type="nvarchar(100)" remarks="The name of the group"/>
       <column name="description" type="nvarchar(100)" remarks="A description for the group"/>
       <column name="created" type="timestamp"
         remarks="The date and time the group was created"/>
@@ -238,9 +238,9 @@
     <createTable schemaName="security" tableName="user_to_group_map"
       remarks="User To Group Mappings">
       <column name="user_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the user"/>
+        remarks="The Universally Unique Identifier (UUID) for the user"/>
       <column name="group_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
+        remarks="The Universally Unique Identifier (UUID) for the group"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="user_to_group_map"
       columnNames="user_id, group_id"/>
@@ -266,7 +266,7 @@
 
     <createTable schemaName="security" tableName="functions" remarks="Functions">
       <column name="code" type="nvarchar(100)"
-        remarks="The code uniquely identifying the function"/>
+        remarks="The code for the function"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the function"/>
       <column name="description" type="nvarchar(100)" remarks="A description for the function'"/>
     </createTable>
@@ -275,7 +275,7 @@
     <addNotNullConstraint schemaName="security" tableName="functions" columnName="name"/>
 
     <createTable schemaName="security" tableName="roles" remarks="Roles">
-      <column name="code" type="nvarchar(100)" remarks="The code uniquely identifying the role"/>
+      <column name="code" type="nvarchar(100)" remarks="The code for the role"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the role"/>
       <column name="description" type="nvarchar(100)" remarks="The description for the role"/>
     </createTable>
@@ -286,9 +286,9 @@
     <createTable schemaName="security" tableName="function_to_role_map"
       remarks="Function To Role Mappings">
       <column name="function_code" type="nvarchar(100)"
-        remarks="The code uniquely identifying the function"/>
+        remarks="The code for the function"/>
       <column name="role_code" type="nvarchar(100)"
-        remarks="The code uniquely identifying the role"/>
+        remarks="The code for the role"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="function_to_role_map"
       columnNames="function_code, role_code"/>
@@ -316,9 +316,9 @@
     <createTable schemaName="security" tableName="role_to_group_map"
       remarks="Role To Group Mappings">
       <column name="role_code" type="nvarchar(100)"
-        remarks="The code uniquely identifying the role"/>
+        remarks="The code for the role"/>
       <column name="group_id" type="uuid"
-        remarks="The Universally Unique Identifier (UUID) uniquely identifying the group"/>
+        remarks="The Universally Unique Identifier (UUID) for the group"/>
     </createTable>
     <addPrimaryKey schemaName="security" tableName="role_to_group_map"
       columnNames="role_code, group_id"/>

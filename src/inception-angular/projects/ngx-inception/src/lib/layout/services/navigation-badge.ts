@@ -27,7 +27,7 @@ export class NavigationBadge {
   text: string;
 
   /**
-   * The type of navigation badge.
+   * The navigation badge type.
    */
   variant: string;
 

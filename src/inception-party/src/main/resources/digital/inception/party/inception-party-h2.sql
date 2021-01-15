@@ -22,13 +22,13 @@ CREATE INDEX parties_tenant_id_ix ON party.parties(tenant_id);
 
 COMMENT ON COLUMN party.parties.created IS 'The date and time the party was created';
 
-COMMENT ON COLUMN party.parties.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party';
+COMMENT ON COLUMN party.parties.id IS 'The Universally Unique Identifier (UUID) for the party';
 
 COMMENT ON COLUMN party.parties.name IS 'The name of the party';
 
-COMMENT ON COLUMN party.parties.tenant_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the tenant the party is associated with';
+COMMENT ON COLUMN party.parties.tenant_id IS 'The Universally Unique Identifier (UUID) for the tenant the party is associated with';
 
-COMMENT ON COLUMN party.parties.type IS 'The code identifying the type of party';
+COMMENT ON COLUMN party.parties.type IS 'The code for the party type';
 
 COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last updated';
 
@@ -67,57 +67,57 @@ CREATE TABLE party.persons (
 
 CREATE INDEX persons_date_of_birth_ix ON party.persons(date_of_birth);
 
-COMMENT ON COLUMN party.persons.correspondence_language IS 'The optional code identifying the correspondence language for the person';
+COMMENT ON COLUMN party.persons.correspondence_language IS 'The optional code for the correspondence language for the person';
 
-COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code identifying the country of birth for the person';
+COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code for the country of birth for the person';
 
-COMMENT ON COLUMN party.persons.country_of_residence IS 'The optional code identifying the country of residence for the person';
+COMMENT ON COLUMN party.persons.country_of_residence IS 'The optional code for the country of residence for the person';
 
-COMMENT ON COLUMN party.persons.country_of_tax_residence IS 'The optional code identifying the country of tax residence for the person';
+COMMENT ON COLUMN party.persons.country_of_tax_residence IS 'The optional code for the country of tax residence for the person';
 
 COMMENT ON COLUMN party.persons.date_of_birth IS 'The optional date of birth for the person';
 
 COMMENT ON COLUMN party.persons.date_of_death IS 'The optional date of death for the person';
 
-COMMENT ON COLUMN party.persons.employment_status IS 'The optional code identifying the employment status for the person';
+COMMENT ON COLUMN party.persons.employment_status IS 'The optional code for the employment status for the person';
 
-COMMENT ON COLUMN party.persons.employment_type IS 'The optional code identifying the employment type for the person';
+COMMENT ON COLUMN party.persons.employment_type IS 'The optional code for the employment type for the person';
 
-COMMENT ON COLUMN party.persons.gender IS 'The optional code identifying the gender for the person';
+COMMENT ON COLUMN party.persons.gender IS 'The optional code for the gender for the person';
 
 COMMENT ON COLUMN party.persons.given_name IS 'The optional given name for the person';
 
-COMMENT ON COLUMN party.persons.home_language IS 'The optional code identifying the home language for the person';
+COMMENT ON COLUMN party.persons.home_language IS 'The optional code for the home language for the person';
 
-COMMENT ON COLUMN party.persons.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the person';
+COMMENT ON COLUMN party.persons.id IS 'The Universally Unique Identifier (UUID) for the person';
 
 COMMENT ON COLUMN party.persons.initials IS 'The optional initials for the person';
 
 COMMENT ON COLUMN party.persons.maiden_name IS 'The optional maiden name for the person';
 
-COMMENT ON COLUMN party.persons.marital_status IS 'The optional code identifying the marital status for the person';
+COMMENT ON COLUMN party.persons.marital_status IS 'The optional code for the marital status for the person';
 
-COMMENT ON COLUMN party.persons.marriage_type IS 'The optional code identifying the marriage type for the person if the person is married';
+COMMENT ON COLUMN party.persons.marriage_type IS 'The optional code for the marriage type for the person if the person is married';
 
 COMMENT ON COLUMN party.persons.middle_names IS 'The optional middle names for the person';
 
-COMMENT ON COLUMN party.persons.occupation IS 'The optional code identifying the occupation for the person';
+COMMENT ON COLUMN party.persons.occupation IS 'The optional code for the occupation for the person';
 
 COMMENT ON COLUMN party.persons.preferred_name IS 'The optional preferred name for the person';
 
-COMMENT ON COLUMN party.persons.race IS 'The optional code identifying the race for the person';
+COMMENT ON COLUMN party.persons.race IS 'The optional code for the race for the person';
 
-COMMENT ON COLUMN party.persons.residency_status IS 'The optional code identifying the residency status for the person';
+COMMENT ON COLUMN party.persons.residency_status IS 'The optional code for the residency status for the person';
 
-COMMENT ON COLUMN party.persons.residential_type IS 'The optional code identifying the residential type for the person';
+COMMENT ON COLUMN party.persons.residential_type IS 'The optional code for the residential type for the person';
 
 COMMENT ON COLUMN party.persons.surname IS 'The optional surname for the person';
 
 COMMENT ON COLUMN party.persons.tax_number IS 'The optional tax number for the person';
 
-COMMENT ON COLUMN party.persons.tax_number_type IS 'The optional code identifying the tax number type for the person';
+COMMENT ON COLUMN party.persons.tax_number_type IS 'The optional code for the tax number type for the person';
 
-COMMENT ON COLUMN party.persons.title IS 'The optional code identifying the title for the person';
+COMMENT ON COLUMN party.persons.title IS 'The optional code for the title for the person';
 
 
 CREATE TABLE party.identity_documents (
@@ -136,7 +136,7 @@ CREATE TABLE party.identity_documents (
 
 CREATE INDEX identity_documents_person_id_ix ON party.identity_documents(person_id);
 
-COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The code identifying the country of issue for the identity document';
+COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The code for the country of issue for the identity document';
 
 COMMENT ON COLUMN party.identity_documents.created IS 'The date and time the identity document was created';
 
@@ -146,9 +146,9 @@ COMMENT ON COLUMN party.identity_documents.date_of_issue IS 'The date of issue f
 
 COMMENT ON COLUMN party.identity_documents.number IS 'The number for the identity document';
 
-COMMENT ON COLUMN party.identity_documents.person_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the person the identity document is associated with';
+COMMENT ON COLUMN party.identity_documents.person_id IS 'The Universally Unique Identifier (UUID) for the person the identity document is associated with';
 
-COMMENT ON COLUMN party.identity_documents.type IS 'The code identifying the type of identity document';
+COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity document type';
 
 COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
 
@@ -160,7 +160,7 @@ CREATE TABLE party.organizations (
   CONSTRAINT organizations_party_fk FOREIGN KEY (id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
-COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (UUID) uniquely identifying the organization';
+COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (UUID) for the organization';
 
 
 CREATE TABLE party.contact_mechanisms (
@@ -179,11 +179,11 @@ CREATE INDEX contact_mechanisms_party_id_ix ON party.contact_mechanisms(party_id
 
 COMMENT ON COLUMN party.contact_mechanisms.created IS 'The date and time the contact mechanism was created';
 
-COMMENT ON COLUMN party.contact_mechanisms.party_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party the contact mechanism is associated with';
+COMMENT ON COLUMN party.contact_mechanisms.party_id IS 'The Universally Unique Identifier (UUID) for the party the contact mechanism is associated with';
 
-COMMENT ON COLUMN party.contact_mechanisms.purpose IS 'The code identifying the contact mechanism purpose';
+COMMENT ON COLUMN party.contact_mechanisms.purpose IS 'The code for the contact mechanism purpose';
 
-COMMENT ON COLUMN party.contact_mechanisms.type IS 'The code identifying the contact mechanism type';
+COMMENT ON COLUMN party.contact_mechanisms.type IS 'The code for the contact mechanism type';
 
 COMMENT ON COLUMN party.contact_mechanisms.updated IS 'The date and time the contact mechanism was last updated';
 
@@ -257,13 +257,13 @@ COMMENT ON COLUMN party.physical_addresses.latitude IS 'The optional GPS latitud
 
 COMMENT ON COLUMN party.physical_addresses.longitude IS 'The optional GPS longitude for the physical address';
 
-COMMENT ON COLUMN party.physical_addresses.party_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party the physical address is associated with';
+COMMENT ON COLUMN party.physical_addresses.party_id IS 'The Universally Unique Identifier (UUID) for the party the physical address is associated with';
 
 COMMENT ON COLUMN party.physical_addresses.postal_code IS 'The postal code for the physical address';
 
-COMMENT ON COLUMN party.physical_addresses.purpose IS 'The code identifying the physical address purpose';
+COMMENT ON COLUMN party.physical_addresses.purpose IS 'The code for the physical address purpose';
 
-COMMENT ON COLUMN party.physical_addresses.region IS 'The optional code identifying the region for the physical address';
+COMMENT ON COLUMN party.physical_addresses.region IS 'The optional code for the region for the physical address';
 
 COMMENT ON COLUMN party.physical_addresses.site_block IS 'The site block for the physical address that is required for a site address';
 
@@ -275,7 +275,7 @@ COMMENT ON COLUMN party.physical_addresses.street_number IS 'The street number f
 
 COMMENT ON COLUMN party.physical_addresses.suburb IS 'The optional suburb for the physical address';
 
-COMMENT ON COLUMN party.physical_addresses.type IS 'The code identifying the physical address type';
+COMMENT ON COLUMN party.physical_addresses.type IS 'The code for the physical address type';
 
 COMMENT ON COLUMN party.physical_addresses.updated IS 'The date and time the physical address was last updated';
 
@@ -295,9 +295,9 @@ CREATE INDEX preferences_person_id_ix ON party.preferences(person_id);
 
 COMMENT ON COLUMN party.preferences.created IS 'The date and time the preferences was created';
 
-COMMENT ON COLUMN party.preferences.person_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the person the preference is associated with';
+COMMENT ON COLUMN party.preferences.person_id IS 'The Universally Unique Identifier (UUID) for the person the preference is associated with';
 
-COMMENT ON COLUMN party.preferences.type IS 'The code identifying the preference type';
+COMMENT ON COLUMN party.preferences.type IS 'The code for the preference type';
 
 COMMENT ON COLUMN party.preferences.updated IS 'The date and time the preference was last updated';
 
@@ -327,9 +327,9 @@ COMMENT ON COLUMN party.preferences.value IS 'The value for the preference';
 --
 -- COMMENT ON COLUMN party.relationships.created IS 'The date and time the relationship was created';
 --
--- COMMENT ON COLUMN party.relationships.party_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party the relationship is associated with';
+-- COMMENT ON COLUMN party.relationships.party_id IS 'The Universally Unique Identifier (UUID) for the party the relationship is associated with';
 --
--- COMMENT ON COLUMN party.relationships.related_party_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the party the relationship is associated with';
+-- COMMENT ON COLUMN party.relationships.related_party_id IS 'The Universally Unique Identifier (UUID) for the party the relationship is associated with';
 
 
 

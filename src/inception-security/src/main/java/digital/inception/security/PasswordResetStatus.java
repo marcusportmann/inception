@@ -56,7 +56,7 @@ public enum PasswordResetStatus {
   /**
    * Returns the password reset status given by the specified code value.
    *
-   * @param code the code value identifying the password reset status
+   * @param code the code for the password reset status
    * @return the password reset status given by the specified code value
    */
   @JsonCreator
@@ -99,7 +99,7 @@ public enum PasswordResetStatus {
   /**
    * Returns the password reset status for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the password reset status
+   * @param numericCode the numeric code for the password reset status
    * @return the password reset status given by the specified numeric code value
    */
   public static PasswordResetStatus fromNumericCode(int numericCode) {

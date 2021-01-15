@@ -155,7 +155,7 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Delete the existing mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    */
   @Override
   @Transactional
@@ -190,7 +190,7 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Retrieve the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the mail template
    */
   @Override
@@ -220,8 +220,8 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Retrieve the name of the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
-   * @return the name of the mail template
+   * @param mailTemplateId the ID for the mail template
+   * @return the name for the mail template
    */
   @Override
   public String getMailTemplateName(String mailTemplateId)
@@ -242,7 +242,7 @@ public class MailService implements IMailService, InitializingBean {
       throw e;
     } catch (Throwable e) {
       throw new MailServiceException(
-          "Failed to retrieve the name for the mail template (" + mailTemplateId + ")", e);
+          "Failed to retrieve the name of the mail template (" + mailTemplateId + ")", e);
     }
   }
 
@@ -263,7 +263,7 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Retrieve the summary for the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the summary for the mail template
    */
   @Override
@@ -293,7 +293,7 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Returns the date and time the mail template was last updated.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return the date and time the mail template was last updated
    */
   @Override
@@ -340,7 +340,7 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Check whether the mail template exists.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
    */
   @Override
@@ -361,7 +361,7 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Process the mail template.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @param templateParameters the template parameters
    * @return the output of processing the template
    */
@@ -396,7 +396,7 @@ public class MailService implements IMailService, InitializingBean {
    * @param subject the subject for the mail
    * @param from the from e-mail address
    * @param fromName the from e-mail name
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    * @param mailTemplateParameters the parameters to apply to the mail template
    */
   public void sendMail(

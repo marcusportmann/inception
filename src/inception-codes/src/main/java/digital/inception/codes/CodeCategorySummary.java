@@ -62,8 +62,8 @@ public class CodeCategorySummary implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the code category. */
-  @Schema(description = "The ID uniquely identifying the code category", required = true)
+  /** The ID for the code category. */
+  @Schema(description = "The ID for the code category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -96,7 +96,7 @@ public class CodeCategorySummary implements Serializable {
   /**
    * Constructs a new <code>CodeCategorySummary</code>.
    *
-   * @param id the ID uniquely identifying the code category
+   * @param id the ID for the code category
    * @param name the name of the code category
    * @param updated the date and time the code category was last updated
    */
@@ -133,9 +133,9 @@ public class CodeCategorySummary implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the code category.
+   * Returns the ID for the code category.
    *
-   * @return the ID uniquely identifying the code category
+   * @return the ID for the code category
    */
   public String getId() {
     return id;

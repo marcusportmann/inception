@@ -60,7 +60,7 @@ public class ApplicationException extends RichRuntimeException {
   /**
    * Constructs a new <code>ApplicationException</code> with the specified code and message.
    *
-   * @param code the error code identifying the error
+   * @param code the error code for the error
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    */
   public ApplicationException(String code, String message) {
@@ -81,7 +81,7 @@ public class ApplicationException extends RichRuntimeException {
   /**
    * Constructs a new <code>ApplicationException</code> with the specified code, message and cause.
    *
-   * @param code the error code identifying the error
+   * @param code the error code for the error
    * @param message the message saved for later retrieval by the <code>getMessage()</code> method
    * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
    *     <code>null</code> value is permitted if the cause is nonexistent or unknown)

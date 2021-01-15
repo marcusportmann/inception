@@ -68,9 +68,9 @@ public class IdentityDocument implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code identifying the country of issue for the identity document. */
+  /** The code for the country of issue for the identity document. */
   @Schema(
-      description = "The code identifying the country of issue for the identity document",
+      description = "The code for the country of issue for the identity document",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
@@ -121,8 +121,8 @@ public class IdentityDocument implements Serializable {
   @JoinColumn(name = "person_id")
   private Person person;
 
-  /** The code identifying the type of identity document. */
-  @Schema(description = "The code identifying the type of identity document", required = true)
+  /** The code for the identity document type. */
+  @Schema(description = "The code for the identity document type", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
@@ -144,8 +144,8 @@ public class IdentityDocument implements Serializable {
   /**
    * Constructs a new <code>IdentityDocument</code>.
    *
-   * @param type the code identifying the type of identity document
-   * @param countryOfIssue the code identifying the country of issue for the identity document
+   * @param type the code for the identity document type
+   * @param countryOfIssue the code for the country of issue for the identity document
    * @param dateOfIssue the date of issue for the identity document
    * @param number the number for the identity document
    */
@@ -160,8 +160,8 @@ public class IdentityDocument implements Serializable {
   /**
    * Constructs a new <code>IdentityDocument</code>.
    *
-   * @param type the code identifying the type of identity document
-   * @param countryOfIssue the code identifying the country of issue for the identity document
+   * @param type the code for the identity document type
+   * @param countryOfIssue the code for the country of issue for the identity document
    * @param dateOfIssue the date of issue for the identity document
    * @param dateOfExpiry the optional date of expiry for the identity document
    * @param number thge number for the identity document
@@ -209,9 +209,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Returns the code identifying the country of issue for the identity document.
+   * Returns the code for the country of issue for the identity document.
    *
-   * @return the code identifying the country of issue for the identity document
+   * @return the code for the country of issue for the identity document
    */
   public String getCountryOfIssue() {
     return countryOfIssue;
@@ -264,9 +264,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Returns the code identifying the type of identity document.
+   * Returns the code for the identity document type.
    *
-   * @return the code identifying the type of identity document
+   * @return the code for the identity document type
    */
   public String getType() {
     return type;
@@ -295,9 +295,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Set the code identifying the country of issue for the identity document.
+   * Set the code for the country of issue for the identity document.
    *
-   * @param countryOfIssue the code identifying the country of issue for the identity document
+   * @param countryOfIssue the code for the country of issue for the identity document
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;
@@ -341,9 +341,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Set the code identifying the type of identity document.
+   * Set the code for the identity document type.
    *
-   * @param type the code identifying the type of identity document
+   * @param type the code for the identity document type
    */
   public void setType(String type) {
     this.type = type;

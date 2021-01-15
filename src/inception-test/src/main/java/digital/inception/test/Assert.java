@@ -31,7 +31,7 @@ public class Assert {
   /**
    * Asserts that two LocalDateTime values are equal.
    *
-   * @param message the identifying message for the AssertionError
+   * @param message the for message for the AssertionError
    * @param expected the expected value
    * @param actual the value to check
    */

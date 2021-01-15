@@ -49,7 +49,7 @@ public class CodeCategoryData implements Serializable {
   /** The codes for the code category. */
   private final List<CodeData> codes;
 
-  /** The ID uniquely identifying the code category. */
+  /** The ID for the code category. */
   private final String id;
 
   /** The date and time the code category was last updated. */
@@ -138,9 +138,9 @@ public class CodeCategoryData implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the code category.
+   * Returns the ID for the code category.
    *
-   * @return the ID uniquely identifying the code category
+   * @return the ID for the code category
    */
   public String getId() {
     return id;

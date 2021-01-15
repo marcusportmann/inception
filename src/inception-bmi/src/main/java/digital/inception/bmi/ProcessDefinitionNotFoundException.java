@@ -49,7 +49,7 @@ public class ProcessDefinitionNotFoundException extends ServiceException {
   /**
    * w Constructs a new <code>ProcessDefinitionNotFoundException</code>.
    *
-   * @param processDefinitionId the ID uniquely identifying the process definition
+   * @param processDefinitionId the ID for the process definition
    */
   public ProcessDefinitionNotFoundException(String processDefinitionId) {
     super(

@@ -53,7 +53,7 @@ public enum TenantStatus {
   /**
    * Returns the tenant status given by the specified code value.
    *
-   * @param code the code value identifying the tenant status
+   * @param code the code for the tenant status
    * @return the tenant status given by the specified code value
    */
   @JsonCreator
@@ -94,7 +94,7 @@ public enum TenantStatus {
   /**
    * Returns the tenant status for the specified numeric code.
    *
-   * @param numericCode the numeric code identifying the tenant status
+   * @param numericCode the numeric code for the tenant status
    * @return the tenant status given by the specified numeric code value
    */
   public static TenantStatus fromNumericCode(int numericCode) {

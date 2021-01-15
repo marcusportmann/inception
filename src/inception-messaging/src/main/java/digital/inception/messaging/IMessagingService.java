@@ -34,7 +34,7 @@ public interface IMessagingService {
   /**
    * Have all the parts been queued for assembly for the message?
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    * @param totalParts the total number of parts for the message
    * @return <code>true</code> if all the parts for the message have been queued for assembly or
    *     <code>false</code> otherwise
@@ -52,7 +52,7 @@ public interface IMessagingService {
   /**
    * Assemble the message from the message parts that have been queued for assembly.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    * @param totalParts the total number of parts for the message
    */
   void assembleMessage(UUID messageId, int totalParts)
@@ -114,7 +114,7 @@ public interface IMessagingService {
   /**
    * Delete the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    */
   void deleteMessage(UUID messageId)
       throws InvalidArgumentException, MessageNotFoundException, MessagingServiceException;
@@ -122,7 +122,7 @@ public interface IMessagingService {
   /**
    * Delete the message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message
    *     part
    */
   void deleteMessagePart(UUID messagePartId)
@@ -131,7 +131,7 @@ public interface IMessagingService {
   /**
    * Delete the message parts for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    */
   void deleteMessagePartsForMessage(UUID messageId)
       throws InvalidArgumentException, MessagingServiceException;
@@ -139,8 +139,8 @@ public interface IMessagingService {
   /**
    * Derive the user-device encryption key.
    *
-   * @param username the username uniquely identifying the user e.g. test1
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   * @param username the username for the user e.g. test1
+   * @param deviceId the Universally Unique Identifier (UUID) for the device
    * @return the user-device encryption key
    */
   byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
@@ -165,7 +165,7 @@ public interface IMessagingService {
   /**
    * Retrieve the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    * @return the message
    */
   Message getMessage(UUID messageId)
@@ -174,7 +174,7 @@ public interface IMessagingService {
   /**
    * Retrieve the message parts queued for assembly for the message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    * @param lockName the name of the lock that should be applied to the message parts queued for
    *     assembly when they are retrieved
    * @return the message parts queued for assembly for the message
@@ -186,8 +186,8 @@ public interface IMessagingService {
    * Get the message parts for a user that have been queued for download by a particular remote
    * device.
    *
-   * @param username the username identifying the user
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   * @param username the username for the user
+   * @param deviceId the Universally Unique Identifier (UUID) for the device
    * @return the message parts that have been queued for download by a particular remote device
    */
   List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
@@ -196,8 +196,8 @@ public interface IMessagingService {
   /**
    * Get the messages for a user that have been queued for download by a particular remote device.
    *
-   * @param username the username identifying the user
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device
+   * @param username the username for the user
+   * @param deviceId the Universally Unique Identifier (UUID) for the device
    * @return the messages for a user that have been queued for download by a particular remote
    *     device
    */
@@ -234,7 +234,7 @@ public interface IMessagingService {
   /**
    * Has the message already been archived?
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    * @return <code>true</code> if the message has already been archived or <code>false</code>
    *     otherwise
    */
@@ -244,7 +244,7 @@ public interface IMessagingService {
   /**
    * Has the message part already been queued for assembly?
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message
    *     part
    * @return <code>true</code> if the message part has already been queued for assembly or <code>
    * false</code> otherwise
@@ -342,7 +342,7 @@ public interface IMessagingService {
   /**
    * Set the status for a message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message
    *     part
    * @param status the new status
    */
@@ -352,7 +352,7 @@ public interface IMessagingService {
   /**
    * Set the status for a message.
    *
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageId the Universally Unique Identifier (UUID) for the message
    * @param status the new status
    */
   void setMessageStatus(UUID messageId, MessageStatus status)
@@ -370,7 +370,7 @@ public interface IMessagingService {
   /**
    * Unlock a locked message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message
    *     part
    * @param status the new status for the unlocked message part
    */

@@ -84,7 +84,7 @@ public class ReportingWebService {
   /**
    * Delete the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    */
   @WebMethod(operationName = "DeleteReportDefinition")
   public void deleteReportDefinition(
@@ -97,7 +97,7 @@ public class ReportingWebService {
   /**
    * Generate the PDF report.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @param reportParameters the report parameters
    * @return the PDF report
    */
@@ -131,7 +131,7 @@ public class ReportingWebService {
   /**
    * Get the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @return the report definition
    */
   @WebMethod(operationName = "GetReportDefinition")
@@ -146,7 +146,7 @@ public class ReportingWebService {
   /**
    * Retrieve the name of the report definition.
    *
-   * @param reportDefinitionId the ID uniquely identifying the report definition
+   * @param reportDefinitionId the ID for the report definition
    * @return the name of report definition
    */
   @WebMethod(operationName = "GetReportDefinitionName")

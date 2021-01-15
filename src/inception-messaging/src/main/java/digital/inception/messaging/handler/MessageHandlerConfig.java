@@ -57,7 +57,7 @@ public class MessageHandlerConfig {
    * defines which messages a message handler is capable of processing synchronously and
    * asynchronously.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
    *     type
    * @param isSynchronous is the handler capable of synchronously processing messages of the
    *     supported message type
@@ -107,7 +107,7 @@ public class MessageHandlerConfig {
   /**
    * Returns whether the messages of the specified message type should be archived.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
    *     type
    * @return <code>true</code> if messages of the specified message type should be archived or
    *     <code>false</code> otherwise
@@ -125,7 +125,7 @@ public class MessageHandlerConfig {
   /**
    * Returns whether the messages of the specified message type should be processed securely.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
    *     type
    * @return <code>true</code> if messages of the specified message type should be processed
    *     securely or <code>false</code> otherwise
@@ -153,7 +153,7 @@ public class MessageHandlerConfig {
    * Returns whether the message handler supports asynchronous processing of the specified message
    * type.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
    *     type
    * @return <code>true</code> if the message handler supports asynchronous processing of the
    *     specified message type or <code>false</code> otherwise
@@ -172,7 +172,7 @@ public class MessageHandlerConfig {
    * Returns whether the message handler supports synchronous processing of the specified message
    * type.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the message
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
    *     type
    * @return <code>true</code> if the message handler supports synchronous processing of the
    *     specified message type or <code>false</code> otherwise
@@ -212,13 +212,13 @@ public class MessageHandlerConfig {
      */
     private final boolean isSynchronous;
 
-    /** The Universally Unique Identifier (UUID) uniquely identifying the message type. */
+    /** The Universally Unique Identifier (UUID) for the message type. */
     private final UUID messageTypeId;
 
     /**
      * Constructs a new <code>MessageConfig</code>.
      *
-     * @param messageTypeId the Universally Unique Identifier (UUID) uniquely identifying the
+     * @param messageTypeId the Universally Unique Identifier (UUID) for the
      *     message type
      * @param isSynchronous is the handler capable of synchronously processing messages of the
      *     supported message type
@@ -242,9 +242,9 @@ public class MessageHandlerConfig {
     }
 
     /**
-     * Return the Universally Unique Identifier (UUID) uniquely identifying the message type.
+     * Return the Universally Unique Identifier (UUID) for the message type.
      *
-     * @return the Universally Unique Identifier (UUID) uniquely identifying the message type
+     * @return the Universally Unique Identifier (UUID) for the message type
      */
     public UUID getMessageTypeId() {
       return messageTypeId;

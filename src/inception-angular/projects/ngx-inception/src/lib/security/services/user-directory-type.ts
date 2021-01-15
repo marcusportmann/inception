@@ -22,7 +22,7 @@
 export class UserDirectoryType {
 
   /**
-   * The code uniquely identifying the user directory type.
+   * The code for the user directory type.
    */
   code: string;
 
@@ -39,7 +39,7 @@ export class UserDirectoryType {
   /**
    * Constructs a new UserDirectoryParameter.
    *
-   * @param code                   The code uniquely identifying the user directory type.
+   * @param code                   The code for the user directory type.
    * @param name                   The name of the user directory type.
    * @param userDirectoryClassName The fully qualified name of the Java class that implements the
    *                               user directory type.

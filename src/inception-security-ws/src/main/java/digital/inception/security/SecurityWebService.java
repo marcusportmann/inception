@@ -73,11 +73,11 @@ public class SecurityWebService {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param memberType the group member type
-   * @param memberName the name identifying the group member
+   * @param memberName the name of the group member
    */
   @WebMethod(operationName = "AddMemberToGroup")
   public void addMemberToGroup(
@@ -93,10 +93,10 @@ public class SecurityWebService {
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
-   * @param roleCode the code uniquely identifying the role
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
    */
   @WebMethod(operationName = "AddRoleToGroup")
   public void addRoleToGroup(
@@ -111,8 +111,8 @@ public class SecurityWebService {
   /**
    * Add the user directory to the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    */
   @WebMethod(operationName = "AddUserDirectoryToTenant")
@@ -127,9 +127,9 @@ public class SecurityWebService {
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param passwordChange the password change
    */
   @WebMethod(operationName = "AdminChangePassword")
@@ -169,7 +169,7 @@ public class SecurityWebService {
   /**
    * Change the password for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param passwordChange the password change
    */
   @WebMethod(operationName = "ChangePassword")
@@ -288,9 +288,9 @@ public class SecurityWebService {
   /**
    * Delete the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    */
   @WebMethod(operationName = "DeleteGroup")
   public void deleteGroup(
@@ -304,7 +304,7 @@ public class SecurityWebService {
   /**
    * Delete the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    */
   @WebMethod(operationName = "DeleteTenant")
   public void deleteTenant(@WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
@@ -315,9 +315,9 @@ public class SecurityWebService {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    */
   @WebMethod(operationName = "DeleteUser")
   public void deleteUser(
@@ -331,7 +331,7 @@ public class SecurityWebService {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    */
   @WebMethod(operationName = "DeleteUserDirectory")
@@ -344,9 +344,9 @@ public class SecurityWebService {
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the group
    */
   @WebMethod(operationName = "GetGroup")
@@ -362,7 +362,7 @@ public class SecurityWebService {
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the group names
    */
@@ -375,12 +375,12 @@ public class SecurityWebService {
   }
 
   /**
-   * Retrieve the names identifying the groups the user is a member of.
+   * Retrieve the names of the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
-   * @return the names identifying the groups the user is a member of
+   * @param username the username for the user
+   * @return the names of the groups the user is a member of
    */
   @WebMethod(operationName = "GetGroupNamesForUser")
   @WebResult(name = "GroupName")
@@ -395,7 +395,7 @@ public class SecurityWebService {
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param filter the optional filter to apply to the groups
    * @param sortDirection the optional sort direction to apply to the groups
@@ -418,9 +418,9 @@ public class SecurityWebService {
   /**
    * Retrieve the group members.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
    * @param pageIndex the optional page index
@@ -444,9 +444,9 @@ public class SecurityWebService {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the codes for the roles that have been assigned to the group
    */
   @WebMethod(operationName = "GetRoleCodesForGroup")
@@ -473,9 +473,9 @@ public class SecurityWebService {
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @return the roles that have been assigned to the group
    */
   @WebMethod(operationName = "GetRolesForGroup")
@@ -499,7 +499,7 @@ public class SecurityWebService {
   /**
    * Retrieve the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the tenant
    */
   @WebMethod(operationName = "GetTenant")
@@ -512,7 +512,7 @@ public class SecurityWebService {
   /**
    * Retrieve the name of the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the name of the tenant
    */
   @WebMethod(operationName = "GetTenantName")
@@ -546,7 +546,7 @@ public class SecurityWebService {
   /**
    * Retrieve the tenants the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the tenants the user directory is associated with
    */
@@ -561,9 +561,9 @@ public class SecurityWebService {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the user
    */
   @WebMethod(operationName = "GetUser")
@@ -606,7 +606,7 @@ public class SecurityWebService {
   /**
    * Retrieve the user directories the tenant is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the user directories the tenant is associated with
    */
   @WebMethod(operationName = "GetUserDirectoriesForTenant")
@@ -620,7 +620,7 @@ public class SecurityWebService {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the user directory
    */
@@ -635,7 +635,7 @@ public class SecurityWebService {
   /**
    * Retrieve the capabilities the user directory supports.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the capabilities the user directory supports
    */
@@ -650,7 +650,7 @@ public class SecurityWebService {
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the name of user directory
    */
@@ -685,7 +685,7 @@ public class SecurityWebService {
   /**
    * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @return the summaries for the user directories the tenant is associated with
    */
   @WebMethod(operationName = "GetUserDirectorySummariesForTenant")
@@ -699,7 +699,7 @@ public class SecurityWebService {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @return the user directory type for the user directory
    */
@@ -726,9 +726,9 @@ public class SecurityWebService {
   /**
    * Retrieve the name of the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @return the name of the user
    */
   @WebMethod(operationName = "GetUserName")
@@ -744,7 +744,7 @@ public class SecurityWebService {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param filter the optional filter to apply to the users
    * @param sortBy The optional method used to sort the users e.g. by name.
@@ -770,11 +770,11 @@ public class SecurityWebService {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
+   * @param groupName the name of the group
    * @param memberType the group member type
-   * @param memberName the name identifying the group member
+   * @param memberName the name of the group member
    */
   @WebMethod(operationName = "RemoveMemberFromGroup")
   public void removeMemberFromGroup(
@@ -790,10 +790,10 @@ public class SecurityWebService {
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @param groupName the name identifying the group
-   * @param roleCode the code uniquely identifying the role
+   * @param groupName the name of the group
+   * @param roleCode the code for the role
    */
   @WebMethod(operationName = "RemoveRoleFromGroup")
   public void removeRoleFromGroup(
@@ -808,8 +808,8 @@ public class SecurityWebService {
   /**
    * Remove the user directory from the tenant.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) uniquely identifying the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    */
   @WebMethod(operationName = "RemoveUserDirectoryFromTenant")
@@ -824,7 +824,7 @@ public class SecurityWebService {
   /**
    * Initiate the password reset process for the user.
    *
-   * @param username the username identifying the user
+   * @param username the username for the user
    * @param resetPasswordUrl the reset password URL
    */
   @WebMethod(operationName = "ResetPassword")

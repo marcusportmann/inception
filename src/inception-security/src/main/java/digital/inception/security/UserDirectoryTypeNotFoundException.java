@@ -50,7 +50,7 @@ public class UserDirectoryTypeNotFoundException extends ServiceException {
   /**
    * Constructs a new <code>UserDirectoryTypeNotFoundException</code>.
    *
-   * @param userDirectoryTypeCode the code uniquely identifying the user directory type
+   * @param userDirectoryTypeCode the code for the user directory type
    */
   public UserDirectoryTypeNotFoundException(String userDirectoryTypeCode) {
     super(

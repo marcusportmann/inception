@@ -52,7 +52,7 @@ public class DuplicateProcessDefinitionException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateProcessDefinitionException</code>.
    *
-   * @param processDefinitionId the ID uniquely identifying the process definition
+   * @param processDefinitionId the ID for the process definition
    */
   public DuplicateProcessDefinitionException(String processDefinitionId) {
     super(

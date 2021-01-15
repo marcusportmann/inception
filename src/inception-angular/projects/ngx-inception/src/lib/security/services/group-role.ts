@@ -22,17 +22,17 @@
 export class GroupRole {
 
   /**
-   * The name identifying the group.
+   * The name of the group.
    */
   groupName: string;
 
   /**
-   * The code uniquely identifying the role.
+   * The code for the role.
    */
   roleCode: string;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * The Universally Unique Identifier (UUID) for the user directory the group
    * is associated with.
    */
   userDirectoryId: string;
@@ -40,10 +40,10 @@ export class GroupRole {
   /**
    * Constructs a new GroupRole.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
    *                        user directory the group is associated with.
-   * @param groupName       The name identifying the group.
-   * @param roleCode        The code uniquely identifying the role.
+   * @param groupName       The name of the group.
+   * @param roleCode        The code for the role.
    */
   constructor(userDirectoryId: string, groupName: string, roleCode: string) {
     this.userDirectoryId = userDirectoryId;

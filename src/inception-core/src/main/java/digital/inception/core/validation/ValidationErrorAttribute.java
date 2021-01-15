@@ -64,7 +64,7 @@ public class ValidationErrorAttribute implements Serializable, Cloneable {
   /**
    * Constructs a new <code>ValidationErrorAttribute</code>.
    *
-   * @param name the name for the validation error attribute
+   * @param name the name of the validation error attribute
    * @param value the value for the validation error attribute
    */
   public ValidationErrorAttribute(String name, String value) {
@@ -73,9 +73,9 @@ public class ValidationErrorAttribute implements Serializable, Cloneable {
   }
 
   /**
-   * Returns the name for the validation error attribute.
+   * Returns the name of the validation error attribute.
    *
-   * @return the name for the validation error attribute
+   * @return the name of the validation error attribute
    */
   public String getName() {
     return name;
@@ -91,9 +91,9 @@ public class ValidationErrorAttribute implements Serializable, Cloneable {
   }
 
   /**
-   * Set the name for the validation error attribute.
+   * Set the name of the validation error attribute.
    *
-   * @param name the name for the validation error attribute
+   * @param name the name of the validation error attribute
    */
   public void setName(String name) {
     this.name = name;

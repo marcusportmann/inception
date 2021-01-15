@@ -24,7 +24,7 @@ CREATE TABLE scheduler.jobs (
   PRIMARY KEY (id)
 );
 
-COMMENT ON COLUMN scheduler.jobs.id IS 'The ID uniquely identifying the job';
+COMMENT ON COLUMN scheduler.jobs.id IS 'The ID for the job';
 
 COMMENT ON COLUMN scheduler.jobs.name IS 'The name of the job';
 
@@ -64,7 +64,7 @@ CREATE INDEX job_parameters_job_id_ix ON scheduler.job_parameters(job_id);
 
 CREATE INDEX job_parameters_name_ix ON scheduler.job_parameters(name);
 
-COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The ID uniquely identifying the job';
+COMMENT ON COLUMN scheduler.job_parameters.job_id IS 'The ID for the job';
 
 COMMENT ON COLUMN scheduler.job_parameters.name IS 'The name of the job parameter';
 

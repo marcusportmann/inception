@@ -23,7 +23,7 @@
     </sql>
 
     <createTable schemaName="scheduler" tableName="jobs" remarks="Jobs">
-      <column name="id" type="nvarchar(100)" remarks="The ID uniquely identifying the job"/>
+      <column name="id" type="nvarchar(100)" remarks="The ID for the job"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the job"/>
       <column name="scheduling_pattern" type="nvarchar(100)"
         remarks="The cron-style scheduling pattern for the job"/>
@@ -54,7 +54,7 @@
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="created"/>
 
     <createTable schemaName="scheduler" tableName="job_parameters" remarks="Job Parameters">
-      <column name="job_id" type="nvarchar(100)" remarks="The ID uniquely identifying the job"/>
+      <column name="job_id" type="nvarchar(100)" remarks="The ID for the job"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the job parameter"/>
       <column name="value" type="nvarchar(4000)" remarks="The value of the job parameter"/>
       <column name="created" type="timestamp"

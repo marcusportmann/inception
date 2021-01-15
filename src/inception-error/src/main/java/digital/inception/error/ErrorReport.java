@@ -89,9 +89,9 @@ public class ErrorReport implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the application that generated the error report. */
+  /** The ID for the application that generated the error report. */
   @Schema(
-      description = "ID uniquely identifying the application that generated the error report",
+      description = "ID for the application that generated the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ApplicationId", required = true)
@@ -146,12 +146,12 @@ public class ErrorReport implements Serializable {
   private String detail;
 
   /**
-   * The optional Universally Unique Identifier (UUID) uniquely identifying the device the error
+   * The optional Universally Unique Identifier (UUID) for the device the error
    * report originated from.
    */
   @Schema(
       description =
-          "The optional Universally Unique Identifier (UUID) uniquely identifying the device "
+          "The optional Universally Unique Identifier (UUID) for the device "
               + "the error report originated from")
   @JsonProperty
   @XmlElement(name = "DeviceId")
@@ -166,10 +166,10 @@ public class ErrorReport implements Serializable {
   @Column(name = "feedback", length = 4000)
   private String feedback;
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the error report. */
+  /** The Universally Unique Identifier (UUID) for the error report. */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the error report",
+          "The Universally Unique Identifier (UUID) for the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -178,9 +178,9 @@ public class ErrorReport implements Serializable {
   @Column(name = "id", nullable = false)
   private UUID id;
 
-  /** The optional username identifying the user associated with the error report. */
+  /** The optional username for the user associated with the error report. */
   @Schema(
-      description = "The optional username identifying the user associated with the error report")
+      description = "The optional username for the user associated with the error report")
   @JsonProperty
   @XmlElement(name = "Who")
   @Size(max = 100)
@@ -193,8 +193,8 @@ public class ErrorReport implements Serializable {
   /**
    * Constructs a new <code>ErrorReport</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
-   * @param applicationId the ID uniquely identifying the application that generated the error
+   * @param id the Universally Unique Identifier (UUID) for the error report
+   * @param applicationId the ID for the application that generated the error
    *     report
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
@@ -219,15 +219,15 @@ public class ErrorReport implements Serializable {
   /**
    * Constructs a new <code>ErrorReport</code>.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
-   * @param applicationId the ID uniquely identifying the application that generated the error
+   * @param id the Universally Unique Identifier (UUID) for the error report
+   * @param applicationId the ID for the application that generated the error
    *     report
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
    * @param detail the error detail
    * @param created the date and time the error report was created
-   * @param who the optional username identifying the user associated with the error report
-   * @param deviceId the optional Universally Unique Identifier (UUID) uniquely identifying the
+   * @param who the optional username for the user associated with the error report
+   * @param deviceId the optional Universally Unique Identifier (UUID) for the
    *     device the error report originated from
    * @param feedback the optional feedback provided by the user for the error
    * @param data the optional base-64 encoded data associated with the error report
@@ -282,9 +282,9 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Returns the ID uniquely identifying the application that generated the error report.
+   * Returns the ID for the application that generated the error report.
    *
-   * @return the ID uniquely identifying the application that generated the error report
+   * @return the ID for the application that generated the error report
    */
   public String getApplicationId() {
     return applicationId;
@@ -336,10 +336,10 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Returns the optional Universally Unique Identifier (UUID) uniquely identifying the device the
+   * Returns the optional Universally Unique Identifier (UUID) for the device the
    * error report originated from.
    *
-   * @return the optional Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @return the optional Universally Unique Identifier (UUID) for the device the
    *     error report originated from
    */
   public UUID getDeviceId() {
@@ -356,18 +356,18 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the error report.
+   * Returns the Universally Unique Identifier (UUID) for the error report.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the error report
+   * @return the Universally Unique Identifier (UUID) for the error report
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Returns the username identifying the user associated with the error report.
+   * Returns the username for the user associated with the error report.
    *
-   * @return the username identifying the user associated with the error report
+   * @return the username for the user associated with the error report
    */
   public String getWho() {
     return who;
@@ -384,9 +384,9 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the ID uniquely identifying the application that generated the error report.
+   * Set the ID for the application that generated the error report.
    *
-   * @param applicationId the ID uniquely identifying the application that generated the error
+   * @param applicationId the ID for the application that generated the error
    *     report
    */
   public void setApplicationId(String applicationId) {
@@ -439,10 +439,10 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the optional Universally Unique Identifier (UUID) uniquely identifying the device the error
+   * Set the optional Universally Unique Identifier (UUID) for the device the error
    * report originated from.
    *
-   * @param deviceId the optional Universally Unique Identifier (UUID) uniquely identifying the
+   * @param deviceId the optional Universally Unique Identifier (UUID) for the
    *     device the error report originated from
    */
   public void setDeviceId(UUID deviceId) {
@@ -459,18 +459,18 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the error report.
+   * Set the Universally Unique Identifier (UUID) for the error report.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the error report
+   * @param id the Universally Unique Identifier (UUID) for the error report
    */
   public void setId(UUID id) {
     this.id = id;
   }
 
   /**
-   * Set the optional username identifying the user associated with the error report.
+   * Set the optional username for the user associated with the error report.
    *
-   * @param who the optional username identifying the user associated with the error report
+   * @param who the optional username for the user associated with the error report
    */
   public void setWho(String who) {
     this.who = who;

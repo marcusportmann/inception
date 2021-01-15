@@ -45,7 +45,7 @@ public class UserDetailsService
    * configured. In this case, the <code>UserDetails</code> object that comes back may have a
    * username that is of a different case than what was actually requested.
    *
-   * @param username the username identifying the user whose data is required.
+   * @param username the username for the user whose data is required.
    * @return a fully populated user record (never <code>null</code>)
    */
   @Override

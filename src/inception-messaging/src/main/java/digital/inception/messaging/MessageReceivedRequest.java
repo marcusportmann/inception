@@ -35,13 +35,13 @@ import java.util.UUID;
 public class MessageReceivedRequest {
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the device the message received
+   * The Universally Unique Identifier (UUID) for the device the message received
    * request originated from.
    */
   private final UUID deviceId;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the message that was successfully
+   * The Universally Unique Identifier (UUID) for the message that was successfully
    * downloaded.
    */
   private final UUID messageId;
@@ -62,9 +62,9 @@ public class MessageReceivedRequest {
   /**
    * Constructs a new <code>MessageReceivedRequest</code>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) uniquely identifying the device the
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message received request originated from
-   * @param messageId the Universally Unique Identifier (UUID) uniquely identifying the message that
+   * @param messageId the Universally Unique Identifier (UUID) for the message that
    *     was successfully downloaded
    */
   public MessageReceivedRequest(UUID deviceId, UUID messageId) {
@@ -90,10 +90,10 @@ public class MessageReceivedRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * Returns the Universally Unique Identifier (UUID) for the device the message
    * received request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the device the message
+   * @return the Universally Unique Identifier (UUID) for the device the message
    *     received request originated from
    */
   public UUID getDeviceId() {
@@ -101,10 +101,10 @@ public class MessageReceivedRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the message that was
+   * Returns the Universally Unique Identifier (UUID) for the message that was
    * successfully downloaded.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the message that was
+   * @return the Universally Unique Identifier (UUID) for the message that was
    *     successfully downloaded
    */
   public UUID getMessageId() {

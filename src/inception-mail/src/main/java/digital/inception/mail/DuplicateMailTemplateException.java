@@ -52,7 +52,7 @@ public class DuplicateMailTemplateException extends ServiceException {
   /**
    * Constructs a new <code>DuplicateMailTemplateException</code>.
    *
-   * @param mailTemplateId the ID uniquely identifying the mail template
+   * @param mailTemplateId the ID for the mail template
    */
   public DuplicateMailTemplateException(String mailTemplateId) {
     super(

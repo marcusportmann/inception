@@ -60,7 +60,7 @@ export class ReferenceService {
    * Constructs a new ReferenceService.
    *
    * @param config     The Inception configuration.
-   * @param localeId   The Unicode locale identifier identifying the locale for the application.
+   * @param localeId   The Unicode locale identifier for the locale for the application.
    * @param httpClient The HTTP client.
    */
   constructor(@Inject(INCEPTION_CONFIG) private config: InceptionConfig,

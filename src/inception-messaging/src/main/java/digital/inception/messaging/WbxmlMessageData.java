@@ -32,23 +32,21 @@ import java.util.UUID;
  */
 public abstract class WbxmlMessageData {
 
-  /** The UUID identifying the type of message the message data is associated with. */
+  /** The UUID for the message type for the message data. */
   private final UUID messageTypeId;
 
-  /** The priority for the message type the message data is associated with. */
+  /** The message priority for the message data. */
   private final MessagePriority messageTypePriority;
 
   /**
    * Constructs a new <code>WbxmlMessageData</code>.
    *
-   * @param messageTypeId the UUID identifying the type of message the message data is associated
-   *     with
-   * @param messageTypePriority the priority for the message type the message data is associated
-   *     with
+   * @param messageTypeId the UUID for the message type for the message data
+   * @param messagePriority the message priority for the message data
    */
-  public WbxmlMessageData(UUID messageTypeId, MessagePriority messageTypePriority) {
+  public WbxmlMessageData(UUID messageTypeId, MessagePriority messagePriority) {
     this.messageTypeId = messageTypeId;
-    this.messageTypePriority = messageTypePriority;
+    this.messageTypePriority = messagePriority;
   }
 
   /**
@@ -61,18 +59,18 @@ public abstract class WbxmlMessageData {
   public abstract boolean fromMessageData(byte[] messageData) throws MessagingServiceException;
 
   /**
-   * Returns the UUID identifying the type of message the message data is associated with.
+   * Returns the UUID for the message type for the message data.
    *
-   * @return the UUID identifying the type of message the message data is associated with
+   * @return the UUID for the message type for the message data
    */
   public UUID getMessageTypeId() {
     return messageTypeId;
   }
 
   /**
-   * Returns the priority for the message type the message data is associated with.
+   * Returns the message priority for the message data.
    *
-   * @return the priority for the message type the message data is associated with
+   * @return the message priority for the message data
    */
   public MessagePriority getMessageTypePriority() {
     return messageTypePriority;

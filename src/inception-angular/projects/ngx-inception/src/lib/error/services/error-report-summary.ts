@@ -22,7 +22,7 @@
 export class ErrorReportSummary {
 
   /**
-   * The ID uniquely identifying the application that generated the error report.
+   * The ID for the application that generated the error report.
    */
   applicationId: string;
 
@@ -42,35 +42,33 @@ export class ErrorReportSummary {
   description: string;
 
   /**
-   * The optional Universally Unique Identifier (UUID) uniquely identifying the device the
+   * The optional Universally Unique Identifier (UUID) for the device the
    * error report originated from.
    */
   deviceId?: string;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the error report.
+   * The Universally Unique Identifier (UUID) for the error report.
    */
   id: string;
 
   /**
-   * The optional username identifying the user associated with the error report.
+   * The optional username for the user associated with the error report.
    */
   who?: string;
 
   /**
    * Constructs a new ErrorReportSummary.
    *
-   * @param id                 The Universally Unique Identifier (UUID) uniquely identifying
-   *                           the error report.
-   * @param applicationId      The ID uniquely identifying the application that generated the
-   *                           error report.
+   * @param id                 The Universally Unique Identifier (UUID) for the error report.
+   * @param applicationId      The ID for the application that generated the error report.
    * @param applicationVersion The version of the application that generated the error report.
    * @param description        The description of the error.
    * @param created            The date and time the error report was created.
-   * @param who                The optional username identifying the user associated with the error
+   * @param who                The optional username for the user associated with the error
    *                           report.
-   * @param deviceId           The optional Universally Unique Identifier (UUID) used to uniquely
-   *                           identify the device the error report originated from.
+   * @param deviceId           The optional Universally Unique Identifier (UUID) for the device the
+   *                           error report originated from.
    */
   constructor(id: string, applicationId: string, applicationVersion: string, description: string, created: Date,
               who?: string, deviceId?: string) {

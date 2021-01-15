@@ -127,7 +127,7 @@ public class User implements Serializable {
   @ManyToMany(mappedBy = "users")
   private Set<Group> groups = new HashSet<>();
 
-  /** The Universally Unique Identifier (UUID) uniquely identifying the user. */
+  /** The Universally Unique Identifier (UUID) for the user. */
   @JsonIgnore
   @XmlTransient
   @Id
@@ -158,14 +158,8 @@ public class User implements Serializable {
   @Column(name = "mobile_number", length = 100)
   private String mobileNumber;
 
-  /**
-   * The personal name or full name of the user.
-   *
-   * <p>In Western culture, this is constructed from a combination of the given name (also known as
-   * the first name, forename, or Christian name), and the surname (also known as the last name or
-   * family name) of the user.
-   */
-  @Schema(description = "The personal name or full name of the user", required = true)
+  /** The name of the user. */
+  @Schema(description = "The name of the user", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -216,12 +210,7 @@ public class User implements Serializable {
   @Column(name = "phone_number", length = 100)
   private String phoneNumber;
 
-  /**
-   * The optional preferred name for the user.
-   *
-   * <p>In Western culture, this is usually the given name, which is also known as the first name,
-   * forename, or Christian name.
-   */
+  /** The optional preferred name for the user. */
   @Schema(description = "The optional preferred name for the user")
   @JsonProperty
   @XmlElement(name = "PreferredName")
@@ -245,12 +234,11 @@ public class User implements Serializable {
   private LocalDateTime updated;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the user is
-   * associated with.
+   * The Universally Unique Identifier (UUID) for the user directory the user is associated with.
    */
   @Schema(
       description =
-          "The Universally Unique Identifier (UUID) uniquely identifying the user directory the "
+          "The Universally Unique Identifier (UUID) for the user directory the "
               + "user is associated with",
       required = true)
   @JsonProperty(required = true)
@@ -325,9 +313,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user.
+   * Returns the Universally Unique Identifier (UUID) for the user.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @return the Universally Unique Identifier (UUID) for the user
    */
   public UUID getId() {
     return id;
@@ -343,13 +331,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the the personal name or full name of the user.
+   * Returns the name of the user.
    *
-   * <p>In Western culture, this is constructed from a combination of the given name (also known as
-   * the first name, forename, or Christian name), and the surname (also known as the last name or
-   * family name) of the user.
-   *
-   * @return the the personal name or full name of the user
+   * @return the name of the user
    */
   public String getName() {
     return name;
@@ -396,9 +380,6 @@ public class User implements Serializable {
   /**
    * Returns the optional preferred name for the user.
    *
-   * <p>In Western culture, this is usually the given name, which is also known as the first name,
-   * forename, or Christian name.
-   *
    * @return the optional preferred name for the user
    */
   public String getPreferredName() {
@@ -424,11 +405,11 @@ public class User implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   * user is associated with.
+   * Returns the Universally Unique Identifier (UUID) for the user directory the user is associated
+   * with.
    *
-   * @return the Universally Unique Identifier (UUID) uniquely identifying the user directory the
-   *     user is associated with
+   * @return the Universally Unique Identifier (UUID) for the user directory the user is associated
+   *     with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
@@ -523,9 +504,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user.
+   * Set the Universally Unique Identifier (UUID) for the user.
    *
-   * @param id the Universally Unique Identifier (UUID) uniquely identifying the user
+   * @param id the Universally Unique Identifier (UUID) for the user
    */
   public void setId(UUID id) {
     this.id = id;
@@ -541,13 +522,9 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the the personal name or full name of the user.
+   * Set the name of the user.
    *
-   * <p>In Western culture, this is constructed from a combination of the given name (also known as
-   * the first name, forename, or Christian name), and the surname (also known as the last name or
-   * family name) of the user.
-   *
-   * @param name the the personal name or full name of the user
+   * @param name the name of the user
    */
   public void setName(String name) {
     this.name = name;
@@ -592,9 +569,6 @@ public class User implements Serializable {
   /**
    * Set the optional preferred name for the user.
    *
-   * <p>In Western culture, this is usually the given name, which is also known as the first name,
-   * forename, or Christian name.
-   *
    * @param preferredName the optional preferred name for the user
    */
   public void setPreferredName(String preferredName) {
@@ -611,11 +585,11 @@ public class User implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) uniquely identifying the user directory the user
-   * is associated with.
+   * Set the Universally Unique Identifier (UUID) for the user directory the user is associated
+   * with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) uniquely identifying the user
-   *     directory the user is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the user
+   *     is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

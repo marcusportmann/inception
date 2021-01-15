@@ -131,7 +131,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Delete the job
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    */
   @Override
   @Transactional
@@ -247,7 +247,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Retrieve the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @return the job
    */
   @Override
@@ -275,7 +275,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Retrieve the name of the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @return the name of the job
    */
   @Override
@@ -297,7 +297,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
       throw e;
     } catch (Throwable e) {
       throw new SchedulerServiceException(
-          "Failed to retrieve the name for the job (" + jobId + ")", e);
+          "Failed to retrieve the name of the job (" + jobId + ")", e);
     }
   }
 
@@ -387,7 +387,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Reschedule the job for execution.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @param schedulingPattern the cron-style scheduling pattern for the job used to determine the
    *     next execution time
    */
@@ -495,7 +495,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Set the status for the job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @param status the new status for the job
    */
   @Override
@@ -523,7 +523,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Unlock a locked job.
    *
-   * @param jobId the ID uniquely identifying the job
+   * @param jobId the ID for the job
    * @param status the new status for the unlocked job
    */
   @Override

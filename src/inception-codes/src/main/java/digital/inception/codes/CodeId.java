@@ -30,10 +30,10 @@ public class CodeId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The ID uniquely identifying the code category the code is associated with. */
+  /** The ID for the code category the code is associated with. */
   private String codeCategoryId;
 
-  /** The ID uniquely identifying the code. */
+  /** The ID for the code. */
   private String id;
 
   /** Constructs a new <code>CodeId</code>. */
@@ -42,8 +42,8 @@ public class CodeId implements Serializable {
   /**
    * Constructs a new <code>CodeId</code>.
    *
-   * @param codeCategoryId the ID uniquely identifying the code category the code is associated with
-   * @param id the ID uniquely identifying the code
+   * @param codeCategoryId the ID for the code category the code is associated with
+   * @param id the ID for the code
    */
   public CodeId(String codeCategoryId, String id) {
     this.codeCategoryId = codeCategoryId;

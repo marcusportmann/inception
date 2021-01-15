@@ -55,7 +55,7 @@ export class Groups {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the groups are
+   * The Universally Unique Identifier (UUID) for the user directory the groups are
    * associated with.
    */
   userDirectoryId: string;
@@ -63,7 +63,7 @@ export class Groups {
   /**
    * Constructs a new Groups.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
    *                        user directory the groups are associated with.
    * @param groups          The groups.
    * @param total           The total number of groups.

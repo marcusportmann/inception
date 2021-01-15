@@ -24,12 +24,12 @@ import {GroupMemberType} from './group-member-type';
 export class GroupMember {
 
   /**
-   * The name identifying the group.
+   * The name of the group.
    */
   groupName: string;
 
   /**
-   * The name identifying the group member.
+   * The name of the group member.
    */
   memberName: string;
 
@@ -39,7 +39,7 @@ export class GroupMember {
   memberType: GroupMemberType;
 
   /**
-   * The Universally Unique Identifier (UUID) uniquely identifying the user directory the group
+   * The Universally Unique Identifier (UUID) for the user directory the group
    * is associated with.
    */
   userDirectoryId: string;
@@ -47,11 +47,11 @@ export class GroupMember {
   /**
    * Constructs a new GroupMember.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) uniquely identifying the
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
    *                        user directory the group is associated with.
-   * @param groupName       The name identifying the group.
+   * @param groupName       The name of the group.
    * @param memberType      The group member type.
-   * @param memberName      The name identifying the group member.
+   * @param memberName      The name of the group member.
    */
   constructor(userDirectoryId: string, groupName: string, memberType: GroupMemberType, memberName: string) {
     this.userDirectoryId = userDirectoryId;

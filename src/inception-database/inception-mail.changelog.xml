@@ -24,7 +24,7 @@
 
     <createTable schemaName="mail" tableName="mail_templates" remarks="Mail Templates">
       <column name="id" type="nvarchar(100)"
-        remarks="The ID uniquely identifying the mail template"/>
+        remarks="The ID for the mail template"/>
       <column name="name" type="nvarchar(100)" remarks="The name of the mail template"/>
       <column name="content_type" type="int" remarks="The content type for the mail template"/>
       <column name="template" type="${blob_type}"
