@@ -225,7 +225,6 @@ CREATE TABLE party.physical_addresses (
 
 CREATE INDEX physical_addresses_party_id_ix ON party.physical_addresses(party_id);
 
-
 COMMENT ON COLUMN party.physical_addresses.building_floor IS 'The building floor for the physical address';
 
 COMMENT ON COLUMN party.physical_addresses.building_name IS 'The building name for the physical address that is required for a building address';
@@ -279,6 +278,33 @@ COMMENT ON COLUMN party.physical_addresses.suburb IS 'The optional suburb for th
 COMMENT ON COLUMN party.physical_addresses.type IS 'The code identifying the physical address type';
 
 COMMENT ON COLUMN party.physical_addresses.updated IS 'The date and time the physical address was last updated';
+
+
+CREATE TABLE party.preferences (
+  created   TIMESTAMP    NOT NULL,
+  person_id UUID         NOT NULL,
+  type      VARCHAR(30)  NOT NULL,
+  updated   TIMESTAMP,
+  value     VARCHAR(200) NOT NULL,
+
+  PRIMARY KEY (person_id, type),
+  CONSTRAINT preferences_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
+);
+
+CREATE INDEX preferences_person_id_ix ON party.preferences(person_id);
+
+COMMENT ON COLUMN party.preferences.created IS 'The date and time the preferences was created';
+
+COMMENT ON COLUMN party.preferences.person_id IS 'The Universally Unique Identifier (UUID) uniquely identifying the person the preference is associated with';
+
+COMMENT ON COLUMN party.preferences.type IS 'The code identifying the preference type';
+
+COMMENT ON COLUMN party.preferences.updated IS 'The date and time the preference was last updated';
+
+COMMENT ON COLUMN party.preferences.value IS 'The value for the preference';
+
+
+
 
 
 

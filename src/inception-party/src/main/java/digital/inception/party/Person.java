@@ -90,7 +90,8 @@ import javax.xml.bind.annotation.XmlType;
   "taxNumber",
   "contactMechanisms",
   "identityDocuments",
-  "physicalAddresses"
+  "physicalAddresses",
+  "preferences"
 })
 @XmlRootElement(name = "Person", namespace = "http://party.inception.digital")
 @XmlType(
@@ -124,12 +125,12 @@ import javax.xml.bind.annotation.XmlType;
       "taxNumber",
       "contactMechanisms",
       "identityDocuments",
-      "physicalAddresses"
+      "physicalAddresses",
+      "preferences"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidPerson
 @Entity
-// @DiscriminatorValue("2")
 @Table(schema = "party", name = "persons")
 public class Person extends Party implements Serializable {
 
@@ -176,6 +177,20 @@ public class Person extends Party implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
+
+  /** The preferences for the person. */
+  @Schema(description = "The preferences for the person")
+  @JsonProperty
+  @JsonManagedReference("preferenceReference")
+  @XmlElementWrapper(name = "Preferences")
+  @XmlElement(name = "Preference")
+  @Valid
+  @OneToMany(
+      mappedBy = "person",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Preference> preferences = new HashSet<>();
 
   /** The optional code identifying the correspondence language for the person. */
   @Schema(description = "The optional code identifying the correspondence language for the person")
@@ -395,6 +410,12 @@ public class Person extends Party implements Serializable {
    * @param contactMechanism the contact mechanism
    */
   public void addContactMechanism(ContactMechanism contactMechanism) {
+    contactMechanisms.removeIf(
+        existingContactMechanism ->
+            Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
+                && Objects.equals(
+                    existingContactMechanism.getPurpose(), contactMechanism.getPurpose()));
+
     contactMechanism.setParty(this);
 
     contactMechanisms.add(contactMechanism);
@@ -406,6 +427,10 @@ public class Person extends Party implements Serializable {
    * @param identityDocument the identity document
    */
   public void addIdentityDocument(IdentityDocument identityDocument) {
+    identityDocuments.removeIf(
+        existingIdentityDocument ->
+            Objects.equals(existingIdentityDocument.getType(), identityDocument.getType()));
+
     identityDocument.setPerson(this);
 
     identityDocuments.add(identityDocument);
@@ -417,9 +442,29 @@ public class Person extends Party implements Serializable {
    * @param physicalAddress the physical address
    */
   public void addPhysicalAddress(PhysicalAddress physicalAddress) {
+    physicalAddresses.removeIf(
+        existingPhysicalAddress ->
+            Objects.equals(existingPhysicalAddress.getType(), physicalAddress.getType())
+                && Objects.equals(
+                    existingPhysicalAddress.getPurpose(), physicalAddress.getPurpose()));
+
     physicalAddress.setParty(this);
 
     physicalAddresses.add(physicalAddress);
+  }
+
+  /**
+   * Add the preference for the person.
+   *
+   * @param preference the preference
+   */
+  public void addPreference(Preference preference) {
+    preferences.removeIf(
+        existingPreference -> Objects.equals(existingPreference.getType(), preference.getType()));
+
+    preference.setPerson(this);
+
+    preferences.add(preference);
   }
 
   /**
@@ -671,6 +716,15 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Returns the preferences for the person.
+   *
+   * @return the preferences for the person
+   */
+  public Set<Preference> getPreferences() {
+    return preferences;
+  }
+
+  /**
    * Returns the optional preferred name for the person.
    *
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
@@ -777,9 +831,9 @@ public class Person extends Party implements Serializable {
    */
   public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
     contactMechanisms.removeIf(
-        contactMechanism ->
-            Objects.equals(contactMechanism.getType(), type)
-                && Objects.equals(contactMechanism.getPurpose(), purpose));
+        existingContactMechanism ->
+            Objects.equals(existingContactMechanism.getType(), type)
+                && Objects.equals(existingContactMechanism.getPurpose(), purpose));
   }
 
   /**
@@ -789,7 +843,7 @@ public class Person extends Party implements Serializable {
    */
   public void removeIdentityDocumentByType(String type) {
     identityDocuments.removeIf(
-        identityDocument -> Objects.equals(identityDocument.getType(), type));
+        existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
   }
 
   /**
@@ -800,9 +854,18 @@ public class Person extends Party implements Serializable {
    */
   public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
     physicalAddresses.removeIf(
-        physicalAddress ->
-            Objects.equals(physicalAddress.getType(), type)
-                && Objects.equals(physicalAddress.getPurpose(), purpose));
+        existingPhysicalAddress ->
+            Objects.equals(existingPhysicalAddress.getType(), type)
+                && Objects.equals(existingPhysicalAddress.getPurpose(), purpose));
+  }
+
+  /**
+   * Remove the preference with the specified type for the person.
+   *
+   * @param type the code identifying the preference type
+   */
+  public void removePreference(String type) {
+    preferences.removeIf(existingPreference -> Objects.equals(existingPreference.getType(), type));
   }
 
   /**
@@ -991,7 +1054,7 @@ public class Person extends Party implements Serializable {
    *
    * <p>See https://en.wikipedia.org/wiki/Personal_name
    *
-   * @param name
+   * @param name the personal name or full name of the person
    */
   public void setName(String name) {
     super.setName(name);
@@ -1014,6 +1077,16 @@ public class Person extends Party implements Serializable {
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
     this.physicalAddresses.clear();
     this.physicalAddresses.addAll(physicalAddresses);
+  }
+
+  /**
+   * Set the preferences for the person.
+   *
+   * @param preferences the preferences for the person
+   */
+  public void setPreferences(Set<Preference> preferences) {
+    this.preferences.clear();
+    this.preferences.addAll(preferences);
   }
 
   /**

@@ -74,19 +74,12 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
     })
 public class PartyServiceTest {
 
-  //  private static final SecureRandom random = new SecureRandom();
-
   private static int organizationCount;
 
   private static int partyCount;
 
   private static int personCount;
-
-  //  /** The data source used to provide connections to the application database. */
-  //  @Autowired
-  //  @Qualifier("applicationDataSource")
-  //  private DataSource dataSource;
-
+  
   /** The Party Service. */
   @Autowired private IPartyService partyService;
 

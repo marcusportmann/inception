@@ -417,6 +417,57 @@ COMMENT ON COLUMN reference.physical_address_purposes.name IS 'The name of the p
 COMMENT ON COLUMN reference.physical_address_purposes.description IS 'The description for the physical address purpose';
 
 
+CREATE TABLE reference.preference_type_categories (
+    code        VARCHAR(30)  NOT NULL,
+    locale_id   VARCHAR(10)  NOT NULL,
+    sort_index  INTEGER      NOT NULL,
+    name        VARCHAR(50)  NOT NULL,
+    description VARCHAR(200) NOT NULL DEFAULT '',
+
+    PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX preference_type_categories_locale_id_ix ON reference.preference_type_categories(locale_id);
+
+COMMENT ON COLUMN reference.preference_type_categories.code IS 'The code for the preference category';
+
+COMMENT ON COLUMN reference.preference_type_categories.locale_id IS 'The Unicode locale identifier for the preference category';
+
+COMMENT ON COLUMN reference.preference_type_categories.sort_index IS 'The sort index for the preference category';
+
+COMMENT ON COLUMN reference.preference_type_categories.name IS 'The name of the preference category';
+
+COMMENT ON COLUMN reference.preference_type_categories.description IS 'The description for the preference category';
+
+
+CREATE TABLE reference.preference_types (
+   code        VARCHAR(30)  NOT NULL,
+   category    VARCHAR(30)  NOT NULL,
+   locale_id   VARCHAR(10)  NOT NULL,
+   sort_index  INTEGER      NOT NULL,
+   name        VARCHAR(50)  NOT NULL,
+   description VARCHAR(200) NOT NULL DEFAULT '',
+
+   PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX preference_types_category_ix ON reference.preference_types(category);
+
+CREATE INDEX preference_types_locale_id_ix ON reference.preference_types(locale_id);
+
+COMMENT ON COLUMN reference.preference_types.code IS 'The code for the preference type';
+
+COMMENT ON COLUMN reference.preference_types.category IS 'The code for the preference category the preference type is associated with';
+
+COMMENT ON COLUMN reference.preference_types.locale_id IS 'The Unicode locale identifier for the preference type';
+
+COMMENT ON COLUMN reference.preference_types.sort_index IS 'The sort index for the preference type';
+
+COMMENT ON COLUMN reference.preference_types.name IS 'The name of the preference type';
+
+COMMENT ON COLUMN reference.preference_types.description IS 'The description for the preference type';
+
+
 CREATE TABLE reference.races (
   code        VARCHAR(10)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
@@ -2650,6 +2701,24 @@ INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, 
  VALUES ('temporary', 'en-ZA', 12, 'person', 12, 'Temporary', 'Temporary Address');
 INSERT INTO reference.physical_address_purposes (code, locale_id, numeric_code, party_types, sort_index, name, description)
   VALUES ('work', 'en-ZA', 13, 'person', 13, 'Work', 'Work Address');
+
+
+
+INSERT INTO reference.preference_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('correspondence', 'en-US', 0, 'Correspondence', 'Correspondence');
+
+
+INSERT INTO reference.preference_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('correspondence', 'en-ZA', 0, 'Correspondence', 'Correspondence');
+
+
+
+INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description)
+  VALUES ('correspondence_language', 'correspondence', 'en-US', 0, 'Correspondence Language', 'Correspondence Language');
+
+
+INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description)
+  VALUES ('correspondence_language', 'correspondence', 'en-ZA', 0, 'Correspondence Language', 'Correspondence Language');
 
 
 

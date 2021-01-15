@@ -58,8 +58,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-// @DiscriminatorValue("0")
-// @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.INTEGER)
 @Table(schema = "party", name = "parties")
 public class Party implements Serializable {
 

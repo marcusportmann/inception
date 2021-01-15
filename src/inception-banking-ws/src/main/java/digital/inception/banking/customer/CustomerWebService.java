@@ -55,9 +55,9 @@ public class CustomerWebService {
    *
    * @param individualCustomer the individual customer
    */
-  @WebMethod(operationName = "CreateIndividualCustomer")
+  @WebMethod(operationName = "CreatePrivateIndividualCustomer")
   public void createCode(
-      @WebParam(name = "IndividualCustomer") @XmlElement(required = true)
+      @WebParam(name = "PrivateIndividualCustomer") @XmlElement(required = true)
           IndividualCustomer individualCustomer)
       throws InvalidArgumentException, DuplicateIndividualCustomerException,
           CustomerServiceException {

@@ -61,7 +61,6 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidOrganization
 @Entity
-// @DiscriminatorValue("1")
 @Table(schema = "party", name = "organizations")
 public class Organization extends Party implements Serializable {
 
@@ -211,9 +210,9 @@ public class Organization extends Party implements Serializable {
    */
   public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
     contactMechanisms.removeIf(
-        contactMechanism ->
-            Objects.equals(contactMechanism.getType(), type)
-                && Objects.equals(contactMechanism.getPurpose(), purpose));
+        existingContactMechanism ->
+            Objects.equals(existingContactMechanism.getType(), type)
+                && Objects.equals(existingContactMechanism.getPurpose(), purpose));
   }
 
   /**
@@ -224,9 +223,9 @@ public class Organization extends Party implements Serializable {
    */
   public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
     physicalAddresses.removeIf(
-        physicalAddress ->
-            Objects.equals(physicalAddress.getType(), type)
-                && Objects.equals(physicalAddress.getPurpose(), purpose));
+        existingPhysicalAddress ->
+            Objects.equals(existingPhysicalAddress.getType(), type)
+                && Objects.equals(existingPhysicalAddress.getPurpose(), purpose));
   }
 
   /**
