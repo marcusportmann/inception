@@ -109,24 +109,24 @@ INSERT INTO security.role_to_group_map (role_code, group_id)
 INSERT INTO security.role_to_group_map (role_code, group_id)
   VALUES ('PasswordResetter', '146c5550-cd3d-42de-8660-7749e1b4df52');
 
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (1, 'Sample Name 1', 'Sample Value 1');
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (2, 'Sample Name 2', 'Sample Value 2');
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (3, 'Sample Name 3', 'Sample Value 3');
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (4, 'Sample Name 4', 'Sample Value 4');
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (5, 'Sample Name 5', 'Sample Value 5');
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (6, 'Sample Name 6', 'Sample Value 6');
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (7, 'Sample Name 7', 'Sample Value 7');
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (8, 'Sample Name 8', 'Sample Value 8');
-INSERT INTO sample.data (id, name, string_value)
-  VALUES (9, 'Sample Name 9', 'Sample Value 9');
+INSERT INTO sample.data (id, string_value)
+  VALUES (1, 'Sample Value 1');
+INSERT INTO sample.data (id, string_value)
+  VALUES (2, 'Sample Value 2');
+INSERT INTO sample.data (id, string_value)
+  VALUES (3, 'Sample Value 3');
+INSERT INTO sample.data (id, string_value)
+  VALUES (4, 'Sample Value 4');
+INSERT INTO sample.data (id, string_value)
+  VALUES (5, 'Sample Value 5');
+INSERT INTO sample.data (id, string_value)
+  VALUES (6, 'Sample Value 6');
+INSERT INTO sample.data (id, string_value)
+  VALUES (7, 'Sample Value 7');
+INSERT INTO sample.data (id, string_value)
+  VALUES (8, 'Sample Value 8');
+INSERT INTO sample.data (id, string_value)
+  VALUES (9, 'Sample Value 9');
 
 INSERT INTO codes.code_categories (id, name, data, created)
   VALUES ('TestCodeCategory01', 'Test Code Category 01', '<codes><code name="name1" value="value1"/></codes>', NOW());
