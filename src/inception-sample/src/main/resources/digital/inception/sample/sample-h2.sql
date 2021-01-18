@@ -318,7 +318,7 @@ INSERT INTO scheduler.jobs (id, name, scheduling_pattern, job_class, enabled, st
 
 INSERT INTO party.parties(id, tenant_id, type, name, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', '204e5b8f-48e7-4354-bd15-753e6543b64d', 2, 'Joe Bloggs', NOW());
-INSERT INTO party.persons(id, title, initials, given_name, surname, preferred_name, gender, race, date_of_birth, home_language, correspondence_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, marriage_type, occupation, residency_status, residential_type, country_of_tax_residence, tax_number_type, tax_number)
+INSERT INTO party.persons(id, title, initials, given_name, surname, preferred_name, gender, race, date_of_birth, home_language, correspondence_language, country_of_birth, country_of_residence, employment_status, employment_type, marital_status, marriage_type, occupation, residency_status, residential_type, countries_of_tax_residence, tax_number_type, tax_number)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', '1', 'J', 'Joe', 'Bloggs', 'Joe', 'M', 'W', '1976-03-07', 'EN', 'EN', 'ZA', 'ZA', 'E', 'F', 'M', '3', '3', 'C', 'O', 'ZA', 'ZAITN', '1234567890');
 INSERT INTO party.identity_documents(person_id, type, number, date_of_issue, country_of_issue, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'ZAIDBOOK', '7603079236083', '2007-08-04', 'ZA', NOW());
