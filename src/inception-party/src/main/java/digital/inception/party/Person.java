@@ -204,6 +204,8 @@ public class Person extends Party implements Serializable {
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
   /** The optional comma-delimited codes for the countries of tax residence for the person. */
+  @JsonIgnore
+  @XmlTransient
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
@@ -499,7 +501,7 @@ public class Person extends Party implements Serializable {
    * @return the optional codes for the countries of tax residence for the person
    */
   @Schema(description = "The optional codes for the countries of tax residence for the person")
-  @JsonProperty(required = true)
+  @JsonProperty
   @XmlElement(name = "CountriesOfTaxResidence")
   public String[] getCountriesOfTaxResidence() {
     return StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence);

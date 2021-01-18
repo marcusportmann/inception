@@ -16,6 +16,7 @@
 
 package digital.inception.party;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -41,6 +42,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
@@ -120,6 +122,8 @@ public class Organization extends Party implements Serializable {
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
   /** The optional comma-delimited codes for the countries of tax residence for the organization. */
+  @JsonIgnore
+  @XmlTransient
   @Size(min = 1, max = 100)
   @Column(table = "organizations", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
@@ -213,7 +217,7 @@ public class Organization extends Party implements Serializable {
    */
   @Schema(
       description = "The optional codes for the countries of tax residence for the organization")
-  @JsonProperty(required = true)
+  @JsonProperty
   @XmlElement(name = "CountriesOfTaxResidence")
   public String[] getCountriesOfTaxResidence() {
     return StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence);

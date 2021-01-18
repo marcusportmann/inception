@@ -174,10 +174,9 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(
       description =
-          "The optional codes for the countries of tax residence for the individual customer",
+          "The codes for the countries of tax residence for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @XmlElement(name = "CountriesOfTaxResidence", required = true)
   public String[] getCountriesOfTaxResidence() {
     return super.getCountriesOfTaxResidence();
   }
@@ -646,10 +645,10 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the optional codes for the countries of tax residence for the individual customer.
+   * Set the codes for the countries of tax residence for the individual customer.
    *
-   * @param countriesOfTaxResidence the optional codes for the countries of tax residence for the
-   *     individual customer
+   * @param countriesOfTaxResidence the codes for the countries of tax residence for the individual
+   *     customer
    */
   @Override
   public void setCountriesOfTaxResidence(String[] countriesOfTaxResidence) {
