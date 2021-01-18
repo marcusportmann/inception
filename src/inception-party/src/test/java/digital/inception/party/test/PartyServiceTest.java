@@ -673,7 +673,7 @@ public class PartyServiceTest {
     Person person = getTestBasicPersonDetails();
 
     PhysicalAddress buildingAddress =
-        new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressPurpose.RESIDENTIAL);
+        new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressPurpose.BILLING);
     buildingAddress.setBuildingName("Burj Khalifa");
     buildingAddress.setBuildingFloor("108");
     buildingAddress.setBuildingRoom("Room 1081");
@@ -686,7 +686,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(buildingAddress);
 
     PhysicalAddress complexAddress =
-        new PhysicalAddress(PhysicalAddressType.COMPLEX, PhysicalAddressPurpose.RESIDENTIAL);
+        new PhysicalAddress(PhysicalAddressType.COMPLEX, PhysicalAddressPurpose.CORRESPONDENCE);
     complexAddress.setComplexName("Secret Hideaway");
     complexAddress.setComplexUnitNumber("10");
     complexAddress.setStreetNumber("56");
@@ -698,7 +698,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(complexAddress);
 
     PhysicalAddress farmAddress =
-        new PhysicalAddress(PhysicalAddressType.FARM, PhysicalAddressPurpose.RESIDENTIAL);
+        new PhysicalAddress(PhysicalAddressType.FARM, PhysicalAddressPurpose.DELIVERY);
     farmAddress.setFarmNumber("S935");
     farmAddress.setFarmName("My Geluk");
     farmAddress.setFarmDescription("My Geluk");
@@ -709,7 +709,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(farmAddress);
 
     PhysicalAddress internationalAddress =
-        new PhysicalAddress(PhysicalAddressType.INTERNATIONAL, PhysicalAddressPurpose.RESIDENTIAL);
+        new PhysicalAddress(PhysicalAddressType.INTERNATIONAL, PhysicalAddressPurpose.HOME);
     internationalAddress.setLine1("Address Line 1");
     internationalAddress.setLine2("Address Line 2");
     internationalAddress.setLine3("Address Line 3");
@@ -729,7 +729,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(siteAddress);
 
     PhysicalAddress streetAddress =
-        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.WORK);
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.TEMPORARY);
     streetAddress.setStreetNumber("1");
     streetAddress.setStreetName("Discovery Place");
     streetAddress.setSuburb("Sandhurst");
@@ -740,7 +740,7 @@ public class PartyServiceTest {
     person.addPhysicalAddress(streetAddress);
 
     PhysicalAddress unstructuredAddress =
-        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.RESIDENTIAL);
+        new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.WORK);
     unstructuredAddress.setLine1("Address Line 1");
     unstructuredAddress.setLine2("Address Line 2");
     unstructuredAddress.setLine3("Address Line 3");

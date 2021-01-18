@@ -158,9 +158,7 @@ public class Organization extends Party implements Serializable {
   public void addPhysicalAddress(PhysicalAddress physicalAddress) {
     physicalAddresses.removeIf(
         existingPhysicalAddress ->
-            Objects.equals(existingPhysicalAddress.getType(), physicalAddress.getType())
-                && Objects.equals(
-                    existingPhysicalAddress.getPurpose(), physicalAddress.getPurpose()));
+            Objects.equals(existingPhysicalAddress.getPurpose(), physicalAddress.getPurpose()));
 
     physicalAddress.setParty(this);
 
@@ -357,6 +355,7 @@ public class Organization extends Party implements Serializable {
    * @param countryOfTaxResidence the optional code for the single country of tax residence for the
    *     organization
    */
+  @JsonIgnore
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
     this.countriesOfTaxResidence = countryOfTaxResidence;
   }

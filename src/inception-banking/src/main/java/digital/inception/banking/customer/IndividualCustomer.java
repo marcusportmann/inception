@@ -682,6 +682,7 @@ public class IndividualCustomer extends Person implements Serializable {
    * @param countryOfTaxResidence the code for the single country of tax residence for the
    *     individual customer
    */
+  @JsonIgnore
   @Override
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
     super.setCountryOfTaxResidence(countryOfTaxResidence);

@@ -35,9 +35,6 @@ public class PhysicalAddressId implements Serializable {
   /** The physical address purpose. */
   private Integer purpose;
 
-  /** The physical address type. */
-  private Integer type;
-
   /** Constructs a new <code>PhysicalAddressId</code>. */
   public PhysicalAddressId() {}
 
@@ -64,9 +61,7 @@ public class PhysicalAddressId implements Serializable {
 
     PhysicalAddressId other = (PhysicalAddressId) object;
 
-    return Objects.equals(party, other.party)
-        && Objects.equals(type, other.type)
-        && Objects.equals(purpose, other.purpose);
+    return Objects.equals(party, other.party) && Objects.equals(purpose, other.purpose);
   }
 
   /**
@@ -76,8 +71,6 @@ public class PhysicalAddressId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode())
-        + ((type == null) ? 0 : type.hashCode())
-        + ((purpose == null) ? 0 : purpose.hashCode());
+    return ((party == null) ? 0 : party.hashCode()) + ((purpose == null) ? 0 : purpose.hashCode());
   }
 }

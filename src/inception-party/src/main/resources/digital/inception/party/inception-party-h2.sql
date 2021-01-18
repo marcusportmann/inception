@@ -222,7 +222,7 @@ CREATE TABLE party.physical_addresses (
   type                INTEGER      NOT NULL,
   updated             TIMESTAMP,
 
-  PRIMARY KEY (party_id, type, purpose),
+  PRIMARY KEY (party_id, purpose),
   CONSTRAINT physical_addresses_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
