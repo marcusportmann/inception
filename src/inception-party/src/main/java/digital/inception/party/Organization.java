@@ -29,17 +29,20 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <code>Organization</code> class holds the information for an organization, which is an
@@ -52,12 +55,20 @@ import javax.xml.bind.annotation.XmlType;
         "An organised group of people with a particular purpose, such as a business or government department")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"type"})
-@JsonPropertyOrder({"id", "tenantId", "name", "contactMechanisms", "physicalAddresses"})
+@JsonPropertyOrder({
+  "id",
+  "tenantId",
+  "name",
+  "contactMechanisms",
+  "physicalAddresses",
+  "countriesOfTaxResidence",
+  "taxNumbers"
+})
 @XmlRootElement(name = "Organization", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Organization",
     namespace = "http://party.inception.digital",
-    propOrder = {"contactMechanisms", "physicalAddresses"})
+    propOrder = {"contactMechanisms", "physicalAddresses", "countriesOfTaxResidence", "taxNumbers"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidOrganization
 @Entity
@@ -94,6 +105,25 @@ public class Organization extends Party implements Serializable {
       orphanRemoval = true)
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
+  /** The tax numbers for the organization. */
+  @Schema(description = "The tax numbers for the organization")
+  @JsonProperty
+  @JsonManagedReference("taxNumberReference")
+  @XmlElementWrapper(name = "TaxNumbers")
+  @XmlElement(name = "TaxNumber")
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<TaxNumber> taxNumbers = new HashSet<>();
+
+  /** The optional comma-delimited codes for the countries of tax residence for the organization. */
+  @Size(min = 1, max = 100)
+  @Column(table = "organizations", name = "countries_of_tax_residence", length = 100)
+  private String countriesOfTaxResidence;
+
   /** Constructs a new <code>Organization</code>. */
   public Organization() {
     super(PartyType.ORGANIZATION);
@@ -109,7 +139,7 @@ public class Organization extends Party implements Serializable {
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
                 && Objects.equals(
-                existingContactMechanism.getPurpose(), contactMechanism.getPurpose()));
+                    existingContactMechanism.getPurpose(), contactMechanism.getPurpose()));
 
     contactMechanism.setParty(this);
 
@@ -126,11 +156,25 @@ public class Organization extends Party implements Serializable {
         existingPhysicalAddress ->
             Objects.equals(existingPhysicalAddress.getType(), physicalAddress.getType())
                 && Objects.equals(
-                existingPhysicalAddress.getPurpose(), physicalAddress.getPurpose()));
+                    existingPhysicalAddress.getPurpose(), physicalAddress.getPurpose()));
 
     physicalAddress.setParty(this);
 
     physicalAddresses.add(physicalAddress);
+  }
+
+  /**
+   * Add the tax number for the organization.
+   *
+   * @param taxNumber the tax number
+   */
+  public void addTaxNumber(TaxNumber taxNumber) {
+    taxNumbers.removeIf(
+        existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), taxNumber.getType()));
+
+    taxNumber.setParty(this);
+
+    taxNumbers.add(taxNumber);
   }
 
   /**
@@ -163,13 +207,24 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
+   * Returns the optional codes for the countries of tax residence for the organization.
+   *
+   * @return the optional codes for the countries of tax residence for the organization
+   */
+  @Schema(
+      description = "The optional codes for the countries of tax residence for the organization")
+  @JsonProperty(required = true)
+  @XmlElement(name = "CountriesOfTaxResidence")
+  public String[] getCountriesOfTaxResidence() {
+    return StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence);
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) for the organization.
    *
    * @return the Universally Unique Identifier (UUID) for the organization
    */
-  @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the organization")
+  @Schema(description = "The Universally Unique Identifier (UUID) for the organization")
   @Override
   public UUID getId() {
     return super.getId();
@@ -215,6 +270,29 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
+   * Retrieve the tax number with the specified type for the organization.
+   *
+   * @param type the tax number type
+   * @return the tax number with the specified type for the organization or <code>null</code> if the
+   *     tax number could not be found
+   */
+  public TaxNumber getTaxNumber(String type) {
+    return taxNumbers.stream()
+        .filter(taxNumber -> Objects.equals(taxNumber.getType(), type))
+        .findFirst()
+        .get();
+  }
+
+  /**
+   * Returns the tax numbers for the organization.
+   *
+   * @return the tax numbers for the organization
+   */
+  public Set<TaxNumber> getTaxNumbers() {
+    return taxNumbers;
+  }
+
+  /**
    * Remove the contact mechanism with the specified type and purpose for the organization.
    *
    * @param type the contact mechanism type
@@ -241,6 +319,15 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
+   * Remove the tax number with the specified type for the organization.
+   *
+   * @param type the tax number type
+   */
+  public void removeTaxNumber(String type) {
+    taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), type));
+  }
+
+  /**
    * Set the contact mechanisms for the organization.
    *
    * @param contactMechanisms the contact mechanisms for the organization
@@ -248,6 +335,26 @@ public class Organization extends Party implements Serializable {
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
     this.contactMechanisms.clear();
     this.contactMechanisms.addAll(contactMechanisms);
+  }
+
+  /**
+   * Set the optional codes for the countries of tax residence for the organization.
+   *
+   * @param countriesOfTaxResidence the optional codes for the countries of tax residence for the
+   *     organization
+   */
+  public void setCountriesOfTaxResidence(String[] countriesOfTaxResidence) {
+    this.countriesOfTaxResidence = StringUtils.arrayToDelimitedString(countriesOfTaxResidence, ",");
+  }
+
+  /**
+   * Set the optional code for the single country of tax residence for the organization.
+   *
+   * @param countryOfTaxResidence the optional code for the single country of tax residence for the
+   *     organization
+   */
+  public void setCountryOfTaxResidence(String countryOfTaxResidence) {
+    this.countriesOfTaxResidence = countryOfTaxResidence;
   }
 
   /**
@@ -278,5 +385,15 @@ public class Organization extends Party implements Serializable {
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
     this.physicalAddresses.clear();
     this.physicalAddresses.addAll(physicalAddresses);
+  }
+
+  /**
+   * Set the tax numbers for the organization.
+   *
+   * @param taxNumbers the tax numbers for the organization
+   */
+  public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
+    this.taxNumbers.clear();
+    this.taxNumbers.addAll(taxNumbers);
   }
 }

@@ -41,8 +41,7 @@ export class Tenant {
   /**
    * Constructs a new Tenant.
    *
-   * @param id     The Universally Unique Identifier (UUID) for the
-   *               tenant.
+   * @param id     The Universally Unique Identifier (UUID) for the tenant.
    * @param name   The name of the tenant.
    * @param status The status for the tenant.
    */

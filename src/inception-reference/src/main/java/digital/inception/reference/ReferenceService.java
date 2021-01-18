@@ -82,6 +82,9 @@ public class ReferenceService implements IReferenceService {
   /** The Physical Address Type Repository. */
   private final PhysicalAddressTypeRepository physicalAddressTypeRepository;
 
+  /** The Preference Type Category Repository. */
+  private final PreferenceTypeCategoryRepository preferenceTypeCategoryRepository;
+
   /** The Preference Type Repository */
   private final PreferenceTypeRepository preferenceTypeRepository;
 
@@ -136,6 +139,7 @@ public class ReferenceService implements IReferenceService {
    * @param occupationRepository the Occupation Repository
    * @param physicalAddressPurposeRepository the Physical Address Purpose Repository
    * @param physicalAddressTypeRepository the Physical Address Type Repository
+   * @param preferenceTypeCategoryRepository the Preference Type Category Repository
    * @param preferenceTypeRepository the Preference Type Repository
    * @param raceRepository the Race Repository
    * @param regionRepository the Region Repository
@@ -164,6 +168,7 @@ public class ReferenceService implements IReferenceService {
       OccupationRepository occupationRepository,
       PhysicalAddressPurposeRepository physicalAddressPurposeRepository,
       PhysicalAddressTypeRepository physicalAddressTypeRepository,
+      PreferenceTypeCategoryRepository preferenceTypeCategoryRepository,
       PreferenceTypeRepository preferenceTypeRepository,
       RaceRepository raceRepository,
       RegionRepository regionRepository,
@@ -190,6 +195,7 @@ public class ReferenceService implements IReferenceService {
     this.occupationRepository = occupationRepository;
     this.physicalAddressPurposeRepository = physicalAddressPurposeRepository;
     this.physicalAddressTypeRepository = physicalAddressTypeRepository;
+    this.preferenceTypeCategoryRepository = preferenceTypeCategoryRepository;
     this.preferenceTypeRepository = preferenceTypeRepository;
     this.raceRepository = raceRepository;
     this.regionRepository = regionRepository;
@@ -648,6 +654,41 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the physical address types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the preference type categories.
+   *
+   * @return the preference type categories
+   */
+  @Override
+  public List<PreferenceTypeCategory> getPreferenceTypeCategories()
+      throws ReferenceServiceException {
+    return getPreferenceTypeCategories(null);
+  }
+
+  /**
+   * Retrieve the preference type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     categories for or <code>null</code> to retrieve the preference type categories for all
+   *     locales
+   * @return the preference type categories
+   */
+  @Override
+  public List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return preferenceTypeCategoryRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return preferenceTypeCategoryRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the preference type categories", e);
     }
   }
 

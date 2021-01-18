@@ -18,6 +18,7 @@ package digital.inception.party.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -40,6 +41,7 @@ import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
+import digital.inception.party.TaxNumber;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
@@ -148,6 +150,9 @@ public class PartyServiceTest {
 
     person.addIdentityDocument(
         new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
+
+    person.setCountryOfTaxResidence("ZA");
+    person.addTaxNumber(new TaxNumber("ZA", "ZAITN", "123456789"));
 
     person.addContactMechanism(
         new ContactMechanism(
@@ -594,6 +599,8 @@ public class PartyServiceTest {
 
     organization.setName(organization.getName() + " Updated");
 
+    organization.setCountriesOfTaxResidence(new String[] {"UK", "ZA"});
+
     organization.addContactMechanism(
         new ContactMechanism(
             ContactMechanismType.PHONE_NUMBER,
@@ -844,8 +851,11 @@ public class PartyServiceTest {
     person.setResidentialType("O");
     person.setSurname(person.getSurname() + " Updated");
     person.setTitle("5");
-    person.setTaxNumber("123456789");
-    person.setTaxNumberType("ZAITN");
+
+    person.setCountryOfTaxResidence("UK");
+    person.addTaxNumber(new TaxNumber("UK", "UKUTN", "987654321"));
+
+    person.removeTaxNumber("ZAITN");
 
     person.addIdentityDocument(
         new IdentityDocument(
@@ -894,6 +904,10 @@ public class PartyServiceTest {
   }
 
   private void compareOrganizations(Organization organization1, Organization organization2) {
+    assertArrayEquals(
+        "The countries of tax residence values for the two organizations do not match",
+        organization1.getCountriesOfTaxResidence(),
+        organization2.getCountriesOfTaxResidence());
     assertEquals(
         "The ID values for the two organizations do not match",
         organization1.getId(),
@@ -985,6 +999,10 @@ public class PartyServiceTest {
   }
 
   private void comparePersons(Person person1, Person person2) {
+    assertArrayEquals(
+        "The countries of tax residence values for the two persons do not match",
+        person1.getCountriesOfTaxResidence(),
+        person2.getCountriesOfTaxResidence());
     assertEquals(
         "The country of birth values for the two persons do not match",
         person1.getCountryOfBirth(),
@@ -993,10 +1011,6 @@ public class PartyServiceTest {
         "The country of residence values for the two persons do not match",
         person1.getCountryOfResidence(),
         person2.getCountryOfResidence());
-    assertEquals(
-        "The country of tax residence values for the two persons do not match",
-        person1.getCountryOfTaxResidence(),
-        person2.getCountryOfTaxResidence());
     assertEquals(
         "The date of birth values for the two persons do not match",
         person1.getDateOfBirth(),
@@ -1072,14 +1086,6 @@ public class PartyServiceTest {
         person1.getSurname(),
         person2.getSurname());
     assertEquals(
-        "The tax number values for the two persons do not match",
-        person1.getTaxNumber(),
-        person2.getTaxNumber());
-    assertEquals(
-        "The tax number type values for the two persons do not match",
-        person1.getTaxNumberType(),
-        person2.getTaxNumberType());
-    assertEquals(
         "The tenant ID values for the two persons do not match",
         person1.getTenantId(),
         person2.getTenantId());
@@ -1087,6 +1093,7 @@ public class PartyServiceTest {
         "The title values for the two persons do not match",
         person1.getTitle(),
         person2.getTitle());
+
     assertEquals(
         "The number of identity documents for the two persons do not match",
         person1.getIdentityDocuments().size(),
@@ -1126,6 +1133,35 @@ public class PartyServiceTest {
                 + ")("
                 + person1IdentityDocument.getDateOfIssue()
                 + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of tax numbers for the two persons do not match",
+        person1.getTaxNumbers().size(),
+        person2.getTaxNumbers().size());
+
+    for (TaxNumber person1TaxNumber : person1.getTaxNumbers()) {
+      boolean foundTaxNumber = false;
+
+      for (TaxNumber person2TaxNumber : person2.getTaxNumbers()) {
+        if (person1TaxNumber.getType().equals(person2TaxNumber.getType())) {
+
+          assertEquals(
+              "The country of issue for the two tax numbers do not match",
+              person1TaxNumber.getCountryOfIssue(),
+              person2TaxNumber.getCountryOfIssue());
+          assertEquals(
+              "The numbers for the two tax numbers do not match",
+              person1TaxNumber.getNumber(),
+              person2TaxNumber.getNumber());
+
+          foundTaxNumber = true;
+        }
+      }
+
+      if (!foundTaxNumber) {
+        fail("Failed to find the tax number (" + person1TaxNumber.getType() + ")");
       }
     }
 

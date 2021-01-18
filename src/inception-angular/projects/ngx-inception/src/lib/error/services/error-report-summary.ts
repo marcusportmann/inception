@@ -42,8 +42,8 @@ export class ErrorReportSummary {
   description: string;
 
   /**
-   * The optional Universally Unique Identifier (UUID) for the device the
-   * error report originated from.
+   * The optional Universally Unique Identifier (UUID) for the device the error report originated
+   * from.
    */
   deviceId?: string;
 

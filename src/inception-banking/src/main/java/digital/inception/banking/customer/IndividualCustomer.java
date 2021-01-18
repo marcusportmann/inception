@@ -15,6 +15,7 @@ import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
+import digital.inception.party.TaxNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -64,13 +65,12 @@ import javax.xml.bind.annotation.XmlType;
   "surname",
   "tenantId",
   "title",
-  "countryOfTaxResidence",
-  "taxNumberType",
-  "taxNumber",
   "contactMechanisms",
   "identityDocuments",
   "physicalAddresses",
-  "preferences"
+  "preferences",
+  "countriesOfTaxResidence",
+  "taxNumbers"
 })
 @XmlRootElement(
     name = "IndividualCustomer",
@@ -132,6 +132,16 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
+   * Add the tax number for the individual customer.
+   *
+   * @param taxNumber the tax number
+   */
+  @Override
+  public void addTaxNumber(TaxNumber taxNumber) {
+    super.addTaxNumber(taxNumber);
+  }
+
+  /**
    * Retrieve the contact mechanism with the specified type and purpose for the individual customer.
    *
    * @param type the contact mechanism type
@@ -155,6 +165,21 @@ public class IndividualCustomer extends Person implements Serializable {
   @Override
   public Set<ContactMechanism> getContactMechanisms() {
     return super.getContactMechanisms();
+  }
+
+  /**
+   * Returns the codes for the countries of tax residence for the individual customer.
+   *
+   * @return the codes for the countries of tax residence for the individual customer
+   */
+  @Schema(
+      description =
+          "The optional codes for the countries of tax residence for the individual customer",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "CountriesOfTaxResidence", required = true)
+  public String[] getCountriesOfTaxResidence() {
+    return super.getCountriesOfTaxResidence();
   }
 
   /**
@@ -183,19 +208,6 @@ public class IndividualCustomer extends Person implements Serializable {
   @Override
   public String getCountryOfResidence() {
     return super.getCountryOfResidence();
-  }
-
-  /**
-   * Returns the optional code for the country of tax residence for the individual customer.
-   *
-   * @return the optional code for the country of tax residence for the individual customer
-   */
-  @Schema(
-      description =
-          "The optional code for the country of tax residence for the individual customer")
-  @Override
-  public String getCountryOfTaxResidence() {
-    return super.getCountryOfTaxResidence();
   }
 
   /**
@@ -523,25 +535,26 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Returns the optional tax number for the individual customer.
+   * Retrieve the tax number with the specified type for the individual customer.
    *
-   * @return the optional tax number for the individual customer
+   * @param type the code for the tax number type
+   * @return the tax number with the specified type for the individual customer or <code>null</code>
+   *     if the tax number could not be found
    */
-  @Schema(description = "The optional tax number for the individual customer")
   @Override
-  public String getTaxNumber() {
-    return super.getTaxNumber();
+  public TaxNumber getTaxNumber(String type) {
+    return super.getTaxNumber(type);
   }
 
   /**
-   * Returns the optional code for the tax number type for the individual customer.
+   * Returns the tax numbers for the individual customer.
    *
-   * @return the optional code for the tax number type for the individual customer
+   * @return the tax numbers for the individual customer
    */
-  @Schema(description = "The optional code for the tax number type for the individual customer")
+  @Schema(description = "The tax numbers for the individual customer")
   @Override
-  public String getTaxNumberType() {
-    return super.getTaxNumberType();
+  public Set<TaxNumber> getTaxNumbers() {
+    return super.getTaxNumbers();
   }
 
   /**
@@ -613,6 +626,16 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
+   * Remove the tax number with the specified type for the individual customer.
+   *
+   * @param type the code for the tax number type
+   */
+  @Override
+  public void removeTaxNumber(String type) {
+    super.removeTaxNumber(type);
+  }
+
+  /**
    * Set the contact mechanisms for the individual customer.
    *
    * @param contactMechanisms the contact mechanisms for the individual customer
@@ -620,6 +643,17 @@ public class IndividualCustomer extends Person implements Serializable {
   @Override
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
     super.setContactMechanisms(contactMechanisms);
+  }
+
+  /**
+   * Set the optional codes for the countries of tax residence for the individual customer.
+   *
+   * @param countriesOfTaxResidence the optional codes for the countries of tax residence for the
+   *     individual customer
+   */
+  @Override
+  public void setCountriesOfTaxResidence(String[] countriesOfTaxResidence) {
+    super.setCountriesOfTaxResidence(countriesOfTaxResidence);
   }
 
   /**
@@ -644,9 +678,9 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the optional code for the country of tax residence for the individual customer.
+   * Set the code for the single country of tax residence for the individual customer.
    *
-   * @param countryOfTaxResidence the optional code for the country of tax residence for the
+   * @param countryOfTaxResidence the code for the single country of tax residence for the
    *     individual customer
    */
   @Override
@@ -908,24 +942,13 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the optional tax number for the individual customer.
+   * Set the tax numbers for the individual customer.
    *
-   * @param taxNumber the optional tax number for the individual customer
+   * @param taxNumbers the tax numbers for the individual customer
    */
   @Override
-  public void setTaxNumber(String taxNumber) {
-    super.setTaxNumber(taxNumber);
-  }
-
-  /**
-   * Set the optional code for the tax number type for the individual customer.
-   *
-   * @param taxNumberType the optional code for the tax number type for the private individual
-   *     customer
-   */
-  @Override
-  public void setTaxNumberType(String taxNumberType) {
-    super.setTaxNumberType(taxNumberType);
+  public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
+    super.setTaxNumbers(taxNumbers);
   }
 
   /**

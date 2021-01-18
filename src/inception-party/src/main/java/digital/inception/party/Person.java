@@ -46,6 +46,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <code>Person</code> class holds the information for a person.
@@ -84,13 +85,12 @@ import javax.xml.bind.annotation.XmlType;
   "surname",
   "tenantId",
   "title",
-  "countryOfTaxResidence",
-  "taxNumberType",
-  "taxNumber",
   "contactMechanisms",
   "identityDocuments",
   "physicalAddresses",
-  "preferences"
+  "preferences",
+  "countriesOfTaxResidence",
+  "taxNumbers"
 })
 @XmlRootElement(name = "Person", namespace = "http://party.inception.digital")
 @XmlType(
@@ -118,13 +118,12 @@ import javax.xml.bind.annotation.XmlType;
       "residentialType",
       "surname",
       "title",
-      "countryOfTaxResidence",
-      "taxNumberType",
-      "taxNumber",
       "contactMechanisms",
       "identityDocuments",
       "physicalAddresses",
-      "preferences"
+      "preferences",
+      "countriesOfTaxResidence",
+      "taxNumbers"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidPerson
@@ -190,6 +189,25 @@ public class Person extends Party implements Serializable {
       orphanRemoval = true)
   private final Set<Preference> preferences = new HashSet<>();
 
+  /** The tax numbers for the person. */
+  @Schema(description = "The tax numbers for the person")
+  @JsonProperty
+  @JsonManagedReference("taxNumberReference")
+  @XmlElementWrapper(name = "TaxNumbers")
+  @XmlElement(name = "TaxNumber")
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<TaxNumber> taxNumbers = new HashSet<>();
+
+  /** The optional comma-delimited codes for the countries of tax residence for the person. */
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "countries_of_tax_residence", length = 100)
+  private String countriesOfTaxResidence;
+
   /** The optional code for the country of birth for the person. */
   @Schema(description = "The optional code for the country of birth for the person")
   @JsonProperty
@@ -205,14 +223,6 @@ public class Person extends Party implements Serializable {
   @Size(min = 1, max = 10)
   @Column(table = "persons", name = "country_of_residence", length = 10)
   private String countryOfResidence;
-
-  /** The optional code for the country of tax residence for the person. */
-  @Schema(description = "The optional code for the country of tax residence for the person")
-  @JsonProperty
-  @XmlElement(name = "CountryOfTaxResidence")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "country_of_tax_residence", length = 10)
-  private String countryOfTaxResidence;
 
   /** The optional date of birth for the person. */
   @Schema(description = "The optional date of birth for the person")
@@ -365,22 +375,6 @@ public class Person extends Party implements Serializable {
   @Column(table = "persons", name = "surname", length = 100)
   private String surname;
 
-  /** The optional tax number for the person. */
-  @Schema(description = "The optional tax number for the person")
-  @JsonProperty
-  @XmlElement(name = "TaxNumber")
-  @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "tax_number", length = 30)
-  private String taxNumber;
-
-  /** The optional code for the tax number type for the person. */
-  @Schema(description = "The optional code for the tax number type for the person")
-  @JsonProperty
-  @XmlElement(name = "TaxNumberType")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "tax_number_type")
-  private String taxNumberType;
-
   /** The optional code for the title for the person. */
   @Schema(description = "The optional code for the title for the person")
   @JsonProperty
@@ -458,6 +452,20 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Add the tax number for the person.
+   *
+   * @param taxNumber the tax number
+   */
+  public void addTaxNumber(TaxNumber taxNumber) {
+    taxNumbers.removeIf(
+        existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), taxNumber.getType()));
+
+    taxNumber.setParty(this);
+
+    taxNumbers.add(taxNumber);
+  }
+
+  /**
    * Retrieve the contact mechanism with the specified type and purpose for the person.
    *
    * @param type the contact mechanism type
@@ -486,6 +494,18 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Returns the optional codes for the countries of tax residence for the person.
+   *
+   * @return the optional codes for the countries of tax residence for the person
+   */
+  @Schema(description = "The optional codes for the countries of tax residence for the person")
+  @JsonProperty(required = true)
+  @XmlElement(name = "CountriesOfTaxResidence")
+  public String[] getCountriesOfTaxResidence() {
+    return StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence);
+  }
+
+  /**
    * Returns the optional code for the country of birth for the person.
    *
    * @return the optional code for the country of birth for the person
@@ -501,15 +521,6 @@ public class Person extends Party implements Serializable {
    */
   public String getCountryOfResidence() {
     return countryOfResidence;
-  }
-
-  /**
-   * Returns the optional code for the country of tax residence for the person.
-   *
-   * @return the optional code for the country of tax residence for the person
-   */
-  public String getCountryOfTaxResidence() {
-    return countryOfTaxResidence;
   }
 
   /**
@@ -753,21 +764,26 @@ public class Person extends Party implements Serializable {
   }
 
   /**
-   * Returns the optional tax number for the person.
+   * Retrieve the tax number with the specified type for the person.
    *
-   * @return the optional tax number for the person
+   * @param type the code for the tax number type
+   * @return the tax number with the specified type for the person or <code>null</code> if the tax
+   *     number could not be found
    */
-  public String getTaxNumber() {
-    return taxNumber;
+  public TaxNumber getTaxNumber(String type) {
+    return taxNumbers.stream()
+        .filter(taxNumber -> Objects.equals(taxNumber.getType(), type))
+        .findFirst()
+        .get();
   }
 
   /**
-   * Returns the optional code for the tax number type for the person.
+   * Returns the tax numbers for the person.
    *
-   * @return the optional code for the tax number type for the person
+   * @return the tax numbers for the person
    */
-  public String getTaxNumberType() {
-    return taxNumberType;
+  public Set<TaxNumber> getTaxNumbers() {
+    return taxNumbers;
   }
 
   /**
@@ -849,6 +865,15 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Remove the tax number with the specified type for the person.
+   *
+   * @param type the tax number type
+   */
+  public void removeTaxNumber(String type) {
+    taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), type));
+  }
+
+  /**
    * Set the contact mechanisms for the person.
    *
    * @param contactMechanisms the contact mechanisms for the person
@@ -856,6 +881,16 @@ public class Person extends Party implements Serializable {
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
     this.contactMechanisms.clear();
     this.contactMechanisms.addAll(contactMechanisms);
+  }
+
+  /**
+   * Set the optional codes for the countries of tax residence for the person.
+   *
+   * @param countriesOfTaxResidence the optional codes for the countries of tax residence for the
+   *     person
+   */
+  public void setCountriesOfTaxResidence(String[] countriesOfTaxResidence) {
+    this.countriesOfTaxResidence = StringUtils.arrayToDelimitedString(countriesOfTaxResidence, ",");
   }
 
   /**
@@ -877,12 +912,13 @@ public class Person extends Party implements Serializable {
   }
 
   /**
-   * Set the optional code for the country of tax residence for the person.
+   * Set the optional code for the single country of tax residence for the person.
    *
-   * @param countryOfTaxResidence the optional code for the country of tax residence for the person
+   * @param countryOfTaxResidence the optional code for the single country of tax residence for the
+   *     person
    */
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
-    this.countryOfTaxResidence = countryOfTaxResidence;
+    this.countriesOfTaxResidence = countryOfTaxResidence;
   }
 
   /**
@@ -1107,21 +1143,13 @@ public class Person extends Party implements Serializable {
   }
 
   /**
-   * Set the optional tax number for the person.
+   * Set the tax numbers for the person.
    *
-   * @param taxNumber the optional tax number for the person
+   * @param taxNumbers the tax numbers for the person
    */
-  public void setTaxNumber(String taxNumber) {
-    this.taxNumber = taxNumber;
-  }
-
-  /**
-   * Set the optional code for the tax number type for the person.
-   *
-   * @param taxNumberType the optional code for the tax number type for the person
-   */
-  public void setTaxNumberType(String taxNumberType) {
-    this.taxNumberType = taxNumberType;
+  public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
+    this.taxNumbers.clear();
+    this.taxNumbers.addAll(taxNumbers);
   }
 
   /**

@@ -16,6 +16,7 @@
 
 package digital.inception.banking.customer.test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -30,6 +31,7 @@ import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
+import digital.inception.party.TaxNumber;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
@@ -105,6 +107,9 @@ public class CustomerServiceTest {
 
     individualCustomer.addIdentityDocument(
         new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
+
+    individualCustomer.setCountryOfTaxResidence("ZA");
+    individualCustomer.addTaxNumber(new TaxNumber("ZA", "ZAITN", "123456789"));
 
     individualCustomer.addContactMechanism(
         new ContactMechanism(
@@ -184,10 +189,10 @@ public class CustomerServiceTest {
         "The country of residence values for the two individual customers do not match",
         individualCustomer1.getCountryOfResidence(),
         individualCustomer2.getCountryOfResidence());
-    assertEquals(
-        "The country of tax residence values for the two individual customers do not match",
-        individualCustomer1.getCountryOfTaxResidence(),
-        individualCustomer2.getCountryOfTaxResidence());
+    assertArrayEquals(
+        "The countries of tax residence values for the two individual customers do not match",
+        individualCustomer1.getCountriesOfTaxResidence(),
+        individualCustomer2.getCountriesOfTaxResidence());
     assertEquals(
         "The date of birth values for the two individual customers do not match",
         individualCustomer1.getDateOfBirth(),
@@ -273,14 +278,6 @@ public class CustomerServiceTest {
         individualCustomer1.getSurname(),
         individualCustomer2.getSurname());
     assertEquals(
-        "The tax number values for the two individual customers do not match",
-        individualCustomer1.getTaxNumber(),
-        individualCustomer2.getTaxNumber());
-    assertEquals(
-        "The tax number type values for the two individual customers do not match",
-        individualCustomer1.getTaxNumberType(),
-        individualCustomer2.getTaxNumberType());
-    assertEquals(
         "The tenant ID values for the two individual customers do not match",
         individualCustomer1.getTenantId(),
         individualCustomer2.getTenantId());
@@ -288,6 +285,7 @@ public class CustomerServiceTest {
         "The title values for the two individual customers do not match",
         individualCustomer1.getTitle(),
         individualCustomer2.getTitle());
+    
     assertEquals(
         "The number of identity documents for the two individual customers do not match",
         individualCustomer1.getIdentityDocuments().size(),
@@ -333,6 +331,39 @@ public class CustomerServiceTest {
                 + ")");
       }
     }
+
+    assertEquals(
+        "The number of tax numbers for the two individual customers do not match",
+        individualCustomer1.getTaxNumbers().size(),
+        individualCustomer2.getTaxNumbers().size());
+
+    for (TaxNumber individualCustomer1TaxNumber : individualCustomer1.getTaxNumbers()) {
+      boolean foundTaxNumber = false;
+
+      for (TaxNumber individualCustomer2TaxNumber : individualCustomer2.getTaxNumbers()) {
+        if (individualCustomer1TaxNumber.getType().equals(individualCustomer2TaxNumber.getType())) {
+
+          assertEquals(
+              "The country of issue for the two tax numbers do not match",
+              individualCustomer1TaxNumber.getCountryOfIssue(),
+              individualCustomer2TaxNumber.getCountryOfIssue());
+          assertEquals(
+              "The numbers for the two tax numbers do not match",
+              individualCustomer1TaxNumber.getNumber(),
+              individualCustomer2TaxNumber.getNumber());
+
+          foundTaxNumber = true;
+        }
+      }
+
+      if (!foundTaxNumber) {
+        fail(
+            "Failed to find the tax number ("
+                + individualCustomer1TaxNumber.getType()
+                + ")");
+      }
+    }
+
 
     assertEquals(
         "The number of contact mechanisms for the two individual customers do not match",

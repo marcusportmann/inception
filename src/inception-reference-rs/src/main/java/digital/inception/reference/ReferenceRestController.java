@@ -608,6 +608,47 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
+   * Retrieve the preference type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     categories for or <code>null</code> to retrieve the preference type categories for all
+   *     locales
+   * @return the preference type categories
+   */
+  @Operation(
+      summary = "Retrieve the preference type categories",
+      description = "Retrieve the preference type categories")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/preference-type-categories",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<PreferenceTypeCategory> getPreferenceTypeCategories(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the preference type categories for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getPreferenceTypeCategories(localeId);
+  }
+
+  /**
    * Retrieve the preference types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference types

@@ -259,6 +259,24 @@ public interface IReferenceService {
       throws ReferenceServiceException;
 
   /**
+   * Retrieve all the preference type categories.
+   *
+   * @return the preference type categories
+   */
+  List<PreferenceTypeCategory> getPreferenceTypeCategories() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the preference type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
+   *     categories for or <code>null</code> to retrieve the preference type categories for all
+   *     locales
+   * @return the preference type categories
+   */
+  List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
+      throws ReferenceServiceException;
+
+  /**
    * Retrieve all the preference types.
    *
    * @return the preference types

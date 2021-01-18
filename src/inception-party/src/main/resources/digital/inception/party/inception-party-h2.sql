@@ -34,32 +34,32 @@ COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last
 
 
 CREATE TABLE party.persons (
-  correspondence_language  VARCHAR(10),
-  country_of_birth         VARCHAR(10),
-  country_of_residence     VARCHAR(10),
-  country_of_tax_residence VARCHAR(10),
-  date_of_birth            DATE,
-  date_of_death            DATE,
-  employment_status        VARCHAR(10),
-  employment_type          VARCHAR(10),
-  gender                   VARCHAR(10),
-  given_name               VARCHAR(100),
-  home_language            VARCHAR(10),
-  id                       UUID          NOT NULL,
-  initials                 VARCHAR(20),
-  maiden_name              VARCHAR(100),
-  marital_status           VARCHAR(10),
-  marriage_type            VARCHAR(10),
-  middle_names             VARCHAR(100),
-  occupation               VARCHAR(10),
-  preferred_name           VARCHAR(100),
-  race                     VARCHAR(10),
-  residency_status         VARCHAR(10),
-  residential_type         VARCHAR(10),
-  surname                  VARCHAR(100),
-  tax_number               VARCHAR(30),
-  tax_number_type          VARCHAR(10),
-  title                    VARCHAR(10),
+  correspondence_language    VARCHAR(10),
+  country_of_birth           VARCHAR(10),
+  country_of_residence       VARCHAR(10),
+  countries_of_tax_residence VARCHAR(100),
+  date_of_birth              DATE,
+  date_of_death              DATE,
+  employment_status          VARCHAR(10),
+  employment_type            VARCHAR(10),
+  gender                     VARCHAR(10),
+  given_name                 VARCHAR(100),
+  home_language              VARCHAR(10),
+  id                         UUID          NOT NULL,
+  initials                   VARCHAR(20),
+  maiden_name                VARCHAR(100),
+  marital_status             VARCHAR(10),
+  marriage_type              VARCHAR(10),
+  middle_names               VARCHAR(100),
+  occupation                 VARCHAR(10),
+  preferred_name             VARCHAR(100),
+  race                       VARCHAR(10),
+  residency_status           VARCHAR(10),
+  residential_type           VARCHAR(10),
+  surname                    VARCHAR(100),
+  tax_number                 VARCHAR(30),
+  tax_number_type            VARCHAR(10),
+  title                      VARCHAR(10),
 
   PRIMARY KEY (id),
   CONSTRAINT persons_party_fk FOREIGN KEY (id) REFERENCES party.parties(id) ON DELETE CASCADE
@@ -73,7 +73,7 @@ COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code for the c
 
 COMMENT ON COLUMN party.persons.country_of_residence IS 'The optional code for the country of residence for the person';
 
-COMMENT ON COLUMN party.persons.country_of_tax_residence IS 'The optional code for the country of tax residence for the person';
+COMMENT ON COLUMN party.persons.countries_of_tax_residence IS 'The optional comma-delimited codes for the countries of tax residence for the person';
 
 COMMENT ON COLUMN party.persons.date_of_birth IS 'The optional date of birth for the person';
 
@@ -154,11 +154,14 @@ COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the ide
 
 
 CREATE TABLE party.organizations (
-  id UUID NOT NULL,
+  countries_of_tax_residence VARCHAR(100),
+  id                         UUID          NOT NULL,
 
   PRIMARY KEY (id),
   CONSTRAINT organizations_party_fk FOREIGN KEY (id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
+
+COMMENT ON COLUMN party.organizations.countries_of_tax_residence IS 'The optional comma-delimited codes for the countries of tax residence for the organization';
 
 COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (UUID) for the organization';
 
@@ -302,6 +305,33 @@ COMMENT ON COLUMN party.preferences.type IS 'The code for the preference type';
 COMMENT ON COLUMN party.preferences.updated IS 'The date and time the preference was last updated';
 
 COMMENT ON COLUMN party.preferences.value IS 'The value for the preference';
+
+
+CREATE TABLE party.tax_numbers (
+  country_of_issue VARCHAR(10) NOT NULL,
+  created          TIMESTAMP   NOT NULL,
+  number           VARCHAR(30) NOT NULL,
+  party_id         UUID        NOT NULL,
+  type             VARCHAR(10) NOT NULL,
+  updated          TIMESTAMP,
+
+  PRIMARY KEY (party_id, type),
+  CONSTRAINT tax_numbers_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX tax_numbers_party_id_ix ON party.tax_numbers(party_id);
+
+COMMENT ON COLUMN party.tax_numbers.country_of_issue IS 'The code for the country of issue for the tax number';
+
+COMMENT ON COLUMN party.tax_numbers.created IS 'The date and time the tax number was created';
+
+COMMENT ON COLUMN party.tax_numbers.number IS 'The tax number';
+
+COMMENT ON COLUMN party.tax_numbers.party_id IS 'The Universally Unique Identifier (UUID) for the party the tax number is associated with';
+
+COMMENT ON COLUMN party.tax_numbers.type IS 'The code for the tax number type';
+
+COMMENT ON COLUMN party.tax_numbers.updated IS 'The date and time the tax number was last updated';
 
 
 

@@ -429,15 +429,15 @@ CREATE TABLE reference.preference_type_categories (
 
 CREATE INDEX preference_type_categories_locale_id_ix ON reference.preference_type_categories(locale_id);
 
-COMMENT ON COLUMN reference.preference_type_categories.code IS 'The code for the preference category';
+COMMENT ON COLUMN reference.preference_type_categories.code IS 'The code for the preference type category';
 
-COMMENT ON COLUMN reference.preference_type_categories.locale_id IS 'The Unicode locale identifier for the preference category';
+COMMENT ON COLUMN reference.preference_type_categories.locale_id IS 'The Unicode locale identifier for the preference type category';
 
-COMMENT ON COLUMN reference.preference_type_categories.sort_index IS 'The sort index for the preference category';
+COMMENT ON COLUMN reference.preference_type_categories.sort_index IS 'The sort index for the preference type category';
 
-COMMENT ON COLUMN reference.preference_type_categories.name IS 'The name of the preference category';
+COMMENT ON COLUMN reference.preference_type_categories.name IS 'The name of the preference type category';
 
-COMMENT ON COLUMN reference.preference_type_categories.description IS 'The description for the preference category';
+COMMENT ON COLUMN reference.preference_type_categories.description IS 'The description for the preference type category';
 
 
 CREATE TABLE reference.preference_types (

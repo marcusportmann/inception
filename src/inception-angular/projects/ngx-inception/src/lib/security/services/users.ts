@@ -61,16 +61,15 @@ export class Users {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the users are
-   * associated with.
+   * The Universally Unique Identifier (UUID) for the user directory the users are associated with.
    */
   userDirectoryId: string;
 
   /**
    * Constructs a new Users.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory the users are associated with.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory the
+   *                        users are associated with.
    * @param users           The users.
    * @param total           The total number of users.
    * @param filter          The optional filter that was applied to the users.

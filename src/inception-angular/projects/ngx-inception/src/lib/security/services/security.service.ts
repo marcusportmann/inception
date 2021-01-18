@@ -107,8 +107,7 @@ export class SecurityService {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    * @param memberType      The group member type.
    * @param memberName      The name of the group member.
@@ -150,8 +149,7 @@ export class SecurityService {
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    * @param roleCode        The code for the role.
    *
@@ -191,10 +189,8 @@ export class SecurityService {
   /**
    * Add the user directory to the tenant.
    *
-   * @param tenantId  The Universally Unique Identifier (UUID) for the
-   *                        tenant.
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param tenantId        The Universally Unique Identifier (UUID) for the tenant.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return True if the user directory was successfully added to the tenant or false
    *         otherwise.
@@ -454,8 +450,7 @@ export class SecurityService {
   /**
    * Delete the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    *
    * @return True if the group was deleted or false otherwise.
@@ -490,8 +485,7 @@ export class SecurityService {
   /**
    * Delete the tenant.
    *
-   * @param tenantId The Universally Unique Identifier (UUID) for the
-   *                       tenant.
+   * @param tenantId The Universally Unique Identifier (UUID) for the tenant.
    *
    * @return True if the tenant was deleted or false otherwise.
    */
@@ -520,8 +514,7 @@ export class SecurityService {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param username        The username for the user.
    *
    * @return True if the user was deleted or false otherwise.
@@ -554,8 +547,7 @@ export class SecurityService {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return True if the user directory was deleted or false otherwise.
    */
@@ -584,8 +576,7 @@ export class SecurityService {
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    *
    * @return The group.
@@ -617,8 +608,7 @@ export class SecurityService {
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return The group names.
    */
@@ -648,8 +638,7 @@ export class SecurityService {
   /**
    * Retrieve the names of the groups the user is a member of.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param username        The username for the user.
    *
    * @return The names of the groups the user is a member of.
@@ -682,8 +671,7 @@ export class SecurityService {
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param filter          The optional filter to apply to the groups.
    * @param sortDirection   The optional sort direction to apply to the groups.
    * @param pageIndex       The optional page index.
@@ -738,8 +726,7 @@ export class SecurityService {
   /**
    * Retrieve the tenant.
    *
-   * @param tenantId The Universally Unique Identifier (UUID) for the
-   *                       tenant.
+   * @param tenantId The Universally Unique Identifier (UUID) for the tenant.
    *
    * @return The tenant.
    */
@@ -768,8 +755,7 @@ export class SecurityService {
   /**
    * Retrieve the members for the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    * @param filter          The optional filter to apply to the group members.
    * @param sortDirection   The optional sort direction to apply to the group members.
@@ -828,8 +814,7 @@ export class SecurityService {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    *
    * @return The codes for the roles that have been assigned to the group.
@@ -886,8 +871,7 @@ export class SecurityService {
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    *
    * @return The roles that have been assigned to the group.
@@ -921,8 +905,7 @@ export class SecurityService {
   /**
    * Retrieve the name of the tenant.
    *
-   * @param tenantId The Universally Unique Identifier (UUID) for the
-   *                       tenant.
+   * @param tenantId The Universally Unique Identifier (UUID) for the tenant.
    *
    * @return The name of the tenant.
    */
@@ -999,8 +982,7 @@ export class SecurityService {
   /**
    * Retrieve the tenants the user directory is associated with.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return The tenants the user directory is associated with.
    */
@@ -1032,8 +1014,7 @@ export class SecurityService {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param username        The username for the user.
    *
    * @return The user.
@@ -1065,8 +1046,7 @@ export class SecurityService {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return The user directory.
    */
@@ -1095,8 +1075,7 @@ export class SecurityService {
   /**
    * Retrieve the capabilities for the user directory.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return The capabilities for the user directory.
    */
@@ -1127,8 +1106,7 @@ export class SecurityService {
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return The name of the user directory.
    */
@@ -1157,8 +1135,7 @@ export class SecurityService {
   /**
    * Retrieve the summaries for the user directories the tenant is associated with.
    *
-   * @param tenantId The Universally Unique Identifier (UUID) for the
-   *                       tenant.
+   * @param tenantId The Universally Unique Identifier (UUID) for the tenant.
    *
    * @return The summaries for the user directories the tenant is associated with.
    */
@@ -1189,8 +1166,7 @@ export class SecurityService {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return The user directory type for the user directory.
    */
@@ -1244,8 +1220,7 @@ export class SecurityService {
   /**
    * Retrieve the name of the user.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param username        The username for the user.
    *
    * @return The name of the user.
@@ -1278,8 +1253,7 @@ export class SecurityService {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param filter          The optional filter to apply to the users.
    * @param sortBy          The optional method used to sort the users e.g. by name.
    * @param sortDirection   The optional sort direction to apply to the users.
@@ -1480,8 +1454,7 @@ export class SecurityService {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    * @param memberType      The group member type.
    * @param memberName      The name of the group member.
@@ -1520,8 +1493,7 @@ export class SecurityService {
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    * @param groupName       The name of the group.
    * @param roleCode        The code for the role.
    *
@@ -1557,10 +1529,8 @@ export class SecurityService {
   /**
    * Remove the user directory from the tenant.
    *
-   * @param tenantId  The Universally Unique Identifier (UUID) for the
-   *                        tenant.
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory.
+   * @param tenantId        The Universally Unique Identifier (UUID) for the tenant.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory.
    *
    * @return True if the user directory was successfully removed from the tenant or false
    *         otherwise.

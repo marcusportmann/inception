@@ -295,7 +295,7 @@ public class PhysicalAddressPurpose implements Serializable {
    *
    * @param partyTypes the codes for the party types the physical address purpose is associated with
    */
-  public void setPartyType(String[] partyTypes) {
+  public void setPartyTypes(String[] partyTypes) {
     this.partyTypes = StringUtils.arrayToDelimitedString(partyTypes, ",");
   }
 

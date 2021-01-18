@@ -60,16 +60,16 @@ export class GroupMembers {
   total: number;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the group
-   * members are associated with.
+   * The Universally Unique Identifier (UUID) for the user directory the group members are
+   * associated with.
    */
   userDirectoryId: string;
 
   /**
    * Constructs a new GroupMembers.
    *
-   * @param userDirectoryId The Universally Unique Identifier (UUID) for the
-   *                        user directory the group members are associated with.
+   * @param userDirectoryId The Universally Unique Identifier (UUID) for the user directory the
+   *                        group members are associated with.
    * @param groupName       The name of the group the group members are associated with.
    * @param groupMembers    The group members.
    * @param total           The total number of groups.

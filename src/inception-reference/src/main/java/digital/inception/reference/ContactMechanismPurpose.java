@@ -327,7 +327,7 @@ public class ContactMechanismPurpose implements Serializable {
    * @param partyTypes the codes for the party types the contact mechanism purpose is associated
    *     with
    */
-  public void setPartyType(String[] partyTypes) {
+  public void setPartyTypes(String[] partyTypes) {
     this.partyTypes = StringUtils.arrayToDelimitedString(partyTypes, ",");
   }
 
