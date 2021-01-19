@@ -48,28 +48,30 @@ public class ValidPhysicalAddressValidator
     /*
     The following validation rules are applied for the different address types:
 
-    +----------------------+----------+----------+----------+---------------+----------+----------+--------------+
-    |                      | Building | Complex  |   Farm   | International |   Site   |  Street  | Unstructured |
-    +----------------------+----------+----------+----------+---------------+----------+----------+--------------+
-    | Building Floor       | Optional | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-    | Building Name        | Required | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-    | Building Room        | Optional | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-    | City                 | Required | Required | Optional | Optional      | Required | Required | Optional     |
-    | Complex Name         | Invalid  | Required | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-    | Complex Unit Number  | Invalid  | Required | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-    | Farm Description     | Invalid  | Invalid  | Optional | Invalid       | Invalid  | Invalid  | Invalid      |
-    | Farm Name            | Invalid  | Invalid  | Optional | Invalid       | Invalid  | Invalid  | Invalid      |
-    | Farm Number          | Invalid  | Invalid  | Required | Invalid       | Invalid  | Invalid  | Invalid      |
-    | Line 1               | Invalid  | Invalid  | Invalid  | Required      | Invalid  | Invalid  | Required     |
-    | Line 2               | Invalid  | Invalid  | Invalid  | Optional      | Invalid  | Invalid  | Optional     |
-    | Line 3               | Invalid  | Invalid  | Invalid  | Optional      | Invalid  | Invalid  | Optional     |
-    | Region               | Optional | Optional | Optional | Optional      | Optional | Optional | Optional     |
-    | Site Block           | Invalid  | Invalid  | Invalid  | Invalid       | Required | Invalid  | Invalid      |
-    | Site Number          | Invalid  | Invalid  | Invalid  | Invalid       | Required | Invalid  | Invalid      |
-    | Street Name          | Required | Required | Optional | Invalid       | Optional | Required | Invalid      |
-    | Street Number        | Optional | Optional | Optional | Invalid       | Optional | Optional | Invalid      |
-    | Suburb               | Optional | Optional | Optional | Invalid       | Optional | Optional | Invalid      |
-    +----------------------+----------+----------+----------+---------------+----------+----------+--------------+
+    +----------------------+-----------+----------+----------+---------------+----------+----------+----------+--------------+
+    |                      |  Building | Complex  |   Farm   | International |  Postal  |   Site   |  Street  | Unstructured |
+    +----------------------+-----------+----------+----------+---------------+----------+----------+----------+--------------+
+    | Building Floor       | Optional  | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Building Name        | Required  | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Building Room        | Optional  | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | City                 | Required  | Required | Optional | Optional      | Required | Required | Required | Optional     |
+    | Complex Name         | Invalid   | Required | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Complex Unit Number  | Invalid   | Required | Invalid  | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Country              | Required  | Required | Required | Required      | Required | Required | Required | Required     |
+    | Farm Description     | Invalid   | Invalid  | Optional | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Farm Name            | Invalid   | Invalid  | Optional | Invalid       | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Farm Number          | Invalid   | Invalid  | Required | Required      | Invalid  | Invalid  | Invalid  | Invalid      |
+    | Line 1               | Invalid   | Invalid  | Invalid  | Required      | Required | Invalid  | Invalid  | Required     |
+    | Line 2               | Invalid   | Invalid  | Invalid  | Optional      | Optional | Invalid  | Invalid  | Optional     |
+    | Line 3               | Invalid   | Invalid  | Invalid  | Optional      | Optional | Invalid  | Invalid  | Optional     |
+    | Postal Code Required | Required  | Required | Required | Required      | Required | Required | Required | Required     |
+    | Region               | Optional  | Optional | Optional | Optional      | Optional | Optional | Optional | Optional     |
+    | Site Block           | Invalid   | Invalid  | Invalid  | Invalid       | Invalid  | Required | Invalid  | Invalid      |
+    | Site Number          | Invalid   | Invalid  | Invalid  | Invalid       | Invalid  | Required | Invalid  | Invalid      |
+    | Street Name          | Required  | Required | Optional | Invalid       | Invalid  | Optional | Required | Invalid      |
+    | Street Number        | Optional  | Optional | Optional | Invalid       | Invalid  | Optional | Optional | Invalid      |
+    | Suburb               | Optional  | Optional | Optional | Invalid       | Optional | Invalid  | Optional | Invalid      |
+    +----------------------+-----------+----------+----------+---------------+----------+----------+----------+--------------+
     */
     boolean isValid = true;
 
@@ -187,6 +189,35 @@ public class ValidPhysicalAddressValidator
         context
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.suburbNotSupported.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+    }
+    // Validate a postal address
+    else if (physicalAddress.getType() == PhysicalAddressType.POSTAL) {
+      if (!StringUtils.hasText(physicalAddress.getLine1())) {
+        context
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.party.constraints.ValidPhysicalAddress.line1PostalRequired.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      if (StringUtils.hasText(physicalAddress.getStreetName())) {
+        context
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      if (StringUtils.hasText(physicalAddress.getStreetNumber())) {
+        context
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
             .addConstraintViolation();
 
         isValid = false;
@@ -432,10 +463,11 @@ public class ValidPhysicalAddressValidator
     }
 
     /*
-     * Check that international and unstructured address fields have not been specified for an
-     * address that is not an international address or unstructured address.
+     * Check that international, postal and unstructured address fields have not been specified for
+     * an address that is not an international address, postal address or unstructured address.
      */
     if ((physicalAddress.getType() != PhysicalAddressType.INTERNATIONAL)
+        && (physicalAddress.getType() != PhysicalAddressType.POSTAL)
         && (physicalAddress.getType() != PhysicalAddressType.UNSTRUCTURED)) {
       if (StringUtils.hasText(physicalAddress.getLine1())) {
         context
@@ -469,65 +501,29 @@ public class ValidPhysicalAddressValidator
   }
 }
 
-/*
-+----------------------+----------+----------+----------+---------------+----------+----------+--------------+
-|                      | Building | Complex  |   Farm   | International |   Site   |  Street  | Unstructured |
-+----------------------+----------+----------+----------+---------------+----------+----------+--------------+
-| Building Floor       | Optional | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-| Building Name        | Required | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-| Building Room        | Optional | Invalid  | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-| City                 | Required | Required | Optional | Optional      | Required | Required | Optional     |
-| Complex Name         | Invalid  | Required | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-| Complex Unit Number  | Invalid  | Required | Invalid  | Invalid       | Invalid  | Invalid  | Invalid      |
-| Farm Description     | Invalid  | Invalid  | Optional | Invalid       | Invalid  | Invalid  | Invalid      |
-| Farm Name            | Invalid  | Invalid  | Optional | Invalid       | Invalid  | Invalid  | Invalid      |
-| Farm Number          | Invalid  | Invalid  | Required | Invalid       | Invalid  | Invalid  | Invalid      |
-| Line 1               | Invalid  | Invalid  | Invalid  | Required      | Invalid  | Invalid  | Required     |
-| Line 2               | Invalid  | Invalid  | Invalid  | Optional      | Invalid  | Invalid  | Optional     |
-| Line 3               | Invalid  | Invalid  | Invalid  | Optional      | Invalid  | Invalid  | Optional     |
-| Region               | Optional | Optional | Optional | Optional      | Optional | Optional | Optional     |
-| Site Block           | Invalid  | Invalid  | Invalid  | Invalid       | Required | Invalid  | Invalid      |
-| Site Number          | Invalid  | Invalid  | Invalid  | Invalid       | Required | Invalid  | Invalid      |
-| Street Name          | Required | Required | Optional | Invalid       | Optional | Required | Invalid      |
-| Street Number        | Optional | Optional | Optional | Invalid       | Optional | Optional | Invalid      |
-| Suburb               | Optional | Optional | Optional | Invalid       | Invalid  | Optional | Invalid      |
-+----------------------+----------+----------+----------+---------------+----------+----------+--------------+
-*/
 
 /*
+See: https://ozh.github.io/ascii-tables/
 
-Type	Building Floor	Building Name	Building Room	City	Complex Name	Complex Unit Number	Country	Farm Description	Farm Name	Farm Number	Line 1	Line 2	Line 3	Postal Code	Region	Site Block	Site Number	Street Name	Street Number	Suburb
-Building	Optional	Required	Optional	Required	Invalid	Invalid	Required	Invalid	Invalid	Invalid	Invalid	Invalid	Invalid	Required	Optional	Invalid	Invalid	Required	Optional	Optional
-Complex	Invalid	Invalid	Invalid	Required	Required	Required	Required	Invalid	Invalid	Invalid	Invalid	Invalid	Invalid	Required	Optional	Invalid	Invalid	Required	Optional	Optional
-Farm	Invalid	Invalid	Invalid	Optional	Invalid	Invalid	Required	Optional	Optional	Required	Invalid	Invalid	Invalid	Required	Optional	Invalid	Invalid	Optional	Optional	Optional
-International	Invalid	Invalid	Invalid	Optional	Invalid	Invalid	Required	Invalid	Invalid	Invalid	Required	Optional	Optional	Required	Optional	Invalid	Invalid	Invalid	Invalid	Invalid
-Site	Invalid	Invalid	Invalid	Required	Invalid	Invalid	Required	Invalid	Invalid	Invalid	Invalid	Invalid	Invalid	Required	Optional	Required	Required	Optional	Optional	Invalid
-Street	Invalid	Invalid	Invalid	Required	Invalid	Invalid	Required	Invalid	Invalid	Invalid	Invalid	Invalid	Invalid	Required	Optional	Invalid	Invalid	Required	Optional	Optional
-International	Invalid	Invalid	Invalid	Optional	Invalid	Invalid	Required	Invalid	Invalid	Invalid	Required	Optional	Optional	Required	Optional	Invalid	Invalid	Invalid	Invalid	Invalid
-
-
- */
-
-/*
- 	Building	Complex	Farm	International	Site	Street	Unstructured
-Building Floor	Optional	Invalid	Invalid	Invalid	Invalid	Invalid	Invalid
-Building Name	Required	Invalid	Invalid	Invalid	Invalid	Invalid	Invalid
-Building Room	Optional	Invalid	Invalid	Invalid	Invalid	Invalid	Invalid
-City	Required	Required	Optional	Optional	Required	Required	Optional
-Complex Name	Invalid	Required	Invalid	Invalid	Invalid	Invalid	Invalid
-Complex Unit Number	Invalid	Required	Invalid	Invalid	Invalid	Invalid	Invalid
-Country	Required	Required	Required	Required	Required	Required	Required
-Farm Description	Invalid	Invalid	Optional	Invalid	Invalid	Invalid	Invalid
-Farm Name	Invalid	Invalid	Optional	Invalid	Invalid	Invalid	Invalid
-Farm Number	Invalid	Invalid	Required	Invalid	Invalid	Invalid	Invalid
-Line 1	Invalid	Invalid	Invalid	Required	Invalid	Invalid	Required
-Line 2	Invalid	Invalid	Invalid	Optional	Invalid	Invalid	Optional
-Line 3	Invalid	Invalid	Invalid	Optional	Invalid	Invalid	Optional
-Postal Code Required	Required	Required	Required	Required	Required	Required	Required
-Region	Optional	Optional	Optional	Optional	Optional	Optional	Optional
-Site Block	Invalid	Invalid	Invalid	Invalid	Required	Invalid	Invalid
-Site Number	Invalid	Invalid	Invalid	Invalid	Required	Invalid	Invalid
-Street Name	Required	Required	Optional	Invalid	Optional	Required	Invalid
-Street Number	Optional	Optional	Optional	Invalid	Optional	Optional	Invalid
-Suburb	Optional	Optional	Optional	Invalid	Invalid	Optional	Invalid
+, Building,Complex,Farm,International,Postal,Site,Street,Unstructured
+Building Floor,Optional,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+Building Name,Required,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+Building Room,Optional,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+City,Required,Required,Optional,Optional,Required,Required,Required,Optional
+Complex Name,Invalid,Required,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+Complex Unit Number,Invalid,Required,Invalid,Invalid,Invalid,Invalid,Invalid,Invalid
+Country,Required,Required,Required,Required,Required,Required,Required,Required
+Farm Description,Invalid,Invalid,Optional,Invalid,Invalid,Invalid,Invalid,Invalid
+Farm Name,Invalid,Invalid,Optional,Invalid,Invalid,Invalid,Invalid,Invalid
+Farm Number,Invalid,Invalid,Required,Required,Invalid,Invalid,Invalid,Invalid
+Line 1,Invalid,Invalid,Invalid,Required,Required,Invalid,Invalid,Required
+Line 2,Invalid,Invalid,Invalid,Optional,Optional,Invalid,Invalid,Optional
+Line 3,Invalid,Invalid,Invalid,Optional,Optional,Invalid,Invalid,Optional
+Postal Code Required,Required,Required,Required,Required,Required,Required,Required,Required
+Region,Optional,Optional,Optional,Optional,Optional,Optional,Optional,Optional
+Site Block,Invalid,Invalid,Invalid,Invalid,Invalid,Required,Invalid,Invalid
+Site Number,Invalid,Invalid,Invalid,Invalid,Invalid,Required,Invalid,Invalid
+Street Name,Required,Required,Optional,Invalid,Invalid,Optional,Required,Invalid
+Street Number,Optional,Optional,Optional,Invalid,Invalid,Optional,Optional,Invalid
+Suburb,Optional,Optional,Optional,Invalid,Optional,Invalid,Optional,Invalid
  */

@@ -40,6 +40,8 @@ public enum PhysicalAddressType {
   FARM("farm", "Farm"),
   @XmlEnumValue("International")
   INTERNATIONAL("international", "International"),
+  @XmlEnumValue("Postal")
+  POSTAL("postal", "Postal"),
   @XmlEnumValue("Site")
   SITE("site", "Site"),
   @XmlEnumValue("Street")
@@ -77,6 +79,9 @@ public enum PhysicalAddressType {
       case "international":
         return PhysicalAddressType.INTERNATIONAL;
 
+      case "postal":
+        return PhysicalAddressType.POSTAL;
+
       case "site":
         return PhysicalAddressType.SITE;
 
@@ -109,10 +114,12 @@ public enum PhysicalAddressType {
       case 4:
         return PhysicalAddressType.INTERNATIONAL;
       case 5:
-        return PhysicalAddressType.SITE;
+        return PhysicalAddressType.POSTAL;
       case 6:
-        return PhysicalAddressType.STREET;
+        return PhysicalAddressType.SITE;
       case 7:
+        return PhysicalAddressType.STREET;
+      case 99:
         return PhysicalAddressType.UNSTRUCTURED;
       default:
         throw new RuntimeException(
@@ -138,12 +145,14 @@ public enum PhysicalAddressType {
         return 3;
       case INTERNATIONAL:
         return 4;
-      case SITE:
+      case POSTAL:
         return 5;
-      case STREET:
+      case SITE:
         return 6;
-      case UNSTRUCTURED:
+      case STREET:
         return 7;
+      case UNSTRUCTURED:
+        return 99;
       default:
         throw new RuntimeException(
             "Failed to determine the numeric code for the physical address type ("

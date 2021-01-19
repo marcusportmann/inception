@@ -37,9 +37,10 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A individual customer")
+@Schema(description = "An individual customer")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+  "id",
   "countryOfBirth",
   "countryOfResidence",
   "dateOfBirth",
@@ -50,7 +51,6 @@ import javax.xml.bind.annotation.XmlType;
   "gender",
   "givenName",
   "homeLanguage",
-  "id",
   "initials",
   "maidenName",
   "maritalStatus",

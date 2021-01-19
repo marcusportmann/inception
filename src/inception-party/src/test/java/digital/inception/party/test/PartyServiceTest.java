@@ -718,6 +718,15 @@ public class PartyServiceTest {
     internationalAddress.setPostalCode("2194");
     person.addPhysicalAddress(internationalAddress);
 
+    PhysicalAddress postalAddress =
+        new PhysicalAddress(PhysicalAddressType.POSTAL, PhysicalAddressPurpose.CORRESPONDENCE);
+    postalAddress.setLine1("PO Box 12345");
+    postalAddress.setSuburb("Fairland");
+    postalAddress.setCity("Johannesburg");
+    postalAddress.setCountry("ZA");
+    postalAddress.setPostalCode("2130");
+    person.addPhysicalAddress(postalAddress);
+
     PhysicalAddress siteAddress =
         new PhysicalAddress(PhysicalAddressType.SITE, PhysicalAddressPurpose.RESIDENTIAL);
     siteAddress.setSiteBlock("CC");

@@ -2623,9 +2623,11 @@ INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sor
 INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
   VALUES ('international', 'en-US', 4, 4, 'International', 'International');
 INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
-  VALUES ('site', 'en-US', 5, 5, 'Site', 'Site');
+  VALUES ('postal', 'en-US', 5, 5, 'Postal', 'Postal');
 INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
-  VALUES ('street', 'en-US', 6, 6, 'Street', 'Street');
+  VALUES ('site', 'en-US', 6, 6, 'Site', 'Site');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('street', 'en-US', 7, 7, 'Street', 'Street');
 INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
   VALUES ('unstructured', 'en-US', 99, 99, 'Unstructured', 'Unstructured');
 
@@ -2639,9 +2641,11 @@ INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sor
 INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
   VALUES ('international', 'en-ZA', 4, 4, 'International', 'International');
 INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
-  VALUES ('site', 'en-ZA', 5, 5, 'Site', 'Site');
+  VALUES ('postal', 'en-ZA', 5, 5, 'Postal', 'Postal');
 INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
-  VALUES ('street', 'en-ZA', 6, 6, 'Street', 'Street');
+  VALUES ('site', 'en-ZA', 6, 6, 'Site', 'Site');
+INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
+  VALUES ('street', 'en-ZA', 7, 7, 'Street', 'Street');
 INSERT INTO reference.physical_address_types (code, locale_id, numeric_code, sort_index, name, description)
   VALUES ('unstructured', 'en-ZA', 99, 99, 'Unstructured', 'Unstructured');
 

@@ -61,6 +61,7 @@ import org.springframework.util.StringUtils;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties({"type"})
 @JsonPropertyOrder({
+  "id",
   "countryOfBirth",
   "countryOfResidence",
   "dateOfBirth",
@@ -70,7 +71,6 @@ import org.springframework.util.StringUtils;
   "gender",
   "givenName",
   "homeLanguage",
-  "id",
   "initials",
   "maidenName",
   "maritalStatus",
