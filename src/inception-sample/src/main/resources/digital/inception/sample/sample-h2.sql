@@ -324,8 +324,8 @@ INSERT INTO party.identity_documents(person_id, type, number, date_of_issue, cou
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'ZAIDBOOK', '7603079236083', '2007-08-04', 'ZA', NOW());
 INSERT INTO party.contact_mechanisms(party_id, type, purpose, value, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 4, 400, 'joe@sample.com', NOW());
-INSERT INTO party.physical_addresses (party_id, type, purpose, line1, line2, city, region, country, postal_code, created)
-  VALUES ('54166574-6564-468a-b845-8a5c127a4345', 7, 5, '145 Apple Street', 'Fairland', 'Johannesburg', 'GP', 'ZA', '2170', NOW());
+INSERT INTO party.physical_addresses (id, party_id, type, line1, line2, city, region, country, postal_code, purposes, created)
+  VALUES ('14166574-6564-468a-b845-8a5c127a4345', '54166574-6564-468a-b845-8a5c127a4345', 7, '145 Apple Street', 'Fairland', 'Johannesburg', 'GP', 'ZA', '2170', 'residential', NOW());
 
 
 
@@ -337,8 +337,8 @@ INSERT INTO party.identity_documents (person_id, type, number, date_of_issue, co
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', 'ZAIDCARD', '8505016777088', '2015-02-17', 'ZA', NOW());
 INSERT INTO party.contact_mechanisms (party_id, type, purpose, value, created)
   VALUES ('00166574-6564-468a-b845-8a5c127a4345', 4, 400, 'sally@sample.com', NOW());
-INSERT INTO party.physical_addresses (party_id, type, purpose, complex_name, complex_unit_number, street_number, street_name, suburb, city, region, country, postal_code, latitude, longitude, created)
-  VALUES ('00166574-6564-468a-b845-8a5c127a4345', 2, 5, 'Happy Place', '7', '15', 'Fifth Avenue', 'Linden', 'Johannesburg', 'GP', 'ZA', '2195', '-26.137005,', '27.969069', NOW());
+INSERT INTO party.physical_addresses (id, party_id, type, complex_name, complex_unit_number, street_number, street_name, suburb, city, region, country, postal_code, latitude, longitude, purposes, created)
+  VALUES ('10166574-6564-468a-b845-8a5c127a4345', '00166574-6564-468a-b845-8a5c127a4345', 2, 'Happy Place', '7', '15', 'Fifth Avenue', 'Linden', 'Johannesburg', 'GP', 'ZA', '2195', '-26.137005,', '27.969069', 'residential', NOW());
 
 
 

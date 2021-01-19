@@ -21,18 +21,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.party.constraints.ValidCountryCode;
 import digital.inception.party.constraints.ValidPhysicalAddress;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -42,29 +44,24 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.util.StringUtils;
 
 /**
  * The <code>PhysicalAddress</code> class holds the information for a physical address.
- *
- * <p><b>NOTE:</b> The JPA 2.2 spec (10.6) does not support attribute converters for attributes
- * annotated with @Id. If Enum types are used for these attributes then the ordinal value is always
- * used. As a result, the purpose attribute for this class is an Integer and the Getter and Setters
- * (a.k.a. Accessors and Mutators) convert to and from the Enum type. A consequence of this is that
- * the attribute is marked as @JsonIgnore and @XmlTransient and the Getter is annotated
- * with @JsonProperty and @XmlElement.
  *
  * @author Marcus Portmann
  */
 @Schema(description = "A physical address associated with a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+  "id",
   "type",
-  "purpose",
   "buildingName",
   "buildingFloor",
   "buildingRoom",
@@ -86,15 +83,16 @@ import org.hibernate.annotations.UpdateTimestamp;
   "country",
   "postalCode",
   "latitude",
-  "longitude"
+  "longitude",
+  "purposes"
 })
 @XmlRootElement(name = "PhysicalAddress", namespace = "http://party.inception.digital")
 @XmlType(
     name = "PhysicalAddress",
     namespace = "http://party.inception.digital",
     propOrder = {
+      "id",
       "type",
-      "purpose",
       "buildingName",
       "buildingFloor",
       "buildingRoom",
@@ -116,13 +114,13 @@ import org.hibernate.annotations.UpdateTimestamp;
       "country",
       "postalCode",
       "latitude",
-      "longitude"
+      "longitude",
+      "purposes"
     })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidPhysicalAddress
 @Entity
 @Table(schema = "party", name = "physical_addresses")
-@IdClass(PhysicalAddressId.class)
 public class PhysicalAddress implements Serializable {
 
   private static final long serialVersionUID = 1000000;
@@ -255,6 +253,15 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "farm_number")
   private String farmNumber;
 
+  /** The Universally Unique Identifier (UUID) for the address. */
+  @Schema(description = "The Universally Unique Identifier (UUID) for the address", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @Id
+  @Column(name = "id", nullable = false)
+  private UUID id;
+
   /** The optional GPS latitude for the physical address. */
   @Schema(description = "The optional GPS latitude for the physical address")
   @JsonProperty
@@ -315,7 +322,6 @@ public class PhysicalAddress implements Serializable {
   @Schema(hidden = true)
   @JsonBackReference("physicalAddressReference")
   @XmlTransient
-  @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
   private Party party;
@@ -331,13 +337,11 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "postal_code")
   private String postalCode;
 
-  /** The physical address purpose. */
+  /** The optional comma-delimited codes for the physical address purposes. */
   @JsonIgnore
   @XmlTransient
-  @NotNull
-  @Id
-  @Column(name = "purpose", nullable = false)
-  private Integer purpose;
+  @Column(name = "purposes")
+  private String purposes;
 
   /** The optional code for the region for the physical address. */
   @Schema(description = "The optional code for the region for the physical address")
@@ -435,11 +439,45 @@ public class PhysicalAddress implements Serializable {
    * Constructs a new <code>PhysicalAddress</code>.
    *
    * @param type the physical address type
+   */
+  public PhysicalAddress(PhysicalAddressType type) {
+    this.id = UuidCreator.getShortPrefixComb();
+    this.type = type;
+  }
+
+  /**
+   * Constructs a new <code>PhysicalAddress</code>.
+   *
+   * @param type the physical address type
    * @param purpose the physical address purpose
    */
   public PhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+    this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
-    this.purpose = PhysicalAddressPurpose.toNumericCode(purpose);
+    this.purposes = purpose.code();
+  }
+
+  /**
+   * Constructs a new <code>PhysicalAddress</code>.
+   *
+   * @param type the physical address type
+   * @param purposes the codes for the physical address purposes
+   */
+  public PhysicalAddress(PhysicalAddressType type, Set<PhysicalAddressPurpose> purposes) {
+    this.id = UuidCreator.getShortPrefixComb();
+    this.type = type;
+
+    if ((purposes != null) && (purposes.size() > 0)) {
+      this.purposes = "";
+
+      for (PhysicalAddressPurpose purpose : purposes) {
+        if (this.purposes.length() > 0) {
+          this.purposes += ",";
+        }
+
+        this.purposes += purpose.code();
+      }
+    }
   }
 
   /**
@@ -465,9 +503,7 @@ public class PhysicalAddress implements Serializable {
 
     PhysicalAddress other = (PhysicalAddress) object;
 
-    return Objects.equals(party, other.party)
-        && Objects.equals(type, other.type)
-        && Objects.equals(purpose, other.purpose);
+    return Objects.equals(id, other.id);
   }
 
   /**
@@ -570,6 +606,15 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
+   * Returns the Universally Unique Identifier (UUID) for the address.
+   *
+   * @return the Universally Unique Identifier (UUID) for the address
+   */
+  public UUID getId() {
+    return id;
+  }
+
+  /**
    * Returns the optional GPS latitude for the physical address.
    *
    * @return the optional GPS latitude for the physical address
@@ -634,15 +679,26 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the physical address purpose.
+   * Returns the optional codes for the physical address purposes.
    *
-   * @return the physical address purpose
+   * @return the optional codes for the physical address purposes
    */
-  @Schema(description = "The physical address purpose", required = true)
+  @Schema(description = "The codes for the physical address purposes", required = true)
   @JsonProperty(required = true)
+  @XmlElementWrapper(name = "Purposes", required = true)
   @XmlElement(name = "Purpose", required = true)
-  public PhysicalAddressPurpose getPurpose() {
-    return PhysicalAddressPurpose.fromNumericCode(purpose);
+  public Set<PhysicalAddressPurpose> getPurposes() {
+    if (this.purposes != null) {
+      Set<PhysicalAddressPurpose> purposes = new LinkedHashSet<>();
+
+      for (String purposeCode : StringUtils.commaDelimitedListToStringArray(this.purposes)) {
+        purposes.add(PhysicalAddressPurpose.fromCode(purposeCode));
+      }
+
+      return purposes;
+    } else {
+      return new LinkedHashSet<>();
+    }
   }
 
   /**
@@ -724,9 +780,7 @@ public class PhysicalAddress implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
-        + ((type == null) ? 0 : type.hashCode())
-        + ((purpose == null) ? 0 : purpose.hashCode());
+    return (id == null) ? 0 : id.hashCode();
   }
 
   /**
@@ -820,6 +874,15 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
+   * Set the Universally Unique Identifier (UUID) for the address.
+   *
+   * @param id the Universally Unique Identifier (UUID) for the address
+   */
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  /**
    * Set the optional GPS latitude for the physical address.
    *
    * @param latitude the optional GPS latitude for the physical address
@@ -884,12 +947,24 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the physical address purpose.
+   * Set the optional codes for the physical address purposes.
    *
-   * @param purpose the physical address purpose
+   * @param purposes the optional codes for the physical address purposes
    */
-  public void setPurpose(PhysicalAddressPurpose purpose) {
-    this.purpose = PhysicalAddressPurpose.toNumericCode(purpose);
+  public void setPurposes(Set<PhysicalAddressPurpose> purposes) {
+    if ((purposes != null) && (purposes.size() > 0)) {
+      this.purposes = "";
+
+      for (PhysicalAddressPurpose purpose : purposes) {
+        if (this.purposes.length() > 0) {
+          this.purposes += ",";
+        }
+
+        this.purposes += purpose.code();
+      }
+    } else {
+      this.purposes = null;
+    }
   }
 
   /**

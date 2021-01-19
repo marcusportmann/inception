@@ -200,29 +200,30 @@ CREATE TABLE party.physical_addresses (
   city                VARCHAR(50),
   complex_name        VARCHAR(50),
   complex_unit_number VARCHAR(20),
-  created             TIMESTAMP    NOT NULL,
-  country             VARCHAR(10)  NOT NULL,
+  created             TIMESTAMP     NOT NULL,
+  country             VARCHAR(10)   NOT NULL,
   farm_description    VARCHAR(50),
   farm_name           VARCHAR(50),
   farm_number         VARCHAR(50),
+  id                  UUID          NOT NULL,
   line1               VARCHAR(100),
   line2               VARCHAR(100),
   line3               VARCHAR(100),
   latitude            VARCHAR(50),
   longitude           VARCHAR(50),
-  party_id            UUID         NOT NULL,
-  postal_code         VARCHAR(30)  NOT NULL,
-  purpose             INTEGER      NOT NULL,
+  party_id            UUID          NOT NULL,
+  postal_code         VARCHAR(30)   NOT NULL,
+  purposes            VARCHAR(300),
   region              VARCHAR(10),
   site_block          VARCHAR(50),
   site_number         VARCHAR(50),
   street_name         VARCHAR(100),
   street_number       VARCHAR(30),
   suburb              VARCHAR(50),
-  type                INTEGER      NOT NULL,
+  type                INTEGER       NOT NULL,
   updated             TIMESTAMP,
 
-  PRIMARY KEY (party_id, purpose),
+  PRIMARY KEY (id),
   CONSTRAINT physical_addresses_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
@@ -250,6 +251,8 @@ COMMENT ON COLUMN party.physical_addresses.farm_name IS 'The farm name for the p
 
 COMMENT ON COLUMN party.physical_addresses.farm_number IS 'The farm number for the physical address that is required for a farm address';
 
+COMMENT ON COLUMN party.physical_addresses.id IS 'The Universally Unique Identifier (UUID) for the address';
+
 COMMENT ON COLUMN party.physical_addresses.line1 IS 'The address line 1 for the physical address that is required for an international or unstructured address';
 
 COMMENT ON COLUMN party.physical_addresses.line2 IS 'The address line 2 for the physical address';
@@ -264,7 +267,7 @@ COMMENT ON COLUMN party.physical_addresses.party_id IS 'The Universally Unique I
 
 COMMENT ON COLUMN party.physical_addresses.postal_code IS 'The postal code for the physical address';
 
-COMMENT ON COLUMN party.physical_addresses.purpose IS 'The code for the physical address purpose';
+COMMENT ON COLUMN party.physical_addresses.purposes IS 'The optional comma-delimited codes for the physical address purposes';
 
 COMMENT ON COLUMN party.physical_addresses.region IS 'The optional code for the region for the physical address';
 

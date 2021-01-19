@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -328,7 +329,17 @@ public class ContactMechanismPurpose implements Serializable {
    *     with
    */
   public void setPartyTypes(String[] partyTypes) {
-    this.partyTypes = StringUtils.arrayToDelimitedString(partyTypes, ",");
+    this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
+  }
+
+  /**
+   * Set the codes for the party types the contact mechanism purpose is associated with.
+   *
+   * @param partyTypes the codes for the party types the contact mechanism purpose is associated
+   *     with
+   */
+  public void setPartyTypes(Collection<String> partyTypes) {
+    this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
   }
 
   /**

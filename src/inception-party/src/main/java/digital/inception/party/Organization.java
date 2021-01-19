@@ -134,6 +134,17 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
+   * Constructs a new <code>Organization</code>.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
+   *     associated with
+   * @param name the name of the organization
+   */
+  public Organization(UUID tenantId, String name) {
+    super(tenantId, PartyType.ORGANIZATION, name);
+  }
+
+  /**
    * Add the contact mechanism for the organization.
    *
    * @param contactMechanism the contact mechanism
@@ -158,7 +169,7 @@ public class Organization extends Party implements Serializable {
   public void addPhysicalAddress(PhysicalAddress physicalAddress) {
     physicalAddresses.removeIf(
         existingPhysicalAddress ->
-            Objects.equals(existingPhysicalAddress.getPurpose(), physicalAddress.getPurpose()));
+            Objects.equals(existingPhysicalAddress.getId(), physicalAddress.getId()));
 
     physicalAddress.setParty(this);
 
@@ -217,8 +228,8 @@ public class Organization extends Party implements Serializable {
       description = "The optional codes for the countries of tax residence for the organization")
   @JsonProperty
   @XmlElement(name = "CountriesOfTaxResidence")
-  public String[] getCountriesOfTaxResidence() {
-    return StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence);
+  public Set<String> getCountriesOfTaxResidence() {
+    return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
   }
 
   /**
@@ -243,24 +254,27 @@ public class Organization extends Party implements Serializable {
     return super.getName();
   }
 
-  /**
-   * Retrieve the physical address with the specified type and purpose for the organization.
-   *
-   * @param type the physical address type
-   * @param purpose the physical address purpose
-   * @return the physical address with the specified type and purpose for the organization or <code>
-   *     null</code> if the physical address could not be found
-   */
-  public PhysicalAddress getPhysicalAddress(
-      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    return physicalAddresses.stream()
-        .filter(
-            physicalAddress ->
-                Objects.equals(physicalAddress.getType(), type)
-                    && Objects.equals(physicalAddress.getPurpose(), purpose))
-        .findFirst()
-        .get();
-  }
+  // TODO: Add method to find the first physical address with the specified purpose -- MARCUS
+
+  //  /**
+  //   * Retrieve the physical address with the specified type and purpose for the organization.
+  //   *
+  //   * @param type the physical address type
+  //   * @param purpose the physical address purpose
+  //   * @return the physical address with the specified type and purpose for the organization or
+  // <code>
+  //   *     null</code> if the physical address could not be found
+  //   */
+  //  public PhysicalAddress getPhysicalAddress(
+  //      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+  //    return physicalAddresses.stream()
+  //        .filter(
+  //            physicalAddress ->
+  //                Objects.equals(physicalAddress.getType(), type)
+  //                    && Objects.equals(physicalAddress.getPurpose(), purpose))
+  //        .findFirst()
+  //        .get();
+  //  }
 
   /**
    * Returns the physical addresses for the organization.
@@ -307,18 +321,20 @@ public class Organization extends Party implements Serializable {
                 && Objects.equals(existingContactMechanism.getPurpose(), purpose));
   }
 
-  /**
-   * Remove the physical address with the specified type and purpose for the organization.
-   *
-   * @param type the physical address type
-   * @param purpose the physical address purpose
-   */
-  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    physicalAddresses.removeIf(
-        existingPhysicalAddress ->
-            Objects.equals(existingPhysicalAddress.getType(), type)
-                && Objects.equals(existingPhysicalAddress.getPurpose(), purpose));
-  }
+  // TODO: Add method to remove the physical address with the specified purpose -- MARCUS
+
+  //  /**
+  //   * Remove the physical address with the specified type and purpose for the organization.
+  //   *
+  //   * @param type the physical address type
+  //   * @param purpose the physical address purpose
+  //   */
+  //  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+  //    physicalAddresses.removeIf(
+  //        existingPhysicalAddress ->
+  //            Objects.equals(existingPhysicalAddress.getType(), type)
+  //                && Objects.equals(existingPhysicalAddress.getPurpose(), purpose));
+  //  }
 
   /**
    * Remove the tax number with the specified type for the organization.
@@ -345,8 +361,9 @@ public class Organization extends Party implements Serializable {
    * @param countriesOfTaxResidence the optional codes for the countries of tax residence for the
    *     organization
    */
-  public void setCountriesOfTaxResidence(String[] countriesOfTaxResidence) {
-    this.countriesOfTaxResidence = StringUtils.arrayToDelimitedString(countriesOfTaxResidence, ",");
+  public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
+    this.countriesOfTaxResidence =
+        StringUtils.collectionToDelimitedString(countriesOfTaxResidence, ",");
   }
 
   /**

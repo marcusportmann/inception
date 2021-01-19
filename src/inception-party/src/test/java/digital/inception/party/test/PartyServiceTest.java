@@ -18,7 +18,6 @@ package digital.inception.party.test;
 
 // ~--- non-JDK imports --------------------------------------------------------
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -92,11 +91,10 @@ public class PartyServiceTest {
   private static synchronized Organization getTestOrganizationDetails() {
     organizationCount++;
 
-    Organization organization = new Organization();
-
-    organization.setId(UuidCreator.getShortPrefixComb());
-    organization.setName("Organization Name " + organizationCount);
-    organization.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
+    Organization organization =
+        new Organization(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            "Organization Name " + organizationCount);
 
     return organization;
   }
@@ -104,20 +102,20 @@ public class PartyServiceTest {
   private static synchronized Party getTestPartyDetails() {
     partyCount++;
 
-    Party party = new Party();
-
-    party.setId(UuidCreator.getShortPrefixComb());
-    party.setName("Party Name " + partyCount);
-    party.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-    party.setType(PartyType.ORGANIZATION);
-
-    return party;
+    return new Party(
+        UUID.fromString("00000000-0000-0000-0000-000000000000"),
+        PartyType.ORGANIZATION,
+        "Party Name " + partyCount);
   }
 
   private static synchronized Person getTestCompletePersonDetails() {
     personCount++;
 
-    Person person = new Person();
+    Person person =
+        new Person(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            String.format(
+                "GivenName%d MiddleName%d Surname%d", personCount, personCount, personCount));
 
     person.setCountryOfBirth("US");
     person.setDateOfBirth(LocalDate.of(1976, 3, 7));
@@ -130,22 +128,12 @@ public class PartyServiceTest {
     person.setMaritalStatus("M");
     person.setMarriageType("1");
     person.setMiddleNames("MiddleName" + personCount);
-    person.setName(
-        "GivenName"
-            + personCount
-            + " "
-            + "MiddleName"
-            + personCount
-            + " "
-            + "Surname"
-            + personCount);
     person.setOccupation("15");
     person.setPreferredName("PreferredName" + personCount);
     person.setRace("W");
     person.setResidencyStatus("P");
     person.setResidentialType("R");
     person.setSurname("Surname" + personCount);
-    person.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
     person.setTitle("1");
 
     person.addIdentityDocument(
@@ -599,7 +587,7 @@ public class PartyServiceTest {
 
     organization.setName(organization.getName() + " Updated");
 
-    organization.setCountriesOfTaxResidence(new String[] {"UK", "ZA"});
+    organization.setCountriesOfTaxResidence(Set.of("UK", "ZA"));
 
     organization.addContactMechanism(
         new ContactMechanism(
@@ -672,8 +660,7 @@ public class PartyServiceTest {
   public void partyPhysicalAddressTest() throws Exception {
     Person person = getTestBasicPersonDetails();
 
-    PhysicalAddress buildingAddress =
-        new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressPurpose.BILLING);
+    PhysicalAddress buildingAddress = new PhysicalAddress(PhysicalAddressType.BUILDING);
     buildingAddress.setBuildingName("Burj Khalifa");
     buildingAddress.setBuildingFloor("108");
     buildingAddress.setBuildingRoom("Room 1081");
@@ -913,7 +900,7 @@ public class PartyServiceTest {
   }
 
   private void compareOrganizations(Organization organization1, Organization organization2) {
-    assertArrayEquals(
+    assertEquals(
         "The countries of tax residence values for the two organizations do not match",
         organization1.getCountriesOfTaxResidence(),
         organization2.getCountriesOfTaxResidence());
@@ -974,9 +961,7 @@ public class PartyServiceTest {
       for (PhysicalAddress person2PhysicalAddress : organization2.getPhysicalAddresses()) {
 
         if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
-            && Objects.equals(person1PhysicalAddress.getType(), person2PhysicalAddress.getType())
-            && Objects.equals(
-                person1PhysicalAddress.getPurpose(), person2PhysicalAddress.getPurpose())) {
+            && Objects.equals(person1PhysicalAddress.getId(), person2PhysicalAddress.getId())) {
 
           comparePhysicalAddresses(person1PhysicalAddress, person2PhysicalAddress);
 
@@ -985,12 +970,7 @@ public class PartyServiceTest {
       }
 
       if (!foundPhysicalAddress) {
-        fail(
-            "Failed to find the physical address ("
-                + person1PhysicalAddress.getType()
-                + ")("
-                + person1PhysicalAddress.getPurpose()
-                + ")");
+        fail("Failed to find the physical address (" + person1PhysicalAddress.getId() + ")");
       }
     }
   }
@@ -1008,7 +988,7 @@ public class PartyServiceTest {
   }
 
   private void comparePersons(Person person1, Person person2) {
-    assertArrayEquals(
+    assertEquals(
         "The countries of tax residence values for the two persons do not match",
         person1.getCountriesOfTaxResidence(),
         person2.getCountriesOfTaxResidence());
@@ -1218,9 +1198,7 @@ public class PartyServiceTest {
       for (PhysicalAddress person2PhysicalAddress : person2.getPhysicalAddresses()) {
 
         if (Objects.equals(person1PhysicalAddress.getParty(), person2PhysicalAddress.getParty())
-            && Objects.equals(person1PhysicalAddress.getType(), person2PhysicalAddress.getType())
-            && Objects.equals(
-                person1PhysicalAddress.getPurpose(), person2PhysicalAddress.getPurpose())) {
+            && Objects.equals(person1PhysicalAddress.getId(), person2PhysicalAddress.getId())) {
 
           comparePhysicalAddresses(person1PhysicalAddress, person2PhysicalAddress);
 
@@ -1229,12 +1207,7 @@ public class PartyServiceTest {
       }
 
       if (!foundPhysicalAddress) {
-        fail(
-            "Failed to find the physical address ("
-                + person1PhysicalAddress.getType()
-                + ")("
-                + person1PhysicalAddress.getPurpose()
-                + ")");
+        fail("Failed to find the physical address (" + person1PhysicalAddress.getId() + ")");
       }
     }
 
@@ -1314,9 +1287,9 @@ public class PartyServiceTest {
         physicalAddress1.getLine3(),
         physicalAddress2.getLine3());
     assertEquals(
-        "The purpose values for the two physical addresses do not match",
-        physicalAddress1.getPurpose(),
-        physicalAddress2.getPurpose());
+        "The purposes values for the two physical addresses do not match",
+        physicalAddress1.getPurposes(),
+        physicalAddress2.getPurposes());
     assertEquals(
         "The region values for the two physical addresses do not match",
         physicalAddress1.getRegion(),

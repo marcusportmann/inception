@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -78,9 +79,7 @@ public class Party implements Serializable {
   protected LocalDateTime updated;
 
   /** The Universally Unique Identifier (UUID) for the party. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the party",
-      required = true)
+  @Schema(description = "The Universally Unique Identifier (UUID) for the party", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -100,10 +99,7 @@ public class Party implements Serializable {
   @Column(name = "name", nullable = false, length = 100)
   private String name;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the tenant the party is
-   * associated with.
-   */
+  /** The Universally Unique Identifier (UUID) for the tenant the party is associated with. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) for the tenant the party is associated with",
@@ -133,6 +129,21 @@ public class Party implements Serializable {
    */
   public Party(PartyType type) {
     this.type = type;
+  }
+
+  /**
+   * Constructs a new <code>Party</code>.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
+   *     with
+   * @param type the party type
+   * @param name the name of the party
+   */
+  public Party(UUID tenantId, PartyType type, String name) {
+    this.id = UuidCreator.getShortPrefixComb();
+    this.tenantId = tenantId;
+    this.type = type;
+    this.name = name;
   }
 
   /**
@@ -189,11 +200,9 @@ public class Party implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the tenant the party is
-   * associated with.
+   * Returns the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the tenant the party is
-   *     associated with
+   * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
    */
   public UUID getTenantId() {
     return tenantId;
@@ -246,11 +255,10 @@ public class Party implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the tenant the party is
-   * associated with.
+   * Set the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
-   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the
-   *     party is associated with
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
+   *     with
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;

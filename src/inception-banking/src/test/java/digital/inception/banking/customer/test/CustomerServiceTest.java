@@ -16,7 +16,6 @@
 
 package digital.inception.banking.customer.test;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -189,7 +188,7 @@ public class CustomerServiceTest {
         "The country of residence values for the two individual customers do not match",
         individualCustomer1.getCountryOfResidence(),
         individualCustomer2.getCountryOfResidence());
-    assertArrayEquals(
+    assertEquals(
         "The countries of tax residence values for the two individual customers do not match",
         individualCustomer1.getCountriesOfTaxResidence(),
         individualCustomer2.getCountriesOfTaxResidence());
@@ -285,7 +284,7 @@ public class CustomerServiceTest {
         "The title values for the two individual customers do not match",
         individualCustomer1.getTitle(),
         individualCustomer2.getTitle());
-    
+
     assertEquals(
         "The number of identity documents for the two individual customers do not match",
         individualCustomer1.getIdentityDocuments().size(),
@@ -357,13 +356,9 @@ public class CustomerServiceTest {
       }
 
       if (!foundTaxNumber) {
-        fail(
-            "Failed to find the tax number ("
-                + individualCustomer1TaxNumber.getType()
-                + ")");
+        fail("Failed to find the tax number (" + individualCustomer1TaxNumber.getType() + ")");
       }
     }
-
 
     assertEquals(
         "The number of contact mechanisms for the two individual customers do not match",
@@ -421,11 +416,8 @@ public class CustomerServiceTest {
                 individualCustomer1PhysicalAddress.getParty(),
                 individualCustomer2PhysicalAddress.getParty())
             && Objects.equals(
-                individualCustomer1PhysicalAddress.getType(),
-                individualCustomer2PhysicalAddress.getType())
-            && Objects.equals(
-                individualCustomer1PhysicalAddress.getPurpose(),
-                individualCustomer2PhysicalAddress.getPurpose())) {
+                individualCustomer1PhysicalAddress.getId(),
+                individualCustomer2PhysicalAddress.getId())) {
 
           comparePhysicalAddresses(
               individualCustomer1PhysicalAddress, individualCustomer2PhysicalAddress);
@@ -437,9 +429,7 @@ public class CustomerServiceTest {
       if (!foundPhysicalAddress) {
         fail(
             "Failed to find the physical address ("
-                + individualCustomer1PhysicalAddress.getType()
-                + ")("
-                + individualCustomer1PhysicalAddress.getPurpose()
+                + individualCustomer1PhysicalAddress.getId()
                 + ")");
       }
     }
@@ -524,8 +514,8 @@ public class CustomerServiceTest {
         physicalAddress2.getLine3());
     assertEquals(
         "The purpose values for the two physical addresses do not match",
-        physicalAddress1.getPurpose(),
-        physicalAddress2.getPurpose());
+        physicalAddress1.getPurposes(),
+        physicalAddress2.getPurposes());
     assertEquals(
         "The region values for the two physical addresses do not match",
         physicalAddress1.getRegion(),

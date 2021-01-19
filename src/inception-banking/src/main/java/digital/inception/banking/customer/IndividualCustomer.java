@@ -12,8 +12,6 @@ import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PhysicalAddress;
-import digital.inception.party.PhysicalAddressPurpose;
-import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
 import digital.inception.party.TaxNumber;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -173,11 +171,10 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the codes for the countries of tax residence for the individual customer
    */
   @Schema(
-      description =
-          "The codes for the countries of tax residence for the individual customer",
+      description = "The codes for the countries of tax residence for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  public String[] getCountriesOfTaxResidence() {
+  public Set<String> getCountriesOfTaxResidence() {
     return super.getCountriesOfTaxResidence();
   }
 
@@ -428,20 +425,24 @@ public class IndividualCustomer extends Person implements Serializable {
     return super.getOccupation();
   }
 
-  /**
-   * Retrieve the physical address with the specified type and purpose for the individual customer.
-   *
-   * @param type the physical address type
-   * @param purpose the physical address purpose
-   * @return the physical address with the specified type and purpose for the individual customer or
-   *     <code>null
-   *     </code> if the physical address could not be found
-   */
-  @Override
-  public PhysicalAddress getPhysicalAddress(
-      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    return super.getPhysicalAddress(type, purpose);
-  }
+  // TODO: Add method to find the first physical address with the specified purpose -- MARCUS
+
+  //  /**
+  //   * Retrieve the physical address with the specified type and purpose for the individual
+  // customer.
+  //   *
+  //   * @param type the physical address type
+  //   * @param purpose the physical address purpose
+  //   * @return the physical address with the specified type and purpose for the individual
+  // customer or
+  //   *     <code>null
+  //   *     </code> if the physical address could not be found
+  //   */
+  //  @Override
+  //  public PhysicalAddress getPhysicalAddress(
+  //      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+  //    return super.getPhysicalAddress(type, purpose);
+  //  }
 
   /**
    * Returns the physical addresses for the individual customer.
@@ -613,16 +614,19 @@ public class IndividualCustomer extends Person implements Serializable {
     super.removeIdentityDocumentByType(type);
   }
 
-  /**
-   * Remove the physical address with the specified type and purpose for the individual customer.
-   *
-   * @param type the physical address type
-   * @param purpose the physical address purpose
-   */
-  @Override
-  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-    super.removePhysicalAddress(type, purpose);
-  }
+  // TODO: Add method to remove the physical address with the specified purpose -- MARCUS
+
+  //  /**
+  //   * Remove the physical address with the specified type and purpose for the individual
+  // customer.
+  //   *
+  //   * @param type the physical address type
+  //   * @param purpose the physical address purpose
+  //   */
+  //  @Override
+  //  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+  //    super.removePhysicalAddress(type, purpose);
+  //  }
 
   /**
    * Remove the tax number with the specified type for the individual customer.
@@ -642,17 +646,6 @@ public class IndividualCustomer extends Person implements Serializable {
   @Override
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
     super.setContactMechanisms(contactMechanisms);
-  }
-
-  /**
-   * Set the codes for the countries of tax residence for the individual customer.
-   *
-   * @param countriesOfTaxResidence the codes for the countries of tax residence for the individual
-   *     customer
-   */
-  @Override
-  public void setCountriesOfTaxResidence(String[] countriesOfTaxResidence) {
-    super.setCountriesOfTaxResidence(countriesOfTaxResidence);
   }
 
   /**
