@@ -64,9 +64,9 @@ public class IdentityDocumentType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
-  @Size(min = 1, max = 10)
+  @Size(min = 1, max = 30)
   @Id
-  @Column(name = "code", nullable = false)
+  @Column(name = "code", length = 30, nullable = false)
   private String code;
 
   /** The optional code for the country of issue for the identity document type. */
@@ -77,8 +77,8 @@ public class IdentityDocumentType implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
-  @Size(min = 1, max = 10)
-  @Column(name = "country_of_issue", nullable = false)
+  @Size(min = 1, max = 30)
+  @Column(name = "country_of_issue", length = 30, nullable = false)
   private String countryOfIssue;
 
   /** The description for the identity document type. */
@@ -87,7 +87,7 @@ public class IdentityDocumentType implements Serializable {
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 200)
-  @Column(name = "description", nullable = false)
+  @Column(name = "description", length = 200, nullable = false)
   private String description;
 
   /** The Unicode locale identifier for the identity document type. */
@@ -99,7 +99,7 @@ public class IdentityDocumentType implements Serializable {
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale_id", nullable = false)
+  @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
   /** The name of the identity document type. */
@@ -108,7 +108,7 @@ public class IdentityDocumentType implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 50)
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", length = 50, nullable = false)
   private String name;
 
   /** The sort index for the identity document type. */

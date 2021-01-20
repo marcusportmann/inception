@@ -76,7 +76,7 @@ public class Code implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "code_category_id", nullable = false, length = 100)
+  @Column(name = "code_category_id", length = 100, nullable = false)
   private String codeCategoryId;
 
   /** The date and time the code was created. */
@@ -93,7 +93,7 @@ public class Code implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "id", nullable = false, length = 100)
+  @Column(name = "id", length = 100, nullable = false)
   private String id;
 
   /** The name of the code. */
@@ -101,8 +101,8 @@ public class Code implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
-  @Size(max = 100)
-  @Column(name = "name", nullable = false, length = 100)
+  @Size(min = 1, max = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The date and time the code was last updated. */
@@ -118,7 +118,7 @@ public class Code implements Serializable {
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
-  @Column(name = "value", nullable = false, length = 4000)
+  @Column(name = "value", length = 4000, nullable = false)
   private String value;
 
   /** Constructs a new <code>Code</code>. */

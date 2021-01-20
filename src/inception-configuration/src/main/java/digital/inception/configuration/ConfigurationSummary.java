@@ -64,7 +64,7 @@ public class ConfigurationSummary implements Serializable {
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 100)
-  @Column(name = "description", nullable = false, length = 100)
+  @Column(name = "description", length = 100, nullable = false)
   private String description;
 
   /** The key for the configuration. */
@@ -74,7 +74,7 @@ public class ConfigurationSummary implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "key", nullable = false, length = 100)
+  @Column(name = "key", length = 100, nullable = false)
   private String key;
 
   /** Constructs a new <code>ConfigurationSummary</code>. */

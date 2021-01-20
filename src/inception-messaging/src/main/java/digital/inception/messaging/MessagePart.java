@@ -148,7 +148,7 @@ public class MessagePart {
   @XmlElement(name = "MessageChecksum", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "message_checksum", nullable = false, length = 100)
+  @Column(name = "message_checksum", length = 100, nullable = false)
   private String messageChecksum;
 
   /** The optional Universally Unique Identifier (UUID) used to correlate the original message. */
@@ -248,7 +248,7 @@ public class MessagePart {
   @XmlElement(name = "MessageUsername", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "message_username", nullable = false, length = 100)
+  @Column(name = "message_username", length = 100, nullable = false)
   private String messageUsername;
 
   /** The number of the message part in the set of message parts for the original message. */

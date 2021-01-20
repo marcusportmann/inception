@@ -65,8 +65,9 @@ public class ReportDefinitionSummary implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
+  @Size(min = 1, max = 100)
   @Id
-  @Column(name = "id", nullable = false)
+  @Column(name = "id", length = 100, nullable = false)
   private String id;
 
   /** The name of the report definition. */
@@ -75,7 +76,7 @@ public class ReportDefinitionSummary implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** Constructs a new <code>ReportDefinitionSummary</code>. */

@@ -97,7 +97,7 @@ public class ErrorReport implements Serializable {
   @XmlElement(name = "ApplicationId", required = true)
   @NotNull
   @Size(min = 1, max = 200)
-  @Column(name = "application_id", nullable = false, length = 200)
+  @Column(name = "application_id", length = 200, nullable = false)
   private String applicationId;
 
   /** The version of the application that generated the error report. */
@@ -108,7 +108,7 @@ public class ErrorReport implements Serializable {
   @XmlElement(name = "ApplicationVersion", required = true)
   @NotNull
   @Size(max = 50)
-  @Column(name = "application_version", nullable = false, length = 50)
+  @Column(name = "application_version", length = 50, nullable = false)
   private String applicationVersion;
 
   /** The date and time the error report was created. */
@@ -134,7 +134,7 @@ public class ErrorReport implements Serializable {
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 4000)
-  @Column(name = "description", nullable = false, length = 4000)
+  @Column(name = "description", length = 4000, nullable = false)
   private String description;
 
   /** The error detail. */
@@ -151,8 +151,7 @@ public class ErrorReport implements Serializable {
    */
   @Schema(
       description =
-          "The optional Universally Unique Identifier (UUID) for the device "
-              + "the error report originated from")
+          "The optional Universally Unique Identifier (UUID) for the device the error report originated from")
   @JsonProperty
   @XmlElement(name = "DeviceId")
   @Column(name = "device_id")

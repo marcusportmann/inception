@@ -111,7 +111,7 @@ public class UserDirectory implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The parameters for the user directory. */
@@ -135,7 +135,7 @@ public class UserDirectory implements Serializable {
   @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "type", nullable = false, length = 100)
+  @Column(name = "type", length = 100, nullable = false)
   private String type;
 
   /** The date and time the user directory was last updated. */
@@ -182,7 +182,7 @@ public class UserDirectory implements Serializable {
   @JsonIgnore
   @XmlTransient
   @Access(AccessType.PROPERTY)
-  @Column(name = "configuration", nullable = false, length = 4000)
+  @Column(name = "configuration", length = 4000, nullable = false)
   public String getConfiguration() {
     StringBuilder buffer = new StringBuilder();
 

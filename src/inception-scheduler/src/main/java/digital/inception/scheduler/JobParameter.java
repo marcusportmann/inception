@@ -91,7 +91,7 @@ public class JobParameter implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "name", nullable = false, length = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The date and time the job parameter was last updated. */
@@ -107,7 +107,7 @@ public class JobParameter implements Serializable {
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
-  @Column(name = "value", nullable = false, length = 4000)
+  @Column(name = "value", length = 4000, nullable = false)
   private String value;
 
   /** Constructs a new <code>JobParameter</code>. */

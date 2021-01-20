@@ -92,16 +92,18 @@ public class ContactMechanism implements Serializable {
   @JsonIgnore
   @XmlTransient
   @NotNull
+  @Size(min = 1, max = 30)
   @Id
-  @Column(name = "purpose", nullable = false, length = 30)
+  @Column(name = "purpose", length = 30, nullable = false)
   private String purpose;
 
   /** The contact mechanism type. */
   @JsonIgnore
   @XmlTransient
   @NotNull
+  @Size(min = 1, max = 30)
   @Id
-  @Column(name = "type", nullable = false, length = 30)
+  @Column(name = "type", length = 30, nullable = false)
   private String type;
 
   /** The date and time the contact mechanism was last updated. */
@@ -117,7 +119,7 @@ public class ContactMechanism implements Serializable {
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(min = 1, max = 200)
-  @Column(name = "value", nullable = false, length = 200)
+  @Column(name = "value", length = 200, nullable = false)
   private String value;
 
   /** Constructs a new <code>ContactMechanism</code>. */

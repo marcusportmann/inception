@@ -99,7 +99,7 @@ public class PasswordReset implements Serializable {
   @XmlElement(name = "SecurityCodeHash", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "security_code_hash", nullable = false, length = 100)
+  @Column(name = "security_code_hash", length = 100, nullable = false)
   private String securityCodeHash;
 
   /** The status of the password reset. */
@@ -119,7 +119,7 @@ public class PasswordReset implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "username", nullable = false, length = 100)
+  @Column(name = "username", length = 100, nullable = false)
   private String username;
 
   /** Constructs a new <code>PasswordReset</code>. */

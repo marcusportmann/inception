@@ -76,7 +76,7 @@ public class Configuration implements Serializable {
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 100)
-  @Column(name = "description", nullable = false, length = 100)
+  @Column(name = "description", length = 100, nullable = false)
   private String description;
 
   /** The key for the configuration. */
@@ -86,7 +86,7 @@ public class Configuration implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "key", nullable = false, length = 100)
+  @Column(name = "key", length = 100, nullable = false)
   private String key;
 
   /** The date and time the configuration was last updated. */
@@ -102,7 +102,7 @@ public class Configuration implements Serializable {
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(max = 4000)
-  @Column(name = "value", nullable = false, length = 4000)
+  @Column(name = "value", length = 4000, nullable = false)
   private String value;
 
   /** Constructs a new <code>Configuration</code>. */

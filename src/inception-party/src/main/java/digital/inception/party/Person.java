@@ -214,16 +214,16 @@ public class Person extends Party implements Serializable {
   @Schema(description = "The optional code for the country of birth for the person")
   @JsonProperty
   @XmlElement(name = "CountryOfBirth")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "country_of_birth", length = 10)
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "country_of_birth", length = 30)
   private String countryOfBirth;
 
   /** The optional code for the country of residence for the person. */
   @Schema(description = "The optional code for the country of residence for the person")
   @JsonProperty
   @XmlElement(name = "CountryOfResidence")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "country_of_residence", length = 10)
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "country_of_residence", length = 30)
   private String countryOfResidence;
 
   /** The optional date of birth for the person. */
@@ -244,24 +244,24 @@ public class Person extends Party implements Serializable {
   @Schema(description = "The optional code for the employment status for the person")
   @JsonProperty
   @XmlElement(name = "EmploymentStatus")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "employment_status")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "employment_status", length = 30)
   private String employmentStatus;
 
   /** The optional code for the employment type for the person. */
   @Schema(description = "The optional code for the employment type for the person")
   @JsonProperty
   @XmlElement(name = "EmploymentType")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "employment_type")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "employment_type", length = 30)
   private String employmentType;
 
   /** The optional code for the gender for the person. */
   @Schema(description = "The optional code for the gender for the person")
   @JsonProperty
   @XmlElement(name = "Gender")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "gender")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "gender", length = 30)
   private String gender;
 
   /** The optional given name, firstname, forename, or Christian name for the person. */
@@ -278,8 +278,8 @@ public class Person extends Party implements Serializable {
   @Schema(description = "The optional code for the home language for the person")
   @JsonProperty
   @XmlElement(name = "HomeLanguage")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "home_language")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "home_language", length = 30)
   private String homeLanguage;
 
   /** The optional initials for the person. */
@@ -302,8 +302,8 @@ public class Person extends Party implements Serializable {
   @Schema(description = "The optional code for the marital status for the person")
   @JsonProperty
   @XmlElement(name = "MaritalStatus")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "marital_status")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "marital_status", length = 30)
   private String maritalStatus;
 
   /** The optional code for the marriage type for the person if the person is married. */
@@ -312,8 +312,8 @@ public class Person extends Party implements Serializable {
           "The optional code for the marriage type for the person if the person is married")
   @JsonProperty
   @XmlElement(name = "MarriageType")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "marriage_type")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "marriage_type", length = 30)
   private String marriageType;
 
   /** The optional middle names for the person. */
@@ -328,8 +328,8 @@ public class Person extends Party implements Serializable {
   @Schema(description = "The optional code for the occupation for the person")
   @JsonProperty
   @XmlElement(name = "Occupation")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "occupation")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "occupation", length = 30)
   private String occupation;
 
   /**
@@ -349,24 +349,24 @@ public class Person extends Party implements Serializable {
   @Schema(description = "The optional code for the race for the person")
   @JsonProperty
   @XmlElement(name = "Race")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "race")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "race", length = 30)
   private String race;
 
   /** The optional code for the residency status for the person. */
   @Schema(description = "The optional code for the residency status for the person")
   @JsonProperty
   @XmlElement(name = "ResidencyStatus")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "residency_status")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "residency_status", length = 30)
   private String residencyStatus;
 
   /** The optional code for the residential type for the person. */
   @Schema(description = "The optional code for the residential type for the person")
   @JsonProperty
   @XmlElement(name = "ResidentialType")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "residential_type")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "residential_type", length = 30)
   private String residentialType;
 
   /** The optional surname, last name, or family name for the person. */
@@ -381,8 +381,8 @@ public class Person extends Party implements Serializable {
   @Schema(description = "The optional code for the title for the person")
   @JsonProperty
   @XmlElement(name = "Title")
-  @Size(min = 1, max = 10)
-  @Column(table = "persons", name = "title")
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "title", length = 30)
   private String title;
 
   /** Constructs a new <code>Person</code>. */

@@ -959,6 +959,46 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
+   * Retrieve the times to contact.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
+   *     for or <code>null</code> to retrieve the times to contact for all locales
+   * @return the times to contact
+   */
+  @Operation(
+      summary = "Retrieve the times to contact",
+      description = "Retrieve the times to contact")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/times-to-contact",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<TimeToContact> getTimesToContact(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the times to contact for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getTimesToContact(localeId);
+  }
+
+  /**
    * Retrieve the titles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or

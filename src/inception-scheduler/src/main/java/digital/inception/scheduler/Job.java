@@ -142,7 +142,7 @@ public class Job implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "id", nullable = false)
+  @Column(name = "id", length = 100, nullable = false)
   private String id;
 
   /** The fully qualified name of the Java class that implements the job. */
@@ -153,7 +153,7 @@ public class Job implements Serializable {
   @XmlElement(name = "JobClass", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "job_class", nullable = false, length = 1000)
+  @Column(name = "job_class", length = 1000, nullable = false)
   private String jobClass;
 
   /** The date and time the job was last executed. */
@@ -178,7 +178,7 @@ public class Job implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The date and time when the job will next be executed. */
@@ -196,7 +196,7 @@ public class Job implements Serializable {
   @XmlElement(name = "SchedulingPattern", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "scheduling_pattern", nullable = false, length = 100)
+  @Column(name = "scheduling_pattern", length = 100, nullable = false)
   private String schedulingPattern;
 
   /** The status of the job. */

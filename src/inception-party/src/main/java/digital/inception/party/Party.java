@@ -96,7 +96,7 @@ public class Party implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The Universally Unique Identifier (UUID) for the tenant the party is associated with. */
@@ -115,7 +115,7 @@ public class Party implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type", nullable = false)
+  @Column(name = "type", length = 30, nullable = false)
   private PartyType type;
 
   /** Constructs a new <code>Party</code>. */

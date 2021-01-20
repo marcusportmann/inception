@@ -109,6 +109,9 @@ public class ReferenceService implements IReferenceService {
   /** The Tax Number Type Repository. */
   private final TaxNumberTypeRepository taxNumberTypeRepository;
 
+  /** The Time To Contact Repository. */
+  private final TimeToContactRepository timeToContactRepository;
+
   /** The Title Repository. */
   private final TitleRepository titleRepository;
 
@@ -148,6 +151,7 @@ public class ReferenceService implements IReferenceService {
    * @param residentialTypeRepository the Residential Type Repository
    * @param sourceOfFundsRepository the Source Of Funds Repository
    * @param taxNumberTypeRepository the Tax Number Type Repository
+   * @param timeToContactRepository the Time To Contact Repository
    * @param titleRepository the Title Repository
    * @param verificationMethodRepository the Verification Method Repository
    * @param verificationStatusRepository the Verification Status Repository
@@ -177,6 +181,7 @@ public class ReferenceService implements IReferenceService {
       ResidentialTypeRepository residentialTypeRepository,
       SourceOfFundsRepository sourceOfFundsRepository,
       TaxNumberTypeRepository taxNumberTypeRepository,
+      TimeToContactRepository timeToContactRepository,
       TitleRepository titleRepository,
       VerificationMethodRepository verificationMethodRepository,
       VerificationStatusRepository verificationStatusRepository) {
@@ -204,6 +209,7 @@ public class ReferenceService implements IReferenceService {
     this.residentialTypeRepository = residentialTypeRepository;
     this.sourceOfFundsRepository = sourceOfFundsRepository;
     this.taxNumberTypeRepository = taxNumberTypeRepository;
+    this.timeToContactRepository = timeToContactRepository;
     this.titleRepository = titleRepository;
     this.verificationMethodRepository = verificationMethodRepository;
     this.verificationStatusRepository = verificationStatusRepository;
@@ -941,6 +947,37 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the tax number types", e);
+    }
+  }
+
+  /**
+   * Retrieve all the times to contact.
+   *
+   * @return the times to contact
+   */
+  @Override
+  public List<TimeToContact> getTimesToContact() throws ReferenceServiceException {
+    return getTimesToContact(null);
+  }
+
+  /**
+   * Retrieve the times to contact.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
+   *     for or <code>null</code> to retrieve the times to contact for all locales
+   * @return the times to contact
+   */
+  @Override
+  public List<TimeToContact> getTimesToContact(String localeId) throws ReferenceServiceException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return timeToContactRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return timeToContactRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the times to contact", e);
     }
   }
 

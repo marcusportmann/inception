@@ -62,9 +62,9 @@ public class VerificationStatus implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
-  @Size(min = 1, max = 10)
+  @Size(min = 1, max = 30)
   @Id
-  @Column(name = "code", nullable = false)
+  @Column(name = "code", length = 30, nullable = false)
   private String code;
 
   /** The description for the verification status. */
@@ -73,7 +73,7 @@ public class VerificationStatus implements Serializable {
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 200)
-  @Column(name = "description", nullable = false)
+  @Column(name = "description", length = 200, nullable = false)
   private String description;
 
   /** The Unicode locale identifier for the verification status. */
@@ -85,7 +85,7 @@ public class VerificationStatus implements Serializable {
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale_id", nullable = false)
+  @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
   /** The name of the verification status. */
@@ -94,7 +94,7 @@ public class VerificationStatus implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 50)
-  @Column(name = "name", nullable = false)
+  @Column(name = "name", length = 50, nullable = false)
   private String name;
 
   /** The sort index for the verification status. */

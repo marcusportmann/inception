@@ -36,28 +36,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>NextOfKinType</code> class holds the information for a possible next of kin type.
+ * The <code>TimeToContact</code> class holds the information for a possible time to contact for a
+ * person.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A type of living relative for a person")
+@Schema(description = "A time to contact for a person")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "NextOfKinType", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "TimeToContact", namespace = "http://reference.inception.digital")
 @XmlType(
-    name = "NextOfKinType",
+    name = "TimeToContact",
     namespace = "http://reference.inception.digital",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "next_of_kin_types")
-@IdClass(NextOfKinTypeId.class)
-public class NextOfKinType implements Serializable {
+@Table(schema = "reference", name = "times_to_contact")
+@IdClass(TimeToContactId.class)
+public class TimeToContact implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the next of kin type. */
-  @Schema(description = "The code for the next of kin type", required = true)
+  /** The code for the time to contact. */
+  @Schema(description = "The code for the time to contact", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -66,8 +67,8 @@ public class NextOfKinType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the next of kin type. */
-  @Schema(description = "The description for the next of kin type", required = true)
+  /** The description for the time to contact. */
+  @Schema(description = "The description for the time to contact", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -75,8 +76,8 @@ public class NextOfKinType implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the next of kin type. */
-  @Schema(description = "The Unicode locale identifier for the next of kin type", required = true)
+  /** The Unicode locale identifier for the time to contact. */
+  @Schema(description = "The Unicode locale identifier for the time to contact", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
   @NotNull
@@ -85,8 +86,8 @@ public class NextOfKinType implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the next of kin type. */
-  @Schema(description = "The name of the next of kin type", required = true)
+  /** The name of the time to contact. */
+  @Schema(description = "The name of the time to contact", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -94,16 +95,16 @@ public class NextOfKinType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the next of kin type. */
-  @Schema(description = "The sort index for the next of kin type", required = true)
+  /** The sort index for the time to contact. */
+  @Schema(description = "The sort index for the time to contact", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>NextOfKinType</code>. */
-  public NextOfKinType() {}
+  /** Constructs a new <code>TimeToContact</code>. */
+  public TimeToContact() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -126,51 +127,51 @@ public class NextOfKinType implements Serializable {
       return false;
     }
 
-    NextOfKinType other = (NextOfKinType) object;
+    TimeToContact other = (TimeToContact) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the next of kin type.
+   * Returns the code for the time to contact.
    *
-   * @return the code for the next of kin type
+   * @return the code for the time to contact
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the next of kin type.
+   * Returns the description for the time to contact.
    *
-   * @return the description for the next of kin type
+   * @return the description for the time to contact
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the next of kin type.
+   * Returns the Unicode locale identifier for the time to contact.
    *
-   * @return the Unicode locale identifier for the next of kin type
+   * @return the Unicode locale identifier for the time to contact
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the next of kin type.
+   * Returns the name of the time to contact.
    *
-   * @return the name of the next of kin type
+   * @return the name of the time to contact
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the next of kin type.
+   * Returns the sort index for the time to contact.
    *
-   * @return the sort index for the next of kin type
+   * @return the sort index for the time to contact
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -187,45 +188,45 @@ public class NextOfKinType implements Serializable {
   }
 
   /**
-   * Set the code for the next of kin type.
+   * Set the code for the time to contact.
    *
-   * @param code the code for the next of kin type
+   * @param code the code for the time to contact
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the next of kin type.
+   * Set the description for the time to contact.
    *
-   * @param description the description for the next of kin type
+   * @param description the description for the time to contact
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the next of kin type.
+   * Set the Unicode locale identifier for the time to contact.
    *
-   * @param localeId the Unicode locale identifier for the next of kin type
+   * @param localeId the Unicode locale identifier for the time to contact
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the next of kin type.
+   * Set the name of the time to contact.
    *
-   * @param name the name of the next of kin type
+   * @param name the name of the time to contact
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the next of kin type.
+   * Set the sort index for the time to contact.
    *
-   * @param sortIndex the sort index for the next of kin type
+   * @param sortIndex the sort index for the time to contact
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

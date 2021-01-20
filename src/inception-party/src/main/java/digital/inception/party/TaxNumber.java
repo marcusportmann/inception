@@ -74,8 +74,8 @@ public class TaxNumber implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
-  @Size(min = 1, max = 10)
-  @Column(name = "country_of_issue", nullable = false)
+  @Size(min = 1, max = 30)
+  @Column(name = "country_of_issue", length = 30, nullable = false)
   private String countryOfIssue;
 
   /** The date and time the tax number was created. */
@@ -91,7 +91,7 @@ public class TaxNumber implements Serializable {
   @XmlElement(name = "Number", required = true)
   @NotNull
   @Size(min = 1, max = 30)
-  @Column(name = "number", nullable = false, length = 30)
+  @Column(name = "number", length = 30, nullable = false)
   private String number;
 
   /** The party the tax number is associated with. */
@@ -108,9 +108,9 @@ public class TaxNumber implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Size(min = 1, max = 10)
+  @Size(min = 1, max = 30)
   @Id
-  @Column(name = "type", nullable = false)
+  @Column(name = "type", length = 30, nullable = false)
   private String type;
 
   /** The date and time the tax number was last updated. */

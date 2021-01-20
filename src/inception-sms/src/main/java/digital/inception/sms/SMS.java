@@ -124,7 +124,7 @@ public class SMS implements Serializable {
   @XmlElement(name = "Message", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "message", nullable = false, length = 1000)
+  @Column(name = "message", length = 1000, nullable = false)
   private String message;
 
   /** The mobile number to send the SMS to. */
@@ -133,7 +133,7 @@ public class SMS implements Serializable {
   @XmlElement(name = "MobileNumber", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "mobile_number", nullable = false, length = 100)
+  @Column(name = "mobile_number", length = 100, nullable = false)
   private String mobileNumber;
 
   /** The number of times that the sending of the SMS was attempted. */

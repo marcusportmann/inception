@@ -88,7 +88,7 @@ public class ErrorReportSummary implements Serializable {
   @XmlElement(name = "ApplicationId", required = true)
   @NotNull
   @Size(min = 1, max = 200)
-  @Column(name = "application_id", nullable = false, length = 200)
+  @Column(name = "application_id", length = 200, nullable = false)
   private String applicationId;
 
   /** The version of the application that generated the error report. */
@@ -118,7 +118,7 @@ public class ErrorReportSummary implements Serializable {
   @XmlElement(name = "Description", required = true)
   @NotNull
   @Size(max = 4000)
-  @Column(name = "description", nullable = false, length = 4000)
+  @Column(name = "description", length = 4000, nullable = false)
   private String description;
 
   /**

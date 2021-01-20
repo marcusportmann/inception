@@ -68,13 +68,13 @@ COMMENT ON COLUMN reference.contact_mechanism_purposes.description IS 'The descr
 
 
 CREATE TABLE reference.countries (
-  code            VARCHAR(10)  NOT NULL,
+  code            VARCHAR(30)  NOT NULL,
   locale_id       VARCHAR(10)  NOT NULL,
   sort_index      INTEGER      NOT NULL,
   name            VARCHAR(50)  NOT NULL,
   short_name      VARCHAR(30)  NOT NULL,
   description     VARCHAR(200) NOT NULL DEFAULT '',
-  sovereign_state VARCHAR(10)  NOT NULL,
+  sovereign_state VARCHAR(30)  NOT NULL,
   nationality     VARCHAR(50)  NOT NULL,
 
   PRIMARY KEY (code, locale_id)
@@ -100,7 +100,7 @@ COMMENT ON COLUMN reference.countries.nationality IS 'The nationality for the co
 
 
 CREATE TABLE reference.employment_statuses (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -123,8 +123,8 @@ COMMENT ON COLUMN reference.employment_statuses.description IS 'The description 
 
 
 CREATE TABLE reference.employment_types (
-  employment_status VARCHAR(10)  NOT NULL,
-  code              VARCHAR(10)  NOT NULL,
+  employment_status VARCHAR(30)  NOT NULL,
+  code              VARCHAR(30)  NOT NULL,
   locale_id         VARCHAR(10)  NOT NULL,
   sort_index        INTEGER      NOT NULL,
   name              VARCHAR(50)  NOT NULL,
@@ -152,8 +152,8 @@ COMMENT ON COLUMN reference.employment_types.description IS 'The description for
 
 
 CREATE TABLE reference.genders (
-  code        VARCHAR(10)  NOT NULL,
-  locale_id    VARCHAR(10) NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10) NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
   description VARCHAR(200) NOT NULL DEFAULT '',
@@ -175,12 +175,12 @@ COMMENT ON COLUMN reference.genders.description IS 'The description for the gend
 
 
 CREATE TABLE reference.identity_document_types (
-  code             VARCHAR(10)  NOT NULL,
+  code             VARCHAR(30)  NOT NULL,
   locale_id        VARCHAR(10)  NOT NULL,
   sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
-  country_of_issue VARCHAR(10),
+  country_of_issue VARCHAR(30),
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT identity_document_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
@@ -204,7 +204,7 @@ COMMENT ON COLUMN reference.identity_document_types.country_of_issue IS 'The opt
 
 
 CREATE TABLE reference.languages (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -230,7 +230,7 @@ COMMENT ON COLUMN reference.languages.description IS 'The description for the la
 
 
 CREATE TABLE reference.marital_statuses (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -253,8 +253,8 @@ COMMENT ON COLUMN reference.marital_statuses.description IS 'The description for
 
 
 CREATE TABLE reference.marriage_types (
-  marital_status VARCHAR(10)  NOT NULL,
-  code           VARCHAR(10)  NOT NULL,
+  marital_status VARCHAR(30)  NOT NULL,
+  code           VARCHAR(30)  NOT NULL,
   locale_id      VARCHAR(10)  NOT NULL,
   sort_index     INTEGER      NOT NULL,
   name           VARCHAR(50)  NOT NULL,
@@ -282,7 +282,7 @@ COMMENT ON COLUMN reference.marriage_types.description IS 'The description for t
 
 
 CREATE TABLE reference.minor_types (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -305,7 +305,7 @@ COMMENT ON COLUMN reference.minor_types.description IS 'The description for the 
 
 
 CREATE TABLE reference.next_of_kin_types (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -328,7 +328,7 @@ COMMENT ON COLUMN reference.next_of_kin_types.description IS 'The description fo
 
 
 CREATE TABLE reference.occupations (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -453,7 +453,7 @@ COMMENT ON COLUMN reference.preference_types.description IS 'The description for
 
 
 CREATE TABLE reference.races (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -476,8 +476,8 @@ COMMENT ON COLUMN reference.races.description IS 'The description for the race';
 
 
 CREATE TABLE reference.regions (
-  country     VARCHAR(10)  NOT NULL,
-  code        VARCHAR(10)  NOT NULL,
+  country     VARCHAR(30)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -505,12 +505,12 @@ COMMENT ON COLUMN reference.regions.description IS 'The description for the regi
 
 
 CREATE TABLE reference.residence_permit_types (
-  code             VARCHAR(10)  NOT NULL,
+  code             VARCHAR(30)  NOT NULL,
   locale_id        VARCHAR(10)  NOT NULL,
   sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
-  country_of_issue VARCHAR(10)  NOT NULL,
+  country_of_issue VARCHAR(30)  NOT NULL,
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT residence_permit_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
@@ -534,7 +534,7 @@ COMMENT ON COLUMN reference.residence_permit_types.country_of_issue IS 'The code
 
 
 CREATE TABLE reference.residency_statuses (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -557,7 +557,7 @@ COMMENT ON COLUMN reference.residency_statuses.description IS 'The description f
 
 
 CREATE TABLE reference.residential_types (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -580,7 +580,7 @@ COMMENT ON COLUMN reference.residential_types.description IS 'The description fo
 
 
 CREATE TABLE reference.sources_of_funds (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -607,7 +607,7 @@ COMMENT ON COLUMN reference.sources_of_funds.description IS 'The description for
 -- FINISH SIC CODES
 
 -- CREATE TABLE reference.standard_industry_codes (
---   code        VARCHAR(10)  NOT NULL,
+--   code        VARCHAR(30)  NOT NULL,
 --   locale_id   VARCHAR(10)  NOT NULL,
 --   sort_index  INTEGER      NOT NULL,
 --   name        VARCHAR(50)  NOT NULL,
@@ -629,36 +629,13 @@ COMMENT ON COLUMN reference.sources_of_funds.description IS 'The description for
 -- COMMENT ON COLUMN reference.standard_industry_codes.description IS 'The description for the standard industry code';
 
 
-CREATE TABLE reference.suitable_times_to_contact (
-  code        VARCHAR(10)  NOT NULL,
-  locale_id   VARCHAR(10)  NOT NULL,
-  sort_index  INTEGER      NOT NULL,
-  name        VARCHAR(50)  NOT NULL,
-  description VARCHAR(200) NOT NULL DEFAULT '',
-
-  PRIMARY KEY (code, locale_id)
-);
-
-CREATE INDEX suitable_times_to_contact_locale_id_ix ON reference.suitable_times_to_contact(locale_id);
-
-COMMENT ON COLUMN reference.suitable_times_to_contact.code IS 'The code for the suitable time to contact';
-
-COMMENT ON COLUMN reference.suitable_times_to_contact.locale_id IS 'The Unicode locale identifier for the suitable time to contact';
-
-COMMENT ON COLUMN reference.suitable_times_to_contact.sort_index IS 'The sort index for the suitable time to contact';
-
-COMMENT ON COLUMN reference.suitable_times_to_contact.name IS 'The name of the suitable time to contact';
-
-COMMENT ON COLUMN reference.suitable_times_to_contact.description IS 'The description for the suitable time to contact';
-
-
 CREATE TABLE reference.tax_number_types (
-  code             VARCHAR(10)  NOT NULL,
+  code             VARCHAR(30)  NOT NULL,
   locale_id        VARCHAR(10)  NOT NULL,
   sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
-  country_of_issue VARCHAR(10)  NOT NULL,
+  country_of_issue VARCHAR(30)  NOT NULL,
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT tax_number_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
@@ -681,8 +658,31 @@ COMMENT ON COLUMN reference.tax_number_types.description IS 'The description for
 COMMENT ON COLUMN reference.tax_number_types.country_of_issue IS 'The code for the country of issue for the tax number type';
 
 
+CREATE TABLE reference.times_to_contact (
+    code        VARCHAR(30)  NOT NULL,
+    locale_id   VARCHAR(10)  NOT NULL,
+    sort_index  INTEGER      NOT NULL,
+    name        VARCHAR(50)  NOT NULL,
+    description VARCHAR(200) NOT NULL DEFAULT '',
+
+    PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX times_to_contact_locale_id_ix ON reference.times_to_contact(locale_id);
+
+COMMENT ON COLUMN reference.times_to_contact.code IS 'The code for the time to contact';
+
+COMMENT ON COLUMN reference.times_to_contact.locale_id IS 'The Unicode locale identifier for the time to contact';
+
+COMMENT ON COLUMN reference.times_to_contact.sort_index IS 'The sort index for the time to contact';
+
+COMMENT ON COLUMN reference.times_to_contact.name IS 'The name of the time to contact';
+
+COMMENT ON COLUMN reference.times_to_contact.description IS 'The description for the time to contact';
+
+
 CREATE TABLE reference.titles (
-  code         VARCHAR(10)  NOT NULL,
+  code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
   sort_index   INTEGER      NOT NULL,
   name         VARCHAR(50)  NOT NULL,
@@ -708,7 +708,7 @@ COMMENT ON COLUMN reference.titles.description IS 'The description for the title
 
 
 CREATE TABLE reference.verification_methods (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -731,7 +731,7 @@ COMMENT ON COLUMN reference.verification_methods.description IS 'The description
 
 
 CREATE TABLE reference.verification_statuses (
-  code        VARCHAR(10)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
   name        VARCHAR(50)  NOT NULL,
@@ -777,7 +777,6 @@ INSERT INTO reference.contact_mechanism_types (code, locale_id, sort_index, name
   VALUES ('email_address', 'en-ZA', 4, 'E-mail Address', 'E-mail Addresses', 'E-mail Address');
 INSERT INTO reference.contact_mechanism_types (code, locale_id, sort_index, name, plural, description)
   VALUES ('social_media', 'en-ZA', 5, 'Social Media', 'Social Media', 'Social Media');
-
 
 
 INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, party_types, sort_index, name, description)
@@ -865,8 +864,7 @@ INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, party_t
   VALUES ('social_media', 'whatsapp_user_id', 'en-ZA', 'person', 500, 'WhatsApp User ID', 'WhatsApp User ID');
 INSERT INTO reference.contact_mechanism_purposes (type, code, locale_id, party_types, sort_index, name, description)
   VALUES ('social_media', 'twitter_id', 'en-ZA', 'person', 501, 'Twitter ID', 'Twitter ID');
-  
-  
+
 
 INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AF', 'en-US', 1, 'Afghanistan', 'Afghanistan', 'Afghanistan', 'AF', 'Afghan');
@@ -1849,115 +1847,110 @@ INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, 
    VALUES ('ZW', 'en-ZA', 244, 'Republic of Zimbabwe', 'Zimbabwe', 'Republic of Zimbabwe', 'ZW', 'Zimbabwean');
 INSERT INTO reference.countries (code, locale_id, sort_index, name, short_name, description, sovereign_state, nationality)
    VALUES ('AX', 'en-ZA', 245, 'Åland Islands', 'Åland Islands', 'Åland Islands', 'FI', 'Ålandic');
-   
-      
+
 
 INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('E', 'en-US', 1, 'Employed', 'Employed');
+  VALUES ('employed', 'en-US', 1, 'Employed', 'Employed');
 INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('O', 'en-US', 2, 'Other', 'Other');
+  VALUES ('other', 'en-US', 2, 'Other', 'Other');
 INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
   
 INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('E', 'en-ZA', 1, 'Employed', 'Employed');
+  VALUES ('employed', 'en-ZA', 1, 'Employed', 'Employed');
 INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('O', 'en-ZA', 2, 'Other', 'Other');
+  VALUES ('other', 'en-ZA', 2, 'Other', 'Other');
 INSERT INTO reference.employment_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
-  
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('E', 'F', 'en-US', 1, 'Full-time', 'Full-time');
+  VALUES ('employed', 'full_time', 'en-US', 1, 'Full-time', 'Full-time');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('E', 'P', 'en-US', 2, 'Part-time', 'Part-time');
+  VALUES ('employed', 'part_time', 'en-US', 2, 'Part-time', 'Part-time');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('E', 'C', 'en-US', 3, 'Contractor', 'Contractor');
+  VALUES ('employed', 'contractor', 'en-US', 3, 'Contractor', 'Contractor');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('E', 'S', 'en-US', 4, 'Self-employed', 'Self-employed');
+  VALUES ('employed', 'self_employed', 'en-US', 4, 'Self-employed', 'Self-employed');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'R', 'en-US', 5, 'Retired/Pensioner', 'Retired/Pensioner');
+  VALUES ('other', 'retired_pensioner', 'en-US', 5, 'Retired/Pensioner', 'Retired/Pensioner');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'U', 'en-US', 6, 'Unemployed', 'Unemployed');
+  VALUES ('other', 'unemployed', 'en-US', 6, 'Unemployed', 'Unemployed');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'H', 'en-US', 7, 'Housewife/Home Executive', 'Housewife/Home Executive');
+  VALUES ('other', 'home_executive', 'en-US', 7, 'Home Executive', 'Home Executive');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'S', 'en-US', 8, 'Student', 'Student');
+  VALUES ('other', 'student', 'en-US', 8, 'Student', 'Student');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'M', 'en-US', 9, 'Minor', 'Minor');
+  VALUES ('other', 'minor', 'en-US', 9, 'Minor', 'Minor');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'N', 'en-US', 10, 'Not Specified', 'Not Specified');
+  VALUES ('other', 'not_specified', 'en-US', 10, 'Not Specified', 'Not Specified');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('U', 'U', 'en-US', 99, 'Unknown', 'Unknown');
-  
+  VALUES ('other', 'unknown', 'en-US', 99, 'Unknown', 'Unknown');
+
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('E', 'F', 'en-ZA', 1, 'Full-time', 'Full-time');
+  VALUES ('employed', 'full_time', 'en-ZA', 1, 'Full-time', 'Full-time');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('E', 'P', 'en-ZA', 2, 'Part-time', 'Part-time');
+  VALUES ('employed', 'part_time', 'en-ZA', 2, 'Part-time', 'Part-time');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('E', 'C', 'en-ZA', 3, 'Contractor', 'Contractor');
+  VALUES ('employed', 'contractor', 'en-ZA', 3, 'Contractor', 'Contractor');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('E', 'S', 'en-ZA', 4, 'Self-employed', 'Self-employed');
+  VALUES ('employed', 'self_employed', 'en-ZA', 4, 'Self-employed', 'Self-employed');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'R', 'en-ZA', 5, 'Retired/Pensioner', 'Retired/Pensioner');
+  VALUES ('other', 'retired_pensioner', 'en-ZA', 5, 'Retired/Pensioner', 'Retired/Pensioner');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'U', 'en-ZA', 6, 'Unemployed', 'Unemployed');
+  VALUES ('other', 'unemployed', 'en-ZA', 6, 'Unemployed', 'Unemployed');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'H', 'en-ZA', 7, 'Housewife/Home Executive', 'Housewife/Home Executive');
+  VALUES ('other', 'home_executive', 'en-ZA', 7, 'Home Executive', 'Home Executive');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'S', 'en-ZA', 8, 'Student', 'Student');
+  VALUES ('other', 'student', 'en-ZA', 8, 'Student', 'Student');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'M', 'en-ZA', 9, 'Minor', 'Minor');
+  VALUES ('other', 'minor', 'en-ZA', 9, 'Minor', 'Minor');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('O', 'N', 'en-ZA', 10, 'Not Specified', 'Not Specified');
+  VALUES ('other', 'not_specified', 'en-ZA', 10, 'Not Specified', 'Not Specified');
 INSERT INTO reference.employment_types (employment_status, code, locale_id, sort_index, name, description)
-  VALUES ('U', 'U', 'en-ZA', 99, 'Unknown', 'Unknown');  
+  VALUES ('other', 'unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
+  VALUES ('male', 'en-US', 1, 'Male', 'Male');
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
+  VALUES ('female', 'en-US', 2, 'Female', 'Female');
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
+  VALUES ('transgender', 'en-US', 3, 'Transgender', 'Transgender');
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
+  VALUES ('non_binary', 'en-US', 4, 'Non-binary', 'Non-binary');
+INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
 INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('M', 'en-US', 1, 'Male', 'Male');
+  VALUES ('male', 'en-ZA', 1, 'Male', 'Male');
 INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-US', 2, 'Female', 'Female');
+  VALUES ('female', 'en-ZA', 2, 'Female', 'Female');
 INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('T', 'en-US', 3, 'Transgender', 'Transgender');
+  VALUES ('transgender', 'en-ZA', 3, 'Transgender', 'Transgender');
 INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-US', 4, 'Non-binary', 'Non-binary');
+  VALUES ('non_binary', 'en-ZA', 4, 'Non-binary', 'Non-binary');
 INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-  
-INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('M', 'en-ZA', 1, 'Male', 'Male');
-INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-ZA', 2, 'Female', 'Female');
-INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('T', 'en-ZA', 3, 'Transgender', 'Transgender');
-INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-ZA', 4, 'Non-binary', 'Non-binary');
-INSERT INTO reference.genders (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');  
-
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAIDBOOK', 'en-US', 10001, 'South African ID Book', 'South African ID Book', 'ZA');
+  VALUES ('za_id_book', 'en-US', 10001, 'South African ID Book', 'South African ID Book', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAIDCARD', 'en-US', 10002, 'South African ID Card', 'South African ID Card', 'ZA');
+  VALUES ('za_id_card', 'en-US', 10002, 'South African ID Card', 'South African ID Card', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZADRVLIC', 'en-US', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
+  VALUES ('za_drivers_license', 'en-US', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description)
-  VALUES ('PASSPORT', 'en-US', 99999, 'Passport', 'Passport');
+  VALUES ('passport', 'en-US', 99999, 'Passport', 'Passport');
 
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAIDBOOK', 'en-ZA', 10001, 'South African ID Book', 'South African ID Book', 'ZA');
+  VALUES ('za_id_book', 'en-ZA', 10001, 'South African ID Book', 'South African ID Book', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAIDCARD', 'en-ZA', 10002, 'South African ID Card', 'South African ID Card', 'ZA');
+  VALUES ('za_id_card', 'en-ZA', 10002, 'South African ID Card', 'South African ID Card', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZADRVLIC', 'en-ZA', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
+  VALUES ('za_drivers_license', 'en-ZA', 10003, 'South African Driver''s License', 'South African Driver''s License', 'ZA');
 INSERT INTO reference.identity_document_types (code, locale_id, sort_index, name, description)
-  VALUES ('PASSPORT', 'en-ZA', 99999, 'Passport', 'Passport');
-
+  VALUES ('passport', 'en-ZA', 99999, 'Passport', 'Passport');
 
 
 -- See: https://en.wikipedia.org/wiki/List_of_official_languages_by_country_and_territory
@@ -2145,7 +2138,6 @@ INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, 
    VALUES ('ZH', 'en-US', 91, 'Chinese', 'Chinese', 'Chinese');
 INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('ZU', 'en-US', 92, 'Zulu', 'Zulu', 'Zulu');
-   
 
 INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, description)
    VALUES ('AB', 'en-ZA', 1, 'Abkhaz', 'Abkhaz', 'Abkhaz');
@@ -2333,269 +2325,259 @@ INSERT INTO reference.languages (code, locale_id, sort_index, name, short_name, 
    VALUES ('ZU', 'en-ZA', 92, 'Zulu', 'Zulu', 'Zulu');
 
 
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('single', 'en-US', 1, 'Single', 'Single');
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('married', 'en-US', 2, 'Married', 'Married');
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('common_law', 'en-US', 3, 'Common Law', 'Common Law');
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('divorced', 'en-US', 4, 'Divorced', 'Divorced');
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('widowed', 'en-US', 5, 'Widowed', 'Widowed');
+INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
 INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('S', 'en-US', 1, 'Single', 'Single');
+  VALUES ('single', 'en-ZA', 1, 'Single', 'Single');
 INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('M', 'en-US', 2, 'Married', 'Married');
+  VALUES ('married', 'en-ZA', 2, 'Married', 'Married');
 INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-US', 3, 'Common Law', 'Common Law');
+  VALUES ('common_law', 'en-ZA', 3, 'Common Law', 'Common Law');
 INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('D', 'en-US', 4, 'Divorced', 'Divorced');
+  VALUES ('divorced', 'en-ZA', 4, 'Divorced', 'Divorced');
 INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('W', 'en-US', 5, 'Widowed', 'Widowed');
+  VALUES ('widowed', 'en-ZA', 5, 'Widowed', 'Widowed');
 INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-  
-INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('S', 'en-ZA', 1, 'Single', 'Single');
-INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('M', 'en-ZA', 2, 'Married', 'Married');
-INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-ZA', 3, 'Common Law', 'Common Law');
-INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('D', 'en-ZA', 4, 'Divorced', 'Divorced');
-INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('W', 'en-ZA', 5, 'Widowed', 'Widowed');
-INSERT INTO reference.marital_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
-
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('U', '0', 'en-US', 99, 'Unknown', 'Unknown');
+  VALUES ('unknown', 'unknown', 'en-US', 99, 'Unknown', 'Unknown');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', '1', 'en-US', 1, 'In Community Of Property', 'In Community Of Property');
+  VALUES ('married', 'in_community_of_property', 'en-US', 1, 'In Community Of Property', 'In Community Of Property');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', '2', 'en-US', 1, 'ANC Without Accrual', 'ANC Without Accrual');
+  VALUES ('married', 'anc_without_accrual', 'en-US', 1, 'ANC Without Accrual', 'ANC Without Accrual');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', '3', 'en-US', 1, 'ANC With Accrual', 'ANC With Accrual');
+  VALUES ('married', 'anc_with_accrual', 'en-US', 1, 'ANC With Accrual', 'ANC With Accrual');
 
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('U', '0', 'en-ZA', 99, 'Unknown', 'Unknown');
+  VALUES ('unknown', 'unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', '1', 'en-ZA', 1, 'In Community Of Property', 'In Community Of Property');
+  VALUES ('married', 'in_community_of_property', 'en-ZA', 1, 'In Community Of Property', 'In Community Of Property');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', '2', 'en-ZA', 1, 'ANC Without Accrual', 'ANC Without Accrual');
+  VALUES ('married', 'anc_without_accrual', 'en-ZA', 1, 'ANC Without Accrual', 'ANC Without Accrual');
 INSERT INTO reference.marriage_types (marital_status, code, locale_id, sort_index, name, description)
-  VALUES ('M', '3', 'en-ZA', 1, 'ANC With Accrual', 'ANC With Accrual');
+  VALUES ('married', 'anc_with_accrual', 'en-ZA', 1, 'ANC With Accrual', 'ANC With Accrual');
 
 
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
+  VALUES ('none', 'en-US', 1, 'None', 'None');
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
+  VALUES ('minor', 'en-US', 2, 'Minor', 'Minor');
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
+  VALUES ('emancipated_minor', 'en-US', 3, 'Emancipated Minor', 'Emancipated Minor');
+INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
 INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-US', 1, 'None', 'None');
+  VALUES ('none', 'en-ZA', 1, 'None', 'None');
 INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
-  VALUES ('M', 'en-US', 2, 'Minor', 'Minor');
+  VALUES ('minor', 'en-ZA', 2, 'Minor', 'Minor');
 INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
-  VALUES ('E', 'en-US', 3, 'Emancipated Minor', 'Emancipated Minor');
+  VALUES ('emancipated_minor', 'en-ZA', 3, 'Emancipated Minor', 'Emancipated Minor');
 INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-  
-
-INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-ZA', 1, 'None', 'None');
-INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
-  VALUES ('M', 'en-ZA', 2, 'Minor', 'Minor');
-INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
-  VALUES ('E', 'en-ZA', 3, 'Emancipated Minor', 'Emancipated Minor');
-INSERT INTO reference.minor_types (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
-  
-    
-
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('0', 'en-US', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('1', 'en-US', 1, 'Aunt', 'Aunt');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('2', 'en-US', 1, 'Brother', 'Brother');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('3', 'en-US', 1, 'Cousin', 'Cousin');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('4', 'en-US', 1, 'Father', 'Father');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('5', 'en-US', 1, 'Friend', 'Friend');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('6', 'en-US', 1, 'Grandfather', 'Grandfather');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('7', 'en-US', 1, 'Grandmother', 'Grandmother');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('8', 'en-US', 1, 'Husband', 'Husband');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('9', 'en-US', 1, 'Life Partner', 'Life Partner');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('10', 'en-US', 1, 'Mother', 'Mother');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('11', 'en-US', 1, 'Nephew', 'Nephew');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('12', 'en-US', 1, 'Niece', 'Niece');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('13', 'en-US', 1, 'Sister', 'Sister');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('14', 'en-US', 1, 'Uncle', 'Uncle');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('15', 'en-US', 1, 'Wife', 'Wife');
-INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('16', 'en-US', 1, 'Other', 'Other');
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
   
 
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('0', 'en-ZA', 99, 'Unknown', 'Unknown');
+  VALUES ('aunt', 'en-US', 1, 'Aunt', 'Aunt');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('1', 'en-ZA', 1, 'Aunt', 'Aunt');
+  VALUES ('brother', 'en-US', 1, 'Brother', 'Brother');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('2', 'en-ZA', 1, 'Brother', 'Brother');
+  VALUES ('cousin', 'en-US', 1, 'Cousin', 'Cousin');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('3', 'en-ZA', 1, 'Cousin', 'Cousin');
+  VALUES ('father', 'en-US', 1, 'Father', 'Father');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('4', 'en-ZA', 1, 'Father', 'Father');
+  VALUES ('friend', 'en-US', 1, 'Friend', 'Friend');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('5', 'en-ZA', 1, 'Friend', 'Friend');
+  VALUES ('grandfather', 'en-US', 1, 'Grandfather', 'Grandfather');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('6', 'en-ZA', 1, 'Grandfather', 'Grandfather');
+  VALUES ('grandmother', 'en-US', 1, 'Grandmother', 'Grandmother');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('7', 'en-ZA', 1, 'Grandmother', 'Grandmother');
+  VALUES ('husband', 'en-US', 1, 'Husband', 'Husband');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('8', 'en-ZA', 1, 'Husband', 'Husband');
+  VALUES ('life_partner', 'en-US', 1, 'Life Partner', 'Life Partner');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('9', 'en-ZA', 1, 'Life Partner', 'Life Partner');
+  VALUES ('mother', 'en-US', 1, 'Mother', 'Mother');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('10', 'en-ZA', 1, 'Mother', 'Mother');
+  VALUES ('nephew', 'en-US', 1, 'Nephew', 'Nephew');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('11', 'en-ZA', 1, 'Nephew', 'Nephew');
+  VALUES ('niece', 'en-US', 1, 'Niece', 'Niece');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('12', 'en-ZA', 1, 'Niece', 'Niece');
+  VALUES ('sister', 'en-US', 1, 'Sister', 'Sister');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('13', 'en-ZA', 1, 'Sister', 'Sister');
+  VALUES ('uncle', 'en-US', 1, 'Uncle', 'Uncle');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('14', 'en-ZA', 1, 'Uncle', 'Uncle');
+  VALUES ('wife', 'en-US', 1, 'Wife', 'Wife');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('15', 'en-ZA', 1, 'Wife', 'Wife');
+  VALUES ('other', 'en-US', 1, 'Other', 'Other');
 INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
-  VALUES ('16', 'en-ZA', 1, 'Other', 'Other');
-  
-    
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('0', 'en-US', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('1', 'en-US', 1, 'Creative', 'Creative');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('2', 'en-US', 2, 'Driver', 'Driver');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('3', 'en-US', 3, 'Executive', 'Executive');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('4', 'en-US', 4, 'Farmer', 'Farmer');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('5', 'en-US', 5, 'Government Official', 'Government Official');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('6', 'en-US', 6, 'Guard', 'Guard');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('7', 'en-US', 7, 'Labourer', 'Labourer');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('8', 'en-US', 8, 'Military / Police', 'Military / Police');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('9', 'en-US', 9, 'Manager', 'Manager');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('10', 'en-US', 10, 'Office Staff', 'Office Staff');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('11', 'en-US', 11, 'Pensioner / Retired', 'Pensioner / Retired');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('12', 'en-US', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('13', 'en-US', 13, 'Professional: Business', 'Professional: Business');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('14', 'en-US', 14, 'Professional: Education', 'Professional: Education');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('15', 'en-US', 15, 'Professional: Engineering', 'Professional: Engineering');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('16', 'en-US', 16, 'Professional: Government', 'Professional: Government');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('17', 'en-US', 17, 'Professional: Legal', 'Professional: Legal');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('18', 'en-US', 18, 'Professional: Medical', 'Professional: Medical');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('19', 'en-US', 19, 'Professional: Scientific', 'Professional: Scientific');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('20', 'en-US', 20, 'Professional: Transport', 'Professional: Transport');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('21', 'en-US', 21, 'Religious / Charitable', 'Religious / Charitable');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('22', 'en-US', 22, 'Sales', 'Sales');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('23', 'en-US', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('24', 'en-US', 24, 'Service', 'Service');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('25', 'en-US', 25, 'Skilled Worker', 'Skilled Worker');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('26', 'en-US', 26, 'Technician', 'Technician');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('27', 'en-US', 27, 'Trade Worker', 'Trade Worker');
-INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('50', 'en-US', 50, 'Unemployed', 'Unemployed');
-  
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('aunt', 'en-ZA', 1, 'Aunt', 'Aunt');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('brother', 'en-ZA', 1, 'Brother', 'Brother');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('cousin', 'en-ZA', 1, 'Cousin', 'Cousin');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('father', 'en-ZA', 1, 'Father', 'Father');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('friend', 'en-ZA', 1, 'Friend', 'Friend');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('grandfather', 'en-ZA', 1, 'Grandfather', 'Grandfather');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('grandmother', 'en-ZA', 1, 'Grandmother', 'Grandmother');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('husband', 'en-ZA', 1, 'Husband', 'Husband');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('life_partner', 'en-ZA', 1, 'Life Partner', 'Life Partner');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('mother', 'en-ZA', 1, 'Mother', 'Mother');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('nephew', 'en-ZA', 1, 'Nephew', 'Nephew');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('niece', 'en-ZA', 1, 'Niece', 'Niece');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('sister', 'en-ZA', 1, 'Sister', 'Sister');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('uncle', 'en-ZA', 1, 'Uncle', 'Uncle');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('wife', 'en-ZA', 1, 'Wife', 'Wife');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('other', 'en-ZA', 1, 'Other', 'Other');
+INSERT INTO reference.next_of_kin_types (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
   
 
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('0', 'en-ZA', 99, 'Unknown', 'Unknown');
+  VALUES ('creative', 'en-US', 1, 'Creative', 'Creative');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('1', 'en-ZA', 1, 'Creative', 'Creative');
+  VALUES ('driver', 'en-US', 2, 'Driver', 'Driver');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('2', 'en-ZA', 2, 'Driver', 'Driver');
+  VALUES ('executive', 'en-US', 3, 'Executive', 'Executive');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('3', 'en-ZA', 3, 'Executive', 'Executive');
+  VALUES ('farmer', 'en-US', 4, 'Farmer', 'Farmer');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('4', 'en-ZA', 4, 'Farmer', 'Farmer');
+  VALUES ('government', 'en-US', 5, 'Government Official', 'Government Official');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('5', 'en-ZA', 5, 'Government Official', 'Government Official');
+  VALUES ('guard', 'en-US', 6, 'Guard', 'Guard');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('6', 'en-ZA', 6, 'Guard', 'Guard');
+  VALUES ('labourer', 'en-US', 7, 'Labourer', 'Labourer');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('7', 'en-ZA', 7, 'Labourer', 'Labourer');
+  VALUES ('military_or_police', 'en-US', 8, 'Military / Police', 'Military / Police');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('8', 'en-ZA', 8, 'Military / Police', 'Military / Police');
+  VALUES ('manager', 'en-US', 9, 'Manager', 'Manager');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('9', 'en-ZA', 9, 'Manager', 'Manager');
+  VALUES ('office_staff', 'en-US', 10, 'Office Staff', 'Office Staff');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('10', 'en-ZA', 10, 'Office Staff', 'Office Staff');
+  VALUES ('pensioner_retired', 'en-US', 11, 'Pensioner / Retired', 'Pensioner / Retired');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('11', 'en-ZA', 11, 'Pensioner / Retired', 'Pensioner / Retired');
+  VALUES ('plant_or_machine_operator', 'en-US', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('12', 'en-ZA', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
+  VALUES ('professional_business', 'en-US', 13, 'Professional: Business', 'Professional: Business');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('13', 'en-ZA', 13, 'Professional: Business', 'Professional: Business');
+  VALUES ('professional_education', 'en-US', 14, 'Professional: Education', 'Professional: Education');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('14', 'en-ZA', 14, 'Professional: Education', 'Professional: Education');
+  VALUES ('professional_engineering', 'en-US', 15, 'Professional: Engineering', 'Professional: Engineering');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('15', 'en-ZA', 15, 'Professional: Engineering', 'Professional: Engineering');
+  VALUES ('professional_government', 'en-US', 16, 'Professional: Government', 'Professional: Government');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('16', 'en-ZA', 16, 'Professional: Government', 'Professional: Government');
+  VALUES ('professional_legal', 'en-US', 17, 'Professional: Legal', 'Professional: Legal');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('17', 'en-ZA', 17, 'Professional: Legal', 'Professional: Legal');
+  VALUES ('professional_medical', 'en-US', 18, 'Professional: Medical', 'Professional: Medical');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('18', 'en-ZA', 18, 'Professional: Medical', 'Professional: Medical');
+  VALUES ('professional_scientific', 'en-US', 19, 'Professional: Scientific', 'Professional: Scientific');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('19', 'en-ZA', 19, 'Professional: Scientific', 'Professional: Scientific');
+  VALUES ('professional_transport', 'en-US', 20, 'Professional: Transport', 'Professional: Transport');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('20', 'en-ZA', 20, 'Professional: Transport', 'Professional: Transport');
+  VALUES ('religious_charity', 'en-US', 21, 'Religious / Charitable', 'Religious / Charitable');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('21', 'en-ZA', 21, 'Religious / Charitable', 'Religious / Charitable');
+  VALUES ('sales', 'en-US', 22, 'Sales', 'Sales');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('22', 'en-ZA', 22, 'Sales', 'Sales');
+  VALUES ('semi_skilled_worker', 'en-US', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('23', 'en-ZA', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
+  VALUES ('service', 'en-US', 24, 'Service', 'Service');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('24', 'en-ZA', 24, 'Service', 'Service');
+  VALUES ('skilled_worker', 'en-US', 25, 'Skilled Worker', 'Skilled Worker');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('25', 'en-ZA', 25, 'Skilled Worker', 'Skilled Worker');
+  VALUES ('technician', 'en-US', 26, 'Technician', 'Technician');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('26', 'en-ZA', 26, 'Technician', 'Technician');
+  VALUES ('trade_worker', 'en-US', 27, 'Trade Worker', 'Trade Worker');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('27', 'en-ZA', 27, 'Trade Worker', 'Trade Worker');
+  VALUES ('unemployed', 'en-US', 50, 'Unemployed', 'Unemployed');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
-  VALUES ('50', 'en-ZA', 50, 'Unemployed', 'Unemployed');
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('creative', 'en-ZA', 1, 'Creative', 'Creative');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('driver', 'en-ZA', 2, 'Driver', 'Driver');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('executive', 'en-ZA', 3, 'Executive', 'Executive');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('farmer', 'en-ZA', 4, 'Farmer', 'Farmer');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('government', 'en-ZA', 5, 'Government Official', 'Government Official');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('guard', 'en-ZA', 6, 'Guard', 'Guard');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('labourer', 'en-ZA', 7, 'Labourer', 'Labourer');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('military_or_police', 'en-ZA', 8, 'Military / Police', 'Military / Police');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('manager', 'en-ZA', 9, 'Manager', 'Manager');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('office_staff', 'en-ZA', 10, 'Office Staff', 'Office Staff');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('pensioner_retired', 'en-ZA', 11, 'Pensioner / Retired', 'Pensioner / Retired');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('plant_or_machine_operator', 'en-ZA', 12, 'Plant or Machine Operator or Assembler', 'Plant or Machine Operator or Assembler');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('professional_business', 'en-ZA', 13, 'Professional: Business', 'Professional: Business');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('professional_education', 'en-ZA', 14, 'Professional: Education', 'Professional: Education');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('professional_engineering', 'en-ZA', 15, 'Professional: Engineering', 'Professional: Engineering');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('professional_government', 'en-ZA', 16, 'Professional: Government', 'Professional: Government');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('professional_legal', 'en-ZA', 17, 'Professional: Legal', 'Professional: Legal');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('professional_medical', 'en-ZA', 18, 'Professional: Medical', 'Professional: Medical');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('professional_scientific', 'en-ZA', 19, 'Professional: Scientific', 'Professional: Scientific');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('professional_transport', 'en-ZA', 20, 'Professional: Transport', 'Professional: Transport');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('religious_charity', 'en-ZA', 21, 'Religious / Charitable', 'Religious / Charitable');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('sales', 'en-ZA', 22, 'Sales', 'Sales');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('semi_skilled_worker', 'en-ZA', 23, 'Semi-skilled Worker', 'Semi-skilled Worker');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('service', 'en-ZA', 24, 'Service', 'Service');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('skilled_worker', 'en-ZA', 25, 'Skilled Worker', 'Skilled Worker');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('technician', 'en-ZA', 26, 'Technician', 'Technician');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('trade_worker', 'en-ZA', 27, 'Trade Worker', 'Trade Worker');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('unemployed', 'en-ZA', 50, 'Unemployed', 'Unemployed');
+INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
 INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
@@ -2615,7 +2597,6 @@ INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name,
 INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
   VALUES ('unstructured', 'en-US', 99, 'Unstructured', 'Unstructured');
 
-
 INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
   VALUES ('building', 'en-ZA', 1, 'Building', 'Building');
 INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
@@ -2632,7 +2613,6 @@ INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name,
   VALUES ('street', 'en-ZA', 7, 'Street', 'Street');
 INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)
   VALUES ('unstructured', 'en-ZA', 99, 'Unstructured', 'Unstructured');
-
 
 
 INSERT INTO reference.physical_address_purposes (code, locale_id, party_types, sort_index, name, description)
@@ -2662,7 +2642,6 @@ INSERT INTO reference.physical_address_purposes (code, locale_id, party_types, s
 INSERT INTO reference.physical_address_purposes (code, locale_id, party_types, sort_index, name, description)
   VALUES ('work', 'en-US', 'person', 13, 'Work', 'Work Address');
 
-
 INSERT INTO reference.physical_address_purposes (code, locale_id, party_types, sort_index, name, description)
   VALUES ('billing', 'en-ZA', 'organization,person', 1, 'Billing', 'Billing Address');
 INSERT INTO reference.physical_address_purposes (code, locale_id, party_types, sort_index, name, description)
@@ -2691,51 +2670,49 @@ INSERT INTO reference.physical_address_purposes (code, locale_id, party_types, s
   VALUES ('work', 'en-ZA', 'person', 13, 'Work', 'Work Address');
 
 
-
 INSERT INTO reference.preference_type_categories (code, locale_id, sort_index, name, description)
   VALUES ('correspondence', 'en-US', 0, 'Correspondence', 'Correspondence');
-
 
 INSERT INTO reference.preference_type_categories (code, locale_id, sort_index, name, description)
   VALUES ('correspondence', 'en-ZA', 0, 'Correspondence', 'Correspondence');
 
 
-
 INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description)
   VALUES ('correspondence_language', 'correspondence', 'en-US', 0, 'Correspondence Language', 'Correspondence Language');
-
+INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description)
+  VALUES ('time_to_contact', 'correspondence', 'en-US', 0, 'Time To Contact', 'Suitable Time To Contact');
 
 INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description)
   VALUES ('correspondence_language', 'correspondence', 'en-ZA', 0, 'Correspondence Language', 'Correspondence Language');
+INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description)
+  VALUES ('time_to_contact', 'correspondence', 'en-ZA', 0, 'Time To Contact', 'Suitable Time To Contact');
 
 
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
+  VALUES ('black', 'en-US', 1, 'Black', 'Black');
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
+  VALUES ('coloured', 'en-US', 2, 'Coloured', 'Coloured');
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
+  VALUES ('indian', 'en-US', 3, 'Indian', 'Indian');
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
+  VALUES ('asian', 'en-US', 4, 'Asian', 'Asian');
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
+  VALUES ('white', 'en-US', 5, 'White', 'White');
+INSERT INTO reference.races (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
 INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('B', 'en-US', 1, 'Black', 'Black');
+  VALUES ('black', 'en-ZA', 1, 'Black', 'Black');
 INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-US', 2, 'Coloured', 'Coloured');
+  VALUES ('coloured', 'en-ZA', 2, 'Coloured', 'Coloured');
 INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('I', 'en-US', 3, 'Indian', 'Indian');
+  VALUES ('indian', 'en-ZA', 3, 'Indian', 'Indian');
 INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('A', 'en-US', 4, 'Asian', 'Asian');
+  VALUES ('asian', 'en-ZA', 4, 'Asian', 'Asian');
 INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('W', 'en-US', 5, 'White', 'White');
+  VALUES ('white', 'en-ZA', 5, 'White', 'White');
 INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-
-INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('B', 'en-ZA', 1, 'Black', 'Black');
-INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-ZA', 2, 'Coloured', 'Coloured');
-INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('I', 'en-ZA', 3, 'Indian', 'Indian');
-INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('A', 'en-ZA', 4, 'Asian', 'Asian');
-INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('W', 'en-ZA', 5, 'White', 'White');
-INSERT INTO reference.races (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');  
-
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
 INSERT INTO reference.regions (country, code, locale_id, sort_index, name, description)
@@ -2777,325 +2754,316 @@ INSERT INTO reference.regions (country, code, locale_id, sort_index, name, descr
   VALUES ('ZA', 'ZN', 'en-ZA', 1, 'KwaZulu-Natal', 'KwaZulu-Natal');
   
 
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_business_visa', 'en-US', 1, 'Business Visa', 'Business Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_general_work_visa', 'en-US', 2, 'General Work Visa', 'General Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_critical_skills_visa', 'en-US', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_intra_company_transfer_visa', 'en-US', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_study_visa', 'en-US', 5, 'Study Visa', 'Study Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_exchange_visa', 'en-US', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_retired_persons_visa', 'en-US', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_relatives_visa', 'en-US', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
+INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
+  VALUES ('za_medical_treatment_visa', 'en-US', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
 
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZABV', 'en-US', 1, 'Business Visa', 'Business Visa', 'ZA');
+  VALUES ('za_business_visa', 'en-ZA', 1, 'Business Visa', 'Business Visa', 'ZA');
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAGWV', 'en-US', 2, 'General Work Visa', 'General Work Visa', 'ZA');
+  VALUES ('za_general_work_visa', 'en-ZA', 2, 'General Work Visa', 'General Work Visa', 'ZA');
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZACSWV', 'en-US', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
+  VALUES ('za_critical_skills_visa', 'en-ZA', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAITWV', 'en-US', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
+  VALUES ('za_intra_company_transfer_visa', 'en-ZA', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZASV', 'en-US', 5, 'Study Visa', 'Study Visa', 'ZA');
+  VALUES ('za_study_visa', 'en-ZA', 5, 'Study Visa', 'Study Visa', 'ZA');
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAEV', 'en-US', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
+  VALUES ('za_exchange_visa', 'en-ZA', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZARPV', 'en-US', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
+  VALUES ('za_retired_persons_visa', 'en-ZA', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZARV', 'en-US', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
+  VALUES ('za_relatives_visa', 'en-ZA', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
 INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAMTV', 'en-US', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
-
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZABV', 'en-ZA', 1, 'Business Visa', 'Business Visa', 'ZA');
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAGWV', 'en-ZA', 2, 'General Work Visa', 'General Work Visa', 'ZA');
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZACSWV', 'en-ZA', 3, 'Critical Skills Work Visa', 'Critical Skills Work Visa', 'ZA');
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAITWV', 'en-ZA', 4, 'Intra-company Transfer Work Visa', 'Intra-company Transfer Work Visa', 'ZA');
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZASV', 'en-ZA', 5, 'Study Visa', 'Study Visa', 'ZA');
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAEV', 'en-ZA', 6, 'Exchange Visa', 'Exchange Visa', 'ZA');
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZARPV', 'en-ZA', 7, 'Retired Persons Visa', 'Retired Persons Visa', 'ZA');
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZARV', 'en-ZA', 8, 'Relatives Visa', 'Relatives Visa', 'ZA');
-INSERT INTO reference.residence_permit_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAMTV', 'en-ZA', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
-
+  VALUES ('za_medical_treatment_visa', 'en-ZA', 9, 'Medical Treatment Visa', 'Medical Treatment Visa', 'ZA');
 
 
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-US', 1, 'Citizen', 'Citizen');
+  VALUES ('citizen', 'en-US', 1, 'Citizen', 'Citizen');
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('P', 'en-US', 2, 'Permanent Resident', 'Permanent Resident');
+  VALUES ('permanent_resident', 'en-US', 2, 'Permanent Resident', 'Permanent Resident');
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-US', 3, 'Foreign National', 'Foreign National');
+  VALUES ('foreign_national', 'en-US', 3, 'Foreign National', 'Foreign National');
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('R', 'en-US', 4, 'Refugee', 'Refugee');
+  VALUES ('refugee', 'en-US', 4, 'Refugee', 'Refugee');
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-ZA', 1, 'Citizen', 'Citizen');
+  VALUES ('citizen', 'en-ZA', 1, 'Citizen', 'Citizen');
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('P', 'en-ZA', 2, 'Permanent Resident', 'Permanent Resident');
+  VALUES ('permanent_resident', 'en-ZA', 2, 'Permanent Resident', 'Permanent Resident');
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-ZA', 3, 'Foreign National', 'Foreign National');
+  VALUES ('foreign_national', 'en-ZA', 3, 'Foreign National', 'Foreign National');
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('R', 'en-ZA', 4, 'Refugee', 'Refugee');
+  VALUES ('refugee', 'en-ZA', 4, 'Refugee', 'Refugee');
 INSERT INTO reference.residency_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');  
-  
-  
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
 
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('O', 'en-US', 1, 'Owner', 'Owner');
+  VALUES ('owner', 'en-US', 1, 'Owner', 'Owner');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('R', 'en-US', 2, 'Renter', 'Renter');
+  VALUES ('renter', 'en-US', 2, 'Renter', 'Renter');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-US', 3, 'Co-Habitant', 'Co-Habitant');
+  VALUES ('cohabitant', 'en-US', 3, 'Co-Habitant', 'Co-Habitant');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('B', 'en-US', 4, 'Boarder', 'Boarder');
+  VALUES ('boarder', 'en-US', 4, 'Boarder', 'Boarder');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('L', 'en-US', 5, 'Living with Parents', 'Living with Parents');
+  VALUES ('living_with_parents', 'en-US', 5, 'Living with Parents', 'Living with Parents');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-US', 6, 'Not Specified', 'Not Specified');
+  VALUES ('not_specified', 'en-US', 6, 'Not Specified', 'Not Specified');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-  
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
+
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('O', 'en-ZA', 1, 'Owner', 'Owner');
+  VALUES ('owner', 'en-ZA', 1, 'Owner', 'Owner');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('R', 'en-ZA', 2, 'Renter', 'Renter');
+  VALUES ('renter', 'en-ZA', 2, 'Renter', 'Renter');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-ZA', 3, 'Co-Habitant', 'Co-Habitant');
+  VALUES ('cohabitant', 'en-ZA', 3, 'Co-Habitant', 'Co-Habitant');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('B', 'en-ZA', 4, 'Boarder', 'Boarder');
+  VALUES ('boarder', 'en-ZA', 4, 'Boarder', 'Boarder');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('L', 'en-ZA', 5, 'Living with Parents', 'Living with Parents');
+  VALUES ('living_with_parents', 'en-ZA', 5, 'Living with Parents', 'Living with Parents');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-ZA', 6, 'Not Specified', 'Not Specified');
+  VALUES ('not_specified', 'en-ZA', 6, 'Not Specified', 'Not Specified');
 INSERT INTO reference.residential_types (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
-    
-    
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
 
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('0', 'en-US', 99, 'Unknown', 'Unknown');
+  VALUES ('salary', 'en-US', 1, 'Salary', 'Salary');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('1', 'en-US', 1, 'Salary', 'Salary');
+  VALUES ('commission', 'en-US', 2, 'Commission', 'Commission');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('2', 'en-US', 2, 'Commission', 'Commission');
+  VALUES ('rental_income', 'en-US', 3, 'Rental Income', 'Rental Income');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('3', 'en-US', 3, 'Rental Income', 'Rental Income');
+  VALUES ('investments', 'en-US', 4, 'Investments', 'Investments');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('4', 'en-US', 4, 'Investments', 'Investments');
+  VALUES ('retirement_annuity', 'en-US', 5, 'Retirement Annuity', 'Retirement Annuity');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('5', 'en-US', 5, 'Retirement Annuity', 'Retirement Annuity');
+  VALUES ('social_grant', 'en-US', 6, 'Social Grant', 'Social Grant');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('6', 'en-US', 6, 'Social Grant', 'Social Grant');
+  VALUES ('inheritance', 'en-US', 7, 'Inheritance', 'Inheritance');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('7', 'en-US', 7, 'Inheritance', 'Inheritance');
+  VALUES ('maintenance', 'en-US', 8, 'Maintenance', 'Maintenance');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('8', 'en-US', 8, 'Maintenance', 'Maintenance');
+  VALUES ('pension', 'en-US', 9, 'Pension', 'Pension');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('9', 'en-US', 9, 'Pension', 'Pension');
+  VALUES ('donations', 'en-US', 10, 'Donations', 'Donations');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('10', 'en-US', 10, 'Donations', 'Donations');
+  VALUES ('allowance', 'en-US', 11, 'Allowance', 'Allowance');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('11', 'en-US', 11, 'Allowance', 'Allowance');
+  VALUES ('winnings', 'en-US', 12, 'Winnings', 'Winnings');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('12', 'en-US', 12, 'Winnings', 'Winnings');
+  VALUES ('owner_draws', 'en-US', 13, 'Owner Draws', 'Owner Draws');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('13', 'en-US', 13, 'Owner Draws', 'Owner Draws');
+  VALUES ('bonus_incentive', 'en-US', 14, 'Bonus/Incentive', 'Bonus/Incentive');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('14', 'en-US', 14, 'Bonus/Incentive', 'Bonus/Incentive');
+  VALUES ('bursary', 'en-US', 15, 'Bursary', 'Bursary');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('15', 'en-US', 15, 'Bursary', 'Bursary');
+  VALUES ('settlement', 'en-US', 16, 'Settlement', 'Settlement');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('16', 'en-US', 16, 'Settlement', 'Settlement');
+  VALUES ('trust', 'en-US', 17, 'Trust', 'Trust');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('17', 'en-US', 17, 'Trust', 'Trust');
+  VALUES ('other', 'en-US', 18, 'Other', 'Other');
 INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('18', 'en-US', 18, 'Other', 'Other');
-  
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('0', 'en-ZA', 99, 'Unknown', 'Unknown');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('1', 'en-ZA', 1, 'Salary', 'Salary');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('2', 'en-ZA', 2, 'Commission', 'Commission');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('3', 'en-ZA', 3, 'Rental Income', 'Rental Income');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('4', 'en-ZA', 4, 'Investments', 'Investments');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('5', 'en-ZA', 5, 'Retirement Annuity', 'Retirement Annuity');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('6', 'en-ZA', 6, 'Social Grant', 'Social Grant');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('7', 'en-ZA', 7, 'Inheritance', 'Inheritance');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('8', 'en-ZA', 8, 'Maintenance', 'Maintenance');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('9', 'en-ZA', 9, 'Pension', 'Pension');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('10', 'en-ZA', 10, 'Donations', 'Donations');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('11', 'en-ZA', 11, 'Allowance', 'Allowance');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('12', 'en-ZA', 12, 'Winnings', 'Winnings');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('13', 'en-ZA', 13, 'Owner Draws', 'Owner Draws');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('14', 'en-ZA', 14, 'Bonus/Incentive', 'Bonus/Incentive');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('15', 'en-ZA', 15, 'Bursary', 'Bursary');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('16', 'en-ZA', 16, 'Settlement', 'Settlement');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('17', 'en-ZA', 17, 'Trust', 'Trust');
-INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
-  VALUES ('18', 'en-ZA', 18, 'Other', 'Other');
-  
-    
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('A', 'en-US', 1, 'Anytime', 'Anytime');
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('L', 'en-US', 2, 'Long Hours', 'Long Hours');
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('O', 'en-US', 3, 'Office Hours', 'Office Hours');
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('N', 'en-US', 4, 'Do Not Contact', 'Do Not Contact');
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
---
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('A', 'en-ZA', 1, 'Anytime', 'Anytime');
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('L', 'en-ZA', 2, 'Long Hours', 'Long Hours');
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('O', 'en-ZA', 3, 'Office Hours', 'Office Hours');
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('N', 'en-ZA', 4, 'Do Not Contact', 'Do Not Contact');
--- INSERT INTO reference.suitable_times_to_contact (code, locale_id, sort_index, name, description)
---   VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
-  
-    
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('salary', 'en-ZA', 1, 'Salary', 'Salary');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('commission', 'en-ZA', 2, 'Commission', 'Commission');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('rental_income', 'en-ZA', 3, 'Rental Income', 'Rental Income');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('investments', 'en-ZA', 4, 'Investments', 'Investments');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('retirement_annuity', 'en-ZA', 5, 'Retirement Annuity', 'Retirement Annuity');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('social_grant', 'en-ZA', 6, 'Social Grant', 'Social Grant');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('inheritance', 'en-ZA', 7, 'Inheritance', 'Inheritance');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('maintenance', 'en-ZA', 8, 'Maintenance', 'Maintenance');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('pension', 'en-ZA', 9, 'Pension', 'Pension');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('donations', 'en-ZA', 10, 'Donations', 'Donations');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('allowance', 'en-ZA', 11, 'Allowance', 'Allowance');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('winnings', 'en-ZA', 12, 'Winnings', 'Winnings');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('owner_draws', 'en-ZA', 13, 'Owner Draws', 'Owner Draws');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('bonus_incentive', 'en-ZA', 14, 'Bonus/Incentive', 'Bonus/Incentive');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('bursary', 'en-ZA', 15, 'Bursary', 'Bursary');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('settlement', 'en-ZA', 16, 'Settlement', 'Settlement');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('trust', 'en-ZA', 17, 'Trust', 'Trust');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('other', 'en-ZA', 18, 'Other', 'Other');
+INSERT INTO reference.sources_of_funds (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
 
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAITN', 'en-US', 1, 'Income Tax Number', 'South African Income Tax Number', 'ZA');
+  VALUES ('za_income_tax_number', 'en-US', 1, 'Income Tax Number', 'South African Income Tax Number', 'ZA');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAVTN', 'en-US', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA');
+  VALUES ('za_vat_tax_number', 'en-US', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAOTN', 'en-US', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA');
+  VALUES ('za_other_tax_number', 'en-US', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('UKUTN', 'en-US', 1, 'UK Tax Number', 'UK Tax Number', 'GB');
+  VALUES ('uk_tax_number', 'en-US', 1, 'UK Tax Number', 'UK Tax Number', 'GB');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('UKOTN', 'en-US', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB');
+  VALUES ('uk_other_tax_number', 'en-US', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('USTIN', 'en-US', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US');
+  VALUES ('us_taxpayer_id_number', 'en-US', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('USOTN', 'en-US', 2, 'US Other Tax Number', 'US Other Tax Number', 'US');  
+  VALUES ('us_other_tax_number', 'en-US', 2, 'US Other Tax Number', 'US Other Tax Number', 'US');
   
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAITN', 'en-ZA', 1, 'Income Tax Number', 'South African Income Tax Number', 'ZA');
+  VALUES ('za_income_tax_number', 'en-ZA', 1, 'Income Tax Number', 'South African Income Tax Number', 'ZA');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAVTN', 'en-ZA', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA');
+  VALUES ('za_vat_tax_number', 'en-ZA', 2, 'VAT Tax Number', 'South African VAT Tax Number', 'ZA');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('ZAOTN', 'en-ZA', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA');
+  VALUES ('za_other_tax_number', 'en-ZA', 3, 'Other Tax Number', 'Other South African Tax Number', 'ZA');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('UKUTN', 'en-ZA', 1, 'UK Tax Number', 'UK Tax Number', 'GB');
+  VALUES ('uk_tax_number', 'en-ZA', 1, 'UK Tax Number', 'UK Tax Number', 'GB');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('UKOTN', 'en-ZA', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB');
+  VALUES ('uk_other_tax_number', 'en-ZA', 2, 'UK Other Tax Number', 'UK Other Tax Number', 'GB');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('USTIN', 'en-ZA', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US');
+  VALUES ('us_taxpayer_id_number', 'en-ZA', 1, 'US Taxpayer Identification Number', 'US Taxpayer Identification Number', 'US');
 INSERT INTO reference.tax_number_types (code, locale_id, sort_index, name, description, country_of_issue)
-  VALUES ('USOTN', 'en-ZA', 2, 'US Other Tax Number', 'US Other Tax Number', 'US');    
-  
-  
+  VALUES ('us_other_tax_number', 'en-ZA', 2, 'US Other Tax Number', 'US Other Tax Number', 'US');
+
+
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('anytime', 'en-US', 1, 'Anytime', 'Anytime');
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('long_hours', 'en-US', 2, 'Long Hours', 'Long Hours');
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('office_hours', 'en-US', 3, 'Office Hours', 'Office Hours');
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('do_not_contact', 'en-US', 4, 'Do Not Contact', 'Do Not Contact');
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
+
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('anytime', 'en-ZA', 1, 'Anytime', 'Anytime');
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('long_hours', 'en-ZA', 2, 'Long Hours', 'Long Hours');
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('office_hours', 'en-ZA', 3, 'Office Hours', 'Office Hours');
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('do_not_contact', 'en-ZA', 4, 'Do Not Contact', 'Do Not Contact');
+INSERT INTO reference.times_to_contact (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
 
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('0', 'en-US', 99, 'Unknown', 'Unknown', 'Unknown');
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown', 'Unknown');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('1', 'en-US', 1, 'Mr', 'Mr.', 'Mr');
+  VALUES ('mr', 'en-US', 1, 'Mr', 'Mr.', 'Mr');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('2', 'en-US', 1, 'Ms', 'Ms.', 'Ms');
+  VALUES ('ms', 'en-US', 1, 'Ms', 'Ms.', 'Ms');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('3', 'en-US', 1, 'Miss', 'Miss', 'Miss');
+  VALUES ('miss', 'en-US', 1, 'Miss', 'Miss', 'Miss');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('4', 'en-US', 1, 'Mrs', 'Mrs.', 'Mrs');
+  VALUES ('mrs', 'en-US', 1, 'Mrs', 'Mrs.', 'Mrs');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('5', 'en-US', 1, 'Doctor', 'Dr.', 'Doctor');
+  VALUES ('doctor', 'en-US', 1, 'Doctor', 'Dr.', 'Doctor');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('6', 'en-US', 1, 'The Honorable', 'The Hon.', 'The Honorable');
+  VALUES ('the_honorable', 'en-US', 1, 'The Honorable', 'The Hon.', 'The Honorable');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('7', 'en-US', 1, 'Reverend', 'Rev.', 'Reverend');
+  VALUES ('reverend', 'en-US', 1, 'Reverend', 'Rev.', 'Reverend');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('8', 'en-US', 1, 'Father', 'Fr.', 'Father');
+  VALUES ('father', 'en-US', 1, 'Father', 'Fr.', 'Father');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('9', 'en-US', 1, 'Rabbi', 'Rabbi', 'Rabbi');
+  VALUES ('rabbi', 'en-US', 1, 'Rabbi', 'Rabbi', 'Rabbi');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('10', 'en-US', 1, 'Professor', 'Prof.', 'Professor');
+  VALUES ('professor', 'en-US', 1, 'Professor', 'Prof.', 'Professor');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('11', 'en-US', 1, 'Advocate', 'Adv.', 'Advocate');
-  
+  VALUES ('advocate', 'en-US', 1, 'Advocate', 'Adv.', 'Advocate');
+
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('0', 'en-ZA', 99, 'Unknown', 'Unknown', 'Unknown');
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown', 'Unknown');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('1', 'en-ZA', 1, 'Mr', 'Mr.', 'Mr');
+  VALUES ('mr', 'en-ZA', 1, 'Mr', 'Mr.', 'Mr');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('2', 'en-ZA', 1, 'Ms', 'Ms.', 'Ms');
+  VALUES ('ms', 'en-ZA', 1, 'Ms', 'Ms.', 'Ms');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('3', 'en-ZA', 1, 'Miss', 'Miss', 'Miss');
+  VALUES ('miss', 'en-ZA', 1, 'Miss', 'Miss', 'Miss');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('4', 'en-ZA', 1, 'Mrs', 'Mrs.', 'Mrs');
+  VALUES ('mrs', 'en-ZA', 1, 'Mrs', 'Mrs.', 'Mrs');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('5', 'en-ZA', 1, 'Doctor', 'Dr.', 'Doctor');
+  VALUES ('doctor', 'en-ZA', 1, 'Doctor', 'Dr.', 'Doctor');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('6', 'en-ZA', 1, 'The Honorable', 'The Hon.', 'The Honorable');
+  VALUES ('the_honorable', 'en-ZA', 1, 'The Honorable', 'The Hon.', 'The Honorable');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('7', 'en-ZA', 1, 'Reverend', 'Rev.', 'Reverend');
+  VALUES ('reverend', 'en-ZA', 1, 'Reverend', 'Rev.', 'Reverend');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('8', 'en-ZA', 1, 'Father', 'Fr.', 'Father');
+  VALUES ('father', 'en-ZA', 1, 'Father', 'Fr.', 'Father');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('9', 'en-ZA', 1, 'Rabbi', 'Rabbi', 'Rabbi');
+  VALUES ('rabbi', 'en-ZA', 1, 'Rabbi', 'Rabbi', 'Rabbi');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('10', 'en-ZA', 1, 'Professor', 'Prof.', 'Professor');
+  VALUES ('professor', 'en-ZA', 1, 'Professor', 'Prof.', 'Professor');
 INSERT INTO reference.titles (code, locale_id, sort_index, name, abbreviation, description)
-  VALUES ('11', 'en-ZA', 1, 'Advocate', 'Adv.', 'Advocate');
-    
+  VALUES ('advocate', 'en-ZA', 1, 'Advocate', 'Adv.', 'Advocate');
 
 
 INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
-  VALUES ('M', 'en-US', 1, 'Manual', 'Manual');
+  VALUES ('manual', 'en-US', 1, 'Manual', 'Manual');
 INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
-  VALUES ('S', 'en-US', 1, 'System', 'System');
+  VALUES ('system', 'en-US', 1, 'System', 'System');
 INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-  
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
+
 INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
-  VALUES ('M', 'en-ZA', 1, 'Manual', 'Manual');
+  VALUES ('manual', 'en-ZA', 1, 'Manual', 'Manual');
 INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
-  VALUES ('S', 'en-ZA', 1, 'System', 'System');
+  VALUES ('system', 'en-ZA', 1, 'System', 'System');
 INSERT INTO reference.verification_methods (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
 
 
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('not_verified', 'en-US', 1, 'Not Verified', 'Not Verified');
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('in_progress', 'en-US', 1, 'In Progress', 'In Progress');
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('complete', 'en-US', 1, 'Complete', 'Complete');
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('failed', 'en-US', 1, 'Failed', 'Failed');
+INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
+  VALUES ('unknown', 'en-US', 99, 'Unknown', 'Unknown');
 
 INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-US', 1, 'Not Verified', 'Not Verified');
+  VALUES ('not_verified', 'en-ZA', 1, 'Not Verified', 'Not Verified');
 INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('I', 'en-US', 1, 'In Progress', 'In Progress');
+  VALUES ('in_progress', 'en-ZA', 1, 'In Progress', 'In Progress');
 INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-US', 1, 'Complete', 'Complete');
+  VALUES ('complete', 'en-ZA', 1, 'Complete', 'Complete');
 INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-US', 1, 'Failed', 'Failed');
+  VALUES ('failed', 'en-ZA', 1, 'Failed', 'Failed');
 INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-US', 99, 'Unknown', 'Unknown');
-
-INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('N', 'en-ZA', 1, 'Not Verified', 'Not Verified');
-INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('I', 'en-ZA', 1, 'In Progress', 'In Progress');
-INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('C', 'en-ZA', 1, 'Complete', 'Complete');
-INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('F', 'en-ZA', 1, 'Failed', 'Failed');
-INSERT INTO reference.verification_statuses (code, locale_id, sort_index, name, description)
-  VALUES ('U', 'en-ZA', 99, 'Unknown', 'Unknown');
+  VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');

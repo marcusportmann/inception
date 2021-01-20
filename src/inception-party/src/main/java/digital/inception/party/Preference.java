@@ -88,7 +88,7 @@ public class Preference implements Serializable {
   @NotNull
   @Size(min = 1, max = 30)
   @Id
-  @Column(name = "type", nullable = false)
+  @Column(name = "type", length = 30, nullable = false)
   private String type;
 
   /** The date and time the preference was last updated. */
@@ -105,7 +105,7 @@ public class Preference implements Serializable {
   @NotNull
   @Size(min = 1, max = 200)
   @Id
-  @Column(name = "value", nullable = false)
+  @Column(name = "value", length = 200, nullable = false)
   private String value;
 
   /** Constructs a new <code>Preference</code>. */

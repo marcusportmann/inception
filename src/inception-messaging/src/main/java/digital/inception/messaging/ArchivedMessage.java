@@ -161,7 +161,7 @@ public class ArchivedMessage {
   @XmlElement(name = "Username", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "username", nullable = false, length = 100)
+  @Column(name = "username", length = 100, nullable = false)
   private String username;
 
   /** Constructs a new <code>ArchivedMessage</code>. */

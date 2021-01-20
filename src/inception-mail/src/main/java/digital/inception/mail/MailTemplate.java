@@ -86,7 +86,7 @@ public class MailTemplate implements Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "id", nullable = false)
+  @Column(name = "id", length = 100, nullable = false)
   private String id;
 
   /** The name of the mail template. */
@@ -95,7 +95,7 @@ public class MailTemplate implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The Apache FreeMarker template for the mail template. */

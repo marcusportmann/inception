@@ -67,7 +67,7 @@ public class UserDirectoryType implements java.io.Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "code", nullable = false, length = 100)
+  @Column(name = "code", length = 100, nullable = false)
   private String code;
 
   /** The name of the user directory type. */
@@ -76,7 +76,7 @@ public class UserDirectoryType implements java.io.Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** The Java class that implements the user directory type. */
@@ -91,7 +91,7 @@ public class UserDirectoryType implements java.io.Serializable {
   @XmlElement(name = "UserDirectoryClassName", required = true)
   @NotNull
   @Size(min = 1, max = 1000)
-  @Column(name = "user_directory_class", nullable = false, length = 1000)
+  @Column(name = "user_directory_class", length = 1000, nullable = false)
   private String userDirectoryClassName;
 
   /** Constructs a new <code>UserDirectoryType</code>. */

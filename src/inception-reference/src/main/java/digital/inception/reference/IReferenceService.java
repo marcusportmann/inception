@@ -453,4 +453,20 @@ public interface IReferenceService {
    */
   List<VerificationStatus> getVerificationStatuses(String localeId)
       throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the times to contact.
+   *
+   * @return the times to contact
+   */
+  List<TimeToContact> getTimesToContact() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the times to contact.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
+   *     for or <code>null</code> to retrieve the times to contact for all locales
+   * @return the times to contact
+   */
+  List<TimeToContact> getTimesToContact(String localeId) throws ReferenceServiceException;
 }

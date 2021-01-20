@@ -75,7 +75,7 @@ public class Role implements java.io.Serializable {
   @NotNull
   @Size(min = 1, max = 100)
   @Id
-  @Column(name = "code", nullable = false, length = 100)
+  @Column(name = "code", length = 100, nullable = false)
   private String code;
 
   /** The description for the role. */
@@ -109,7 +109,7 @@ public class Role implements java.io.Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "name", nullable = false, length = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /** Constructs a new <code>Role</code>. */

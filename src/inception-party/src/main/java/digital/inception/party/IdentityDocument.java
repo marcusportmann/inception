@@ -75,9 +75,9 @@ public class IdentityDocument implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
-  @Size(min = 1, max = 10)
+  @Size(min = 1, max = 30)
   @Id
-  @Column(name = "country_of_issue", nullable = false)
+  @Column(name = "country_of_issue", length = 30, nullable = false)
   private String countryOfIssue;
 
   /** The date and time the identity document was created. */
@@ -126,9 +126,9 @@ public class IdentityDocument implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Size(min = 1, max = 10)
+  @Size(min = 1, max = 30)
   @Id
-  @Column(name = "type", nullable = false)
+  @Column(name = "type", length = 30, nullable = false)
   private String type;
 
   /** The date and time the identity document was last updated. */

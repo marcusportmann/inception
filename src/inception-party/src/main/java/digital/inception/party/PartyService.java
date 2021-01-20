@@ -517,6 +517,9 @@ public class PartyService implements IPartyService {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
+
+      logger.error("Failed to retrieve the filtered persons", e);
+
       throw new PartyServiceException("Failed to retrieve the filtered persons", e);
     }
   }

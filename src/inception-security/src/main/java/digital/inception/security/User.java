@@ -164,7 +164,7 @@ public class User implements Serializable {
   @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(max = 100)
-  @Column(name = "name", nullable = false, length = 100)
+  @Column(name = "name", length = 100, nullable = false)
   private String name;
 
   /**
@@ -177,7 +177,7 @@ public class User implements Serializable {
   @JsonProperty
   @XmlElement(name = "Password")
   @Size(max = 100)
-  @Column(name = "password", nullable = false, length = 100)
+  @Column(name = "password", length = 100, nullable = false)
   private String password;
 
   /**
@@ -253,7 +253,7 @@ public class User implements Serializable {
   @XmlElement(name = "Username", required = true)
   @NotNull
   @Size(min = 1, max = 100)
-  @Column(name = "username", nullable = false, length = 100)
+  @Column(name = "username", length = 100, nullable = false)
   private String username;
 
   /** Constructs a new <code>User</code>. */
