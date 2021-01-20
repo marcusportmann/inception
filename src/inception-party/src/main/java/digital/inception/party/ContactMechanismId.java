@@ -33,10 +33,10 @@ public class ContactMechanismId implements Serializable {
   private Party party;
 
   /** The contact mechanism purpose. */
-  private Integer purpose;
+  private String purpose;
 
   /** The contact mechanism type. */
-  private Integer type;
+  private String type;
 
   /**
    * Indicates whether some other object is "equal to" this one.

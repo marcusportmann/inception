@@ -49,7 +49,6 @@ import org.springframework.util.StringUtils;
   "type",
   "code",
   "localeId",
-  "numericCode",
   "partyTypes",
   "sortIndex",
   "name",
@@ -63,7 +62,6 @@ import org.springframework.util.StringUtils;
       "type",
       "code",
       "localeId",
-      "numericCode",
       "partyTypes",
       "sortIndex",
       "name",
@@ -116,14 +114,6 @@ public class ContactMechanismPurpose implements Serializable {
   @Size(min = 1, max = 50)
   @Column(name = "name", nullable = false)
   private String name;
-
-  /** The numeric code for the contact mechanism purpose. */
-  @Schema(description = "The numeric code for the contact mechanism purpose", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "NumericCode", required = true)
-  @NotNull
-  @Column(name = "numeric_code", nullable = false)
-  private Integer numericCode;
 
   /**
    * The comma-delimited codes for the party types the contact mechanism purpose is associated with.
@@ -222,15 +212,6 @@ public class ContactMechanismPurpose implements Serializable {
   }
 
   /**
-   * Returns the numeric code for the contact mechanism purpose.
-   *
-   * @return the numeric code for the contact mechanism purpose
-   */
-  public Integer getNumericCode() {
-    return numericCode;
-  }
-
-  /**
    * Returns the codes for the party types the contact mechanism purpose is associated with.
    *
    * @return the codes for the party types the contact mechanism purpose is associated with
@@ -311,15 +292,6 @@ public class ContactMechanismPurpose implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Set the numeric code for the contact mechanism purpose.
-   *
-   * @param numericCode the numeric code for the contact mechanism purpose
-   */
-  public void setNumericCode(Integer numericCode) {
-    this.numericCode = numericCode;
   }
 
   /**

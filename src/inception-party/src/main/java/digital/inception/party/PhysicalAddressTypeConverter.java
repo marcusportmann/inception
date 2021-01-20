@@ -29,7 +29,7 @@ import javax.persistence.Converter;
  */
 @Converter(autoApply = true)
 public class PhysicalAddressTypeConverter
-    implements AttributeConverter<PhysicalAddressType, Integer> {
+    implements AttributeConverter<PhysicalAddressType, String> {
 
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
@@ -39,8 +39,8 @@ public class PhysicalAddressTypeConverter
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(PhysicalAddressType attribute) {
-    return PhysicalAddressType.toNumericCode(attribute);
+  public String convertToDatabaseColumn(PhysicalAddressType attribute) {
+    return attribute.code();
   }
 
   /**
@@ -53,7 +53,7 @@ public class PhysicalAddressTypeConverter
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public PhysicalAddressType convertToEntityAttribute(Integer dbData) {
-    return PhysicalAddressType.fromNumericCode(dbData);
+  public PhysicalAddressType convertToEntityAttribute(String dbData) {
+    return PhysicalAddressType.fromCode(dbData);
   }
 }

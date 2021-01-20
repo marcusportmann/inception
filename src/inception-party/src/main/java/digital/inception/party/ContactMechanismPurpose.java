@@ -27,11 +27,6 @@ import javax.xml.bind.annotation.XmlType;
  * The <code>ContactMechanismPurpose</code> enumeration defines the possible contact mechanism
  * purposes.
  *
- * <p>NOTE: The numeric codes for the contact mechanism purposes fall into ranges based on the
- * contact mechanism type they are associated with, e.g. the numeric code for the phone number
- * contact mechanism type is 1 and all contact mechanism purposes associated with this contact
- * mechanism type start with 1; 101 = Mobile Phone Number, 102 = Home Phone Number, etc.
- *
  * @author Marcus Portmann
  */
 @Schema(description = "The contact mechanism purpose")
@@ -257,122 +252,6 @@ public enum ContactMechanismPurpose {
         throw new RuntimeException(
             "Failed to determine the contact mechanism purpose with the invalid code ("
                 + code
-                + ")");
-    }
-  }
-
-  /**
-   * Returns the contact mechanism purpose for the specified numeric code.
-   *
-   * @param numericCode the numeric code for the contact mechanism purpose
-   * @return the contact mechanism purpose given by the specified numeric code value
-   */
-  public static ContactMechanismPurpose fromNumericCode(int numericCode) {
-    switch (numericCode) {
-      case 100:
-        return ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER;
-      case 101:
-        return ContactMechanismPurpose.WORK_MOBILE_NUMBER;
-      case 102:
-        return ContactMechanismPurpose.OTHER_MOBILE_NUMBER;
-      case 110:
-        return ContactMechanismPurpose.MAIN_MOBILE_NUMBER;
-      case 200:
-        return ContactMechanismPurpose.HOME_PHONE_NUMBER;
-      case 201:
-        return ContactMechanismPurpose.WORK_PHONE_NUMBER;
-      case 202:
-        return ContactMechanismPurpose.SCHOOL_PHONE_NUMBER;
-      case 203:
-        return ContactMechanismPurpose.PAGER_PHONE_NUMBER;
-      case 204:
-        return ContactMechanismPurpose.OTHER_PHONE_NUMBER;
-      case 210:
-        return ContactMechanismPurpose.MAIN_PHONE_NUMBER;
-      case 300:
-        return ContactMechanismPurpose.HOME_FAX_NUMBER;
-      case 301:
-        return ContactMechanismPurpose.WORK_FAX_NUMBER;
-      case 302:
-        return ContactMechanismPurpose.OTHER_FAX_NUMBER;
-      case 310:
-        return ContactMechanismPurpose.MAIN_FAX_NUMBER;
-      case 400:
-        return ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS;
-      case 401:
-        return ContactMechanismPurpose.WORK_EMAIL_ADDRESS;
-      case 402:
-        return ContactMechanismPurpose.SCHOOL_EMAIL_ADDRESS;
-      case 403:
-        return ContactMechanismPurpose.OTHER_EMAIL_ADDRESS;
-      case 410:
-        return ContactMechanismPurpose.MAIN_EMAIL_ADDRESS;
-      case 500:
-        return ContactMechanismPurpose.WHATSAPP_USER_ID;
-      case 501:
-        return ContactMechanismPurpose.TWITTER_ID;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the contact mechanism purpose for the numeric code ("
-                + numericCode
-                + ")");
-    }
-  }
-
-  /**
-   * Returns the numeric code for the contact mechanism purpose.
-   *
-   * @param contactMechanismPurpose the contact mechanism purpose
-   * @return the numeric code for the contact mechanism purpose
-   */
-  public static int toNumericCode(ContactMechanismPurpose contactMechanismPurpose) {
-    switch (contactMechanismPurpose) {
-      case PERSONAL_MOBILE_NUMBER:
-        return 100;
-      case WORK_MOBILE_NUMBER:
-        return 101;
-      case OTHER_MOBILE_NUMBER:
-        return 102;
-      case MAIN_MOBILE_NUMBER:
-        return 110;
-      case HOME_PHONE_NUMBER:
-        return 200;
-      case WORK_PHONE_NUMBER:
-        return 201;
-      case SCHOOL_PHONE_NUMBER:
-        return 202;
-      case PAGER_PHONE_NUMBER:
-        return 203;
-      case OTHER_PHONE_NUMBER:
-        return 204;
-      case MAIN_PHONE_NUMBER:
-        return 210;
-      case HOME_FAX_NUMBER:
-        return 300;
-      case WORK_FAX_NUMBER:
-        return 301;
-      case OTHER_FAX_NUMBER:
-        return 302;
-      case MAIN_FAX_NUMBER:
-        return 310;
-      case PERSONAL_EMAIL_ADDRESS:
-        return 400;
-      case WORK_EMAIL_ADDRESS:
-        return 401;
-      case SCHOOL_EMAIL_ADDRESS:
-        return 402;
-      case OTHER_EMAIL_ADDRESS:
-        return 403;
-      case MAIN_EMAIL_ADDRESS:
-        return 410;
-      case WHATSAPP_USER_ID:
-        return 500;
-      case TWITTER_ID:
-        return 501;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the numeric code for the contact mechanism purpose ("
-                + contactMechanismPurpose.code()
                 + ")");
     }
   }

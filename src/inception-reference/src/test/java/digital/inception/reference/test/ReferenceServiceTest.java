@@ -35,6 +35,8 @@ import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
 import digital.inception.reference.PhysicalAddressPurpose;
 import digital.inception.reference.PhysicalAddressType;
+import digital.inception.reference.PreferenceType;
+import digital.inception.reference.PreferenceTypeCategory;
 import digital.inception.reference.Race;
 import digital.inception.reference.Region;
 import digital.inception.reference.ResidencePermitType;
@@ -314,6 +316,23 @@ public class ReferenceServiceTest {
         referenceService.getPhysicalAddressTypes();
 
     retrievedPhysicalAddressTypes = referenceService.getPhysicalAddressTypes("en-US");
+  }
+
+  /** Test the preference type category functionality. */
+  @Test
+  public void preferenceTypeCategoryTest() throws Exception {
+    List<PreferenceTypeCategory> retrievedPreferenceTypeCategories =
+        referenceService.getPreferenceTypeCategories();
+
+    retrievedPreferenceTypeCategories = referenceService.getPreferenceTypeCategories("en-US");
+  }
+
+  /** Test the preference type functionality. */
+  @Test
+  public void preferenceTypeTest() throws Exception {
+    List<PreferenceType> retrievedPreferenceTypes = referenceService.getPreferenceTypes();
+
+    retrievedPreferenceTypes = referenceService.getPreferenceTypes("en-US");
   }
 
   /** Test the race reference functionality. */

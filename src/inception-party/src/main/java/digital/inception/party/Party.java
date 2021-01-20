@@ -115,7 +115,6 @@ public class Party implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  // @Column(name = "type", nullable = false, insertable = false, updatable = false)
   @Column(name = "type", nullable = false)
   private PartyType type;
 

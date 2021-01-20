@@ -70,46 +70,6 @@ public enum PartyType {
   }
 
   /**
-   * Returns the party type for the specified numeric code.
-   *
-   * @param numericCode the numeric code for the party type
-   * @return the party type given by the specified numeric code value
-   */
-  public static PartyType fromNumericCode(int numericCode) {
-    switch (numericCode) {
-      case 0:
-        return PartyType.UNKNOWN;
-      case 1:
-        return PartyType.ORGANIZATION;
-      case 2:
-        return PartyType.PERSON;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the party type for the numeric code (" + numericCode + ")");
-    }
-  }
-
-  /**
-   * Returns the numeric code for the party type.
-   *
-   * @param partyType the party type
-   * @return the numeric code for the party type
-   */
-  public static int toNumericCode(PartyType partyType) {
-    switch (partyType) {
-      case UNKNOWN:
-        return 1;
-      case ORGANIZATION:
-        return 1;
-      case PERSON:
-        return 2;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the numeric code for the party type (" + partyType.code() + ")");
-    }
-  }
-
-  /**
    * Returns the code for the party type.
    *
    * @return the code for the party type

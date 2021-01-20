@@ -12,7 +12,7 @@ CREATE TABLE party.parties (
   id        UUID         NOT NULL,
   name      VARCHAR(100) NOT NULL,
   tenant_id UUID         NOT NULL,
-  type      INTEGER      NOT NULL,
+  type      VARCHAR(30)  NOT NULL,
   updated   TIMESTAMP,
 
   PRIMARY KEY (id)
@@ -169,8 +169,8 @@ COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (
 CREATE TABLE party.contact_mechanisms (
   created  TIMESTAMP    NOT NULL,
   party_id UUID         NOT NULL,
-  purpose  INTEGER      NOT NULL,
-  type     INTEGER      NOT NULL,
+  purpose  VARCHAR(30)  NOT NULL,
+  type     VARCHAR(30)  NOT NULL,
   updated  TIMESTAMP,
   value    VARCHAR(200) NOT NULL,
 
@@ -220,7 +220,7 @@ CREATE TABLE party.physical_addresses (
   street_name         VARCHAR(100),
   street_number       VARCHAR(30),
   suburb              VARCHAR(50),
-  type                INTEGER       NOT NULL,
+  type                VARCHAR(30)   NOT NULL,
   updated             TIMESTAMP,
 
   PRIMARY KEY (id),

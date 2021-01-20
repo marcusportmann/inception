@@ -46,7 +46,6 @@ import javax.xml.bind.annotation.XmlType;
 @JsonPropertyOrder({
   "code",
   "localeId",
-  "numericCode",
   "sortIndex",
   "name",
   "plural",
@@ -56,7 +55,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
     name = "ContactMechanismType",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "localeId", "numericCode", "sortIndex", "name", "plural", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "plural", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "contact_mechanism_types")
@@ -104,14 +103,6 @@ public class ContactMechanismType implements Serializable {
   @Size(min = 1, max = 50)
   @Column(name = "name", nullable = false)
   private String name;
-
-  /** The numeric code for the contact mechanism type. */
-  @Schema(description = "The numeric code for the contact mechanism type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "NumericCode", required = true)
-  @NotNull
-  @Column(name = "numeric_code", nullable = false)
-  private Integer numericCode;
 
   /** The plural for the contact mechanism type. */
   @Schema(description = "The plural for the contact mechanism type", required = true)
@@ -196,15 +187,6 @@ public class ContactMechanismType implements Serializable {
   }
 
   /**
-   * Returns the numeric code for the contact mechanism type.
-   *
-   * @return the numeric code for the contact mechanism type
-   */
-  public Integer getNumericCode() {
-    return numericCode;
-  }
-
-  /**
    * Returns the plural for the contact mechanism type.
    *
    * @return the plural for the contact mechanism type
@@ -266,15 +248,6 @@ public class ContactMechanismType implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Set the numeric code for the contact mechanism type.
-   *
-   * @param numericCode the numeric code for the contact mechanism type
-   */
-  public void setNumericCode(Integer numericCode) {
-    this.numericCode = numericCode;
   }
 
   /**

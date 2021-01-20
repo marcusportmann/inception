@@ -43,12 +43,12 @@ import javax.xml.bind.annotation.XmlType;
  */
 @Schema(description = "A type of physical address")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "numericCode", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "PhysicalAddressType", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "PhysicalAddressType",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "localeId", "numericCode", "sortIndex", "name", "description"})
+    propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "physical_address_types")
@@ -96,14 +96,6 @@ public class PhysicalAddressType implements Serializable {
   @Size(min = 1, max = 50)
   @Column(name = "name", nullable = false)
   private String name;
-
-  /** The numeric code for the physical address type. */
-  @Schema(description = "The numeric code for the physical address type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "NumericCode", required = true)
-  @NotNull
-  @Column(name = "numeric_code", nullable = false)
-  private Integer numericCode;
 
   /** The sort index for the physical address type. */
   @Schema(description = "The sort index for the physical address type", required = true)
@@ -179,15 +171,6 @@ public class PhysicalAddressType implements Serializable {
   }
 
   /**
-   * Returns the numeric code for the physical address type.
-   *
-   * @return the numeric code for the physical address type
-   */
-  public Integer getNumericCode() {
-    return numericCode;
-  }
-
-  /**
    * Returns the sort index for the physical address type.
    *
    * @return the sort index for the physical address type
@@ -240,15 +223,6 @@ public class PhysicalAddressType implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Set the numeric code for the physical address type.
-   *
-   * @param numericCode the numeric code for the physical address type
-   */
-  public void setNumericCode(Integer numericCode) {
-    this.numericCode = numericCode;
   }
 
   /**

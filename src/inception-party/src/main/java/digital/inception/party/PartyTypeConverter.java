@@ -28,7 +28,7 @@ import javax.persistence.Converter;
  * @author Marcus Portmann
  */
 @Converter(autoApply = true)
-public class PartyTypeConverter implements AttributeConverter<PartyType, Integer> {
+public class PartyTypeConverter implements AttributeConverter<PartyType, String> {
 
   /**
    * Converts the value stored in the entity attribute into the data representation to be stored in
@@ -38,8 +38,8 @@ public class PartyTypeConverter implements AttributeConverter<PartyType, Integer
    * @return the converted data to be stored in the database column
    */
   @Override
-  public Integer convertToDatabaseColumn(PartyType attribute) {
-    return PartyType.toNumericCode(attribute);
+  public String convertToDatabaseColumn(PartyType attribute) {
+    return attribute.code();
   }
 
   /**
@@ -52,7 +52,7 @@ public class PartyTypeConverter implements AttributeConverter<PartyType, Integer
    * @return the converted value to be stored in the entity attribute
    */
   @Override
-  public PartyType convertToEntityAttribute(Integer dbData) {
-    return PartyType.fromNumericCode(dbData);
+  public PartyType convertToEntityAttribute(String dbData) {
+    return PartyType.fromCode(dbData);
   }
 }

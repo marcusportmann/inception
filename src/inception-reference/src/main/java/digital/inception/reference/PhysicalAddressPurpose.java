@@ -48,7 +48,6 @@ import org.springframework.util.StringUtils;
 @JsonPropertyOrder({
   "code",
   "localeId",
-  "numericCode",
   "partyTypes",
   "sortIndex",
   "name",
@@ -61,7 +60,6 @@ import org.springframework.util.StringUtils;
     propOrder = {
       "code",
       "localeId",
-      "numericCode",
       "partyTypes",
       "sortIndex",
       "name",
@@ -114,14 +112,6 @@ public class PhysicalAddressPurpose implements Serializable {
   @Size(min = 1, max = 50)
   @Column(name = "name", nullable = false)
   private String name;
-
-  /** The numeric code for the physical address purpose. */
-  @Schema(description = "The numeric code for the physical address purpose", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "NumericCode", required = true)
-  @NotNull
-  @Column(name = "numeric_code", nullable = false)
-  private Integer numericCode;
 
   /**
    * The comma-delimited codes for the party types the physical address purpose is associated with.
@@ -205,15 +195,6 @@ public class PhysicalAddressPurpose implements Serializable {
   }
 
   /**
-   * Returns the numeric code for the physical address purpose.
-   *
-   * @return the numeric code for the physical address purpose
-   */
-  public Integer getNumericCode() {
-    return numericCode;
-  }
-
-  /**
    * Returns the codes for the party types the physical address purpose is associated with.
    *
    * @return the codes for the party types the physical address purpose is associated with
@@ -280,15 +261,6 @@ public class PhysicalAddressPurpose implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-
-  /**
-   * Set the numeric code for the physical address purpose.
-   *
-   * @param numericCode the numeric code for the physical address purpose
-   */
-  public void setNumericCode(Integer numericCode) {
-    this.numericCode = numericCode;
   }
 
   /**

@@ -83,58 +83,6 @@ public enum ContactMechanismType {
   }
 
   /**
-   * Returns the contact mechanism type for the specified numeric code.
-   *
-   * @param numericCode the numeric code for the contact mechanism type
-   * @return the contact mechanism type given by the specified numeric code value
-   */
-  public static ContactMechanismType fromNumericCode(int numericCode) {
-    switch (numericCode) {
-      case 1:
-        return ContactMechanismType.MOBILE_NUMBER;
-      case 2:
-        return ContactMechanismType.PHONE_NUMBER;
-      case 3:
-        return ContactMechanismType.FAX_NUMBER;
-      case 4:
-        return ContactMechanismType.EMAIL_ADDRESS;
-      case 5:
-        return ContactMechanismType.SOCIAL_MEDIA;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the contact mechanism type for the numeric code ("
-                + numericCode
-                + ")");
-    }
-  }
-
-  /**
-   * Returns the numeric code for the contact mechanism type.
-   *
-   * @param contactMechanismTypeCategory the contact mechanism type
-   * @return the numeric code for the contact mechanism type
-   */
-  public static int toNumericCode(ContactMechanismType contactMechanismTypeCategory) {
-    switch (contactMechanismTypeCategory) {
-      case MOBILE_NUMBER:
-        return 1;
-      case PHONE_NUMBER:
-        return 2;
-      case FAX_NUMBER:
-        return 3;
-      case EMAIL_ADDRESS:
-        return 4;
-      case SOCIAL_MEDIA:
-        return 5;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the numeric code for the contact mechanism type ("
-                + contactMechanismTypeCategory.code()
-                + ")");
-    }
-  }
-
-  /**
    * Returns the code for the contact mechanism type.
    *
    * @return the code for the contact mechanism type
