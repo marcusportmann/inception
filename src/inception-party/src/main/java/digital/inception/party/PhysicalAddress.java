@@ -253,8 +253,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "farm_number", length = 50)
   private String farmNumber;
 
-  /** The Universally Unique Identifier (UUID) for the address. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the address", required = true)
+  /** The Universally Unique Identifier (UUID) for the physical address. */
+  @Schema(description = "The Universally Unique Identifier (UUID) for the physical address", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -608,9 +608,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the address.
+   * Returns the Universally Unique Identifier (UUID) for the physical address.
    *
-   * @return the Universally Unique Identifier (UUID) for the address
+   * @return the Universally Unique Identifier (UUID) for the physical address
    */
   public UUID getId() {
     return id;
@@ -876,9 +876,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the address.
+   * Set the Universally Unique Identifier (UUID) for the physical address.
    *
-   * @param id the Universally Unique Identifier (UUID) for the address
+   * @param id the Universally Unique Identifier (UUID) for the physical address
    */
   public void setId(UUID id) {
     this.id = id;
