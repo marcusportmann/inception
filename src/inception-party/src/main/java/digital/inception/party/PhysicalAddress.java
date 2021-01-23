@@ -154,11 +154,11 @@ public class PhysicalAddress implements Serializable {
   @Schema(description = "The building room for the physical address")
   @JsonProperty
   @XmlElement(name = "BuildingRoom")
-  @Size(max = 20)
+  @Size(max = 30)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.BuildingRoom.Pattern.message}",
       regexp = "^[\\pL\\pN-' ]*$")
-  @Column(name = "building_room", length = 20)
+  @Column(name = "building_room", length = 30)
   private String buildingRoom;
 
   /** The town or town or city for the physical address. */

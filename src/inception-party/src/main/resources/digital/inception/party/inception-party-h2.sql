@@ -33,11 +33,83 @@ COMMENT ON COLUMN party.parties.type IS 'The code for the party type';
 COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last updated';
 
 
+CREATE TABLE party.contact_mechanisms (
+  created  TIMESTAMP    NOT NULL,
+  party_id UUID         NOT NULL,
+  purpose  VARCHAR(30)  NOT NULL,
+  type     VARCHAR(30)  NOT NULL,
+  updated  TIMESTAMP,
+  value    VARCHAR(200) NOT NULL,
+
+  PRIMARY KEY (party_id, type, purpose),
+  CONSTRAINT contact_mechanisms_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX contact_mechanisms_party_id_ix ON party.contact_mechanisms(party_id);
+
+COMMENT ON COLUMN party.contact_mechanisms.created IS 'The date and time the contact mechanism was created';
+
+COMMENT ON COLUMN party.contact_mechanisms.party_id IS 'The Universally Unique Identifier (UUID) for the party the contact mechanism is associated with';
+
+COMMENT ON COLUMN party.contact_mechanisms.purpose IS 'The code for the contact mechanism purpose';
+
+COMMENT ON COLUMN party.contact_mechanisms.type IS 'The code for the contact mechanism type';
+
+COMMENT ON COLUMN party.contact_mechanisms.updated IS 'The date and time the contact mechanism was last updated';
+
+COMMENT ON COLUMN party.contact_mechanisms.value IS 'The value for the contact mechanism';
+
+
+CREATE TABLE party.identity_documents (
+  country_of_issue VARCHAR(30) NOT NULL,
+  created          TIMESTAMP   NOT NULL,
+  date_of_expiry   DATE,
+  date_of_issue    DATE        NOT NULL,
+  number           VARCHAR(30) NOT NULL,
+  person_id        UUID        NOT NULL,
+  type             VARCHAR(30) NOT NULL,
+  updated          TIMESTAMP,
+
+  PRIMARY KEY (person_id, type, country_of_issue, date_of_issue),
+  CONSTRAINT identity_documents_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
+);
+
+CREATE INDEX identity_documents_person_id_ix ON party.identity_documents(person_id);
+
+COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The code for the country of issue for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.created IS 'The date and time the identity document was created';
+
+COMMENT ON COLUMN party.identity_documents.date_of_expiry IS 'The optional date of expiry for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.date_of_issue IS 'The date of issue for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.number IS 'The number for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.person_id IS 'The Universally Unique Identifier (UUID) for the person the identity document is associated with';
+
+COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity document type';
+
+COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
+
+
+CREATE TABLE party.organizations (
+  countries_of_tax_residence VARCHAR(100),
+  id                         UUID          NOT NULL,
+
+  PRIMARY KEY (id),
+  CONSTRAINT organizations_party_fk FOREIGN KEY (id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+COMMENT ON COLUMN party.organizations.countries_of_tax_residence IS 'The optional comma-delimited codes for the countries of tax residence for the organization';
+
+COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (UUID) for the organization';
+
+
 CREATE TABLE party.persons (
-  correspondence_language    VARCHAR(30),
+  countries_of_tax_residence VARCHAR(100),
   country_of_birth           VARCHAR(30),
   country_of_residence       VARCHAR(30),
-  countries_of_tax_residence VARCHAR(100),
   date_of_birth              DATE,
   date_of_death              DATE,
   employment_status          VARCHAR(30),
@@ -66,8 +138,6 @@ CREATE TABLE party.persons (
 );
 
 CREATE INDEX persons_date_of_birth_ix ON party.persons(date_of_birth);
-
-COMMENT ON COLUMN party.persons.correspondence_language IS 'The optional code for the correspondence language for the person';
 
 COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code for the country of birth for the person';
 
@@ -120,96 +190,23 @@ COMMENT ON COLUMN party.persons.tax_number_type IS 'The optional code for the ta
 COMMENT ON COLUMN party.persons.title IS 'The optional code for the title for the person';
 
 
-CREATE TABLE party.identity_documents (
-  country_of_issue VARCHAR(30) NOT NULL,
-  created          TIMESTAMP   NOT NULL,
-  date_of_expiry   DATE,
-  date_of_issue    DATE        NOT NULL,
-  number           VARCHAR(30) NOT NULL,
-  person_id        UUID        NOT NULL,
-  type             VARCHAR(30) NOT NULL,
-  updated          TIMESTAMP,
-
-  PRIMARY KEY (person_id, type, country_of_issue, date_of_issue),
-  CONSTRAINT identity_documents_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
-);
-
-CREATE INDEX identity_documents_person_id_ix ON party.identity_documents(person_id);
-
-COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The code for the country of issue for the identity document';
-
-COMMENT ON COLUMN party.identity_documents.created IS 'The date and time the identity document was created';
-
-COMMENT ON COLUMN party.identity_documents.date_of_expiry IS 'The optional date of expiry for the identity document';
-
-COMMENT ON COLUMN party.identity_documents.date_of_issue IS 'The date of issue for the identity document';
-
-COMMENT ON COLUMN party.identity_documents.number IS 'The number for the identity document';
-
-COMMENT ON COLUMN party.identity_documents.person_id IS 'The Universally Unique Identifier (UUID) for the person the identity document is associated with';
-
-COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity document type';
-
-COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
-
-
-CREATE TABLE party.organizations (
-  countries_of_tax_residence VARCHAR(100),
-  id                         UUID          NOT NULL,
-
-  PRIMARY KEY (id),
-  CONSTRAINT organizations_party_fk FOREIGN KEY (id) REFERENCES party.parties(id) ON DELETE CASCADE
-);
-
-COMMENT ON COLUMN party.organizations.countries_of_tax_residence IS 'The optional comma-delimited codes for the countries of tax residence for the organization';
-
-COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (UUID) for the organization';
-
-
-CREATE TABLE party.contact_mechanisms (
-  created  TIMESTAMP    NOT NULL,
-  party_id UUID         NOT NULL,
-  purpose  VARCHAR(30)  NOT NULL,
-  type     VARCHAR(30)  NOT NULL,
-  updated  TIMESTAMP,
-  value    VARCHAR(200) NOT NULL,
-
-  PRIMARY KEY (party_id, type, purpose),
-  CONSTRAINT contact_mechanisms_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
-);
-
-CREATE INDEX contact_mechanisms_party_id_ix ON party.contact_mechanisms(party_id);
-
-COMMENT ON COLUMN party.contact_mechanisms.created IS 'The date and time the contact mechanism was created';
-
-COMMENT ON COLUMN party.contact_mechanisms.party_id IS 'The Universally Unique Identifier (UUID) for the party the contact mechanism is associated with';
-
-COMMENT ON COLUMN party.contact_mechanisms.purpose IS 'The code for the contact mechanism purpose';
-
-COMMENT ON COLUMN party.contact_mechanisms.type IS 'The code for the contact mechanism type';
-
-COMMENT ON COLUMN party.contact_mechanisms.updated IS 'The date and time the contact mechanism was last updated';
-
-COMMENT ON COLUMN party.contact_mechanisms.value IS 'The value for the contact mechanism';
-
-
 CREATE TABLE party.physical_addresses (
   building_floor      VARCHAR(20),
   building_name       VARCHAR(50),
-  building_room       VARCHAR(20),
+  building_room       VARCHAR(30),
   city                VARCHAR(50),
   complex_name        VARCHAR(50),
   complex_unit_number VARCHAR(20),
-  created             TIMESTAMP     NOT NULL,
   country             VARCHAR(30)   NOT NULL,
+  created             TIMESTAMP     NOT NULL,
   farm_description    VARCHAR(50),
   farm_name           VARCHAR(50),
   farm_number         VARCHAR(50),
   id                  UUID          NOT NULL,
+  latitude            VARCHAR(50),
   line1               VARCHAR(100),
   line2               VARCHAR(100),
   line3               VARCHAR(100),
-  latitude            VARCHAR(50),
   longitude           VARCHAR(50),
   party_id            UUID          NOT NULL,
   postal_code         VARCHAR(30)   NOT NULL,
