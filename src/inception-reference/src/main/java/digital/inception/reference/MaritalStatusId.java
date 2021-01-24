@@ -79,24 +79,6 @@ public class MaritalStatusId implements Serializable {
   }
 
   /**
-   * Returns the code for the marital status.
-   *
-   * @return the code for the marital status
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the marital status.
-   *
-   * @return the Unicode locale identifier for the marital status
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -104,23 +86,5 @@ public class MaritalStatusId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the marital status.
-   *
-   * @param code the code for the marital status
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the marital status.
-   *
-   * @param locale the Unicode locale identifier for the marital status
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

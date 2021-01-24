@@ -79,24 +79,6 @@ public class PartyRolePurposeId implements Serializable {
   }
 
   /**
-   * Returns the code for the party role purpose.
-   *
-   * @return the code for the party role purpose
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the party role purpose.
-   *
-   * @return the Unicode locale identifier for the party role purpose
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -104,23 +86,5 @@ public class PartyRolePurposeId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the party role purpose.
-   *
-   * @param code the code for the party role purpose
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the party role purpose.
-   *
-   * @param locale the Unicode locale identifier for the party role purpose
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

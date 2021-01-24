@@ -528,6 +528,86 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
+   * Retrieve the party role purposes.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
+   *     purposes for or <code>null</code> to retrieve the party role purposes for all locales
+   * @return the party role purposes
+   */
+  @Operation(
+      summary = "Retrieve the party role purposes",
+      description = "Retrieve the party role purposes")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/party-role-purposes",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<PartyRolePurpose> getPartyRolePurposes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the party role purposes for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getPartyRolePurposes(localeId);
+  }
+
+  /**
+   * Retrieve the party role types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
+   *     for or <code>null</code> to retrieve the party role types for all locales
+   * @return the party role types
+   */
+  @Operation(
+      summary = "Retrieve the party role types",
+      description = "Retrieve the party role types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/party-role-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<PartyRoleType> getPartyRoleTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the party role types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getPartyRoleTypes(localeId);
+  }
+
+  /**
    * Retrieve the physical address purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism

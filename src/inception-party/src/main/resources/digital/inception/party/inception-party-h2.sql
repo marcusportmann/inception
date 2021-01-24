@@ -33,66 +33,6 @@ COMMENT ON COLUMN party.parties.type IS 'The code for the party type';
 COMMENT ON COLUMN party.parties.updated IS 'The date and time the party was last updated';
 
 
-CREATE TABLE party.contact_mechanisms (
-  created  TIMESTAMP    NOT NULL,
-  party_id UUID         NOT NULL,
-  purpose  VARCHAR(30)  NOT NULL,
-  type     VARCHAR(30)  NOT NULL,
-  updated  TIMESTAMP,
-  value    VARCHAR(200) NOT NULL,
-
-  PRIMARY KEY (party_id, type, purpose),
-  CONSTRAINT contact_mechanisms_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
-);
-
-CREATE INDEX contact_mechanisms_party_id_ix ON party.contact_mechanisms(party_id);
-
-COMMENT ON COLUMN party.contact_mechanisms.created IS 'The date and time the contact mechanism was created';
-
-COMMENT ON COLUMN party.contact_mechanisms.party_id IS 'The Universally Unique Identifier (UUID) for the party the contact mechanism is associated with';
-
-COMMENT ON COLUMN party.contact_mechanisms.purpose IS 'The code for the contact mechanism purpose';
-
-COMMENT ON COLUMN party.contact_mechanisms.type IS 'The code for the contact mechanism type';
-
-COMMENT ON COLUMN party.contact_mechanisms.updated IS 'The date and time the contact mechanism was last updated';
-
-COMMENT ON COLUMN party.contact_mechanisms.value IS 'The value for the contact mechanism';
-
-
-CREATE TABLE party.identity_documents (
-  country_of_issue VARCHAR(30) NOT NULL,
-  created          TIMESTAMP   NOT NULL,
-  date_of_expiry   DATE,
-  date_of_issue    DATE        NOT NULL,
-  number           VARCHAR(30) NOT NULL,
-  person_id        UUID        NOT NULL,
-  type             VARCHAR(30) NOT NULL,
-  updated          TIMESTAMP,
-
-  PRIMARY KEY (person_id, type, country_of_issue, date_of_issue),
-  CONSTRAINT identity_documents_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
-);
-
-CREATE INDEX identity_documents_person_id_ix ON party.identity_documents(person_id);
-
-COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The code for the country of issue for the identity document';
-
-COMMENT ON COLUMN party.identity_documents.created IS 'The date and time the identity document was created';
-
-COMMENT ON COLUMN party.identity_documents.date_of_expiry IS 'The optional date of expiry for the identity document';
-
-COMMENT ON COLUMN party.identity_documents.date_of_issue IS 'The date of issue for the identity document';
-
-COMMENT ON COLUMN party.identity_documents.number IS 'The number for the identity document';
-
-COMMENT ON COLUMN party.identity_documents.person_id IS 'The Universally Unique Identifier (UUID) for the person the identity document is associated with';
-
-COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity document type';
-
-COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
-
-
 CREATE TABLE party.organizations (
   countries_of_tax_residence VARCHAR(100),
   id                         UUID          NOT NULL,
@@ -188,6 +128,97 @@ COMMENT ON COLUMN party.persons.tax_number IS 'The optional tax number for the p
 COMMENT ON COLUMN party.persons.tax_number_type IS 'The optional code for the tax number type for the person';
 
 COMMENT ON COLUMN party.persons.title IS 'The optional code for the title for the person';
+
+
+
+
+
+
+
+
+
+CREATE TABLE party.contact_mechanisms (
+  created  TIMESTAMP    NOT NULL,
+  party_id UUID         NOT NULL,
+  purpose  VARCHAR(30)  NOT NULL,
+  type     VARCHAR(30)  NOT NULL,
+  updated  TIMESTAMP,
+  value    VARCHAR(200) NOT NULL,
+
+  PRIMARY KEY (party_id, type, purpose),
+  CONSTRAINT contact_mechanisms_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX contact_mechanisms_party_id_ix ON party.contact_mechanisms(party_id);
+
+COMMENT ON COLUMN party.contact_mechanisms.created IS 'The date and time the contact mechanism was created';
+
+COMMENT ON COLUMN party.contact_mechanisms.party_id IS 'The Universally Unique Identifier (UUID) for the party the contact mechanism is associated with';
+
+COMMENT ON COLUMN party.contact_mechanisms.purpose IS 'The code for the contact mechanism purpose';
+
+COMMENT ON COLUMN party.contact_mechanisms.type IS 'The code for the contact mechanism type';
+
+COMMENT ON COLUMN party.contact_mechanisms.updated IS 'The date and time the contact mechanism was last updated';
+
+COMMENT ON COLUMN party.contact_mechanisms.value IS 'The value for the contact mechanism';
+
+
+CREATE TABLE party.identity_documents (
+  country_of_issue VARCHAR(30) NOT NULL,
+  created          TIMESTAMP   NOT NULL,
+  date_of_expiry   DATE,
+  date_of_issue    DATE        NOT NULL,
+  number           VARCHAR(30) NOT NULL,
+  person_id        UUID        NOT NULL,
+  type             VARCHAR(30) NOT NULL,
+  updated          TIMESTAMP,
+
+  PRIMARY KEY (person_id, type, country_of_issue, date_of_issue),
+  CONSTRAINT identity_documents_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
+);
+
+CREATE INDEX identity_documents_person_id_ix ON party.identity_documents(person_id);
+
+COMMENT ON COLUMN party.identity_documents.country_of_issue IS 'The code for the country of issue for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.created IS 'The date and time the identity document was created';
+
+COMMENT ON COLUMN party.identity_documents.date_of_expiry IS 'The optional date of expiry for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.date_of_issue IS 'The date of issue for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.number IS 'The number for the identity document';
+
+COMMENT ON COLUMN party.identity_documents.person_id IS 'The Universally Unique Identifier (UUID) for the person the identity document is associated with';
+
+COMMENT ON COLUMN party.identity_documents.type IS 'The code for the identity document type';
+
+COMMENT ON COLUMN party.identity_documents.updated IS 'The date and time the identity document was last updated';
+
+
+CREATE TABLE party.party_roles (
+  created  TIMESTAMP    NOT NULL,
+  party_id UUID         NOT NULL,
+  purpose  VARCHAR(30),
+  type     VARCHAR(30)  NOT NULL,
+  updated  TIMESTAMP,
+
+  PRIMARY KEY (party_id, type),
+  CONSTRAINT party_roles_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
+);
+
+CREATE INDEX party_roles_party_id_ix ON party.party_roles(party_id);
+
+COMMENT ON COLUMN party.party_roles.created IS 'The date and time the party role was created';
+
+COMMENT ON COLUMN party.party_roles.party_id IS 'The Universally Unique Identifier (UUID) for the party the party role is associated with';
+
+COMMENT ON COLUMN party.party_roles.purpose IS 'The optional code for the party role purpose';
+
+COMMENT ON COLUMN party.party_roles.type IS 'The code for the party role type';
+
+COMMENT ON COLUMN party.party_roles.updated IS 'The date and time the party role was last updated';
 
 
 CREATE TABLE party.physical_addresses (

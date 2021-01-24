@@ -22,7 +22,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>PreferenceTypeId</code> class implements the ID class for the <code>PreferenceType</code> class.
+ * The <code>PreferenceTypeId</code> class implements the ID class for the <code>PreferenceType
+ * </code> class.
  *
  * @author Marcus Portmann
  */
@@ -78,24 +79,6 @@ public class PreferenceTypeId implements Serializable {
   }
 
   /**
-   * Returns the code for the preference type.
-   *
-   * @return the code for the preference type
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the preference type.
-   *
-   * @return the Unicode locale identifier for the preference type
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -103,23 +86,5 @@ public class PreferenceTypeId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the preference type.
-   *
-   * @param code the code for the preference type
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the preference type.
-   *
-   * @param locale the Unicode locale identifier for the preference type
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

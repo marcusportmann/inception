@@ -86,33 +86,6 @@ public class MarriageTypeId implements Serializable {
   }
 
   /**
-   * Returns the code for the marital status.
-   *
-   * @return the code for the marital status
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the marital status.
-   *
-   * @return the Unicode locale identifier for the marital status
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
-   * Returns the code for the marital status the marriage type is associated with.
-   *
-   * @return the code for the marital status the marriage type is associated with
-   */
-  public String getMaritalStatus() {
-    return maritalStatus;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -122,32 +95,5 @@ public class MarriageTypeId implements Serializable {
     return ((maritalStatus == null) ? 0 : maritalStatus.hashCode())
         + ((code == null) ? 0 : code.hashCode())
         + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the marital status.
-   *
-   * @param code the code for the marital status
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the marital status.
-   *
-   * @param locale the Unicode locale identifier for the marital status
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
-  }
-
-  /**
-   * Set the code for the marital status the marriage type is associated with.
-   *
-   * @param maritalStatus the code for the marital status the marriage type is associated with
-   */
-  public void setMaritalStatus(String maritalStatus) {
-    this.maritalStatus = maritalStatus;
   }
 }

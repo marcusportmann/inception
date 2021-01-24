@@ -79,24 +79,6 @@ public class VerificationMethodId implements Serializable {
   }
 
   /**
-   * Returns the code for the verification method.
-   *
-   * @return the code for the verification method
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the verification method.
-   *
-   * @return the Unicode locale identifier for the verification method
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -104,23 +86,5 @@ public class VerificationMethodId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the verification method.
-   *
-   * @param code the code for the verification method
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the verification method.
-   *
-   * @param locale the Unicode locale identifier for the verification method
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

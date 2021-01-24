@@ -79,24 +79,6 @@ public class ResidencePermitTypeId implements Serializable {
   }
 
   /**
-   * Returns the code for the residence permit type.
-   *
-   * @return the code for the residence permit type
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the residence permit type.
-   *
-   * @return the Unicode locale identifier for the residence permit type
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -104,23 +86,5 @@ public class ResidencePermitTypeId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the residence permit type.
-   *
-   * @param code the code for the residence permit type
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the residence permit type.
-   *
-   * @param locale the Unicode locale identifier for the residence permit type
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

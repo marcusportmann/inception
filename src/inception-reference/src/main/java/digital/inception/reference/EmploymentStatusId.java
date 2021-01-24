@@ -79,24 +79,6 @@ public class EmploymentStatusId implements Serializable {
   }
 
   /**
-   * Returns the code for the employment status.
-   *
-   * @return the code for the employment status
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the employment status.
-   *
-   * @return the Unicode locale identifier for the employment status
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -104,23 +86,5 @@ public class EmploymentStatusId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the employment status.
-   *
-   * @param code the code for the employment status
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the employment status.
-   *
-   * @param locale the Unicode locale identifier for the employment status
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

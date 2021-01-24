@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -64,16 +65,24 @@ import org.springframework.util.StringUtils;
   "contactMechanisms",
   "physicalAddresses",
   "countriesOfTaxResidence",
-  "taxNumbers"
+  "taxNumbers",
+  "roles"
 })
 @XmlRootElement(name = "Organization", namespace = "http://party.inception.digital")
 @XmlType(
     name = "Organization",
     namespace = "http://party.inception.digital",
-    propOrder = {"contactMechanisms", "physicalAddresses", "countriesOfTaxResidence", "taxNumbers"})
+    propOrder = {
+      "contactMechanisms",
+      "physicalAddresses",
+      "countriesOfTaxResidence",
+      "taxNumbers",
+      "roles"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidOrganization
 @Entity
+@DiscriminatorValue("organization")
 @Table(schema = "party", name = "organizations")
 public class Organization extends Party implements Serializable {
 
@@ -106,6 +115,20 @@ public class Organization extends Party implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
+
+  /** The roles for the organization independent of a party association. */
+  @Schema(description = "The roles for the organization independent of a party association")
+  @JsonProperty
+  @JsonManagedReference("partyRoleReference")
+  @XmlElementWrapper(name = "Roles")
+  @XmlElement(name = "Role")
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<PartyRole> roles = new HashSet<>();
 
   /** The tax numbers for the organization. */
   @Schema(description = "The tax numbers for the organization")
@@ -174,6 +197,19 @@ public class Organization extends Party implements Serializable {
     physicalAddress.setParty(this);
 
     physicalAddresses.add(physicalAddress);
+  }
+
+  /**
+   * Add the role to the organization independent of a party association.
+   *
+   * @param role the party role
+   */
+  public void addRole(PartyRole role) {
+    roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), role.getType()));
+
+    role.setParty(this);
+
+    roles.add(role);
   }
 
   /**
@@ -254,6 +290,50 @@ public class Organization extends Party implements Serializable {
     return super.getName();
   }
 
+  /**
+   * Returns the physical addresses for the organization.
+   *
+   * @return the physical addresses for the organization
+   */
+  public Set<PhysicalAddress> getPhysicalAddresses() {
+    return physicalAddresses;
+  }
+
+  /**
+   * Retrieve the role with the specified type for the organization independent of a party
+   * association.
+   *
+   * @param type the code for the party role type
+   * @return the role with the specified type for the organization independent of a party
+   *     association or <code>null</code> if the role could not be found
+   */
+  public PartyRole getRole(String type) {
+    return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst().get();
+  }
+
+  /**
+   * Returns the roles for the party independent of a party association.
+   *
+   * @return the roles for the party independent of a party association
+   */
+  public Set<PartyRole> getRoles() {
+    return roles;
+  }
+
+  /**
+   * Retrieve the tax number with the specified type for the organization.
+   *
+   * @param type the tax number type
+   * @return the tax number with the specified type for the organization or <code>null</code> if the
+   *     tax number could not be found
+   */
+  public TaxNumber getTaxNumber(String type) {
+    return taxNumbers.stream()
+        .filter(taxNumber -> Objects.equals(taxNumber.getType(), type))
+        .findFirst()
+        .get();
+  }
+
   // TODO: Add method to find the first physical address with the specified purpose -- MARCUS
 
   //  /**
@@ -277,29 +357,6 @@ public class Organization extends Party implements Serializable {
   //  }
 
   /**
-   * Returns the physical addresses for the organization.
-   *
-   * @return the physical addresses for the organization
-   */
-  public Set<PhysicalAddress> getPhysicalAddresses() {
-    return physicalAddresses;
-  }
-
-  /**
-   * Retrieve the tax number with the specified type for the organization.
-   *
-   * @param type the tax number type
-   * @return the tax number with the specified type for the organization or <code>null</code> if the
-   *     tax number could not be found
-   */
-  public TaxNumber getTaxNumber(String type) {
-    return taxNumbers.stream()
-        .filter(taxNumber -> Objects.equals(taxNumber.getType(), type))
-        .findFirst()
-        .get();
-  }
-
-  /**
    * Returns the tax numbers for the organization.
    *
    * @return the tax numbers for the organization
@@ -321,21 +378,6 @@ public class Organization extends Party implements Serializable {
                 && Objects.equals(existingContactMechanism.getPurpose(), purpose));
   }
 
-  // TODO: Add method to remove the physical address with the specified purpose -- MARCUS
-
-  //  /**
-  //   * Remove the physical address with the specified type and purpose for the organization.
-  //   *
-  //   * @param type the physical address type
-  //   * @param purpose the physical address purpose
-  //   */
-  //  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-  //    physicalAddresses.removeIf(
-  //        existingPhysicalAddress ->
-  //            Objects.equals(existingPhysicalAddress.getType(), type)
-  //                && Objects.equals(existingPhysicalAddress.getPurpose(), purpose));
-  //  }
-
   /**
    * Remove the tax number with the specified type for the organization.
    *
@@ -354,6 +396,21 @@ public class Organization extends Party implements Serializable {
     this.contactMechanisms.clear();
     this.contactMechanisms.addAll(contactMechanisms);
   }
+
+  // TODO: Add method to remove the physical address with the specified purpose -- MARCUS
+
+  //  /**
+  //   * Remove the physical address with the specified type and purpose for the organization.
+  //   *
+  //   * @param type the physical address type
+  //   * @param purpose the physical address purpose
+  //   */
+  //  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+  //    physicalAddresses.removeIf(
+  //        existingPhysicalAddress ->
+  //            Objects.equals(existingPhysicalAddress.getType(), type)
+  //                && Objects.equals(existingPhysicalAddress.getPurpose(), purpose));
+  //  }
 
   /**
    * Set the optional codes for the countries of tax residence for the organization.
@@ -405,6 +462,16 @@ public class Organization extends Party implements Serializable {
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
     this.physicalAddresses.clear();
     this.physicalAddresses.addAll(physicalAddresses);
+  }
+
+  /**
+   * Set the roles for the party independent of a party association.
+   *
+   * @param roles the party roles
+   */
+  public void setRoles(Set<PartyRole> roles) {
+    this.roles.clear();
+    this.roles.addAll(roles);
   }
 
   /**

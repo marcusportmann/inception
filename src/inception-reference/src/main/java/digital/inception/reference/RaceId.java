@@ -78,24 +78,6 @@ public class RaceId implements Serializable {
   }
 
   /**
-   * Returns the code for the race.
-   *
-   * @return the code for the race
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the race.
-   *
-   * @return the Unicode locale identifier for the race
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -103,23 +85,5 @@ public class RaceId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the race.
-   *
-   * @param code the code for the race
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the race.
-   *
-   * @param locale the Unicode locale identifier for the race
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

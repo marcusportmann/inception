@@ -78,24 +78,6 @@ public class CountryId implements Serializable {
   }
 
   /**
-   * Returns the code for the country.
-   *
-   * @return the code for the country
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the country.
-   *
-   * @return the Unicode locale identifier for the country
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -103,23 +85,5 @@ public class CountryId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the country.
-   *
-   * @param code the code for the country
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the country.
-   *
-   * @param locale the Unicode locale identifier for the country
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

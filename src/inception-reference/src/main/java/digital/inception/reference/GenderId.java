@@ -78,24 +78,6 @@ public class GenderId implements Serializable {
   }
 
   /**
-   * Returns the code for the gender.
-   *
-   * @return the code for the gender
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the gender.
-   *
-   * @return the Unicode locale identifier for the gender
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -103,23 +85,5 @@ public class GenderId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the gender.
-   *
-   * @param code the code for the gender
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the gender.
-   *
-   * @param locale the Unicode locale identifier for the gender
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

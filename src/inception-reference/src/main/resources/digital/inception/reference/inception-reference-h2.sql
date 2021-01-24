@@ -350,6 +350,52 @@ COMMENT ON COLUMN reference.occupations.name IS 'The name of the occupation';
 COMMENT ON COLUMN reference.occupations.description IS 'The description for the occupation';
 
 
+CREATE TABLE reference.party_role_types (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX party_role_types_locale_id_ix ON reference.party_role_types(locale_id);
+
+COMMENT ON COLUMN reference.party_role_types.code IS 'The code for the party role type';
+
+COMMENT ON COLUMN reference.party_role_types.locale_id IS 'The Unicode locale identifier for the party role type';
+
+COMMENT ON COLUMN reference.party_role_types.sort_index IS 'The sort index for the party role type';
+
+COMMENT ON COLUMN reference.party_role_types.name IS 'The name of the party role type';
+
+COMMENT ON COLUMN reference.party_role_types.description IS 'The description for the party role type';
+
+
+CREATE TABLE reference.party_role_purposes (
+  code         VARCHAR(30)  NOT NULL,
+  locale_id    VARCHAR(10)  NOT NULL,
+  sort_index   INTEGER      NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX party_role_purposes_locale_id_ix ON reference.party_role_purposes(locale_id);
+
+COMMENT ON COLUMN reference.party_role_purposes.code IS 'The code for the party role purpose';
+
+COMMENT ON COLUMN reference.party_role_purposes.locale_id IS 'The Unicode locale identifier for the party role purpose';
+
+COMMENT ON COLUMN reference.party_role_purposes.sort_index IS 'The sort index for the party role purpose';
+
+COMMENT ON COLUMN reference.party_role_purposes.name IS 'The name of the party role purpose';
+
+COMMENT ON COLUMN reference.party_role_purposes.description IS 'The description for the party role purpose';
+
+
 CREATE TABLE reference.physical_address_types (
    code         VARCHAR(30)  NOT NULL,
    locale_id    VARCHAR(10)  NOT NULL,
@@ -385,8 +431,6 @@ CREATE TABLE reference.physical_address_purposes (
 );
 
 CREATE INDEX physical_address_purposes_locale_id_ix ON reference.physical_address_purposes(locale_id);
-
-CREATE UNIQUE INDEX physical_address_purposes_locale_id_code_ix ON reference.physical_address_purposes(locale_id, code);
 
 COMMENT ON COLUMN reference.physical_address_purposes.code IS 'The code for the physical address purpose';
 
@@ -2578,6 +2622,32 @@ INSERT INTO reference.occupations (code, locale_id, sort_index, name, descriptio
   VALUES ('unemployed', 'en-ZA', 50, 'Unemployed', 'Unemployed');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
+
+INSERT INTO reference.party_role_purposes (code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-US', 1, 'Test', 'Test');
+
+INSERT INTO reference.party_role_purposes (code, locale_id, sort_index, name, description)
+  VALUES ('test', 'en-ZA', 1, 'Test', 'Test');
+
+
+INSERT INTO reference.party_role_types (code, locale_id, sort_index, name, description)
+  VALUES ('employer', 'en-US', 1, 'Employer', 'Employer');
+INSERT INTO reference.party_role_types (code, locale_id, sort_index, name, description)
+  VALUES ('employee', 'en-US', 2, 'Employee', 'Employee');
+INSERT INTO reference.party_role_types (code, locale_id, sort_index, name, description)
+  VALUES ('supplier', 'en-US', 3, 'Supplier', 'Supplier');
+INSERT INTO reference.party_role_types (code, locale_id, sort_index, name, description)
+  VALUES ('vendor', 'en-US', 4, 'Vendor', 'Vendor');
+
+INSERT INTO reference.party_role_types (code, locale_id, sort_index, name, description)
+  VALUES ('employer', 'en-ZA', 1, 'Employer', 'Employer');
+INSERT INTO reference.party_role_types (code, locale_id, sort_index, name, description)
+  VALUES ('employee', 'en-ZA', 2, 'Employee', 'Employee');
+INSERT INTO reference.party_role_types (code, locale_id, sort_index, name, description)
+  VALUES ('supplier', 'en-ZA', 3, 'Supplier', 'Supplier');
+INSERT INTO reference.party_role_types (code, locale_id, sort_index, name, description)
+  VALUES ('vendor', 'en-ZA', 4, 'Vendor', 'Vendor');
 
 
 INSERT INTO reference.physical_address_types (code, locale_id, sort_index, name, description)

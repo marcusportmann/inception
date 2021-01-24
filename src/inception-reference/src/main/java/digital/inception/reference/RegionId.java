@@ -85,33 +85,6 @@ public class RegionId implements Serializable {
   }
 
   /**
-   * Returns the code for the region.
-   *
-   * @return the code for the region
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the code for the country the region is associated with.
-   *
-   * @return the code for the country the region is associated with
-   */
-  public String getCountry() {
-    return country;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the region.
-   *
-   * @return the Unicode locale identifier for the region
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -121,32 +94,5 @@ public class RegionId implements Serializable {
     return ((country == null) ? 0 : country.hashCode())
         + ((code == null) ? 0 : code.hashCode())
         + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the region.
-   *
-   * @param code the code for the region
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the code for the country the region is associated with.
-   *
-   * @param country the code for the country the region is associated with
-   */
-  public void setCountry(String country) {
-    this.country = country;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the region.
-   *
-   * @param locale the Unicode locale identifier for the region
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

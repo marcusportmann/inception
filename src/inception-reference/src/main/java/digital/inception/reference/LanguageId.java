@@ -80,24 +80,6 @@ public class LanguageId implements Serializable {
   }
 
   /**
-   * Returns the code for the language.
-   *
-   * @return the code for the language
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the language.
-   *
-   * @return the Unicode locale identifier for the language
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -105,23 +87,5 @@ public class LanguageId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the language.
-   *
-   * @param code the code for the language
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the language.
-   *
-   * @param locale the Unicode locale identifier for the language
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

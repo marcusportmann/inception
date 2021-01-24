@@ -20,23 +20,22 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>PhysicalAddressId</code> class implements the ID class for the <code>PhysicalAddress
- * </code> class.
+ * The <code>PartyRoleId</code> class implements the ID class for the <code>PartyRole</code> class.
  *
  * @author Marcus Portmann
  */
-public class PhysicalAddressId implements Serializable {
+public class PartyRoleId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The party the physical address is associated with. */
+  /** The party the party role is associated with. */
   private Party party;
 
-  /** The physical address purpose. */
-  private Integer purpose;
+  /** The code for the party role type. */
+  private String type;
 
-  /** Constructs a new <code>PhysicalAddressId</code>. */
-  public PhysicalAddressId() {}
+  /** Constructs a new <code>PartyRoleId</code>. */
+  public PartyRoleId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -59,9 +58,9 @@ public class PhysicalAddressId implements Serializable {
       return false;
     }
 
-    PhysicalAddressId other = (PhysicalAddressId) object;
+    PartyRoleId other = (PartyRoleId) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(purpose, other.purpose);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -71,6 +70,6 @@ public class PhysicalAddressId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((purpose == null) ? 0 : purpose.hashCode());
+    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

@@ -79,24 +79,6 @@ public class ResidencyStatusId implements Serializable {
   }
 
   /**
-   * Returns the code for the residency status.
-   *
-   * @return the code for the residency status
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the residency status.
-   *
-   * @return the Unicode locale identifier for the residency status
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -104,23 +86,5 @@ public class ResidencyStatusId implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the residency status.
-   *
-   * @param code the code for the residency status
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the residency status.
-   *
-   * @param locale the Unicode locale identifier for the residency status
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
   }
 }

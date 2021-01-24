@@ -469,4 +469,36 @@ public interface IReferenceService {
    * @return the times to contact
    */
   List<TimeToContact> getTimesToContact(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the party role purposes.
+   *
+   * @return the party role purposes
+   */
+  List<PartyRolePurpose> getPartyRolePurposes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the party role purposes.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
+   *     purposes for or <code>null</code> to retrieve the party role purposes for all locales
+   * @return the party role purposes
+   */
+  List<PartyRolePurpose> getPartyRolePurposes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the party role types.
+   *
+   * @return the party role types
+   */
+  List<PartyRoleType> getPartyRoleTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the party role types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
+   *     for or <code>null</code> to retrieve the party role types for all locales
+   * @return the party role types
+   */
+  List<PartyRoleType> getPartyRoleTypes(String localeId) throws ReferenceServiceException;
 }

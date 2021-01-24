@@ -76,6 +76,12 @@ public class ReferenceService implements IReferenceService {
   /** The Occupation Repository. */
   private final OccupationRepository occupationRepository;
 
+  /** The Party Role Purpose Repository. */
+  private final PartyRolePurposeRepository partyRolePurposeRepository;
+
+  /** The Party Role Type Repository. */
+  private final PartyRoleTypeRepository partyRoleTypeRepository;
+
   /** The Physical Address Purpose Repository. */
   private final PhysicalAddressPurposeRepository physicalAddressPurposeRepository;
 
@@ -140,6 +146,8 @@ public class ReferenceService implements IReferenceService {
    * @param marriageTypeRepository the Marriage Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
    * @param occupationRepository the Occupation Repository
+   * @param partyRolePurposeRepository the Party Role Purpose Repository
+   * @param partyRoleTypeRepository the Party Role Type Repository
    * @param physicalAddressPurposeRepository the Physical Address Purpose Repository
    * @param physicalAddressTypeRepository the Physical Address Type Repository
    * @param preferenceTypeCategoryRepository the Preference Type Category Repository
@@ -170,6 +178,8 @@ public class ReferenceService implements IReferenceService {
       MarriageTypeRepository marriageTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
       OccupationRepository occupationRepository,
+      PartyRolePurposeRepository partyRolePurposeRepository,
+      PartyRoleTypeRepository partyRoleTypeRepository,
       PhysicalAddressPurposeRepository physicalAddressPurposeRepository,
       PhysicalAddressTypeRepository physicalAddressTypeRepository,
       PreferenceTypeCategoryRepository preferenceTypeCategoryRepository,
@@ -198,6 +208,8 @@ public class ReferenceService implements IReferenceService {
     this.marriageTypeRepository = marriageTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
     this.occupationRepository = occupationRepository;
+    this.partyRolePurposeRepository = partyRolePurposeRepository;
+    this.partyRoleTypeRepository = partyRoleTypeRepository;
     this.physicalAddressPurposeRepository = physicalAddressPurposeRepository;
     this.physicalAddressTypeRepository = physicalAddressTypeRepository;
     this.preferenceTypeCategoryRepository = preferenceTypeCategoryRepository;
@@ -593,6 +605,69 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the occupations", e);
+    }
+  }
+
+  /**
+   * Retrieve all the party role purposes.
+   *
+   * @return the party role purposes
+   */
+  @Override
+  public List<PartyRolePurpose> getPartyRolePurposes() throws ReferenceServiceException {
+    return getPartyRolePurposes(null);
+  }
+
+  /**
+   * Retrieve the party role purposes.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
+   *     purposes for or <code>null</code> to retrieve the party role purposes for all locales
+   * @return the party role purposes
+   */
+  @Override
+  public List<PartyRolePurpose> getPartyRolePurposes(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return partyRolePurposeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return partyRolePurposeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the party role purposes", e);
+    }
+  }
+
+  /**
+   * Retrieve all the party role types.
+   *
+   * @return the party role types
+   */
+  @Override
+  public List<PartyRoleType> getPartyRoleTypes() throws ReferenceServiceException {
+    return getPartyRoleTypes(null);
+  }
+
+  /**
+   * Retrieve the party role types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
+   *     for or <code>null</code> to retrieve the party role types for all locales
+   * @return the party role types
+   */
+  @Override
+  public List<PartyRoleType> getPartyRoleTypes(String localeId) throws ReferenceServiceException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return partyRoleTypeRepository.findAll(Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return partyRoleTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the party role types", e);
     }
   }
 

@@ -33,6 +33,8 @@ import digital.inception.reference.MaritalStatus;
 import digital.inception.reference.MarriageType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
+import digital.inception.reference.PartyRolePurpose;
+import digital.inception.reference.PartyRoleType;
 import digital.inception.reference.PhysicalAddressPurpose;
 import digital.inception.reference.PhysicalAddressType;
 import digital.inception.reference.PreferenceType;
@@ -44,6 +46,7 @@ import digital.inception.reference.ResidencyStatus;
 import digital.inception.reference.ResidentialType;
 import digital.inception.reference.SourceOfFunds;
 import digital.inception.reference.TaxNumberType;
+import digital.inception.reference.TimeToContact;
 import digital.inception.reference.Title;
 import digital.inception.reference.VerificationMethod;
 import digital.inception.reference.VerificationStatus;
@@ -300,9 +303,25 @@ public class ReferenceServiceTest {
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
   }
 
+  /** Test the party role purpose functionality. */
+  @Test
+  public void partyRolePurposeTest() throws Exception {
+    List<PartyRolePurpose> retrievedPartyRolePurposes = referenceService.getPartyRolePurposes();
+
+    retrievedPartyRolePurposes = referenceService.getPartyRolePurposes("en-US");
+  }
+
+  /** Test the party role type functionality. */
+  @Test
+  public void partyRoleTypeTest() throws Exception {
+    List<PartyRoleType> retrievedPartyRoleTypes = referenceService.getPartyRoleTypes();
+
+    retrievedPartyRoleTypes = referenceService.getPartyRoleTypes("en-US");
+  }
+
   /** Test the physical address purpose functionality. */
   @Test
-  public void physicalAddressPurposesTest() throws Exception {
+  public void physicalAddressPurposeTest() throws Exception {
     List<PhysicalAddressPurpose> retrievedPhysicalAddressPurposes =
         referenceService.getPhysicalAddressPurposes();
 
@@ -448,6 +467,14 @@ public class ReferenceServiceTest {
         "The correct number of tax number types was not retrieved",
         7,
         retrievedTaxNumberTypes.size());
+  }
+
+  /** Test the time to contact functionality. */
+  @Test
+  public void timeToContactTest() throws Exception {
+    List<TimeToContact> retrievedTimesToContact = referenceService.getTimesToContact();
+
+    retrievedTimesToContact = referenceService.getTimesToContact("en-US");
   }
 
   /** Test the title reference functionality. */

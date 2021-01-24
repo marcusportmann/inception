@@ -87,35 +87,6 @@ public class ContactMechanismPurposeId implements Serializable {
   }
 
   /**
-   * Returns the code for the contact mechanism purpose.
-   *
-   * @return the code for the contact mechanism purpose
-   */
-  public String getCode() {
-    return code;
-  }
-
-  /**
-   * Returns the Unicode locale identifier for the contact mechanism purpose.
-   *
-   * @return the Unicode locale identifier for the contact mechanism purpose
-   */
-  public String getLocaleId() {
-    return localeId;
-  }
-
-  /**
-   * Returns the code for the contact mechanism type the contact mechanism purpose is associated
-   * with.
-   *
-   * @return the code for the contact mechanism type the contact mechanism purpose is associated
-   *     with
-   */
-  public String getType() {
-    return type;
-  }
-
-  /**
    * Returns a hash code value for the object.
    *
    * @return a hash code value for the object
@@ -125,33 +96,5 @@ public class ContactMechanismPurposeId implements Serializable {
     return ((type == null) ? 0 : type.hashCode())
         + ((code == null) ? 0 : code.hashCode())
         + ((localeId == null) ? 0 : localeId.hashCode());
-  }
-
-  /**
-   * Set the code for the contact mechanism purpose.
-   *
-   * @param code the code for the contact mechanism purpose
-   */
-  public void setCode(String code) {
-    this.code = code;
-  }
-
-  /**
-   * Set the Unicode locale identifier for the contact mechanism purpose.
-   *
-   * @param locale the Unicode locale identifier for the contact mechanism purpose
-   */
-  public void setLocaleId(String locale) {
-    this.localeId = locale;
-  }
-
-  /**
-   * Set the code for the contact mechanism type the contact mechanism purpose is associated with.
-   *
-   * @param type the code for the contact mechanism type the contact mechanism purpose is associated
-   *     with
-   */
-  public void setType(String type) {
-    this.type = type;
   }
 }
