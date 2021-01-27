@@ -16,7 +16,7 @@
 
 package digital.inception.application.test;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import java.util.Objects;
 import javax.persistence.Column;

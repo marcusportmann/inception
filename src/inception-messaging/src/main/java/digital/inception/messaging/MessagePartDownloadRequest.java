@@ -16,14 +16,14 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.util.UUID;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessagePartDownloadRequest</code> class represents a request sent a mobile device to

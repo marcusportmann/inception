@@ -16,12 +16,8 @@
 
 package digital.inception.rs;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.io.StringWriter;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>RestUtil</code> class provides utility methods that are useful when working with

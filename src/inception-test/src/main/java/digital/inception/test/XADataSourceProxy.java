@@ -16,8 +16,6 @@
 
 package digital.inception.test;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;

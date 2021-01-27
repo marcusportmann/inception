@@ -16,7 +16,7 @@
 
 package digital.inception.application;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.util.JDBCUtil;
 import io.agroal.api.AgroalDataSource;
@@ -46,7 +46,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ApplicationDataSourceConfiguration</code> class provides access to the application data

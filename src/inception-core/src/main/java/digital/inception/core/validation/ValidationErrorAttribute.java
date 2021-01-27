@@ -16,8 +16,6 @@
 
 package digital.inception.core.validation;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
@@ -26,8 +24,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ValidationErrorAttribute</code> attribute represents an attribute associated with the

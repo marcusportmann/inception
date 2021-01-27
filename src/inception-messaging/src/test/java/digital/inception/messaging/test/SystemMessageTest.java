@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -59,6 +59,7 @@ import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -67,7 +68,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>SystemMessageTest</code> class contains the implementation of the JUnit tests for the
@@ -77,7 +78,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
+@ContextConfiguration(
+    classes = {TestConfiguration.class},
+    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,

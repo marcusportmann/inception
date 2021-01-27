@@ -16,12 +16,11 @@
 
 package digital.inception.sms.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.sms.ISMSService;
 import digital.inception.sms.SMS;
 import digital.inception.sms.SMSStatus;
@@ -31,16 +30,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
-import org.springframework.test.context.BootstrapWith;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSServiceTest</code> class contains the implementation of the JUnit tests for the
@@ -49,14 +45,15 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
+@ContextConfiguration(
+    classes = {TestConfiguration.class},
+    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,
       DirtiesContextTestExecutionListener.class,
       TransactionalTestExecutionListener.class
     })
-@BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class SMSServiceTest {
 
   /** The client ID to use for the SMS Portal API. */
@@ -72,6 +69,7 @@ public class SMSServiceTest {
 
   private static synchronized SMS getTestSMSDetails() {
     SMS sms = new SMS();
+    sms.setId(UuidCreator.getShortPrefixComb());
     sms.setMobileNumber("0832763107");
     sms.setMessage("Testing 1.. 2.. 3..");
     sms.setStatus(SMSStatus.SENT);

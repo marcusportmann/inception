@@ -16,14 +16,10 @@
 
 package digital.inception.core.validation;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InvalidArgumentException</code> exception is thrown to indicate an error condition as a

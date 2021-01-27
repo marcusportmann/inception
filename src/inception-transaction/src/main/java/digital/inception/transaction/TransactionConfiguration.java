@@ -16,7 +16,7 @@
 
 package digital.inception.transaction;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.arjuna.ats.arjuna.coordinator.TxControl;
 import com.arjuna.ats.arjuna.recovery.RecoveryManager;
@@ -29,9 +29,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>TransactionConfiguration</code> class.
@@ -39,6 +40,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
  * @author Marcus Portmann
  */
 @Configuration
+@EnableTransactionManagement
 public class TransactionConfiguration {
 
   private static Class<?> transactionManagerProxyClass;

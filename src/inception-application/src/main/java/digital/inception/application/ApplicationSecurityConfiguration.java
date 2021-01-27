@@ -16,7 +16,7 @@
 
 package digital.inception.application;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ApplicationSecurityConfiguration</code> class provides access to the application
@@ -37,36 +37,36 @@ import org.springframework.util.StringUtils;
  * @author Marcus Portmann
  */
 @Configuration
-@ConditionalOnProperty(value = "application.security.trustStore.path")
+@ConditionalOnProperty(value = "inception.application.security.trustStore.path")
 @SuppressWarnings("unused")
 public class ApplicationSecurityConfiguration {
 
   /** The application key store alias. */
-  @Value("${application.security.keyStore.alias:#{null}}")
+  @Value("${inception.application.security.keyStore.alias:#{null}}")
   private String keyStoreAlias;
 
   /** The application key store password. */
-  @Value("${application.security.keyStore.password:#{null}}")
+  @Value("${inception.application.security.keyStore.password:#{null}}")
   private String keyStorePassword;
 
   /** The application key store path. */
-  @Value("${application.security.keyStore.path:#{null}}")
+  @Value("${inception.application.security.keyStore.path:#{null}}")
   private String keyStorePath;
 
   /** The application key store type. */
-  @Value("${application.security.keyStore.type:#{null}}")
+  @Value("${inception.application.security.keyStore.type:#{null}}")
   private String keyStoreType;
 
   /** The optional application trust store password. */
-  @Value("${application.security.trustStore.password:#{null}}")
+  @Value("${inception.application.security.trustStore.password:#{null}}")
   private String trustStorePassword;
 
   /** The optional application trust store path. */
-  @Value("${application.security.trustStore.path:#{null}}")
+  @Value("${inception.application.security.trustStore.path:#{null}}")
   private String trustStorePath;
 
   /** The optional application trust store type. */
-  @Value("${application.security.trustStore.type:#{null}}")
+  @Value("${inception.application.security.trustStore.type:#{null}}")
   private String trustStoreType;
 
   /**

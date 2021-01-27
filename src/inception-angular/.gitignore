@@ -46,4 +46,4 @@ testem.log
 Thumbs.db
 
 # Build files
-projects/inception-sample/.browserslistrc
+projects/demo/.browserslistrc

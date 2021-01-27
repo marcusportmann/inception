@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.PasswordUtil;
@@ -52,7 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>SecurityService</code> class provides the Security Service implementation.

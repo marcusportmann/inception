@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>CodeCategoryData</code> class holds the information for a code category.

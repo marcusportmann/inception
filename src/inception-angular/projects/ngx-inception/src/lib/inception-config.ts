@@ -25,7 +25,7 @@ import {InjectionToken} from '@angular/core';
 export interface InceptionConfig {
 
   /**
-   * The ID used to identify the application e.g. digital.inception.sample.angular.
+   * The ID used to identify the application e.g. demo.
    */
   applicationId: string;
 

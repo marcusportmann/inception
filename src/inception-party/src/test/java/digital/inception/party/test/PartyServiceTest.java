@@ -16,7 +16,7 @@
 
 package digital.inception.party.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -32,6 +32,7 @@ import digital.inception.party.Organization;
 import digital.inception.party.Organizations;
 import digital.inception.party.Parties;
 import digital.inception.party.Party;
+import digital.inception.party.PartyRole;
 import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PersonSortBy;
@@ -52,13 +53,14 @@ import javax.validation.Validator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>PartyServiceTest</code> class contains the implementation of the JUnit tests for the
@@ -67,7 +69,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
+@ContextConfiguration(
+    classes = {TestConfiguration.class},
+    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,
@@ -195,6 +199,29 @@ public class PartyServiceTest {
         new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     return person;
+  }
+
+  /** Test the person functionality. */
+  @Test
+  public void basicPersonTest() throws Exception {
+    Person person = getTestBasicPersonDetails();
+
+    person.addRole(new PartyRole("employee"));
+
+    person.addContactMechanism(
+        new ContactMechanism(
+            ContactMechanismType.MOBILE_NUMBER,
+            ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER,
+            "+27835551234"));
+
+    person.addIdentityDocument(
+        new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
+
+    person.addTaxNumber(new TaxNumber("ZA", "ZAITN", "123456789"));
+
+    person.addPreference(new Preference("correspondence_language", "EN"));
+
+    partyService.createPerson(person);
   }
 
   /** Test the invalid building address verification functionality. */
@@ -1221,7 +1248,7 @@ public class PartyServiceTest {
 
       for (Preference person2Preference : person2.getPreferences()) {
 
-        if (Objects.equals(person1Preference.getPerson(), person2Preference.getPerson())
+        if (Objects.equals(person1Preference.getParty(), person2Preference.getParty())
             && Objects.equals(person1Preference.getType(), person2Preference.getType())) {
 
           comparePreferences(person1Preference, person2Preference);

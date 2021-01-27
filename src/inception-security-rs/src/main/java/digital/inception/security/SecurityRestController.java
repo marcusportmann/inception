@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
@@ -55,7 +55,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>SecurityRestController</code> class.

@@ -52,7 +52,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A legal document which may be used to verify aspects of a person's identity")
+@Schema(description = "A legal document which may be used to verify aspects of a party's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "countryOfIssue", "dateOfIssue", "dateOfExpiry", "number"})
 @XmlRootElement(name = "IdentityDocument", namespace = "http://party.inception.digital")
@@ -112,14 +112,14 @@ public class IdentityDocument implements Serializable {
   @Column(name = "number", length = 30, nullable = false)
   private String number;
 
-  /** The person the identity document is associated with. */
+  /** The party the identity document is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("identityDocumentReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "person_id")
-  private Person person;
+  @JoinColumn(name = "party_id")
+  private Party party;
 
   /** The code for the identity document type. */
   @Schema(description = "The code for the identity document type", required = true)
@@ -202,7 +202,7 @@ public class IdentityDocument implements Serializable {
 
     IdentityDocument other = (IdentityDocument) object;
 
-    return Objects.equals(person, other.person)
+    return Objects.equals(party, other.party)
         && Objects.equals(type, other.type)
         && Objects.equals(countryOfIssue, other.countryOfIssue)
         && Objects.equals(dateOfIssue, other.dateOfIssue);
@@ -254,13 +254,13 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Returns the person the identity document is associated with.
+   * Returns the party the identity document is associated with.
    *
-   * @return the person the identity document is associated with
+   * @return the party the identity document is associated with
    */
   @Schema(hidden = true)
-  public Person getPerson() {
-    return person;
+  public Party getParty() {
+    return party;
   }
 
   /**
@@ -288,7 +288,7 @@ public class IdentityDocument implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode())
+    return ((party == null) ? 0 : party.hashCode())
         + ((type == null) ? 0 : type.hashCode())
         + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
         + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());
@@ -331,13 +331,13 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Set the person the identity document is associated with.
+   * Set the party the identity document is associated with.
    *
-   * @param person the person the identity document is associated with
+   * @param party the party the identity document is associated with
    */
   @Schema(hidden = true)
-  public void setPerson(Person person) {
-    this.person = person;
+  public void setParty(Party party) {
+    this.party = party;
   }
 
   /**

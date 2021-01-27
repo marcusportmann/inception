@@ -16,8 +16,6 @@
 
 package digital.inception.error;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -40,8 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorReport</code> class holds the information for an error report.
@@ -90,9 +86,7 @@ public class ErrorReport implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The ID for the application that generated the error report. */
-  @Schema(
-      description = "ID for the application that generated the error report",
-      required = true)
+  @Schema(description = "ID for the application that generated the error report", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ApplicationId", required = true)
   @NotNull
@@ -146,8 +140,8 @@ public class ErrorReport implements Serializable {
   private String detail;
 
   /**
-   * The optional Universally Unique Identifier (UUID) for the device the error
-   * report originated from.
+   * The optional Universally Unique Identifier (UUID) for the device the error report originated
+   * from.
    */
   @Schema(
       description =
@@ -167,8 +161,7 @@ public class ErrorReport implements Serializable {
 
   /** The Universally Unique Identifier (UUID) for the error report. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the error report",
+      description = "The Universally Unique Identifier (UUID) for the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -178,8 +171,7 @@ public class ErrorReport implements Serializable {
   private UUID id;
 
   /** The optional username for the user associated with the error report. */
-  @Schema(
-      description = "The optional username for the user associated with the error report")
+  @Schema(description = "The optional username for the user associated with the error report")
   @JsonProperty
   @XmlElement(name = "Who")
   @Size(max = 100)
@@ -193,8 +185,7 @@ public class ErrorReport implements Serializable {
    * Constructs a new <code>ErrorReport</code>.
    *
    * @param id the Universally Unique Identifier (UUID) for the error report
-   * @param applicationId the ID for the application that generated the error
-   *     report
+   * @param applicationId the ID for the application that generated the error report
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
    * @param detail the error detail
@@ -219,15 +210,14 @@ public class ErrorReport implements Serializable {
    * Constructs a new <code>ErrorReport</code>.
    *
    * @param id the Universally Unique Identifier (UUID) for the error report
-   * @param applicationId the ID for the application that generated the error
-   *     report
+   * @param applicationId the ID for the application that generated the error report
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
    * @param detail the error detail
    * @param created the date and time the error report was created
    * @param who the optional username for the user associated with the error report
-   * @param deviceId the optional Universally Unique Identifier (UUID) for the
-   *     device the error report originated from
+   * @param deviceId the optional Universally Unique Identifier (UUID) for the device the error
+   *     report originated from
    * @param feedback the optional feedback provided by the user for the error
    * @param data the optional base-64 encoded data associated with the error report
    */
@@ -335,11 +325,11 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Returns the optional Universally Unique Identifier (UUID) for the device the
-   * error report originated from.
+   * Returns the optional Universally Unique Identifier (UUID) for the device the error report
+   * originated from.
    *
-   * @return the optional Universally Unique Identifier (UUID) for the device the
-   *     error report originated from
+   * @return the optional Universally Unique Identifier (UUID) for the device the error report
+   *     originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -385,8 +375,7 @@ public class ErrorReport implements Serializable {
   /**
    * Set the ID for the application that generated the error report.
    *
-   * @param applicationId the ID for the application that generated the error
-   *     report
+   * @param applicationId the ID for the application that generated the error report
    */
   public void setApplicationId(String applicationId) {
     this.applicationId = applicationId;
@@ -438,11 +427,11 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Set the optional Universally Unique Identifier (UUID) for the device the error
-   * report originated from.
+   * Set the optional Universally Unique Identifier (UUID) for the device the error report
+   * originated from.
    *
-   * @param deviceId the optional Universally Unique Identifier (UUID) for the
-   *     device the error report originated from
+   * @param deviceId the optional Universally Unique Identifier (UUID) for the device the error
+   *     report originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

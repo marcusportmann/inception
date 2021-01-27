@@ -16,8 +16,6 @@
 
 package digital.inception.core.exception;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import digital.inception.core.util.ISO8601Util;
 import java.time.LocalDateTime;
 

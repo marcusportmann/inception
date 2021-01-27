@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
@@ -28,7 +28,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessageTranslator</code> class provides the facilities to create messages containing

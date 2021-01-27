@@ -19,6 +19,7 @@ package digital.inception.party;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The <code>IdentityDocumentId</code> class implements the ID class for the <code>IdentityDocument
@@ -36,8 +37,11 @@ public class IdentityDocumentId implements Serializable {
   /** The date of issue for the identity document. */
   private LocalDate dateOfIssue;
 
-  /** The person the identity document is associated with. */
-  private Person person;
+  /**
+   * The Universally Unique Identifier (UUID) for the party the identity document is associated
+   * with.
+   */
+  private UUID party;
 
   /** The code for the identity document type. */
   private String type;
@@ -68,7 +72,7 @@ public class IdentityDocumentId implements Serializable {
 
     IdentityDocumentId other = (IdentityDocumentId) object;
 
-    return Objects.equals(person, other.person)
+    return Objects.equals(party, other.party)
         && Objects.equals(type, other.type)
         && Objects.equals(countryOfIssue, other.countryOfIssue)
         && Objects.equals(dateOfIssue, other.dateOfIssue);
@@ -81,7 +85,7 @@ public class IdentityDocumentId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode())
+    return ((party == null) ? 0 : party.hashCode())
         + ((type == null) ? 0 : type.hashCode())
         + ((countryOfIssue == null) ? 0 : countryOfIssue.hashCode())
         + ((dateOfIssue == null) ? 0 : dateOfIssue.hashCode());

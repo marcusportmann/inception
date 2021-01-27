@@ -16,16 +16,12 @@
 
 package digital.inception.mail;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import freemarker.cache.TemplateLoader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>FreeMarkerTemplateLoader</code> class implements the Apache FreeMarker template loader.

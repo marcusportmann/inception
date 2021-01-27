@@ -1,4 +1,4 @@
-To build and run the ngx-inception Angular library project and inception-sample project execute the following steps:
+To build and run the ngx-inception Angular library project and demo project execute the following steps:
 
 ng build ngx-inception
 

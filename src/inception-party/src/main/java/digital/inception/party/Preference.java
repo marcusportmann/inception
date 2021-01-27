@@ -45,11 +45,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>Preference</code> class holds the information for a preference for a person.
+ * The <code>Preference</code> class holds the information for a preference for a party.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A preference for a person")
+@Schema(description = "A preference for a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"type", "value"})
 @XmlRootElement(name = "Preference", namespace = "http://party.inception.digital")
@@ -72,14 +72,14 @@ public class Preference implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The person the preference is associated with. */
+  /** The party the preference is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("preferenceReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "person_id")
-  private Person person;
+  @JoinColumn(name = "party_id")
+  private Party party;
 
   /** The code for the preference type. */
   @Schema(description = "The code for the preference type", required = true)
@@ -104,7 +104,6 @@ public class Preference implements Serializable {
   @XmlElement(name = "Value", required = true)
   @NotNull
   @Size(min = 1, max = 200)
-  @Id
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 
@@ -145,7 +144,7 @@ public class Preference implements Serializable {
 
     Preference other = (Preference) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -158,13 +157,13 @@ public class Preference implements Serializable {
   }
 
   /**
-   * Returns the person the preference is associated with.
+   * Returns the party the preference is associated with.
    *
-   * @return the person the preference is associated with
+   * @return the party the preference is associated with
    */
   @Schema(hidden = true)
-  public Party getPerson() {
-    return person;
+  public Party getParty() {
+    return party;
   }
 
   /**
@@ -201,18 +200,18 @@ public class Preference implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
+    return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 
   /**
-   * Set the person the preference is associated with.
+   * Set the party the preference is associated with.
    *
-   * @param person the person the preference is associated with
+   * @param party the party the preference is associated with
    */
   @Schema(hidden = true)
-  public void setPerson(Person person) {
-    this.person = person;
+  public void setParty(Party party) {
+    this.party = party;
   }
 
   /**

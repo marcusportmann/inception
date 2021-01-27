@@ -16,8 +16,6 @@
 
 package digital.inception.codes.test;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.CodeCategoryNotFoundException;

@@ -16,8 +16,6 @@
 
 package digital.inception.codes;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
 import digital.inception.core.xml.DtdJarResolver;
@@ -46,8 +44,6 @@ import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesService</code> class provides the Codes Service implementation.

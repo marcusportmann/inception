@@ -31,7 +31,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -82,7 +81,7 @@ import org.springframework.util.StringUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidOrganization
 @Entity
-@DiscriminatorValue("organization")
+// @DiscriminatorValue("organization")
 @Table(schema = "party", name = "organizations")
 public class Organization extends Party implements Serializable {
 
@@ -167,6 +166,8 @@ public class Organization extends Party implements Serializable {
     super(tenantId, PartyType.ORGANIZATION, name);
   }
 
+  // TODO: Add identity documents -- MARCUS
+
   /**
    * Add the contact mechanism for the organization.
    *
@@ -207,7 +208,7 @@ public class Organization extends Party implements Serializable {
   public void addRole(PartyRole role) {
     roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), role.getType()));
 
-    role.setParty(this);
+    // role.setParty(this);
 
     roles.add(role);
   }
@@ -224,6 +225,32 @@ public class Organization extends Party implements Serializable {
     taxNumber.setParty(this);
 
     taxNumbers.add(taxNumber);
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   * false</code>
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+
+    if (object == null) {
+      return false;
+    }
+
+    if (getClass() != object.getClass()) {
+      return false;
+    }
+
+    Organization other = (Organization) object;
+
+    return Objects.equals(getId(), other.getId());
   }
 
   /**
@@ -291,6 +318,20 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
+   * Retrieve the first physical address with the specified purpose for the organization.
+   *
+   * @param purpose the physical address purpose
+   * @return the first physical address with the specified purpose for the organization or <code>
+   *     null</code> if the physical address could not be found
+   */
+  public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
+    return physicalAddresses.stream()
+        .filter(physicalAddress -> physicalAddress.getPurposes().contains(purpose))
+        .findFirst()
+        .get();
+  }
+
+  /**
    * Returns the physical addresses for the organization.
    *
    * @return the physical addresses for the organization
@@ -334,28 +375,6 @@ public class Organization extends Party implements Serializable {
         .get();
   }
 
-  // TODO: Add method to find the first physical address with the specified purpose -- MARCUS
-
-  //  /**
-  //   * Retrieve the physical address with the specified type and purpose for the organization.
-  //   *
-  //   * @param type the physical address type
-  //   * @param purpose the physical address purpose
-  //   * @return the physical address with the specified type and purpose for the organization or
-  // <code>
-  //   *     null</code> if the physical address could not be found
-  //   */
-  //  public PhysicalAddress getPhysicalAddress(
-  //      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-  //    return physicalAddresses.stream()
-  //        .filter(
-  //            physicalAddress ->
-  //                Objects.equals(physicalAddress.getType(), type)
-  //                    && Objects.equals(physicalAddress.getPurpose(), purpose))
-  //        .findFirst()
-  //        .get();
-  //  }
-
   /**
    * Returns the tax numbers for the organization.
    *
@@ -363,6 +382,16 @@ public class Organization extends Party implements Serializable {
    */
   public Set<TaxNumber> getTaxNumbers() {
     return taxNumbers;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((getId() == null) ? 0 : getId().hashCode());
   }
 
   /**
@@ -376,6 +405,16 @@ public class Organization extends Party implements Serializable {
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), type)
                 && Objects.equals(existingContactMechanism.getPurpose(), purpose));
+  }
+
+  /**
+   * Remove any physical addresses with the specified purpose for the person.
+   *
+   * @param purpose the physical address purpose
+   */
+  public void removePhysicalAddress(PhysicalAddressPurpose purpose) {
+    physicalAddresses.removeIf(
+        existingPhysicalAddress -> existingPhysicalAddress.getPurposes().contains(purpose));
   }
 
   /**
@@ -396,21 +435,6 @@ public class Organization extends Party implements Serializable {
     this.contactMechanisms.clear();
     this.contactMechanisms.addAll(contactMechanisms);
   }
-
-  // TODO: Add method to remove the physical address with the specified purpose -- MARCUS
-
-  //  /**
-  //   * Remove the physical address with the specified type and purpose for the organization.
-  //   *
-  //   * @param type the physical address type
-  //   * @param purpose the physical address purpose
-  //   */
-  //  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-  //    physicalAddresses.removeIf(
-  //        existingPhysicalAddress ->
-  //            Objects.equals(existingPhysicalAddress.getType(), type)
-  //                && Objects.equals(existingPhysicalAddress.getPurpose(), purpose));
-  //  }
 
   /**
    * Set the optional codes for the countries of tax residence for the organization.

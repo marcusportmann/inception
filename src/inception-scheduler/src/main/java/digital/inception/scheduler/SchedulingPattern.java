@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import java.util.ArrayList;
 import java.util.Calendar;

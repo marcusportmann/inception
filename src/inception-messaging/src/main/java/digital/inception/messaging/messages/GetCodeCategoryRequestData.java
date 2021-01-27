@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>GetCodeCategoryRequestData</code> class manages the data for a "Get Code Category

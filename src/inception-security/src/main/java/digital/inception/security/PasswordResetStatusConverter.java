@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -40,6 +40,7 @@ public class PasswordResetStatusConverter
    */
   @Override
   public Integer convertToDatabaseColumn(PasswordResetStatus attribute) {
+    if (attribute == null) return null;
     return PasswordResetStatus.toNumericCode(attribute);
   }
 
@@ -54,6 +55,7 @@ public class PasswordResetStatusConverter
    */
   @Override
   public PasswordResetStatus convertToEntityAttribute(Integer dbData) {
+    if (dbData == null) return null;
     return PasswordResetStatus.fromNumericCode(dbData);
   }
 }

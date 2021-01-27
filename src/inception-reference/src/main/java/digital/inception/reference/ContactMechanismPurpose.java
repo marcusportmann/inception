@@ -16,6 +16,7 @@
 
 package digital.inception.reference;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -310,6 +311,7 @@ public class ContactMechanismPurpose implements Serializable {
    * @param partyTypes the codes for the party types the contact mechanism purpose is associated
    *     with
    */
+  @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
     this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
   }

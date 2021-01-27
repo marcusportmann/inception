@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>JobParameter</code> class holds the information for a job parameter.

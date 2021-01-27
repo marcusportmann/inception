@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,7 +28,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>BackgroundJobExecutor</code> class implements the Background Job Executor.

@@ -450,17 +450,15 @@ Complete the following steps to create a new application based on the Inception 
         oauth2:
           authorization-server:
             jwt:
-              private-key-location: classpath:META-INF/oauth2-jwt-key
-              public-key-location: classpath:META-INF/oauth2-jwt-key.pub
+              rsa-private-key-location: classpath:META-INF/oauth2-jwt-key
+              rsa-public-key-location: classpath:META-INF/oauth2-jwt-key.pub
+          resource-server:
+            jwt:
+              rsa-public-key-location: classpath:META-INF/oauth2-jwt-key.pub
 
       spring:
         application:
           name: demo
-        security:
-          oauth2:
-            resourceserver:
-              jwt:
-                public-key-location: classpath:META-INF/oauth2-jwt-key.pub
       ```
    6. Add the in-memory H2 database script for the application,
       e.g. *src/main/resources/digital/inception/demo/demo-h2.sql*, to the project. This

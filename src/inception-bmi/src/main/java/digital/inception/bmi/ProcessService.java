@@ -16,8 +16,6 @@
 
 package digital.inception.bmi;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.xml.XmlSchemaClasspathInputSource;
 import java.io.ByteArrayInputStream;
@@ -47,8 +45,6 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ProcessService</code> class provides the Process Service implementation.

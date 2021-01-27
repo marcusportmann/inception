@@ -16,7 +16,7 @@
     <!-- Inception Dependencies -->
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-core</artifactId>
+      <artifactId>inception-transaction</artifactId>
     </dependency>
 
     <!-- Dependencies -->
@@ -31,13 +31,6 @@
     <dependency>
       <groupId>org.springframework.data</groupId>
       <artifactId>spring-data-jpa</artifactId>
-    </dependency>
-
-    <!-- Test Dependencies -->
-    <dependency>
-      <groupId>digital.inception</groupId>
-      <artifactId>inception-test</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

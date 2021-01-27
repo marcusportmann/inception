@@ -16,8 +16,6 @@
 
 package digital.inception.core.xml;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -31,8 +29,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>XmlUtil</code> class provides utility methods for working with XML documents.

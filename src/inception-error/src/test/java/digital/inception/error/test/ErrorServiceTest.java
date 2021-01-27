@@ -16,8 +16,6 @@
 
 package digital.inception.error.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertEquals;
 
@@ -34,13 +32,12 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorServiceTest</code> class contains the implementation of the JUnit tests for the
@@ -49,7 +46,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
+@ContextConfiguration(
+    classes = {TestConfiguration.class},
+    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,

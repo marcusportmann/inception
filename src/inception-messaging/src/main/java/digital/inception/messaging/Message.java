@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>Message</code> class holds the information for a message.

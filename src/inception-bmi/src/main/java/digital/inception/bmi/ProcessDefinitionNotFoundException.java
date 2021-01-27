@@ -16,16 +16,12 @@
 
 package digital.inception.bmi;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ProcessDefinitionNotFoundException</code> exception is thrown to indicate an error

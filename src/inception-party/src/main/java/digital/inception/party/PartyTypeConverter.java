@@ -16,7 +16,7 @@
 
 package digital.inception.party;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -39,6 +39,7 @@ public class PartyTypeConverter implements AttributeConverter<PartyType, String>
    */
   @Override
   public String convertToDatabaseColumn(PartyType attribute) {
+    if (attribute == null) return null;
     return attribute.code();
   }
 
@@ -53,6 +54,7 @@ public class PartyTypeConverter implements AttributeConverter<PartyType, String>
    */
   @Override
   public PartyType convertToEntityAttribute(String dbData) {
+    if (dbData == null) return null;
     return PartyType.fromCode(dbData);
   }
 }

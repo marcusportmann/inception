@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.rs.SecureRestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessagingRestController</code> class.

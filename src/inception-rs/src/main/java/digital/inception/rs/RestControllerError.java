@@ -16,8 +16,6 @@
 
 package digital.inception.rs;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -34,8 +32,6 @@ import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>RestControllerError</code> class holds the information for an error returned by a

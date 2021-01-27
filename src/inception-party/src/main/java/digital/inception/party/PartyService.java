@@ -16,8 +16,6 @@
 
 package digital.inception.party;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -35,8 +33,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PartyService</code> class provides the Party Service implementation.
@@ -169,8 +165,7 @@ public class PartyService implements IPartyService {
   /**
    * Delete the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) for the
-   *     organization
+   * @param organizationId the Universally Unique Identifier (UUID) for the organization
    */
   @Override
   @Transactional
@@ -249,8 +244,7 @@ public class PartyService implements IPartyService {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) for the
-   *     organization
+   * @param organizationId the Universally Unique Identifier (UUID) for the organization
    * @return the organization
    */
   @Override

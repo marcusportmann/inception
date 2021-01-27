@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>UserSortBy</code> enumeration defines the possible methods used to sort a list of

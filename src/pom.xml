@@ -70,7 +70,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.4.1</version>
+    <version>2.4.2</version>
   </parent>
 
   <properties>
@@ -96,7 +96,7 @@
     <mssql-jdbc.version>8.4.1.jre11</mssql-jdbc.version>
     <narayana.version>5.10.6.Final</narayana.version>
     <postgresql.version>42.2.18</postgresql.version>
-    <spring-boot.version>2.4.1</spring-boot.version>
+    <spring-boot.version>2.4.2</spring-boot.version>
     <spring-shell.version>2.0.0</spring-shell.version>
     <springdoc-openapi-ui.version>1.5.2</springdoc-openapi-ui.version>
     <sun-activation.version>1.2.0</sun-activation.version>
@@ -444,16 +444,6 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-sample</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
-        <artifactId>inception-sample-client</artifactId>
-        <version>${inception.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>digital.inception</groupId>
         <artifactId>inception-scheduler</artifactId>
         <version>${inception.version}</version>
       </dependency>
@@ -516,6 +506,7 @@
   </dependencyManagement>
 
   <modules>
+    <!-- Inception Modules -->
     <module>inception-application</module>
     <module>inception-audit</module>
     <module>inception-banking</module>
@@ -554,8 +545,6 @@
     <module>inception-rs</module>
     <module>inception-oauth2-authorization-server</module>
     <module>inception-oauth2-resource-server</module>
-    <module>inception-sample</module>
-    <module>inception-sample-client</module>
     <module>inception-scheduler</module>
     <module>inception-scheduler-rs</module>
     <module>inception-scheduler-ws</module>
@@ -568,6 +557,11 @@
     <module>inception-test</module>
     <module>inception-transaction</module>
     <module>inception-ws</module>
+
+    <!-- Demo Modules -->
+    <module>demo</module>
+    <module>demo-client</module>
+
   </modules>
 
   <build>

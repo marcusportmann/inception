@@ -16,16 +16,12 @@
 
 package digital.inception.party.constraints;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressType;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ValidPhysicalAddressValidator</code> class implements the custom constraint validator
@@ -500,7 +496,6 @@ public class ValidPhysicalAddressValidator
     return isValid;
   }
 }
-
 
 /*
 See: https://ozh.github.io/ascii-tables/

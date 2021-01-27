@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;

@@ -16,15 +16,13 @@
 
 package digital.inception.sms;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToSMSStatusConverter</code> class implements the Spring converter that converts
- * a <code>String</code> type into a <code>SMSStatus</code> type.
+ * The <code>StringToSMSStatusConverter</code> class implements the Spring converter that converts a
+ * <code>String</code> type into a <code>SMSStatus</code> type.
  *
  * @author Marcus Portmann
  */

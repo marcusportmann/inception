@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -53,7 +53,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ReportingRestController</code> class.

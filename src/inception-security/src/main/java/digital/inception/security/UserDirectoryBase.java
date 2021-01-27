@@ -16,12 +16,12 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.util.List;
 import java.util.UUID;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>UserDirectoryBase</code> class provides the base class from which all user directory

@@ -16,15 +16,11 @@
 
 package digital.inception.core.support;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.io.IOException;
 import java.util.Properties;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MergedMessageSource</code> class implements the merged message source that provides

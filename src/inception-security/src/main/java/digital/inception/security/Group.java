@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>Group</code> class holds the information for a group.
@@ -121,8 +121,7 @@ public class Group implements Serializable {
   private LocalDateTime updated;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the group is
-   * associated with.
+   * The Universally Unique Identifier (UUID) for the user directory the group is associated with.
    */
   @Schema(
       description =
@@ -161,8 +160,8 @@ public class Group implements Serializable {
   /**
    * Constructs a new <code>Group</code>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the
+   *     group is associated with
    * @param name the name of the group
    * @param description the description for the group
    */
@@ -178,9 +177,7 @@ public class Group implements Serializable {
    * @param role the role
    */
   public void addRole(Role role) {
-    roles.removeIf(
-        existingRole ->
-            Objects.equals(existingRole.getCode(), role.getCode()));
+    roles.removeIf(existingRole -> Objects.equals(existingRole.getCode(), role.getCode()));
 
     roles.add(role);
     role.getGroups().add(this);
@@ -192,9 +189,7 @@ public class Group implements Serializable {
    * @param user the user
    */
   public void addUser(User user) {
-    users.removeIf(
-        existingUser ->
-            Objects.equals(existingUser.getId(), user.getId()));
+    users.removeIf(existingUser -> Objects.equals(existingUser.getId(), user.getId()));
 
     users.add(user);
     user.getGroups().add(this);
@@ -281,11 +276,11 @@ public class Group implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the user directory the
-   * group is associated with.
+   * Returns the Universally Unique Identifier (UUID) for the user directory the group is associated
+   * with.
    *
-   * @return the Universally Unique Identifier (UUID) for the user directory the
-   *     group is associated with
+   * @return the Universally Unique Identifier (UUID) for the user directory the group is associated
+   *     with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
@@ -367,11 +362,11 @@ public class Group implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the user directory the group
-   * is associated with.
+   * Set the Universally Unique Identifier (UUID) for the user directory the group is associated
+   * with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the
+   *     group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

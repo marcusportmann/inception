@@ -16,13 +16,9 @@
 
 package digital.inception.ws.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import org.apache.wss4j.common.ext.WSPasswordCallback;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>PasswordCallbackHandler</code> class implements the password callback handler.

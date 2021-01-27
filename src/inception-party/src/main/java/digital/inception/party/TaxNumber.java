@@ -53,7 +53,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A tax number")
+@Schema(description = "A tax number for a party")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"countryOfIssue", "type", "number"})
 @XmlRootElement(name = "TaxNumber", namespace = "http://party.inception.digital")

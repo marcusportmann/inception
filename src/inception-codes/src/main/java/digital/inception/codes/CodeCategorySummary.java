@@ -16,8 +16,6 @@
 
 package digital.inception.codes;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -39,8 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeCategorySummary</code> class holds the summary information for a code category.

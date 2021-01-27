@@ -254,7 +254,9 @@ public class PhysicalAddress implements Serializable {
   private String farmNumber;
 
   /** The Universally Unique Identifier (UUID) for the physical address. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the physical address", required = true)
+  @Schema(
+      description = "The Universally Unique Identifier (UUID) for the physical address",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull

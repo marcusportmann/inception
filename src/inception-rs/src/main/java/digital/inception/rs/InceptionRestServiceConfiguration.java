@@ -16,8 +16,6 @@
 
 package digital.inception.rs;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import org.springframework.context.annotation.Configuration;
 
 /**

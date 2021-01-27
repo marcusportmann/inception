@@ -16,8 +16,6 @@
 
 package digital.inception.codes;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,8 +39,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Code</code> class holds the information for a code.
@@ -68,9 +64,7 @@ public class Code implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The ID for the code category the code is associated with. */
-  @Schema(
-      description = "The ID for the code category the code is associated with",
-      required = true)
+  @Schema(description = "The ID for the code category the code is associated with", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CodeCategoryId", required = true)
   @NotNull
@@ -236,7 +230,8 @@ public class Code implements Serializable {
   @Override
   public int hashCode() {
     return ((codeCategoryId == null) ? 0 : codeCategoryId.hashCode())
-        + ((id == null) ? 0 : id.hashCode());  }
+        + ((id == null) ? 0 : id.hashCode());
+  }
 
   /**
    * Set the ID for the code category the code is associated with.

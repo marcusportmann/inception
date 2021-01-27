@@ -16,7 +16,7 @@
 //
 // package digital.inception.rs.oauth;
 //
-//// ~--- non-JDK imports --------------------------------------------------------
+//
 //
 // import digital.inception.core.util.ISO8601Util;
 // import java.io.BufferedOutputStream;
@@ -34,7 +34,7 @@
 // import org.springframework.http.HttpStatus;
 // import org.springframework.security.access.AccessDeniedException;
 //
-//// ~--- JDK imports ------------------------------------------------------------
+//
 //
 /// **
 // * The <code>AccessDeniedHandler</code> implements the custom access denied handler.

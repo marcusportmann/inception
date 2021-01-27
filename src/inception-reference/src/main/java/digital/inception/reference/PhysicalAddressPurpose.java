@@ -16,6 +16,7 @@
 
 package digital.inception.reference;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -45,26 +46,12 @@ import org.springframework.util.StringUtils;
  */
 @Schema(description = "A physical address purpose")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "code",
-  "localeId",
-  "partyTypes",
-  "sortIndex",
-  "name",
-  "description"
-})
+@JsonPropertyOrder({"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
 @XmlRootElement(name = "PhysicalAddressPurpose", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "PhysicalAddressPurpose",
     namespace = "http://reference.inception.digital",
-    propOrder = {
-      "code",
-      "localeId",
-      "partyTypes",
-      "sortIndex",
-      "name",
-      "description"
-    })
+    propOrder = {"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "physical_address_purposes")
@@ -277,6 +264,7 @@ public class PhysicalAddressPurpose implements Serializable {
    *
    * @param partyTypes the codes for the party types the physical address purpose is associated with
    */
+  @JsonIgnore
   public void setPartyTypes(Collection<String> partyTypes) {
     this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
   }

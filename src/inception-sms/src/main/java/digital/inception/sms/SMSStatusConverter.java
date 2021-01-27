@@ -16,8 +16,6 @@
 
 package digital.inception.sms;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
@@ -40,6 +38,7 @@ public class SMSStatusConverter implements AttributeConverter<SMSStatus, Integer
    */
   @Override
   public Integer convertToDatabaseColumn(SMSStatus attribute) {
+    if (attribute == null) return null;
     return SMSStatus.toNumericCode(attribute);
   }
 
@@ -54,6 +53,7 @@ public class SMSStatusConverter implements AttributeConverter<SMSStatus, Integer
    */
   @Override
   public SMSStatus convertToEntityAttribute(Integer dbData) {
+    if (dbData == null) return null;
     return SMSStatus.fromNumericCode(dbData);
   }
 }

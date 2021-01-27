@@ -16,7 +16,7 @@
 //
 // package digital.inception.security.test;
 //
-//// ~--- non-JDK imports --------------------------------------------------------
+//
 //
 // import static org.junit.Assert.assertEquals;
 // import static org.junit.Assert.assertFalse;
@@ -61,7 +61,14 @@
 // * @author Marcus Portmann
 // */
 // @RunWith(TestClassRunner.class)
-// @ContextConfiguration(classes = {TestConfiguration.class})
+//
+//import digital.inception.test.TestConfiguration;
+//import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+//import org.springframework.test.context.ContextConfiguration;
+//
+//@ContextConfiguration(
+//    classes = {TestConfiguration.class},
+//    initializers = {ConfigDataApplicationContextInitializer.class})
 // @TestExecutionListeners(
 //    listeners = {
 //      DependencyInjectionTestExecutionListener.class,

@@ -16,8 +16,6 @@
 
 package digital.inception.ws.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.util.MutualSSLSocketFactory;
 import digital.inception.core.util.NoTrustSSLSocketFactory;
 import java.lang.reflect.Constructor;
@@ -32,8 +30,6 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.handler.HandlerResolver;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>WebServiceClientSecurityHelper</code> class is a utility class that provides support

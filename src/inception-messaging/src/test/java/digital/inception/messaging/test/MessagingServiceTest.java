@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.messaging.IMessagingService;
 import digital.inception.test.TestClassRunner;
@@ -24,6 +24,7 @@ import digital.inception.test.TestConfiguration;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
 import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,7 +41,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  */
 @SuppressWarnings("unused")
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
+@ContextConfiguration(
+    classes = {TestConfiguration.class},
+    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,

@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
@@ -26,7 +26,7 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * An <code>UserDirectoryNotFoundException</code> is thrown to indicate that a security operation

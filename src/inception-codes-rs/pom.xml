@@ -8,26 +8,26 @@
   <name>inception-codes-rs</name>
 
   <parent>
-    <artifactId>inception</artifactId>
     <groupId>digital.inception</groupId>
+    <artifactId>inception</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <dependencies>
     <!-- Inception Dependencies -->
     <dependency>
-      <artifactId>inception-codes</artifactId>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-codes</artifactId>
     </dependency>
     <dependency>
-      <artifactId>inception-rs</artifactId>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-rs</artifactId>
     </dependency>
 
     <!-- Test Dependencies -->
     <dependency>
-      <artifactId>inception-test</artifactId>
       <groupId>digital.inception</groupId>
+      <artifactId>inception-test</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

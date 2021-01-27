@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +25,7 @@ import java.util.UUID;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>UserDetails</code> class stores the details for a user.

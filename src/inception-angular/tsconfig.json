@@ -14,10 +14,10 @@
       "path": "./projects/ngx-inception/tsconfig.spec.json"
     },
     {
-      "path": "./projects/inception-sample/tsconfig.app.json"
+      "path": "./projects/demo/tsconfig.app.json"
     },
     {
-      "path": "./projects/inception-sample/tsconfig.spec.json"
+      "path": "./projects/demo/tsconfig.spec.json"
     }
   ]
 }

@@ -86,9 +86,8 @@ public class PartyRole implements Serializable {
   @Schema(description = "The optional code for the party role purpose")
   @JsonProperty
   @XmlElement(name = "Purpose")
-  @NotNull
   @Size(min = 1, max = 30)
-  @Column(name = "purpose", length = 30, nullable = false)
+  @Column(name = "purpose", length = 30)
   private String purpose;
 
   /** The code for the party role type. */

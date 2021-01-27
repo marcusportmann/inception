@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import java.io.Serializable;
 import java.util.Objects;

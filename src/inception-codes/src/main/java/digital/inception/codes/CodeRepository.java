@@ -16,16 +16,12 @@
 
 package digital.inception.codes;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodeRepository</code> interface declares the repository for the <code>Code</code>

@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;

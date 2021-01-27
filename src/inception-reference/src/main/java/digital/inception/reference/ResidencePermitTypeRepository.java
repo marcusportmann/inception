@@ -16,13 +16,13 @@
 
 package digital.inception.reference;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ResidencePermitTypeRepository</code> interface declares the repository for the <code>

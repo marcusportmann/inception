@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessageRepository</code> interface declares the repository for the <code>Message</code>

@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>Job</code> class holds the information for a job.
@@ -262,8 +262,7 @@ public class Job implements Serializable {
    */
   public void addParameter(JobParameter parameter) {
     parameters.removeIf(
-        existingParameter ->
-            Objects.equals(existingParameter.getName(), parameter.getName()));
+        existingParameter -> Objects.equals(existingParameter.getName(), parameter.getName()));
 
     parameter.setJob(this);
 

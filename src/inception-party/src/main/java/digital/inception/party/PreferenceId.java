@@ -18,6 +18,7 @@ package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The <code>PreferenceId</code> class implements the ID class for the <code>Preference</code>
@@ -29,15 +30,17 @@ public class PreferenceId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The person the preference is associated with. */
-  private Person person;
+  /**
+   * The Universally Unique Identifier (UUID) for the party the preference is associated with.
+   */
+  private UUID party;
 
   /** The code for the preference type. */
   private String type;
 
   /** Constructs a new <code>PreferenceId</code>. */
   public PreferenceId() {}
-  
+
   /**
    * Indicates whether some other object is "equal to" this one.
    *
@@ -61,7 +64,7 @@ public class PreferenceId implements Serializable {
 
     PreferenceId other = (PreferenceId) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -71,6 +74,6 @@ public class PreferenceId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

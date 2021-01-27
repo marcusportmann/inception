@@ -16,8 +16,6 @@
 
 package digital.inception.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.transaction.HeuristicMixedException;
@@ -30,8 +28,6 @@ import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>TransactionManagerProxy</code> class provides a proxy that tracks the Java Transaction

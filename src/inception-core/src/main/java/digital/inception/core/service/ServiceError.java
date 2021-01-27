@@ -16,8 +16,6 @@
 
 package digital.inception.core.service;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
@@ -29,8 +27,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ServiceError</code> class holds the service error information.

@@ -37,6 +37,7 @@ public class MessagePriorityConverter implements AttributeConverter<MessagePrior
    */
   @Override
   public Integer convertToDatabaseColumn(MessagePriority attribute) {
+    if (attribute == null) return null;
     return MessagePriority.toNumericCode(attribute);
   }
 
@@ -51,6 +52,7 @@ public class MessagePriorityConverter implements AttributeConverter<MessagePrior
    */
   @Override
   public MessagePriority convertToEntityAttribute(Integer dbData) {
+    if (dbData == null) return null;
     return MessagePriority.fromNumericCode(dbData);
   }
 }

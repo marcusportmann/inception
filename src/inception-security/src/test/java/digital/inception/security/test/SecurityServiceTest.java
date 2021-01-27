@@ -16,17 +16,15 @@
 
 package digital.inception.security.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import static digital.inception.test.Assert.assertEqualsToMillisecond;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
-import digital.inception.security.UserAttribute;
 import digital.inception.security.AuthenticationFailedException;
 import digital.inception.security.DuplicateTenantException;
 import digital.inception.security.Function;
@@ -48,6 +46,7 @@ import digital.inception.security.TenantNotFoundException;
 import digital.inception.security.TenantStatus;
 import digital.inception.security.Tenants;
 import digital.inception.security.User;
+import digital.inception.security.UserAttribute;
 import digital.inception.security.UserDirectories;
 import digital.inception.security.UserDirectory;
 import digital.inception.security.UserDirectoryNotFoundException;
@@ -68,13 +67,14 @@ import java.util.UUID;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit tests for the
@@ -83,7 +83,9 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  * @author Marcus Portmann
  */
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
+@ContextConfiguration(
+    classes = {TestConfiguration.class},
+    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,
@@ -111,11 +113,11 @@ public class SecurityServiceTest {
     user.setUserDirectoryId(userDirectoryId);
     user.setUsername("Numbered Test Username " + number);
     user.setStatus(UserStatus.ACTIVE);
-    user.setEmail("testing" + String.format("%03d" , number) + "@inception.digital");
+    user.setEmail("testing" + String.format("%03d", number) + "@inception.digital");
     user.setName("Numbered Test Name " + number);
     user.setPreferredName("Numbered Test Preferred Name " + number);
     user.setPhoneNumber("Numbered Test Phone Number " + number);
-    user.setMobileNumber("+2782666" + String.format("%03d" , number));
+    user.setMobileNumber("+2782666" + String.format("%03d", number));
     user.setPassword("Numbered Test Password " + number);
 
     return user;
@@ -165,11 +167,11 @@ public class SecurityServiceTest {
     user.setUserDirectoryId(userDirectoryId);
     user.setUsername("Test User Username " + userCount);
     user.setStatus(UserStatus.ACTIVE);
-    user.setEmail("test" + String.format("%03d" , userCount) + "@inception.digital");
+    user.setEmail("test" + String.format("%03d", userCount) + "@inception.digital");
     user.setName("Test User Name " + userCount);
     user.setPreferredName("Test User Preferred Name " + userCount);
     user.setPhoneNumber("Test User Phone Number " + userCount);
-    user.setMobileNumber("+2782555" + String.format("%03d" , userCount));
+    user.setMobileNumber("+2782555" + String.format("%03d", userCount));
     user.setPassword("Test User Password " + userCount);
 
     return user;
@@ -270,112 +272,112 @@ public class SecurityServiceTest {
     securityService.authenticate(user.getUsername(), "Password2");
   }
 
-//  /** Test the name-value attribute functionality. */
-//  @Test
-//  public void attributeTest() throws AttributeException {
-//    byte[] byteArrayValue = "Hello World".getBytes();
-//
-//    BigDecimal bigDecimalValue = new BigDecimal(12345.12345);
-//
-//    double doubleValue = 12345.12345;
-//
-//    long longValue = 12345L;
-//
-//    String stringValue = "Hello World";
-//
-//    List<Attribute> attributes = new ArrayList<>();
-//
-//    Attribute bigDecimalAttribute = new Attribute("BigDecimal", bigDecimalValue);
-//    attributes.add(bigDecimalAttribute);
-//
-//    Attribute binaryBufferAttribute =
-//        new Attribute("BinaryBuffer", new BinaryBuffer(byteArrayValue));
-//    attributes.add(binaryBufferAttribute);
-//
-//    Attribute byteArrayAttribute = new Attribute("ByteArray", byteArrayValue);
-//    attributes.add(byteArrayAttribute);
-//
-//    Attribute doubleAttribute = new Attribute("Double", doubleValue);
-//    attributes.add(doubleAttribute);
-//
-//    Attribute longAttribute = new Attribute("Long", longValue);
-//    attributes.add(longAttribute);
-//
-//    Attribute stringAttribute = new Attribute("String", stringValue);
-//    attributes.add(stringAttribute);
-//
-//    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "ByteArray"));
-//
-//    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "BinaryBuffer"));
-//
-//    assertEquals(bigDecimalValue, Attribute.getDecimalValue(attributes, "BigDecimal"));
-//
-//    assertEquals(doubleValue, Attribute.getDoubleValue(attributes, "Double"), 0);
-//
-//    assertEquals(longValue, Attribute.getLongValue(attributes, "Long"));
-//
-//    assertEquals(stringValue, Attribute.getStringValue(attributes, "String"));
-//
-//    Attribute.setBinaryValue(attributes, "BinaryBuffer", new BinaryBuffer(byteArrayValue));
-//
-//    Attribute.setBinaryValue(attributes, "ByteArray", byteArrayValue);
-//
-//    Attribute.setDecimalValue(attributes, "BigDecimal", bigDecimalValue);
-//
-//    Attribute.setDoubleValue(attributes, "Double", doubleValue);
-//
-//    Attribute.setLongValue(attributes, "Long", longValue);
-//
-//    Attribute.setStringValue(attributes, "String", stringValue);
-//
-//    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
-//
-//    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
-//
-//    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
-//
-//    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
-//
-//    assertEquals(longValue, longAttribute.getLongValue());
-//
-//    assertEquals(stringValue, stringAttribute.getStringValue());
-//
-//    binaryBufferAttribute.setBinaryValue(new BinaryBuffer(byteArrayValue));
-//
-//    byteArrayAttribute.setBinaryValue(byteArrayValue);
-//
-//    bigDecimalAttribute.setDecimalValue(bigDecimalValue);
-//
-//    doubleAttribute.setDoubleValue(doubleValue);
-//
-//    longAttribute.setLongValue(longValue);
-//
-//    stringAttribute.setStringValue(stringValue);
-//
-//    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
-//
-//    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
-//
-//    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
-//
-//    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
-//
-//    assertEquals(longValue, longAttribute.getLongValue());
-//
-//    assertEquals(stringValue, stringAttribute.getStringValue());
-//
-//    assertEquals("BinaryBuffer", binaryBufferAttribute.getName());
-//
-//    assertEquals("ByteArray", byteArrayAttribute.getName());
-//
-//    assertEquals("BigDecimal", bigDecimalAttribute.getName());
-//
-//    assertEquals("Double", doubleAttribute.getName());
-//
-//    assertEquals("Long", longAttribute.getName());
-//
-//    assertEquals("String", stringAttribute.getName());
-//  }
+  //  /** Test the name-value attribute functionality. */
+  //  @Test
+  //  public void attributeTest() throws AttributeException {
+  //    byte[] byteArrayValue = "Hello World".getBytes();
+  //
+  //    BigDecimal bigDecimalValue = new BigDecimal(12345.12345);
+  //
+  //    double doubleValue = 12345.12345;
+  //
+  //    long longValue = 12345L;
+  //
+  //    String stringValue = "Hello World";
+  //
+  //    List<Attribute> attributes = new ArrayList<>();
+  //
+  //    Attribute bigDecimalAttribute = new Attribute("BigDecimal", bigDecimalValue);
+  //    attributes.add(bigDecimalAttribute);
+  //
+  //    Attribute binaryBufferAttribute =
+  //        new Attribute("BinaryBuffer", new BinaryBuffer(byteArrayValue));
+  //    attributes.add(binaryBufferAttribute);
+  //
+  //    Attribute byteArrayAttribute = new Attribute("ByteArray", byteArrayValue);
+  //    attributes.add(byteArrayAttribute);
+  //
+  //    Attribute doubleAttribute = new Attribute("Double", doubleValue);
+  //    attributes.add(doubleAttribute);
+  //
+  //    Attribute longAttribute = new Attribute("Long", longValue);
+  //    attributes.add(longAttribute);
+  //
+  //    Attribute stringAttribute = new Attribute("String", stringValue);
+  //    attributes.add(stringAttribute);
+  //
+  //    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "ByteArray"));
+  //
+  //    assertArrayEquals(byteArrayValue, Attribute.getBinaryValue(attributes, "BinaryBuffer"));
+  //
+  //    assertEquals(bigDecimalValue, Attribute.getDecimalValue(attributes, "BigDecimal"));
+  //
+  //    assertEquals(doubleValue, Attribute.getDoubleValue(attributes, "Double"), 0);
+  //
+  //    assertEquals(longValue, Attribute.getLongValue(attributes, "Long"));
+  //
+  //    assertEquals(stringValue, Attribute.getStringValue(attributes, "String"));
+  //
+  //    Attribute.setBinaryValue(attributes, "BinaryBuffer", new BinaryBuffer(byteArrayValue));
+  //
+  //    Attribute.setBinaryValue(attributes, "ByteArray", byteArrayValue);
+  //
+  //    Attribute.setDecimalValue(attributes, "BigDecimal", bigDecimalValue);
+  //
+  //    Attribute.setDoubleValue(attributes, "Double", doubleValue);
+  //
+  //    Attribute.setLongValue(attributes, "Long", longValue);
+  //
+  //    Attribute.setStringValue(attributes, "String", stringValue);
+  //
+  //    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
+  //
+  //    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
+  //
+  //    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
+  //
+  //    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
+  //
+  //    assertEquals(longValue, longAttribute.getLongValue());
+  //
+  //    assertEquals(stringValue, stringAttribute.getStringValue());
+  //
+  //    binaryBufferAttribute.setBinaryValue(new BinaryBuffer(byteArrayValue));
+  //
+  //    byteArrayAttribute.setBinaryValue(byteArrayValue);
+  //
+  //    bigDecimalAttribute.setDecimalValue(bigDecimalValue);
+  //
+  //    doubleAttribute.setDoubleValue(doubleValue);
+  //
+  //    longAttribute.setLongValue(longValue);
+  //
+  //    stringAttribute.setStringValue(stringValue);
+  //
+  //    assertArrayEquals(byteArrayValue, byteArrayAttribute.getBinaryValue());
+  //
+  //    assertArrayEquals(byteArrayValue, binaryBufferAttribute.getBinaryValue());
+  //
+  //    assertEquals(bigDecimalValue, bigDecimalAttribute.getDecimalValue());
+  //
+  //    assertEquals(doubleValue, doubleAttribute.getDoubleValue(), 0);
+  //
+  //    assertEquals(longValue, longAttribute.getLongValue());
+  //
+  //    assertEquals(stringValue, stringAttribute.getStringValue());
+  //
+  //    assertEquals("BinaryBuffer", binaryBufferAttribute.getName());
+  //
+  //    assertEquals("ByteArray", byteArrayAttribute.getName());
+  //
+  //    assertEquals("BigDecimal", bigDecimalAttribute.getName());
+  //
+  //    assertEquals("Double", doubleAttribute.getName());
+  //
+  //    assertEquals("Long", longAttribute.getName());
+  //
+  //    assertEquals("String", stringAttribute.getName());
+  //  }
 
   /** Test the change user password functionality. */
   @Test

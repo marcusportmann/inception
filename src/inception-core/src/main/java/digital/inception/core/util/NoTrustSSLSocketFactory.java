@@ -16,8 +16,6 @@
 
 package digital.inception.core.util;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;

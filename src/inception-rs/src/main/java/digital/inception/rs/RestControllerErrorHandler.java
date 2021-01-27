@@ -16,8 +16,6 @@
 
 package digital.inception.rs;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.validation.InvalidArgumentException;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -30,8 +28,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>RestControllerErrorHandler</code> class implements the error handler for RESTful web
@@ -78,8 +74,7 @@ public class RestControllerErrorHandler {
             new RestControllerError(request, HttpStatus.BAD_REQUEST, cause),
             new HttpHeaders(),
             HttpStatus.BAD_REQUEST);
-      }
-      else {
+      } else {
         return new ResponseEntity<>(
             new RestControllerError(request, HttpStatus.INTERNAL_SERVER_ERROR, cause),
             new HttpHeaders(),

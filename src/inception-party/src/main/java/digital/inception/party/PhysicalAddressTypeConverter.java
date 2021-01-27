@@ -16,7 +16,7 @@
 
 package digital.inception.party;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -40,6 +40,7 @@ public class PhysicalAddressTypeConverter
    */
   @Override
   public String convertToDatabaseColumn(PhysicalAddressType attribute) {
+    if (attribute == null) return null;
     return attribute.code();
   }
 
@@ -54,6 +55,7 @@ public class PhysicalAddressTypeConverter
    */
   @Override
   public PhysicalAddressType convertToEntityAttribute(String dbData) {
+    if (dbData == null) return null;
     return PhysicalAddressType.fromCode(dbData);
   }
 }

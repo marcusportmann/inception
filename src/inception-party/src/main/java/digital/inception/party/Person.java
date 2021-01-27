@@ -33,7 +33,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -131,7 +130,7 @@ import org.springframework.util.StringUtils;
 @XmlAccessorType(XmlAccessType.FIELD)
 @ValidPerson
 @Entity
-@DiscriminatorValue("person")
+// @DiscriminatorValue("person")
 @Table(schema = "party", name = "persons")
 public class Person extends Party implements Serializable {
 
@@ -159,7 +158,7 @@ public class Person extends Party implements Serializable {
   @XmlElement(name = "IdentityDocument")
   @Valid
   @OneToMany(
-      mappedBy = "person",
+      mappedBy = "party",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
@@ -187,7 +186,7 @@ public class Person extends Party implements Serializable {
   @XmlElement(name = "Preference")
   @Valid
   @OneToMany(
-      mappedBy = "person",
+      mappedBy = "party",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
@@ -199,12 +198,12 @@ public class Person extends Party implements Serializable {
   @JsonManagedReference("partyRoleReference")
   @XmlElementWrapper(name = "Roles")
   @XmlElement(name = "Role")
-  @Valid
   @OneToMany(
       mappedBy = "party",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
+  @Valid
   private final Set<PartyRole> roles = new HashSet<>();
 
   /** The tax numbers for the person. */
@@ -446,7 +445,7 @@ public class Person extends Party implements Serializable {
         existingIdentityDocument ->
             Objects.equals(existingIdentityDocument.getType(), identityDocument.getType()));
 
-    identityDocument.setPerson(this);
+    identityDocument.setParty(this);
 
     identityDocuments.add(identityDocument);
   }
@@ -475,7 +474,7 @@ public class Person extends Party implements Serializable {
     preferences.removeIf(
         existingPreference -> Objects.equals(existingPreference.getType(), preference.getType()));
 
-    preference.setPerson(this);
+    preference.setParty(this);
 
     preferences.add(preference);
   }
@@ -505,6 +504,32 @@ public class Person extends Party implements Serializable {
     taxNumber.setParty(this);
 
     taxNumbers.add(taxNumber);
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
+   * false</code>
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+
+    if (object == null) {
+      return false;
+    }
+
+    if (getClass() != object.getClass()) {
+      return false;
+    }
+
+    Person other = (Person) object;
+
+    return Objects.equals(getId(), other.getId());
   }
 
   /**
@@ -721,6 +746,20 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Retrieve the first physical address with the specified purpose for the person.
+   *
+   * @param purpose the physical address purpose
+   * @return the first physical address with the specified purpose for the person or <code>null
+   *     </code> if the physical address could not be found
+   */
+  public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
+    return physicalAddresses.stream()
+        .filter(physicalAddress -> physicalAddress.getPurposes().contains(purpose))
+        .findFirst()
+        .get();
+  }
+
+  /**
    * Returns the physical addresses for the person.
    *
    * @return the physical addresses for the person
@@ -776,28 +815,6 @@ public class Person extends Party implements Serializable {
   public String getResidentialType() {
     return residentialType;
   }
-
-  // TODO: Add method to find the first physical address with the specified purpose -- MARCUS
-
-  //  /**
-  //   * Retrieve the physical address with the specified type and purpose for the person.
-  //   *
-  //   * @param type the physical address type
-  //   * @param purpose the physical address purpose
-  //   * @return the physical address with the specified type and purpose for the person or
-  // <code>null
-  //   *     </code> if the physical address could not be found
-  //   */
-  //  public PhysicalAddress getPhysicalAddress(
-  //      PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-  //    return physicalAddresses.stream()
-  //        .filter(
-  //            physicalAddress ->
-  //                Objects.equals(physicalAddress.getType(), type)
-  //                    && Objects.equals(physicalAddress.getPurpose(), purpose))
-  //        .findFirst()
-  //        .get();
-  //  }
 
   /**
    * Retrieve the role with the specified type for the person independent of a party association.
@@ -885,6 +902,17 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((getId() == null) ? 0 : getId().hashCode());
+  }
+  //
+
+  /**
    * Remove the contact mechanism with the specified type and purpose for the person.
    *
    * @param type the contact mechanism type
@@ -907,6 +935,18 @@ public class Person extends Party implements Serializable {
         existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
   }
 
+  // TODO: Add a method to remove a role with the specified type -- MARCUS
+
+  /**
+   * Remove any physical addresses with the specified purpose for the person.
+   *
+   * @param purpose the physical address purpose
+   */
+  public void removePhysicalAddress(PhysicalAddressPurpose purpose) {
+    physicalAddresses.removeIf(
+        existingPhysicalAddress -> existingPhysicalAddress.getPurposes().contains(purpose));
+  }
+
   /**
    * Remove the preference with the specified type for the person.
    *
@@ -917,6 +957,15 @@ public class Person extends Party implements Serializable {
   }
 
   /**
+   * Remove the role with the specified type for the person.
+   *
+   * @param type the code for party role type
+   */
+  public void removeRole(String type) {
+    roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), type));
+  }
+
+  /**
    * Remove the tax number with the specified type for the person.
    *
    * @param type the tax number type
@@ -924,21 +973,6 @@ public class Person extends Party implements Serializable {
   public void removeTaxNumber(String type) {
     taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), type));
   }
-
-  // TODO: Add method to remove the physical address with the specified purpose -- MARCUS
-
-  //  /**
-  //   * Remove the physical address with the specified type and purpose for the person.
-  //   *
-  //   * @param type the physical address type
-  //   * @param purpose the physical address purpose
-  //   */
-  //  public void removePhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
-  //    physicalAddresses.removeIf(
-  //        existingPhysicalAddress ->
-  //            Objects.equals(existingPhysicalAddress.getType(), type)
-  //                && Objects.equals(existingPhysicalAddress.getPurpose(), purpose));
-  //  }
 
   /**
    * Set the contact mechanisms for the person.

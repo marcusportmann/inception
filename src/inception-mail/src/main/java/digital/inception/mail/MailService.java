@@ -16,8 +16,6 @@
 
 package digital.inception.mail;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
 import freemarker.cache.TemplateLookupContext;
@@ -48,8 +46,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailService</code> class provides the Mail Service implementation.

@@ -16,12 +16,8 @@
 
 package digital.inception.core.xml;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.exception.RichRuntimeException;
 import org.xml.sax.SAXParseException;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>XmlParserException</code> exception is thrown to indicate an error condition when

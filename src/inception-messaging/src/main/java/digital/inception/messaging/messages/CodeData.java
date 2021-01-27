@@ -16,14 +16,14 @@
 
 package digital.inception.messaging.messages;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.codes.Code;
 import digital.inception.core.wbxml.Element;
 import java.io.Serializable;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>CodeData</code> class holds the information for a code.

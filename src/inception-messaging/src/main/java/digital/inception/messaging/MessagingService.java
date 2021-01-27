@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
@@ -67,7 +67,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessagingService</code> class provides the implementation of the Messaging Service for

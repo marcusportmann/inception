@@ -16,8 +16,6 @@
 
 package digital.inception.sms;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.Debug;
 import digital.inception.core.util.ServiceUtil;
@@ -54,8 +52,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSService</code> class provides the SMS Service implementation.

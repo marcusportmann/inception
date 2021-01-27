@@ -16,8 +16,6 @@
 
 package digital.inception.bmi.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.util.ServiceUtil;
 import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;

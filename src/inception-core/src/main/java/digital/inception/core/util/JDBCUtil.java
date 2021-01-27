@@ -16,8 +16,6 @@
 
 package digital.inception.core.util;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -33,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>JDBCUtil</code> class provides JDBCUtil utility functions.
@@ -216,7 +212,7 @@ public class JDBCUtil {
            *       terminated by a ';' delimiter. This is because correctly handling the delimiter
            *       in single or double quotes is Very Hard (TM).
            */
-            if (line.endsWith(";")) {
+          if (line.endsWith(";")) {
             if (multiLineBuffer != null) {
               multiLineBuffer.append(" ");
               multiLineBuffer.append(line);

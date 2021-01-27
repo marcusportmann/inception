@@ -16,8 +16,6 @@
 
 package digital.inception.mail;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -35,8 +33,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailTemplateSummary</code> class holds the information for a mail template.

@@ -16,8 +16,6 @@
 
 package digital.inception.bmi;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.xml.XmlSchemaClasspathInputSource;
 import java.io.ByteArrayInputStream;
@@ -45,8 +43,6 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CaseService</code> class provides the Case Service implementation.
@@ -81,6 +77,8 @@ public class CaseService implements ICaseService {
       CaseDefinitionQuery caseDefinitionQuery =
           processEngine.getRepositoryService().createCaseDefinitionQuery();
       caseDefinitionQuery.caseDefinitionKey(caseDefinitionId).latestVersion();
+
+      caseDefinitionQuery.count();
 
       return caseDefinitionQuery.count() > 0;
     } catch (Throwable e) {

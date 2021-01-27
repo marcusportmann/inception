@@ -16,12 +16,12 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ArchivedMessageRepository</code> interface declares the repository for the <code>

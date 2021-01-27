@@ -16,7 +16,7 @@
 
 package digital.inception.application;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.support.MergedMessageSource;
 import java.util.Map;
@@ -34,9 +34,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>Application</code> class provides the class that all application-specific application
@@ -50,7 +49,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     lazyInit = true)
 @EnableAsync
 @EnableScheduling
-@EnableTransactionManagement
 @SuppressWarnings({"unused"})
 public abstract class Application extends ApplicationBase {
 

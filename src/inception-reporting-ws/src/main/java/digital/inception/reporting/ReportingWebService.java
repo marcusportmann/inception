@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.validation.InvalidArgumentException;
 import java.sql.Connection;
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlElement;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ReportingWebService</code> class.

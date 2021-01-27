@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

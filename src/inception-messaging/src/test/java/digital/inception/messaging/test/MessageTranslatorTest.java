@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import static org.junit.Assert.assertArrayEquals;
 

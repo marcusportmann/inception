@@ -16,8 +16,6 @@
 
 package digital.inception.core.converters;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.sorting.SortDirection;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

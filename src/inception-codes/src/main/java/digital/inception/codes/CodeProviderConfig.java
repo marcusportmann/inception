@@ -16,8 +16,6 @@
 
 package digital.inception.codes;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**

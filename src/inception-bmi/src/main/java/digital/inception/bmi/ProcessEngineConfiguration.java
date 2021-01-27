@@ -16,14 +16,14 @@
 //
 // package digital.inception.process;
 //
-//// ~--- non-JDK imports --------------------------------------------------------
+//
 //
 // import org.camunda.bpm.engine.spring.SpringProcessEngineConfiguration;
 //
 // import org.springframework.context.ApplicationContext;
 // import org.springframework.transaction.PlatformTransactionManager;
 //
-//// ~--- JDK imports ------------------------------------------------------------
+//
 //
 // import javax.sql.DataSource;
 //

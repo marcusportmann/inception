@@ -16,8 +16,6 @@
 
 package digital.inception.ws.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.security.KeyStore;
@@ -29,8 +27,6 @@ import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.dom.handler.RequestData;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFWSSX509CertificateTokenProfileProxyConfigurator</code> class provides the capability

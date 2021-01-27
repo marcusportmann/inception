@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -24,7 +24,7 @@ import digital.inception.core.wbxml.Encoder;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessagePartReceivedResponse</code> class represents the response to a request sent by a

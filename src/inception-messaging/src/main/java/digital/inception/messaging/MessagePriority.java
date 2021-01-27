@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /** The enumeration giving the possible priorities for a message. */
 @Schema(description = "The message priority")

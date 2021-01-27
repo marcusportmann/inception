@@ -16,8 +16,6 @@
 
 package digital.inception.core.util;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

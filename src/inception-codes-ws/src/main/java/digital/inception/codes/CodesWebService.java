@@ -16,8 +16,6 @@
 
 package digital.inception.codes;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.validation.InvalidArgumentException;
 import java.time.ZoneId;
 import java.util.Date;
@@ -29,8 +27,6 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesWebService</code> class.

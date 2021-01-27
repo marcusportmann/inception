@@ -16,8 +16,6 @@
 
 package digital.inception.ws.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.security.cert.CertificateException;
@@ -28,8 +26,6 @@ import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.http.HTTPConduit;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFNoTrustSecurityProxyConfigurator</code> class provides the capability to configure a

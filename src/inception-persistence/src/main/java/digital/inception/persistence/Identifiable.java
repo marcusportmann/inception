@@ -16,7 +16,7 @@
 
 package digital.inception.persistence;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import java.io.Serializable;
 

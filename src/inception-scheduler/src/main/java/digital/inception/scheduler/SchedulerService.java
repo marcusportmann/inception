@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.validation.InvalidArgumentException;
@@ -43,7 +43,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>SchedulerService</code> class provides the Scheduler Service implementation.

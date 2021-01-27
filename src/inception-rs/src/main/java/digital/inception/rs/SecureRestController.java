@@ -16,8 +16,6 @@
 
 package digital.inception.rs;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,8 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SecureRestController</code> class provides the base class from which all secure RESTful

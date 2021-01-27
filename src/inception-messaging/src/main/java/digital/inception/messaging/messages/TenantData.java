@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.wbxml.Element;
 import digital.inception.security.Tenant;
@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>TenantData</code> class holds the information for a tenant.

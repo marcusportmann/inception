@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -63,7 +63,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>UserDirectory</code> class holds the information for a user directory.
@@ -95,8 +95,7 @@ public class UserDirectory implements Serializable {
 
   /** The Universally Unique Identifier (UUID) for the user directory. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the user directory",
+      description = "The Universally Unique Identifier (UUID) for the user directory",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)

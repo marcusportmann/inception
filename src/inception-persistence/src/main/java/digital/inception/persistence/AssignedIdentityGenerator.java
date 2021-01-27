@@ -16,13 +16,13 @@
 
 package digital.inception.persistence;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.io.Serializable;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentityGenerator;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>AssignedIdentityGenerator</code> implements a Hibernate generator that allows a value

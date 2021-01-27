@@ -16,9 +16,8 @@
 
 package digital.inception.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.util.JDBCUtil;
+import digital.inception.persistence.JtaPlatform;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
@@ -38,9 +37,8 @@ import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.orm.jpa.hibernate.SpringJtaPlatform;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,23 +55,23 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * The <code>TestConfiguration</code> class provides the base Spring configuration for the JUnit
  * test classes that test the capabilities provided by the <b>Inception</b> framework.
  *
+ * <p>NOTE: This configuration class disables the default application data source and Camunda
+ * Process Engine bootstrapping using the component scan filters.
+ *
  * @author Marcus Portmann
  */
 @Configuration
 @EnableAsync
-@EnableAutoConfiguration
+@EnableConfigurationProperties
 @EnableScheduling
-@EnableTransactionManagement
 @ComponentScan(
     basePackages = {"digital.inception"},
     lazyInit = true,
@@ -89,7 +87,7 @@ import org.springframework.util.StringUtils;
           pattern = "digital\\.inception\\.persistence\\.PersistenceConfiguration",
           type = FilterType.REGEX),
       @ComponentScan.Filter(
-          pattern = "digital\\.inception\\.process\\.ProcessConfiguration",
+          pattern = "digital\\.inception\\.bmi\\.BMIConfiguration",
           type = FilterType.REGEX)
     })
 @SuppressWarnings("WeakerAccess")
@@ -125,32 +123,39 @@ public class TestConfiguration {
   @Bean(name = "applicationPersistenceUnit")
   @DependsOn("applicationDataSource")
   public LocalContainerEntityManagerFactoryBean applicationEntityManagerFactory() {
-    LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean =
+    LocalContainerEntityManagerFactoryBean entityManagerFactoryBean =
         new LocalContainerEntityManagerFactoryBean();
 
     HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+    // EclipseLinkJpaVendorAdapter jpaVendorAdapter = new EclipseLinkJpaVendorAdapter();
     jpaVendorAdapter.setGenerateDdl(false);
     jpaVendorAdapter.setShowSql(true);
     jpaVendorAdapter.setDatabase(Database.H2);
 
-    localContainerEntityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
-    localContainerEntityManagerFactoryBean.setJtaDataSource(dataSource());
-    localContainerEntityManagerFactoryBean.setPackagesToScan(
+    entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
+    entityManagerFactoryBean.setJtaDataSource(dataSource());
+    entityManagerFactoryBean.setPackagesToScan(
         StringUtils.toStringArray(packagesToScanForEntities()));
-    localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+    entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
-    Map<String, Object> jpaPropertyMap = localContainerEntityManagerFactoryBean.getJpaPropertyMap();
+    Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
 
-    PlatformTransactionManager transactionManager =
+    PlatformTransactionManager platformTransactionManager =
         applicationContext.getBean(PlatformTransactionManager.class);
 
-    if (transactionManager instanceof JtaTransactionManager) {
+    if (platformTransactionManager instanceof JtaTransactionManager) {
       jpaPropertyMap.put(
           "hibernate.transaction.jta.platform",
-          new SpringJtaPlatform(((JtaTransactionManager) transactionManager)));
+          new JtaPlatform(((JtaTransactionManager) platformTransactionManager)));
     }
 
-    return localContainerEntityManagerFactoryBean;
+    // EclipseLink
+    //    jpaPropertyMap.put(
+    //        "eclipselink.target-server",
+    //        "digital.inception.persistence.EclipseLinkJtaTransactionController");
+    //    jpaPropertyMap.put("eclipselink.weaving", "false");
+
+    return entityManagerFactoryBean;
   }
 
   /**
@@ -171,6 +176,19 @@ public class TestConfiguration {
   @Bean
   public TaskScheduler taskScheduler() {
     return new ConcurrentTaskScheduler();
+  }
+
+  /**
+   * Returns the WebClient.Builder bean.
+   *
+   * @return the default
+   */
+  @Bean
+  public WebClient.Builder webClientBuilder() {
+
+    // TODO: Configure with security if available -- MARCUS
+
+    return WebClient.builder();
   }
 
   /**

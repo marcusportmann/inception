@@ -16,7 +16,7 @@
 
 package digital.inception.reference;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

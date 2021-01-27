@@ -16,8 +16,6 @@
 
 package digital.inception.bmi;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.util.List;
 
 /**

@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
@@ -31,7 +31,7 @@ import java.time.ZoneId;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>SubmitErrorReportRequestData</code> class manages the data for a "Submit Error Report

@@ -16,7 +16,7 @@
 
 package digital.inception.scheduler;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -39,6 +39,7 @@ public class JobStatusConverter implements AttributeConverter<JobStatus, Integer
    */
   @Override
   public Integer convertToDatabaseColumn(JobStatus attribute) {
+    if (attribute == null) return null;
     return JobStatus.toNumericCode(attribute);
   }
 
@@ -53,6 +54,7 @@ public class JobStatusConverter implements AttributeConverter<JobStatus, Integer
    */
   @Override
   public JobStatus convertToEntityAttribute(Integer dbData) {
+    if (dbData == null) return null;
     return JobStatus.fromNumericCode(dbData);
   }
 }

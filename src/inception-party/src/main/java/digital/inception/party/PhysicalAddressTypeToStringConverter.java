@@ -16,7 +16,7 @@
 
 package digital.inception.party;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;

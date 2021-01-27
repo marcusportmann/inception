@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

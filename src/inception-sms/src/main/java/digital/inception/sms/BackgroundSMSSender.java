@@ -16,8 +16,6 @@
 
 package digital.inception.sms;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

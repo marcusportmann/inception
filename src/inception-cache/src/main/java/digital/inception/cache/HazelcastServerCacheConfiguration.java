@@ -16,8 +16,6 @@
 
 package digital.inception.cache;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.hazelcast.config.AwsConfig;
 import com.hazelcast.config.Config;
 import com.hazelcast.config.EvictionConfig;
@@ -37,8 +35,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>HazelcastServerCacheConfiguration</code> class provides the Hazelcast server cache
  * configuration.
@@ -48,7 +44,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnClass(name = "com.hazelcast.config.Config")
 @ConditionalOnProperty(value = "inception.cache.hazelcast.server.enabled", havingValue = "true")
-@EnableCaching
 @ConfigurationProperties("inception.cache.hazelcast.server")
 public class HazelcastServerCacheConfiguration {
 

@@ -16,7 +16,7 @@
 
 package digital.inception.configuration;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -29,6 +29,8 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -41,7 +43,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>Configuration</code> class stores the key, value and description for the configuration.
@@ -104,6 +106,7 @@ public class Configuration implements Serializable {
   @Size(max = 4000)
   @Column(name = "value", length = 4000, nullable = false)
   private String value;
+
 
   /** Constructs a new <code>Configuration</code>. */
   public Configuration() {}

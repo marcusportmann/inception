@@ -16,8 +16,6 @@
 
 package digital.inception.mail;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;

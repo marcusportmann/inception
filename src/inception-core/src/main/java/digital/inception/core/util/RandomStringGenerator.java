@@ -16,8 +16,6 @@
 
 package digital.inception.core.util;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Random;

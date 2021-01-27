@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.handler;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.messaging.Message;
 

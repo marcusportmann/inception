@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -44,7 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ReportingService</code> class provides the Reporting Service implementation.

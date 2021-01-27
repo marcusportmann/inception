@@ -16,7 +16,7 @@
 
 package digital.inception.party;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;

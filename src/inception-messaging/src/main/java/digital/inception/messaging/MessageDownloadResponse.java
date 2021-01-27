@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -27,7 +27,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessageDownloadResponse</code> class represents the response to a request sent by a

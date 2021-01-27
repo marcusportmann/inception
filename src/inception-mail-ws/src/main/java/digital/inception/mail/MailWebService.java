@@ -16,7 +16,7 @@
 
 package digital.inception.mail;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
@@ -27,7 +27,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MailWebService</code> class.

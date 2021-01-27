@@ -38,6 +38,7 @@ public class MessagePartStatusConverter implements AttributeConverter<MessagePar
    */
   @Override
   public Integer convertToDatabaseColumn(MessagePartStatus attribute) {
+    if (attribute == null) return null;
     return MessagePartStatus.toNumericCode(attribute);
   }
 
@@ -52,6 +53,7 @@ public class MessagePartStatusConverter implements AttributeConverter<MessagePar
    */
   @Override
   public MessagePartStatus convertToEntityAttribute(Integer dbData) {
+    if (dbData == null) return null;
     return MessagePartStatus.fromNumericCode(dbData);
   }
 }

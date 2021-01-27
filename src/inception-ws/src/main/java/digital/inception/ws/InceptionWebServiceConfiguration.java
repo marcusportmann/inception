@@ -16,8 +16,6 @@
 
 package digital.inception.ws;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointConfigurator;

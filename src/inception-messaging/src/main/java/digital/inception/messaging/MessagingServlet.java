@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.Debug;
 import digital.inception.core.wbxml.Document;
@@ -36,7 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessageServlet</code> servlet.

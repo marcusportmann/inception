@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -49,7 +49,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>User</code> class holds the information for a user.

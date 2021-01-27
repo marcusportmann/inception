@@ -16,7 +16,7 @@
 
 package digital.inception.application;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.codahale.metrics.MetricRegistry;
 import digital.inception.json.DateTimeModule;
@@ -32,7 +32,7 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ApplicationBase</code> class provides the base class that application classes can be

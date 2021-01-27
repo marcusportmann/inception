@@ -16,7 +16,7 @@
 
 package digital.inception.error;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.validation.InvalidArgumentException;
 import javax.jws.WebMethod;
@@ -25,7 +25,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ErrorWebService</code> class.

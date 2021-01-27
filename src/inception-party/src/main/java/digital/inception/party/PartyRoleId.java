@@ -18,6 +18,7 @@ package digital.inception.party;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The <code>PartyRoleId</code> class implements the ID class for the <code>PartyRole</code> class.
@@ -28,8 +29,8 @@ public class PartyRoleId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The party the party role is associated with. */
-  private Party party;
+  /** The Universally Unique Identifier (UUID) for the party the party role is associated with. */
+  private UUID party;
 
   /** The code for the party role type. */
   private String type;

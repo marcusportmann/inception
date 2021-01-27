@@ -16,14 +16,12 @@
 
 package digital.inception.scheduler;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * The <code>JobExecutionContext</code> provides access to context information associated with the
- * execution of a job.
+ * The <code>JobExecutionContext</code> class provides access to context information associated with
+ * the execution of a job.
  *
  * @author Marcus Portmann
  */
@@ -31,10 +29,10 @@ import java.util.Map;
 public class JobExecutionContext {
 
   /** The date and time that the job was scheduled to be executed. */
-  private LocalDateTime executionDate;
+  private final LocalDateTime executionDate;
 
   /** The parameters for the job. */
-  private Map<String, String> parameters;
+  private final Map<String, String> parameters;
 
   /**
    * Constructs a new <code>JobExecutionContext</code>.

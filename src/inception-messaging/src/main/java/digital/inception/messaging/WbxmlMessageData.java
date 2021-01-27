@@ -16,13 +16,13 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
 import java.util.UUID;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>WbxmlMessageData</code> class provides the abstract base class from which all

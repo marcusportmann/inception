@@ -16,11 +16,7 @@
 
 package digital.inception.audit;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import org.springframework.stereotype.Service;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>AuditService</code> class provides the Audit Service implementation.

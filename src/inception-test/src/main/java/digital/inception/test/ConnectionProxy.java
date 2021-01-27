@@ -16,8 +16,6 @@
 
 package digital.inception.test;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;

@@ -16,8 +16,6 @@
 
 package digital.inception.ws.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
@@ -59,8 +57,6 @@ import org.apache.wss4j.common.ext.WSPasswordCallback;
 import org.apache.wss4j.common.ext.WSSecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>Crypto</code> class.

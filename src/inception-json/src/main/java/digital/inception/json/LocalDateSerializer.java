@@ -16,16 +16,12 @@
 
 package digital.inception.json;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import digital.inception.core.util.ISO8601Util;
 import java.io.IOException;
 import java.time.LocalDate;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>LocalDateDeserializer</code> class implements the Jackson serializer for the <code>

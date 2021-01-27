@@ -16,11 +16,7 @@
 
 package digital.inception.mail;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import org.springframework.data.jpa.repository.JpaRepository;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>MailTemplateSummaryRepository</code> interface declares the repository for the <code>

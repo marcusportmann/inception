@@ -16,7 +16,7 @@
 
 package digital.inception.application;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import digital.inception.core.exception.RichRuntimeException;
 

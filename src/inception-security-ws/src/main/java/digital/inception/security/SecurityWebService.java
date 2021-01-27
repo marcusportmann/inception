@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
@@ -34,7 +34,7 @@ import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 //  For get functions use classes with this naming convention...
 //

@@ -16,8 +16,6 @@
 
 package digital.inception.core.util;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.naming.Context;

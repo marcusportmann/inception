@@ -16,7 +16,7 @@
 
 package digital.inception.persistence;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -37,10 +37,11 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>PersistenceConfiguration</code> class provides the Spring configuration for the
@@ -51,10 +52,11 @@ import org.springframework.util.StringUtils;
  */
 @Configuration
 @EnableJpaRepositories
+@EnableTransactionManagement
 public class PersistenceConfiguration {
 
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
   @Value("${inception.persistence.entity-packages:#{null}}")
@@ -86,6 +88,7 @@ public class PersistenceConfiguration {
           new LocalContainerEntityManagerFactoryBean();
 
       HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
+      // EclipseLinkJpaVendorAdapter jpaVendorAdapter = new EclipseLinkJpaVendorAdapter();
       jpaVendorAdapter.setGenerateDdl(false);
 
       try (Connection connection = dataSource.getConnection()) {
@@ -121,16 +124,22 @@ public class PersistenceConfiguration {
           StringUtils.toStringArray(packagesToScanForEntities()));
       entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
 
+      Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
+
       PlatformTransactionManager platformTransactionManager =
           applicationContext.getBean(PlatformTransactionManager.class);
 
       if (platformTransactionManager instanceof JtaTransactionManager) {
-        Map<String, Object> jpaPropertyMap = entityManagerFactoryBean.getJpaPropertyMap();
-
         jpaPropertyMap.put(
             "hibernate.transaction.jta.platform",
             new JtaPlatform(((JtaTransactionManager) platformTransactionManager)));
       }
+
+      // EclipseLink
+      //      jpaPropertyMap.put(
+      //          "eclipselink.target-server",
+      //          "digital.inception.persistence.EclipseLinkJtaTransactionController");
+      //      jpaPropertyMap.put("eclipselink.weaving", "false");
 
       return entityManagerFactoryBean;
     } catch (Throwable e) {
@@ -152,7 +161,11 @@ public class PersistenceConfiguration {
     if (StringUtils.hasText(this.packagesToScanForEntities)) {
       String[] packagesToScan = this.packagesToScanForEntities.split(",");
 
-      Collections.addAll(packagesToScanForEntities, StringUtils.trimArrayElements(packagesToScan));
+      for (String packageToScan : packagesToScan) {
+        if (!packageToScan.startsWith("digital.inception")) {
+          packagesToScanForEntities.add(packageToScan);
+        }
+      }
     }
 
     return packagesToScanForEntities;

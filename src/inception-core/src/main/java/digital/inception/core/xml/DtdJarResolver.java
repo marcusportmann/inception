@@ -16,8 +16,6 @@
 
 package digital.inception.core.xml;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 

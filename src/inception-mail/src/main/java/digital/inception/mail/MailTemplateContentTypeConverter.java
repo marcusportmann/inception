@@ -16,8 +16,6 @@
 
 package digital.inception.mail;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
@@ -40,6 +38,7 @@ public class MailTemplateContentTypeConverter
    */
   @Override
   public Integer convertToDatabaseColumn(MailTemplateContentType attribute) {
+    if (attribute == null) return null;
     return MailTemplateContentType.toNumericCode(attribute);
   }
 
@@ -54,6 +53,7 @@ public class MailTemplateContentTypeConverter
    */
   @Override
   public MailTemplateContentType convertToEntityAttribute(Integer dbData) {
+    if (dbData == null) return null;
     return MailTemplateContentType.fromNumericCode(dbData);
   }
 }

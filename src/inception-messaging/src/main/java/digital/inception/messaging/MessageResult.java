@@ -16,7 +16,7 @@
 
 package digital.inception.messaging;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -25,7 +25,7 @@ import digital.inception.core.wbxml.Parser;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessageResult</code> class stores the results of processing a message.

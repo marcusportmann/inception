@@ -16,8 +16,6 @@
 
 package digital.inception.bmi;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.util.ServiceUtil;
 import javax.sql.DataSource;
 import org.camunda.bpm.engine.ProcessEngine;
@@ -30,8 +28,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>BMIConfiguration</code> class provides the Spring configuration for the Business

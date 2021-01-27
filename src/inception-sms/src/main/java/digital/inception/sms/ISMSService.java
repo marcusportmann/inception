@@ -16,8 +16,6 @@
 
 package digital.inception.sms;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.UUID;
 

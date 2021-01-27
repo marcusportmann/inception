@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.handler;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
@@ -53,7 +53,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>SystemMessageHandler</code> class implements the message handler that processes the

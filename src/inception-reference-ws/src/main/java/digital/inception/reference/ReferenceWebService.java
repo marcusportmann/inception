@@ -16,7 +16,7 @@
 
 package digital.inception.reference;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import java.util.List;
 import javax.jws.WebMethod;

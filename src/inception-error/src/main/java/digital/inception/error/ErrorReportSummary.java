@@ -16,8 +16,6 @@
 
 package digital.inception.error;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -40,8 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorReportSummary</code> class holds the summary information for an error report.
@@ -81,9 +77,7 @@ public class ErrorReportSummary implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The ID for the application that generated the error report. */
-  @Schema(
-      description = "ID for the application that generated the error report",
-      required = true)
+  @Schema(description = "ID for the application that generated the error report", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "ApplicationId", required = true)
   @NotNull
@@ -122,8 +116,8 @@ public class ErrorReportSummary implements Serializable {
   private String description;
 
   /**
-   * The optional Universally Unique Identifier (UUID) for the device the error
-   * report originated from.
+   * The optional Universally Unique Identifier (UUID) for the device the error report originated
+   * from.
    */
   @Schema(
       description =
@@ -136,8 +130,7 @@ public class ErrorReportSummary implements Serializable {
 
   /** The Universally Unique Identifier (UUID) for the error report. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the error report",
+      description = "The Universally Unique Identifier (UUID) for the error report",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -147,8 +140,7 @@ public class ErrorReportSummary implements Serializable {
   private UUID id;
 
   /** The optional username for the user associated with the error report. */
-  @Schema(
-      description = "The optional username for the user associated with the error report")
+  @Schema(description = "The optional username for the user associated with the error report")
   @JsonProperty
   @XmlElement(name = "Who")
   @Size(max = 100)
@@ -162,14 +154,13 @@ public class ErrorReportSummary implements Serializable {
    * Constructs a new <code>ErrorReportSummary</code>.
    *
    * @param id the Universally Unique Identifier (UUID) for the error report
-   * @param applicationId the ID for the application that generated the error
-   *     report
+   * @param applicationId the ID for the application that generated the error report
    * @param applicationVersion the version of the application that generated the error report
    * @param description the description of the error
    * @param created the date and time the error report was created
    * @param who the optional username for the user associated with the error report
-   * @param deviceId the optional Universally Unique Identifier (UUID) for the
-   *     device the error report originated from
+   * @param deviceId the optional Universally Unique Identifier (UUID) for the device the error
+   *     report originated from
    */
   public ErrorReportSummary(
       UUID id,
@@ -251,11 +242,11 @@ public class ErrorReportSummary implements Serializable {
   }
 
   /**
-   * Returns the optional Universally Unique Identifier (UUID) for the device the
-   * error report originated from.
+   * Returns the optional Universally Unique Identifier (UUID) for the device the error report
+   * originated from.
    *
-   * @return the optional Universally Unique Identifier (UUID) for the device the
-   *     error report originated from
+   * @return the optional Universally Unique Identifier (UUID) for the device the error report
+   *     originated from
    */
   public UUID getDeviceId() {
     return deviceId;

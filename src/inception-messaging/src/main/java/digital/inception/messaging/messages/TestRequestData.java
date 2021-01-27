@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -27,7 +27,7 @@ import digital.inception.messaging.WbxmlMessageData;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>TestRequestData</code> class manages the data for a "Test Request" message.

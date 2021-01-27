@@ -1410,8 +1410,8 @@ export class SecurityService {
     .set('grant_type', 'password')
     .set('username', username)
     .set('password', password);
-    // .set('scope', 'inception-sample')
-    // .set('client_id', 'inception-sample');
+    // .set('scope', 'demo')
+    // .set('client_id', 'demo');
 
     const options = {headers: {'Content-Type': 'application/x-www-form-urlencoded'}};
 

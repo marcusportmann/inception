@@ -16,8 +16,6 @@
 
 package digital.inception.codes;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.rs.RestControllerError;
@@ -41,8 +39,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CodesRestController</code> class.
@@ -235,10 +231,7 @@ public class CodesRestController extends SecureRestController {
               required = true)
           @PathVariable
           String codeCategoryId,
-      @Parameter(
-              name = "codeId",
-              description = "The ID for the code",
-              required = true)
+      @Parameter(name = "codeId", description = "The ID for the code", required = true)
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
@@ -339,15 +332,11 @@ public class CodesRestController extends SecureRestController {
   public Code getCode(
       @Parameter(
               name = "codeCategoryId",
-              description =
-                  "The ID for the code category the code is associated with",
+              description = "The ID for the code category the code is associated with",
               required = true)
           @PathVariable
           String codeCategoryId,
-      @Parameter(
-              name = "codeId",
-              description = "The ID for the code",
-              required = true)
+      @Parameter(name = "codeId", description = "The ID for the code", required = true)
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
@@ -666,15 +655,11 @@ public class CodesRestController extends SecureRestController {
   public String getCodeName(
       @Parameter(
               name = "codeCategoryId",
-              description =
-                  "The ID for the code category the code is associated with",
+              description = "The ID for the code category the code is associated with",
               required = true)
           @PathVariable
           String codeCategoryId,
-      @Parameter(
-              name = "codeId",
-              description = "The ID for the code",
-              required = true)
+      @Parameter(name = "codeId", description = "The ID for the code", required = true)
           @PathVariable
           String codeId)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
@@ -780,10 +765,7 @@ public class CodesRestController extends SecureRestController {
               required = true)
           @PathVariable
           String codeCategoryId,
-      @Parameter(
-              name = "codeId",
-              description = "The ID for the code",
-              required = true)
+      @Parameter(name = "codeId", description = "The ID for the code", required = true)
           @PathVariable
           String codeId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(

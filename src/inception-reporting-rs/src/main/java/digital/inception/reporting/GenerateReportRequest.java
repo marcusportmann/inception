@@ -16,7 +16,7 @@
 
 package digital.inception.reporting;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.util.List;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>GenerateReportRequest</code> class holds the information for a request to generate a

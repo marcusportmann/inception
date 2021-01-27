@@ -16,8 +16,6 @@
 
 package digital.inception.sms;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -28,8 +26,6 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMSRepository</code> interface declares the repository for the <code>SMS</code> domain

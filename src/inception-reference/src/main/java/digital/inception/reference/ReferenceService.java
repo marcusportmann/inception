@@ -16,7 +16,7 @@
 
 package digital.inception.reference;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.util.List;
 import javax.validation.Validator;
@@ -27,7 +27,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ReferenceService</code> class provides the Reference Service implementation.

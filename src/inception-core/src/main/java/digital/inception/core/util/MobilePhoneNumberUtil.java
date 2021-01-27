@@ -16,8 +16,6 @@
 
 package digital.inception.core.util;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.util.regex.Pattern;
 
 /**

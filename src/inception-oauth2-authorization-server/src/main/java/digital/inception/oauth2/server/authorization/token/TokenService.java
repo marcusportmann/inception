@@ -17,7 +17,7 @@
 package digital.inception.oauth2.server.authorization.token;
 
 import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt. JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.User;
@@ -59,11 +59,11 @@ public class TokenService implements ITokenService {
   private String applicationName;
 
   /* The RSA private key used to sign the JWTs. */
-  @Value("${inception.oauth2.authorization-server.jwt.private-key-location}")
+  @Value("${inception.oauth2.authorization-server.jwt.rsa-private-key-location}")
   private RSAPrivateKey rsaPrivateKey;
 
   /* The RSA public key used to verify the JWTs. */
-  @Value("${inception.oauth2.authorization-server.jwt.public-key-location}")
+  @Value("${inception.oauth2.authorization-server.jwt.rsa-public-key-location}")
   private RSAPublicKey rsaPublicKey;
 
   /**

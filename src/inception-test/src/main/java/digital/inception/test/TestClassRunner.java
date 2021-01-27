@@ -16,8 +16,6 @@
 
 package digital.inception.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.sql.Connection;
 import java.util.Map;
 import javax.sql.XAConnection;
@@ -28,11 +26,10 @@ import org.junit.runners.model.InitializationError;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 /**
  * The <code>TestClassRunner</code> class implements the JUnit runner that provides support for
- * JUnit test classes that test the capabilities provided by the <b>Inception</b> framework.
+ * JUnit test classes that test the capabilities provided by or dependent on the <b>Inception</b>
+ * framework.
  *
  * @author Marcus Portmann
  */

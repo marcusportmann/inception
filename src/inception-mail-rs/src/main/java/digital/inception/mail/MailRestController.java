@@ -16,7 +16,7 @@
 
 package digital.inception.mail;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.rs.RestControllerError;
@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MailRestController</code> class.

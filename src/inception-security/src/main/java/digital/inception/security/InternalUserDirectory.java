@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
@@ -35,7 +35,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.

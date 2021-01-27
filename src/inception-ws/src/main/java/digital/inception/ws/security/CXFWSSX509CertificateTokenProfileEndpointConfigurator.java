@@ -16,8 +16,6 @@
 
 package digital.inception.ws.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,8 +26,6 @@ import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.apache.wss4j.common.ext.WSSecurityException;
 import org.apache.wss4j.dom.handler.RequestData;
 import org.apache.wss4j.dom.handler.WSHandlerConstants;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>CXFWSSX509CertificateTokenProfileEndpointConfigurator</code> class provides the

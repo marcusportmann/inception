@@ -16,8 +16,6 @@
 
 package digital.inception.core.wbxml;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import java.io.Serializable;
 
 /**

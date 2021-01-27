@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.sorting.SortDirection;
@@ -47,7 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>LDAPUserDirectory</code> class provides the LDAP user directory implementation.

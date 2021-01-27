@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.messages;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
@@ -33,7 +33,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>AuthenticateResponseData</code> class manages the data for a "Authenticate Response"

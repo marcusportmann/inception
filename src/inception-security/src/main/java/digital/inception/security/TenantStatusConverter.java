@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -39,6 +39,7 @@ public class TenantStatusConverter implements AttributeConverter<TenantStatus, I
    */
   @Override
   public Integer convertToDatabaseColumn(TenantStatus attribute) {
+    if (attribute == null) return null;
     return TenantStatus.toNumericCode(attribute);
   }
 
@@ -53,6 +54,7 @@ public class TenantStatusConverter implements AttributeConverter<TenantStatus, I
    */
   @Override
   public TenantStatus convertToEntityAttribute(Integer dbData) {
+    if (dbData == null) return null;
     return TenantStatus.fromNumericCode(dbData);
   }
 }

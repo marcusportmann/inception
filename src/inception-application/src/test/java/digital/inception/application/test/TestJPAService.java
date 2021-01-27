@@ -16,7 +16,7 @@
 
 package digital.inception.application.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -27,7 +27,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>TestJPAService</code> class provides the Test JPA Service implementation.

@@ -16,15 +16,11 @@
 
 package digital.inception.core.xml;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import org.w3c.dom.ls.LSInput;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>XmlSchemaClasspathInputSource</code> class provides an implementation of the <code>

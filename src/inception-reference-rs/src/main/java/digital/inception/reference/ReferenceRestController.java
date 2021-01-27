@@ -16,7 +16,7 @@
 
 package digital.inception.reference;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.SecureRestController;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>ReferenceRestController</code> class.

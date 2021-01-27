@@ -16,7 +16,7 @@
 
 package digital.inception.messaging.test;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -71,16 +71,15 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTestContextBootstrapper;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.BootstrapWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>MessagingServletTest</code> class contains the implementation of the JUnit tests for
@@ -90,14 +89,15 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
  */
 @SuppressWarnings({"unused", "SameParameterValue"})
 @RunWith(TestClassRunner.class)
-@ContextConfiguration(classes = {TestConfiguration.class})
+@ContextConfiguration(
+    classes = {TestConfiguration.class},
+    initializers = {ConfigDataApplicationContextInitializer.class})
 @TestExecutionListeners(
     listeners = {
       DependencyInjectionTestExecutionListener.class,
       DirtiesContextTestExecutionListener.class,
       TransactionalTestExecutionListener.class
     })
-@BootstrapWith(SpringBootTestContextBootstrapper.class)
 public class MessagingServletTest {
 
   private static final UUID DEVICE_ID = UuidCreator.getShortPrefixComb();

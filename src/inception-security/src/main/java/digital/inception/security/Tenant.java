@@ -16,7 +16,7 @@
 
 package digital.inception.security;
 
-// ~--- non-JDK imports --------------------------------------------------------
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-// ~--- JDK imports ------------------------------------------------------------
+
 
 /**
  * The <code>Tenant</code> class holds the information for a tenant.
@@ -81,9 +81,7 @@ public class Tenant implements Serializable {
   private LocalDateTime created;
 
   /** The Universally Unique Identifier (UUID) for the tenant. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the tenant",
-      required = true)
+  @Schema(description = "The Universally Unique Identifier (UUID) for the tenant", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull

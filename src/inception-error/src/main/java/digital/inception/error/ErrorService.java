@@ -16,8 +16,6 @@
 
 package digital.inception.error;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
 import java.util.List;
@@ -32,8 +30,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>ErrorService</code> class provides the Error Service implementation.
@@ -140,8 +136,7 @@ public class ErrorService implements IErrorService {
   /**
    * Retrieve the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) for the error
-   *     report
+   * @param errorReportId the Universally Unique Identifier (UUID) for the error report
    * @return the error report or <code>null</code> if the error report could not be found
    */
   @Override
@@ -170,8 +165,7 @@ public class ErrorService implements IErrorService {
   /**
    * Retrieve the summary for the error report.
    *
-   * @param errorReportId the Universally Unique Identifier (UUID) for the error
-   *     report
+   * @param errorReportId the Universally Unique Identifier (UUID) for the error report
    * @return the summary for the error report or <code>null</code> if the error report could not be
    *     found
    */

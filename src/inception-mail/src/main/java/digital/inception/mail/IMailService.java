@@ -16,8 +16,6 @@
 
 package digital.inception.mail;
 
-// ~--- JDK imports ------------------------------------------------------------
-
 import digital.inception.core.validation.InvalidArgumentException;
 import java.time.LocalDateTime;
 import java.util.List;

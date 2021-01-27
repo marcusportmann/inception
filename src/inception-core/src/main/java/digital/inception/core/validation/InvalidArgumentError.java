@@ -16,8 +16,6 @@
 
 package digital.inception.core.validation;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import digital.inception.core.xml.LocalDateTimeAdapter;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
@@ -32,8 +30,6 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>InvalidArgumentError</code> class holds the invalid argument error information.

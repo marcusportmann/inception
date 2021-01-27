@@ -16,12 +16,11 @@
 
 package digital.inception.sms;
 
-// ~--- non-JDK imports --------------------------------------------------------
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.core.xml.LocalDateTimeAdapter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
@@ -44,8 +43,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-// ~--- JDK imports ------------------------------------------------------------
 
 /**
  * The <code>SMS</code> class holds the information for a SMS.
@@ -92,9 +89,7 @@ public class SMS implements Serializable {
   private LocalDateTime created;
 
   /** The Universally Unique Identifier (UUID) for the SMS. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the SMS",
-      required = true)
+  @Schema(description = "The Universally Unique Identifier (UUID) for the SMS", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "id", required = true)
   @NotNull
@@ -168,6 +163,7 @@ public class SMS implements Serializable {
    * @param message the message to send
    */
   public SMS(String mobileNumber, String message) {
+    this.id = UuidCreator.getShortPrefixComb();
     this.mobileNumber = mobileNumber;
     this.message = message;
   }
@@ -180,6 +176,7 @@ public class SMS implements Serializable {
    * @param status the status of the SMS
    */
   SMS(String mobileNumber, String message, SMSStatus status) {
+    this.id = UuidCreator.getShortPrefixComb();
     this.mobileNumber = mobileNumber;
     this.message = message;
     this.status = status;
