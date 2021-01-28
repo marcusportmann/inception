@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>DuplicateGroupException</code> is thrown to indicate that a security operation failed as
+ * A <b>DuplicateGroupException</b> is thrown to indicate that a security operation failed as
  * a result of a duplicate group.
  *
  * @author Marcus Portmann
@@ -47,7 +47,7 @@ public class DuplicateGroupException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>DuplicateGroupException</code>.
+   * Constructs a new <b>DuplicateGroupException</b>.
    *
    * @param groupName the name of the group
    */

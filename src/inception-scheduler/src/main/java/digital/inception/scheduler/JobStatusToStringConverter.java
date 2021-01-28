@@ -23,8 +23,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>JobStatusToStringConverter</code> class implements the Spring converter that converts a
- * <code>JobStatus</code> type into a <code>String</code> type.
+ * The <b>JobStatusToStringConverter</b> class implements the Spring converter that converts a
+ * <b>JobStatus</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class JobStatusToStringConverter implements Converter<JobStatus, String> {
 
-  /** Constructs a new <code>JobStatusToStringConverter</code>. */
+  /** Constructs a new <b>JobStatusToStringConverter</b>. */
   public JobStatusToStringConverter() {}
 
   @Override

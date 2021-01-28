@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>GetCodeCategoryResponseData</code> class manages the data for a "Get Code Category
+ * The <b>GetCodeCategoryResponseData</b> class manages the data for a "Get Code Category
  * Response" message.
  *
  * <p>This is a synchronous message.
@@ -64,13 +64,13 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
   /** The error message describing the result of retrieving the code category. */
   private String errorMessage;
 
-  /** Constructs a new <code>GetCodesResponseData</code>. */
+  /** Constructs a new <b>GetCodesResponseData</b>. */
   public GetCodeCategoryResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
   /**
-   * Constructs a new <code>GetCodeCategoryResponseData</code>.
+   * Constructs a new <b>GetCodeCategoryResponseData</b>.
    *
    * @param codeCategory the data for the code category
    */
@@ -83,7 +83,7 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
   }
 
   /**
-   * Constructs a new <code>GetCodeCategoryResponseData</code>.
+   * Constructs a new <b>GetCodeCategoryResponseData</b>.
    *
    * @param errorCode the error code indicating the result of retrieving the code category
    * @param errorMessage the error message describing the result of retrieving the code category
@@ -99,8 +99,8 @@ public class GetCodeCategoryResponseData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the message data was extracted successfully from the WBXML data or
+   *     <b>false</b> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {

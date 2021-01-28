@@ -16,8 +16,6 @@
 
 package digital.inception.party;
 
-
-
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +23,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
-
 /**
- * The <code>OrganizationRepository</code> interface declares the repository for the <code>
- * Organization</code> domain type.
+ * The <b>OrganizationRepository</b> interface declares the repository for the <b> Organization</b>
+ * domain type.
  *
  * @author Marcus Portmann
  */

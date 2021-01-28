@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>AnotherTestResponseData</code> class manages the data for a "Another Test Response"
+ * The <b>AnotherTestResponseData</b> class manages the data for a "Another Test Response"
  * message.
  *
  * <p>This is an asynchronous message.
@@ -49,13 +49,13 @@ public class AnotherTestResponseData extends WbxmlMessageData {
   /** The test value. */
   private String testValue;
 
-  /** Constructs a new <code>AnotherTestResponseData</code>. */
+  /** Constructs a new <b>AnotherTestResponseData</b>. */
   public AnotherTestResponseData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
   /**
-   * Constructs a new <code>AnotherTestResponseData</code>.
+   * Constructs a new <b>AnotherTestResponseData</b>.
    *
    * @param testValue the test value
    * @param testData the test data
@@ -71,8 +71,8 @@ public class AnotherTestResponseData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the message data was extracted successfully from the WBXML data or
+   *     <b>false</b> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {

@@ -17,11 +17,10 @@
 package digital.inception.messaging.handler;
 
 /**
- * The <code>MessageHandlerException</code> exception is thrown to indicate an error condition when
+ * The <b>MessageHandlerException</b> exception is thrown to indicate an error condition when
  * a message handler processes a message.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -31,22 +30,22 @@ public class MessageHandlerException extends Exception {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>MessageHandlerException</code> with the specified message.
+   * Constructs a new <b>MessageHandlerException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet
-   *                ()</code> method.
+   * @param message The message saved for later retrieval by the <b>buildMessageFromResultSet
+   *                ()</b> method.
    */
   public MessageHandlerException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>MessageHandlerException</code> with the specified message and cause.
+   * Constructs a new <b>MessageHandlerException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>buildMessageFromResultSet
-   *                ()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>buildMessageFromResultSet
+   *                ()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public MessageHandlerException(String message, Throwable cause) {
     super(message, cause);

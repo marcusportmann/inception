@@ -27,7 +27,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
- * The <code>Predictor</code> class provides the capability to predict when a scheduling pattern
+ * The <b>Predictor</b> class provides the capability to predict when a scheduling pattern
  * will be matched.
  *
  * <p>Suppose you want to know when the scheduler will execute a job scheduled with the pattern
@@ -62,7 +62,7 @@ public class Predictor {
   private TimeZone timeZone = TimeZone.getDefault();
 
   /**
-   * Constructs a new <code>SchedulingPattern</code>.
+   * Constructs a new <b>SchedulingPattern</b>.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    */
@@ -71,7 +71,7 @@ public class Predictor {
   }
 
   /**
-   * Constructs a new <code>SchedulingPattern</code>.
+   * Constructs a new <b>SchedulingPattern</b>.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    */
@@ -80,7 +80,7 @@ public class Predictor {
   }
 
   /**
-   * Constructs a new <code>SchedulingPattern</code>.
+   * Constructs a new <b>SchedulingPattern</b>.
    *
    * @param schedulingPattern the scheduling pattern on which the prediction will be based
    * @param start the start time of the prediction

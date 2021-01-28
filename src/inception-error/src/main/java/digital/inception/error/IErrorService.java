@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <code>IErrorService</code> interface defines the functionality provided by an Error Service
+ * The <b>IErrorService</b> interface defines the functionality provided by an Error Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ public interface IErrorService {
   /**
    * Create the new entry for the error report in the database.
    *
-   * @param errorReport the <code>ErrorReport</code> instance containing the information for the
+   * @param errorReport the <b>ErrorReport</b> instance containing the information for the
    *     error report
    */
   void createErrorReport(ErrorReport errorReport)
@@ -41,7 +41,7 @@ public interface IErrorService {
    * Retrieve the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the error report or <code>null</code> if the error report could not be found
+   * @return the error report or <b>null</b> if the error report could not be found
    */
   ErrorReport getErrorReport(UUID errorReportId)
       throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException;
@@ -50,7 +50,7 @@ public interface IErrorService {
    * Retrieve the summary for the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the summary for the error report or <code>null</code> if the error report could not be
+   * @return the summary for the error report or <b>null</b> if the error report could not be
    *     found
    */
   ErrorReportSummary getErrorReportSummary(UUID errorReportId)

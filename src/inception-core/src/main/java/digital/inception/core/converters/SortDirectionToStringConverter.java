@@ -21,15 +21,15 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>SortDirectionToStringConverter</code> class implements the Spring converter that
- * converts a <code>SortDirection</code> type into a <code>String</code> type.
+ * The <b>SortDirectionToStringConverter</b> class implements the Spring converter that
+ * converts a <b>SortDirection</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
 @Component
 public class SortDirectionToStringConverter implements Converter<SortDirection, String> {
 
-  /** Constructs a new <code>SortDirectionToStringConverter</code>. */
+  /** Constructs a new <b>SortDirectionToStringConverter</b>. */
   public SortDirectionToStringConverter() {}
 
   @Override

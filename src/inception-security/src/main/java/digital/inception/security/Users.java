@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Users</code> class holds the results of a request to retrieve a list of users.
+ * The <b>Users</b> class holds the results of a request to retrieve a list of users.
  *
  * @author Marcus Portmann
  */
@@ -123,11 +123,11 @@ public class Users implements Serializable {
   @XmlElement(name = "User", required = true)
   private List<User> users;
 
-  /** Constructs a new <code>Users</code>. */
+  /** Constructs a new <b>Users</b>. */
   public Users() {}
 
   /**
-   * Constructs a new <code>Users</code>.
+   * Constructs a new <b>Users</b>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory the users are associated with

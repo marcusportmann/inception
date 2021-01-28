@@ -28,7 +28,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>SMSRepository</code> interface declares the repository for the <code>SMS</code> domain
+ * The <b>SMSRepository</b> interface declares the repository for the <b>SMS</b> domain
  * type.`
  *
  * @author Marcus Portmann

@@ -20,8 +20,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>CustomerConfiguration</code> class provides the Spring configuration for the Banking
- * Customer module.
+ * The <b>CustomerConfiguration</b> class provides the Spring configuration for the Banking Customer
+ * module.
  *
  * @author Marcus Portmann
  */

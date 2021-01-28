@@ -32,7 +32,7 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * The <code>MessageRepository</code> interface declares the repository for the <code>Message</code>
+ * The <b>MessageRepository</b> interface declares the repository for the <b>Message</b>
  * domain type.
  *
  * @author Marcus Portmann

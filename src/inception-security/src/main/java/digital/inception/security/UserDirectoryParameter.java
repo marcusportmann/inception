@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>UserDirectoryParameter</code> class stores a parameter for a user directory as a
+ * The <b>UserDirectoryParameter</b> class stores a parameter for a user directory as a
  * name-value pair.
  *
  * @author Marcus Portmann
@@ -74,14 +74,14 @@ public class UserDirectoryParameter implements Serializable {
   @Size(max = 4000)
   private String value;
 
-  /** Constructs a new <code>UserDirectoryParameter</code>. */
+  /** Constructs a new <b>UserDirectoryParameter</b>. */
   public UserDirectoryParameter() {}
 
   /**
-   * Constructs a new <code>UserDirectoryParameter</code>.
+   * Constructs a new <b>UserDirectoryParameter</b>.
    *
    * @param name the name of the user directory parameter
-   * @param value the <code>BigDecimal</code> value for the user directory parameter
+   * @param value the <b>BigDecimal</b> value for the user directory parameter
    */
   public UserDirectoryParameter(String name, BigDecimal value) {
     this.name = name;
@@ -89,7 +89,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserDirectoryParameter</code>.
+   * Constructs a new <b>UserDirectoryParameter</b>.
    *
    * @param name the name of the user directory parameter
    * @param value the binary value for the user directory parameter
@@ -100,7 +100,7 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserDirectoryParameter</code>.
+   * Constructs a new <b>UserDirectoryParameter</b>.
    *
    * @param name the name of the user directory parameter
    * @param value the binary value for the user directory parameter
@@ -111,10 +111,10 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserDirectoryParameter</code>.
+   * Constructs a new <b>UserDirectoryParameter</b>.
    *
    * @param name the name of the user directory parameter
-   * @param value the <code>double</code> value for the user directory parameter
+   * @param value the <b>double</b> value for the user directory parameter
    */
   public UserDirectoryParameter(String name, double value) {
     this.name = name;
@@ -122,10 +122,10 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserDirectoryParameter</code>.
+   * Constructs a new <b>UserDirectoryParameter</b>.
    *
    * @param name the name of the user directory parameter
-   * @param value the <code>long</code> value for the user directory parameter
+   * @param value the <b>long</b> value for the user directory parameter
    */
   public UserDirectoryParameter(String name, long value) {
     this.name = name;
@@ -133,10 +133,10 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserDirectoryParameter</code>.
+   * Constructs a new <b>UserDirectoryParameter</b>.
    *
    * @param name the name of the user directory parameter
-   * @param value the <code>String</code> value for the user directory parameter
+   * @param value the <b>String</b> value for the user directory parameter
    */
   public UserDirectoryParameter(String name, String value) {
     this.name = name;
@@ -149,8 +149,8 @@ public class UserDirectoryParameter implements Serializable {
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @return <code>true</code> if the list of user directory parameters contains a user directory
-   *     parameter whose name matches the specified name or <code>false</code> otherwise
+   * @return <b>true</b> if the list of user directory parameters contains a user directory
+   *     parameter whose name matches the specified name or <b>false</b> otherwise
    */
   public static boolean contains(List<UserDirectoryParameter> parameters, String name) {
     for (UserDirectoryParameter parameter : parameters) {
@@ -194,12 +194,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>boolean</code> value for the user directory parameter with the specified name
+   * Returns the <b>boolean</b> value for the user directory parameter with the specified name
    * in the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @return the <code>boolean</code> value for the user directory parameter with the specified name
+   * @return the <b>boolean</b> value for the user directory parameter with the specified name
    *     in the specified list
    */
   public static boolean getBooleanValue(List<UserDirectoryParameter> parameters, String name)
@@ -225,12 +225,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>BigDecimal</code> value for the user directory parameter with the specified
+   * Returns the <b>BigDecimal</b> value for the user directory parameter with the specified
    * name in the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @return the <code>BigDecimal</code> value for the user directory parameter with the specified
+   * @return the <b>BigDecimal</b> value for the user directory parameter with the specified
    *     name in the specified list
    */
   public static BigDecimal getDecimalValue(List<UserDirectoryParameter> parameters, String name)
@@ -256,12 +256,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>double</code> value for the user directory parameter with the specified name
+   * Returns the <b>double</b> value for the user directory parameter with the specified name
    * in the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @return the <code>double</code> value for the user directory parameter with the specified name
+   * @return the <b>double</b> value for the user directory parameter with the specified name
    *     in the specified list
    */
   public static double getDoubleValue(List<UserDirectoryParameter> parameters, String name)
@@ -287,12 +287,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>int</code> value for the user directory parameter with the specified name in
+   * Returns the <b>int</b> value for the user directory parameter with the specified name in
    * the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @return the <code>int</code> value for the user directory parameter with the specified name in
+   * @return the <b>int</b> value for the user directory parameter with the specified name in
    *     the specified list
    */
   public static int getIntegerValue(List<UserDirectoryParameter> parameters, String name)
@@ -318,12 +318,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>long</code> value for the user directory parameter with the specified name in
+   * Returns the <b>long</b> value for the user directory parameter with the specified name in
    * the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @return the <code>long</code> value for the user directory parameter with the specified name in
+   * @return the <b>long</b> value for the user directory parameter with the specified name in
    *     the specified list
    */
   public static long getLongValue(List<UserDirectoryParameter> parameters, String name)
@@ -349,12 +349,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>String</code> value for the user directory parameter with the specified name
+   * Returns the <b>String</b> value for the user directory parameter with the specified name
    * in the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @return the <code>String</code> value for the user directory parameter with the specified name
+   * @return the <b>String</b> value for the user directory parameter with the specified name
    *     in the specified list
    */
   public static String getStringValue(List<UserDirectoryParameter> parameters, String name)
@@ -413,12 +413,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>BigDecimal</code> value for the user directory parameter with the specified name
+   * Set the <b>BigDecimal</b> value for the user directory parameter with the specified name
    * in the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @param value the <code>BigDecimal</code> value for the user directory parameter
+   * @param value the <b>BigDecimal</b> value for the user directory parameter
    */
   public static void setDecimalValue(
       List<UserDirectoryParameter> parameters, String name, BigDecimal value)
@@ -439,12 +439,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>double</code> value for the user directory parameter with the specified name in
+   * Set the <b>double</b> value for the user directory parameter with the specified name in
    * the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @param value the <code>double</code> value for the user directory parameter
+   * @param value the <b>double</b> value for the user directory parameter
    */
   public static void setDoubleValue(
       List<UserDirectoryParameter> parameters, String name, double value)
@@ -465,12 +465,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>int</code> value for the user directory parameter with the specified name in the
+   * Set the <b>int</b> value for the user directory parameter with the specified name in the
    * specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @param value the <code>int</code> value for the user directory parameter
+   * @param value the <b>int</b> value for the user directory parameter
    */
   public static void setIntegerValue(
       List<UserDirectoryParameter> parameters, String name, int value)
@@ -491,12 +491,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>long</code> value for the user directory parameter with the specified name in the
+   * Set the <b>long</b> value for the user directory parameter with the specified name in the
    * specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @param value the <code>long</code> value for the user directory parameter
+   * @param value the <b>long</b> value for the user directory parameter
    */
   public static void setLongValue(List<UserDirectoryParameter> parameters, String name, long value)
       throws UserDirectoryParameterException {
@@ -516,12 +516,12 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>String</code> value for the user directory parameter with the specified name in
+   * Set the <b>String</b> value for the user directory parameter with the specified name in
    * the specified list.
    *
    * @param parameters the user directory parameters to search
    * @param name the name of the user directory parameter to search for
-   * @param value the <code>String</code> value for the user directory parameter
+   * @param value the <b>String</b> value for the user directory parameter
    */
   public static void setStringValue(
       List<UserDirectoryParameter> parameters, String name, String value)
@@ -558,9 +558,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>BigDecimal</code> value for the user directory parameter.
+   * Returns the <b>BigDecimal</b> value for the user directory parameter.
    *
-   * @return the <code>BigDecimal</code> value for the user directory parameter
+   * @return the <b>BigDecimal</b> value for the user directory parameter
    */
   @JsonIgnore
   public BigDecimal getDecimalValue() throws UserDirectoryParameterException {
@@ -574,9 +574,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>double</code> value for the user directory parameter.
+   * Returns the <b>double</b> value for the user directory parameter.
    *
-   * @return the <code>double</code> value for the user directory parameter
+   * @return the <b>double</b> value for the user directory parameter
    */
   @JsonIgnore
   public double getDoubleValue() throws UserDirectoryParameterException {
@@ -590,9 +590,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>int</code> value for the user directory parameter.
+   * Returns the <b>int</b> value for the user directory parameter.
    *
-   * @return the <code>int</code> value for the user directory parameter
+   * @return the <b>int</b> value for the user directory parameter
    */
   @JsonIgnore
   public int getIntegerValue() throws UserDirectoryParameterException {
@@ -606,9 +606,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>long</code> value for the user directory parameter.
+   * Returns the <b>long</b> value for the user directory parameter.
    *
-   * @return the <code>long</code> value for the user directory parameter
+   * @return the <b>long</b> value for the user directory parameter
    */
   @JsonIgnore
   public long getLongValue() throws UserDirectoryParameterException {
@@ -631,9 +631,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>String</code> value for the user directory parameter.
+   * Returns the <b>String</b> value for the user directory parameter.
    *
-   * @return the <code>String</code> value for the user directory parameter
+   * @return the <b>String</b> value for the user directory parameter
    */
   @JsonIgnore
   public String getStringValue() {
@@ -641,9 +641,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Returns the <code>String</code> value for the user directory parameter.
+   * Returns the <b>String</b> value for the user directory parameter.
    *
-   * @return the <code>String</code> value for the user directory parameter
+   * @return the <b>String</b> value for the user directory parameter
    */
   public String getValue() {
     return value;
@@ -670,9 +670,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>boolean</code> value for the user directory parameter.
+   * Set the <b>boolean</b> value for the user directory parameter.
    *
-   * @param value the <code>boolean</code> value for the user directory parameter
+   * @param value the <b>boolean</b> value for the user directory parameter
    */
   @JsonIgnore
   public void setBooleanValue(boolean value) {
@@ -680,9 +680,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>BigDecimal</code> value for the user directory parameter.
+   * Set the <b>BigDecimal</b> value for the user directory parameter.
    *
-   * @param value the <code>BigDecimal</code> value for the user directory parameter
+   * @param value the <b>BigDecimal</b> value for the user directory parameter
    */
   @JsonIgnore
   public void setDecimalValue(BigDecimal value) {
@@ -690,9 +690,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>double</code> value for the user directory parameter.
+   * Set the <b>double</b> value for the user directory parameter.
    *
-   * @param value the <code>double</code> value for the user directory parameter
+   * @param value the <b>double</b> value for the user directory parameter
    */
   @JsonIgnore
   public void setDoubleValue(double value) {
@@ -700,9 +700,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>int</code> value for the user directory parameter.
+   * Set the <b>int</b> value for the user directory parameter.
    *
-   * @param value the <code>int</code> value for the user directory parameter
+   * @param value the <b>int</b> value for the user directory parameter
    */
   @JsonIgnore
   public void setIntegerValue(int value) {
@@ -710,9 +710,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>long</code> value for the user directory parameter.
+   * Set the <b>long</b> value for the user directory parameter.
    *
-   * @param value the <code>long</code> value for the user directory parameter
+   * @param value the <b>long</b> value for the user directory parameter
    */
   @JsonIgnore
   public void setLongValue(long value) {
@@ -729,9 +729,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>String</code> value for the user directory parameter.
+   * Set the <b>String</b> value for the user directory parameter.
    *
-   * @param value the <code>String</code> value for the user directory parameter
+   * @param value the <b>String</b> value for the user directory parameter
    */
   @JsonIgnore
   public void setStringValue(String value) {
@@ -739,9 +739,9 @@ public class UserDirectoryParameter implements Serializable {
   }
 
   /**
-   * Set the <code>String</code> value for the user directory parameter.
+   * Set the <b>String</b> value for the user directory parameter.
    *
-   * @param value the <code>String</code> value for the user directory parameter
+   * @param value the <b>String</b> value for the user directory parameter
    */
   public void setValue(String value) {
     this.value = value;

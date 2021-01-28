@@ -24,8 +24,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 /**
- * The <code>ArchivedMessageRepository</code> interface declares the repository for the <code>
- * ArchivedMessage</code> domain type.
+ * The <b>ArchivedMessageRepository</b> interface declares the repository for the <b>
+ * ArchivedMessage</b> domain type.
  *
  * @author Marcus Portmann
  */

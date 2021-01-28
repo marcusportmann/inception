@@ -45,13 +45,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>ContactMechanism</code> class holds the information for a contact mechanism.
+ * The <b>ContactMechanism</b> class holds the information for a contact mechanism.
  *
- * <p><b>NOTE:</b> The JPA 2.2 spec (10.6) does not support attribute converters for attributes
- * annotated with @Id. If Enum types are used for these attributes then the ordinal value is always
- * used. As a result, the type and purpose attributes for this class are Strings and the Getter and
- * Setters (a.k.a. Accessors and Mutators) convert to and from the Enum types. A consequence of this
- * is that the attributes are marked as @JsonIgnore and @XmlTransient and the Getters are annotated
+ * <p>The JPA 2.2 spec (10.6) does not support attribute converters for attributes annotated
+ * with @Id. If Enum types are used for these attributes then the ordinal value is always used. As a
+ * result, the type and purpose attributes for this class are Strings and the Getter and Setters
+ * (a.k.a. Accessors and Mutators) convert to and from the Enum types. A consequence of this is that
+ * the attributes are marked as @JsonIgnore and @XmlTransient and the Getters are annotated
  * with @JsonProperty and @XmlElement.
  *
  * @author Marcus Portmann
@@ -86,7 +86,7 @@ public class ContactMechanism implements Serializable {
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
-  private Party party;
+  private PartyBase party;
 
   /** The contact mechanism purpose. */
   @JsonIgnore
@@ -122,11 +122,11 @@ public class ContactMechanism implements Serializable {
   @Column(name = "value", length = 200, nullable = false)
   private String value;
 
-  /** Constructs a new <code>ContactMechanism</code>. */
+  /** Constructs a new <b>ContactMechanism</b>. */
   public ContactMechanism() {}
 
   /**
-   * Constructs a new <code>ContactMechanism</code>.
+   * Constructs a new <b>ContactMechanism</b>.
    *
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
@@ -143,8 +143,7 @@ public class ContactMechanism implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -182,7 +181,7 @@ public class ContactMechanism implements Serializable {
    * @return the party the contact mechanism is associated with
    */
   @Schema(hidden = true)
-  public Party getParty() {
+  public PartyBase getParty() {
     return party;
   }
 
@@ -246,7 +245,7 @@ public class ContactMechanism implements Serializable {
    * @param party the party the contact mechanism is associated with
    */
   @Schema(hidden = true)
-  public void setParty(Party party) {
+  public void setParty(PartyBase party) {
     this.party = party;
   }
 

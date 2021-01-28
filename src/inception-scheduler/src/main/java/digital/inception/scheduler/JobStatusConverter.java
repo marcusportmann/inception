@@ -22,8 +22,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>JobStatusConverter</code> class implements the custom JPA converter for the <code>
- * JobStatus</code> enumeration.
+ * The <b>JobStatusConverter</b> class implements the custom JPA converter for the <b>
+ * JobStatus</b> enumeration.
  *
  * @author Marcus Portmann
  */

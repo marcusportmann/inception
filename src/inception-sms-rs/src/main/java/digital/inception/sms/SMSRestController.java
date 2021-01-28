@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>SMSRestController</code> class.
+ * The <b>SMSRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -42,7 +42,7 @@ public class SMSRestController extends SecureRestController {
   private final ISMSService smsService;
 
   /**
-   * Constructs a new <code>SMSRestController</code>.
+   * Constructs a new <b>SMSRestController</b>.
    *
    * @param smsService the SMS Service
    */

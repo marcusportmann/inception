@@ -58,7 +58,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>SecurityRestController</code> class.
+ * The <b>SecurityRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -79,7 +79,7 @@ public class SecurityRestController extends SecureRestController {
   private final Validator validator;
 
   /**
-   * Constructs a new <code>SecurityRestController</code>.
+   * Constructs a new <b>SecurityRestController</b>.
    *
    * @param securityService the Security Service
    * @param validator the JSR-303 validator
@@ -3294,8 +3294,8 @@ public class SecurityRestController extends SecureRestController {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
-   * @return <code>true</code> if the user associated with the authenticated request has access to
-   *     the user directory or <code>false</code> otherwise
+   * @return <b>true</b> if the user associated with the authenticated request has access to
+   *     the user directory or <b>false</b> otherwise
    */
   protected boolean hasAccessToUserDirectory(UUID userDirectoryId) throws InvalidArgumentException {
     if (userDirectoryId == null) {

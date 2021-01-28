@@ -23,8 +23,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToTenantStatusConverter</code> class implements the Spring converter that
- * converts a <code>String</code> type into a <code>TenantStatus</code> type.
+ * The <b>StringToTenantStatusConverter</b> class implements the Spring converter that
+ * converts a <b>String</b> type into a <b>TenantStatus</b> type.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class StringToTenantStatusConverter implements Converter<String, TenantStatus> {
 
-  /** Constructs a new <code>StringToTenantStatusConverter</code>. */
+  /** Constructs a new <b>StringToTenantStatusConverter</b>. */
   public StringToTenantStatusConverter() {}
 
   @Override

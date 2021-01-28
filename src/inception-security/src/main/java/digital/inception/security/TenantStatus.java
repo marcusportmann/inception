@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>TenantStatus</code> enumeration defines the possible statuses for a tenant.
+ * The <b>TenantStatus</b> enumeration defines the possible statuses for a tenant.
  *
  * @author Marcus Portmann
  */

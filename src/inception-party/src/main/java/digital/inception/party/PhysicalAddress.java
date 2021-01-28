@@ -53,7 +53,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>PhysicalAddress</code> class holds the information for a physical address.
+ * The <b>PhysicalAddress</b> class holds the information for a physical address.
  *
  * @author Marcus Portmann
  */
@@ -125,8 +125,8 @@ public class PhysicalAddress implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The building floor for the physical address. */
-  @Schema(description = "The building floor for the physical address")
+  /** The optional building floor for the physical address. */
+  @Schema(description = "The optional building floor for the physical address")
   @JsonProperty
   @XmlElement(name = "BuildingFloor")
   @Size(max = 20)
@@ -136,13 +136,12 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "building_floor", length = 20)
   private String buildingFloor;
 
-  /** The building name for the physical address. */
+  /** The building name for the physical address that is required for a building address. */
   @Schema(
       description =
-          "The building name for the physical address that is required for a building address",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "BuildingName", required = true)
+          "The building name for the physical address that is required for a building address")
+  @JsonProperty
+  @XmlElement(name = "BuildingName")
   @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.BuildingName.Pattern.message}",
@@ -150,8 +149,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "building_name", length = 50)
   private String buildingName;
 
-  /** The building room for the physical address. */
-  @Schema(description = "The building room for the physical address")
+  /** The optional building room for the physical address. */
+  @Schema(description = "The optional building room for the physical address")
   @JsonProperty
   @XmlElement(name = "BuildingRoom")
   @Size(max = 30)
@@ -161,10 +160,12 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "building_room", length = 30)
   private String buildingRoom;
 
-  /** The town or town or city for the physical address. */
-  @Schema(description = "The town or town or city for the physical address", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "City", required = true)
+  /** The town or city for the physical address that is required for a building, complex, postal, site or street address. */
+  @Schema(
+      description =
+          "The town or city for the physical address that is required for a building, complex, postal, site or street address")
+  @JsonProperty
+  @XmlElement(name = "City")
   @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.City.Pattern.message}",
@@ -172,13 +173,12 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "city", length = 50)
   private String city;
 
-  /** The complex name for the physical address. */
+  /** The complex name for the physical address that is required for a complex address. */
   @Schema(
       description =
-          "The complex name for the physical address that is required for a complex address",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "ComplexName", required = true)
+          "The complex name for the physical address that is required for a complex address")
+  @JsonProperty
+  @XmlElement(name = "ComplexName")
   @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.ComplexName.Pattern.message}",
@@ -186,13 +186,12 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "complex_name", length = 50)
   private String complexName;
 
-  /** The complex unit number for the physical address. */
+  /** The complex unit number for the physical address that is required for a complex address. */
   @Schema(
       description =
-          "The complex unit number for the physical address that is required for a complex address",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "ComplexUnitNumber", required = true)
+          "The complex unit number for the physical address that is required for a complex address")
+  @JsonProperty
+  @XmlElement(name = "ComplexUnitNumber")
   @Size(max = 20)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.ComplexUnitNumber.Pattern.message}",
@@ -218,8 +217,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The farm description for the physical address. */
-  @Schema(description = "The farm description for the physical address")
+  /** The optional farm description for the physical address. */
+  @Schema(description = "The optional farm description for the physical address")
   @JsonProperty
   @XmlElement(name = "FarmDescription")
   @Size(max = 50)
@@ -229,8 +228,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "farm_description", length = 50)
   private String farmDescription;
 
-  /** The farm name for the physical address. */
-  @Schema(description = "The farm name for the physical address")
+  /** The optional farm name for the physical address. */
+  @Schema(description = "The optional farm name for the physical address")
   @JsonProperty
   @XmlElement(name = "FarmName")
   @Size(max = 50)
@@ -240,12 +239,11 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "farm_name", length = 50)
   private String farmName;
 
-  /** The farm number for the physical address. */
+  /** The farm number for the physical address that is required for a farm address. */
   @Schema(
-      description = "The farm number for the physical address that is required for a farm address",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "FarmNumber", required = true)
+      description = "The farm number for the physical address that is required for a farm address")
+  @JsonProperty
+  @XmlElement(name = "FarmNumber")
   @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.FarmNumber.Pattern.message}",
@@ -275,13 +273,12 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "latitude", length = 50)
   private String latitude;
 
-  /** The address line 1 for the physical address. */
+  /** The address line 1 for the physical address that is required for an international, postal or unstructured address. */
   @Schema(
       description =
-          "The address line 1 for the physical address that is required for an international or unstructured address",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Line1", required = true)
+          "The address line 1 for the physical address that is required for an international, postal or unstructured address")
+  @JsonProperty
+  @XmlElement(name = "Line1")
   @Size(max = 100)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.Line1.Pattern.message}",
@@ -289,8 +286,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "line1", length = 100)
   private String line1;
 
-  /** The address line 2 for the physical address. */
-  @Schema(description = "The address line 2 for the physical address")
+  /** The optional address line 2 for the physical address. */
+  @Schema(description = "The optional address line 2 for the physical address")
   @JsonProperty
   @XmlElement(name = "Line2")
   @Size(max = 100)
@@ -300,8 +297,8 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "line2", length = 100)
   private String line2;
 
-  /** The address line 3 for the physical address. */
-  @Schema(description = "The address line 3 for the physical address")
+  /** The optional address line 3 for the physical address. */
+  @Schema(description = "The optional address line 3 for the physical address")
   @JsonProperty
   @XmlElement(name = "Line3")
   @Size(max = 100)
@@ -328,7 +325,7 @@ public class PhysicalAddress implements Serializable {
   @XmlTransient
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
-  private Party party;
+  private PartyBase party;
 
   /** The postal code for the physical address. */
   @Schema(description = "The postal code for the physical address", required = true)
@@ -358,12 +355,11 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "region", length = 30)
   private String region;
 
-  /** The site block for the physical address. */
+  /** The site block for the physical address that is required for a site address. */
   @Schema(
-      description = "The site block for the physical address that is required for a site address",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SiteBlock", required = true)
+      description = "The site block for the physical address that is required for a site address")
+  @JsonProperty
+  @XmlElement(name = "SiteBlock")
   @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.SiteBlock.Pattern.message}",
@@ -371,12 +367,11 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "site_block", length = 50)
   private String siteBlock;
 
-  /** The site number for the physical address. */
+  /** The site number for the physical address that is required for a site address. */
   @Schema(
-      description = "The site number for the physical address that is required for a site address",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "SiteNumber", required = true)
+      description = "The site number for the physical address that is required for a site address")
+  @JsonProperty
+  @XmlElement(name = "SiteNumber")
   @Size(max = 50)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.SiteNumber.Pattern.message}",
@@ -384,7 +379,7 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "site_number", length = 50)
   private String siteNumber;
 
-  /** The street name for the physical address. */
+  /** The street name for the physical address that is required for a street address. */
   @Schema(
       description =
           "The street name for the physical address that is required for a street address")
@@ -397,7 +392,7 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "street_name", length = 100)
   private String streetName;
 
-  /** The street number for the physical address. */
+  /** The street number for the physical address that is required for a street address. */
   @Schema(
       description =
           "The street number for the physical address that is required for a street address")
@@ -436,11 +431,11 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>PhysicalAddress</code>. */
+  /** Constructs a new <b>PhysicalAddress</b>. */
   public PhysicalAddress() {}
 
   /**
-   * Constructs a new <code>PhysicalAddress</code>.
+   * Constructs a new <b>PhysicalAddress</b>.
    *
    * @param type the physical address type
    */
@@ -450,7 +445,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Constructs a new <code>PhysicalAddress</code>.
+   * Constructs a new <b>PhysicalAddress</b>.
    *
    * @param type the physical address type
    * @param purpose the physical address purpose
@@ -462,7 +457,7 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Constructs a new <code>PhysicalAddress</code>.
+   * Constructs a new <b>PhysicalAddress</b>.
    *
    * @param type the physical address type
    * @param purposes the codes for the physical address purposes
@@ -488,8 +483,7 @@ public class PhysicalAddress implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -511,9 +505,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the building floor for the physical address.
+   * Returns the optional building floor for the physical address.
    *
-   * @return the building floor for the physical address
+   * @return the optional building floor for the physical address
    */
   public String getBuildingFloor() {
     return buildingFloor;
@@ -529,18 +523,18 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the building room for the physical address.
+   * Returns the optional building room for the physical address.
    *
-   * @return building room for the physical address
+   * @return the optional building room for the physical address
    */
   public String getBuildingRoom() {
     return buildingRoom;
   }
 
   /**
-   * Returns the town or town or city for the physical address.
+   * Returns the town or city for the physical address.
    *
-   * @return the town or town or city for the physical address
+   * @return the town or city for the physical address
    */
   public String getCity() {
     return city;
@@ -583,18 +577,18 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the farm description for the physical address.
+   * Returns the optional farm description for the physical address.
    *
-   * @return the farm description for the physical address
+   * @return the optional farm description for the physical address
    */
   public String getFarmDescription() {
     return farmDescription;
   }
 
   /**
-   * Returns the farm name for the physical address.
+   * Returns the optional farm name for the physical address.
    *
-   * @return the farm name for the physical address
+   * @return the optional farm name for the physical address
    */
   public String getFarmName() {
     return farmName;
@@ -637,18 +631,18 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the address line 2 for the physical address.
+   * Returns the optional address line 2 for the physical address.
    *
-   * @return the address line 2 for the physical address
+   * @return the optional address line 2 for the physical address
    */
   public String getLine2() {
     return line2;
   }
 
   /**
-   * Returns the address line 3 for the physical address.
+   * Returns the optional address line 3 for the physical address.
    *
-   * @return the address line 3 for the physical address
+   * @return the optional address line 3 for the physical address
    */
   public String getLine3() {
     return line3;
@@ -669,7 +663,7 @@ public class PhysicalAddress implements Serializable {
    * @return the party the physical address is associated with
    */
   @Schema(hidden = true)
-  public Party getParty() {
+  public PartyBase getParty() {
     return party;
   }
 
@@ -788,9 +782,9 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the building floor for the physical address.
+   * Set the optional building floor for the physical address.
    *
-   * @param buildingFloor the building floor for the physical address
+   * @param buildingFloor the optional building floor for the physical address
    */
   public void setBuildingFloor(String buildingFloor) {
     this.buildingFloor = buildingFloor;
@@ -806,18 +800,18 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the building room for the physical address.
+   * Set the optional building room for the physical address.
    *
-   * @param buildingRoom the building room for the physical address
+   * @param buildingRoom the optional building room for the physical address
    */
   public void setBuildingRoom(String buildingRoom) {
     this.buildingRoom = buildingRoom;
   }
 
   /**
-   * Set the town or town or city for the physical address.
+   * Set the town or city for the physical address.
    *
-   * @param city the town or town or city for the physical address
+   * @param city the town or city for the physical address
    */
   public void setCity(String city) {
     this.city = city;
@@ -851,18 +845,18 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the farm description for the physical address.
+   * Set the optional farm description for the physical address.
    *
-   * @param farmDescription the farm description for the physical address
+   * @param farmDescription the optional farm description for the physical address
    */
   public void setFarmDescription(String farmDescription) {
     this.farmDescription = farmDescription;
   }
 
   /**
-   * Set the farm name for the physical address.
+   * Set the optional farm name for the physical address.
    *
-   * @param farmName the farm name for the physical address
+   * @param farmName the optional farm name for the physical address
    */
   public void setFarmName(String farmName) {
     this.farmName = farmName;
@@ -905,18 +899,18 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the address line 2 for the physical address.
+   * Set the optional address line 2 for the physical address.
    *
-   * @param line2 the address line 2 for the physical address
+   * @param line2 the optional address line 2 for the physical address
    */
   public void setLine2(String line2) {
     this.line2 = line2;
   }
 
   /**
-   * Set the address line 3 for the physical address.
+   * Set the optional address line 3 for the physical address.
    *
-   * @param line3 the address line 3 for the physical address
+   * @param line3 the optional address line 3 for the physical address
    */
   public void setLine3(String line3) {
     this.line3 = line3;
@@ -937,7 +931,7 @@ public class PhysicalAddress implements Serializable {
    * @param party the party the physical address is associated with
    */
   @Schema(hidden = true)
-  public void setParty(Party party) {
+  public void setParty(PartyBase party) {
     this.party = party;
   }
 

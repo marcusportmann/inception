@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * An <code>InvalidSecurityCodeException</code> is thrown to indicate that a security operation
+ * An <b>InvalidSecurityCodeException</b> is thrown to indicate that a security operation
  * failed as a result of an invalid security code.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -47,7 +46,7 @@ public class InvalidSecurityCodeException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <code>InvalidSecurityCodeException</code>. */
+  /** Constructs a new <b>InvalidSecurityCodeException</b>. */
   public InvalidSecurityCodeException() {
     super("InvalidSecurityCodeError", "Invalid security code");
   }

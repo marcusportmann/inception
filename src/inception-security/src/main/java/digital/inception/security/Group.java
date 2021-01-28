@@ -51,7 +51,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 /**
- * The <code>Group</code> class holds the information for a group.
+ * The <b>Group</b> class holds the information for a group.
  *
  * @author Marcus Portmann
  */
@@ -145,11 +145,11 @@ public class Group implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
   private Set<User> users = new HashSet<>();
 
-  /** Constructs a new <code>Group</code>. */
+  /** Constructs a new <b>Group</b>. */
   public Group() {}
 
   /**
-   * Constructs a new <code>Group</code>.
+   * Constructs a new <b>Group</b>.
    *
    * @param name the name of the group
    */
@@ -158,7 +158,7 @@ public class Group implements Serializable {
   }
 
   /**
-   * Constructs a new <code>Group</code>.
+   * Constructs a new <b>Group</b>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the
    *     group is associated with
@@ -199,8 +199,8 @@ public class Group implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

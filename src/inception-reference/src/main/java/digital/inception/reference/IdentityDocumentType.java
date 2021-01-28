@@ -16,11 +16,13 @@
 
 package digital.inception.reference;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,10 +36,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
- * The <code>IdentityDocumentType</code> class holds the information for a possible identity
- * document type.
+ * The <b>IdentityDocumentType</b> class holds the information for a possible identity document
+ * type.
  *
  * @author Marcus Portmann
  */
@@ -45,12 +48,28 @@ import javax.xml.bind.annotation.XmlType;
     description =
         "A type of legal document which may be used to verify aspects of a person's identity")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
+@JsonPropertyOrder({
+  "code",
+  "localeId",
+  "sortIndex",
+  "name",
+  "description",
+  "countryOfIssue",
+  "partyTypes"
+})
 @XmlRootElement(name = "IdentityDocumentType", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "IdentityDocumentType",
     namespace = "http://reference.inception.digital",
-    propOrder = {"code", "localeId", "sortIndex", "name", "description", "countryOfIssue"})
+    propOrder = {
+      "code",
+      "localeId",
+      "sortIndex",
+      "name",
+      "description",
+      "countryOfIssue",
+      "partyTypes"
+    })
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "identity_document_types")
@@ -71,8 +90,7 @@ public class IdentityDocumentType implements Serializable {
 
   /** The optional code for the country of issue for the identity document type. */
   @Schema(
-      description =
-          "The optional code for the country of issue for the identity document type",
+      description = "The optional code for the country of issue for the identity document type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
@@ -111,6 +129,14 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
+  /**
+   * The comma-delimited codes for the party types the identity document type is associated with.
+   */
+  @NotNull
+  @Size(min = 1, max = 300)
+  @Column(name = "party_types", length = 300, nullable = false)
+  private String partyTypes;
+
   /** The sort index for the identity document type. */
   @Schema(description = "The sort index for the identity document type", required = true)
   @JsonProperty(required = true)
@@ -119,15 +145,14 @@ public class IdentityDocumentType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>IdentityDocumentType</code>. */
+  /** Constructs a new <b>IdentityDocumentType</b>. */
   public IdentityDocumentType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -194,6 +219,20 @@ public class IdentityDocumentType implements Serializable {
   }
 
   /**
+   * Returns the codes for the party types the identity document type is associated with.
+   *
+   * @return the codes for the party types the identity document type is associated with
+   */
+  @Schema(
+      description = "The codes for the party types the identity document type is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PartyTypes", required = true)
+  public String[] getPartyTypes() {
+    return StringUtils.commaDelimitedListToStringArray(partyTypes);
+  }
+
+  /**
    * Returns the sort index for the identity document type.
    *
    * @return the sort index for the identity document type
@@ -224,8 +263,7 @@ public class IdentityDocumentType implements Serializable {
   /**
    * Set the optional code for the country of issue for the identity document type.
    *
-   * @param countryOfIssue the optional code for the country of issue for the identity
-   *     document type
+   * @param countryOfIssue the optional code for the country of issue for the identity document type
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;
@@ -256,6 +294,25 @@ public class IdentityDocumentType implements Serializable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Set the codes for the party types the identity document type is associated with.
+   *
+   * @param partyTypes the codes for the party types the identity document type is associated with
+   */
+  public void setPartyTypes(String[] partyTypes) {
+    this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
+  }
+
+  /**
+   * Set the codes for the party types the identity document type is associated with.
+   *
+   * @param partyTypes the codes for the party types the identity document type is associated with
+   */
+  @JsonIgnore
+  public void setPartyTypes(Collection<String> partyTypes) {
+    this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
   }
 
   /**

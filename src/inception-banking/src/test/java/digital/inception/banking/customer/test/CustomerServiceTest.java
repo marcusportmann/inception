@@ -47,9 +47,9 @@
 // import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 //
 /// **
-// * The <code>CustomerServiceTest</code> class contains the implementation of the JUnit tests for
+// * The <b>CustomerServiceTest</b> class contains the implementation of the JUnit tests for
 // the
-// * <code>CustomerService</code> class.
+// * <b>CustomerService</b> class.
 // *
 // * @author Marcus Portmann
 // */

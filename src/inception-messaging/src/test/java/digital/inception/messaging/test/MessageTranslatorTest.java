@@ -25,8 +25,8 @@ import digital.inception.messaging.MessageTranslator;
 import org.junit.Test;
 
 /**
- * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit tests for
- * the <code>MessageTranslator</code> class.
+ * The <b>MessagingServiceTest</b> class contains the implementation of the JUnit tests for
+ * the <b>MessageTranslator</b> class.
  *
  * @author Marcus Portmann
  */

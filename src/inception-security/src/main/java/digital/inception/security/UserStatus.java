@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>UserStatus</code> enumeration defines the possible statuses for a user.
+ * The <b>UserStatus</b> enumeration defines the possible statuses for a user.
  *
  * @author Marcus Portmann
  */

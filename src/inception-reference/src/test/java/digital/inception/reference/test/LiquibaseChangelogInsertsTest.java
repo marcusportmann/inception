@@ -55,7 +55,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <code>LiquibaseChangelogInsertsTest</code>.
+ * The <b>LiquibaseChangelogInsertsTest</b>.
  *
  * @author Marcus Portmann
  */

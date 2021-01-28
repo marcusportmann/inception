@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>TimeToContactRepository</code> interface declares the repository for the <code>
- * TimeToContact</code> domain type.
+ * The <b>TimeToContactRepository</b> interface declares the repository for the <b>
+ * TimeToContact</b> domain type.
  *
  * @author Marcus Portmann
  */

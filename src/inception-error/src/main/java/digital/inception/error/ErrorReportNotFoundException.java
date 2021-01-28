@@ -25,11 +25,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>ErrorReportNotFoundException</code> exception is thrown to indicate that the required
+ * The <b>ErrorReportNotFoundException</b> exception is thrown to indicate that the required
  * error report could not be found when working with the Error Service.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +44,7 @@ public class ErrorReportNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ErrorReportNotFoundException</code>.
+   * Constructs a new <b>ErrorReportNotFoundException</b>.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
    */

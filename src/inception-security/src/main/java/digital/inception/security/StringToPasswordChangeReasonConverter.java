@@ -23,8 +23,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToPasswordChangeReasonConverter</code> class implements the Spring converter that
- * converts a <code>String</code> type into a <code>PasswordChangeReason</code> type.
+ * The <b>StringToPasswordChangeReasonConverter</b> class implements the Spring converter that
+ * converts a <b>String</b> type into a <b>PasswordChangeReason</b> type.
  *
  * @author Marcus Portmann
  */
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 public class StringToPasswordChangeReasonConverter
     implements Converter<String, PasswordChangeReason> {
 
-  /** Constructs a new <code>StringToPasswordChangeReasonConverter</code>. */
+  /** Constructs a new <b>StringToPasswordChangeReasonConverter</b>. */
   public StringToPasswordChangeReasonConverter() {}
 
   @Override

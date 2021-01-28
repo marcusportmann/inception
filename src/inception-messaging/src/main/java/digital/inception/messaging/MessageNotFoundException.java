@@ -29,11 +29,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * The <code>MessageNotFoundException</code> exception is thrown to indicate an error condition as a
+ * The <b>MessageNotFoundException</b> exception is thrown to indicate an error condition as a
  * result of a message that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -49,7 +48,7 @@ public class MessageNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>MessageNotFoundException</code>.
+   * Constructs a new <b>MessageNotFoundException</b>.
    *
    * @param messageId the Universally Unique Identifier (UUID) for the message
    */

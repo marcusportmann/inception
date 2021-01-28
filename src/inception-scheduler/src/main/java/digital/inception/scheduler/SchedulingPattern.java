@@ -26,7 +26,7 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 /**
- * The <code>SchedulingPattern</code> class supports a UNIX crontab-like pattern is a string split
+ * The <b>SchedulingPattern</b> class supports a UNIX crontab-like pattern is a string split
  * in five space separated parts.
  *
  * <p>Each part is intented as:
@@ -228,8 +228,8 @@ public class SchedulingPattern {
    * Validates a string as a scheduling pattern.
    *
    * @param schedulingPattern the pattern to validate
-   * @return <code>true</code> if the given string represents a valid scheduling pattern or <code>
-   * false</code> otherwise
+   * @return <b>true</b> if the given string represents a valid scheduling pattern or <b>
+   * false</b> otherwise
    */
   @SuppressWarnings("unused")
   public static boolean validate(String schedulingPattern) {
@@ -261,12 +261,12 @@ public class SchedulingPattern {
   }
 
   /**
-   * Returns <code>true</code> if the EPOCH timestamp in milliseconds matches the pattern, according
+   * Returns <b>true</b> if the EPOCH timestamp in milliseconds matches the pattern, according
    * to the given time zone.
    *
    * @param timezone the time zone
    * @param timestamp the EPOCH timestamp in milliseconds
-   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
+   * @return <b>true</b> if the given timestamp matches the pattern or <b>false</b>
    *     otherwise
    */
   public boolean match(TimeZone timezone, long timestamp) {
@@ -307,11 +307,11 @@ public class SchedulingPattern {
   }
 
   /**
-   * Returns <code>true</code> if the given EPOCH timestamp in milliseconds matches the pattern,
+   * Returns <b>true</b> if the given EPOCH timestamp in milliseconds matches the pattern,
    * according to the system default time zone.
    *
    * @param timestamp the EPOCH timestamp in milliseconds
-   * @return <code>true</code> if the given timestamp matches the pattern or <code>false</code>
+   * @return <b>true</b> if the given timestamp matches the pattern or <b>false</b>
    *     otherwise
    */
   public boolean match(long timestamp) {
@@ -328,11 +328,11 @@ public class SchedulingPattern {
   }
 
   /**
-   * A <code>ValueMatcher</code> utility builder.
+   * A <b>ValueMatcher</b> utility builder.
    *
-   * @param str the pattern part for the <code>ValueMatcher</code> creation
+   * @param str the pattern part for the <b>ValueMatcher</b> creation
    * @param parser the parser used to parse the values
-   * @return the requested <code>ValueMatcher</code>
+   * @return the requested <b>ValueMatcher</b>
    */
   private ValueMatcher buildValueMatcher(String str, ValueParser parser) throws Exception {
     if ((str.length() == 1) && str.equals("*")) {

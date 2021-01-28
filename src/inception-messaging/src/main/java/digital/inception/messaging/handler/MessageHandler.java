@@ -17,7 +17,7 @@
 package digital.inception.messaging.handler;
 
 /**
- * The <code>MessageHandler</code> class provides the base class that all message handlers should be
+ * The <b>MessageHandler</b> class provides the base class that all message handlers should be
  * derived from.
  *
  * @author Marcus Portmann
@@ -32,7 +32,7 @@ public abstract class MessageHandler implements IMessageHandler {
   private final String name;
 
   /**
-   * Constructs a new <code>MessageHandler</code>.
+   * Constructs a new <b>MessageHandler</b>.
    *
    * @param name the name of the message handler
    * @param messageHandlerConfig the configuration information for the message handler

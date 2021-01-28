@@ -48,8 +48,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 
 
 /**
- * The <code>ReportingServiceTest</code> class contains the implementation of the JUnit tests for
- * the <code>ReportingService</code> class.
+ * The <b>ReportingServiceTest</b> class contains the implementation of the JUnit tests for
+ * the <b>ReportingService</b> class.
  *
  * @author Marcus Portmann
  */

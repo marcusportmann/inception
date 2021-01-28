@@ -19,7 +19,7 @@ package digital.inception.rs;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <code>InceptionRestServiceConfiguration</code> class provides the configuration for the
+ * The <b>InceptionRestServiceConfiguration</b> class provides the configuration for the
  * <b>inception-rs</b> library.
  *
  * @author Marcus Portmann

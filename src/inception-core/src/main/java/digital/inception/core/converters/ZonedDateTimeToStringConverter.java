@@ -22,8 +22,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>ZonedDateTimeToStringConverter</code> class implements the Spring converter that
- * converts a <code>ZonedDateTime</code> type into a <code>String</code> type.
+ * The <b>ZonedDateTimeToStringConverter</b> class implements the Spring converter that
+ * converts a <b>ZonedDateTime</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 @Component
 public final class ZonedDateTimeToStringConverter implements Converter<ZonedDateTime, String> {
 
-  /** Constructs a new <code>ZonedDateTimeToStringConverter</code>. */
+  /** Constructs a new <b>ZonedDateTimeToStringConverter</b>. */
   public ZonedDateTimeToStringConverter() {}
 
   @Override

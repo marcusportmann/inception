@@ -19,9 +19,9 @@ package digital.inception.codes;
 import java.io.Serializable;
 
 /**
- * The <code>CodeProviderConfig</code> class stores the configuration information for a code
- * provider. This is the configuration read from the META-INF/code-providers.xml configuration files
- * on the classpath.
+ * The <b>CodeProviderConfig</b> class stores the configuration information for a code provider.
+ * This is the configuration read from the META-INF/code-providers.xml configuration files on the
+ * classpath.
  *
  * @author Marcus Portmann
  */
@@ -31,13 +31,13 @@ public class CodeProviderConfig implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The fully qualified name of the class that implements the code provider. */
-  private String className;
+  private final String className;
 
   /** The name of the code provider. */
-  private String name;
+  private final String name;
 
   /**
-   * Constructs a new <code>CodeProviderConfig</code>.
+   * Constructs a new <b>CodeProviderConfig</b>.
    *
    * @param name the name of the code provider
    * @param className fully qualified name of the class that implements the code provider

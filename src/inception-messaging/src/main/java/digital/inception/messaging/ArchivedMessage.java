@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * The <code>ArchivedMessage</code> class holds the information for an archived message.
+ * The <b>ArchivedMessage</b> class holds the information for an archived message.
  *
  * @author Marcus Portmann
  */
@@ -164,11 +164,11 @@ public class ArchivedMessage {
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
-  /** Constructs a new <code>ArchivedMessage</code>. */
+  /** Constructs a new <b>ArchivedMessage</b>. */
   public ArchivedMessage() {}
 
   /**
-   * Constructs a new <code>ArchivedMessage</code>.
+   * Constructs a new <b>ArchivedMessage</b>.
    *
    * @param message the message to archive
    */
@@ -184,7 +184,7 @@ public class ArchivedMessage {
   }
 
   /**
-   * Constructs a new <code>ArchivedMessage</code>.
+   * Constructs a new <b>ArchivedMessage</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the message
    * @param username the username for the user associated with the message
@@ -220,8 +220,8 @@ public class ArchivedMessage {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

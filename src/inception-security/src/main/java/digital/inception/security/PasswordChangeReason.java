@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>PasswordChangeReason</code> enumeration defines the possible reasons for why a user's
+ * The <b>PasswordChangeReason</b> enumeration defines the possible reasons for why a user's
  * password was changed.
  *
  * @author Marcus Portmann

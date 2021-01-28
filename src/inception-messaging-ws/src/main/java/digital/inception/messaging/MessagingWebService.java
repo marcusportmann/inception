@@ -22,7 +22,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
 /**
- * The <code>MessagingWebService</code> class.
+ * The <b>MessagingWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -38,7 +38,7 @@ public class MessagingWebService {
   private final IMessagingService messagingService;
 
   /**
-   * Constructs a new <code>MessagingWebService</code>.
+   * Constructs a new <b>MessagingWebService</b>.
    *
    * @param messagingService the Messaging Service
    */

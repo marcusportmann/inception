@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>ErrorRestController</code> class.
+ * The <b>ErrorRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -55,7 +55,7 @@ public class ErrorRestController extends SecureRestController {
   private final IErrorService errorService;
 
   /**
-   * Constructs a new <code>ErrorRestController</code>.
+   * Constructs a new <b>ErrorRestController</b>.
    *
    * @param errorService the Error Service
    */

@@ -22,7 +22,7 @@ import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 
 /**
- * The <code>IConfigurationService</code> interface defines the functionality provided by a
+ * The <b>IConfigurationService</b> interface defines the functionality provided by a
  * Configuration Service implementation, which manages the configuration information for an
  * application or service.
  *
@@ -60,21 +60,21 @@ public interface IConfigurationService {
       throws InvalidArgumentException, ConfigurationServiceException;
 
   /**
-   * Retrieve the <code>Boolean</code> configuration.
+   * Retrieve the <b>Boolean</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the <code>Boolean</code> configuration
+   * @return the <b>Boolean</b> configuration
    */
   boolean getBoolean(String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException;
 
   /**
-   * Retrieve the <code>Boolean</code> configuration.
+   * Retrieve the <b>Boolean</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <code>Boolean</code> configuration or the default value if the configuration value
+   * @return the <b>Boolean</b> configuration or the default value if the configuration value
    *     does not exist
    */
   boolean getBoolean(String key, boolean defaultValue)
@@ -105,21 +105,21 @@ public interface IConfigurationService {
   List<Configuration> getConfigurations() throws ConfigurationServiceException;
 
   /**
-   * Retrieve the <code>Double</code> configuration.
+   * Retrieve the <b>Double</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the <code>Double</code> configuration
+   * @return the <b>Double</b> configuration
    */
   Double getDouble(String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException;
 
   /**
-   * Retrieve the <code>Double</code> configuration.
+   * Retrieve the <b>Double</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <code>Double</code> configuration or the default value if the configuration entry
+   * @return the <b>Double</b> configuration or the default value if the configuration entry
    *     does not exist
    */
   double getDouble(String key, double defaultValue)
@@ -143,63 +143,63 @@ public interface IConfigurationService {
   List<Configuration> getFilteredConfigurations(String filter) throws ConfigurationServiceException;
 
   /**
-   * Retrieve the <code>Integer</code> configuration.
+   * Retrieve the <b>Integer</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the <code>Integer</code> configuration
+   * @return the <b>Integer</b> configuration
    */
   Integer getInteger(String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException;
 
   /**
-   * Retrieve the <code>Integer</code> configuration.
+   * Retrieve the <b>Integer</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <code>Integer</code> configuration or the default value if the configuration entry
+   * @return the <b>Integer</b> configuration or the default value if the configuration entry
    *     does not exist
    */
   int getInteger(String key, int defaultValue)
       throws InvalidArgumentException, ConfigurationServiceException;
 
   /**
-   * Retrieve the <code>Long</code> configuration.
+   * Retrieve the <b>Long</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the <code>Long</code> configuration
+   * @return the <b>Long</b> configuration
    */
   Long getLong(String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException;
 
   /**
-   * Retrieve the <code>Long</code> configuration.
+   * Retrieve the <b>Long</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <code>Long</code> configuration or the default value if the configuration entry
+   * @return the <b>Long</b> configuration or the default value if the configuration entry
    *     does not exist
    */
   long getLong(String key, long defaultValue)
       throws InvalidArgumentException, ConfigurationServiceException;
 
   /**
-   * Retrieve the value for the <code>String</code> configuration.
+   * Retrieve the value for the <b>String</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the value for the <code>String</code> configuration
+   * @return the value for the <b>String</b> configuration
    */
   String getString(String key)
       throws InvalidArgumentException, ConfigurationNotFoundException,
           ConfigurationServiceException;
 
   /**
-   * Retrieve the value for the <code>String</code> configuration.
+   * Retrieve the value for the <b>String</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the value for the <code>String</code> configuration or the default value if the
+   * @return the value for the <b>String</b> configuration or the default value if the
    *     configuration does not exist
    */
   String getString(String key, String defaultValue)
@@ -209,8 +209,8 @@ public interface IConfigurationService {
    * Check if a configuration with the specified key exists.
    *
    * @param key the key for the configuration
-   * @return <code>true</code> if the configuration with the specified key exists or <code>false
-   * </code> otherwise
+   * @return <b>true</b> if the configuration with the specified key exists or <b>false
+   * </b> otherwise
    */
   boolean keyExists(String key) throws InvalidArgumentException, ConfigurationServiceException;
 

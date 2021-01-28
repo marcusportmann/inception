@@ -34,7 +34,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>SubmitErrorReportRequestData</code> class manages the data for a "Submit Error Report
+ * The <b>SubmitErrorReportRequestData</b> class manages the data for a "Submit Error Report
  * Request" message.
  *
  * <p>This is an asynchronous message.
@@ -80,13 +80,13 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
   /** The username for the user associated with the error report. */
   private String who;
 
-  /** Constructs a new <code>SubmitErrorReportRequestData</code>. */
+  /** Constructs a new <b>SubmitErrorReportRequestData</b>. */
   public SubmitErrorReportRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
   /**
-   * Constructs a new <code>SubmitErrorReportRequestData</code>.
+   * Constructs a new <b>SubmitErrorReportRequestData</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the error report
    * @param applicationId the ID for the application that generated the error
@@ -130,8 +130,8 @@ public class SubmitErrorReportRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the message data was extracted successfully from the WBXML data or
+   *     <b>false</b> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {

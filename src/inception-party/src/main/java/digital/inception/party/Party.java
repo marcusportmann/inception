@@ -29,8 +29,6 @@ import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,7 +42,18 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>Party</code> class holds the information for a party.
+ * The <b>Party</b> class holds the information for a party.
+ *
+ * <p>The <b>Party</b> and <b>PartyBase</b> classes are both JPA entity classes mapped to the same
+ * <b>party.parties</b> table. The <b>PartyBase</b> class provides the common base class for all JPA
+ * entity classes that form part of the party inheritance model, e.g. <b>Organization</b>,
+ * <b>Person</b>, etc. This inheritance model is required to allow the same child classes to be
+ * mapped to the different parent classes for the different party types, e.g. to support the
+ * one-to-many mappings for both the <b>Organization</b> and <b>Person</b> classes to the
+ * <b>PhysicalAddress</b> class. The <b>Party</b> class provides a mechanism to retrieve the minimum
+ * amount of party information without executing the polymorphic query that would result from
+ * retrieving the same entities using a query that specifies the <b>PartyBase</b> class as the
+ * result type.
  *
  * @author Marcus Portmann
  */
@@ -58,8 +67,6 @@ import org.hibernate.annotations.UpdateTimestamp;
     propOrder = {"id", "tenantId", "type", "name"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-// @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, length = 30)
 @Table(schema = "party", name = "parties")
 public class Party implements Serializable {
 
@@ -119,20 +126,20 @@ public class Party implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private PartyType type;
 
-  /** Constructs a new <code>Party</code>. */
+  /** Constructs a new <b>Party</b>. */
   public Party() {}
 
   /**
-   * Constructs a new <code>Party</code>.
+   * Constructs a new <b>Party</b>.
    *
    * @param type the party type
    */
-  public Party(PartyType type) {
+  protected Party(PartyType type) {
     this.type = type;
   }
 
   /**
-   * Constructs a new <code>Party</code>.
+   * Constructs a new <b>Party</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
    *     with
@@ -150,8 +157,7 @@ public class Party implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

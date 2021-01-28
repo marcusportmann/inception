@@ -19,8 +19,8 @@ package digital.inception.mail;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <code>MailTemplateSummaryRepository</code> interface declares the repository for the <code>
- * MailTemplateSummary</code> domain type.
+ * The <b>MailTemplateSummaryRepository</b> interface declares the repository for the <b>
+ * MailTemplateSummary</b> domain type.
  *
  * @author Marcus Portmann
  */

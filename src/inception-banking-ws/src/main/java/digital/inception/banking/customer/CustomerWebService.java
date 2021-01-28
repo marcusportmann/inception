@@ -26,7 +26,7 @@
 // import javax.xml.bind.annotation.XmlElement;
 //
 /// **
-// * The <code>CustomerWebService</code> class.
+// * The <b>CustomerWebService</b> class.
 // *
 // * @author Marcus Portmann
 // */
@@ -42,7 +42,7 @@
 //  private final ICustomerService customerService;
 //
 //  /**
-//   * Constructs a new <code>CustomerWebService</code>.
+//   * Constructs a new <b>CustomerWebService</b>.
 //   *
 //   * @param customerService the Customer Service
 //   */

@@ -16,14 +16,11 @@
 
 package digital.inception.reference;
 
-
-
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>MarriageTypeId</code> class implements the ID class for the <code>
- * MarriageType</code> class.
+ * The <b>MarriageTypeId</b> class implements the ID class for the <b> MarriageType</b> class.
  *
  * @author Marcus Portmann
  */
@@ -41,11 +38,11 @@ public class MarriageTypeId implements Serializable {
   /** The code for the marital status the marriage type is associated with. */
   private String maritalStatus;
 
-  /** Constructs a new <code>MarriageTypeId</code>. */
+  /** Constructs a new <b>MarriageTypeId</b>. */
   public MarriageTypeId() {}
 
   /**
-   * Constructs a new <code>MarriageTypeId</code>.
+   * Constructs a new <b>MarriageTypeId</b>.
    *
    * @param maritalStatus the code for the marital status the marriage type is associated with
    * @param code the code for the marital status
@@ -61,8 +58,7 @@ public class MarriageTypeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

@@ -23,8 +23,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToGroupMemberTypeConverter</code> class implements the Spring converter that
- * converts a <code>String</code> type into a <code>GroupMemberType</code> type.
+ * The <b>StringToGroupMemberTypeConverter</b> class implements the Spring converter that
+ * converts a <b>String</b> type into a <b>GroupMemberType</b> type.
  *
  * @author Marcus Portmann
  */
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class StringToGroupMemberTypeConverter implements Converter<String, GroupMemberType> {
 
-  /** Constructs a new <code>StringToGroupMemberTypeConverter</code>. */
+  /** Constructs a new <b>StringToGroupMemberTypeConverter</b>. */
   public StringToGroupMemberTypeConverter() {}
 
   @Override

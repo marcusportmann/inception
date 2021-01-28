@@ -16,15 +16,13 @@
 
 package digital.inception.party;
 
-
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>ContactMechanismPurposeToStringConverter</code> class implements the Spring converter
- * that converts a <code>ContactMechanismPurpose</code> type into a <code>String</code> type.
+ * The <b>ContactMechanismPurposeToStringConverter</b> class implements the Spring converter
+ * that converts a <b>ContactMechanismPurpose</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -33,7 +31,7 @@ import org.springframework.stereotype.Component;
 public class ContactMechanismPurposeToStringConverter
     implements Converter<ContactMechanismPurpose, String> {
 
-  /** Constructs a new <code>ContactMechanismPurposeToStringConverter</code>. */
+  /** Constructs a new <b>ContactMechanismPurposeToStringConverter</b>. */
   public ContactMechanismPurposeToStringConverter() {}
 
   @Override

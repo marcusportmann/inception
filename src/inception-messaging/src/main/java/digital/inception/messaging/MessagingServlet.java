@@ -39,7 +39,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * The <code>MessageServlet</code> servlet.
+ * The <b>MessageServlet</b> servlet.
  *
  * @author Marcus Portmann
  */
@@ -60,7 +60,7 @@ public class MessagingServlet extends HttpServlet {
   /* Messaging Service */
   @Autowired private IMessagingService messagingService;
 
-  /** Constructs a new <code>MessagingServlet</code>. */
+  /** Constructs a new <b>MessagingServlet</b>. */
   public MessagingServlet() {}
 
   /**
@@ -832,7 +832,7 @@ public class MessagingServlet extends HttpServlet {
    * Write the specified error information to the HTTP response.
    *
    * @param message the error message
-   * @param exception the exception containing the error information which may be <code>null</code>
+   * @param exception the exception containing the error information which may be <b>null</b>
    * @param response the HTTP servlet response to write the error information to
    */
   private void writeErrorResponse(

@@ -31,8 +31,8 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * The <code>TenantRepository</code> interface declares the repository for the <code>
- * Tenant</code> domain type.
+ * The <b>TenantRepository</b> interface declares the repository for the <b>
+ * Tenant</b> domain type.
  *
  * @author Marcus Portmann
  */

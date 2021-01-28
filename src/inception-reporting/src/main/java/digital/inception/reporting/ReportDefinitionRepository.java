@@ -27,8 +27,8 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * The <code>ReportDefinitionRepository</code> interface declares the repository for the <code>
- * ReportDefinition</code> domain type.
+ * The <b>ReportDefinitionRepository</b> interface declares the repository for the <b>
+ * ReportDefinition</b> domain type.
  *
  * @author Marcus Portmann
  */

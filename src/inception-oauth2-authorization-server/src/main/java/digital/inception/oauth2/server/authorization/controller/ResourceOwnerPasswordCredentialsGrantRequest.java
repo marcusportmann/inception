@@ -20,7 +20,7 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>ResourceOwnerPasswordCredentialsGrantRequest</code> class holds the information for a
+ * The <b>ResourceOwnerPasswordCredentialsGrantRequest</b> class holds the information for a
  * Resource Owner Password Credentials Grant request.
  *
  * <p>See <a href="https://tools.ietf.org/html/rfc6749#section-4.3.2">Access Token Request</a>
@@ -53,7 +53,7 @@ public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
   private final String username;
 
   /**
-   * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantRequest</code>.
+   * Constructs a new <b>ResourceOwnerPasswordCredentialsGrantRequest</b>.
    *
    * @param parameters the request parameters
    */
@@ -69,8 +69,8 @@ public class ResourceOwnerPasswordCredentialsGrantRequest extends GrantRequest {
    * provided as part of the HTTP servlet request.
    *
    * @param parameters the request parameters
-   * @return <code>true</code> if the HTTP servlet request contains the required information for the
-   *     Resource Owner Password Credentials Grant or <code>false</code> otherwise
+   * @return <b>true</b> if the HTTP servlet request contains the required information for the
+   *     Resource Owner Password Credentials Grant or <b>false</b> otherwise
    */
   public static boolean isValid(Map<String, String> parameters) {
 

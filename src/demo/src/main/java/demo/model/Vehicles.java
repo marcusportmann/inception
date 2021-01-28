@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Vehicles</code> class holds the results of a request to retrieve a list of vehicles.
+ * The <b>Vehicles</b> class holds the results of a request to retrieve a list of vehicles.
  *
  * @author Marcus Portmann
  */
@@ -86,11 +86,11 @@ public class Vehicles implements Serializable {
   @XmlElement(name = "Vehicle", required = true)
   private List<Vehicle> vehicles;
 
-  /** Constructs a new <code>Vehicles</code>. */
+  /** Constructs a new <b>Vehicles</b>. */
   public Vehicles() {}
 
   /**
-   * Constructs a new <code>Vehicles</code>.
+   * Constructs a new <b>Vehicles</b>.
    *
    * @param vehicles the vehicles
    * @param total the total number of vehicles

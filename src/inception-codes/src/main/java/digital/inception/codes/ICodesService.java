@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The <code>ICodesService</code> interface defines the functionality provided by a Codes Service
+ * The <b>ICodesService</b> interface defines the functionality provided by a Codes Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -33,7 +33,7 @@ public interface ICodesService {
    * Check whether the code category exists.
    *
    * @param codeCategoryId the ID for the code category
-   * @return <code>true</code> if the code category exists or <code>false</code> otherwise
+   * @return <b>true</b> if the code category exists or <b>false</b> otherwise
    */
   boolean codeCategoryExists(String codeCategoryId)
       throws InvalidArgumentException, CodesServiceException;
@@ -43,7 +43,7 @@ public interface ICodesService {
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
-   * @return <code>true</code> if the code exists or <code>false</code> otherwise
+   * @return <b>true</b> if the code exists or <b>false</b> otherwise
    */
   boolean codeExists(String codeCategoryId, String codeId)
       throws InvalidArgumentException, CodesServiceException;
@@ -51,7 +51,7 @@ public interface ICodesService {
   /**
    * Create the new code.
    *
-   * @param code the <code>Code</code> instance containing the information for the new code
+   * @param code the <b>Code</b> instance containing the information for the new code
    */
   void createCode(Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
@@ -60,8 +60,8 @@ public interface ICodesService {
   /**
    * Create the new code category.
    *
-   * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
-   *     new code category
+   * @param codeCategory the <b>CodeCategory</b> instance containing the information for the new
+   *     code category
    */
   void createCodeCategory(CodeCategory codeCategory)
       throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException;
@@ -112,9 +112,8 @@ public interface ICodesService {
   /**
    * Retrieve the XML or JSON data for the code category.
    *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
+   * registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration file.
    *
    * @param codeCategoryId the ID for the code category
    * @return the XML or JSON data for the code category
@@ -125,9 +124,8 @@ public interface ICodesService {
   /**
    * Retrieve the XML or JSON data for the code category using the specified parameters.
    *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
+   * registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration file.
    *
    * @param codeCategoryId the ID for the code category
    * @param parameters the parameters
@@ -174,9 +172,9 @@ public interface ICodesService {
   /**
    * Retrieve the codes for the code category.
    *
-   * <p>NOTE: This will also attempt to retrieve the codes from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * file.
    *
    * @param codeCategoryId the ID for the code category
    * @return the codes for the code category
@@ -187,9 +185,9 @@ public interface ICodesService {
   /**
    * Retrieve the codes for the code category using the specified parameters.
    *
-   * <p>NOTE: This will also attempt to retrieve the codes from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * file.
    *
    * @param codeCategoryId the ID for the code category
    * @param parameters the parameters
@@ -202,7 +200,7 @@ public interface ICodesService {
   /**
    * Update the existing code.
    *
-   * @param code the <code>Code</code> instance containing the updated information for the code
+   * @param code the <b>Code</b> instance containing the updated information for the code
    */
   void updateCode(Code code)
       throws InvalidArgumentException, CodeNotFoundException, CodesServiceException;
@@ -210,8 +208,8 @@ public interface ICodesService {
   /**
    * Update the existing code category.
    *
-   * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
-   *     for the code category
+   * @param codeCategory the <b>CodeCategory</b> instance containing the updated information for the
+   *     code category
    */
   void updateCodeCategory(CodeCategory codeCategory)
       throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;

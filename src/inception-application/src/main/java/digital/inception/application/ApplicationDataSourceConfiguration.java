@@ -16,8 +16,6 @@
 
 package digital.inception.application;
 
-
-
 import digital.inception.core.util.JDBCUtil;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
@@ -46,10 +44,8 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
-
-
 /**
- * The <code>ApplicationDataSourceConfiguration</code> class provides access to the application data
+ * The <b>ApplicationDataSourceConfiguration</b> class provides access to the application data
  * source configuration and initialises the application data source.
  *
  * @author Marcus Portmann
@@ -119,7 +115,7 @@ public class ApplicationDataSourceConfiguration {
   private String username;
 
   /**
-   * Constructs a new <code>ApplicationDataSourceConfiguration</code>.
+   * Constructs a new <b>ApplicationDataSourceConfiguration</b>.
    *
    * @param applicationContext the Spring application context
    */

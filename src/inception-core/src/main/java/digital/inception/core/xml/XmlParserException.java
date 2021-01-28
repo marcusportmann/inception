@@ -20,7 +20,7 @@ import digital.inception.core.exception.RichRuntimeException;
 import org.xml.sax.SAXParseException;
 
 /**
- * The <code>XmlParserException</code> exception is thrown to indicate an error condition when
+ * The <b>XmlParserException</b> exception is thrown to indicate an error condition when
  * parsing an XML file.
  *
  * @author Marcus Portmann
@@ -30,16 +30,16 @@ public class XmlParserException extends RichRuntimeException {
 
   private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <code>XmlParserException</code> with <code>null</code> as its message. */
+  /** Constructs a new <b>XmlParserException</b> with <b>null</b> as its message. */
   public XmlParserException() {
     super();
   }
 
   /**
-   * Constructs a new <code>XmlParserException</code> using the information contained in the
-   * specified <code>SAXParseException</code>.
+   * Constructs a new <b>XmlParserException</b> using the information contained in the
+   * specified <b>SAXParseException</b>.
    *
-   * @param cause the <code>SAXParseException</code> giving the cause of the exception
+   * @param cause the <b>SAXParseException</b> giving the cause of the exception
    */
   public XmlParserException(SAXParseException cause) {
     super(
@@ -56,54 +56,54 @@ public class XmlParserException extends RichRuntimeException {
   }
 
   /**
-   * Constructs a new <code>XmlParserException</code> with the specified message.
+   * Constructs a new <b>XmlParserException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public XmlParserException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>XmlParserException</code> with the specified cause and a message of
-   * <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
+   * Constructs a new <b>XmlParserException</b> with the specified cause and a message of
+   * <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and
    * message of cause).
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public XmlParserException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Constructs a new <code>XmlParserException</code> with the specified code and message.
+   * Constructs a new <b>XmlParserException</b> with the specified code and message.
    *
    * @param code the error code
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public XmlParserException(String code, String message) {
     super(code, message);
   }
 
   /**
-   * Constructs a new <code>XmlParserException</code> with the specified message and cause.
+   * Constructs a new <b>XmlParserException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public XmlParserException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Constructs a new <code>XmlParserException</code> with the specified code, message and cause.
+   * Constructs a new <b>XmlParserException</b> with the specified code, message and cause.
    *
    * @param code the error code
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public XmlParserException(String code, String message, Throwable cause) {
     super(code, message, cause);

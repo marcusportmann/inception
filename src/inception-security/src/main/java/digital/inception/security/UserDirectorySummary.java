@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>UserDirectorySummary</code> class holds the summary information for a user directory.
+ * The <b>UserDirectorySummary</b> class holds the summary information for a user directory.
  *
  * @author Marcus Portmann
  */
@@ -108,15 +108,15 @@ public class UserDirectorySummary implements java.io.Serializable {
   @Column(name = "type", length = 100, nullable = false)
   private String type;
 
-  /** Constructs a new <code>UserDirectorySummary</code>. */
+  /** Constructs a new <b>UserDirectorySummary</b>. */
   public UserDirectorySummary() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

@@ -49,7 +49,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 /**
- * The <code>JobParameter</code> class holds the information for a job parameter.
+ * The <b>JobParameter</b> class holds the information for a job parameter.
  *
  * @author Marcus Portmann
  */
@@ -110,11 +110,11 @@ public class JobParameter implements Serializable {
   @Column(name = "value", length = 4000, nullable = false)
   private String value;
 
-  /** Constructs a new <code>JobParameter</code>. */
+  /** Constructs a new <b>JobParameter</b>. */
   public JobParameter() {}
 
   /**
-   * Constructs a new <code>JobParameter</code>.
+   * Constructs a new <b>JobParameter</b>.
    *
    * @param name the name of the job parameter
    * @param value the value of the job parameter
@@ -128,8 +128,8 @@ public class JobParameter implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 
 /**
- * The <code>ErrorWebService</code> class.
+ * The <b>ErrorWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -44,7 +44,7 @@ public class ErrorWebService {
   private final IErrorService errorService;
 
   /**
-   * Constructs a new <code>ErrorWebService</code>.
+   * Constructs a new <b>ErrorWebService</b>.
    *
    * @param errorService the Error Service
    */

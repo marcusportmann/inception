@@ -34,7 +34,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>CodeCategoryData</code> class holds the information for a code category.
+ * The <b>CodeCategoryData</b> class holds the information for a code category.
  *
  * @author Marcus Portmann
  */
@@ -59,7 +59,7 @@ public class CodeCategoryData implements Serializable {
   private final String name;
 
   /**
-   * Constructs a new <code>CodeCategoryData</code>.
+   * Constructs a new <b>CodeCategoryData</b>.
    *
    * @param element the WBXML element containing the code category data
    */
@@ -101,7 +101,7 @@ public class CodeCategoryData implements Serializable {
   }
 
   /**
-   * Constructs a new <code>CodeCategoryData</code>.
+   * Constructs a new <b>CodeCategoryData</b>.
    *
    * @param codeCategory the code category
    * @param codeData the XML or JSON data for the code category

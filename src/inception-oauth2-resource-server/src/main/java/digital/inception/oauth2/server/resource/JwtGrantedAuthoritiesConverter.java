@@ -24,7 +24,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 /**
- * The <code>JwtGrantedAuthoritiesConverter</code> class extracts the granted authorities from a
+ * The <b>JwtGrantedAuthoritiesConverter</b> class extracts the granted authorities from a
  * JWT.
  *
  * @author Marcus Portmann

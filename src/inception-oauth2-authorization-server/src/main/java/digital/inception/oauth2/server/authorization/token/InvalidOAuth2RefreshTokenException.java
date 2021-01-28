@@ -25,11 +25,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * The <code>InvalidOAuth2RefreshTokenException</code> exception is thrown to indicate an error
+ * The <b>InvalidOAuth2RefreshTokenException</b> exception is thrown to indicate an error
  * condition as a result of an invalid OAuth2 refresh token.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -41,7 +40,7 @@ public class InvalidOAuth2RefreshTokenException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>InvalidOAuth2RefreshTokenException</code> with the specified message.
+   * Constructs a new <b>InvalidOAuth2RefreshTokenException</b> with the specified message.
    */
   public InvalidOAuth2RefreshTokenException() {
     super("InvalidOAuth2RefreshTokenError", "The OAuth2 refresh token is invalid");

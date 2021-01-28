@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.ZoneOffset;
 
 /**
- * The <code>FreeMarkerTemplateLoader</code> class implements the Apache FreeMarker template loader.
+ * The <b>FreeMarkerTemplateLoader</b> class implements the Apache FreeMarker template loader.
  *
  * @author Marcus Portmann
  */
@@ -34,7 +34,7 @@ public class FreeMarkerTemplateLoader implements TemplateLoader {
   private IMailService mailService;
 
   /**
-   * Constructs a new <code>FreeMarkerTemplateLoader</code>.
+   * Constructs a new <b>FreeMarkerTemplateLoader</b>.
    *
    * @param mailService the Mail Service
    */
@@ -81,7 +81,7 @@ public class FreeMarkerTemplateLoader implements TemplateLoader {
 
   /**
    * Returns the time of last modification of the specified template source. This method is called
-   * after <code>findTemplateSource()</code>.
+   * after <b>findTemplateSource()</b>.
    *
    * @param templateSource an object representing a template source, obtained through a prior call
    *     to {@link #findTemplateSource(String)}

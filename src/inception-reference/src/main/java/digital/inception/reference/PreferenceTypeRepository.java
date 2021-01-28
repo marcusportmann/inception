@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>PreferenceTypeRepository</code> interface declares the repository for the <code>
- * PreferenceType</code> domain type.
+ * The <b>PreferenceTypeRepository</b> interface declares the repository for the <b>
+ * PreferenceType</b> domain type.
  *
  * @author Marcus Portmann
  */

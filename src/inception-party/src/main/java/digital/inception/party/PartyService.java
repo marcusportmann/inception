@@ -35,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>PartyService</code> class provides the Party Service implementation.
+ * The <b>PartyService</b> class provides the Party Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -71,7 +71,7 @@ public class PartyService implements IPartyService {
   private final Validator validator;
 
   /**
-   * Constructs a new <code>PartyService</code>.
+   * Constructs a new <b>PartyService</b>.
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator

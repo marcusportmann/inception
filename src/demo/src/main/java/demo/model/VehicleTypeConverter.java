@@ -20,8 +20,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>VehicleTypeConverter</code> class implements the custom JPA converter for the <code>
- * VehicleType</code> enumeration.
+ * The <b>VehicleTypeConverter</b> class implements the custom JPA converter for the <b>
+ * VehicleType</b> enumeration.
  *
  * @author Marcus Portmann
  */

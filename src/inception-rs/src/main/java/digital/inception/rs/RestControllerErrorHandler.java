@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>RestControllerErrorHandler</code> class implements the error handler for RESTful web
+ * The <b>RestControllerErrorHandler</b> class implements the error handler for RESTful web
  * services.
  *
  * @author Marcus Portmann

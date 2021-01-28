@@ -19,7 +19,7 @@ package digital.inception.oauth2.server.authorization.controller;
 import java.util.Map;
 
 /**
- * The <code>GrantRequest</code> class provides the base class that all OAuth2 grant request classes
+ * The <b>GrantRequest</b> class provides the base class that all OAuth2 grant request classes
  * should be derived from.
  *
  * @author Marcus Portmann
@@ -79,7 +79,7 @@ public abstract class GrantRequest {
   private final String state;
 
   /**
-   * Constructs a new <code>GrantRequest</code>.
+   * Constructs a new <b>GrantRequest</b>.
    *
    * @param parameters the request parameters
    */

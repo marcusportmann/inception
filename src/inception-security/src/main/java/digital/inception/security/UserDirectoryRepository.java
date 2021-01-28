@@ -31,8 +31,8 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * The <code>UserDirectoryRepository</code> interface declares the repository for the <code>
- * UserDirectory</code> domain type.
+ * The <b>UserDirectoryRepository</b> interface declares the repository for the <b>
+ * UserDirectory</b> domain type.
  *
  * @author Marcus Portmann
  */

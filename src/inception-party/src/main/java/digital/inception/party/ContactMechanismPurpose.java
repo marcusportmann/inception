@@ -24,8 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>ContactMechanismPurpose</code> enumeration defines the possible contact mechanism
- * purposes.
+ * The <b>ContactMechanismPurpose</b> enumeration defines the possible contact mechanism purposes.
  *
  * @author Marcus Portmann
  */

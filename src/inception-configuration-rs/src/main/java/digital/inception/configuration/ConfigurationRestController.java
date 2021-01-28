@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>ConfigurationRestController</code> class.
+ * The <b>ConfigurationRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -58,7 +58,7 @@ public class ConfigurationRestController extends SecureRestController {
   private final IConfigurationService configurationService;
 
   /**
-   * Constructs a new <code>ConfigurationRestController</code>.
+   * Constructs a new <b>ConfigurationRestController</b>.
    *
    * @param configurationService the Configuration Service
    */

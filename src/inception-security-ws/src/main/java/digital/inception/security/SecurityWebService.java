@@ -41,7 +41,7 @@ import org.springframework.util.StringUtils;
 //      Users, Groups, Tenants, etc
 
 /**
- * The <code>SecurityWebService</code> class.
+ * The <b>SecurityWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -60,7 +60,7 @@ public class SecurityWebService {
   private final Validator validator;
 
   /**
-   * Constructs a new <code>SecurityWebService</code>.
+   * Constructs a new <b>SecurityWebService</b>.
    *
    * @param securityService the Security Service
    * @param validator the JSR-303 validator

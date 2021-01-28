@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2021 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,29 +14,30 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.party;
+// package digital.inception.party;
 //
 //
 //
-//import org.springframework.core.convert.converter.Converter;
-//import org.springframework.data.convert.ReadingConverter;
-//import org.springframework.stereotype.Component;
+// import org.springframework.core.convert.converter.Converter;
+// import org.springframework.data.convert.ReadingConverter;
+// import org.springframework.stereotype.Component;
 //
-///**
-// * The <code>StringToPartyTypeConverter</code> class implements the Spring converter that converts a
-// * <code>String</code> type into a <code>PartyType</code> type.
+/// **
+// * The <b>StringToPartyTypeConverter</b> class implements the Spring converter that converts
+// a
+// * <b>String</b> type into a <b>PartyType</b> type.
 // *
 // * @author Marcus Portmann
 // */
-//@Component
-//@ReadingConverter
-//public class StringToPartyTypeConverter implements Converter<String, PartyType> {
+// @Component
+// @ReadingConverter
+// public class StringToPartyTypeConverter implements Converter<String, PartyType> {
 //
-//  /** Constructs a new <code>StringToPartyTypeConverter</code>. */
+//  /** Constructs a new <b>StringToPartyTypeConverter</b>. */
 //  public StringToPartyTypeConverter() {}
 //
 //  @Override
 //  public PartyType convert(String source) {
 //    return PartyType.fromCode(source);
 //  }
-//}
+// }

@@ -19,7 +19,7 @@ package digital.inception.oauth2.server.authorization.token;
 import java.util.Set;
 
 /**
- * The <code>ITokenService</code> interface defines the functionality provided by a Token Service
+ * The <b>ITokenService</b> interface defines the functionality provided by a Token Service
  * implementation, which manages the OAuth2 tokens for an application.
  *
  * @author Marcus Portmann

@@ -25,7 +25,7 @@ import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transport.http.auth.DefaultBasicAuthSupplier;
 
 /**
- * The <code>CXFBasicSecurityProxyConfigurator</code> class provides the capability to configure a
+ * The <b>CXFBasicSecurityProxyConfigurator</b> class provides the capability to configure a
  * CXF web service proxy for basic authentication.
  *
  * @author Marcus Portmann

@@ -41,7 +41,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The <code>CodesRestController</code> class.
+ * The <b>CodesRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -56,7 +56,7 @@ public class CodesRestController extends SecureRestController {
   private final ICodesService codesService;
 
   /**
-   * Constructs a new <code>CodesRestController</code>.
+   * Constructs a new <b>CodesRestController</b>.
    *
    * @param codesService the Codes Service
    */

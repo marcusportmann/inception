@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The <code>IProcessService</code> interface defines the functionality provided by a Process
- * Service implementation.
+ * The <b>IProcessService</b> interface defines the functionality provided by a Process Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
@@ -76,7 +76,7 @@ public interface IProcessService {
    * Check whether the process definition exists.
    *
    * @param processDefinitionId the ID for the process definition
-   * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
+   * @return <b>true</b> if the process definition exists or <b>false</b> otherwise
    */
   boolean processDefinitionExists(String processDefinitionId) throws ProcessServiceException;
 

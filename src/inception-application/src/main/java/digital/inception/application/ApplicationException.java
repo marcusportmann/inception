@@ -16,13 +16,10 @@
 
 package digital.inception.application;
 
-
-
 import digital.inception.core.exception.RichRuntimeException;
 
 /**
- * The <code>ApplicationException</code> exception is thrown to indicate an application error
- * condition.
+ * The <b>ApplicationException</b> exception is thrown to indicate an application error condition.
  *
  * @author Marcus Portmann
  */
@@ -31,60 +28,60 @@ public class ApplicationException extends RichRuntimeException {
 
   private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <code>ApplicationException</code> with <code>null</code> as its message. */
+  /** Constructs a new <b>ApplicationException</b> with <b>null</b> as its message. */
   public ApplicationException() {
     super();
   }
 
   /**
-   * Constructs a new <code>ApplicationException</code> with the specified message.
+   * Constructs a new <b>ApplicationException</b> with the specified message.
    *
-   * @param message the message saved for later retrieval by the <code>getMessage()</code> method
+   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
    */
   public ApplicationException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>ApplicationException</code> with the specified cause and a message of
-   * <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
-   * message of cause).
+   * Constructs a new <b>ApplicationException</b> with the specified cause and a message of
+   * <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and message
+   * of cause).
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public ApplicationException(Throwable cause) {
     super(cause);
   }
 
   /**
-   * Constructs a new <code>ApplicationException</code> with the specified code and message.
+   * Constructs a new <b>ApplicationException</b> with the specified code and message.
    *
    * @param code the error code for the error
-   * @param message the message saved for later retrieval by the <code>getMessage()</code> method
+   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
    */
   public ApplicationException(String code, String message) {
     super(code, message);
   }
 
   /**
-   * Constructs a new <code>ApplicationException</code> with the specified message and cause.
+   * Constructs a new <b>ApplicationException</b> with the specified message and cause.
    *
-   * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public ApplicationException(String message, Throwable cause) {
     super(message, cause);
   }
 
   /**
-   * Constructs a new <code>ApplicationException</code> with the specified code, message and cause.
+   * Constructs a new <b>ApplicationException</b> with the specified code, message and cause.
    *
    * @param code the error code for the error
-   * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public ApplicationException(String code, String message, Throwable cause) {
     super(code, message, cause);

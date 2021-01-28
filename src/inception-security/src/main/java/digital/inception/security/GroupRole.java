@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>GroupRole</code> class holds the information for a group role.
+ * The <b>GroupRole</b> class holds the information for a group role.
  *
  * @author Marcus Portmann
  */
@@ -83,11 +83,11 @@ public class GroupRole implements Serializable {
   @NotNull
   private UUID userDirectoryId;
 
-  /** Constructs a new <code>GroupRole</code>. */
+  /** Constructs a new <b>GroupRole</b>. */
   public GroupRole() {}
 
   /**
-   * Constructs a new <code>GroupRole</code>.
+   * Constructs a new <b>GroupRole</b>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory the group is associated with

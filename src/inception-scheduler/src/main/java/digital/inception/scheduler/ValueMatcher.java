@@ -17,7 +17,7 @@
 package digital.inception.scheduler;
 
 /**
- * The <code>ValueMatcher</code> describes the behavior that must be implemented by a ValueMatcher.
+ * The <b>ValueMatcher</b> describes the behavior that must be implemented by a ValueMatcher.
  *
  * <p>A ValueMatcher is an object that validate an integer value against a set of rules.
  *
@@ -30,8 +30,8 @@ public interface ValueMatcher {
    * Validate the given integer value against a set of rules.
    *
    * @param value the value
-   * @return <code>true</code> if the given value matches the rules of the <code>ValueMatcher</code>
-   *     , <code>false</code> otherwise
+   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b>
+   *     , <b>false</b> otherwise
    */
   boolean match(int value);
 }

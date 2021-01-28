@@ -23,8 +23,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>UserStatusToStringConverter</code> class implements the Spring converter that converts
- * a <code>UserStatus</code> type into a <code>String</code> type.
+ * The <b>UserStatusToStringConverter</b> class implements the Spring converter that converts
+ * a <b>UserStatus</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class UserStatusToStringConverter implements Converter<UserStatus, String> {
 
-  /** Constructs a new <code>UserStatusToStringConverter</code>. */
+  /** Constructs a new <b>UserStatusToStringConverter</b>. */
   public UserStatusToStringConverter() {}
 
   @Override

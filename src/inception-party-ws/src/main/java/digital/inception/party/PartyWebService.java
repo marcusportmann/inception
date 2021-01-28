@@ -27,7 +27,7 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * The <code>PartyWebService</code> class.
+ * The <b>PartyWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +43,7 @@ public class PartyWebService {
   private final IPartyService partyService;
 
   /**
-   * Constructs a new <code>PartyWebService</code>.
+   * Constructs a new <b>PartyWebService</b>.
    *
    * @param partyService the Party Service
    */

@@ -36,7 +36,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>ReportingWebService</code> class.
+ * The <b>ReportingWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -55,7 +55,7 @@ public class ReportingWebService {
   private final IReportingService reportingService;
 
   /**
-   * Constructs a new <code>ReportingWebService</code>.
+   * Constructs a new <b>ReportingWebService</b>.
    *
    * @param dataSource the data source used to provide connections to the application database
    * @param reportingService the Reporting Service

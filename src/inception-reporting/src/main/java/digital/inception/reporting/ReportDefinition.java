@@ -44,7 +44,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 /**
- * The <code>ReportDefinition</code> class holds the information for a report definition.
+ * The <b>ReportDefinition</b> class holds the information for a report definition.
  *
  * @author Marcus Portmann
  */
@@ -106,11 +106,11 @@ public class ReportDefinition implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>ReportDefinition</code>. */
+  /** Constructs a new <b>ReportDefinition</b>. */
   public ReportDefinition() {}
 
   /**
-   * Constructs a new <code>ReportDefinition</code>.
+   * Constructs a new <b>ReportDefinition</b>.
    *
    * @param id the ID for the report definition
    * @param name the name of the report definition
@@ -126,8 +126,8 @@ public class ReportDefinition implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

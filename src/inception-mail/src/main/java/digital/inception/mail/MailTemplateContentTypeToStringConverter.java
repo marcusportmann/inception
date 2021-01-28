@@ -21,8 +21,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>MailTemplateContentTypeToStringConverter</code> class implements the Spring converter
- * that converts a <code>MailTemplateContentType</code> type into a <code>String</code> type.
+ * The <b>MailTemplateContentTypeToStringConverter</b> class implements the Spring converter
+ * that converts a <b>MailTemplateContentType</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 public class MailTemplateContentTypeToStringConverter
     implements Converter<MailTemplateContentType, String> {
 
-  /** Constructs a new <code>MailTemplateContentTypeToStringConverter</code>. */
+  /** Constructs a new <b>MailTemplateContentTypeToStringConverter</b>. */
   public MailTemplateContentTypeToStringConverter() {}
 
   @Override

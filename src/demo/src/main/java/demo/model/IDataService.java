@@ -20,7 +20,7 @@ import digital.inception.core.validation.ValidationError;
 import java.util.List;
 
 /**
- * The <code>IDemoService</code> interface defines the functionality that must be provided by a Data
+ * The <b>IDemoService</b> interface defines the functionality that must be provided by a Data
  * Service implementation.
  *
  * @author Marcus Portmann
@@ -28,22 +28,22 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface IDataService {
 
-  /** Create the sample data. */
-  void createSampleData() throws DemoServiceException;
-
   /**
    * Create the data.
    *
    * @param data the data
    */
-  void createData(Data data) throws DemoServiceException;
+  void createData(Data data) throws DataServiceException;
+
+  /** Create the sample data. */
+  void createSampleData() throws DataServiceException;
 
   /**
    * Returns the data.
    *
    * @return the data
    */
-  List<Data> getAllData() throws DemoServiceException;
+  List<Data> getAllData() throws DataServiceException;
 
   /**
    * Returns the data.
@@ -51,12 +51,12 @@ public interface IDataService {
    * @param id the ID for the data
    * @return the data
    */
-  Data getData(long id) throws DemoServiceException;
+  Data getData(long id) throws DataServiceException;
 
   /**
    * Validate the data.
    *
    * @return the validation errors
    */
-  List<ValidationError> validateData(Data data) throws DemoServiceException;
+  List<ValidationError> validateData(Data data) throws DataServiceException;
 }

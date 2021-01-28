@@ -20,7 +20,7 @@ import digital.inception.core.util.ISO8601Util;
 import java.time.LocalDateTime;
 
 /**
- * The <code>RichException</code> exception is thrown when additional information related to an
+ * The <b>RichException</b> exception is thrown when additional information related to an
  * error condition exists including the time the error occurred and an associated error code.
  * condition.
  *
@@ -39,16 +39,16 @@ public class RichException extends Exception {
   /** The optional error code. */
   private String code;
 
-  /** Constructs a new <code>RichException</code> with <code>null</code> as its message. */
+  /** Constructs a new <b>RichException</b> with <b>null</b> as its message. */
   public RichException() {
     super();
     this.when = LocalDateTime.now();
   }
 
   /**
-   * Constructs a new <code>RichException</code> with the specified message.
+   * Constructs a new <b>RichException</b> with the specified message.
    *
-   * @param message the message saved for later retrieval by the <code>getMessage()</code> method
+   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
    */
   public RichException(String message) {
     super(message);
@@ -56,12 +56,12 @@ public class RichException extends Exception {
   }
 
   /**
-   * Constructs a new <code>RichException</code> with the specified cause and a message of <code>
-   * (cause==null ? null : cause.toString())</code> (which typically contains the class and message
+   * Constructs a new <b>RichException</b> with the specified cause and a message of <b>
+   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message
    * of cause).
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public RichException(Throwable cause) {
     super(cause);
@@ -69,10 +69,10 @@ public class RichException extends Exception {
   }
 
   /**
-   * Constructs a new <code>RichException</code> with the specified code and message.
+   * Constructs a new <b>RichException</b> with the specified code and message.
    *
    * @param code the error code
-   * @param message the message saved for later retrieval by the <code>getMessage()</code> method
+   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
    */
   public RichException(String code, String message) {
     super(message);
@@ -81,11 +81,11 @@ public class RichException extends Exception {
   }
 
   /**
-   * Constructs a new <code>RichException</code> with the specified message and cause.
+   * Constructs a new <b>RichException</b> with the specified message and cause.
    *
-   * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public RichException(String message, Throwable cause) {
     super(message, cause);
@@ -93,12 +93,12 @@ public class RichException extends Exception {
   }
 
   /**
-   * Constructs a new <code>RichException</code> with the specified code, message and cause.
+   * Constructs a new <b>RichException</b> with the specified code, message and cause.
    *
    * @param code the error code
-   * @param message the message saved for later retrieval by the <code>getMessage()</code> method
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message the message saved for later retrieval by the <b>getMessage()</b> method
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public RichException(String code, String message, Throwable cause) {
     super(message, cause);

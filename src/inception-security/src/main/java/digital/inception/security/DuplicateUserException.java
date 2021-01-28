@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>DuplicateUserException</code> is thrown to indicate that a security operation failed as a
+ * A <b>DuplicateUserException</b> is thrown to indicate that a security operation failed as a
  * result of duplicate users.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -50,7 +49,7 @@ public class DuplicateUserException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>DuplicateUserException</code>.
+   * Constructs a new <b>DuplicateUserException</b>.
    *
    * @param username the username for the user
    */

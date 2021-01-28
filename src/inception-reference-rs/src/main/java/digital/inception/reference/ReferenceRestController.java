@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>ReferenceRestController</code> class.
+ * The <b>ReferenceRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -58,7 +58,7 @@ public class ReferenceRestController extends SecureRestController {
   private final Validator validator;
 
   /**
-   * Constructs a new <code>ReferenceRestController</code>.
+   * Constructs a new <b>ReferenceRestController</b>.
    *
    * @param referenceService the Reference Service
    * @param validator the JSR-303 validator
@@ -72,7 +72,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <code>null</code> to retrieve the contact mechanism purposes for all
+   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all
    *     locales
    * @return the contact mechanism purposes
    */
@@ -113,7 +113,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the contact mechanism types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <code>null</code> to retrieve the contact mechanism types for all locales
+   *     types for or <b>null</b> to retrieve the contact mechanism types for all locales
    * @return the contact mechanism types
    */
   @Operation(
@@ -153,7 +153,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the countries.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the countries for or
-   *     <code>null</code> to retrieve the countries for all locales
+   *     <b>null</b> to retrieve the countries for all locales
    * @return the countries
    */
   @Operation(summary = "Retrieve the countries", description = "Retrieve the countries")
@@ -188,7 +188,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the employment statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <code>null</code> to retrieve the employment statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
    * @return the employment statuses
    */
   @Operation(
@@ -228,7 +228,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the employment types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for or <code>null</code> to retrieve the employment types for all locales
+   *     for or <b>null</b> to retrieve the employment types for all locales
    * @return the employment types
    */
   @Operation(
@@ -268,7 +268,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
-   *     <code>null</code> to retrieve the genders for all locales
+   *     <b>null</b> to retrieve the genders for all locales
    * @return the genders
    */
   @Operation(summary = "Retrieve the genders", description = "Retrieve the genders")
@@ -303,7 +303,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the identity document types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     types for or <code>null</code> to retrieve the identity document types for all locales
+   *     types for or <b>null</b> to retrieve the identity document types for all locales
    * @return the identity document types
    */
   @Operation(
@@ -343,7 +343,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the languages.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the languages for or
-   *     <code>null</code> to retrieve the languages for all locales
+   *     <b>null</b> to retrieve the languages for all locales
    * @return the languages
    */
   @Operation(summary = "Retrieve the languages", description = "Retrieve the languages")
@@ -378,7 +378,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the marital statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
-   *     for or <code>null</code> to retrieve the marital statuses for all locales
+   *     for or <b>null</b> to retrieve the marital statuses for all locales
    * @return the marital statuses
    */
   @Operation(
@@ -418,7 +418,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the marriage types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   *     or <code>null</code> to retrieve the marriage types for all locales
+   *     or <b>null</b> to retrieve the marriage types for all locales
    * @return the marriage types
    */
   @Operation(summary = "Retrieve the marriage types", description = "Retrieve the marriage types")
@@ -456,7 +456,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the next of kin types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for or <code>null</code> to retrieve the next of kin types for all locales
+   *     for or <b>null</b> to retrieve the next of kin types for all locales
    * @return the next of kin types
    */
   @Operation(
@@ -496,7 +496,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the occupations.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
-   *     <code>null</code> to retrieve the occupations for all locales
+   *     <b>null</b> to retrieve the occupations for all locales
    * @return the occupations
    */
   @Operation(summary = "Retrieve the occupations", description = "Retrieve the occupations")
@@ -531,7 +531,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the party role purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party role
-   *     purposes for or <code>null</code> to retrieve the party role purposes for all locales
+   *     purposes for or <b>null</b> to retrieve the party role purposes for all locales
    * @return the party role purposes
    */
   @Operation(
@@ -571,7 +571,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the party role types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
-   *     for or <code>null</code> to retrieve the party role types for all locales
+   *     for or <b>null</b> to retrieve the party role types for all locales
    * @return the party role types
    */
   @Operation(
@@ -611,7 +611,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the physical address purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <code>null</code> to retrieve the physical address purposes for all locales
+   *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
    * @return the physical address purposes
    */
   @Operation(
@@ -651,7 +651,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the physical address types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <code>null</code> to retrieve the physical address types for all locales
+   *     types for or <b>null</b> to retrieve the physical address types for all locales
    * @return the physical address types
    */
   @Operation(
@@ -691,7 +691,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the preference type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <code>null</code> to retrieve the preference type categories for all
+   *     categories for or <b>null</b> to retrieve the preference type categories for all
    *     locales
    * @return the preference type categories
    */
@@ -732,7 +732,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the preference types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for or <code>null</code> to retrieve the preference types for all locales
+   *     for or <b>null</b> to retrieve the preference types for all locales
    * @return the preference types
    */
   @Operation(
@@ -772,7 +772,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
-   *     <code>null</code> to retrieve the races for all locales
+   *     <b>null</b> to retrieve the races for all locales
    * @return the races
    */
   @Operation(summary = "Retrieve the races", description = "Retrieve the races")
@@ -807,7 +807,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the regions.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the regions for or
-   *     <code>null</code> to retrieve the regions for all locales
+   *     <b>null</b> to retrieve the regions for all locales
    * @return the regions
    */
   @Operation(summary = "Retrieve the regions", description = "Retrieve the regions")
@@ -842,7 +842,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the residence permit types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     types for or <code>null</code> to retrieve the residence permit types for all locales
+   *     types for or <b>null</b> to retrieve the residence permit types for all locales
    * @return the residence permit types
    */
   @Operation(
@@ -882,7 +882,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the residency statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
-   *     for or <code>null</code> to retrieve the residency statuses for all locales
+   *     for or <b>null</b> to retrieve the residency statuses for all locales
    * @return the residency statuses
    */
   @Operation(
@@ -922,7 +922,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the residential types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for or <code>null</code> to retrieve the residential types for all locales
+   *     for or <b>null</b> to retrieve the residential types for all locales
    * @return the residential types
    */
   @Operation(
@@ -962,7 +962,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the sources of funds.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
-   *     for or <code>null</code> to retrieve the sources of funds for all locales
+   *     for or <b>null</b> to retrieve the sources of funds for all locales
    * @return the sources of funds
    */
   @Operation(
@@ -1002,7 +1002,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the tax number types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
-   *     for or <code>null</code> to retrieve the tax number types for all locales
+   *     for or <b>null</b> to retrieve the tax number types for all locales
    * @return the tax number types
    */
   @Operation(
@@ -1042,7 +1042,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the times to contact.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for or <code>null</code> to retrieve the times to contact for all locales
+   *     for or <b>null</b> to retrieve the times to contact for all locales
    * @return the times to contact
    */
   @Operation(
@@ -1082,7 +1082,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the titles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or
-   *     <code>null</code> to retrieve the titles for all locales
+   *     <b>null</b> to retrieve the titles for all locales
    * @return the titles
    */
   @Operation(summary = "Retrieve the titles", description = "Retrieve the titles")
@@ -1117,7 +1117,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the verification methods.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     methods for or <code>null</code> to retrieve the verification methods for all locales
+   *     methods for or <b>null</b> to retrieve the verification methods for all locales
    * @return the verification methods
    */
   @Operation(
@@ -1157,7 +1157,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the verification statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     statuses for or <code>null</code> to retrieve the verification statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the verification statuses for all locales
    * @return the verification statuses
    */
   @Operation(

@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>UserLockedException</code> is thrown to indicate that a security operation failed as a
+ * A <b>UserLockedException</b> is thrown to indicate that a security operation failed as a
  * result of a user being locked.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -51,7 +50,7 @@ public class UserLockedException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>UserLockedException</code>.
+   * Constructs a new <b>UserLockedException</b>.
    *
    * @param username the username for the user
    */

@@ -23,8 +23,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>GroupMemberTypeToStringConverter</code> class implements the Spring converter that
- * converts a <code>GroupMemberType</code> type into a <code>String</code> type.
+ * The <b>GroupMemberTypeToStringConverter</b> class implements the Spring converter that
+ * converts a <b>GroupMemberType</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +32,7 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class GroupMemberTypeToStringConverter implements Converter<GroupMemberType, String> {
 
-  /** Constructs a new <code>GroupMemberTypeToStringConverter</code>. */
+  /** Constructs a new <b>GroupMemberTypeToStringConverter</b>. */
   public GroupMemberTypeToStringConverter() {}
 
   @Override

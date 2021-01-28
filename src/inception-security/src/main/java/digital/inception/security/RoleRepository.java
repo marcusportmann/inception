@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>RoleRepository</code> interface declares the repository for the <code>Role</code>
+ * The <b>RoleRepository</b> interface declares the repository for the <b>Role</b>
  * domain type.
  *
  * @author Marcus Portmann

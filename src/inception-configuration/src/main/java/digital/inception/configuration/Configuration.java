@@ -46,7 +46,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 /**
- * The <code>Configuration</code> class stores the key, value and description for the configuration.
+ * The <b>Configuration</b> class stores the key, value and description for the configuration.
  *
  * @author Marcus Portmann
  */
@@ -108,11 +108,11 @@ public class Configuration implements Serializable {
   private String value;
 
 
-  /** Constructs a new <code>Configuration</code>. */
+  /** Constructs a new <b>Configuration</b>. */
   public Configuration() {}
 
   /**
-   * Constructs a new <code>Configuration</code>.
+   * Constructs a new <b>Configuration</b>.
    *
    * @param key the key for the configuration
    * @param value the value for the configuration
@@ -128,8 +128,8 @@ public class Configuration implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

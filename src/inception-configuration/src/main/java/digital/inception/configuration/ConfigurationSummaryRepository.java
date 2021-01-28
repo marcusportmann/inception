@@ -24,8 +24,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 /**
- * The <code>ConfigurationSummaryRepository</code> interface declares the repository for the <code>
- * ConfigurationSummary</code> domain type.
+ * The <b>ConfigurationSummaryRepository</b> interface declares the repository for the <b>
+ * ConfigurationSummary</b> domain type.
  *
  * @author Marcus Portmann
  */

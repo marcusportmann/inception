@@ -33,7 +33,7 @@ import org.springframework.data.repository.query.QueryByExampleExecutor;
 
 
 /**
- * The <code>UserRepository</code> interface declares the repository for the <code>User</code>
+ * The <b>UserRepository</b> interface declares the repository for the <b>User</b>
  * domain type.
  *
  * @author Marcus Portmann

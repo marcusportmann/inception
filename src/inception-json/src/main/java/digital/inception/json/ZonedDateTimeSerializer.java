@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 
 /**
- * The <code>ZonedDateTimeDeserializer</code> class implements the Jackson serializer for the <code>
- * ZonedDateTime</code> type.
+ * The <b>ZonedDateTimeDeserializer</b> class implements the Jackson serializer for the <b>
+ * ZonedDateTime</b> type.
  *
  * @author Marcus Portmann
  */

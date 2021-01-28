@@ -29,11 +29,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * The <code>MessagePartNotFoundException</code> exception is thrown to indicate an error condition
+ * The <b>MessagePartNotFoundException</b> exception is thrown to indicate an error condition
  * as a result of a message part that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -49,7 +48,7 @@ public class MessagePartNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>MessagePartNotFoundException</code>.
+   * Constructs a new <b>MessagePartNotFoundException</b>.
    *
    * @param messagePartId the Universally Unique Identifier (UUID) for the message
    *     part

@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>UserDirectoryTypeNotFoundException</code> is thrown to indicate that a security operation
+ * A <b>UserDirectoryTypeNotFoundException</b> is thrown to indicate that a security operation
  * failed as a result of a user directory type that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +47,7 @@ public class UserDirectoryTypeNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>UserDirectoryTypeNotFoundException</code>.
+   * Constructs a new <b>UserDirectoryTypeNotFoundException</b>.
    *
    * @param userDirectoryTypeCode the code for the user directory type
    */

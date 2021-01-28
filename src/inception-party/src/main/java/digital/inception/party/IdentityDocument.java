@@ -46,7 +46,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>IdentityDocument</code> class holds the information for an identity document.
+ * The <b>IdentityDocument</b> class holds the information for an identity document.
  *
  * <p>See: https://spec.edmcouncil.org/fibo/ontology/FND/AgentsAndPeople/People/IdentityDocument
  *
@@ -119,7 +119,7 @@ public class IdentityDocument implements Serializable {
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
-  private Party party;
+  private PartyBase party;
 
   /** The code for the identity document type. */
   @Schema(description = "The code for the identity document type", required = true)
@@ -138,11 +138,11 @@ public class IdentityDocument implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>IdentityDocument</code>. */
+  /** Constructs a new <b>IdentityDocument</b>. */
   public IdentityDocument() {}
 
   /**
-   * Constructs a new <code>IdentityDocument</code>.
+   * Constructs a new <b>IdentityDocument</b>.
    *
    * @param type the code for the identity document type
    * @param countryOfIssue the code for the country of issue for the identity document
@@ -158,7 +158,7 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Constructs a new <code>IdentityDocument</code>.
+   * Constructs a new <b>IdentityDocument</b>.
    *
    * @param type the code for the identity document type
    * @param countryOfIssue the code for the country of issue for the identity document
@@ -183,8 +183,7 @@ public class IdentityDocument implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -259,7 +258,7 @@ public class IdentityDocument implements Serializable {
    * @return the party the identity document is associated with
    */
   @Schema(hidden = true)
-  public Party getParty() {
+  public PartyBase getParty() {
     return party;
   }
 
@@ -336,7 +335,7 @@ public class IdentityDocument implements Serializable {
    * @param party the party the identity document is associated with
    */
   @Schema(hidden = true)
-  public void setParty(Party party) {
+  public void setParty(PartyBase party) {
     this.party = party;
   }
 

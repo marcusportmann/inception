@@ -25,7 +25,7 @@ import java.util.UUID;
 
 
 /**
- * The <code>WbxmlMessageData</code> class provides the abstract base class from which all
+ * The <b>WbxmlMessageData</b> class provides the abstract base class from which all
  * WBXML-based infrastructural and application-specific message data classes should be derived.
  *
  * @author Marcus Portmann
@@ -39,7 +39,7 @@ public abstract class WbxmlMessageData {
   private final MessagePriority messageTypePriority;
 
   /**
-   * Constructs a new <code>WbxmlMessageData</code>.
+   * Constructs a new <b>WbxmlMessageData</b>.
    *
    * @param messageTypeId the UUID for the message type for the message data
    * @param messagePriority the message priority for the message data
@@ -53,8 +53,8 @@ public abstract class WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the message data was extracted successfully from the WBXML data or
+   *     <b>false</b> otherwise
    */
   public abstract boolean fromMessageData(byte[] messageData) throws MessagingServiceException;
 

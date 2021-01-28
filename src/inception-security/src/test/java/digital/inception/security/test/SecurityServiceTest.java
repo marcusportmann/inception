@@ -77,8 +77,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 
 
 /**
- * The <code>SecurityServiceTest</code> class contains the implementation of the JUnit tests for the
- * <code>SecurityService</code> class.
+ * The <b>SecurityServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>SecurityService</b> class.
  *
  * @author Marcus Portmann
  */

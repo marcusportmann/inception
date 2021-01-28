@@ -21,7 +21,7 @@ package digital.inception.scheduler;
 import java.util.List;
 
 /**
- * The <code>DayOfMonthValueMatcher</code> class implements a <code>ValueMatcher</code> whose rules
+ * The <b>DayOfMonthValueMatcher</b> class implements a <b>ValueMatcher</b> whose rules
  * are in a plain array of integer values.
  *
  * <p>When asked to validate a value, this ValueMatcher checks if it is in the array and, if not,
@@ -36,10 +36,10 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
   private static final int[] lastDays = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
   /**
-   * Constructs a new <code>DayOfMonthValueMatcher</code>.
+   * Constructs a new <b>DayOfMonthValueMatcher</b>.
    *
    * @param integers The Integer elements, one for every value accepted by the matcher. The match()
-   *     method will return <code>true</code> only if its parameter will be one of this list or the
+   *     method will return <b>true</b> only if its parameter will be one of this list or the
    *     last-day-of-month setting applies.
    */
   public DayOfMonthValueMatcher(List<Integer> integers) {
@@ -47,14 +47,14 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
   }
 
   /**
-   * Returns <code>true</code> if the given value is included in the matcher list or the
-   * last-day-of-month setting applies otherwise <code>false</code>.
+   * Returns <b>true</b> if the given value is included in the matcher list or the
+   * last-day-of-month setting applies otherwise <b>false</b>.
    *
    * @param value the value
    * @param month the month
-   * @param isLeapYear <code>true</code> if this is a leap year <code>false</code> otherwise
-   * @return <code>true</code> if the given value matches the rules of the <code>ValueMatcher</code>
-   *     , <code>false</code> otherwise
+   * @param isLeapYear <b>true</b> if this is a leap year <b>false</b> otherwise
+   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b>
+   *     , <b>false</b> otherwise
    */
   public boolean match(int value, int month, boolean isLeapYear) {
     return (super.match(value)

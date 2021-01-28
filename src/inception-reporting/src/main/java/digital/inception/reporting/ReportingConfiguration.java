@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>ReportingConfiguration</code> class provides the Spring configuration for the Reporting
+ * The <b>ReportingConfiguration</b> class provides the Spring configuration for the Reporting
  * module.
  *
  * @author Marcus Portmann

@@ -25,11 +25,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * The <code>TokenCreationException</code> exception is thrown to indicate an error condition when
+ * The <b>TokenCreationException</b> exception is thrown to indicate an error condition when
  * creating an OAuth2 token.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -42,20 +41,20 @@ public class TokenCreationException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>TokenCreationException</code> with the specified message.
+   * Constructs a new <b>TokenCreationException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public TokenCreationException(String message) {
     super("TokenCreationError", message);
   }
 
   /**
-   * Constructs a new <code>TokenCreationException</code> with the specified message and cause.
+   * Constructs a new <b>TokenCreationException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public TokenCreationException(String message, Throwable cause) {
     super("TokenCreationError", message, cause);

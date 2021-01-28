@@ -55,7 +55,7 @@ import org.springframework.web.util.UriUtils;
 
 
 /**
- * The <code>SecurityService</code> class provides the Security Service implementation.
+ * The <b>SecurityService</b> class provides the Security Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -157,7 +157,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   private Map<UUID, IUserDirectory> userDirectories = new ConcurrentHashMap<>();
 
   /**
-   * Constructs a new <code>SecurityService</code>.
+   * Constructs a new <b>SecurityService</b>.
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
@@ -620,8 +620,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
-   * @return the new internal user directory that was created for the tenant or <code>null
-   * </code> if no user directory was created
+   * @return the new internal user directory that was created for the tenant or <b>null
+   * </b> if no user directory was created
    */
   @Override
   @Transactional
@@ -1710,7 +1710,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *
    * @param username the username for the user
    * @return the Universally Unique Identifier (UUID) for the user directory that the user with the
-   *     specified username is associated with or <code>null</code> if the user cannot be found
+   *     specified username is associated with or <b>null</b> if the user cannot be found
    */
   @Override
   public UUID getUserDirectoryIdForUser(String username)
@@ -2200,7 +2200,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
-   * @return <code>true</code> if a user with specified username exists or <code>false</code>
+   * @return <b>true</b> if a user with specified username exists or <b>false</b>
    *     otherwise
    */
   @Override
@@ -2229,7 +2229,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param username the username for the user
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
    */
   @Override
   public boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
@@ -2683,8 +2683,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *
    * @param username the username for the internal user
    * @return the Universally Unique Identifier (UUID) for the internal user directory the internal
-   *     user with the specified username is associated with or <code>null
-   * </code> if an internal user with the specified username could not be found
+   *     user with the specified username is associated with or <b>null
+   * </b> if an internal user with the specified username could not be found
    */
   private UUID getInternalUserDirectoryIdForUser(String username) throws SecurityServiceException {
     try {
@@ -2702,10 +2702,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   /**
-   * Checks whether the specified value is <code>null</code> or blank.
+   * Checks whether the specified value is <b>null</b> or blank.
    *
    * @param value the value to check
-   * @return true if the value is <code>null</code> or blank
+   * @return true if the value is <b>null</b> or blank
    */
   private boolean isNullOrEmpty(Object value) {
     if (value == null) {

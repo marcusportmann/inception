@@ -21,8 +21,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <code>ContactMechanismId</code> class implements the ID class for the <code>ContactMechanism
- * </code> class.
+ * The <b>ContactMechanismId</b> class implements the ID class for the <b>ContactMechanism </b>
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -46,8 +46,7 @@ public class ContactMechanismId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

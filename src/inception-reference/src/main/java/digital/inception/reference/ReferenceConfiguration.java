@@ -16,13 +16,11 @@
 
 package digital.inception.reference;
 
-
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>ReferenceConfiguration</code> class provides the Spring configuration for the Reference
+ * The <b>ReferenceConfiguration</b> class provides the Spring configuration for the Reference
  * module.
  *
  * @author Marcus Portmann

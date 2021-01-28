@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The <code>Parser</code> class generates a WBXML object hierarchy from the binary data
+ * The <b>Parser</b> class generates a WBXML object hierarchy from the binary data
  * representation of a WBXML document.
  *
  * @author Marcus Portmann
@@ -35,7 +35,7 @@ public class Parser {
 
   private byte[] stringTable = null;
 
-  /** Constructs a new <code>Parser</code>. */
+  /** Constructs a new <b>Parser</b>. */
   public Parser() {}
 
   /**

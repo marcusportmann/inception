@@ -26,7 +26,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>CodeData</code> class holds the information for a code.
+ * The <b>CodeData</b> class holds the information for a code.
  *
  * @author Marcus Portmann
  */
@@ -47,9 +47,9 @@ public class CodeData implements Serializable {
   private final String value;
 
   /**
-   * Constructs a new <code>CodeData</code>.
+   * Constructs a new <b>CodeData</b>.
    *
-   * @param code the <code>Code</code> instance containing the code data
+   * @param code the <b>Code</b> instance containing the code data
    */
   CodeData(Code code) {
     this.id = String.valueOf(code.getId());
@@ -59,7 +59,7 @@ public class CodeData implements Serializable {
   }
 
   /**
-   * Constructs a new <code>CodeData</code>.
+   * Constructs a new <b>CodeData</b>.
    *
    * @param element the WBXML element containing the code data
    */

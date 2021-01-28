@@ -26,7 +26,7 @@
 //
 //
 /// **
-// * The <code>ValidIndividualCustomerValidator</code> class implements the custom constraint
+// * The <b>ValidIndividualCustomerValidator</b> class implements the custom constraint
 // * validator for validating an individual customer.
 // *
 // * @author Marcus Portmann

@@ -28,7 +28,7 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * The <code>SchedulerWebService</code> class.
+ * The <b>SchedulerWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -44,7 +44,7 @@ public class SchedulerWebService {
   private final ISchedulerService schedulerService;
 
   /**
-   * Constructs a new <code>SchedulerWebService</code>.
+   * Constructs a new <b>SchedulerWebService</b>.
    *
    * @param schedulerService the Scheduler Service
    */

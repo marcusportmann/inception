@@ -20,7 +20,7 @@
 // import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 //
 /// **
-// * The <code>AuthorizationServerConfiguration</code> class provides the Spring configuration for
+// * The <b>AuthorizationServerConfiguration</b> class provides the Spring configuration for
 // the
 // * Authorization Server.
 // */

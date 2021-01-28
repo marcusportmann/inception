@@ -36,8 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>ResidencePermitType</code> class holds the information for a possible residence permit
- * type, which is a type of official document giving a foreign national authorization to reside in a
+ * The <b>ResidencePermitType</b> class holds the information for a possible residence permit type,
+ * which is a type of official document giving a foreign national authorization to reside in a
  * country.
  *
  * @author Marcus Portmann
@@ -119,15 +119,14 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>ResidencePermitType</code>. */
+  /** Constructs a new <b>ResidencePermitType</b>. */
   public ResidencePermitType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

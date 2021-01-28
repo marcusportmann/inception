@@ -16,14 +16,12 @@
 
 package digital.inception.reference;
 
-
-
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>PartyRolePurposeId</code> class implements the ID class for the <code>PartyRolePurpose
- * </code> class.
+ * The <b>PartyRolePurposeId</b> class implements the ID class for the <b>PartyRolePurpose </b>
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -38,11 +36,11 @@ public class PartyRolePurposeId implements Serializable {
   /** The Unicode locale identifier for the party role purpose. */
   private String localeId;
 
-  /** Constructs a new <code>PartyRolePurposeId</code>. */
+  /** Constructs a new <b>PartyRolePurposeId</b>. */
   public PartyRolePurposeId() {}
 
   /**
-   * Constructs a new <code>PartyRolePurposeId</code>.
+   * Constructs a new <b>PartyRolePurposeId</b>.
    *
    * @param code the code for the party role purpose
    * @param localeId the Unicode locale identifier for the party role purpose
@@ -56,8 +54,7 @@ public class PartyRolePurposeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

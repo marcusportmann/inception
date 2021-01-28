@@ -22,8 +22,8 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <code>ValidPersonValidator</code> class implements the custom constraint validator for
- * validating a person.
+ * The <b>ValidPersonValidator</b> class implements the custom constraint validator for validating a
+ * person.
  *
  * @author Marcus Portmann
  */

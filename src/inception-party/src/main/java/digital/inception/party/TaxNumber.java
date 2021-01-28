@@ -45,11 +45,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>TaxNumber</code> class holds the information for a tax number.
+ * The <b>TaxNumber</b> class holds the information for a tax number.
  *
- * <p>NOTE: Even though the country of issue is specified as part of the reference data for a tax
- * number type, it is included here to eliminate the additional join. The additional join will also
- * be problematic if the reference data is stored in a separate database.
+ * <p>Even though the country of issue is specified as part of the reference data for a tax number
+ * type, it is included here to eliminate the additional join. The additional join will also be
+ * problematic if the reference data is stored in a separate database.
  *
  * @author Marcus Portmann
  */
@@ -101,7 +101,7 @@ public class TaxNumber implements Serializable {
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
-  private Party party;
+  private PartyBase party;
 
   /** The code for the tax number type. */
   @Schema(description = "The code for the tax number type", required = true)
@@ -120,11 +120,11 @@ public class TaxNumber implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>TaxNumber</code>. */
+  /** Constructs a new <b>TaxNumber</b>. */
   public TaxNumber() {}
 
   /**
-   * Constructs a new <code>TaxNumber</code>.
+   * Constructs a new <b>TaxNumber</b>.
    *
    * @param countryOfIssue the code for the country of issue for the tax number
    * @param type the code for the tax number type
@@ -140,8 +140,7 @@ public class TaxNumber implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -195,7 +194,7 @@ public class TaxNumber implements Serializable {
    * @return the party the tax number is associated with
    */
   @Schema(hidden = true)
-  public Party getParty() {
+  public PartyBase getParty() {
     return party;
   }
 
@@ -252,7 +251,7 @@ public class TaxNumber implements Serializable {
    * @param party the party the tax number is associated with
    */
   @Schema(hidden = true)
-  public void setParty(Party party) {
+  public void setParty(PartyBase party) {
     this.party = party;
   }
 

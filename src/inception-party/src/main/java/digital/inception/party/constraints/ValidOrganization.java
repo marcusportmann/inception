@@ -25,8 +25,8 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * The <code>ValidOrganization</code> annotation implements the custom constraint annotation used to
- * apply the organization validation.
+ * The <b>ValidOrganization</b> annotation implements the custom constraint annotation used to apply
+ * the organization validation.
  *
  * @author Marcus Portmann
  */

@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * The <code>ConfigurationNotFoundException</code> exception is thrown to indicate that the required
+ * The <b>ConfigurationNotFoundException</b> exception is thrown to indicate that the required
  * configuration could not be found when working with the Configuration Service.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +47,7 @@ public class ConfigurationNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ConfigurationNotFoundException</code>.
+   * Constructs a new <b>ConfigurationNotFoundException</b>.
    *
    * @param key the key for the configuration
    */

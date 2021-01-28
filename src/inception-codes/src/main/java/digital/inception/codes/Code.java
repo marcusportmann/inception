@@ -41,7 +41,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>Code</code> class holds the information for a code.
+ * The <b>Code</b> class holds the information for a code.
  *
  * @author Marcus Portmann
  */
@@ -115,11 +115,11 @@ public class Code implements Serializable {
   @Column(name = "value", length = 4000, nullable = false)
   private String value;
 
-  /** Constructs a new <code>Code</code>. */
+  /** Constructs a new <b>Code</b>. */
   public Code() {}
 
   /**
-   * Constructs a new <code>Code</code>.
+   * Constructs a new <b>Code</b>.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    */
@@ -128,7 +128,7 @@ public class Code implements Serializable {
   }
 
   /**
-   * Constructs a new <code>Code</code>.
+   * Constructs a new <b>Code</b>.
    *
    * @param id the ID for the code
    * @param codeCategoryId the ID for the code category the code is associated with
@@ -146,8 +146,7 @@ public class Code implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

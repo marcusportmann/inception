@@ -17,7 +17,7 @@
 package digital.inception.scheduler;
 
 /**
- * The <code>IJob</code> interface defines the functionality that must be provided by all jobs.
+ * The <b>IJob</b> interface defines the functionality that must be provided by all jobs.
  *
  * @author Marcus Portmann
  */

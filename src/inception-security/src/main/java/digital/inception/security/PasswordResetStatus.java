@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>PasswordResetStatus</code> enumeration defines the possible statuses for a password
+ * The <b>PasswordResetStatus</b> enumeration defines the possible statuses for a password
  * reset.
  *
  * @author Marcus Portmann

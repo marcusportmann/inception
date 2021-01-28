@@ -27,7 +27,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>TenantData</code> class holds the information for a tenant.
+ * The <b>TenantData</b> class holds the information for a tenant.
  *
  * @author Marcus Portmann
  */
@@ -42,7 +42,7 @@ public class TenantData implements Serializable {
   private String name;
 
   /**
-   * Constructs a new <code>TenantData</code>.
+   * Constructs a new <b>TenantData</b>.
    *
    * @param element the WBXML element containing the tenant data
    */
@@ -57,9 +57,9 @@ public class TenantData implements Serializable {
   }
 
   /**
-   * Constructs a new <code>TenantData</code>.
+   * Constructs a new <b>TenantData</b>.
    *
-   * @param tenant the <code>Tenant</code> instance containing the tenant data
+   * @param tenant the <b>Tenant</b> instance containing the tenant data
    */
   TenantData(Tenant tenant) {
     this.id = tenant.getId();

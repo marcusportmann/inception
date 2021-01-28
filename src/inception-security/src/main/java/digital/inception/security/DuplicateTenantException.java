@@ -29,11 +29,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>DuplicateTenantException</code> is thrown to indicate that a security operation failed as
+ * A <b>DuplicateTenantException</b> is thrown to indicate that a security operation failed as
  * a result of a duplicate tenant.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -51,7 +50,7 @@ public class DuplicateTenantException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>DuplicateTenantException</code>.
+   * Constructs a new <b>DuplicateTenantException</b>.
    *
    * @param name the name of the tenant
    */
@@ -60,7 +59,7 @@ public class DuplicateTenantException extends ServiceException {
   }
 
   /**
-   * Constructs a new <code>DuplicateTenantException</code>.
+   * Constructs a new <b>DuplicateTenantException</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    */

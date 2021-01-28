@@ -26,7 +26,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 
 
 /**
- * The <code>JtaPlatform</code> class.
+ * The <b>JtaPlatform</b> class.
  *
  * @author Marcus Portmann
  */
@@ -35,7 +35,7 @@ public class JtaPlatform extends AbstractJtaPlatform {
   private final JtaTransactionManager transactionManager;
 
   /**
-   * Constructs a new <code>JtaPlatform</code>.
+   * Constructs a new <b>JtaPlatform</b>.
    *
    * @param transactionManager the JTA transaction manager
    */

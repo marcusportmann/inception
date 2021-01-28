@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * The <code>PasswordResetId</code> class implements the ID class for the <code>PasswordReset</code>
+ * The <b>PasswordResetId</b> class implements the ID class for the <b>PasswordReset</b>
  * class.
  *
  * @author Marcus Portmann
@@ -39,11 +39,11 @@ public class PasswordResetId implements Serializable {
   /** The username for the user associated with the password reset. */
   private String username;
 
-  /** Constructs a new <code>PasswordResetId</code>. */
+  /** Constructs a new <b>PasswordResetId</b>. */
   public PasswordResetId() {}
 
   /**
-   * Constructs a new <code>CodeId</code>.
+   * Constructs a new <b>CodeId</b>.
    *
    * @param username the username for the user associated with the password reset
    * @param requested the date and time the password reset was requested
@@ -57,8 +57,8 @@ public class PasswordResetId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

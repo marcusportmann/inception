@@ -48,7 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>MailService</code> class provides the Mail Service implementation.
+ * The <b>MailService</b> class provides the Mail Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -78,7 +78,7 @@ public class MailService implements IMailService, InitializingBean {
   private JavaMailSender javaMailSender;
 
   /**
-   * Constructs a new <code>MailService</code>.
+   * Constructs a new <b>MailService</b>.
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
@@ -125,7 +125,7 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Create the new mail template.
    *
-   * @param mailTemplate the <code>MailTemplate</code> instance containing the information for the
+   * @param mailTemplate the <b>MailTemplate</b> instance containing the information for the
    *     new mail template
    */
   @Override
@@ -337,7 +337,7 @@ public class MailService implements IMailService, InitializingBean {
    * Check whether the mail template exists.
    *
    * @param mailTemplateId the ID for the mail template
-   * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
+   * @return <b>true</b> if the mail template exists or <b>false</b> otherwise
    */
   @Override
   public boolean mailTemplateExists(String mailTemplateId)
@@ -467,7 +467,7 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Update the mail template.
    *
-   * @param mailTemplate the <code>MailTemplate</code> instance containing the updated information
+   * @param mailTemplate the <b>MailTemplate</b> instance containing the updated information
    *     for the mail template
    */
   @Override

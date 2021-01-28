@@ -42,7 +42,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 
 
 /**
- * The <code>SchedulerServiceTest</code> class contains the implementation of the JUnit tests for
+ * The <b>SchedulerServiceTest</b> class contains the implementation of the JUnit tests for
  * the Scheduler Service.
  *
  * @author Marcus Portmann

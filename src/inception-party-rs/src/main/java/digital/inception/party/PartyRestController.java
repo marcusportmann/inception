@@ -43,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>PartyRestController</code> class.
+ * The <b>PartyRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -58,7 +58,7 @@ public class PartyRestController extends SecureRestController {
   private final IPartyService partyService;
 
   /**
-   * Constructs a new <code>PartyRestController</code>.
+   * Constructs a new <b>PartyRestController</b>.
    *
    * @param partyService the Party Service
    */

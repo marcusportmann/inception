@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 
 /**
- * The <code>MailWebService</code> class.
+ * The <b>MailWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -46,7 +46,7 @@ public class MailWebService {
   private final IMailService mailService;
 
   /**
-   * Constructs a new <code>MailWebService</code>.
+   * Constructs a new <b>MailWebService</b>.
    *
    * @param mailService the Mail Service
    */

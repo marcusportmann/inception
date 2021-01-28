@@ -19,7 +19,7 @@
 //import org.eclipse.persistence.transaction.JTATransactionController;
 //
 ///**
-// * The <code>JtaTransactionController</code> class implements the external JTA transaction
+// * The <b>JtaTransactionController</b> class implements the external JTA transaction
 // * controller for the EclipseLink persistence provider.
 // *
 // * @author Marcus Portmann

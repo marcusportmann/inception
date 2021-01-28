@@ -16,8 +16,6 @@
 
 package digital.inception.application.test;
 
-
-
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,10 +25,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
- * The <code>TestJPAService</code> class provides the Test JPA Service implementation.
+ * The <b>TestJPAService</b> class provides the Test JPA Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -43,10 +39,10 @@ public class TestJPAService implements ITestJPAService {
   private EntityManager entityManager;
 
   /** The Spring platform transaction manager. */
-  private PlatformTransactionManager transactionManager;
+  private final PlatformTransactionManager transactionManager;
 
   /**
-   * Constructs a new <code>TestJPAService</code>.
+   * Constructs a new <b>TestJPAService</b>.
    *
    * @param platformTransactionManager the Spring platform transaction manager
    */
@@ -146,7 +142,7 @@ public class TestJPAService implements ITestJPAService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return the test data or <code>null</code> if the test data cannot be found
+   * @return the test data or <b>null</b> if the test data cannot be found
    */
   @Transactional
   public TestData getTestData(String id) throws TestJPAServiceException {
@@ -173,7 +169,7 @@ public class TestJPAService implements ITestJPAService {
    * Retrieve the test data without a transaction.
    *
    * @param id the ID
-   * @return the test data or <code>null</code> if the test data cannot be found
+   * @return the test data or <b>null</b> if the test data cannot be found
    */
   public TestData getTestDataWithoutTransaction(String id) throws TestJPAServiceException {
     try {

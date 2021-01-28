@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- * The <code>CodeCategorySummary</code> class holds the summary information for a code category.
+ * The <b>CodeCategorySummary</b> class holds the summary information for a code category.
  *
  * @author Marcus Portmann
  */
@@ -86,11 +86,11 @@ public class CodeCategorySummary implements Serializable {
   @Column(name = "updated")
   private LocalDateTime updated;
 
-  /** Constructs a new <code>CodeCategorySummary</code>. */
+  /** Constructs a new <b>CodeCategorySummary</b>. */
   public CodeCategorySummary() {}
 
   /**
-   * Constructs a new <code>CodeCategorySummary</code>.
+   * Constructs a new <b>CodeCategorySummary</b>.
    *
    * @param id the ID for the code category
    * @param name the name of the code category
@@ -106,8 +106,7 @@ public class CodeCategorySummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

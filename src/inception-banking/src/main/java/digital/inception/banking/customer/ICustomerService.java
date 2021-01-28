@@ -21,7 +21,7 @@
 // import java.util.UUID;
 //
 /// **
-// * The <code>ICustomerService</code> interface defines the functionality provided by a Customer
+// * The <b>ICustomerService</b> interface defines the functionality provided by a Customer
 // * Service implementation.
 // *
 // * @author Marcus Portmann

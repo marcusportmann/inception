@@ -23,8 +23,8 @@ import java.io.Reader;
 import org.w3c.dom.ls.LSInput;
 
 /**
- * The <code>XmlSchemaClasspathInputSource</code> class provides an implementation of the <code>
- * org.w3c.dom.ls.LSInput</code> interface that allows resources to be retrieved from the classpath.
+ * The <b>XmlSchemaClasspathInputSource</b> class provides an implementation of the <b>
+ * org.w3c.dom.ls.LSInput</b> interface that allows resources to be retrieved from the classpath.
  *
  * @author Marcus Portmann
  */
@@ -52,7 +52,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   private String systemId;
 
   /**
-   * Constructs a new <code>XmlSchemaClasspathInputSource</code>.
+   * Constructs a new <b>XmlSchemaClasspathInputSource</b>.
    *
    * @param namespaceURI the namespace for this input source
    * @param publicId the public identifier for this input source.
@@ -99,9 +99,9 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Returns the <code>InputStream</code> for the input source.
+   * Returns the <b>InputStream</b> for the input source.
    *
-   * @return the <code>InputStream</code> for the input source
+   * @return the <b>InputStream</b> for the input source
    */
   @Override
   public InputStream getByteStream() {
@@ -109,9 +109,9 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Returns <code>true</code> if the input source is certified or <code>false</code> otherwise.
+   * Returns <b>true</b> if the input source is certified or <b>false</b> otherwise.
    *
-   * @return <code>true</code> if the input source is certified or <code>false</code> otherwise
+   * @return <b>true</b> if the input source is certified or <b>false</b> otherwise
    */
   @Override
   public boolean getCertifiedText() {
@@ -158,9 +158,9 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Returns the <code>String</code> data for the input source
+   * Returns the <b>String</b> data for the input source
    *
-   * @return the <code>String</code> data for the input source
+   * @return the <b>String</b> data for the input source
    */
   @Override
   public String getStringData() {
@@ -214,7 +214,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   /**
    * Set whether the input source is certified.
    *
-   * @param certifiedText <code>true</code> if the input source is certified or <code>false</code>
+   * @param certifiedText <b>true</b> if the input source is certified or <b>false</b>
    *     otherwise
    */
   @Override
@@ -254,9 +254,9 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   }
 
   /**
-   * Set the <code>String</code> data for the input source.
+   * Set the <b>String</b> data for the input source.
    *
-   * @param stringData the <code>String</code> data for the input source
+   * @param stringData the <b>String</b> data for the input source
    */
   @Override
   public void setStringData(String stringData) {

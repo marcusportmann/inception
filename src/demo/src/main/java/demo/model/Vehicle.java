@@ -20,22 +20,40 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.github.f4b6a3.uuid.UuidCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>Vehicle</code> class.
+ * The <b>Vehicle</b> class.
+ *
+ * <p>The <b>Vehicle</b> and <b>VehicleBase</b> classes are both JPA entity classes mapped to the
+ * same <b>demo.vehicles</b> table. The <b>VehicleBase</b> class provides the common base class for
+ * all JPA entity classes that form part of the vehicle inheritance model, e.g. <b>Car</b>,
+ * <b>Motorbike</b>, etc. This inheritance model is required to allow the same child classes to be
+ * mapped to the different parent classes for the different vehicle types, e.g. to support the
+ * one-to-many mappings for both the <b>Car</b> and <b>Motorbike</b> classes to the
+ * <b>VehicleAttribute</b> class. The <b>Vehicle</b> class provides a mechanism to retrieve the
+ * minimum amount of vehicle information without executing the polymorphic query that would result
+ * from retrieving the same entities using a query that specifies the <b>VehicleBase</b> class as
+ * the result type.
  *
  * @author Marcus Portmann
  */
@@ -50,38 +68,70 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
 @Table(schema = "demo", name = "vehicles")
-public class Vehicle extends VehicleBase implements Serializable {
+public class Vehicle implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <code>Vehicle</code>. */
+  /** The date and time the vehicle was created. */
+  @JsonIgnore
+  @XmlTransient
+  @CreationTimestamp
+  @Column(table = "vehicles", name = "created", nullable = false, updatable = false)
+  private LocalDateTime created;
+
+  /** The Universally Unique Identifier (UUID) for the vehicle. */
+  @Schema(description = "The Universally Unique Identifier (UUID) for the vehicle", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
+  @NotNull
+  @Id
+  @Column(table = "vehicles", name = "id", nullable = false)
+  private UUID id;
+
+  /** The name of the vehicle. */
+  @Schema(description = "The name of the vehicle", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(table = "vehicles", name = "name", length = 100, nullable = false)
+  private String name;
+
+  /** The vehicle type. */
+  @Schema(description = "The vehicle type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Column(table = "vehicles", name = "type", length = 30, nullable = false)
+  private VehicleType type;
+
+  /** The date and time the vehicle was last updated. */
+  @JsonIgnore
+  @XmlTransient
+  @UpdateTimestamp
+  @Column(table = "vehicles", name = "updated", insertable = false)
+  private LocalDateTime updated;
+
+  /** Constructs a new <b>Vehicle</b>. */
   public Vehicle() {}
 
   /**
-   * Constructs a new <code>Vehicle</code>.
-   *
-   * @param type the vehicle type
-   */
-  public Vehicle(VehicleType type) {
-    super(type);
-  }
-
-  /**
-   * Constructs a new <code>Vehicle</code>.
+   * Constructs a new <b>Vehicle</b>.
    *
    * @param type the vehicle type
    * @param name the name of the vehicle
    */
   public Vehicle(VehicleType type, String name) {
-    super(type, name);
+    this.id = UuidCreator.getShortPrefixComb();
+    this.type = type;
+    this.name = name;
   }
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -99,7 +149,7 @@ public class Vehicle extends VehicleBase implements Serializable {
 
     Vehicle other = (Vehicle) object;
 
-    return Objects.equals(getId(), other.getId());
+    return Objects.equals(id, other.id);
   }
 
   /**
@@ -107,11 +157,8 @@ public class Vehicle extends VehicleBase implements Serializable {
    *
    * @return the date and time the vehicle was created
    */
-  @JsonIgnore
-  @XmlTransient
-  @Override
   public LocalDateTime getCreated() {
-    return super.getCreated();
+    return created;
   }
 
   /**
@@ -119,12 +166,8 @@ public class Vehicle extends VehicleBase implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) for the vehicle
    */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the vehicle", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
-  @Override
   public UUID getId() {
-    return super.getId();
+    return id;
   }
 
   /**
@@ -132,12 +175,8 @@ public class Vehicle extends VehicleBase implements Serializable {
    *
    * @return the name of the vehicle
    */
-  @Schema(description = "The name of the vehicle", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
-  @Override
   public String getName() {
-    return super.getName();
+    return name;
   }
 
   /**
@@ -145,12 +184,8 @@ public class Vehicle extends VehicleBase implements Serializable {
    *
    * @return the vehicle type
    */
-  @Schema(description = "The vehicle type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
-  @Override
   public VehicleType getType() {
-    return super.getType();
+    return type;
   }
 
   /**
@@ -158,11 +193,8 @@ public class Vehicle extends VehicleBase implements Serializable {
    *
    * @return the date and time the vehicle was last updated
    */
-  @JsonIgnore
-  @XmlTransient
-  @Override
   public LocalDateTime getUpdated() {
-    return super.getUpdated();
+    return updated;
   }
 
   /**
@@ -172,7 +204,7 @@ public class Vehicle extends VehicleBase implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((super.getId() == null) ? 0 : super.getId().hashCode());
+    return ((id == null) ? 0 : id.hashCode());
   }
 
   /**
@@ -180,9 +212,8 @@ public class Vehicle extends VehicleBase implements Serializable {
    *
    * @param id the Universally Unique Identifier (UUID) for the vehicle
    */
-  @Override
   public void setId(UUID id) {
-    super.setId(id);
+    this.id = id;
   }
 
   /**
@@ -190,9 +221,8 @@ public class Vehicle extends VehicleBase implements Serializable {
    *
    * @param name the name of the vehicle
    */
-  @Override
   public void setName(String name) {
-    super.setName(name);
+    this.name = name;
   }
 
   /**
@@ -200,8 +230,7 @@ public class Vehicle extends VehicleBase implements Serializable {
    *
    * @param type the vehicle type
    */
-  @Override
   public void setType(VehicleType type) {
-    super.setType(type);
+    this.type = type;
   }
 }

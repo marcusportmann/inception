@@ -82,8 +82,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 
 
 /**
- * The <code>MessagingServletTest</code> class contains the implementation of the JUnit tests for
- * the <code>MessagingServlet</code> class.
+ * The <b>MessagingServletTest</b> class contains the implementation of the JUnit tests for
+ * the <b>MessagingServlet</b> class.
  *
  * @author Marcus Portmann
  */

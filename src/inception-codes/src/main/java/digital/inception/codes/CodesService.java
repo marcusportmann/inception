@@ -46,7 +46,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 /**
- * The <code>CodesService</code> class provides the Codes Service implementation.
+ * The <b>CodesService</b> class provides the Codes Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -88,7 +88,7 @@ public class CodesService implements ICodesService, InitializingBean {
   private List<ICodeProvider> codeProviders;
 
   /**
-   * Constructs a new <code>CodesService</code>.
+   * Constructs a new <b>CodesService</b>.
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
@@ -131,7 +131,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Check whether the code category exists.
    *
    * @param codeCategoryId the ID for the code category
-   * @return <code>true</code> if the code category exists or <code>false</code> otherwise
+   * @return <b>true</b> if the code category exists or <b>false</b> otherwise
    */
   @Override
   public boolean codeCategoryExists(String codeCategoryId)
@@ -153,7 +153,7 @@ public class CodesService implements ICodesService, InitializingBean {
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code
-   * @return <code>true</code> if the code exists or <code>false</code> otherwise
+   * @return <b>true</b> if the code exists or <b>false</b> otherwise
    */
   @Override
   public boolean codeExists(String codeCategoryId, String codeId)
@@ -182,7 +182,7 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Create the new code.
    *
-   * @param code the <code>Code</code> instance containing the information for the new code
+   * @param code the <b>Code</b> instance containing the information for the new code
    */
   @Override
   @Transactional
@@ -217,8 +217,8 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Create the new code category.
    *
-   * @param codeCategory the <code>CodeCategory</code> instance containing the information for the
-   *     new code category
+   * @param codeCategory the <b>CodeCategory</b> instance containing the information for the new
+   *     code category
    */
   @Override
   @Transactional
@@ -405,9 +405,8 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Retrieve the XML or JSON data for the code category.
    *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
+   * registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration file.
    *
    * @param codeCategoryId the ID for the code category
    * @return the XML or JSON data for the code category
@@ -447,9 +446,8 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Retrieve the XML or JSON data for the code category using the specified parameters.
    *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
+   * registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration file.
    *
    * @param codeCategoryId the ID for the code category
    * @param parameters the parameters
@@ -629,9 +627,9 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Retrieve the codes for the code category.
    *
-   * <p>NOTE: This will also attempt to retrieve the codes from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * file.
    *
    * @param codeCategoryId the ID for the code category
    * @return the codes for the code category
@@ -667,9 +665,9 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Retrieve the codes for the code category using the specified parameters.
    *
-   * <p>NOTE: This will also attempt to retrieve the codes from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * file.
    *
    * @param codeCategoryId the ID for the code category
    * @param parameters the parameters
@@ -707,7 +705,7 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Update the existing code.
    *
-   * @param code the <code>Code</code> instance containing the updated information for the code
+   * @param code the <b>Code</b> instance containing the updated information for the code
    */
   @Override
   public void updateCode(Code code)
@@ -730,8 +728,8 @@ public class CodesService implements ICodesService, InitializingBean {
   /**
    * Update the existing code category.
    *
-   * @param codeCategory the <code>CodeCategory</code> instance containing the updated information
-   *     for the code category
+   * @param codeCategory the <b>CodeCategory</b> instance containing the updated information for the
+   *     code category
    */
   @Override
   public void updateCodeCategory(CodeCategory codeCategory)

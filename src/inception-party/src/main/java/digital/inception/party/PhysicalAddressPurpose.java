@@ -24,8 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>PhysicalAddressPurpose</code> enumeration defines the possible physical address
- * purposes.
+ * The <b>PhysicalAddressPurpose</b> enumeration defines the possible physical address purposes.
  *
  * @author Marcus Portmann
  */

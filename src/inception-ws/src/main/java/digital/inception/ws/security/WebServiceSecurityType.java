@@ -109,9 +109,9 @@ public enum WebServiceSecurityType {
   }
 
   /**
-   * Return the string representation of the <code>WebServiceSecurityType</code> enumeration value.
+   * Return the string representation of the <b>WebServiceSecurityType</b> enumeration value.
    *
-   * @return the string representation of the <code>WebServiceSecurityType</code> enumeration value
+   * @return the string representation of the <b>WebServiceSecurityType</b> enumeration value
    */
   public String toString() {
     return description;

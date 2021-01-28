@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>MailRestController</code> class.
+ * The <b>MailRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -64,7 +64,7 @@ public class MailRestController extends SecureRestController {
   private final IMailService mailService;
 
   /**
-   * Constructs a new <code>MailRestController</code>.
+   * Constructs a new <b>MailRestController</b>.
    *
    * @param mailService the Mail Service
    */

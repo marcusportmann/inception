@@ -16,14 +16,12 @@
 
 package digital.inception.party;
 
-
-
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.UUID;
 
 /**
- * The <code>IPartyService</code> interface defines the functionality provided by a Party Service
+ * The <b>IPartyService</b> interface defines the functionality provided by a Party Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -50,8 +48,7 @@ public interface IPartyService {
   /**
    * Delete the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) for the
-   *     organization
+   * @param organizationId the Universally Unique Identifier (UUID) for the organization
    */
   void deleteOrganization(UUID organizationId)
       throws InvalidArgumentException, OrganizationNotFoundException, PartyServiceException;
@@ -75,8 +72,7 @@ public interface IPartyService {
   /**
    * Retrieve the organization.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) for the
-   *     organization
+   * @param organizationId the Universally Unique Identifier (UUID) for the organization
    * @return the organization
    */
   Organization getOrganization(UUID organizationId)

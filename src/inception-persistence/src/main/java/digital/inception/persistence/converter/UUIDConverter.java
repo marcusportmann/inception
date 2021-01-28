@@ -24,7 +24,7 @@
 //import javax.persistence.Converter;
 //
 ///**
-// * The <code>UUIDConverter</code> class implements the custom JPA converter for the UUID type.
+// * The <b>UUIDConverter</b> class implements the custom JPA converter for the UUID type.
 // *
 // * <p>NOTE: This is required for EclipseLink.
 // *

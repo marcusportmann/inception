@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>ErrorGrantResponse</code> class holds the information for an OAuth2 error response and
+ * The <b>ErrorGrantResponse</b> class holds the information for an OAuth2 error response and
  * provides the base class that all OAuth2 error response classes should be derived from.
  *
  * <p>See: <a href="https://tools.ietf.org/html/rfc6749#section-5.2">Error Response</a>
@@ -39,7 +39,7 @@ public abstract class ErrorResponse extends Response {
   private final String errorDescription;
 
   /**
-   * Constructs a new <code>ErrorGrantResponse</code>.
+   * Constructs a new <b>ErrorGrantResponse</b>.
    *
    * @param status the HTTP status that should be returned for the OAuth2 error response
    * @param error the single ASCII error code
@@ -52,7 +52,7 @@ public abstract class ErrorResponse extends Response {
   }
 
   /**
-   * Constructs a new <code>ErrorResponse</code>.
+   * Constructs a new <b>ErrorResponse</b>.
    *
    * @param status the HTTP status that should be returned for the OAuth2 error response
    * @param error the single ASCII error code

@@ -17,7 +17,7 @@
 package demo.ws;
 
 import demo.model.Data;
-import demo.model.DemoServiceException;
+import demo.model.DataServiceException;
 import demo.model.IDataService;
 import digital.inception.core.validation.ValidationError;
 import java.time.LocalDate;
@@ -32,24 +32,24 @@ import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * The <code>DemoWebService</code> class.
+ * The <b>DataWebService</b> class.
  *
  * @author Marcus Portmann
  */
-@WebService(serviceName = "DemoService", name = "IDemoService", targetNamespace = "http://demo")
+@WebService(serviceName = "DataService", name = "IDataService", targetNamespace = "http://demo")
 @SOAPBinding
 @SuppressWarnings({"unused", "ValidExternallyBoundObject"})
-public class DemoWebService {
+public class DataWebService {
 
-  private final IDataService demoService;
+  private final IDataService dataService;
 
   /**
-   * Constructs a new <code>DemoWebService</code>.
+   * Constructs a new <b>DataWebService</b>.
    *
-   * @param demoService the Demo Service
+   * @param dataService the Data Service
    */
-  public DemoWebService(IDataService demoService) {
-    this.demoService = demoService;
+  public DataWebService(IDataService dataService) {
+    this.dataService = dataService;
   }
 
   /**
@@ -59,8 +59,8 @@ public class DemoWebService {
    */
   @WebMethod(operationName = "GetAllData")
   @WebResult(name = "Data")
-  public List<Data> getAllData() throws DemoServiceException {
-    return demoService.getAllData();
+  public List<Data> getAllData() throws DataServiceException {
+    return dataService.getAllData();
   }
 
   /**
@@ -70,22 +70,22 @@ public class DemoWebService {
    */
   @WebMethod(operationName = "GetData")
   @WebResult(name = "Data")
-  public Data getData() throws DemoServiceException {
+  public Data getData() throws DataServiceException {
     long id = System.currentTimeMillis();
 
     Data data = new Data(id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
 
-    demoService.createData(data);
+    dataService.createData(data);
 
-    data = demoService.getData(data.getId());
+    data = dataService.getData(data.getId());
 
     return data;
   }
 
   /** Test the exception handling. */
   @WebMethod(operationName = "TestExceptionHandling")
-  public void testExceptionHandling() throws DemoServiceException {
-    throw new DemoServiceException("Testing 1.. 2.. 3..");
+  public void testExceptionHandling() throws DataServiceException {
+    throw new DataServiceException("Testing 1.. 2.. 3..");
   }
 
   /**
@@ -96,9 +96,9 @@ public class DemoWebService {
   @WebMethod(operationName = "TestLocalDateTime")
   public LocalDateTime testLocalDateTime(
       @WebParam(name = "LocalDateTime") @XmlElement(required = true) LocalDateTime localDateTime)
-      throws DemoServiceException {
+      throws DataServiceException {
     if (true) {
-      throw new DemoServiceException("Testing 1.. 2.. 3...");
+      throw new DataServiceException("Testing 1.. 2.. 3...");
     }
 
     System.out.println("localDateTime = " + localDateTime);
@@ -114,9 +114,9 @@ public class DemoWebService {
   @WebMethod(operationName = "TestZonedDateTime")
   public ZonedDateTime testZonedDateTime(
       @WebParam(name = "ZonedDateTime") @XmlElement(required = true) ZonedDateTime zonedDateTime)
-      throws DemoServiceException {
+      throws DataServiceException {
     if (false) {
-      throw new DemoServiceException("Testing 1.. 2.. 3...");
+      throw new DataServiceException("Testing 1.. 2.. 3...");
     }
 
     System.out.println("zonedDateTime = " + zonedDateTime);
@@ -125,10 +125,10 @@ public class DemoWebService {
   }
 
   /** Validate the data. */
-  @WebMethod(operationName = "Validate")
+  @WebMethod(operationName = "ValidateData")
   @WebResult(name = "ValidationError")
-  public List<ValidationError> validate(
-      @WebParam(name = "Data") @XmlElement(required = true) Data data) throws DemoServiceException {
-    return demoService.validateData(data);
+  public List<ValidationError> validateData(
+      @WebParam(name = "Data") @XmlElement(required = true) Data data) throws DataServiceException {
+    return dataService.validateData(data);
   }
 }

@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>EmploymentStatusRepository</code> interface declares the repository for the <code>
- * EmploymentStatus</code> domain type.
+ * The <b>EmploymentStatusRepository</b> interface declares the repository for the <b>
+ * EmploymentStatus</b> domain type.
  *
  * @author Marcus Portmann
  */

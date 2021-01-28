@@ -22,8 +22,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>PasswordResetStatusConverter</code> class implements the custom JPA converter for the
- * <code>PasswordResetStatus</code> enumeration.
+ * The <b>PasswordResetStatusConverter</b> class implements the custom JPA converter for the
+ * <b>PasswordResetStatus</b> enumeration.
  *
  * @author Marcus Portmann
  */

@@ -16,14 +16,12 @@
 
 package digital.inception.reference;
 
-
-
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>ContactMechanismPurposeId</code> class implements the ID class for the <code>
- * ContactMechanismPurpose</code> class.
+ * The <b>ContactMechanismPurposeId</b> class implements the ID class for the <b>
+ * ContactMechanismPurpose</b> class.
  *
  * @author Marcus Portmann
  */
@@ -41,11 +39,11 @@ public class ContactMechanismPurposeId implements Serializable {
   /** The code for the contact mechanism type the contact mechanism purpose is associated with. */
   private String type;
 
-  /** Constructs a new <code>ContactMechanismPurposeId</code>. */
+  /** Constructs a new <b>ContactMechanismPurposeId</b>. */
   public ContactMechanismPurposeId() {}
 
   /**
-   * Constructs a new <code>ContactMechanismPurposeId</code>.
+   * Constructs a new <b>ContactMechanismPurposeId</b>.
    *
    * @param type the code for the contact mechanism type the contact mechanism purpose is associated
    *     with
@@ -62,8 +60,7 @@ public class ContactMechanismPurposeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

@@ -24,11 +24,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>InvalidBPMNException</code> exception is thrown to indicate an error condition as a
- * result of invalid BPMN 2.0 XML data.
+ * The <b>InvalidBPMNException</b> exception is thrown to indicate an error condition as a result of
+ * invalid BPMN 2.0 XML data.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -43,25 +42,25 @@ public class InvalidBPMNException extends ServiceException {
 
   private static final long serialVersionUID = 1000000;
 
-  /** Constructs a new <code>InvalidBPMNException</code>. */
+  /** Constructs a new <b>InvalidBPMNException</b>. */
   public InvalidBPMNException() {
     super("InvalidBPMNError", "The BPMN 2.0 XML data is invalid");
   }
 
   /**
-   * Constructs a new <code>InvalidBPMNException</code> with the specified message.
+   * Constructs a new <b>InvalidBPMNException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public InvalidBPMNException(String message) {
     super("InvalidBPMNError", message);
   }
 
   /**
-   * Constructs a new <code>InvalidBPMNException</code>.
+   * Constructs a new <b>InvalidBPMNException</b>.
    *
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidBPMNException(Throwable cause) {
     super("InvalidBPMNError", "The BPMN 2.0 XML data is invalid", cause);

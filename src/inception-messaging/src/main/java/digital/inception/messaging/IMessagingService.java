@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <code>IMessagingService</code> interface defines the interface for the Messaging Service for
+ * The <b>IMessagingService</b> interface defines the interface for the Messaging Service for
  * the messaging infrastructure.
  *
  * @author Marcus Portmann
@@ -36,8 +36,8 @@ public interface IMessagingService {
    *
    * @param messageId the Universally Unique Identifier (UUID) for the message
    * @param totalParts the total number of parts for the message
-   * @return <code>true</code> if all the parts for the message have been queued for assembly or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if all the parts for the message have been queued for assembly or
+   *     <b>false</b> otherwise
    */
   boolean allMessagePartsForMessageQueuedForAssembly(UUID messageId, int totalParts)
       throws InvalidArgumentException, MessagingServiceException;
@@ -59,36 +59,36 @@ public interface IMessagingService {
       throws InvalidArgumentException, MessagingServiceException;
 
   /**
-   * Returns <code>true</code> if the message processor is capable of processing the specified
-   * message or <code>false</code> otherwise.
+   * Returns <b>true</b> if the message processor is capable of processing the specified
+   * message or <b>false</b> otherwise.
    *
    * @param message the message to process
-   * @return <code>true</code> if the message processor is capable of processing the specified
-   *     message or <code>false</code> otherwise
+   * @return <b>true</b> if the message processor is capable of processing the specified
+   *     message or <b>false</b> otherwise
    */
   boolean canProcessMessage(Message message);
 
   /**
-   * Returns <code>true</code> if the message processor is capable of queueing the specified message
-   * part for assembly or <code>false</code> otherwise.
+   * Returns <b>true</b> if the message processor is capable of queueing the specified message
+   * part for assembly or <b>false</b> otherwise.
    *
    * @param messagePart the message part to queue for assembly
-   * @return <code>true</code> if the message processor is capable of queueing the specified message
-   *     part for assembly or <code>false</code> otherwise
+   * @return <b>true</b> if the message processor is capable of queueing the specified message
+   *     part for assembly or <b>false</b> otherwise
    */
   boolean canQueueMessagePartForAssembly(MessagePart messagePart);
 
   /**
    * Create the new message.
    *
-   * @param message the <code>Message</code> instance containing the information for the message
+   * @param message the <b>Message</b> instance containing the information for the message
    */
   void createMessage(Message message) throws InvalidArgumentException, MessagingServiceException;
 
   /**
    * Create the new message part.
    *
-   * @param messagePart the <code>MessagePart</code> instance containing the information for the
+   * @param messagePart the <b>MessagePart</b> instance containing the information for the
    *     message part
    */
   void createMessagePart(MessagePart messagePart)
@@ -98,7 +98,7 @@ public interface IMessagingService {
    * Decrypt the message.
    *
    * @param message the message to decrypt
-   * @return <code>true</code> if the message data was decrypted successfully or <code>false</code>
+   * @return <b>true</b> if the message data was decrypted successfully or <b>false</b>
    *     otherwise
    */
   boolean decryptMessage(Message message) throws MessagingServiceException;
@@ -150,7 +150,7 @@ public interface IMessagingService {
    * Encrypt the message.
    *
    * @param message the message to encrypt
-   * @return <code>true</code> if the message data was encrypted successfully or <code>false</code>
+   * @return <b>true</b> if the message data was encrypted successfully or <b>false</b>
    *     otherwise
    */
   boolean encryptMessage(Message message) throws MessagingServiceException;
@@ -209,7 +209,7 @@ public interface IMessagingService {
    *
    * <p>The message will be locked to prevent duplicate processing.
    *
-   * @return the next message that has been queued for processing or <code>null</code> if no
+   * @return the next message that has been queued for processing or <b>null</b> if no
    *     messages are currently queued for processing
    */
   Message getNextMessageQueuedForProcessing() throws MessagingServiceException;
@@ -218,7 +218,7 @@ public interface IMessagingService {
    * Should the specified message be archived?
    *
    * @param message the message
-   * @return <code>true</code> if the message should be archived or <code>false</code> otherwise
+   * @return <b>true</b> if the message should be archived or <b>false</b> otherwise
    */
   boolean isArchivableMessage(Message message);
 
@@ -226,7 +226,7 @@ public interface IMessagingService {
    * Can the specified message be processed asynchronously?
    *
    * @param message the message
-   * @return <code>true</code> if the message can be processed asynchronously or <code>false</code>
+   * @return <b>true</b> if the message can be processed asynchronously or <b>false</b>
    *     otherwise
    */
   boolean isAsynchronousMessage(Message message);
@@ -235,7 +235,7 @@ public interface IMessagingService {
    * Has the message already been archived?
    *
    * @param messageId the Universally Unique Identifier (UUID) for the message
-   * @return <code>true</code> if the message has already been archived or <code>false</code>
+   * @return <b>true</b> if the message has already been archived or <b>false</b>
    *     otherwise
    */
   boolean isMessageArchived(UUID messageId)
@@ -246,8 +246,8 @@ public interface IMessagingService {
    *
    * @param messagePartId the Universally Unique Identifier (UUID) for the message
    *     part
-   * @return <code>true</code> if the message part has already been queued for assembly or <code>
-   * false</code> otherwise
+   * @return <b>true</b> if the message part has already been queued for assembly or <b>
+   * false</b> otherwise
    */
   boolean isMessagePartQueuedForAssembly(UUID messagePartId)
       throws InvalidArgumentException, MessagingServiceException;
@@ -256,7 +256,7 @@ public interface IMessagingService {
    * Should the specified message be be processed securely?
    *
    * @param message the message
-   * @return <code>true</code> if the message is secure or <code>false</code> otherwise
+   * @return <b>true</b> if the message is secure or <b>false</b> otherwise
    */
   boolean isSecureMessage(Message message);
 
@@ -264,7 +264,7 @@ public interface IMessagingService {
    * Can the specified message be processed synchronously?
    *
    * @param message the message
-   * @return <code>true</code> if the message can be processed synchronously or <code>false</code>
+   * @return <b>true</b> if the message can be processed synchronously or <b>false</b>
    *     otherwise
    */
   boolean isSynchronousMessage(Message message);
@@ -273,7 +273,7 @@ public interface IMessagingService {
    * Process the message.
    *
    * @param message the message to process
-   * @return the response message or <code>null</code> if no response message exists
+   * @return the response message or <b>null</b> if no response message exists
    */
   Message processMessage(Message message)
       throws InvalidArgumentException, MessagingServiceException;

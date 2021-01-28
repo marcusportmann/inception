@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>UserDirectoryCapabilities</code> class holds the information that describes the
+ * The <b>UserDirectoryCapabilities</b> class holds the information that describes the
  * capabilities supported by a user directory.
  *
  * @author Marcus Portmann
@@ -137,11 +137,11 @@ public class UserDirectoryCapabilities {
   @NotNull
   private boolean supportsUserLocks;
 
-  /** Constructs a new <code>UserDirectoryCapabilities</code>. */
+  /** Constructs a new <b>UserDirectoryCapabilities</b>. */
   public UserDirectoryCapabilities() {}
 
   /**
-   * Constructs a new <code>UserDirectoryCapabilities</code>.
+   * Constructs a new <b>UserDirectoryCapabilities</b>.
    *
    * @param supportsAdminChangePassword the user directory supports the admin change password
    *     capability
@@ -178,8 +178,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the admin change password capability.
    *
-   * @return <code>true</code> if the user directory supports the admin change password capability
-   *     or <code>false</code> otherwise
+   * @return <b>true</b> if the user directory supports the admin change password capability
+   *     or <b>false</b> otherwise
    */
   public boolean getSupportsAdminChangePassword() {
     return supportsAdminChangePassword;
@@ -188,8 +188,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the change password capability.
    *
-   * @return <code>true</code> if the user directory supports the change password capability or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the user directory supports the change password capability or
+   *     <b>false</b> otherwise
    */
   public boolean getSupportsChangePassword() {
     return supportsChangePassword;
@@ -198,8 +198,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the group administration capability.
    *
-   * @return <code>true</code> if the user directory supports the group administration capability or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the user directory supports the group administration capability or
+   *     <b>false</b> otherwise
    */
   public boolean getSupportsGroupAdministration() {
     return supportsGroupAdministration;
@@ -208,8 +208,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the group member administration capability.
    *
-   * @return <code>true</code> if the user directory supports the group member administration
-   *     capability or <code>false</code> otherwise
+   * @return <b>true</b> if the user directory supports the group member administration
+   *     capability or <b>false</b> otherwise
    */
   public boolean getSupportsGroupMemberAdministration() {
     return supportsGroupMemberAdministration;
@@ -218,8 +218,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the password expiry capability.
    *
-   * @return <code>true</code> if the user directory supports the password expiry capability or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the user directory supports the password expiry capability or
+   *     <b>false</b> otherwise
    */
   public boolean getSupportsPasswordExpiry() {
     return supportsPasswordExpiry;
@@ -228,8 +228,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the password history capability.
    *
-   * @return <code>true</code> if the user directory supports the password history capability or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the user directory supports the password history capability or
+   *     <b>false</b> otherwise
    */
   public boolean getSupportsPasswordHistory() {
     return supportsPasswordHistory;
@@ -238,8 +238,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the user administration capability.
    *
-   * @return <code>true</code> if the user directory supports the user administration capability or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the user directory supports the user administration capability or
+   *     <b>false</b> otherwise
    */
   public boolean getSupportsUserAdministration() {
     return supportsUserAdministration;
@@ -248,8 +248,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the user locks capability.
    *
-   * @return <code>true</code> if the user directory supports the user locks capability or <code>
-   * false</code>
+   * @return <b>true</b> if the user directory supports the user locks capability or <b>
+   * false</b>
    */
   public boolean getSupportsUserLocks() {
     return supportsUserLocks;

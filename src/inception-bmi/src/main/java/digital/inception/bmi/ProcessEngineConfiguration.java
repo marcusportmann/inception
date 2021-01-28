@@ -28,7 +28,7 @@
 // import javax.sql.DataSource;
 //
 /// **
-// * The <code>ProcessEngineConfiguration</code> class is used to configure the Camunda Process
+// * The <b>ProcessEngineConfiguration</b> class is used to configure the Camunda Process
 // * Engine.
 // *
 // * @author Marcus Portmann
@@ -36,7 +36,7 @@
 // public class ProcessEngineConfiguration extends SpringProcessEngineConfiguration
 // {
 //  /**
-//   * Constructs a new <code>ProcessEngineConfiguration</code>.
+//   * Constructs a new <b>ProcessEngineConfiguration</b>.
 //   *
 //   * @param processEngineName   the name of the process engine
 //   * @param applicationContext  the Spring application context

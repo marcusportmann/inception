@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>MessagingRestController</code> class.
+ * The <b>MessagingRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -42,7 +42,7 @@ public class MessagingRestController extends SecureRestController {
   private final IMessagingService messagingService;
 
   /**
-   * Constructs a new <code>MessagingRestController</code>.
+   * Constructs a new <b>MessagingRestController</b>.
    *
    * @param messagingService the Messaging Service
    */

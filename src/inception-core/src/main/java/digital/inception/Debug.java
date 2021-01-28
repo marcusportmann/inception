@@ -17,7 +17,7 @@
 package digital.inception;
 
 /**
- * The <code>Debug</code> class provides debugging capabilities.
+ * The <b>Debug</b> class provides debugging capabilities.
  *
  * @author Marcus Portmann
  */
@@ -26,10 +26,10 @@ public class Debug {
 
   /**
    * Returns the root directory for the JEE application server the application is running under or
-   * <code>null</code> if the root directory cannot be determined.
+   * <b>null</b> if the root directory cannot be determined.
    *
    * @return the root directory for the JEE application server the application is running under or
-   *     <code>null</code> if the root directory cannot be determined
+   *     <b>null</b> if the root directory cannot be determined
    */
   public static String getApplicationServerRootDirectory() {
     String wasInstallRoot = System.getProperty("was.install.root");
@@ -62,11 +62,11 @@ public class Debug {
   }
 
   /**
-   * Returns <code>true</code> if the application infrastructure is running in debug mode or <code>
-   * false</code> otherwise.
+   * Returns <b>true</b> if the application infrastructure is running in debug mode or <b>
+   * false</b> otherwise.
    *
-   * @return <code>true</code> if the application infrastructure is running in debug mode or <code>
-   * false</code> otherwise
+   * @return <b>true</b> if the application infrastructure is running in debug mode or <b>
+   * false</b> otherwise
    */
   public static boolean inDebugMode() {
     if (System.getProperty("digital.inception.debugMode") != null) {

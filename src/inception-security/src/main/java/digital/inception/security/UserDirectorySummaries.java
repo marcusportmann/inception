@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>UserDirectorySummaries</code> class holds the results of a request to retrieve a list
+ * The <b>UserDirectorySummaries</b> class holds the results of a request to retrieve a list
  * of user directory summaries.
  *
  * @author Marcus Portmann
@@ -102,11 +102,11 @@ public class UserDirectorySummaries implements Serializable {
   @XmlElement(name = "UserDirectorySummary", required = true)
   private List<UserDirectorySummary> userDirectorySummaries;
 
-  /** Constructs a new <code>UserDirectorySummaries</code>. */
+  /** Constructs a new <b>UserDirectorySummaries</b>. */
   public UserDirectorySummaries() {}
 
   /**
-   * Constructs a new <code>UserDirectorySummaries</code>.
+   * Constructs a new <b>UserDirectorySummaries</b>.
    *
    * @param userDirectorySummaries the user directory summaries
    * @param total the total number of user directory summaries

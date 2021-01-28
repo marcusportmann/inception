@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * The <code>BinaryBuffer</code> class provides the capabilities similar to the <code>StringBuffer
- * </code> class when working with binary data (bytes).
+ * The <b>BinaryBuffer</b> class provides the capabilities similar to the <b>StringBuffer
+ * </b> class when working with binary data (bytes).
  *
  * @author Marcus Portmann
  */
@@ -32,15 +32,15 @@ public class BinaryBuffer implements Serializable {
 
   private ByteArrayOutputStream stream = null;
 
-  /** Constructs a new empty <code>BinaryBuffer</code>. */
+  /** Constructs a new empty <b>BinaryBuffer</b>. */
   public BinaryBuffer() {
     stream = new ByteArrayOutputStream();
   }
 
   /**
-   * Constructs a new <code>BinaryBuffer</code> containing the specified binary data.
+   * Constructs a new <b>BinaryBuffer</b> containing the specified binary data.
    *
-   * @param data the binary data to initialize the <code>BinaryBuffer</code> with
+   * @param data the binary data to initialize the <b>BinaryBuffer</b> with
    */
   public BinaryBuffer(byte[] data) {
     stream = new ByteArrayOutputStream(data.length);
@@ -52,18 +52,18 @@ public class BinaryBuffer implements Serializable {
   }
 
   /**
-   * Append the binary data stored in the specified <code>BinaryBuffer</code> instance to this
-   * <code>BinaryBuffer</code>.
+   * Append the binary data stored in the specified <b>BinaryBuffer</b> instance to this
+   * <b>BinaryBuffer</b>.
    *
-   * @param buffer the existing <code>BinaryBuffer</code> containing the binary data to append
+   * @param buffer the existing <b>BinaryBuffer</b> containing the binary data to append
    */
   public void append(BinaryBuffer buffer) {
     append(buffer.getData());
   }
 
   /**
-   * Append the specified binary data to the binary data already stored in the <code>BinaryBuffer
-   * </code>.
+   * Append the specified binary data to the binary data already stored in the <b>BinaryBuffer
+   * </b>.
    *
    * @param data the binary data to append
    */
@@ -74,31 +74,31 @@ public class BinaryBuffer implements Serializable {
     }
   }
 
-  /** Empty the <code>BinaryBuffer</code> removing any binary data stored by the buffer. */
+  /** Empty the <b>BinaryBuffer</b> removing any binary data stored by the buffer. */
   public void empty() {
     stream.reset();
   }
 
   /**
-   * Returns the binary data stored by the <code>BinaryBuffer</code>.
+   * Returns the binary data stored by the <b>BinaryBuffer</b>.
    *
-   * @return the binary data stored by the <code>BinaryBuffer</code>
+   * @return the binary data stored by the <b>BinaryBuffer</b>
    */
   public byte[] getData() {
     return stream.toByteArray();
   }
 
   /**
-   * Returns the length of the binary data stored by the <code>BinaryBuffer</code>.
+   * Returns the length of the binary data stored by the <b>BinaryBuffer</b>.
    *
-   * @return the length of the binary data stored by the <code>BinaryBuffer</code>
+   * @return the length of the binary data stored by the <b>BinaryBuffer</b>
    */
   public int getLength() {
     return stream.size();
   }
 
   /**
-   * Append the specified byte to the binary data already stored in the <code>BinaryBuffer</code>.
+   * Append the specified byte to the binary data already stored in the <b>BinaryBuffer</b>.
    *
    * @param b the byte to append
    */

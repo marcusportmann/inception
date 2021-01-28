@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>PreferenceType</code> class holds the information for a possible preference type.
+ * The <b>PreferenceType</b> class holds the information for a possible preference type.
  *
  * @author Marcus Portmann
  */
@@ -58,7 +58,8 @@ public class PreferenceType implements Serializable {
 
   /** The code for the preference type category the preference type is associated with. */
   @Schema(
-      description = "The code for the preference type category the preference type is associated with",
+      description =
+          "The code for the preference type category the preference type is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Category", required = true)
@@ -93,7 +94,7 @@ public class PreferenceType implements Serializable {
   @NotNull
   @Size(min = 2, max = 10)
   @Id
-  @Column(name = "locale_id", length =  10, nullable = false)
+  @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
   /** The name of the preference type. */
@@ -113,15 +114,14 @@ public class PreferenceType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>PreferenceType</code>. */
+  /** Constructs a new <b>PreferenceType</b>. */
   public PreferenceType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -209,7 +209,8 @@ public class PreferenceType implements Serializable {
   /**
    * Set the code for the preference type category the preference type is associated with.
    *
-   * @param category the code for the preference type category the preference type is associated with
+   * @param category the code for the preference type category the preference type is associated
+   *     with
    */
   public void setCategory(String category) {
     this.category = category;

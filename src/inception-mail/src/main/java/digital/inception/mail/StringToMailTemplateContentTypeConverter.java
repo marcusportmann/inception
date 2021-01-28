@@ -21,8 +21,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToMailTemplateContentTypeConverter</code> class implements the Spring converter
- * that converts a <code>String</code> type into a <code>MailTemplateContentType</code> type.
+ * The <b>StringToMailTemplateContentTypeConverter</b> class implements the Spring converter
+ * that converts a <b>String</b> type into a <b>MailTemplateContentType</b> type.
  *
  * @author Marcus Portmann
  */
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 public class StringToMailTemplateContentTypeConverter
     implements Converter<String, MailTemplateContentType> {
 
-  /** Constructs a new <code>StringToMailTemplateContentTypeConverter</code>. */
+  /** Constructs a new <b>StringToMailTemplateContentTypeConverter</b>. */
   public StringToMailTemplateContentTypeConverter() {}
 
   @Override

@@ -16,13 +16,11 @@
 
 package digital.inception.reference;
 
-
-
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>LanguageId</code> class implements the ID class for the <code>Language</code> class.
+ * The <b>LanguageId</b> class implements the ID class for the <b>Language</b> class.
  *
  * <p>See: https://en.wikipedia.org/wiki/List_of_official_languages_by_country_and_territory
  *
@@ -39,11 +37,11 @@ public class LanguageId implements Serializable {
   /** The Unicode locale identifier for the language. */
   private String localeId;
 
-  /** Constructs a new <code>LanguageId</code>. */
+  /** Constructs a new <b>LanguageId</b>. */
   public LanguageId() {}
 
   /**
-   * Constructs a new <code>LanguageId</code>.
+   * Constructs a new <b>LanguageId</b>.
    *
    * @param code the code for the language
    * @param localeId the Unicode locale identifier for the language
@@ -57,8 +55,7 @@ public class LanguageId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

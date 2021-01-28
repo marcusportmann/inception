@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The <code>SMSConfiguration</code> class provides the Spring configuration for the SMS module.
+ * The <b>SMSConfiguration</b> class provides the Spring configuration for the SMS module.
  *
  * @author Marcus Portmann
  */

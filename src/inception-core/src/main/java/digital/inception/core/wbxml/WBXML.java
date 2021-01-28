@@ -17,7 +17,7 @@
 package digital.inception.core.wbxml;
 
 /**
- * The <code>WBXML</code> class contains the WBXML constants.
+ * The <b>WBXML</b> class contains the WBXML constants.
  *
  * @author Marcus Portmann
  */

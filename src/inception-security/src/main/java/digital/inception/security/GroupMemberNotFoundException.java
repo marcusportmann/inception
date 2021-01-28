@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>GroupMemberNotFoundException</code> is thrown to indicate that a security operation
+ * A <b>GroupMemberNotFoundException</b> is thrown to indicate that a security operation
  * failed as a result of a group member that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +47,7 @@ public class GroupMemberNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>GroupMemberNotFoundException</code>.
+   * Constructs a new <b>GroupMemberNotFoundException</b>.
    *
    * @param memberType the group member type
    * @param memberName the group member name

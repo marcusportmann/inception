@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>ErrorConfiguration</code> class provides the Spring configuration for the Error module.
+ * The <b>ErrorConfiguration</b> class provides the Spring configuration for the Error module.
  *
  * @author Marcus Portmann
  */

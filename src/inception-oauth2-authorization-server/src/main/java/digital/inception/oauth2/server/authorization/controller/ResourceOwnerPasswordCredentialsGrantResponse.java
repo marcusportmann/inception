@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>ResourceOwnerPasswordCredentialsGrantResponse</code> class holds the information for a
+ * The <b>ResourceOwnerPasswordCredentialsGrantResponse</b> class holds the information for a
  * Resource Owner Password Credentials Grant response.
  *
  * @author Marcus Portmann
@@ -43,7 +43,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   private String scope;
 
   /**
-   * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
+   * Constructs a new <b>ResourceOwnerPasswordCredentialsGrantResponse</b>.
    *
    * @param accessToken the access token
    * @param expiresIn the access token validity in seconds
@@ -61,7 +61,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   }
 
   /**
-   * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
+   * Constructs a new <b>ResourceOwnerPasswordCredentialsGrantResponse</b>.
    *
    * @param accessToken the access token
    * @param expiresIn the access token validity in seconds
@@ -78,7 +78,7 @@ public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
   }
 
   /**
-   * Constructs a new <code>ResourceOwnerPasswordCredentialsGrantResponse</code>.
+   * Constructs a new <b>ResourceOwnerPasswordCredentialsGrantResponse</b>.
    *
    * @param accessToken the access token
    * @param expiresIn the lifetime in seconds of the access token

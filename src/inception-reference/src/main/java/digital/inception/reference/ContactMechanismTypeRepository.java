@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>ContactMechanismTypeRepository</code> interface declares the repository for the <code>
- * ContactMechanismType</code> domain type.
+ * The <b>ContactMechanismTypeRepository</b> interface declares the repository for the <b>
+ * ContactMechanismType</b> domain type.
  *
  * @author Marcus Portmann
  */

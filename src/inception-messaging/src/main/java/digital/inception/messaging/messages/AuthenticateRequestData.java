@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>AuthenticateRequestData</code> class manages the data for a "Authenticate Request"
+ * The <b>AuthenticateRequestData</b> class manages the data for a "Authenticate Request"
  * message.
  *
  * <p>This is a synchronous message.
@@ -55,13 +55,13 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   /** The username for the user associated with the message. */
   private String username;
 
-  /** Constructs a new <code>AuthenticateRequestData</code>. */
+  /** Constructs a new <b>AuthenticateRequestData</b>. */
   public AuthenticateRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
   /**
-   * Constructs a new <code>AuthenticateRequestData</code>.
+   * Constructs a new <b>AuthenticateRequestData</b>.
    *
    * @param username the username for the user associated with the message
    * @param password the password used to authenticate the user
@@ -80,8 +80,8 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the message data was extracted successfully from the WBXML data or
+   *     <b>false</b> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {

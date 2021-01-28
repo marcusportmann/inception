@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Organizations</code> class holds the results of a request to retrieve a list of
+ * The <b>Organizations</b> class holds the results of a request to retrieve a list of
  * organizations.
  *
  * @author Marcus Portmann
@@ -87,11 +87,11 @@ public class Organizations implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <code>Organizations</code>. */
+  /** Constructs a new <b>Organizations</b>. */
   public Organizations() {}
 
   /**
-   * Constructs a new <code>Organizations</code>.
+   * Constructs a new <b>Organizations</b>.
    *
    * @param organizations the organizations
    * @param total the total number of organizations

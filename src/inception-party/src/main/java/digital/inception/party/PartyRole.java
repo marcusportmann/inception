@@ -45,8 +45,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>PartyRole</code> class holds the information for a role assigned to a party independent
- * of a party association.
+ * The <b>PartyRole</b> class holds the information for a role assigned to a party independent of a
+ * party association.
  *
  * @author Marcus Portmann
  */
@@ -80,7 +80,7 @@ public class PartyRole implements Serializable {
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "party_id")
-  private Party party;
+  private PartyBase party;
 
   /** The optional code for the party role purpose. */
   @Schema(description = "The optional code for the party role purpose")
@@ -107,11 +107,11 @@ public class PartyRole implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>PartyRole</code>. */
+  /** Constructs a new <b>PartyRole</b>. */
   public PartyRole() {}
 
   /**
-   * Constructs a new <code>PartyRole</code>.
+   * Constructs a new <b>PartyRole</b>.
    *
    * @param type the party role type
    */
@@ -123,8 +123,7 @@ public class PartyRole implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -160,7 +159,7 @@ public class PartyRole implements Serializable {
    * @return the party the party role is associated with
    */
   @Schema(hidden = true)
-  public Party getParty() {
+  public PartyBase getParty() {
     return party;
   }
 
@@ -208,7 +207,7 @@ public class PartyRole implements Serializable {
    * @param party the party the party role is associated with
    */
   @Schema(hidden = true)
-  public void setParty(Party party) {
+  public void setParty(PartyBase party) {
     this.party = party;
   }
 

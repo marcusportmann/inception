@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- * The <code>ServiceError</code> class holds the service error information.
+ * The <b>ServiceError</b> class holds the service error information.
  *
  * @author Marcus Portmann
  */
@@ -60,11 +60,11 @@ public class ServiceError {
   @XmlSchemaType(name = "dateTime")
   private LocalDateTime when;
 
-  /** Constructs a new <code>ServiceError</code>. */
+  /** Constructs a new <b>ServiceError</b>. */
   public ServiceError() {}
 
   /**
-   * Constructs a new <code>ServiceError</code>.
+   * Constructs a new <b>ServiceError</b>.
    *
    * @param code the code for the service error
    * @param cause the cause of the service error

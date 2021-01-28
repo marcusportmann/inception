@@ -36,14 +36,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>PartyRolePurpose</code> class holds the information for a possible purpose for a party
- * role.
+ * The <b>PartyRolePurpose</b> class holds the information for a possible purpose for a party role.
  *
  * @author Marcus Portmann
  */
 @Schema(description = "A purpose for a party role")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
 @XmlRootElement(name = "PartyRolePurpose", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "PartyRolePurpose",
@@ -103,15 +102,14 @@ public class PartyRolePurpose implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>PartyRolePurpose</code>. */
+  /** Constructs a new <b>PartyRolePurpose</b>. */
   public PartyRolePurpose() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

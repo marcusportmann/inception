@@ -56,7 +56,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>ReportingRestController</code> class.
+ * The <b>ReportingRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -77,7 +77,7 @@ public class ReportingRestController extends SecureRestController {
   private final Validator validator;
 
   /**
-   * Constructs a new <code>ReportingRestController</code>.
+   * Constructs a new <b>ReportingRestController</b>.
    *
    * @param dataSource the data source used to provide connections to the application database
    * @param reportingService the Reporting Service

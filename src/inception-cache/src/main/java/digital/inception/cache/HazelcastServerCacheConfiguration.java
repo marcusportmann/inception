@@ -31,12 +31,11 @@ import java.util.List;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <code>HazelcastServerCacheConfiguration</code> class provides the Hazelcast server cache
+ * The <b>HazelcastServerCacheConfiguration</b> class provides the Hazelcast server cache
  * configuration.
  *
  * @author Marcus Portmann
@@ -157,8 +156,7 @@ public class HazelcastServerCacheConfiguration {
   /**
    * Returns whether the Hazelcast server cache is enabled.
    *
-   * @return <code>true</code> if the Hazelcast server cache is enabled or <code>false</code>
-   *     otherwise
+   * @return <b>true</b> if the Hazelcast server cache is enabled or <b>false</b> otherwise
    */
   public boolean isEnabled() {
     return enabled;
@@ -185,16 +183,14 @@ public class HazelcastServerCacheConfiguration {
   /**
    * Set whether the Hazelcast server cache is enabled.
    *
-   * @param enabled <code>true</code> if the Hazelcast server cache is enabled or <code>false</code>
-   *     otherwise
+   * @param enabled <b>true</b> if the Hazelcast server cache is enabled or <b>false</b> otherwise
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
   }
 
   /**
-   * The <code>CacheConfig</code> class provides access to the distributed in-memory cache
-   * configuration.
+   * The <b>CacheConfig</b> class provides access to the distributed in-memory cache configuration.
    */
   public static class CacheConfig {
 
@@ -303,8 +299,8 @@ public class HazelcastServerCacheConfiguration {
     /**
      * Returns whether read-backup-data is enabled for the distributed in-memory cache.
      *
-     * @return <code>true</code> if read-backup-data is enabled for the distributed in-memory cache
-     *     or <code>false</code> otherwise
+     * @return <b>true</b> if read-backup-data is enabled for the distributed in-memory cache or
+     *     <b>false</b> otherwise
      */
     public boolean getReadBackupData() {
       return readBackupData;
@@ -313,8 +309,8 @@ public class HazelcastServerCacheConfiguration {
     /**
      * Returns whether statistics are enabled for the distributed in-memory cache?
      *
-     * @return <code>true</code> if statistics are enabled for the distributed in-memory cache or
-     *     <code>false</code> otherwise
+     * @return <b>true</b> if statistics are enabled for the distributed in-memory cache or
+     *     <b>false</b> otherwise
      */
     public boolean getStatisticsEnabled() {
       return statisticsEnabled;
@@ -396,8 +392,8 @@ public class HazelcastServerCacheConfiguration {
     /**
      * Set whether read-backup-data is enabled for the distributed in-memory cache.
      *
-     * @param readBackupData <code>true</code> if read-backup-data enabled for the distributed
-     *     in-memory cache or <code>false</code> otherwise
+     * @param readBackupData <b>true</b> if read-backup-data enabled for the distributed in-memory
+     *     cache or <b>false</b> otherwise
      */
     public void setReadBackupData(boolean readBackupData) {
       this.readBackupData = readBackupData;
@@ -406,8 +402,8 @@ public class HazelcastServerCacheConfiguration {
     /**
      * Set whether statistics are enabled for the distributed in-memory cache.
      *
-     * @param statisticsEnabled <code>true</code> if statistics are enabled for the distributed
-     *     in-memory cache or <code>false</code> otherwise
+     * @param statisticsEnabled <b>true</b> if statistics are enabled for the distributed in-memory
+     *     cache or <b>false</b> otherwise
      */
     public void setStatisticsEnabled(boolean statisticsEnabled) {
       this.statisticsEnabled = statisticsEnabled;
@@ -415,7 +411,7 @@ public class HazelcastServerCacheConfiguration {
   }
 
   /**
-   * The <code>ClusterConfig</code> class provides access to the distributed in-memory cache cluster
+   * The <b>ClusterConfig</b> class provides access to the distributed in-memory cache cluster
    * configuration.
    */
   public static class ClusterConfig {

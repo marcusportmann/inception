@@ -17,7 +17,7 @@
 package digital.inception.core.util;
 
 /**
- * The <code>Base64Util</code> class provides a number of Base-64 related utility functions.
+ * The <b>Base64Util</b> class provides a number of Base-64 related utility functions.
  *
  * @author Robert Harder
  * @author Marcus Portmann
@@ -350,7 +350,7 @@ public class Base64Util {
    * there was an error.
    *
    * @param encodedObject the Base64Util data to decode
-   * @return the decoded and deserialized object or <code>null</code> if there was an error
+   * @return the decoded and deserialized object or <b>null</b> if there was an error
    * @since 1.4
    */
   public static Object decodeToObject(String encodedObject) {
@@ -385,8 +385,8 @@ public class Base64Util {
   }
 
   /**
-   * Decodes data from Base64Util notation and returns it as a string. Equivlaent to calling <code>
-   * new String(decode(s))</code>
+   * Decodes data from Base64Util notation and returns it as a string. Equivlaent to calling <b>
+   * new String(decode(s))</b>
    *
    * @param s the string to decode
    * @return the data as a string
@@ -397,8 +397,8 @@ public class Base64Util {
   }
 
   /**
-   * Encodes a byte array into Base64Util notation. Equivalent to calling <code>encodeBytes(source,
-   * 0, source.length)</code>
+   * Encodes a byte array into Base64Util notation. Equivalent to calling <b>encodeBytes(source,
+   * 0, source.length)</b>
    *
    * @param source the data to convert
    * @return the Base64Util encoded string
@@ -409,8 +409,8 @@ public class Base64Util {
   }
 
   /**
-   * Encodes a byte array into Base64Util notation. Equivalent to calling <code>encodeBytes(source,
-   * 0, source.length)</code>
+   * Encodes a byte array into Base64Util notation. Equivalent to calling <b>encodeBytes(source,
+   * 0, source.length)</b>
    *
    * @param source the data to convert
    * @param breakLines break lines at 80 characters or less

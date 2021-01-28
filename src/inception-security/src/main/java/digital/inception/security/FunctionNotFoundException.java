@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>FunctionNotFoundException</code> is thrown to indicate that a security operation failed
+ * A <b>FunctionNotFoundException</b> is thrown to indicate that a security operation failed
  * as a result of an authorised function that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +47,7 @@ public class FunctionNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>FunctionNotFoundException</code>.
+   * Constructs a new <b>FunctionNotFoundException</b>.
    *
    * @param functionCode the code for the function
    */

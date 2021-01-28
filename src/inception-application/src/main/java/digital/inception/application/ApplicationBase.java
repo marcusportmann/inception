@@ -16,8 +16,6 @@
 
 package digital.inception.application;
 
-
-
 import com.codahale.metrics.MetricRegistry;
 import digital.inception.json.DateTimeModule;
 import javax.servlet.ServletContext;
@@ -32,11 +30,9 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-
-
 /**
- * The <code>ApplicationBase</code> class provides the base class that application classes can be
- * derived from.
+ * The <b>ApplicationBase</b> class provides the base class that application classes can be derived
+ * from.
  *
  * @author Marcus Portmann
  */
@@ -54,7 +50,7 @@ public abstract class ApplicationBase implements WebApplicationInitializer {
   private final ApplicationContext applicationContext;
 
   /**
-   * Constructs a new <code>ApplicationBase</code>.
+   * Constructs a new <b>ApplicationBase</b>.
    *
    * @param applicationContext the Spring application context
    */
@@ -80,10 +76,10 @@ public abstract class ApplicationBase implements WebApplicationInitializer {
   }
 
   /**
-   * Returns the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
+   * Returns the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
    * processor package.
    *
-   * @return the <code>Jackson2ObjectMapperBuilder</code> bean, which configures the Jackson JSON
+   * @return the <b>Jackson2ObjectMapperBuilder</b> bean, which configures the Jackson JSON
    *     processor package
    */
   @Bean

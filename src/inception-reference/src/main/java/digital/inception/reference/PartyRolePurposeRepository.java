@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>PartyRoleSubTypeRepository</code> interface declares the repository for the
- * <code>PartyRoleSubType</code> domain type.
+ * The <b>PartyRoleSubTypeRepository</b> interface declares the repository for the
+ * <b>PartyRoleSubType</b> domain type.
  *
  * @author Marcus Portmann
  */

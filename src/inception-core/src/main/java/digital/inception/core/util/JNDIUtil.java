@@ -28,7 +28,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchResult;
 
 /**
- * The <code>JNDIUtil</code> class provides JNDI utility functions.
+ * The <b>JNDIUtil</b> class provides JNDI utility functions.
  *
  * @author Marcus Portmann
  */
@@ -87,7 +87,7 @@ public final class JNDIUtil {
   /**
    * Dump the contents of the JNDIUtil tree.
    *
-   * @return the contents of the JNDIUtil as a <code>String</code>
+   * @return the contents of the JNDIUtil as a <b>String</b>
    */
   public static String dumpJNDIToString() {
     StringWriter sw = new StringWriter();

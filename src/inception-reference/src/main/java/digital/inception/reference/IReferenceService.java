@@ -16,13 +16,11 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 
 /**
- * The <code>IReferenceService</code> interface defines the functionality provided by a Reference
- * Service implementation.
+ * The <b>IReferenceService</b> interface defines the functionality provided by a Reference Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
@@ -39,8 +37,7 @@ public interface IReferenceService {
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <code>null</code> to retrieve the contact mechanism purposes for all
-   *     locales
+   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all locales
    * @return the contact mechanism purposes
    */
   List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
@@ -57,7 +54,7 @@ public interface IReferenceService {
    * Retrieve the contact mechanism types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <code>null</code> to retrieve the contact mechanism types for all locales
+   *     types for or <b>null</b> to retrieve the contact mechanism types for all locales
    * @return the contact mechanism types
    */
   List<ContactMechanismType> getContactMechanismTypes(String localeId)
@@ -74,7 +71,7 @@ public interface IReferenceService {
    * Retrieve the countries.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the countries for or
-   *     <code>null</code> to retrieve the countries for all locales
+   *     <b>null</b> to retrieve the countries for all locales
    * @return the countries
    */
   List<Country> getCountries(String localeId) throws ReferenceServiceException;
@@ -90,7 +87,7 @@ public interface IReferenceService {
    * Retrieve the employment statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <code>null</code> to retrieve the employment statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
    * @return the employment statuses
    */
   List<EmploymentStatus> getEmploymentStatuses(String localeId) throws ReferenceServiceException;
@@ -106,7 +103,7 @@ public interface IReferenceService {
    * Retrieve the employment types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for or <code>null</code> to retrieve the employment types for all locales
+   *     for or <b>null</b> to retrieve the employment types for all locales
    * @return the employment types
    */
   List<EmploymentType> getEmploymentTypes(String localeId) throws ReferenceServiceException;
@@ -122,7 +119,7 @@ public interface IReferenceService {
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
-   *     <code>null</code> to retrieve the genders for all locales
+   *     <b>null</b> to retrieve the genders for all locales
    * @return the genders
    */
   List<Gender> getGenders(String localeId) throws ReferenceServiceException;
@@ -138,7 +135,7 @@ public interface IReferenceService {
    * Retrieve the identity document types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     types for or <code>null</code> to retrieve the identity document types for all locales
+   *     types for or <b>null</b> to retrieve the identity document types for all locales
    * @return the identity document types
    */
   List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
@@ -155,7 +152,7 @@ public interface IReferenceService {
    * Retrieve the languages.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the languages for or
-   *     <code>null</code> to retrieve the languages for all locales
+   *     <b>null</b> to retrieve the languages for all locales
    * @return the languages
    */
   List<Language> getLanguages(String localeId) throws ReferenceServiceException;
@@ -171,7 +168,7 @@ public interface IReferenceService {
    * Retrieve the marital statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
-   *     for or <code>null</code> to retrieve the marital statuses for all locales
+   *     for or <b>null</b> to retrieve the marital statuses for all locales
    * @return the marital statuses
    */
   List<MaritalStatus> getMaritalStatuses(String localeId) throws ReferenceServiceException;
@@ -187,7 +184,7 @@ public interface IReferenceService {
    * Retrieve the marriage types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   *     or <code>null</code> to retrieve the marriage types for all locales
+   *     or <b>null</b> to retrieve the marriage types for all locales
    * @return the marriage types
    */
   List<MarriageType> getMarriageTypes(String localeId) throws ReferenceServiceException;
@@ -203,7 +200,7 @@ public interface IReferenceService {
    * Retrieve the next of kin types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for or <code>null</code> to retrieve the next of kin types for all locales
+   *     for or <b>null</b> to retrieve the next of kin types for all locales
    * @return the next of kin types
    */
   List<NextOfKinType> getNextOfKinTypes(String localeId) throws ReferenceServiceException;
@@ -219,10 +216,42 @@ public interface IReferenceService {
    * Retrieve the occupations.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
-   *     <code>null</code> to retrieve the occupations for all locales
+   *     <b>null</b> to retrieve the occupations for all locales
    * @return the occupations
    */
   List<Occupation> getOccupations(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the party role purposes.
+   *
+   * @return the party role purposes
+   */
+  List<PartyRolePurpose> getPartyRolePurposes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the party role purposes.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
+   *     purposes for or <b>null</b> to retrieve the party role purposes for all locales
+   * @return the party role purposes
+   */
+  List<PartyRolePurpose> getPartyRolePurposes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the party role types.
+   *
+   * @return the party role types
+   */
+  List<PartyRoleType> getPartyRoleTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the party role types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
+   *     for or <b>null</b> to retrieve the party role types for all locales
+   * @return the party role types
+   */
+  List<PartyRoleType> getPartyRoleTypes(String localeId) throws ReferenceServiceException;
 
   /**
    * Retrieve all the physical address purposes.
@@ -235,7 +264,7 @@ public interface IReferenceService {
    * Retrieve the physical address purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purposes for or <code>null</code> to retrieve the physical address purposes for all locales
+   *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
    * @return the physical address purposes
    */
   List<PhysicalAddressPurpose> getPhysicalAddressPurposes(String localeId)
@@ -252,7 +281,7 @@ public interface IReferenceService {
    * Retrieve the physical address types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     types for or <code>null</code> to retrieve the physical address types for all locales
+   *     types for or <b>null</b> to retrieve the physical address types for all locales
    * @return the physical address types
    */
   List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
@@ -269,8 +298,7 @@ public interface IReferenceService {
    * Retrieve the preference type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <code>null</code> to retrieve the preference type categories for all
-   *     locales
+   *     categories for or <b>null</b> to retrieve the preference type categories for all locales
    * @return the preference type categories
    */
   List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
@@ -287,7 +315,7 @@ public interface IReferenceService {
    * Retrieve the preference types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for or <code>null</code> to retrieve the preference types for all locales
+   *     for or <b>null</b> to retrieve the preference types for all locales
    * @return the preference types
    */
   List<PreferenceType> getPreferenceTypes(String localeId) throws ReferenceServiceException;
@@ -303,7 +331,7 @@ public interface IReferenceService {
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
-   *     <code>null</code> to retrieve the races for all locales
+   *     <b>null</b> to retrieve the races for all locales
    * @return the races
    */
   List<Race> getRaces(String localeId) throws ReferenceServiceException;
@@ -319,7 +347,7 @@ public interface IReferenceService {
    * Retrieve the regions.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the regions for or
-   *     <code>null</code> to retrieve the regions for all locales
+   *     <b>null</b> to retrieve the regions for all locales
    * @return the regions
    */
   List<Region> getRegions(String localeId) throws ReferenceServiceException;
@@ -335,7 +363,7 @@ public interface IReferenceService {
    * Retrieve the residence permit types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     types for or <code>null</code> to retrieve the residence permit types for all locales
+   *     types for or <b>null</b> to retrieve the residence permit types for all locales
    * @return the residence permit types
    */
   List<ResidencePermitType> getResidencePermitTypes(String localeId)
@@ -352,7 +380,7 @@ public interface IReferenceService {
    * Retrieve the residency statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
-   *     for or <code>null</code> to retrieve the residency statuses for all locales
+   *     for or <b>null</b> to retrieve the residency statuses for all locales
    * @return the residency statuses
    */
   List<ResidencyStatus> getResidencyStatuses(String localeId) throws ReferenceServiceException;
@@ -368,7 +396,7 @@ public interface IReferenceService {
    * Retrieve the residential types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for or <code>null</code> to retrieve the residential types for all locales
+   *     for or <b>null</b> to retrieve the residential types for all locales
    * @return the residential types
    */
   List<ResidentialType> getResidentialTypes(String localeId) throws ReferenceServiceException;
@@ -384,7 +412,7 @@ public interface IReferenceService {
    * Retrieve the sources of funds.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
-   *     for or <code>null</code> to retrieve the sources of funds for all locales
+   *     for or <b>null</b> to retrieve the sources of funds for all locales
    * @return the sources of funds
    */
   List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ReferenceServiceException;
@@ -400,10 +428,26 @@ public interface IReferenceService {
    * Retrieve the tax number types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
-   *     for or <code>null</code> to retrieve the tax number types for all locales
+   *     for or <b>null</b> to retrieve the tax number types for all locales
    * @return the tax number types
    */
   List<TaxNumberType> getTaxNumberTypes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the times to contact.
+   *
+   * @return the times to contact
+   */
+  List<TimeToContact> getTimesToContact() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the times to contact.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
+   *     for or <b>null</b> to retrieve the times to contact for all locales
+   * @return the times to contact
+   */
+  List<TimeToContact> getTimesToContact(String localeId) throws ReferenceServiceException;
 
   /**
    * Retrieve all the titles.
@@ -416,7 +460,7 @@ public interface IReferenceService {
    * Retrieve the titles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or
-   *     <code>null</code> to retrieve the titles for all locales
+   *     <b>null</b> to retrieve the titles for all locales
    * @return the titles
    */
   List<Title> getTitles(String localeId) throws ReferenceServiceException;
@@ -432,7 +476,7 @@ public interface IReferenceService {
    * Retrieve the verification methods.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     methods for or <code>null</code> to retrieve the verification methods for all locales
+   *     methods for or <b>null</b> to retrieve the verification methods for all locales
    * @return the verification methods
    */
   List<VerificationMethod> getVerificationMethods(String localeId) throws ReferenceServiceException;
@@ -448,57 +492,9 @@ public interface IReferenceService {
    * Retrieve the verification statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     statuses for or <code>null</code> to retrieve the verification statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the verification statuses for all locales
    * @return the verification statuses
    */
   List<VerificationStatus> getVerificationStatuses(String localeId)
       throws ReferenceServiceException;
-
-  /**
-   * Retrieve all the times to contact.
-   *
-   * @return the times to contact
-   */
-  List<TimeToContact> getTimesToContact() throws ReferenceServiceException;
-
-  /**
-   * Retrieve the times to contact.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for or <code>null</code> to retrieve the times to contact for all locales
-   * @return the times to contact
-   */
-  List<TimeToContact> getTimesToContact(String localeId) throws ReferenceServiceException;
-
-  /**
-   * Retrieve all the party role purposes.
-   *
-   * @return the party role purposes
-   */
-  List<PartyRolePurpose> getPartyRolePurposes() throws ReferenceServiceException;
-
-  /**
-   * Retrieve the party role purposes.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role
-   *     purposes for or <code>null</code> to retrieve the party role purposes for all locales
-   * @return the party role purposes
-   */
-  List<PartyRolePurpose> getPartyRolePurposes(String localeId) throws ReferenceServiceException;
-
-  /**
-   * Retrieve all the party role types.
-   *
-   * @return the party role types
-   */
-  List<PartyRoleType> getPartyRoleTypes() throws ReferenceServiceException;
-
-  /**
-   * Retrieve the party role types.
-   *
-   * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
-   *     for or <code>null</code> to retrieve the party role types for all locales
-   * @return the party role types
-   */
-  List<PartyRoleType> getPartyRoleTypes(String localeId) throws ReferenceServiceException;
 }

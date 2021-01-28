@@ -47,7 +47,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * The <code>ProcessService</code> class provides the Process Service implementation.
+ * The <b>ProcessService</b> class provides the Process Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -56,10 +56,10 @@ import org.xml.sax.SAXParseException;
 public class ProcessService implements IProcessService {
 
   /** The Camunda Process Engine. */
-  private ProcessEngine processEngine;
+  private final ProcessEngine processEngine;
 
   /**
-   * Constructs a new <code>ProcessService</code>.
+   * Constructs a new <b>ProcessService</b>.
    *
    * @param processEngine the Camunda Process Engine
    */
@@ -139,7 +139,7 @@ public class ProcessService implements IProcessService {
    * Check whether the process definition exists.
    *
    * @param processDefinitionId the ID for the process definition
-   * @return <code>true</code> if the process definition exists or <code>false</code> otherwise
+   * @return <b>true</b> if the process definition exists or <b>false</b> otherwise
    */
   @Override
   public boolean processDefinitionExists(String processDefinitionId)

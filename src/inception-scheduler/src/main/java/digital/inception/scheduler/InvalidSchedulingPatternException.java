@@ -17,11 +17,10 @@
 package digital.inception.scheduler;
 
 /**
- * The <code>InvalidSchedulingPatternException</code> exception is thrown to indicate an error
+ * The <b>InvalidSchedulingPatternException</b> exception is thrown to indicate an error
  * condition when executing a job.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -31,21 +30,21 @@ public class InvalidSchedulingPatternException extends Exception {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>InvalidSchedulingPatternException</code> with the specified message.
+   * Constructs a new <b>InvalidSchedulingPatternException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   InvalidSchedulingPatternException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>InvalidSchedulingPatternException</code> with the specified message and
+   * Constructs a new <b>InvalidSchedulingPatternException</b> with the specified message and
    * cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidSchedulingPatternException(String message, Throwable cause) {
     super(message, cause);

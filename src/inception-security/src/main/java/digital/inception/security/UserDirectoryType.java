@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>UserDirectoryType</code> class holds the information for a user directory type.
+ * The <b>UserDirectoryType</b> class holds the information for a user directory type.
  *
  * @author Marcus Portmann
  */
@@ -94,11 +94,11 @@ public class UserDirectoryType implements java.io.Serializable {
   @Column(name = "user_directory_class", length = 1000, nullable = false)
   private String userDirectoryClassName;
 
-  /** Constructs a new <code>UserDirectoryType</code>. */
+  /** Constructs a new <b>UserDirectoryType</b>. */
   public UserDirectoryType() {}
 
   /**
-   * Constructs a new <code>UserDirectoryType</code>.
+   * Constructs a new <b>UserDirectoryType</b>.
    *
    * @param code the code for the user directory type
    * @param name the name of the user directory type
@@ -115,8 +115,8 @@ public class UserDirectoryType implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

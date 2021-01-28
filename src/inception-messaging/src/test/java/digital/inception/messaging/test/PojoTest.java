@@ -36,7 +36,7 @@ import org.junit.Test;
 
 
 /**
- * The <code>PojoTest</code> class contains the implementation of the JUnit tests for the POJOs that
+ * The <b>PojoTest</b> class contains the implementation of the JUnit tests for the POJOs that
  * form part of the messaging infrastructure.
  *
  * @author Marcus Portmann
@@ -96,7 +96,7 @@ public class PojoTest {
 
   private static final String USERNAME = "Administrator";
 
-  /** Test the <code>MessagePart</code> POJO. */
+  /** Test the <b>MessagePart</b> POJO. */
   @Test
   public void messagePartTest() {
     MessagePart messagePart =
@@ -182,7 +182,7 @@ public class PojoTest {
     assertEquals(true, anotherMessagePart.messageIsEncrypted());
   }
 
-  /** Test the <code>Message</code> POJO. */
+  /** Test the <b>Message</b> POJO. */
   @Test
   public void messageTest() {
     Message message =

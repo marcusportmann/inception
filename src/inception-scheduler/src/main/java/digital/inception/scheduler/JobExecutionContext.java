@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * The <code>JobExecutionContext</code> class provides access to context information associated with
+ * The <b>JobExecutionContext</b> class provides access to context information associated with
  * the execution of a job.
  *
  * @author Marcus Portmann
@@ -35,7 +35,7 @@ public class JobExecutionContext {
   private final Map<String, String> parameters;
 
   /**
-   * Constructs a new <code>JobExecutionContext</code>.
+   * Constructs a new <b>JobExecutionContext</b>.
    *
    * @param executionDate the date and time that the job was scheduled to be executed
    * @param parameters the parameters for the job
@@ -58,7 +58,7 @@ public class JobExecutionContext {
    * Returns the parameter with the specified name for the job.
    *
    * @param name the name of the parameter
-   * @return the value of the parameter with the specified name or <code>null</code> if the
+   * @return the value of the parameter with the specified name or <b>null</b> if the
    *     parameter cannot be found
    */
   public String getParameter(String name) {

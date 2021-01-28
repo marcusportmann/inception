@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>EmploymentStatus</code> class holds the information for a possible employment status.
+ * The <b>EmploymentStatus</b> class holds the information for a possible employment status.
  *
  * @author Marcus Portmann
  */
@@ -102,15 +102,14 @@ public class EmploymentStatus implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>EmploymentStatus</code>. */
+  /** Constructs a new <b>EmploymentStatus</b>. */
   public EmploymentStatus() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

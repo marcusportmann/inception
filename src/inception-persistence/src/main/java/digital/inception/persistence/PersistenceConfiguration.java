@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>PersistenceConfiguration</code> class provides the Spring configuration for the
+ * The <b>PersistenceConfiguration</b> class provides the Spring configuration for the
  * persistence module and initializes the application entity manager factory bean associated with
  * the application data source.
  *
@@ -63,7 +63,7 @@ public class PersistenceConfiguration {
   private String packagesToScanForEntities;
 
   /**
-   * Constructs a new <code>PersistenceConfiguration</code>.
+   * Constructs a new <b>PersistenceConfiguration</b>.
    *
    * @param applicationContext the Spring application context
    */

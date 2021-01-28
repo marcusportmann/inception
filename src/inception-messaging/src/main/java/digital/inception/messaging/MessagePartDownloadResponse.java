@@ -30,7 +30,7 @@ import java.util.List;
 
 
 /**
- * The <code>MessagePartDownloadResponse</code> class represents the response to a request sent by a
+ * The <b>MessagePartDownloadResponse</b> class represents the response to a request sent by a
  * mobile device to download the queued message parts for the device.
  *
  * @author Marcus Portmann
@@ -58,7 +58,7 @@ public class MessagePartDownloadResponse {
 
   /**
    * The user-friendly text description of the result of processing the message part download
-   * request. The <code>detail</code> field may be blank if the message download request was
+   * request. The <b>detail</b> field may be blank if the message download request was
    * processed successfully.
    */
   private final String detail;
@@ -73,7 +73,7 @@ public class MessagePartDownloadResponse {
   private List<MessagePart> messageParts;
 
   /**
-   * Constructs a new <code>MessagePartDownloadResponse</code> and populates it from the information
+   * Constructs a new <b>MessagePartDownloadResponse</b> and populates it from the information
    * stored in the specified WBXML document.
    *
    * @param document the WBXML document containing the message part download response information
@@ -111,7 +111,7 @@ public class MessagePartDownloadResponse {
   }
 
   /**
-   * Constructs a new <code>MessagePartDownloadResponse</code>.
+   * Constructs a new <b>MessagePartDownloadResponse</b>.
    *
    * @param messageParts the message parts being downloaded
    */
@@ -122,7 +122,7 @@ public class MessagePartDownloadResponse {
   }
 
   /**
-   * Constructs a new <code>MessagePartDownloadResponse</code>.
+   * Constructs a new <b>MessagePartDownloadResponse</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of processing the message part download
@@ -134,7 +134,7 @@ public class MessagePartDownloadResponse {
   }
 
   /**
-   * Constructs a new <code>MessagePartDownloadResponse</code>.
+   * Constructs a new <b>MessagePartDownloadResponse</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of processing the message part download
@@ -161,12 +161,12 @@ public class MessagePartDownloadResponse {
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message part download response
-   * information or <code>false</code> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message part download response
+   * information or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <code>true</code> if the WBXML document contains valid message part download response
-   *     information or <code>false</code> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message part download response
+   *     information or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();

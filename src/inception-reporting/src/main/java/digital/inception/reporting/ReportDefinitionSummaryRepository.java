@@ -21,8 +21,8 @@ package digital.inception.reporting;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <code>ReportDefinitionSummaryRepository</code> interface declares the repository for the
- * <code>ReportDefinitionSummary</code> domain type.
+ * The <b>ReportDefinitionSummaryRepository</b> interface declares the repository for the
+ * <b>ReportDefinitionSummary</b> domain type.
  *
  * @author Marcus Portmann
  */

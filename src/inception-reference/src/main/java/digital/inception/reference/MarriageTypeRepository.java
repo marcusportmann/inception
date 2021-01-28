@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>MarriageTypeRepository</code> interface declares the repository for the <code>
- * MarriageType</code> domain type.
+ * The <b>MarriageTypeRepository</b> interface declares the repository for the <b> MarriageType</b>
+ * domain type.
  *
  * @author Marcus Portmann
  */

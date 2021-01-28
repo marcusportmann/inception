@@ -71,7 +71,7 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 
 
 /**
- * The <code>SystemMessageTest</code> class contains the implementation of the JUnit tests for the
+ * The <b>SystemMessageTest</b> class contains the implementation of the JUnit tests for the
  * "system" messages supported by the messaging infrastructure.
  *
  * @author Marcus Portmann

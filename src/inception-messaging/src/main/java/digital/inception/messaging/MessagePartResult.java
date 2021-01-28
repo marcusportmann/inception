@@ -71,7 +71,7 @@ public class MessagePartResult {
   private String exception;
 
   /**
-   * Constructs a new <code>MessagePartResult</code> and populates it from the information stored in
+   * Constructs a new <b>MessagePartResult</b> and populates it from the information stored in
    * the specified WBXML document.
    *
    * @param document the WBXML document containing the message part result information
@@ -90,7 +90,7 @@ public class MessagePartResult {
   }
 
   /**
-   * Constructs a new <code>MessagePartResult</code>.
+   * Constructs a new <b>MessagePartResult</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of uploading the message part
@@ -101,7 +101,7 @@ public class MessagePartResult {
   }
 
   /**
-   * Constructs a new <code>MessagePartResult</code>.
+   * Constructs a new <b>MessagePartResult</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of uploading the message part
@@ -129,12 +129,12 @@ public class MessagePartResult {
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message received response
-   * information or <code>false</code> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message received response
+   * information or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <code>true</code> if the WBXML document contains valid message received response
-   *     information or <code>false</code> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message received response
+   *     information or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();

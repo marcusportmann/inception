@@ -24,11 +24,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>CodeNotFoundException</code> exception is thrown to indicate an error condition as a
- * result of a code that could not be found.
+ * The <b>CodeNotFoundException</b> exception is thrown to indicate an error condition as a result
+ * of a code that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +42,7 @@ public class CodeNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>CodeNotFoundException</code>.
+   * Constructs a new <b>CodeNotFoundException</b>.
    *
    * @param codeCategoryId the ID for the code category the code is associated with
    * @param codeId the ID for the code

@@ -36,8 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>TimeToContact</code> class holds the information for a possible time to contact for a
- * person.
+ * The <b>TimeToContact</b> class holds the information for a possible time to contact for a person.
  *
  * @author Marcus Portmann
  */
@@ -103,15 +102,14 @@ public class TimeToContact implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>TimeToContact</code>. */
+  /** Constructs a new <b>TimeToContact</b>. */
   public TimeToContact() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

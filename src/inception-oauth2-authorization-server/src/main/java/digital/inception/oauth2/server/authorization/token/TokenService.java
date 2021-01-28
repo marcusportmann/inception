@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- * The <code>TokenService</code> class provides the Token Service implementation.
+ * The <b>TokenService</b> class provides the Token Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -67,7 +67,7 @@ public class TokenService implements ITokenService {
   private RSAPublicKey rsaPublicKey;
 
   /**
-   * Constructs a new <code>TokenService</code>.
+   * Constructs a new <b>TokenService</b>.
    *
    * @param securityService the Security Service
    */

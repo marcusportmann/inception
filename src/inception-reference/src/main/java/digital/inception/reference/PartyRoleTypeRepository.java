@@ -16,22 +16,17 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>PartyRoleTypeRepository</code> interface declares the repository for the <code>
- * PartyRoleType</code> domain type.
+ * The <b>PartyRoleTypeRepository</b> interface declares the repository for the <b>
+ * PartyRoleType</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface PartyRoleTypeRepository
-    extends JpaRepository<PartyRoleType, PartyRoleTypeId> {
+public interface PartyRoleTypeRepository extends JpaRepository<PartyRoleType, PartyRoleTypeId> {
 
   List<PartyRoleType> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

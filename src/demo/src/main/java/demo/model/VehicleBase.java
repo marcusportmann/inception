@@ -16,65 +16,119 @@
 
 package demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.f4b6a3.uuid.UuidCreator;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-/** The <class>VehicleBase</class>. */
-@MappedSuperclass
+/**
+ * The <b>VehicleBase</b> class.
+ *
+ * <p>The <b>Vehicle</b> and <b>VehicleBase</b> classes are both JPA entity classes mapped to the
+ * same <b>demo.vehicles</b> table. The <b>VehicleBase</b> class provides the common base class for
+ * all JPA entity classes that form part of the vehicle inheritance model, e.g. <b>Car</b>,
+ * <b>Motorbike</b>, etc. This inheritance model is required to allow the same child classes to be
+ * mapped to the different parent classes for the different vehicle types, e.g. to support the
+ * one-to-many mappings for both the <b>Car</b> and <b>Motorbike</b> classes to the
+ * <b>VehicleAttribute</b> class. The <b>Vehicle</b> class provides a mechanism to retrieve the
+ * minimum amount of vehicle information without executing the polymorphic query that would result
+ * from retrieving the same entities using a query that specifies the <b>VehicleBase</b> class as
+ * the result type.
+ *
+ * <p>This class and its subclasses expose the JSON and XML properties using a property-based
+ * approach rather than a field-based approach to support the JPA inheritance model.
+ *
+ * @author Marcus Portmann
+ */
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, length = 30)
+@DiscriminatorValue("unknown")
+@Table(schema = "demo", name = "vehicles")
 public class VehicleBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
   /** The date and time the vehicle was created. */
+  @JsonIgnore
+  @XmlTransient
   @CreationTimestamp
   @Column(table = "vehicles", name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
   /** The Universally Unique Identifier (UUID) for the vehicle. */
+  @Schema(description = "The Universally Unique Identifier (UUID) for the vehicle", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
   @Column(table = "vehicles", name = "id", nullable = false)
   private UUID id;
 
   /** The name of the vehicle. */
+  @Schema(description = "The name of the vehicle", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   @Column(table = "vehicles", name = "name", length = 100, nullable = false)
   private String name;
 
   /** The vehicle type. */
+  @Schema(description = "The vehicle type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(table = "vehicles", name = "type", length = 30, nullable = false)
+  @Column(
+      table = "vehicles",
+      name = "type",
+      length = 30,
+      nullable = false,
+      insertable = false,
+      updatable = false)
   private VehicleType type;
 
   /** The date and time the vehicle was last updated. */
+  @JsonIgnore
+  @XmlTransient
   @UpdateTimestamp
   @Column(table = "vehicles", name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>VehicleBase</code>. */
+  /** Constructs a new <b>VehicleBase</b>. */
   public VehicleBase() {}
 
   /**
-   * Constructs a new <code>VehicleBase</code>.
+   * Constructs a new <b>VehicleBase</b>.
    *
    * @param type the vehicle type
    */
-  public VehicleBase(VehicleType type) {
+  protected VehicleBase(VehicleType type) {
+    this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
   }
 
   /**
-   * Constructs a new <code>VehicleBase</code>.
+   * Constructs a new <b>VehicleBase</b>.
    *
    * @param type the vehicle type
    * @param name the name of the vehicle
@@ -83,6 +137,31 @@ public class VehicleBase implements Serializable {
     this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
     this.name = name;
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+
+    if (object == null) {
+      return false;
+    }
+
+    if (getClass() != object.getClass()) {
+      return false;
+    }
+
+    VehicleBase other = (VehicleBase) object;
+
+    return Objects.equals(id, other.id);
   }
 
   /**
@@ -131,12 +210,13 @@ public class VehicleBase implements Serializable {
   }
 
   /**
-   * Set the date and time the vehicle was created.
+   * Returns a hash code value for the object.
    *
-   * @param created the date and time the vehicle was created
+   * @return a hash code value for the object
    */
-  public void setCreated(LocalDateTime created) {
-    this.created = created;
+  @Override
+  public int hashCode() {
+    return ((id == null) ? 0 : id.hashCode());
   }
 
   /**
@@ -164,14 +244,5 @@ public class VehicleBase implements Serializable {
    */
   public void setType(VehicleType type) {
     this.type = type;
-  }
-
-  /**
-   * Set the date and time the vehicle was last updated.
-   *
-   * @param updated the date and time the vehicle was last updated
-   */
-  public void setUpdated(LocalDateTime updated) {
-    this.updated = updated;
   }
 }

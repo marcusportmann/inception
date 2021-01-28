@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The <code>ICodeProvider</code> interface defines the interface that must be implemented by all
- * custom code providers.
+ * The <b>ICodeProvider</b> interface defines the interface that must be implemented by all custom
+ * code providers.
  *
  * @author Marcus Portmann
  */
@@ -32,8 +32,7 @@ public interface ICodeProvider {
    * Returns whether the code provider supports the code category.
    *
    * @param codeCategoryId the ID for the code category
-   * @return <code>true</code> if the code provider supports the code category or <code>false</code>
-   *     otherwise
+   * @return <b>true</b> if the code provider supports the code category or <b>false</b> otherwise
    */
   boolean codeCategoryExists(String codeCategoryId) throws CodeProviderException;
 
@@ -42,7 +41,7 @@ public interface ICodeProvider {
    *
    * @param codeCategoryId the ID for the code category
    * @param codeId the ID for the code
-   * @return <code>true</code> if the code exists or <code>false</code> otherwise
+   * @return <b>true</b> if the code exists or <b>false</b> otherwise
    */
   boolean codeExists(String codeCategoryId, String codeId) throws CodeProviderException;
 
@@ -75,9 +74,8 @@ public interface ICodeProvider {
   /**
    * Retrieve the XML or JSON data for the code category.
    *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
+   * registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration file.
    *
    * @param codeCategoryId the ID for the code category
    * @return the XML or JSON data for the code category
@@ -88,9 +86,8 @@ public interface ICodeProvider {
   /**
    * Retrieve the XML or JSON data for the code category using the specified parameters.
    *
-   * <p>NOTE: This will also attempt to retrieve the data from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the data from the appropriate code provider that has been
+   * registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration file.
    *
    * @param codeCategoryId the ID for the code category
    * @param parameters the parameters
@@ -130,9 +127,9 @@ public interface ICodeProvider {
   /**
    * Retrieve the codes for the code category.
    *
-   * <p>NOTE: This will also attempt to retrieve the codes from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * file.
    *
    * @param codeCategoryId the ID for the code category
    * @return the codes for the code category
@@ -143,9 +140,9 @@ public interface ICodeProvider {
   /**
    * Retrieve the codes for the code category using the specified parameters.
    *
-   * <p>NOTE: This will also attempt to retrieve the codes from the appropriate code provider that
-   * has been registered with the Codes Service in the <code>META-INF/code-providers.xml</code>
-   * configuration file.
+   * <p>This will also attempt to retrieve the codes from the appropriate code provider that has
+   * been registered with the Codes Service in the <b>META-INF/code-providers.xml</b> configuration
+   * file.
    *
    * @param codeCategoryId the ID for the code category
    * @param parameters the parameters

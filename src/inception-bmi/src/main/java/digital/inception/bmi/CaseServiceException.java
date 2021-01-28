@@ -24,11 +24,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>CaseServiceException</code> exception is thrown to indicate an error condition when
- * working with the Case Service.
+ * The <b>CaseServiceException</b> exception is thrown to indicate an error condition when working
+ * with the Case Service.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -46,20 +45,20 @@ public class CaseServiceException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>CaseServiceException</code> with the specified message.
+   * Constructs a new <b>CaseServiceException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public CaseServiceException(String message) {
     super("CaseServiceError", message);
   }
 
   /**
-   * Constructs a new <code>CaseServiceException</code> with the specified message and cause.
+   * Constructs a new <b>CaseServiceException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public CaseServiceException(String message, Throwable cause) {
     super("CaseServiceError", message, cause);

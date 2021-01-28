@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>AuditConfiguration</code> class provides the Spring configuration for the Audit module.
+ * The <b>AuditConfiguration</b> class provides the Spring configuration for the Audit module.
  *
  * @author Marcus Portmann
  */

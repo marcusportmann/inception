@@ -28,7 +28,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
 /**
- * The <code>UserDetailsService</code> class provides the User Details Service implementation that
+ * The <b>UserDetailsService</b> class provides the User Details Service implementation that
  * provides the details for users.
  *
  * @author Marcus Portmann
@@ -42,11 +42,11 @@ public class UserDetailsService
   /**
    * Locates the user based on the username. In the actual implementation, the search may possibly
    * be case sensitive, or case insensitive depending on how the implementation instance is
-   * configured. In this case, the <code>UserDetails</code> object that comes back may have a
+   * configured. In this case, the <b>UserDetails</b> object that comes back may have a
    * username that is of a different case than what was actually requested.
    *
    * @param username the username for the user whose data is required.
-   * @return a fully populated user record (never <code>null</code>)
+   * @return a fully populated user record (never <b>null</b>)
    */
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

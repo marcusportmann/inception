@@ -27,7 +27,7 @@ import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * The <code>ReferenceWebService</code> class.
+ * The <b>ReferenceWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -46,7 +46,7 @@ public class ReferenceWebService {
   private final Validator validator;
 
   /**
-   * Constructs a new <code>ReferenceWebService</code>.
+   * Constructs a new <b>ReferenceWebService</b>.
    *
    * @param referenceService the Reference Service
    * @param validator the JSR-303 validator
@@ -60,7 +60,7 @@ public class ReferenceWebService {
    * Retrieve the countries.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the countries
-   *     for or <code>null</code> to retrieve the countries for all locales
+   *     for or <b>null</b> to retrieve the countries for all locales
    * @return the countries
    */
   @WebMethod(operationName = "GetCountries")
@@ -74,7 +74,7 @@ public class ReferenceWebService {
    * Retrieve the employment statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <code>null</code> to retrieve the employment statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
    * @return the employment statuses
    */
   @WebMethod(operationName = "GetEmploymentStatuses")
@@ -88,7 +88,7 @@ public class ReferenceWebService {
    * Retrieve the employment types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     types for or <code>null</code> to retrieve the employment types for all locales
+   *     types for or <b>null</b> to retrieve the employment types for all locales
    * @return the employment types
    */
   @WebMethod(operationName = "GetEmploymentTypes")
@@ -102,7 +102,7 @@ public class ReferenceWebService {
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders
-   *     for or <code>null</code> to retrieve the genders for all locales
+   *     for or <b>null</b> to retrieve the genders for all locales
    * @return the genders
    */
   @WebMethod(operationName = "GetGenders")
@@ -116,7 +116,7 @@ public class ReferenceWebService {
    * Retrieve the identity document types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity
-   *     document types for or <code>null</code> to retrieve the identity document types for all
+   *     document types for or <b>null</b> to retrieve the identity document types for all
    *     locales
    * @return the identity document types
    */
@@ -131,7 +131,7 @@ public class ReferenceWebService {
    * Retrieve the languages.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the languages
-   *     for or <code>null</code> to retrieve the languages for all locales
+   *     for or <b>null</b> to retrieve the languages for all locales
    * @return the languages
    */
   @WebMethod(operationName = "GetLanguages")
@@ -145,7 +145,7 @@ public class ReferenceWebService {
    * Retrieve the marital statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital
-   *     statuses for or <code>null</code> to retrieve the marital statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the marital statuses for all locales
    * @return the marital statuses
    */
   @WebMethod(operationName = "GetMaritalStatuses")
@@ -159,7 +159,7 @@ public class ReferenceWebService {
    * Retrieve the marriage types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage
-   *     types for or <code>null</code> to retrieve the marriage types for all locales
+   *     types for or <b>null</b> to retrieve the marriage types for all locales
    * @return the marriage types
    */
   @WebMethod(operationName = "GetMarriageTypes")
@@ -173,7 +173,7 @@ public class ReferenceWebService {
    * Retrieve the next of kin types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of
-   *     kin types for or <code>null</code> to retrieve the next of kin types for all locales
+   *     kin types for or <b>null</b> to retrieve the next of kin types for all locales
    * @return the next of kin types
    */
   @WebMethod(operationName = "GetNextOfKinTypes")
@@ -187,7 +187,7 @@ public class ReferenceWebService {
    * Retrieve the occupations.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the
-   *     occupations for or <code>null</code> to retrieve the occupations for all locales
+   *     occupations for or <b>null</b> to retrieve the occupations for all locales
    * @return the occupations
    */
   @WebMethod(operationName = "GetOccupations")
@@ -201,7 +201,7 @@ public class ReferenceWebService {
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the races for
-   *     or <code>null</code> to retrieve the races for all locales
+   *     or <b>null</b> to retrieve the races for all locales
    * @return the races
    */
   @WebMethod(operationName = "GetRaces")
@@ -215,7 +215,7 @@ public class ReferenceWebService {
    * Retrieve the regions.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the regions
-   *     for or <code>null</code> to retrieve the regions for all locales
+   *     for or <b>null</b> to retrieve the regions for all locales
    * @return the regions
    */
   @WebMethod(operationName = "GetRegions")
@@ -229,7 +229,7 @@ public class ReferenceWebService {
    * Retrieve the residence permit types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence
-   *     permit types for or <code>null</code> to retrieve the residence permit types for all
+   *     permit types for or <b>null</b> to retrieve the residence permit types for all
    *     locales
    * @return the residence permit types
    */
@@ -244,7 +244,7 @@ public class ReferenceWebService {
    * Retrieve the residency statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency
-   *     statuses for or <code>null</code> to retrieve the residency statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the residency statuses for all locales
    * @return the residency statuses
    */
   @WebMethod(operationName = "GetResidencyStatuses")
@@ -258,7 +258,7 @@ public class ReferenceWebService {
    * Retrieve the residential types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the
-   *     residential types for or <code>null</code> to retrieve the residential types for all
+   *     residential types for or <b>null</b> to retrieve the residential types for all
    *     locales
    * @return the residential types
    */
@@ -273,7 +273,7 @@ public class ReferenceWebService {
    * Retrieve the sources of funds.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the sources of
-   *     funds for or <code>null</code> to retrieve the sources of funds for all locales
+   *     funds for or <b>null</b> to retrieve the sources of funds for all locales
    * @return the sources of funds
    */
   @WebMethod(operationName = "GetSourcesOfFunds")
@@ -287,7 +287,7 @@ public class ReferenceWebService {
    * Retrieve the tax number types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number
-   *     types for or <code>null</code> to retrieve the tax number types for all locales
+   *     types for or <b>null</b> to retrieve the tax number types for all locales
    * @return the tax number types
    */
   @WebMethod(operationName = "GetTaxNumberTypes")
@@ -301,7 +301,7 @@ public class ReferenceWebService {
    * Retrieve the titles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the titles for
-   *     or <code>null</code> to retrieve the titles for all locales
+   *     or <b>null</b> to retrieve the titles for all locales
    * @return the titles
    */
   @WebMethod(operationName = "GetTitles")
@@ -315,7 +315,7 @@ public class ReferenceWebService {
    * Retrieve the verification methods.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the
-   *     verification methods for or <code>null</code> to retrieve the verification methods for all
+   *     verification methods for or <b>null</b> to retrieve the verification methods for all
    *     locales
    * @return the verification methods
    */
@@ -330,7 +330,7 @@ public class ReferenceWebService {
    * Retrieve the verification statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the
-   *     verification statuses for or <code>null</code> to retrieve the verification statuses for
+   *     verification statuses for or <b>null</b> to retrieve the verification statuses for
    *     all locales
    * @return the verification statuses
    */

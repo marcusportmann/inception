@@ -20,7 +20,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 
 /**
- * The <code>Document</code> class represents a WBXML document.
+ * The <b>Document</b> class represents a WBXML document.
  *
  * @author Marcus Portmann
  */
@@ -36,7 +36,7 @@ public class Document implements Serializable {
   private Element rootElement = null;
 
   /**
-   * Constructs a new <code>Document</code> with the specified root element.
+   * Constructs a new <b>Document</b> with the specified root element.
    *
    * @param element the root element for the document
    */
@@ -45,7 +45,7 @@ public class Document implements Serializable {
   }
 
   /**
-   * Constructs a new <code>Document</code> with the specified root element and public ID.
+   * Constructs a new <b>Document</b> with the specified root element and public ID.
    *
    * @param element the root element for the document
    * @param publicId the public ID for the document
@@ -79,9 +79,9 @@ public class Document implements Serializable {
   }
 
   /**
-   * Print the document to the specified <code>OutputStream</code>.
+   * Print the document to the specified <b>OutputStream</b>.
    *
-   * @param out the <code>OuputStream</code> to output the document to
+   * @param out the <b>OuputStream</b> to output the document to
    */
   public void print(OutputStream out) {
     rootElement.print(out, 0);

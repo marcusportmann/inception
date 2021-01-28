@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>ValidationErrorAttribute</code> attribute represents an attribute associated with the
+ * The <b>ValidationErrorAttribute</b> attribute represents an attribute associated with the
  * validation error.
  *
  * @author Marcus Portmann
@@ -54,11 +54,11 @@ public class ValidationErrorAttribute implements Serializable, Cloneable {
   @XmlElement(name = "Value")
   private String value;
 
-  /** Constructs a new <code>ValidationErrorAttribute</code>. */
+  /** Constructs a new <b>ValidationErrorAttribute</b>. */
   public ValidationErrorAttribute() {}
 
   /**
-   * Constructs a new <code>ValidationErrorAttribute</code>.
+   * Constructs a new <b>ValidationErrorAttribute</b>.
    *
    * @param name the name of the validation error attribute
    * @param value the value for the validation error attribute

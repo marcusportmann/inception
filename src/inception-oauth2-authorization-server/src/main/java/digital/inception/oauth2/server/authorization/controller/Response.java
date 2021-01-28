@@ -19,7 +19,7 @@ package digital.inception.oauth2.server.authorization.controller;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <code>Response</code> class provides the base class that all OAuth2 response classes should
+ * The <b>Response</b> class provides the base class that all OAuth2 response classes should
  * be derived from.
  *
  * @author Marcus Portmann
@@ -30,7 +30,7 @@ public abstract class Response {
   private final HttpStatus status;
 
   /**
-   * Constructs a new <code>Response</code>.
+   * Constructs a new <b>Response</b>.
    *
    * @param status the HTTP status that should be returned for the OAuth2 response
    */

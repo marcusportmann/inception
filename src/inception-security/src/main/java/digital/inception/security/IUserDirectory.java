@@ -22,7 +22,7 @@ import digital.inception.core.sorting.SortDirection;
 import java.util.List;
 
 /**
- * The <code>IUserDirectoryProvider</code> interface defines the functionality provided by a user
+ * The <b>IUserDirectoryProvider</b> interface defines the functionality provided by a user
  * directory, which manages users and groups.
  *
  * @author Marcus Portmann
@@ -307,7 +307,7 @@ interface IUserDirectory {
    * Does the user with the specified username exist?
    *
    * @param username the username for the user
-   * @return <code>true</code> if a user with specified username exists or <code>false</code>
+   * @return <b>true</b> if a user with specified username exists or <b>false</b>
    *     otherwise
    */
   boolean isExistingUser(String username) throws SecurityServiceException;
@@ -317,7 +317,7 @@ interface IUserDirectory {
    *
    * @param groupName the name of the group
    * @param username the username for the user
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
    */
   boolean isUserInGroup(String groupName, String username)
       throws UserNotFoundException, GroupNotFoundException, SecurityServiceException;

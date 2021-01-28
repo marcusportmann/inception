@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
- * The <code>Assert</code> class provides additional assertions for JUnit tests.
+ * The <b>Assert</b> class provides additional assertions for JUnit tests.
  *
  * @author Marcus Portmann
  */

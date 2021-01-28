@@ -16,13 +16,11 @@
 
 package digital.inception.party;
 
-
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>PartyConfiguration</code> class provides the Spring configuration for the Party module.
+ * The <b>PartyConfiguration</b> class provides the Spring configuration for the Party module.
  *
  * @author Marcus Portmann
  */

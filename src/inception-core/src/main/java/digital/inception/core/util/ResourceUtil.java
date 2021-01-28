@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The <code>ResourceUtil</code> class is a utility class which provides methods for working with
+ * The <b>ResourceUtil</b> class is a utility class which provides methods for working with
  * resources.
  *
  * @author Marcus Portmann

@@ -17,7 +17,7 @@
 package demo;
 
 /**
- * The <code>Version</code> class.
+ * The <b>Version</b> class.
  *
  * @author Marcus Portmann
  */

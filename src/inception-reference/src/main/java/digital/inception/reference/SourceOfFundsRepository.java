@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>SourceOfFundsRepository</code> interface declares the repository for the <code>
- * SourceOfFunds</code> domain type.
+ * The <b>SourceOfFundsRepository</b> interface declares the repository for the <b>
+ * SourceOfFunds</b> domain type.
  *
  * @author Marcus Portmann
  */

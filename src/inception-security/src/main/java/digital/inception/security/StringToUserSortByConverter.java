@@ -22,15 +22,15 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToUserSortByConverter</code> class implements the Spring converter that converts
- * a <code>String</code> type into a <code>UserSortBy</code> type.
+ * The <b>StringToUserSortByConverter</b> class implements the Spring converter that converts
+ * a <b>String</b> type into a <b>UserSortBy</b> type.
  *
  * @author Marcus Portmann
  */
 @Component
 public class StringToUserSortByConverter implements Converter<String, UserSortBy> {
 
-  /** Constructs a new <code>StringToUserSortByConverter</code>. */
+  /** Constructs a new <b>StringToUserSortByConverter</b>. */
   public StringToUserSortByConverter() {}
 
   @Override

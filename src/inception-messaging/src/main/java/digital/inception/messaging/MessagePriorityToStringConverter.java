@@ -21,8 +21,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>MessagePriorityToStringConverter</code> class implements the Spring converter that
- * converts a <code>MessagePriority</code> type into a <code>String</code> type.
+ * The <b>MessagePriorityToStringConverter</b> class implements the Spring converter that
+ * converts a <b>MessagePriority</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class MessagePriorityToStringConverter implements Converter<MessagePriority, String> {
 
-  /** Constructs a new <code>MessagePriorityToStringConverter</code>. */
+  /** Constructs a new <b>MessagePriorityToStringConverter</b>. */
   public MessagePriorityToStringConverter() {}
 
   @Override

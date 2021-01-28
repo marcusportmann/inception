@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <code>Encoder</code> class generates the binary data representation of a WBXML document from
+ * The <b>Encoder</b> class generates the binary data representation of a WBXML document from
  * a WBXML object hierarchy.
  *
  * @author Marcus Portmann
@@ -39,7 +39,7 @@ public class Encoder {
   private final List<String> stringTable;
 
   /**
-   * Constructs a new <code>Encoder</code> to WBXML encode the specified document.
+   * Constructs a new <b>Encoder</b> to WBXML encode the specified document.
    *
    * @param document the document to encode
    */

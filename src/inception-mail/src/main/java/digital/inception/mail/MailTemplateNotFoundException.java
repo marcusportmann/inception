@@ -24,11 +24,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>MailTemplateNotFoundException</code> exception is thrown to indicate an error condition
+ * The <b>MailTemplateNotFoundException</b> exception is thrown to indicate an error condition
  * as a result of a mail template that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +42,7 @@ public class MailTemplateNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new <code>MailTemplateNotFoundException</code>.
+   * w Constructs a new <b>MailTemplateNotFoundException</b>.
    *
    * @param mailTemplateId the ID for the mail template
    */

@@ -31,7 +31,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>MessageTranslator</code> class provides the facilities to create messages containing
+ * The <b>MessageTranslator</b> class provides the facilities to create messages containing
  * WBXML message data. It also provides facilities to retrieve the WBXML message data from a
  * message.
  *
@@ -63,7 +63,7 @@ public class MessageTranslator {
   private final String username;
 
   /**
-   * Constructs a new <code>MessageTranslator</code>.
+   * Constructs a new <b>MessageTranslator</b>.
    *
    * @param username the username for the username responsible for the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the
@@ -76,7 +76,7 @@ public class MessageTranslator {
   }
 
   /**
-   * Constructs a new <code>MessageTranslator</code>.
+   * Constructs a new <b>MessageTranslator</b>.
    *
    * @param username the username for the user responsible for the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the

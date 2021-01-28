@@ -19,7 +19,7 @@ package digital.inception.core.wbxml;
 import java.io.Serializable;
 
 /**
- * The <code>Attribute</code> class stores the name and value of a WBXML attribute.
+ * The <b>Attribute</b> class stores the name and value of a WBXML attribute.
  *
  * @author Marcus Portmann
  */
@@ -31,14 +31,14 @@ public class Attribute implements Serializable {
 
   private String value;
 
-  /** Constructs a new <code>Attribute</code>. */
+  /** Constructs a new <b>Attribute</b>. */
   public Attribute() {
     name = "";
     value = "";
   }
 
   /**
-   * Constructs a new <code>Attribute</code> with the specified name and value.
+   * Constructs a new <b>Attribute</b> with the specified name and value.
    *
    * @param name the name of the attribute
    * @param value the value for the attribute

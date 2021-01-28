@@ -42,8 +42,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 
 
 /**
- * The <code>ConfigurationServiceTest</code> class contains the implementation of the JUnit tests
- * for the <code>ConfigurationService</code> class.
+ * The <b>ConfigurationServiceTest</b> class contains the implementation of the JUnit tests
+ * for the <b>ConfigurationService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -96,7 +96,7 @@ public class ConfigurationServiceTest {
   /** The Configuration Service. */
   @Autowired private IConfigurationService configurationService;
 
-  /** Test the <code>Binary</code> configuration. */
+  /** Test the <b>Binary</b> configuration. */
   @Test
   public void binaryConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_BINARY_KEY)) {
@@ -144,7 +144,7 @@ public class ConfigurationServiceTest {
         value);
   }
 
-  /** Test the <code>Boolean</code> configuration. */
+  /** Test the <b>Boolean</b> configuration. */
   @Test
   public void booleanConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_BOOLEAN_KEY)) {
@@ -192,7 +192,7 @@ public class ConfigurationServiceTest {
         value);
   }
 
-  /** Test the <code>Configuration</code> configuration. */
+  /** Test the <b>Configuration</b> configuration. */
   @Test
   public void configurationConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_CONFIGURATION_KEY)) {
@@ -230,7 +230,7 @@ public class ConfigurationServiceTest {
     List<Configuration> configurations = configurationService.getConfigurations();
   }
 
-  /** Test the <code>Double</code> configuration. */
+  /** Test the <b>Double</b> configuration. */
   @Test
   public void doubleConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_DOUBLE_KEY)) {
@@ -304,7 +304,7 @@ public class ConfigurationServiceTest {
         filteredConfigurations.get(0).getValue());
   }
 
-  /** Test the <code>Integer</code> configuration. */
+  /** Test the <b>Integer</b> configuration. */
   @Test
   public void integerConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_INTEGER_KEY)) {
@@ -354,7 +354,7 @@ public class ConfigurationServiceTest {
         value.intValue());
   }
 
-  /** Test the <code>Long</code> configuration. */
+  /** Test the <b>Long</b> configuration. */
   @Test
   public void longConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_LONG_KEY)) {
@@ -402,7 +402,7 @@ public class ConfigurationServiceTest {
         value.longValue());
   }
 
-  /** Test the <code>String</code> configuration. */
+  /** Test the <b>String</b> configuration. */
   @Test
   public void stringConfigurationTest() throws Exception {
     if (configurationService.keyExists(TEST_STRING_KEY)) {

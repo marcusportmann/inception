@@ -20,8 +20,8 @@ import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
 
 /**
- * The <code>IVehicleService</code> interface defines the functionality that must be provided by a
- * Vehicle Service implementation.
+ * The <b>IVehicleService</b> interface defines the functionality that must be provided by a Vehicle
+ * Service implementation.
  *
  * @author Marcus Portmann
  */

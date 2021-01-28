@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * The <code>SchedulerRestController</code> class.
+ * The <b>SchedulerRestController</b> class.
  *
  * @author Marcus Portmann
  */
@@ -59,7 +59,7 @@ public class SchedulerRestController extends SecureRestController {
   private final ISchedulerService schedulerService;
 
   /**
-   * Constructs a new <code>SchedulerRestController</code>.
+   * Constructs a new <b>SchedulerRestController</b>.
    *
    * @param schedulerService the Scheduler Service
    */

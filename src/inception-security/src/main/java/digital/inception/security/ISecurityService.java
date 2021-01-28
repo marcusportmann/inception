@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The <code>ISecurityService</code> interface defines the functionality provided by a Security
+ * The <b>ISecurityService</b> interface defines the functionality provided by a Security
  * Service implementation, which manages the security related information for an application.
  *
  * @author Marcus Portmann
@@ -148,8 +148,8 @@ public interface ISecurityService {
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
-   * @return the new internal user directory that was created for the tenant or <code>null
-   * </code> if no user directory was created
+   * @return the new internal user directory that was created for the tenant or <b>null
+   * </b> if no user directory was created
    */
   UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException;
@@ -537,7 +537,7 @@ public interface ISecurityService {
    *
    * @param username the username for the user
    * @return the Universally Unique Identifier (UUID) for the user directory that
-   *     the user with the specified username is associated with or <code>null</code> if the user
+   *     the user with the specified username is associated with or <b>null</b> if the user
    *     cannot be found
    */
   UUID getUserDirectoryIdForUser(String username)
@@ -686,7 +686,7 @@ public interface ISecurityService {
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
    * @param username the username for the user
-   * @return <code>true</code> if a user with specified username exists or <code>false</code>
+   * @return <b>true</b> if a user with specified username exists or <b>false</b>
    *     otherwise
    */
   boolean isExistingUser(UUID userDirectoryId, String username)
@@ -699,7 +699,7 @@ public interface ISecurityService {
    *     directory
    * @param groupName the name of the group
    * @param username the username for the user
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
    */
   boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,

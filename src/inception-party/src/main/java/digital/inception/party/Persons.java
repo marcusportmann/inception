@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Persons</code> class holds the results of a request to retrieve a list of persons.
+ * The <b>Persons</b> class holds the results of a request to retrieve a list of persons.
  *
  * @author Marcus Portmann
  */
@@ -100,11 +100,11 @@ public class Persons implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <code>Persons</code>. */
+  /** Constructs a new <b>Persons</b>. */
   public Persons() {}
 
   /**
-   * Constructs a new <code>Persons</code>.
+   * Constructs a new <b>Persons</b>.
    *
    * @param persons the persons
    * @param total the total number of persons

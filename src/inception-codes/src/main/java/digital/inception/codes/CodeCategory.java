@@ -40,7 +40,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>CodeCategory</code> class holds the information for a code category.
+ * The <b>CodeCategory</b> class holds the information for a code category.
  *
  * @author Marcus Portmann
  */
@@ -99,11 +99,11 @@ public class CodeCategory implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>CodeCategory</code>. */
+  /** Constructs a new <b>CodeCategory</b>. */
   public CodeCategory() {}
 
   /**
-   * Constructs a new <code>CodeCategory</code>.
+   * Constructs a new <b>CodeCategory</b>.
    *
    * @param id the ID for the code category
    * @param name the name of the code category
@@ -114,7 +114,7 @@ public class CodeCategory implements Serializable {
   }
 
   /**
-   * Constructs a new <code>CodeCategory</code>.
+   * Constructs a new <b>CodeCategory</b>.
    *
    * @param id the ID for the code category
    * @param name the name of the code category
@@ -130,8 +130,7 @@ public class CodeCategory implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

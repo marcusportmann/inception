@@ -31,7 +31,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * The <code>XmlUtil</code> class provides utility methods for working with XML documents.
+ * The <b>XmlUtil</b> class provides utility methods for working with XML documents.
  *
  * @author Marcus Portmann
  */
@@ -39,7 +39,7 @@ import org.w3c.dom.NodeList;
 public class XmlUtil {
 
   /**
-   * The <code>DatatypeFactory</code> instance used to convert java.xml.datatype object that map XML
+   * The <b>DatatypeFactory</b> instance used to convert java.xml.datatype object that map XML
    * to/from Java objects.
    */
   private static final DatatypeFactory datatypeFactory;
@@ -53,11 +53,11 @@ public class XmlUtil {
   }
 
   /**
-   * Converts a <code>javax.xml.datatype.XMLGregorianCalendar</code> instance to a <code>
-   * java.util.Date</code> instance.
+   * Converts a <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to a <b>
+   * java.util.Date</b> instance.
    *
-   * @param calendar the <code>javax.xml.datatype.XMLGregorianCalendar</code> instance to convert
-   * @return the converted <code>java.util.Date</code> instance
+   * @param calendar the <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to convert
+   * @return the converted <b>java.util.Date</b> instance
    */
   public static java.util.Date asDate(XMLGregorianCalendar calendar) {
     if (calendar == null) {
@@ -68,11 +68,11 @@ public class XmlUtil {
   }
 
   /**
-   * Converts a <code>java.util.Date</code> instance to a <code>
-   *  javax.xml.datatype.XMLGregorianCalendar</code> instance.
+   * Converts a <b>java.util.Date</b> instance to a <b>
+   *  javax.xml.datatype.XMLGregorianCalendar</b> instance.
    *
-   * @param date the <code>java.util.Date</code> instance to convert
-   * @return the converted <code>javax.xml.datatype.XMLGregorianCalendar</code> instance
+   * @param date the <b>java.util.Date</b> instance to convert
+   * @return the converted <b>javax.xml.datatype.XMLGregorianCalendar</b> instance
    */
   public static XMLGregorianCalendar asXMLGregorianCalendar(java.util.Date date) {
     if (date == null) {
@@ -91,7 +91,7 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return the child element or <code>null</code> if a child element with the specified name could
+   * @return the child element or <b>null</b> if a child element with the specified name could
    *     not be found
    */
   public static Element getChildElement(Element element, String name) {
@@ -118,7 +118,7 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return the boolean value of the text content for the child element or <code>null</code> if a
+   * @return the boolean value of the text content for the child element or <b>null</b> if a
    *     child element with the specified name could not be found
    */
   public static Boolean getChildElementBoolean(Element element, String name) {
@@ -152,7 +152,7 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return the text content for the child element or <code>null</code> if a child element with the
+   * @return the text content for the child element or <b>null</b> if a child element with the
    *     specified name could not be found
    */
   public static String getChildElementText(Element element, String name) {
@@ -201,13 +201,13 @@ public class XmlUtil {
   }
 
   /**
-   * Returns the <code>javax.xml.namespace.QName</code> instance for the specified QName.
+   * Returns the <b>javax.xml.namespace.QName</b> instance for the specified QName.
    *
-   * @param document the <code>org.w3c.dom.Document</code> instance used to determine the namespace
-   *     URI for the QName if the namespace is referenced using a prefix as part of the <code>name
-   *                 </code> parameter
+   * @param document the <b>org.w3c.dom.Document</b> instance used to determine the namespace
+   *     URI for the QName if the namespace is referenced using a prefix as part of the <b>name
+   *                 </b> parameter
    * @param qname the QName
-   * @return the <code>javax.xml.namespace.QName</code> instance for the specified QName
+   * @return the <b>javax.xml.namespace.QName</b> instance for the specified QName
    */
   public static QName getQName(Document document, String qname) {
     qname = StringUtils.hasText(qname) ? qname.trim() : "";
@@ -233,26 +233,26 @@ public class XmlUtil {
   }
 
   /**
-   * Returns the <code>javax.xml.namespace.QName</code> instance for the specified QName.
+   * Returns the <b>javax.xml.namespace.QName</b> instance for the specified QName.
    *
-   * @param element the <code>org.w3c.dom.Element</code> instance used to determine the namespace
-   *     URI for the QName if the namespace is referenced using a prefix as part of the <code>name
-   *                </code> parameter
+   * @param element the <b>org.w3c.dom.Element</b> instance used to determine the namespace
+   *     URI for the QName if the namespace is referenced using a prefix as part of the <b>name
+   *                </b> parameter
    * @param qname the QName
-   * @return the <code>javax.xml.namespace.QName</code> instance for the specified QName
+   * @return the <b>javax.xml.namespace.QName</b> instance for the specified QName
    */
   public static QName getQName(Element element, String qname) {
     return getQName(element.getOwnerDocument(), qname);
   }
 
   /**
-   * Returns <code>true</code> if the specified element has a child with the specified name or
-   * <code>false</code> otherwise.
+   * Returns <b>true</b> if the specified element has a child with the specified name or
+   * <b>false</b> otherwise.
    *
    * @param element the parent element
    * @param name the name of the child element
-   * @return <code>true</code> if the specified element has a child with the specified name or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the specified element has a child with the specified name or
+   *     <b>false</b> otherwise
    */
   public static boolean hasChildElement(Element element, String name) {
     NodeList nodeList = element.getChildNodes();

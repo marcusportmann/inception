@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>TaxNumberType</code> class holds the information for a possible tax number type.
+ * The <b>TaxNumberType</b> class holds the information for a possible tax number type.
  *
  * @author Marcus Portmann
  */
@@ -74,7 +74,7 @@ public class TaxNumberType implements Serializable {
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
   @Size(min = 1, max = 30)
-  @Column(name = "country_of_issue", length =  30, nullable = false)
+  @Column(name = "country_of_issue", length = 30, nullable = false)
   private String countryOfIssue;
 
   /** The description for the tax number type. */
@@ -113,15 +113,14 @@ public class TaxNumberType implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>TaxNumberType</code>. */
+  /** Constructs a new <b>TaxNumberType</b>. */
   public TaxNumberType() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

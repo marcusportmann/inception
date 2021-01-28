@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>LanguageRepository</code> interface declares the repository for the <code>Language
- * </code> domain type.
+ * The <b>LanguageRepository</b> interface declares the repository for the <b>Language </b> domain
+ * type.
  *
  * @author Marcus Portmann
  */

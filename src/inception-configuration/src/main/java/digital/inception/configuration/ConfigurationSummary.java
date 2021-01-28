@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>Configuration</code> class stores the summary for a configuration.
+ * The <b>Configuration</b> class stores the summary for a configuration.
  *
  * @author Marcus Portmann
  */
@@ -77,11 +77,11 @@ public class ConfigurationSummary implements Serializable {
   @Column(name = "key", length = 100, nullable = false)
   private String key;
 
-  /** Constructs a new <code>ConfigurationSummary</code>. */
+  /** Constructs a new <b>ConfigurationSummary</b>. */
   public ConfigurationSummary() {}
 
   /**
-   * Constructs a new <code>ConfigurationSummary</code>.
+   * Constructs a new <b>ConfigurationSummary</b>.
    *
    * @param key the key for the configuration
    * @param description the description for the configuration
@@ -95,8 +95,8 @@ public class ConfigurationSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

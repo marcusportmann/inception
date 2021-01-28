@@ -16,14 +16,12 @@
 
 package digital.inception.party;
 
-
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>PhysicalAddressTypeConverter</code> class implements the custom JPA converter for the
- * <code>PhysicalAddressType</code> enumeration.
+ * The <b>PhysicalAddressTypeConverter</b> class implements the custom JPA converter for the
+ * <b>PhysicalAddressType</b> enumeration.
  *
  * @author Marcus Portmann
  */

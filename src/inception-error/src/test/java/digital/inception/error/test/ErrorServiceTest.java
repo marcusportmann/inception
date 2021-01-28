@@ -40,8 +40,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <code>ErrorServiceTest</code> class contains the implementation of the JUnit tests for the
- * <code>ErrorService</code> class.
+ * The <b>ErrorServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>ErrorService</b> class.
  *
  * @author Marcus Portmann
  */

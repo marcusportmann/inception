@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>SortDirection</code> enumeration defines the possible sort directions when retrieving
+ * The <b>SortDirection</b> enumeration defines the possible sort directions when retrieving
  * security related entities.
  *
  * @author Marcus Portmann

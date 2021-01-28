@@ -30,9 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <code>UserTransactionProxy</code> class provides a proxy that tracks the Java Transaction
- * (JTA) API transactions associated with the current thread and managed by a <code>
- * javax.transaction.UserTransaction</code> implementation.
+ * The <b>UserTransactionProxy</b> class provides a proxy that tracks the Java Transaction
+ * (JTA) API transactions associated with the current thread and managed by a <b>
+ * javax.transaction.UserTransaction</b> implementation.
  *
  * @author Marcus Portmann
  */
@@ -53,7 +53,7 @@ public class UserTransactionProxy implements UserTransaction {
   private UserTransaction userTransaction;
 
   /**
-   * Constructs a new <code>UserTransactionProxy</code>.
+   * Constructs a new <b>UserTransactionProxy</b>.
    *
    * @param userTransaction the JTA user transaction
    * @param transactionManager the JTA transaction manager
@@ -137,7 +137,7 @@ public class UserTransactionProxy implements UserTransaction {
   /**
    * Returns the current transaction.
    *
-   * @return the current transaction or <code>null</code> if there is no current transaction
+   * @return the current transaction or <b>null</b> if there is no current transaction
    */
   private Transaction getCurrentTransaction() {
     try {

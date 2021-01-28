@@ -17,7 +17,7 @@
 package digital.inception.core.util;
 
 /**
- * The <code>ExceptionUtil</code> class is a utility class which provides methods for manipulating
+ * The <b>ExceptionUtil</b> class is a utility class which provides methods for manipulating
  * exceptions.
  *
  * @author Marcus Portmann

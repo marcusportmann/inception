@@ -28,8 +28,8 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * The <code>PasswordResetRepository</code> interface declares the repository for the <code>
- * PasswordReset</code> domain type.
+ * The <b>PasswordResetRepository</b> interface declares the repository for the <b>
+ * PasswordReset</b> domain type.
  *
  * @author Marcus Portmann
  */

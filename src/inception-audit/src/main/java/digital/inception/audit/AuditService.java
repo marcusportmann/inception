@@ -19,7 +19,7 @@ package digital.inception.audit;
 import org.springframework.stereotype.Service;
 
 /**
- * The <code>AuditService</code> class provides the Audit Service implementation.
+ * The <b>AuditService</b> class provides the Audit Service implementation.
  *
  * @author Marcus Portmann
  */

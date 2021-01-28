@@ -22,7 +22,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
 /**
- * The <code>SMSWebService</code> class.
+ * The <b>SMSWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -38,7 +38,7 @@ public class SMSWebService {
   private final ISMSService smsService;
 
   /**
-   * Constructs a new <code>SMSWebService</code>.
+   * Constructs a new <b>SMSWebService</b>.
    *
    * @param smsService the SMS Service
    */

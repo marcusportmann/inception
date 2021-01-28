@@ -28,8 +28,8 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- * The <code>DataSourceProxy</code> class provides a proxy that tracks the JDBC connections
- * associated with the current thread and managed by a <code>javax.sql.DataSource</code>
+ * The <b>DataSourceProxy</b> class provides a proxy that tracks the JDBC connections
+ * associated with the current thread and managed by a <b>javax.sql.DataSource</b>
  * implementation.
  *
  * @author Marcus Portmann
@@ -44,7 +44,7 @@ public class DataSourceProxy implements DataSource {
   private DataSource dataSource;
 
   /**
-   * Constructs a new <code>DataSourceProxy</code>.
+   * Constructs a new <b>DataSourceProxy</b>.
    *
    * @param dataSource the data source
    */

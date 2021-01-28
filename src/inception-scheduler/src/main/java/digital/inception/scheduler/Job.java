@@ -55,7 +55,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 /**
- * The <code>Job</code> class holds the information for a job.
+ * The <b>Job</b> class holds the information for a job.
  *
  * @author Marcus Portmann
  */
@@ -214,11 +214,11 @@ public class Job implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>Job</code>. */
+  /** Constructs a new <b>Job</b>. */
   public Job() {}
 
   /**
-   * Constructs a new <code>Job</code>.
+   * Constructs a new <b>Job</b>.
    *
    * @param id the ID for the job
    * @param name the name of the job
@@ -273,8 +273,8 @@ public class Job implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -425,7 +425,7 @@ public class Job implements Serializable {
   /**
    * Returns whether the job is enabled for execution.
    *
-   * @return <code>true</code> if the job is enabled for execution or <code>false</code> otherwise
+   * @return <b>true</b> if the job is enabled for execution or <b>false</b> otherwise
    */
   public boolean isEnabled() {
     return enabled;
@@ -449,7 +449,7 @@ public class Job implements Serializable {
   /**
    * Set whether the job is enabled for execution.
    *
-   * @param enabled <code>true</code> if the job is enabled for execution or <code>false</code>
+   * @param enabled <b>true</b> if the job is enabled for execution or <b>false</b>
    *     otherwise
    */
   public void setEnabled(boolean enabled) {

@@ -24,8 +24,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>UserDirectoryTypeRepository</code> interface declares the repository for the <code>
- * UserDirectoryType</code> domain type.
+ * The <b>UserDirectoryTypeRepository</b> interface declares the repository for the <b>
+ * UserDirectoryType</b> domain type.
  *
  * @author Marcus Portmann
  */

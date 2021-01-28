@@ -24,8 +24,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>MailTemplateRepository</code> interface declares the repository for the <code>
- * MailTemplate</code> domain type.
+ * The <b>MailTemplateRepository</b> interface declares the repository for the <b>
+ * MailTemplate</b> domain type.
  *
  * @author Marcus Portmann
  */

@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2021 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,30 +14,30 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.party;
+// package digital.inception.party;
 //
 //
 //
-//import org.springframework.core.convert.converter.Converter;
-//import org.springframework.data.convert.ReadingConverter;
-//import org.springframework.stereotype.Component;
+// import org.springframework.core.convert.converter.Converter;
+// import org.springframework.data.convert.ReadingConverter;
+// import org.springframework.stereotype.Component;
 //
-///**
-// * The <code>StringToContactMechanismPurposeConverter</code> class implements the Spring converter
-// * that converts a <code>String</code> type into a <code>ContactMechanismPurpose</code> type.
+/// **
+// * The <b>StringToContactMechanismPurposeConverter</b> class implements the Spring converter
+// * that converts a <b>String</b> type into a <b>ContactMechanismPurpose</b> type.
 // *
 // * @author Marcus Portmann
 // */
-//@Component
-//@ReadingConverter
-//public class StringToContactMechanismPurposeConverter
+// @Component
+// @ReadingConverter
+// public class StringToContactMechanismPurposeConverter
 //    implements Converter<String, ContactMechanismPurpose> {
 //
-//  /** Constructs a new <code>StringToContactMechanismPurposeConverter</code>. */
+//  /** Constructs a new <b>StringToContactMechanismPurposeConverter</b>. */
 //  public StringToContactMechanismPurposeConverter() {}
 //
 //  @Override
 //  public ContactMechanismPurpose convert(String source) {
 //    return ContactMechanismPurpose.fromCode(source);
 //  }
-//}
+// }

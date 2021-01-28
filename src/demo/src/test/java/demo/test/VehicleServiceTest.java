@@ -26,6 +26,8 @@ import demo.model.Vehicles;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.validation.Validator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +40,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <code>VehicleServiceTest</code> class.
+ * The <b>VehicleServiceTest</b> class.
  *
  * @author Marcus Portmann
  */
@@ -53,6 +55,11 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
       TransactionalTestExecutionListener.class
     })
 public class VehicleServiceTest {
+
+  /* Entity Manager */
+  @Autowired
+  @PersistenceContext(unitName = "applicationPersistenceUnit")
+  private EntityManager entityManager;
 
   /** The JSR-303 validator. */
   @Autowired private Validator validator;
@@ -76,6 +83,17 @@ public class VehicleServiceTest {
     Cars cars = vehicleService.getCars("", SortDirection.ASCENDING, 0, 100);
 
     vehicles = vehicleService.getVehicles("", SortDirection.ASCENDING, 0, 100);
+
+    //    TypedQuery<Vehicle> query = entityManager.createQuery("SELECT v FROM Vehicle v",
+    // Vehicle.class);
+    //
+    //    List<Vehicle> vehicleList = query.getResultList();
+    //
+    //
+    //    Query nativeQuery = entityManager.createNativeQuery("SELECT v.created, v.id, v.name,
+    // v.type, v.updated FROM demo.vehicles v", Vehicle.class);
+    //
+    //    vehicleList = nativeQuery.getResultList();
 
     int xxx = 0;
     xxx++;

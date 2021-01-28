@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>ContactMechanismType</code> enumeration defines the possible contact mechanism types.
+ * The <b>ContactMechanismType</b> enumeration defines the possible contact mechanism types.
  *
  * @author Marcus Portmann
  */

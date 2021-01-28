@@ -60,11 +60,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * The <code>TestConfiguration</code> class provides the base Spring configuration for the JUnit
+ * The <b>TestConfiguration</b> class provides the base Spring configuration for the JUnit
  * test classes that test the capabilities provided by the <b>Inception</b> framework.
  *
- * <p>NOTE: This configuration class disables the default application data source and Camunda
- * Process Engine bootstrapping using the component scan filters.
+ * <p>This configuration class disables the default application data source and Camunda Process
+ * Engine bootstrapping using the component scan filters.
  *
  * @author Marcus Portmann
  */
@@ -107,7 +107,7 @@ public class TestConfiguration {
   private Resource[] inMemoryInitResources;
 
   /**
-   * Constructs a new <code>TestConfiguration</code>.
+   * Constructs a new <b>TestConfiguration</b>.
    *
    * @param applicationContext the Spring application context
    */
@@ -195,8 +195,8 @@ public class TestConfiguration {
    * Initialize the in-memory application database and return a data source that can be used to
    * interact with the database.
    *
-   * <p>NOTE: This data source returned by this method must be closed after use with the <code>
-   * close()</code> method.
+   * <p>This data source returned by this method must be closed after use with the <b>
+   * close()</b> method.
    *
    * @return the data source that can be used to interact with the in-memory database
    */

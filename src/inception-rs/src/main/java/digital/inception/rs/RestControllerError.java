@@ -34,7 +34,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>RestControllerError</code> class holds the information for an error returned by a
+ * The <b>RestControllerError</b> class holds the information for an error returned by a
  * RESTful web service.
  *
  * @author Marcus Portmann
@@ -95,7 +95,7 @@ public class RestControllerError implements Serializable {
   @JsonProperty private List<ValidationError> validationErrors;
 
   /**
-   * Constructs a new <code>RestControllerError</code>.
+   * Constructs a new <b>RestControllerError</b>.
    *
    * @param request the HTTP servlet request
    * @param responseStatus the HTTP response status
@@ -105,7 +105,7 @@ public class RestControllerError implements Serializable {
   }
 
   /**
-   * Constructs a new <code>RestControllerError</code>.
+   * Constructs a new <b>RestControllerError</b>.
    *
    * @param request the HTTP servlet request
    * @param responseStatus the HTTP response status

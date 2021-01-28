@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <code>PartyRoleId</code> class implements the ID class for the <code>PartyRole</code> class.
+ * The <b>PartyRoleId</b> class implements the ID class for the <b>PartyRole</b> class.
  *
  * @author Marcus Portmann
  */
@@ -35,15 +35,14 @@ public class PartyRoleId implements Serializable {
   /** The code for the party role type. */
   private String type;
 
-  /** Constructs a new <code>PartyRoleId</code>. */
+  /** Constructs a new <b>PartyRoleId</b>. */
   public PartyRoleId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

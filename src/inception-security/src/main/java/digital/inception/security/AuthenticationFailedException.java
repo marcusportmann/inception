@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * An <code>AuthenticationFailedException</code> is thrown to indicate that a security operation
+ * An <b>AuthenticationFailedException</b> is thrown to indicate that a security operation
  * failed as a result of an authentication failure.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -48,21 +47,21 @@ public class AuthenticationFailedException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>AuthenticationFailedException</code> with the specified message.
+   * Constructs a new <b>AuthenticationFailedException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public AuthenticationFailedException(String message) {
     super("AuthenticationFailedError", message);
   }
 
   /**
-   * Constructs a new <code>AuthenticationFailedException</code> with the specified message and
+   * Constructs a new <b>AuthenticationFailedException</b> with the specified message and
    * cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public AuthenticationFailedException(String message, Throwable cause) {
     super("AuthenticationFailedError", message, cause);

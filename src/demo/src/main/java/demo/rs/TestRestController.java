@@ -16,25 +16,16 @@
 
 package demo.rs;
 
-import demo.model.Data;
-import demo.model.DemoServiceException;
-import demo.model.IDataService;
-import digital.inception.core.validation.ValidationError;
+import demo.model.DataServiceException;
 import digital.inception.sms.smsportal.AuthenticationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
-import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,64 +34,32 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 /**
- * The <code>DemoServiceController</code> class.
+ * The <b>TestRestController</b> class.
  *
  * @author Marcus Portmann
  */
-@Tag(name = "Demo API")
+@Tag(name = "Test API")
 @RestController
-@RequestMapping(value = "/api/demo")
+@RequestMapping(value = "/api/test")
 @CrossOrigin
 @SuppressWarnings({"unused"})
-public class DemoRestController {
-
-  private final IDataService demoService;
+public class TestRestController {
 
   private final WebClient.Builder webClientBuilder;
 
   /**
-   * Constructs a new <code>DemoServiceController</code>.
+   * Constructs a new <b>TestRestController</b>.
    *
    * @param webClientBuilder the web client builder
-   * @param demoService the Demo Service
    */
-  public DemoRestController(WebClient.Builder webClientBuilder, IDataService demoService) {
+  public TestRestController(WebClient.Builder webClientBuilder) {
     this.webClientBuilder = webClientBuilder;
-    this.demoService = demoService;
-  }
-
-  /**
-   * Returns all the data.
-   *
-   * @return all the data
-   */
-  @RequestMapping(value = "/all-data", method = RequestMethod.GET, produces = "application/json")
-  public List<Data> getAllData() throws DemoServiceException {
-    return demoService.getAllData();
-  }
-
-  /**
-   * Retrieve the data.
-   *
-   * @return the data
-   */
-  @RequestMapping(value = "/data", method = RequestMethod.GET, produces = "application/json")
-  public Data getData() throws DemoServiceException {
-    long id = System.currentTimeMillis();
-
-    Data data = new Data(id, 777, "Test Value " + id, LocalDate.now(), LocalDateTime.now());
-
-    demoService.createData(data);
-
-    data = demoService.getData(data.getId());
-
-    return data;
   }
 
   /** Test the exception handling. */
   @RequestMapping(value = "/test-exception-handling", method = RequestMethod.GET)
-  public void testExceptionHandling() throws DemoServiceException {
-    throw new DemoServiceException("Testing 1.. 2.. 3..");
+  public void testExceptionHandling() throws DataServiceException {
+    throw new DataServiceException("Testing 1.. 2.. 3..");
   }
 
   /**
@@ -120,11 +79,7 @@ public class DemoRestController {
       @Parameter(name = "localDateTime", description = "The local date time", required = true)
           @RequestParam("localDateTime")
           LocalDateTime localDateTime)
-      throws DemoServiceException {
-    if (true) {
-      throw new DemoServiceException("Testing 1.. 2.. 3...");
-    }
-
+      throws DataServiceException {
     System.out.println("localDateTime = " + localDateTime);
 
     return localDateTime;
@@ -134,7 +89,7 @@ public class DemoRestController {
       value = "/test-web-client",
       method = RequestMethod.GET,
       produces = "application/json")
-  public AuthenticationResponse testWebClient() throws DemoServiceException {
+  public AuthenticationResponse testWebClient() throws DataServiceException {
     try {
       WebClient webClient =
           webClientBuilder
@@ -156,7 +111,7 @@ public class DemoRestController {
 
       return authenticationResponse;
     } catch (Throwable e) {
-      throw new DemoServiceException("Failed to test the web client", e);
+      throw new DataServiceException("Failed to test the web client", e);
     }
   }
 
@@ -177,36 +132,9 @@ public class DemoRestController {
       @Parameter(name = "zonedDateTime", description = "The zoned date time", required = true)
           @RequestParam("zonedDateTime")
           ZonedDateTime zonedDateTime)
-      throws DemoServiceException {
-    if (false) {
-      throw new DemoServiceException("Testing 1.. 2.. 3...");
-    }
-
+      throws DataServiceException {
     System.out.println("zonedDateTime = " + zonedDateTime);
 
     return zonedDateTime;
-  }
-
-  /** Validate the data. */
-  @Operation(summary = "Validate the data", description = "Validate the data")
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "OK",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    array = @ArraySchema(schema = @Schema(implementation = ValidationError.class))))
-      })
-  @RequestMapping(value = "/validate", method = RequestMethod.POST, produces = "application/json")
-  public List<ValidationError> validate(
-      @io.swagger.v3.oas.annotations.parameters.RequestBody(
-              description = "The data to validate",
-              required = true)
-          @RequestBody
-          Data data)
-      throws DemoServiceException {
-    return demoService.validateData(data);
   }
 }

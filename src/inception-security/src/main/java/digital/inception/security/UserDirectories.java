@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>UserDirectories</code> class holds the results of a request to retrieve a list of user
+ * The <b>UserDirectories</b> class holds the results of a request to retrieve a list of user
  * directories.
  *
  * @author Marcus Portmann
@@ -87,11 +87,11 @@ public class UserDirectories implements Serializable {
   @XmlElement(name = "UserDirectory", required = true)
   private List<UserDirectory> userDirectories;
 
-  /** Constructs a new <code>UserDirectories</code>. */
+  /** Constructs a new <b>UserDirectories</b>. */
   public UserDirectories() {}
 
   /**
-   * Constructs a new <code>UserDirectories</code>.
+   * Constructs a new <b>UserDirectories</b>.
    *
    * @param userDirectories the user directories
    * @param total the total number of user directories

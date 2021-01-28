@@ -23,7 +23,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * The <code>SchedulerConfiguration</code> class provides the Spring configuration for the Scheduler
+ * The <b>SchedulerConfiguration</b> class provides the Spring configuration for the Scheduler
  * module.
  *
  * @author Marcus Portmann

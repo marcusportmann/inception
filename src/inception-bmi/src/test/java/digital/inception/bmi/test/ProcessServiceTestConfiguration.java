@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
- * The <code>ProcessServiceTestConfiguration/code> class.
+ * The <b>ProcessServiceTestConfiguration/code> class.
  *
  * @author Marcus Portmann
  */
@@ -37,19 +37,19 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class ProcessServiceTestConfiguration {
 
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /** The data source used to provide connections to the application database. */
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /** The name of the Process Engine instance. */
-  private String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
+  private final String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
 
   /** The Spring platform transaction manager. */
-  private PlatformTransactionManager transactionManager;
+  private final PlatformTransactionManager transactionManager;
 
   /**
-   * Constructs a new <code>ProcessServiceTestConfiguration</code>.
+   * Constructs a new <b>ProcessServiceTestConfiguration</b>.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

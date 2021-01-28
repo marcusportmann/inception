@@ -51,7 +51,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 /**
- * The <code>Tenant</code> class holds the information for a tenant.
+ * The <b>Tenant</b> class holds the information for a tenant.
  *
  * @author Marcus Portmann
  */
@@ -124,11 +124,11 @@ public class Tenant implements Serializable {
       inverseJoinColumns = @JoinColumn(name = "user_directory_id", referencedColumnName = "id"))
   private Set<UserDirectory> userDirectories = new HashSet<>();
 
-  /** Constructs a new <code>Tenant</code>. */
+  /** Constructs a new <b>Tenant</b>. */
   public Tenant() {}
 
   /**
-   * Constructs a new <code>Tenant</code>.
+   * Constructs a new <b>Tenant</b>.
    *
    * @param name the name of the tenant
    * @param status the status for the tenant
@@ -139,7 +139,7 @@ public class Tenant implements Serializable {
   }
 
   /**
-   * Constructs a new <code>Tenant</code>.
+   * Constructs a new <b>Tenant</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the tenant
    * @param name the name of the tenant
@@ -155,8 +155,8 @@ public class Tenant implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

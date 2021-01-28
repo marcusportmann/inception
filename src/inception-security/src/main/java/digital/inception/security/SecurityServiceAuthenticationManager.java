@@ -28,7 +28,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * The <code>SecurityServiceAuthenticationManager</code> class provides an authentication manager
+ * The <b>SecurityServiceAuthenticationManager</b> class provides an authentication manager
  * implementation based on the Security Service.
  *
  * @author Marcus Portmann
@@ -43,7 +43,7 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
   private final UserDetailsService userDetailsService;
 
   /**
-   * Constructs a new <code>SecurityServiceAuthenticationManager</code>.
+   * Constructs a new <b>SecurityServiceAuthenticationManager</b>.
    *
    * @param securityService the Security Service
    * @param userDetailsService the User Details Service
@@ -56,18 +56,18 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
 
   /**
    * Attempts to authenticate the passed {@link Authentication} object, returning a fully populated
-   * <code>Authentication</code> object (including granted authorities) if successful.
+   * <b>Authentication</b> object (including granted authorities) if successful.
    *
-   * <p>An <code>AuthenticationManager</code> must honour the following contract concerning
+   * <p>An <b>AuthenticationManager</b> must honour the following contract concerning
    * exceptions:
    *
    * <ul>
-   *   <li>A {@link DisabledException} must be thrown if an account is disabled and the <code>
-   *       AuthenticationManager</code> can test for this state.
-   *   <li>A {@link LockedException} must be thrown if an account is locked and the <code>
-   *       AuthenticationManager</code> can test for account locking.
+   *   <li>A {@link DisabledException} must be thrown if an account is disabled and the <b>
+   *       AuthenticationManager</b> can test for this state.
+   *   <li>A {@link LockedException} must be thrown if an account is locked and the <b>
+   *       AuthenticationManager</b> can test for account locking.
    *   <li>A {@link BadCredentialsException} must be thrown if incorrect credentials are presented.
-   *       Whilst the above exceptions are optional, an <code>AuthenticationManager</code> must
+   *       Whilst the above exceptions are optional, an <b>AuthenticationManager</b> must
    *       <B>always</B> test credentials.
    * </ul>
    *

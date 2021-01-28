@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -49,10 +47,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
-
 /**
- * The <code>User</code> class holds the information for a user.
+ * The <b>User</b> class holds the information for a user.
  *
  * @author Marcus Portmann
  */
@@ -170,8 +166,8 @@ public class User implements Serializable {
   /**
    * The password or password hash for the user.
    *
-   * <p>NOTE: The password is not required as part of the JSON or XML representation of the user,
-   * other than when creating the user, so the field is nullable but the database column is not.
+   * <p>The password is not required as part of the JSON or XML representation of the user, other
+   * than when creating the user, so the field is nullable but the database column is not.
    */
   @Schema(description = "The password or password hash for the user")
   @JsonProperty
@@ -256,15 +252,15 @@ public class User implements Serializable {
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
-  /** Constructs a new <code>User</code>. */
+  /** Constructs a new <b>User</b>. */
   public User() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -431,7 +427,7 @@ public class User implements Serializable {
   /**
    * Has the password for the user expired?
    *
-   * @return <code>true</code> if the password for the user has expired or <code>false</code>
+   * @return <b>true</b> if the password for the user has expired or <b>false</b>
    *     otherwise
    */
   public boolean hasPasswordExpired() {
@@ -455,7 +451,7 @@ public class User implements Serializable {
   /**
    * Is the user active?
    *
-   * @return <code>true</code> if the user is active or <code>false</code> otherwise
+   * @return <b>true</b> if the user is active or <b>false</b> otherwise
    */
   @JsonIgnore
   @XmlTransient
@@ -466,7 +462,7 @@ public class User implements Serializable {
   /**
    * Is the user expired?
    *
-   * @return <code>true</code> if the user is expired or <code>false</code> otherwise
+   * @return <b>true</b> if the user is expired or <b>false</b> otherwise
    */
   @JsonIgnore
   @XmlTransient
@@ -477,7 +473,7 @@ public class User implements Serializable {
   /**
    * Is the user locked?
    *
-   * @return <code>true</code> if the user is locked or <code>false</code> otherwise
+   * @return <b>true</b> if the user is locked or <b>false</b> otherwise
    */
   @JsonIgnore
   @XmlTransient

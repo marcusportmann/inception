@@ -24,12 +24,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>DuplicateMailTemplateException</code> exception is thrown to indicate an error
+ * The <b>DuplicateMailTemplateException</b> exception is thrown to indicate an error
  * condition as a result of an attempt to create a duplicate mail template i.e a mail template with
  * the specified ID already exists.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -46,7 +45,7 @@ public class DuplicateMailTemplateException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>DuplicateMailTemplateException</code>.
+   * Constructs a new <b>DuplicateMailTemplateException</b>.
    *
    * @param mailTemplateId the ID for the mail template
    */

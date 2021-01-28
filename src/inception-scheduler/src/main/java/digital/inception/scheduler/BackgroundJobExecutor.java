@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 
 
 /**
- * The <code>BackgroundJobExecutor</code> class implements the Background Job Executor.
+ * The <b>BackgroundJobExecutor</b> class implements the Background Job Executor.
  *
  * @author Marcus Portmann
  */
@@ -64,7 +64,7 @@ public class BackgroundJobExecutor implements InitializingBean {
   private final ISchedulerService schedulerService;
 
   /**
-   * Constructs a new <code>BackgroundJobExecutor</code>.
+   * Constructs a new <b>BackgroundJobExecutor</b>.
    *
    * @param schedulerService the Scheduler Service
    */

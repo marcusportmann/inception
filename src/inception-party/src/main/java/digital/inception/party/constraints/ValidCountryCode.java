@@ -25,8 +25,8 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * The <code>ValidCountryCode</code> annotation implements the custom constraint annotation used to
- * apply the country code validation.
+ * The <b>ValidCountryCode</b> annotation implements the custom constraint annotation used to apply
+ * the country code validation.
  *
  * @author Marcus Portmann
  */

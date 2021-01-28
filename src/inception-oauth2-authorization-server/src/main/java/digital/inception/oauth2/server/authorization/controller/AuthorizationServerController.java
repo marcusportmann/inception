@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * The <code>AuthorizationServerController</code> class implements a simple OAuth authorization
+ * The <b>AuthorizationServerController</b> class implements a simple OAuth authorization
  * server that provides support for the Resource Owner Password Grant.
  */
 @Controller
@@ -60,7 +60,7 @@ public class AuthorizationServerController {
   private final ITokenService tokenService;
 
   /**
-   * Constructs a new <code>AuthorizationServerController</code>.
+   * Constructs a new <b>AuthorizationServerController</b>.
    *
    * @param securityService the Security Service
    * @param tokenService the Token Service

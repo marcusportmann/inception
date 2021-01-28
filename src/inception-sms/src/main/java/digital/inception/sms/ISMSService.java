@@ -20,7 +20,7 @@ import digital.inception.core.validation.InvalidArgumentException;
 import java.util.UUID;
 
 /**
- * The <code>ISMSService</code> interface defines the functionality provided by an SMS Service
+ * The <b>ISMSService</b> interface defines the functionality provided by an SMS Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ public interface ISMSService {
   /**
    * Create the new SMS.
    *
-   * @param sms the <code>SMS</code> instance containing the information for the SMS
+   * @param sms the <b>SMS</b> instance containing the information for the SMS
    */
   void createSMS(SMS sms) throws InvalidArgumentException, SMSServiceException;
 
@@ -55,7 +55,7 @@ public interface ISMSService {
    *
    * <p>The SMS will be locked to prevent duplicate sending.
    *
-   * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
+   * @return the next SMS that has been queued for sending or <b>null</b> if no SMSs are
    *     currently queued for sending
    */
   SMS getNextSMSQueuedForSending() throws SMSServiceException;
@@ -71,7 +71,7 @@ public interface ISMSService {
    * Retrieve the SMS.
    *
    * @param smsId the ID for the SMS
-   * @return the SMS or <code>null</code> if the SMS could not be found
+   * @return the SMS or <b>null</b> if the SMS could not be found
    */
   SMS getSMS(UUID smsId) throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
 
@@ -86,7 +86,7 @@ public interface ISMSService {
   /**
    * Send the SMS.
    *
-   * <p>NOTE: This will queue the SMS for sending. The SMS will actually be sent asynchronously.
+   * <p>This will queue the SMS for sending. The SMS will actually be sent asynchronously.
    *
    * @param mobileNumber the mobile number
    * @param message the message
@@ -97,12 +97,12 @@ public interface ISMSService {
   /**
    * Send the SMS synchronously.
    *
-   * <p>NOTE: This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
+   * <p>This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
    *
    * @param smsId the ID of the SMS
    * @param mobileNumber the mobile number
    * @param message the message
-   * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
+   * @return <b>true</b> if the SMS was sent successfully or <b>false</b> otherwise
    */
   boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
       throws InvalidArgumentException, SMSServiceException;

@@ -38,7 +38,7 @@
 //
 //
 /// **
-// * The <code>CustomerRestController</code> class.
+// * The <b>CustomerRestController</b> class.
 // *
 // * @author Marcus Portmann
 // */
@@ -53,7 +53,7 @@
 //  private final ICustomerService customerService;
 //
 //  /**
-//   * Constructs a new <code>CustomerRestController</code>.
+//   * Constructs a new <b>CustomerRestController</b>.
 //   *
 //   * @param customerService the Customer Service
 //   */

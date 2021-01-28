@@ -30,9 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <code>TransactionManagerProxy</code> class provides a proxy that tracks the Java Transaction
- * (JTA) API transactions associated with the current thread and managed by a <code>
- * javax.transaction.TransactionManager</code> implementation.
+ * The <b>TransactionManagerProxy</b> class provides a proxy that tracks the Java Transaction
+ * (JTA) API transactions associated with the current thread and managed by a <b>
+ * javax.transaction.TransactionManager</b> implementation.
  *
  * @author Marcus Portmann
  */
@@ -50,7 +50,7 @@ public class TransactionManagerProxy implements TransactionManager {
   private TransactionManager transactionManager;
 
   /**
-   * Constructs a new <code>TransactionManagerProxy</code>.
+   * Constructs a new <b>TransactionManagerProxy</b>.
    *
    * @param transactionManager the JTA transaction manager
    */

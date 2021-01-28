@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * The <code>DateDeserializer</code> class implements the Jackson deserializer for the <code>
- * LocalDate</code> type.
+ * The <b>DateDeserializer</b> class implements the Jackson deserializer for the <b>
+ * LocalDate</b> type.
  *
  * @author Marcus Portmann
  */

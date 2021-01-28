@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 /**
- * The <code>NetworkUtil</code> class is a utility class which provides network-related utility
+ * The <b>NetworkUtil</b> class is a utility class which provides network-related utility
  * methods.
  *
  * @author Marcus Portmann
@@ -30,13 +30,13 @@ import java.util.Enumeration;
 public class NetworkUtil {
 
   /**
-   * Returns an <code>InetAddress</code> object encapsulating what is most likely the machine's LAN
+   * Returns an <b>InetAddress</b> object encapsulating what is most likely the machine's LAN
    * IP address.
    *
-   * <p>This method is intended for use as a replacement of JDK method <code>
-   * InetAddress.getLocalHost</code>, because that method is ambiguous on Linux systems. Linux
+   * <p>This method is intended for use as a replacement of JDK method <b>
+   * InetAddress.getLocalHost</b>, because that method is ambiguous on Linux systems. Linux
    * systems enumerate the loopback network interface the same way as regular LAN network
-   * interfaces, but the JDK <code>InetAddress.getLocalHost</code> method does not specify the
+   * interfaces, but the JDK <b>InetAddress.getLocalHost</b> method does not specify the
    * algorithm used to select the address returned under such circumstances, and will often return
    * the loopback address, which is not valid for network communication. Details <a
    * href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4665037">here</a>.
@@ -49,8 +49,8 @@ public class NetworkUtil {
    * method will return simply the first non-loopback address found (IPv4 or IPv6).
    *
    * <p>If this method cannot find a non-loopback address using this selection algorithm, it will
-   * fall back to calling and returning the result of JDK method <code>InetAddress.getLocalHost
-   * </code>.
+   * fall back to calling and returning the result of JDK method <b>InetAddress.getLocalHost
+   * </b>.
    *
    * <p>
    */

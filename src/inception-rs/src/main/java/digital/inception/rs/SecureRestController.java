@@ -25,7 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>SecureRestController</code> class provides the base class from which all secure RESTful
+ * The <b>SecureRestController</b> class provides the base class from which all secure RESTful
  * controllers should be derived.
  *
  * @author Marcus Portmann
@@ -34,11 +34,11 @@ import org.springframework.util.StringUtils;
 public abstract class SecureRestController {
 
   /**
-   * Returns the <code>Long</code> value portion of the authorities with the specified prefix.
+   * Returns the <b>Long</b> value portion of the authorities with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request
    * @param prefix the authority prefix
-   * @return the <code>Long</code> value portion of the authorities with the specified prefix
+   * @return the <b>Long</b> value portion of the authorities with the specified prefix
    */
   protected List<Long> getLongValuesForAuthoritiesWithPrefix(
       Authentication authentication, String prefix) {
@@ -57,11 +57,11 @@ public abstract class SecureRestController {
   }
 
   /**
-   * Returns the <code>UUID</code> value portion of the authorities with the specified prefix.
+   * Returns the <b>UUID</b> value portion of the authorities with the specified prefix.
    *
    * @param authentication the authenticated principal associated with the authenticated request
    * @param prefix the authority prefix
-   * @return the <code>UUID</code> value portion of the authorities with the specified prefix
+   * @return the <b>UUID</b> value portion of the authorities with the specified prefix
    */
   protected List<UUID> getUUIDValuesForAuthoritiesWithPrefix(
       Authentication authentication, String prefix) {
@@ -84,7 +84,7 @@ public abstract class SecureRestController {
    *
    * @param authentication the authenticated principal associated with the authenticated request
    * @param prefix the authority prefix
-   * @return the value portion of the authority with the specified prefix or <code>null</code> if
+   * @return the value portion of the authority with the specified prefix or <b>null</b> if
    *     the authority with the specified prefix could not be found
    */
   protected String getValueForAuthorityWithPrefix(Authentication authentication, String prefix) {
@@ -122,8 +122,8 @@ public abstract class SecureRestController {
    * function.
    *
    * @param functionCode the code for the function
-   * @return <code>true</code> if the user associated with the authenticated request has access to
-   *     the function identified by the specified function code or <code>false</code> otherwise
+   * @return <b>true</b> if the user associated with the authenticated request has access to
+   *     the function identified by the specified function code or <b>false</b> otherwise
    */
   protected boolean hasAccessToFunction(String functionCode) {
     return hasAuthority("FUNCTION_" + functionCode);
@@ -133,8 +133,8 @@ public abstract class SecureRestController {
    * Confirm that the user associated with the authenticated request has the specified authority.
    *
    * @param authority the authority
-   * @return <code>true</code> if the user associated with the authenticated request has the
-   *     specified authority or <code>false</code> otherwise
+   * @return <b>true</b> if the user associated with the authenticated request has the
+   *     specified authority or <b>false</b> otherwise
    */
   protected boolean hasAuthority(String authority) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -165,8 +165,8 @@ public abstract class SecureRestController {
    * Confirm that the user associated with the authenticated request has the specified role.
    *
    * @param roleName the name of the role
-   * @return <code>true</code> if the user associated with the authenticated request has the
-   *     specified role or <code>false</code> otherwise
+   * @return <b>true</b> if the user associated with the authenticated request has the
+   *     specified role or <b>false</b> otherwise
    */
   protected boolean hasRole(String roleName) {
     return hasAuthority("ROLE_" + roleName);

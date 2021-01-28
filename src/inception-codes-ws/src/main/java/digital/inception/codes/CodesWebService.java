@@ -29,7 +29,7 @@ import javax.xml.bind.annotation.XmlElement;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>CodesWebService</code> class.
+ * The <b>CodesWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +45,7 @@ public class CodesWebService {
   private final ICodesService codesService;
 
   /**
-   * Constructs a new <code>CodesRestController</code>.
+   * Constructs a new <b>CodesRestController</b>.
    *
    * @param codesService the Codes Service
    */

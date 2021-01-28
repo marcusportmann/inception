@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * The <code>TestClassRunner</code> class implements the JUnit runner that provides support for
+ * The <b>TestClassRunner</b> class implements the JUnit runner that provides support for
  * JUnit test classes that test the capabilities provided by or dependent on the <b>Inception</b>
  * framework.
  *
@@ -36,7 +36,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class TestClassRunner extends SpringJUnit4ClassRunner {
 
   /**
-   * Constructs a new <code>TestClassRunner</code>.
+   * Constructs a new <b>TestClassRunner</b>.
    *
    * @param testClass the JUnit test class to run
    */

@@ -31,8 +31,8 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * The <code>MessagePartRepository</code> interface declares the repository for the <code>
- * MessagePart</code> domain type.
+ * The <b>MessagePartRepository</b> interface declares the repository for the <b>
+ * MessagePart</b> domain type.
  *
  * @author Marcus Portmann
  */

@@ -21,8 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <code>PreferenceId</code> class implements the ID class for the <code>Preference</code>
- * class.
+ * The <b>PreferenceId</b> class implements the ID class for the <b>Preference</b> class.
  *
  * @author Marcus Portmann
  */
@@ -30,23 +29,20 @@ public class PreferenceId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the party the preference is associated with.
-   */
-  private UUID party;
+  /** The Universally Unique Identifier (UUID) for the person the preference is associated with. */
+  private UUID person;
 
   /** The code for the preference type. */
   private String type;
 
-  /** Constructs a new <code>PreferenceId</code>. */
+  /** Constructs a new <b>PreferenceId</b>. */
   public PreferenceId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -64,7 +60,7 @@ public class PreferenceId implements Serializable {
 
     PreferenceId other = (PreferenceId) object;
 
-    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
+    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
   }
 
   /**
@@ -74,6 +70,6 @@ public class PreferenceId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((person == null) ? 0 : person.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

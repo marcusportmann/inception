@@ -20,8 +20,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>MessagePartStatusConverter</code> class implements the custom JPA converter for the
- * <code>MessagePartStatus</code> enumeration.
+ * The <b>MessagePartStatusConverter</b> class implements the custom JPA converter for the
+ * <b>MessagePartStatus</b> enumeration.
  *
  * @author Marcus Portmann
  */

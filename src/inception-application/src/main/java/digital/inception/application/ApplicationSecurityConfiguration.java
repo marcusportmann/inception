@@ -16,8 +16,6 @@
 
 package digital.inception.application;
 
-
-
 import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
 import java.security.KeyStore;
@@ -28,11 +26,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-
-
 /**
- * The <code>ApplicationSecurityConfiguration</code> class provides access to the application
- * security configuration and initialises the application key store and trust store.
+ * The <b>ApplicationSecurityConfiguration</b> class provides access to the application security
+ * configuration and initialises the application key store and trust store.
  *
  * @author Marcus Portmann
  */
@@ -72,8 +68,8 @@ public class ApplicationSecurityConfiguration {
   /**
    * Returns whether the key store configuration has been specified.
    *
-   * @return <code>true</code> if the key store configuration has been specified or <code>false
-   * </code> otherwise
+   * @return <b>true</b> if the key store configuration has been specified or <b>false </b>
+   *     otherwise
    */
   public boolean hasKeyStoreConfiguration() {
     return ((StringUtils.hasText(keyStoreType))
@@ -84,8 +80,8 @@ public class ApplicationSecurityConfiguration {
   /**
    * Returns whether the trust store configuration has been specified.
    *
-   * @return <code>true</code> if the trust store configuration has been specified or <code>false
-   * </code> otherwise
+   * @return <b>true</b> if the trust store configuration has been specified or <b>false </b>
+   *     otherwise
    */
   public boolean hasTrustStoreConfiguration() {
     return ((StringUtils.hasText(trustStoreType)) && (StringUtils.hasText(trustStorePath)));

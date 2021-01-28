@@ -50,7 +50,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>LDAPUserDirectory</code> class provides the LDAP user directory implementation.
+ * The <b>LDAPUserDirectory</b> class provides the LDAP user directory implementation.
  *
  * @author Marcus Portmann
  */
@@ -130,7 +130,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   private String groupDescriptionAttribute;
 
   /**
-   * Constructs a new <code>LDAPUserDirectory</code>.
+   * Constructs a new <b>LDAPUserDirectory</b>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
@@ -2119,7 +2119,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Does the user with the specified username exist?
    *
    * @param username the username for the user
-   * @return <code>true</code> if a user with specified username exists or <code>false</code>
+   * @return <b>true</b> if a user with specified username exists or <b>false</b>
    *     otherwise
    */
   @Override
@@ -2160,7 +2160,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    *
    * @param groupName the name of the group
    * @param username the username for the user
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
    */
   @Override
   public boolean isUserInGroup(String groupName, String username)

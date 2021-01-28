@@ -20,8 +20,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>SMSStatusConverter</code> class implements the custom JPA converter for the <code>
- * SMSStatus</code> enumeration.
+ * The <b>SMSStatusConverter</b> class implements the custom JPA converter for the <b>
+ * SMSStatus</b> enumeration.
  *
  * @author Marcus Portmann
  */

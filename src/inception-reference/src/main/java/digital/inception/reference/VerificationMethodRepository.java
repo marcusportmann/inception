@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>VerificationMethodRepository</code> interface declares the repository for the <code>
- * VerificationMethod</code> domain type.
+ * The <b>VerificationMethodRepository</b> interface declares the repository for the <b>
+ * VerificationMethod</b> domain type.
  *
  * @author Marcus Portmann
  */

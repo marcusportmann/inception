@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -49,19 +50,24 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>Person</code> class holds the information for a person.
+ * The <b>Person</b> class holds the information for a person.
  *
  * <p>This entity may be used under different circumstances when more or less information is
  * available for a person. As a result, most of the attributes are optional and the particular
  * application making use of this entity should enforce which attributes are mandatory.
  *
+ * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
+ * field-based approach to support the JPA inheritance model.
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "A person; any member of the species homo sapiens")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({"type"})
+@JsonIgnoreProperties({"created", "type", "updated"})
 @JsonPropertyOrder({
   "id",
+  "tenantId",
+  "name",
   "countryOfBirth",
   "countryOfResidence",
   "dateOfBirth",
@@ -76,14 +82,12 @@ import org.springframework.util.StringUtils;
   "maritalStatus",
   "marriageType",
   "middleNames",
-  "name",
   "occupation",
   "preferredName",
   "race",
   "residencyStatus",
   "residentialType",
   "surname",
-  "tenantId",
   "title",
   "contactMechanisms",
   "identityDocuments",
@@ -98,6 +102,9 @@ import org.springframework.util.StringUtils;
     name = "Person",
     namespace = "http://party.inception.digital",
     propOrder = {
+      "id",
+      "tenantId",
+      "name",
       "countryOfBirth",
       "countryOfResidence",
       "dateOfBirth",
@@ -125,23 +132,18 @@ import org.springframework.util.StringUtils;
       "preferences",
       "countriesOfTaxResidence",
       "taxNumbers",
-      "roles"
+      "roles",
     })
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidPerson
 @Entity
-// @DiscriminatorValue("person")
+@DiscriminatorValue("person")
 @Table(schema = "party", name = "persons")
-public class Person extends Party implements Serializable {
+public class Person extends PartyBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
   /** The contact mechanisms for the person. */
-  @Schema(description = "The contact mechanisms for the person")
-  @JsonProperty
-  @JsonManagedReference("contactMechanismReference")
-  @XmlElementWrapper(name = "ContactMechanisms")
-  @XmlElement(name = "ContactMechanism")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -151,11 +153,6 @@ public class Person extends Party implements Serializable {
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
   /** The identity documents for the person. */
-  @Schema(description = "The identity documents for the person")
-  @JsonProperty
-  @JsonManagedReference("identityDocumentReference")
-  @XmlElementWrapper(name = "IdentityDocuments")
-  @XmlElement(name = "IdentityDocument")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -165,11 +162,6 @@ public class Person extends Party implements Serializable {
   private final Set<IdentityDocument> identityDocuments = new HashSet<>();
 
   /** The physical addresses for the person. */
-  @Schema(description = "The physical addresses for the person")
-  @JsonProperty
-  @JsonManagedReference("physicalAddressReference")
-  @XmlElementWrapper(name = "PhysicalAddresses")
-  @XmlElement(name = "PhysicalAddress")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -179,39 +171,24 @@ public class Person extends Party implements Serializable {
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
   /** The preferences for the person. */
-  @Schema(description = "The preferences for the person")
-  @JsonProperty
-  @JsonManagedReference("preferenceReference")
-  @XmlElementWrapper(name = "Preferences")
-  @XmlElement(name = "Preference")
   @Valid
   @OneToMany(
-      mappedBy = "party",
+      mappedBy = "person",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<Preference> preferences = new HashSet<>();
 
-  /** The roles for the person independent of a party association. */
-  @Schema(description = "The roles for the person independent of a party association")
-  @JsonProperty
-  @JsonManagedReference("partyRoleReference")
-  @XmlElementWrapper(name = "Roles")
-  @XmlElement(name = "Role")
+  /** The party roles for the person independent of a party association. */
+  @Valid
   @OneToMany(
       mappedBy = "party",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
-  @Valid
   private final Set<PartyRole> roles = new HashSet<>();
 
   /** The tax numbers for the person. */
-  @Schema(description = "The tax numbers for the person")
-  @JsonProperty
-  @JsonManagedReference("taxNumberReference")
-  @XmlElementWrapper(name = "TaxNumbers")
-  @XmlElement(name = "TaxNumber")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -228,123 +205,74 @@ public class Person extends Party implements Serializable {
   private String countriesOfTaxResidence;
 
   /** The optional code for the country of birth for the person. */
-  @Schema(description = "The optional code for the country of birth for the person")
-  @JsonProperty
-  @XmlElement(name = "CountryOfBirth")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "country_of_birth", length = 30)
   private String countryOfBirth;
 
   /** The optional code for the country of residence for the person. */
-  @Schema(description = "The optional code for the country of residence for the person")
-  @JsonProperty
-  @XmlElement(name = "CountryOfResidence")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "country_of_residence", length = 30)
   private String countryOfResidence;
 
   /** The optional date of birth for the person. */
-  @Schema(description = "The optional date of birth for the person")
-  @JsonProperty
-  @XmlElement(name = "DateOfBirth")
   @Column(table = "persons", name = "date_of_birth")
   private LocalDate dateOfBirth;
 
   /** The optional date of death for the person. */
-  @Schema(description = "The optional date of death for the person")
-  @JsonProperty
-  @XmlElement(name = "DateOfDeath")
   @Column(table = "persons", name = "date_of_death")
   private LocalDate dateOfDeath;
 
   /** The optional code for the employment status for the person. */
-  @Schema(description = "The optional code for the employment status for the person")
-  @JsonProperty
-  @XmlElement(name = "EmploymentStatus")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "employment_status", length = 30)
   private String employmentStatus;
 
   /** The optional code for the employment type for the person. */
-  @Schema(description = "The optional code for the employment type for the person")
-  @JsonProperty
-  @XmlElement(name = "EmploymentType")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "employment_type", length = 30)
   private String employmentType;
 
   /** The optional code for the gender for the person. */
-  @Schema(description = "The optional code for the gender for the person")
-  @JsonProperty
-  @XmlElement(name = "Gender")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "gender", length = 30)
   private String gender;
 
   /** The optional given name, firstname, forename, or Christian name for the person. */
-  @Schema(
-      description =
-          "The optional given name, firstname, forename, or Christian name for the person")
-  @JsonProperty
-  @XmlElement(name = "GivenName")
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "given_name", length = 100)
   private String givenName;
 
   /** The optional code for the home language for the person. */
-  @Schema(description = "The optional code for the home language for the person")
-  @JsonProperty
-  @XmlElement(name = "HomeLanguage")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "home_language", length = 30)
   private String homeLanguage;
 
   /** The optional initials for the person. */
-  @Schema(description = "The optional initials for the person")
-  @JsonProperty
-  @XmlElement(name = "Initials")
   @Size(min = 1, max = 20)
   @Column(table = "persons", name = "initials", length = 20)
   private String initials;
 
   /** The optional maiden name for the person. */
-  @Schema(description = "The optional maiden name for the person")
-  @JsonProperty
-  @XmlElement(name = "MaidenName")
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "maiden_name", length = 100)
   private String maidenName;
 
   /** The optional code for the marital status for the person. */
-  @Schema(description = "The optional code for the marital status for the person")
-  @JsonProperty
-  @XmlElement(name = "MaritalStatus")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "marital_status", length = 30)
   private String maritalStatus;
 
   /** The optional code for the marriage type for the person if the person is married. */
-  @Schema(
-      description =
-          "The optional code for the marriage type for the person if the person is married")
-  @JsonProperty
-  @XmlElement(name = "MarriageType")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "marriage_type", length = 30)
   private String marriageType;
 
   /** The optional middle names for the person. */
-  @Schema(description = "The optional middle names for the person")
-  @JsonProperty
-  @XmlElement(name = "MiddleNames")
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "middle_names", length = 100)
   private String middleNames;
 
   /** The optional code for the occupation for the person. */
-  @Schema(description = "The optional code for the occupation for the person")
-  @JsonProperty
-  @XmlElement(name = "Occupation")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "occupation", length = 30)
   private String occupation;
@@ -355,60 +283,42 @@ public class Person extends Party implements Serializable {
    * <p>In Western culture, this is usually the given name, which is also known as the first name,
    * forename, or Christian name.
    */
-  @Schema(description = "The optional preferred name for the person")
-  @JsonProperty
-  @XmlElement(name = "PreferredName")
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "preferred_name", length = 100)
   private String preferredName;
 
   /** The optional code for the race for the person. */
-  @Schema(description = "The optional code for the race for the person")
-  @JsonProperty
-  @XmlElement(name = "Race")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "race", length = 30)
   private String race;
 
   /** The optional code for the residency status for the person. */
-  @Schema(description = "The optional code for the residency status for the person")
-  @JsonProperty
-  @XmlElement(name = "ResidencyStatus")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "residency_status", length = 30)
   private String residencyStatus;
 
   /** The optional code for the residential type for the person. */
-  @Schema(description = "The optional code for the residential type for the person")
-  @JsonProperty
-  @XmlElement(name = "ResidentialType")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "residential_type", length = 30)
   private String residentialType;
 
   /** The optional surname, last name, or family name for the person. */
-  @Schema(description = "The optional surname, last name, or family name for the person")
-  @JsonProperty
-  @XmlElement(name = "Surname")
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "surname", length = 100)
   private String surname;
 
   /** The optional code for the title for the person. */
-  @Schema(description = "The optional code for the title for the person")
-  @JsonProperty
-  @XmlElement(name = "Title")
   @Size(min = 1, max = 30)
   @Column(table = "persons", name = "title", length = 30)
   private String title;
 
-  /** Constructs a new <code>Person</code>. */
+  /** Constructs a new <b>Person</b>. */
   public Person() {
     super(PartyType.PERSON);
   }
 
   /**
-   * Constructs a new <code>Person</code>.
+   * Constructs a new <b>Person</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the person is
    *     associated with
@@ -474,13 +384,13 @@ public class Person extends Party implements Serializable {
     preferences.removeIf(
         existingPreference -> Objects.equals(existingPreference.getType(), preference.getType()));
 
-    preference.setParty(this);
+    preference.setPerson(this);
 
     preferences.add(preference);
   }
 
   /**
-   * Add the role to the person independent of a party association.
+   * Add the party role to the person independent of a party association.
    *
    * @param role the party role
    */
@@ -510,8 +420,7 @@ public class Person extends Party implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -537,8 +446,8 @@ public class Person extends Party implements Serializable {
    *
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
-   * @return the contact mechanism with the specified type and purpose for the person or <code>null
-   *     </code> if the contact mechanism could not be found
+   * @return the contact mechanism with the specified type and purpose for the person or <b>null
+   *     </b> if the contact mechanism could not be found
    */
   public ContactMechanism getContactMechanism(
       ContactMechanismType type, ContactMechanismPurpose purpose) {
@@ -556,6 +465,11 @@ public class Person extends Party implements Serializable {
    *
    * @return the contact mechanisms for the person
    */
+  @Schema(description = "The contact mechanisms for the person")
+  @JsonProperty
+  @JsonManagedReference("contactMechanismReference")
+  @XmlElementWrapper(name = "ContactMechanisms")
+  @XmlElement(name = "ContactMechanism")
   public Set<ContactMechanism> getContactMechanisms() {
     return contactMechanisms;
   }
@@ -577,6 +491,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the country of birth for the person
    */
+  @Schema(description = "The optional code for the country of birth for the person")
+  @JsonProperty
+  @XmlElement(name = "CountryOfBirth")
   public String getCountryOfBirth() {
     return countryOfBirth;
   }
@@ -586,8 +503,22 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the country of residence for the person
    */
+  @Schema(description = "The optional code for the country of residence for the person")
+  @JsonProperty
+  @XmlElement(name = "CountryOfResidence")
   public String getCountryOfResidence() {
     return countryOfResidence;
+  }
+
+  /**
+   * Returns the date and time the person was created.
+   *
+   * @return the date and time the person was created
+   */
+  @JsonIgnore
+  @XmlTransient
+  public LocalDateTime getCreated() {
+    return super.getCreated();
   }
 
   /**
@@ -595,6 +526,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional date of birth for the person
    */
+  @Schema(description = "The optional date of birth for the person")
+  @JsonProperty
+  @XmlElement(name = "DateOfBirth")
   public LocalDate getDateOfBirth() {
     return dateOfBirth;
   }
@@ -604,6 +538,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional date of death for the person
    */
+  @Schema(description = "The optional date of death for the person")
+  @JsonProperty
+  @XmlElement(name = "DateOfDeath")
   public LocalDate getDateOfDeath() {
     return dateOfDeath;
   }
@@ -613,6 +550,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the employment status for the person
    */
+  @Schema(description = "The optional code for the employment status for the person")
+  @JsonProperty
+  @XmlElement(name = "EmploymentStatus")
   public String getEmploymentStatus() {
     return employmentStatus;
   }
@@ -622,6 +562,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the employment type for the person
    */
+  @Schema(description = "The optional code for the employment type for the person")
+  @JsonProperty
+  @XmlElement(name = "EmploymentType")
   public String getEmploymentType() {
     return employmentType;
   }
@@ -631,6 +574,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the gender for the person
    */
+  @Schema(description = "The optional code for the gender for the person")
+  @JsonProperty
+  @XmlElement(name = "Gender")
   public String getGender() {
     return gender;
   }
@@ -640,6 +586,11 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional given name, firstname, forename, or Christian name for the person
    */
+  @Schema(
+      description =
+          "The optional given name, firstname, forename, or Christian name for the person")
+  @JsonProperty
+  @XmlElement(name = "GivenName")
   public String getGivenName() {
     return givenName;
   }
@@ -649,6 +600,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the home language for the person
    */
+  @Schema(description = "The optional code for the home language for the person")
+  @JsonProperty
+  @XmlElement(name = "HomeLanguage")
   public String getHomeLanguage() {
     return homeLanguage;
   }
@@ -659,6 +613,8 @@ public class Person extends Party implements Serializable {
    * @return the Universally Unique Identifier (UUID) for the person
    */
   @Schema(description = "The Universally Unique Identifier (UUID) for the person")
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @Override
   public UUID getId() {
     return super.getId();
@@ -669,6 +625,11 @@ public class Person extends Party implements Serializable {
    *
    * @return the identity documents for the person
    */
+  @Schema(description = "The identity documents for the person")
+  @JsonProperty
+  @JsonManagedReference("identityDocumentReference")
+  @XmlElementWrapper(name = "IdentityDocuments")
+  @XmlElement(name = "IdentityDocument")
   public Set<IdentityDocument> getIdentityDocuments() {
     return identityDocuments;
   }
@@ -678,6 +639,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional initials for the person
    */
+  @Schema(description = "The optional initials for the person")
+  @JsonProperty
+  @XmlElement(name = "Initials")
   public String getInitials() {
     return initials;
   }
@@ -687,6 +651,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional maiden name for the person
    */
+  @Schema(description = "The optional maiden name for the person")
+  @JsonProperty
+  @XmlElement(name = "MaidenName")
   public String getMaidenName() {
     return maidenName;
   }
@@ -696,6 +663,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the marital status for the person
    */
+  @Schema(description = "The optional code for the marital status for the person")
+  @JsonProperty
+  @XmlElement(name = "MaritalStatus")
   public String getMaritalStatus() {
     return maritalStatus;
   }
@@ -705,6 +675,11 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the marriage type for the person if the person is married
    */
+  @Schema(
+      description =
+          "The optional code for the marriage type for the person if the person is married")
+  @JsonProperty
+  @XmlElement(name = "MarriageType")
   public String getMarriageType() {
     return marriageType;
   }
@@ -714,6 +689,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional middle names for the person
    */
+  @Schema(description = "The optional middle names for the person")
+  @JsonProperty
+  @XmlElement(name = "MiddleNames")
   public String getMiddleNames() {
     return middleNames;
   }
@@ -731,6 +709,8 @@ public class Person extends Party implements Serializable {
    * @return the personal name or full name of the person
    */
   @Schema(description = "The personal name or full name of the person")
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @Override
   public String getName() {
     return super.getName();
@@ -741,6 +721,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the occupation for the person
    */
+  @Schema(description = "The optional code for the occupation for the person")
+  @JsonProperty
+  @XmlElement(name = "Occupation")
   public String getOccupation() {
     return occupation;
   }
@@ -749,8 +732,8 @@ public class Person extends Party implements Serializable {
    * Retrieve the first physical address with the specified purpose for the person.
    *
    * @param purpose the physical address purpose
-   * @return the first physical address with the specified purpose for the person or <code>null
-   *     </code> if the physical address could not be found
+   * @return the first physical address with the specified purpose for the person or <b>null </b> if
+   *     the physical address could not be found
    */
   public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
     return physicalAddresses.stream()
@@ -764,6 +747,11 @@ public class Person extends Party implements Serializable {
    *
    * @return the physical addresses for the person
    */
+  @Schema(description = "The physical addresses for the person")
+  @JsonProperty
+  @JsonManagedReference("physicalAddressReference")
+  @XmlElementWrapper(name = "PhysicalAddresses")
+  @XmlElement(name = "PhysicalAddress")
   public Set<PhysicalAddress> getPhysicalAddresses() {
     return physicalAddresses;
   }
@@ -773,6 +761,11 @@ public class Person extends Party implements Serializable {
    *
    * @return the preferences for the person
    */
+  @Schema(description = "The preferences for the person")
+  @JsonProperty
+  @JsonManagedReference("preferenceReference")
+  @XmlElementWrapper(name = "Preferences")
+  @XmlElement(name = "Preference")
   public Set<Preference> getPreferences() {
     return preferences;
   }
@@ -785,6 +778,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional preferred name for the person
    */
+  @Schema(description = "The optional preferred name for the person")
+  @JsonProperty
+  @XmlElement(name = "PreferredName")
   public String getPreferredName() {
     return preferredName;
   }
@@ -794,6 +790,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the race for the person
    */
+  @Schema(description = "The optional code for the race for the person")
+  @JsonProperty
+  @XmlElement(name = "Race")
   public String getRace() {
     return race;
   }
@@ -803,6 +802,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the residency status for the person
    */
+  @Schema(description = "The optional code for the residency status for the person")
+  @JsonProperty
+  @XmlElement(name = "ResidencyStatus")
   public String getResidencyStatus() {
     return residencyStatus;
   }
@@ -812,6 +814,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the residential type for the person
    */
+  @Schema(description = "The optional code for the residential type for the person")
+  @JsonProperty
+  @XmlElement(name = "ResidentialType")
   public String getResidentialType() {
     return residentialType;
   }
@@ -821,17 +826,22 @@ public class Person extends Party implements Serializable {
    *
    * @param type the code for the party role type
    * @return the role with the specified type for the person independent of a party association or
-   *     <code>null</code> if the role could not be found
+   *     <b>null</b> if the role could not be found
    */
   public PartyRole getRole(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst().get();
   }
 
   /**
-   * Returns the roles for the party independent of a party association.
+   * Returns the party roles for the person independent of a party association.
    *
-   * @return the roles for the party independent of a party association
+   * @return the party roles for the person independent of a party association
    */
+  @Schema(description = "The party roles for the person independent of a party association")
+  @JsonProperty
+  @JsonManagedReference("partyRoleReference")
+  @XmlElementWrapper(name = "Roles")
+  @XmlElement(name = "Role")
   public Set<PartyRole> getRoles() {
     return roles;
   }
@@ -841,6 +851,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional surname, last name, or family name for the person
    */
+  @Schema(description = "The optional surname, last name, or family name for the person")
+  @JsonProperty
+  @XmlElement(name = "Surname")
   public String getSurname() {
     return surname;
   }
@@ -849,8 +862,8 @@ public class Person extends Party implements Serializable {
    * Retrieve the tax number with the specified type for the person.
    *
    * @param type the code for the tax number type
-   * @return the tax number with the specified type for the person or <code>null</code> if the tax
-   *     number could not be found
+   * @return the tax number with the specified type for the person or <b>null</b> if the tax number
+   *     could not be found
    */
   public TaxNumber getTaxNumber(String type) {
     return taxNumbers.stream()
@@ -864,8 +877,28 @@ public class Person extends Party implements Serializable {
    *
    * @return the tax numbers for the person
    */
+  @Schema(description = "The tax numbers for the person")
+  @JsonProperty
+  @JsonManagedReference("taxNumberReference")
+  @XmlElementWrapper(name = "TaxNumbers")
+  @XmlElement(name = "TaxNumber")
   public Set<TaxNumber> getTaxNumbers() {
     return taxNumbers;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the person is associated with.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the person is associated with
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the person is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  public UUID getTenantId() {
+    return super.getTenantId();
   }
 
   /**
@@ -873,6 +906,9 @@ public class Person extends Party implements Serializable {
    *
    * @return the optional code for the title for the person
    */
+  @Schema(description = "The optional code for the title for the person")
+  @JsonProperty
+  @XmlElement(name = "Title")
   public String getTitle() {
     return title;
   }
@@ -896,7 +932,6 @@ public class Person extends Party implements Serializable {
    */
   @JsonIgnore
   @XmlTransient
-  @Override
   public LocalDateTime getUpdated() {
     return super.getUpdated();
   }
@@ -910,7 +945,6 @@ public class Person extends Party implements Serializable {
   public int hashCode() {
     return ((getId() == null) ? 0 : getId().hashCode());
   }
-  //
 
   /**
    * Remove the contact mechanism with the specified type and purpose for the person.
@@ -924,6 +958,7 @@ public class Person extends Party implements Serializable {
             Objects.equals(existingContactMechanism.getType(), type)
                 && Objects.equals(existingContactMechanism.getPurpose(), purpose));
   }
+  //
 
   /**
    * Remove the identity document with the specified type for the person.
@@ -935,8 +970,6 @@ public class Person extends Party implements Serializable {
         existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
   }
 
-  // TODO: Add a method to remove a role with the specified type -- MARCUS
-
   /**
    * Remove any physical addresses with the specified purpose for the person.
    *
@@ -946,6 +979,8 @@ public class Person extends Party implements Serializable {
     physicalAddresses.removeIf(
         existingPhysicalAddress -> existingPhysicalAddress.getPurposes().contains(purpose));
   }
+
+  // TODO: Add a method to remove a role with the specified type -- MARCUS
 
   /**
    * Remove the preference with the specified type for the person.
@@ -1237,9 +1272,9 @@ public class Person extends Party implements Serializable {
   }
 
   /**
-   * Set the roles for the party independent of a party association.
+   * Set the party roles for the person independent of a party association.
    *
-   * @param roles the party roles
+   * @param roles the party roles for the person
    */
   public void setRoles(Set<PartyRole> roles) {
     this.roles.clear();
@@ -1263,6 +1298,16 @@ public class Person extends Party implements Serializable {
   public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
     this.taxNumbers.clear();
     this.taxNumbers.addAll(taxNumbers);
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the person is associated with.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the person is
+   *     associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    super.setTenantId(tenantId);
   }
 
   /**

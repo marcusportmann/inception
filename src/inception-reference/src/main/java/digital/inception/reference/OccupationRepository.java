@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>OccupationRepository</code> interface declares the repository for the <code>Occupation
- * </code> domain type.
+ * The <b>OccupationRepository</b> interface declares the repository for the <b>Occupation </b>
+ * domain type.
  *
  * @author Marcus Portmann
  */

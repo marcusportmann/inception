@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>PhysicalAddressTypeRepository</code> interface declares the repository for the <code>
- * PhysicalAddressType</code> domain type.
+ * The <b>PhysicalAddressTypeRepository</b> interface declares the repository for the <b>
+ * PhysicalAddressType</b> domain type.
  *
  * @author Marcus Portmann
  */

@@ -31,8 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>ProcessInstanceSummary</code> class holds the summary information for a process§
- * instance.
+ * The <b>ProcessInstanceSummary</b> class holds the summary information for a process§ instance.
  *
  * @author Marcus Portmann
  */
@@ -74,11 +73,11 @@ public class ProcessInstanceSummary implements Serializable {
   @Size(min = 1, max = 100)
   private String version;
 
-  /** Constructs a new <code>ProcessInstanceSummary</code>. */
+  /** Constructs a new <b>ProcessInstanceSummary</b>. */
   public ProcessInstanceSummary() {}
 
   /**
-   * Constructs a new <code>ProcessInstanceSummary</code>.
+   * Constructs a new <b>ProcessInstanceSummary</b>.
    *
    * @param id the ID for the process definition
    * @param name the name of the process definition
@@ -94,8 +93,7 @@ public class ProcessInstanceSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

@@ -21,7 +21,7 @@ package digital.inception.messaging.handler;
 import digital.inception.messaging.Message;
 
 /**
- * The <code>IMessageHandler</code> interface defines the interface that must be implemented by all
+ * The <b>IMessageHandler</b> interface defines the interface that must be implemented by all
  * message handlers.
  *
  * @author Marcus Portmann
@@ -39,7 +39,7 @@ public interface IMessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   * @return the response message or <code>null</code> if no response message exists
+   * @return the response message or <b>null</b> if no response message exists
    */
   Message processMessage(Message message) throws MessageHandlerException;
 }

@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Country</code> class holds the information for a possible country.
+ * The <b>Country</b> class holds the information for a possible country.
  *
  * @author Marcus Portmann
  */
@@ -139,23 +139,24 @@ public class Country implements Serializable {
   private Integer sortIndex;
 
   /** The code for the sovereign state the country is associated with. */
-  @Schema(description = "The code for the sovereign state the country is associated with", required = true)
+  @Schema(
+      description = "The code for the sovereign state the country is associated with",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SovereignState", required = true)
   @NotNull
   @Size(min = 1, max = 30)
-  @Column(name = "sovereign_state", length =  30, nullable = false)
+  @Column(name = "sovereign_state", length = 30, nullable = false)
   private String sovereignState;
 
-  /** Constructs a new <code>Country</code>. */
+  /** Constructs a new <b>Country</b>. */
   public Country() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

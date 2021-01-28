@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>Role</code> class holds the information for a role.
+ * The <b>Role</b> class holds the information for a role.
  *
  * @author Marcus Portmann
  */
@@ -112,7 +112,7 @@ public class Role implements java.io.Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Constructs a new <code>Role</code>. */
+  /** Constructs a new <b>Role</b>. */
   public Role() {}
 
   /**
@@ -133,8 +133,8 @@ public class Role implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

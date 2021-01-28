@@ -46,7 +46,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>SchedulerService</code> class provides the Scheduler Service implementation.
+ * The <b>SchedulerService</b> class provides the Scheduler Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -85,7 +85,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   private int maximumJobExecutionAttempts;
 
   /**
-   * Constructs a new <code>SchedulerService</code>.
+   * Constructs a new <b>SchedulerService</b>.
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
@@ -107,7 +107,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Create the new job.
    *
-   * @param job the <code>Job</code> instance containing the information for the job
+   * @param job the <b>Job</b> instance containing the information for the job
    */
   @Override
   @Transactional
@@ -330,7 +330,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    *
    * <p>The job will be locked to prevent duplicate processing.
    *
-   * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
+   * @return the next job that is scheduled for execution or <b>null</b> if no jobs are
    *     currently scheduled for execution
    */
   @Override
@@ -439,8 +439,8 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Schedule the next unscheduled job for execution.
    *
-   * @return <code>true</code> if a job was successfully scheduled for execution or <code>false
-   * </code> otherwise
+   * @return <b>true</b> if a job was successfully scheduled for execution or <b>false
+   * </b> otherwise
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -551,7 +551,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Update the job.
    *
-   * @param job the <code>Job</code> instance containing the updated information for the job
+   * @param job the <b>Job</b> instance containing the updated information for the job
    */
   @Override
   public void updateJob(Job job)

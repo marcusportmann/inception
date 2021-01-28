@@ -16,8 +16,6 @@
 
 package digital.inception.party;
 
-
-
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,14 +24,11 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * The <code>PartyNotFoundException</code> exception is thrown to indicate an error condition as a
- * result of a party that could not be found.
+ * The <b>PartyNotFoundException</b> exception is thrown to indicate an error condition as a result
+ * of a party that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -49,7 +44,7 @@ public class PartyNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>PartyNotFoundException</code>.
+   * Constructs a new <b>PartyNotFoundException</b>.
    *
    * @param partyId the Universally Unique Identifier (UUID) for the party
    */

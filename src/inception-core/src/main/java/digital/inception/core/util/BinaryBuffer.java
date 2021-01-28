@@ -17,8 +17,8 @@
 package digital.inception.core.util;
 
 /**
- * The <code>BinaryBuffer</code> class manages binary data. It provides the capabilities similar to
- * the <code>StringBuffer</code> class when working with binary data (bytes).
+ * The <b>BinaryBuffer</b> class manages binary data. It provides the capabilities similar to
+ * the <b>StringBuffer</b> class when working with binary data (bytes).
  *
  * <p>This class is thread-safe.
  *
@@ -32,19 +32,19 @@ public class BinaryBuffer implements java.io.Serializable {
   private byte[] data;
 
   /**
-   * Constructs a new <code>BinaryBuffer</code> and initializes it using the specified binary data.
+   * Constructs a new <b>BinaryBuffer</b> and initializes it using the specified binary data.
    *
-   * @param data <code>BinaryBuffer</code> instance containing the binary data that will be copied
-   *     and managed by the <code>BinaryBuffer</code> instance
+   * @param data <b>BinaryBuffer</b> instance containing the binary data that will be copied
+   *     and managed by the <b>BinaryBuffer</b> instance
    */
   public BinaryBuffer(BinaryBuffer data) {
     this(data.getData());
   }
 
   /**
-   * Constructs a new <code>BinaryBuffer</code> and initializes it using the specified binary data.
+   * Constructs a new <b>BinaryBuffer</b> and initializes it using the specified binary data.
    *
-   * @param data the binary data that will be copied and managed by the <code>BinaryBuffer</code>
+   * @param data the binary data that will be copied and managed by the <b>BinaryBuffer</b>
    *     instance
    */
   public BinaryBuffer(byte[] data) {
@@ -53,18 +53,18 @@ public class BinaryBuffer implements java.io.Serializable {
   }
 
   /**
-   * Append the binary data stored in the specified <code>BinaryBuffer</code> instance to this
-   * <code>BinaryBuffer</code>.
+   * Append the binary data stored in the specified <b>BinaryBuffer</b> instance to this
+   * <b>BinaryBuffer</b>.
    *
-   * @param buffer the existing <code>BinaryBuffer</code> containing the binary data to append
+   * @param buffer the existing <b>BinaryBuffer</b> containing the binary data to append
    */
   public void append(BinaryBuffer buffer) {
     append(buffer.getData());
   }
 
   /**
-   * Append the specified binary data to the binary data already stored in the <code>BinaryBuffer
-   * </code>.
+   * Append the specified binary data to the binary data already stored in the <b>BinaryBuffer
+   * </b>.
    *
    * @param data the binary data to append
    */
@@ -77,24 +77,24 @@ public class BinaryBuffer implements java.io.Serializable {
     this.data = newData;
   }
 
-  /** Clears the <code>BinaryBuffer</code>. */
+  /** Clears the <b>BinaryBuffer</b>. */
   public void clear() {
     this.data = new byte[0];
   }
 
   /**
-   * Returns the binary data managed by the <code>BinaryBuffer</code>.
+   * Returns the binary data managed by the <b>BinaryBuffer</b>.
    *
-   * @return the binary data managed by the <code>BinaryBuffer</code>
+   * @return the binary data managed by the <b>BinaryBuffer</b>
    */
   public byte[] getData() {
     return data;
   }
 
   /**
-   * Returns the amount of binary data managed by the <code>BinaryBuffer</code>.
+   * Returns the amount of binary data managed by the <b>BinaryBuffer</b>.
    *
-   * @return the amount of binary data managed by the <code>BinaryBuffer</code>
+   * @return the amount of binary data managed by the <b>BinaryBuffer</b>
    */
   public int length() {
     return data.length;

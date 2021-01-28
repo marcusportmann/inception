@@ -27,7 +27,7 @@ import java.io.PrintWriter;
 
 
 /**
- * The <code>MessagePartReceivedResponse</code> class represents the response to a request sent by a
+ * The <b>MessagePartReceivedResponse</b> class represents the response to a request sent by a
  * mobile device to acknowledge the successful download of a message part.
  *
  * @author Marcus Portmann
@@ -55,7 +55,7 @@ public class MessagePartReceivedResponse {
 
   /**
    * The user-friendly text description of the result of processing the message part received
-   * request. The <code>detail</code> field may be blank if the message received request was
+   * request. The <b>detail</b> field may be blank if the message received request was
    * processed successfully.
    */
   private String detail;
@@ -67,7 +67,7 @@ public class MessagePartReceivedResponse {
   private String exception;
 
   /**
-   * Constructs a new <code>MessagePartReceivedResponse</code> and populates it from the information
+   * Constructs a new <b>MessagePartReceivedResponse</b> and populates it from the information
    * stored in the specified WBXML document.
    *
    * @param document the WBXML document containing the message part received response information
@@ -86,7 +86,7 @@ public class MessagePartReceivedResponse {
   }
 
   /**
-   * Constructs a new <code>MessagePartReceivedResponse</code>.
+   * Constructs a new <b>MessagePartReceivedResponse</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of processing the message part download
@@ -98,7 +98,7 @@ public class MessagePartReceivedResponse {
   }
 
   /**
-   * Constructs a new <code>MessagePartReceivedResponse</code>.
+   * Constructs a new <b>MessagePartReceivedResponse</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of processing the message part received
@@ -127,12 +127,12 @@ public class MessagePartReceivedResponse {
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message part received response
-   * information or <code>false</code> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message part received response
+   * information or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <code>true</code> if the WBXML document contains valid message part received response
-   *     information or <code>false</code> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message part received response
+   *     information or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();

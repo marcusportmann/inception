@@ -24,7 +24,7 @@ import java.util.UUID;
 
 
 /**
- * The <code>UserDirectoryBase</code> class provides the base class from which all user directory
+ * The <b>UserDirectoryBase</b> class provides the base class from which all user directory
  * classes should be derived.
  *
  * @author Marcus Portmann
@@ -48,7 +48,7 @@ public abstract class UserDirectoryBase implements IUserDirectory {
   private final UserRepository userRepository;
 
   /**
-   * Constructs a new <code>UserDirectoryBase</code>.
+   * Constructs a new <b>UserDirectoryBase</b>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
@@ -116,10 +116,10 @@ public abstract class UserDirectoryBase implements IUserDirectory {
   }
 
   /**
-   * Checks whether the specified value is <code>null</code> or blank.
+   * Checks whether the specified value is <b>null</b> or blank.
    *
    * @param value the value to check
-   * @return true if the value is <code>null</code> or blank
+   * @return true if the value is <b>null</b> or blank
    */
   protected boolean isNullOrEmpty(Object value) {
     if (value == null) {

@@ -35,7 +35,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 
 
 /**
- * The <code>TransactionConfiguration</code> class.
+ * The <b>TransactionConfiguration</b> class.
  *
  * @author Marcus Portmann
  */

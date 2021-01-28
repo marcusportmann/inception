@@ -16,8 +16,6 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import javax.validation.Validator;
 import org.slf4j.Logger;
@@ -27,10 +25,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-
-
 /**
- * The <code>ReferenceService</code> class provides the Reference Service implementation.
+ * The <b>ReferenceService</b> class provides the Reference Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -131,7 +127,7 @@ public class ReferenceService implements IReferenceService {
   private final VerificationStatusRepository verificationStatusRepository;
 
   /**
-   * Constructs a new <code>ReferenceService</code>.
+   * Constructs a new <b>ReferenceService</b>.
    *
    * @param validator the JSR-303 validator
    * @param contactMechanismPurposeRepository the Contact Mechanism Purpose Repository
@@ -242,8 +238,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <code>null</code> to retrieve the contact mechanism purposes for all
-   *     locales
+   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all locales
    * @return the contact mechanism purposes
    */
   @Override
@@ -276,7 +271,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the contact mechanism types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     types for or <code>null</code> to retrieve the contact mechanism types for all locales
+   *     types for or <b>null</b> to retrieve the contact mechanism types for all locales
    * @return the contact mechanism types
    */
   @Override
@@ -309,7 +304,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the countries.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the countries for or
-   *     <code>null</code> to retrieve the countries for all locales
+   *     <b>null</b> to retrieve the countries for all locales
    * @return the countries
    */
   @Override
@@ -340,7 +335,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the employment statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment
-   *     statuses for or <code>null</code> to retrieve the employment statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the employment statuses for all locales
    * @return the employment statuses
    */
   @Override
@@ -372,7 +367,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the employment types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the employment types
-   *     for or <code>null</code> to retrieve the employment types for all locales
+   *     for or <b>null</b> to retrieve the employment types for all locales
    * @return the employment types
    */
   @Override
@@ -393,7 +388,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
-   *     <code>null</code> to retrieve the genders for all locales
+   *     <b>null</b> to retrieve the genders for all locales
    * @return the genders
    */
   @Override
@@ -434,7 +429,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the identity document types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the identity document
-   *     types for or <code>null</code> to retrieve the identity document types for all locales
+   *     types for or <b>null</b> to retrieve the identity document types for all locales
    * @return the identity document types
    */
   @Override
@@ -467,7 +462,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the languages.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the languages for or
-   *     <code>null</code> to retrieve the languages for all locales
+   *     <b>null</b> to retrieve the languages for all locales
    * @return the languages
    */
   @Override
@@ -498,7 +493,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the marital statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marital statuses
-   *     for or <code>null</code> to retrieve the marital statuses for all locales
+   *     for or <b>null</b> to retrieve the marital statuses for all locales
    * @return the marital statuses
    */
   @Override
@@ -529,7 +524,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the marriage types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the marriage types for
-   *     or <code>null</code> to retrieve the marriage types for all locales
+   *     or <b>null</b> to retrieve the marriage types for all locales
    * @return the marriage types
    */
   @Override
@@ -560,7 +555,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the next of kin types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the next of kin types
-   *     for or <code>null</code> to retrieve the next of kin types for all locales
+   *     for or <b>null</b> to retrieve the next of kin types for all locales
    * @return the next of kin types
    */
   @Override
@@ -591,7 +586,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the occupations.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the occupations for or
-   *     <code>null</code> to retrieve the occupations for all locales
+   *     <b>null</b> to retrieve the occupations for all locales
    * @return the occupations
    */
   @Override
@@ -622,7 +617,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the party role purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party role
-   *     purposes for or <code>null</code> to retrieve the party role purposes for all locales
+   *     purposes for or <b>null</b> to retrieve the party role purposes for all locales
    * @return the party role purposes
    */
   @Override
@@ -654,7 +649,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the party role types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party role types
-   *     for or <code>null</code> to retrieve the party role types for all locales
+   *     for or <b>null</b> to retrieve the party role types for all locales
    * @return the party role types
    */
   @Override
@@ -686,7 +681,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the physical address purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     purposes for or <code>null</code> to retrieve the physical address purposes for all locales
+   *     purposes for or <b>null</b> to retrieve the physical address purposes for all locales
    * @return the physical address purposes
    */
   @Override
@@ -719,7 +714,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the physical address types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the physical address
-   *     types for or <code>null</code> to retrieve the physical address types for all locales
+   *     types for or <b>null</b> to retrieve the physical address types for all locales
    * @return the physical address types
    */
   @Override
@@ -753,8 +748,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the preference type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <code>null</code> to retrieve the preference type categories for all
-   *     locales
+   *     categories for or <b>null</b> to retrieve the preference type categories for all locales
    * @return the preference type categories
    */
   @Override
@@ -787,7 +781,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the preference types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference types
-   *     for or <code>null</code> to retrieve the preference types for all locales
+   *     for or <b>null</b> to retrieve the preference types for all locales
    * @return the preference types
    */
   @Override
@@ -818,7 +812,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the races.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the races for or
-   *     <code>null</code> to retrieve the races for all locales
+   *     <b>null</b> to retrieve the races for all locales
    * @return the races
    */
   @Override
@@ -849,7 +843,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the regions.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the regions for or
-   *     <code>null</code> to retrieve the regions for all locales
+   *     <b>null</b> to retrieve the regions for all locales
    * @return the regions
    */
   @Override
@@ -880,7 +874,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the residence permit types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residence permit
-   *     types for or <code>null</code> to retrieve the residence permit types for all locales
+   *     types for or <b>null</b> to retrieve the residence permit types for all locales
    * @return the residence permit types
    */
   @Override
@@ -913,7 +907,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the residency statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residency statuses
-   *     for or <code>null</code> to retrieve the residency statuses for all locales
+   *     for or <b>null</b> to retrieve the residency statuses for all locales
    * @return the residency statuses
    */
   @Override
@@ -945,7 +939,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the residential types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the residential types
-   *     for or <code>null</code> to retrieve the residential types for all locales
+   *     for or <b>null</b> to retrieve the residential types for all locales
    * @return the residential types
    */
   @Override
@@ -977,7 +971,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the sources of funds.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the sources of funds
-   *     for or <code>null</code> to retrieve the sources of funds for all locales
+   *     for or <b>null</b> to retrieve the sources of funds for all locales
    * @return the sources of funds
    */
   @Override
@@ -1008,7 +1002,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the tax number types.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the tax number types
-   *     for or <code>null</code> to retrieve the tax number types for all locales
+   *     for or <b>null</b> to retrieve the tax number types for all locales
    * @return the tax number types
    */
   @Override
@@ -1039,7 +1033,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the times to contact.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the times to contact
-   *     for or <code>null</code> to retrieve the times to contact for all locales
+   *     for or <b>null</b> to retrieve the times to contact for all locales
    * @return the times to contact
    */
   @Override
@@ -1070,7 +1064,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the titles.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the titles for or
-   *     <code>null</code> to retrieve the titles for all locales
+   *     <b>null</b> to retrieve the titles for all locales
    * @return the titles
    */
   @Override
@@ -1101,7 +1095,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the verification methods.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     methods for or <code>null</code> to retrieve the verification methods for all locales
+   *     methods for or <b>null</b> to retrieve the verification methods for all locales
    * @return the verification methods
    */
   @Override
@@ -1134,7 +1128,7 @@ public class ReferenceService implements IReferenceService {
    * Retrieve the verification statuses.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the verification
-   *     statuses for or <code>null</code> to retrieve the verification statuses for all locales
+   *     statuses for or <b>null</b> to retrieve the verification statuses for all locales
    * @return the verification statuses
    */
   @Override

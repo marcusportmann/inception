@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>UserSortBy</code> enumeration defines the possible methods used to sort a list of
+ * The <b>UserSortBy</b> enumeration defines the possible methods used to sort a list of
  * users.
  *
  * @author Marcus Portmann

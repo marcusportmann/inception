@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>MailConfiguration</code> class provides the Spring configuration for the Mail module.
+ * The <b>MailConfiguration</b> class provides the Spring configuration for the Mail module.
  *
  * @author Marcus Portmann
  */

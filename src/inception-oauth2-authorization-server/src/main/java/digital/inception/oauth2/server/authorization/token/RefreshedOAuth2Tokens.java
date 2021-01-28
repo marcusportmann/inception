@@ -17,7 +17,7 @@
 package digital.inception.oauth2.server.authorization.token;
 
 /**
- * The <code>RefreshedOAuth2Tokens</code> class holds a refreshed OAuth2 access token and optionally
+ * The <b>RefreshedOAuth2Tokens</b> class holds a refreshed OAuth2 access token and optionally
  * a refreshed OAuth2 refresh token.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ public class RefreshedOAuth2Tokens {
   private OAuth2RefreshToken refreshToken;
 
   /**
-   * Constructs a new <code>RefreshedOAuth2Tokens</code>.
+   * Constructs a new <b>RefreshedOAuth2Tokens</b>.
    *
    * @param accessToken the OAuth2 access token
    * @param refreshToken the OAuth2 refresh token

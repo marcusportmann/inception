@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Cars</code> class holds the results of a request to retrieve a list of cars.
+ * The <b>Cars</b> class holds the results of a request to retrieve a list of cars.
  *
  * @author Marcus Portmann
  */
@@ -48,6 +48,13 @@ import javax.xml.bind.annotation.XmlType;
 public class Cars implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The cars. */
+  @Schema(description = "The cars", required = true)
+  @JsonProperty(required = true)
+  @XmlElementWrapper(name = "Cars", required = true)
+  @XmlElement(name = "Car", required = true)
+  private List<Car> cars;
 
   /** The optional filter that was applied to the cars. */
   @Schema(description = "The optional filter that was applied to the cars")
@@ -79,18 +86,11 @@ public class Cars implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** The cars. */
-  @Schema(description = "The cars", required = true)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "Cars", required = true)
-  @XmlElement(name = "Car", required = true)
-  private List<Car> cars;
-
-  /** Constructs a new <code>Cars</code>. */
+  /** Constructs a new <b>Cars</b>. */
   public Cars() {}
 
   /**
-   * Constructs a new <code>Cars</code>.
+   * Constructs a new <b>Cars</b>.
    *
    * @param cars the cars
    * @param total the total number of cars
@@ -112,6 +112,15 @@ public class Cars implements Serializable {
     this.sortDirection = sortDirection;
     this.pageIndex = pageIndex;
     this.pageSize = pageSize;
+  }
+
+  /**
+   * Returns the cars.
+   *
+   * @return the cars
+   */
+  public List<Car> getCars() {
+    return cars;
   }
 
   /**
@@ -157,14 +166,5 @@ public class Cars implements Serializable {
    */
   public Long getTotal() {
     return total;
-  }
-
-  /**
-   * Returns the cars.
-   *
-   * @return the cars
-   */
-  public List<Car> getCars() {
-    return cars;
   }
 }

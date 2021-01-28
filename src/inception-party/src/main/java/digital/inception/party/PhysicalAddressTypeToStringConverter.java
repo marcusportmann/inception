@@ -16,15 +16,13 @@
 
 package digital.inception.party;
 
-
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>PhysicalAddressTypeToStringConverter</code> class implements the Spring converter that
- * converts a <code>PhysicalAddressType</code> type into a <code>String</code> type.
+ * The <b>PhysicalAddressTypeToStringConverter</b> class implements the Spring converter that
+ * converts a <b>PhysicalAddressType</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -33,7 +31,7 @@ import org.springframework.stereotype.Component;
 public class PhysicalAddressTypeToStringConverter
     implements Converter<PhysicalAddressType, String> {
 
-  /** Constructs a new <code>PhysicalAddressTypeToStringConverter</code>. */
+  /** Constructs a new <b>PhysicalAddressTypeToStringConverter</b>. */
   public PhysicalAddressTypeToStringConverter() {}
 
   @Override

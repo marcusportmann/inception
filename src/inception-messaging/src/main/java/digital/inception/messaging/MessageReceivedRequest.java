@@ -26,7 +26,7 @@ import java.util.UUID;
 
 
 /**
- * The <code>MessageReceivedRequest</code> class represents a request sent by a mobile device to
+ * The <b>MessageReceivedRequest</b> class represents a request sent by a mobile device to
  * acknowledge the successful download of a message.
  *
  * @author Marcus Portmann
@@ -47,7 +47,7 @@ public class MessageReceivedRequest {
   private final UUID messageId;
 
   /**
-   * Constructs a new <code>MessageReceivedRequest</code> and populates it from the information
+   * Constructs a new <b>MessageReceivedRequest</b> and populates it from the information
    * stored in the specified WBXML document.
    *
    * @param document the WBXML document containing the message received request information
@@ -60,7 +60,7 @@ public class MessageReceivedRequest {
   }
 
   /**
-   * Constructs a new <code>MessageReceivedRequest</code>.
+   * Constructs a new <b>MessageReceivedRequest</b>.
    *
    * @param deviceId the Universally Unique Identifier (UUID) for the device the
    *     message received request originated from
@@ -73,12 +73,12 @@ public class MessageReceivedRequest {
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message received request
-   * information or <code>false</code> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message received request
+   * information or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <code>true</code> if the WBXML document contains valid message received request
-   *     information or <code>false</code> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message received request
+   *     information or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();

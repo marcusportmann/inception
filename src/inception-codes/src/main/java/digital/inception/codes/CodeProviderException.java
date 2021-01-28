@@ -17,8 +17,8 @@
 package digital.inception.codes;
 
 /**
- * The <code>CodeProviderException</code> exception is thrown to indicate an error condition when
- * invoking a code provider.
+ * The <b>CodeProviderException</b> exception is thrown to indicate an error condition when invoking
+ * a code provider.
  *
  * @author Marcus Portmann
  */
@@ -28,20 +28,20 @@ public class CodeProviderException extends Exception {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>CodeProviderException</code> with the specified message.
+   * Constructs a new <b>CodeProviderException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public CodeProviderException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>CodeProviderException</code> with the specified message and cause.
+   * Constructs a new <b>CodeProviderException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public CodeProviderException(String message, Throwable cause) {
     super(message, cause);

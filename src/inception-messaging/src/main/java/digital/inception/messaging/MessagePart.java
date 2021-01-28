@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * The <code>MessagePart</code> class holds the information for a message part.
+ * The <b>MessagePart</b> class holds the information for a message part.
  *
  * @author Marcus Portmann
  */
@@ -288,11 +288,11 @@ public class MessagePart {
   @Column(name = "total_parts", nullable = false)
   private int totalParts;
 
-  /** Constructs a new <code>MessagePart</code>. */
+  /** Constructs a new <b>MessagePart</b>. */
   public MessagePart() {}
 
   /**
-   * Constructs a new <code>MessagePart</code> and populates it from the message information stored
+   * Constructs a new <b>MessagePart</b> and populates it from the message information stored
    * in the specified WBXML document.
    *
    * @param document the WBXML document containing the message information
@@ -354,7 +354,7 @@ public class MessagePart {
   }
 
   /**
-   * Constructs a new <code>MessagePart</code>.
+   * Constructs a new <b>MessagePart</b>.
    *
    * @param partNo the number of the message part in the set of message parts for the original
    *     message
@@ -408,7 +408,7 @@ public class MessagePart {
   }
 
   /**
-   * Constructs a new <code>MessagePart</code>.
+   * Constructs a new <b>MessagePart</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the message part
    * @param partNo the number of the message part in the set of message parts for the original
@@ -474,12 +474,12 @@ public class MessagePart {
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message part information or
-   * <code>false</code> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message part information or
+   * <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <code>true</code> if the WBXML document contains valid message part information or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message part information or
+   *     <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -501,8 +501,8 @@ public class MessagePart {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -711,11 +711,11 @@ public class MessagePart {
   }
 
   /**
-   * Returns <code>true</code> if the data for the original message is encrypted or <code>false
-   * </code> otherwise.
+   * Returns <b>true</b> if the data for the original message is encrypted or <b>false
+   * </b> otherwise.
    *
-   * @return <code>true</code> if the data for the original message is encrypted or <code>false
-   * </code> otherwise
+   * @return <b>true</b> if the data for the original message is encrypted or <b>false
+   * </b> otherwise
    */
   public boolean messageIsEncrypted() {
     return ((messageDataHash != null) && (messageDataHash.length() > 0));

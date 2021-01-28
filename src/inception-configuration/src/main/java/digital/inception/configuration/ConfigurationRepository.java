@@ -27,8 +27,8 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * The <code>ConfigurationRepository</code> interface declares the repository for the <code>
- * Configuration</code> domain type.
+ * The <b>ConfigurationRepository</b> interface declares the repository for the <b>
+ * Configuration</b> domain type.
  *
  * @author Marcus Portmann
  */

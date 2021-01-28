@@ -34,7 +34,7 @@
 //
 //
 /// **
-// * The <code>DemoUserAuthenticationConverter</code> class.
+// * The <b>DemoUserAuthenticationConverter</b> class.
 // *
 // * @author Marcus Portmann
 // */

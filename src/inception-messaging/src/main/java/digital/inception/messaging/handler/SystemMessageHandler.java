@@ -56,7 +56,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
- * The <code>SystemMessageHandler</code> class implements the message handler that processes the
+ * The <b>SystemMessageHandler</b> class implements the message handler that processes the
  * "system" messages for the messaging infrastructure.
  *
  * @author Marcus Portmann
@@ -80,7 +80,7 @@ public class SystemMessageHandler extends MessageHandler {
   @Autowired private ISecurityService securityService;
 
   /**
-   * Constructs a new <code>SystemMessageHandler</code>.
+   * Constructs a new <b>SystemMessageHandler</b>.
    *
    * @param messageHandlerConfig the configuration information for this message handler
    */
@@ -93,7 +93,7 @@ public class SystemMessageHandler extends MessageHandler {
    * Process the specified message.
    *
    * @param message the message to process
-   * @return the response message or <code>null</code> if no response message exists
+   * @return the response message or <b>null</b> if no response message exists
    */
   @Override
   public Message processMessage(Message message) throws MessageHandlerException {

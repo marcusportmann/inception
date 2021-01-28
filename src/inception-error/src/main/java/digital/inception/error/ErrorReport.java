@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- * The <code>ErrorReport</code> class holds the information for an error report.
+ * The <b>ErrorReport</b> class holds the information for an error report.
  *
  * @author Marcus Portmann
  */
@@ -178,11 +178,11 @@ public class ErrorReport implements Serializable {
   @Column(name = "who", length = 100)
   private String who;
 
-  /** Constructs a new <code>ErrorReport</code>. */
+  /** Constructs a new <b>ErrorReport</b>. */
   public ErrorReport() {}
 
   /**
-   * Constructs a new <code>ErrorReport</code>.
+   * Constructs a new <b>ErrorReport</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the error report
    * @param applicationId the ID for the application that generated the error report
@@ -207,7 +207,7 @@ public class ErrorReport implements Serializable {
   }
 
   /**
-   * Constructs a new <code>ErrorReport</code>.
+   * Constructs a new <b>ErrorReport</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the error report
    * @param applicationId the ID for the application that generated the error report
@@ -248,8 +248,8 @@ public class ErrorReport implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

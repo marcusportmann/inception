@@ -16,20 +16,16 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.util.UUID;
 
-
-
 /**
- * The <code>MessageDownloadRequest</code> class represents a request sent by a mobile device to
+ * The <b>MessageDownloadRequest</b> class represents a request sent by a mobile device to
  * download the queued messages for the device.
  *
- * <p>NOTE: No information in the download request is encrypted and the request itself is not
+ * <p>No information in the download request is encrypted and the request itself is not
  * authenticated. This is because the queued messages returned will themselves be encrypted.
  *
  * @author Marcus Portmann
@@ -38,8 +34,8 @@ import java.util.UUID;
 public class MessageDownloadRequest {
 
   /**
-   * The Universally Unique Identifier (UUID) for the device the message download
-   * request originated from.
+   * The Universally Unique Identifier (UUID) for the device the message download request originated
+   * from.
    */
   private UUID deviceId;
 
@@ -47,7 +43,7 @@ public class MessageDownloadRequest {
   private String username;
 
   /**
-   * Constructs a new <code>MessageDownloadRequest</code> and populates it from the information
+   * Constructs a new <b>MessageDownloadRequest</b> and populates it from the information
    * stored in the specified WBXML document.
    *
    * @param document the WBXML document containing the message download information
@@ -60,10 +56,10 @@ public class MessageDownloadRequest {
   }
 
   /**
-   * Constructs a new <code>MessageDownloadRequest</code>.
+   * Constructs a new <b>MessageDownloadRequest</b>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message download request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message download
+   *     request originated from
    * @param username the username for the user whose messages should be downloaded
    */
   public MessageDownloadRequest(UUID deviceId, String username) {
@@ -72,12 +68,12 @@ public class MessageDownloadRequest {
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message download request
-   * information or <code>false</code> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message download request
+   * information or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <code>true</code> if the WBXML document contains valid message download request
-   *     information or <code>false</code> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message download request
+   *     information or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -89,11 +85,11 @@ public class MessageDownloadRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the message
-   * download request originated from.
+   * Returns the Universally Unique Identifier (UUID) for the device the message download request
+   * originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message
-   *     download request originated from
+   * @return the Universally Unique Identifier (UUID) for the device the message download request
+   *     originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -109,11 +105,11 @@ public class MessageDownloadRequest {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device the message
-   * download request originated from.
+   * Set the Universally Unique Identifier (UUID) for the device the message download request
+   * originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message download request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message download
+   *     request originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

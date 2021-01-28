@@ -20,7 +20,7 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 
 /**
- * The <code>DdtJarResolver</code> allows the SAX parser to resolve DTD's stored in a JAR file.
+ * The <b>DdtJarResolver</b> allows the SAX parser to resolve DTD's stored in a JAR file.
  *
  * @author Marcus Portmann
  */
@@ -34,7 +34,7 @@ public class DtdJarResolver implements EntityResolver {
   private String publicId;
 
   /**
-   * Constructs a new <code>DTDJarResolver</code>.
+   * Constructs a new <b>DTDJarResolver</b>.
    *
    * @param systemId the system ID for the DTD
    * @param dtdPath the path on the classpath to the DTD
@@ -45,7 +45,7 @@ public class DtdJarResolver implements EntityResolver {
   }
 
   /**
-   * Constructs a new <code>DTDJarResolver</code>.
+   * Constructs a new <b>DTDJarResolver</b>.
    *
    * @param publicId the public ID for the DTD
    * @param systemId the system ID for the DTD

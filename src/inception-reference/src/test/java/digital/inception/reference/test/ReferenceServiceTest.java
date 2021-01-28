@@ -16,8 +16,6 @@
 
 package digital.inception.reference.test;
 
-
-
 import static org.junit.Assert.assertEquals;
 
 import digital.inception.reference.ContactMechanismPurpose;
@@ -63,11 +61,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-
-
 /**
- * The <code>ReferenceServiceTest</code> class contains the implementation of the JUnit tests for
- * the <code>ReferenceService</code> class.
+ * The <b>ReferenceServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>ReferenceService</b> class.
  *
  * @author Marcus Portmann
  */

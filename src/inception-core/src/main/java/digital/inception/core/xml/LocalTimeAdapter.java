@@ -21,18 +21,18 @@ import java.time.LocalTime;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
- * The <code>LocalTimeAdapter</code> class implements a JAXB 2.0 adapter used to convert between
- * <code>String</code> and <code>LocalTime</code> types. <br>
+ * The <b>LocalTimeAdapter</b> class implements a JAXB 2.0 adapter used to convert between
+ * <b>String</b> and <b>LocalTime</b> types. <br>
  * Can be used when customizing XML Schema to Java Representation Binding (XJC).
  */
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class LocalTimeAdapter extends XmlAdapter<String, LocalTime> {
 
   /**
-   * Marshals the <code>java.time.LocalTime</code> value as an ISO8601Util string.
+   * Marshals the <b>java.time.LocalTime</b> value as an ISO8601Util string.
    *
    * @param value the value to marshal
-   * @return the <code>java.time.LocalTime</code> value as an ISO8601Util string
+   * @return the <b>java.time.LocalTime</b> value as an ISO8601Util string
    */
   @Override
   public String marshal(LocalTime value) {
@@ -44,10 +44,10 @@ public class LocalTimeAdapter extends XmlAdapter<String, LocalTime> {
   }
 
   /**
-   * Unmarshals the ISO8601Util string value as a <code>java.time.LocalTime</code>.
+   * Unmarshals the ISO8601Util string value as a <b>java.time.LocalTime</b>.
    *
    * @param value the ISO8601Util string value
-   * @return the ISO8601Util string value as a <code>java.time.LocalTime</code>
+   * @return the ISO8601Util string value as a <b>java.time.LocalTime</b>
    */
   @Override
   public LocalTime unmarshal(String value) {

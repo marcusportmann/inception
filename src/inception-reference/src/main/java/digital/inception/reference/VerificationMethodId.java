@@ -16,14 +16,12 @@
 
 package digital.inception.reference;
 
-
-
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>VerificationMethodId</code> class implements the ID class for the <code>
- * VerificationMethod</code> class.
+ * The <b>VerificationMethodId</b> class implements the ID class for the <b> VerificationMethod</b>
+ * class.
  *
  * @author Marcus Portmann
  */
@@ -38,11 +36,11 @@ public class VerificationMethodId implements Serializable {
   /** The Unicode locale identifier for the verification method. */
   private String localeId;
 
-  /** Constructs a new <code>VerificationMethodId</code>. */
+  /** Constructs a new <b>VerificationMethodId</b>. */
   public VerificationMethodId() {}
 
   /**
-   * Constructs a new <code>VerificationMethodId</code>.
+   * Constructs a new <b>VerificationMethodId</b>.
    *
    * @param code the code for the verification method
    * @param localeId the Unicode locale identifier for the verification method
@@ -56,8 +54,7 @@ public class VerificationMethodId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

@@ -25,12 +25,14 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.party.constraints.ValidOrganization;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -47,8 +49,11 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>Organization</code> class holds the information for an organization, which is an
- * organised group of people with a particular purpose, such as a business or government department.
+ * The <b>Organization</b> class holds the information for an organization, which is an organised
+ * group of people with a particular purpose, such as a business or government department.
+ *
+ * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
+ * field-based approach to support the JPA inheritance model.
  *
  * @author Marcus Portmann
  */
@@ -56,7 +61,7 @@ import org.springframework.util.StringUtils;
     description =
         "An organised group of people with a particular purpose, such as a business or government department")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties({"type"})
+@JsonIgnoreProperties({"created", "type", "updated"})
 @JsonPropertyOrder({
   "id",
   "tenantId",
@@ -72,27 +77,25 @@ import org.springframework.util.StringUtils;
     name = "Organization",
     namespace = "http://party.inception.digital",
     propOrder = {
+      "id",
+      "tenantId",
+      "name",
       "contactMechanisms",
       "physicalAddresses",
       "countriesOfTaxResidence",
       "taxNumbers",
       "roles"
     })
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidOrganization
 @Entity
-// @DiscriminatorValue("organization")
+@DiscriminatorValue("organization")
 @Table(schema = "party", name = "organizations")
-public class Organization extends Party implements Serializable {
+public class Organization extends PartyBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
   /** The contact mechanisms for the organization. */
-  @Schema(description = "The contact mechanisms for the organization")
-  @JsonProperty
-  @JsonManagedReference("contactMechanismReference")
-  @XmlElementWrapper(name = "ContactMechanisms")
-  @XmlElement(name = "ContactMechanism")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -102,11 +105,6 @@ public class Organization extends Party implements Serializable {
   private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
 
   /** The physical addresses for the organization. */
-  @Schema(description = "The physical addresses for the organization")
-  @JsonProperty
-  @JsonManagedReference("physicalAddressReference")
-  @XmlElementWrapper(name = "PhysicalAddresses")
-  @XmlElement(name = "PhysicalAddress")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -115,12 +113,7 @@ public class Organization extends Party implements Serializable {
       orphanRemoval = true)
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
 
-  /** The roles for the organization independent of a party association. */
-  @Schema(description = "The roles for the organization independent of a party association")
-  @JsonProperty
-  @JsonManagedReference("partyRoleReference")
-  @XmlElementWrapper(name = "Roles")
-  @XmlElement(name = "Role")
+  /** The party roles for the organization independent of a party association. */
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -130,11 +123,6 @@ public class Organization extends Party implements Serializable {
   private final Set<PartyRole> roles = new HashSet<>();
 
   /** The tax numbers for the organization. */
-  @Schema(description = "The tax numbers for the organization")
-  @JsonProperty
-  @JsonManagedReference("taxNumberReference")
-  @XmlElementWrapper(name = "TaxNumbers")
-  @XmlElement(name = "TaxNumber")
   @Valid
   @OneToMany(
       mappedBy = "party",
@@ -150,13 +138,13 @@ public class Organization extends Party implements Serializable {
   @Column(table = "organizations", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
 
-  /** Constructs a new <code>Organization</code>. */
+  /** Constructs a new <b>Organization</b>. */
   public Organization() {
     super(PartyType.ORGANIZATION);
   }
 
   /**
-   * Constructs a new <code>Organization</code>.
+   * Constructs a new <b>Organization</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
    *     associated with
@@ -165,8 +153,6 @@ public class Organization extends Party implements Serializable {
   public Organization(UUID tenantId, String name) {
     super(tenantId, PartyType.ORGANIZATION, name);
   }
-
-  // TODO: Add identity documents -- MARCUS
 
   /**
    * Add the contact mechanism for the organization.
@@ -200,8 +186,10 @@ public class Organization extends Party implements Serializable {
     physicalAddresses.add(physicalAddress);
   }
 
+  // TODO: Add identity documents -- MARCUS
+
   /**
-   * Add the role to the organization independent of a party association.
+   * Add the party role to the organization independent of a party association.
    *
    * @param role the party role
    */
@@ -231,8 +219,7 @@ public class Organization extends Party implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -259,8 +246,7 @@ public class Organization extends Party implements Serializable {
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
    * @return the contact mechanism with the specified type and purpose for the organization or
-   *     <code>null
-   *     </code> if the contact mechanism could not be found
+   *     <b>null </b> if the contact mechanism could not be found
    */
   public ContactMechanism getContactMechanism(
       ContactMechanismType type, ContactMechanismPurpose purpose) {
@@ -278,6 +264,11 @@ public class Organization extends Party implements Serializable {
    *
    * @return the contact mechanisms for the organization
    */
+  @Schema(description = "The contact mechanisms for the organization")
+  @JsonProperty
+  @JsonManagedReference("contactMechanismReference")
+  @XmlElementWrapper(name = "ContactMechanisms")
+  @XmlElement(name = "ContactMechanism")
   public Set<ContactMechanism> getContactMechanisms() {
     return contactMechanisms;
   }
@@ -296,11 +287,24 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
+   * Returns the date and time the organization was created.
+   *
+   * @return the date and time the organization was created
+   */
+  @JsonIgnore
+  @XmlTransient
+  public LocalDateTime getCreated() {
+    return super.getCreated();
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) for the organization.
    *
    * @return the Universally Unique Identifier (UUID) for the organization
    */
   @Schema(description = "The Universally Unique Identifier (UUID) for the organization")
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @Override
   public UUID getId() {
     return super.getId();
@@ -312,6 +316,8 @@ public class Organization extends Party implements Serializable {
    * @return the name of the organization
    */
   @Schema(description = "The name of the organization")
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @Override
   public String getName() {
     return super.getName();
@@ -321,8 +327,8 @@ public class Organization extends Party implements Serializable {
    * Retrieve the first physical address with the specified purpose for the organization.
    *
    * @param purpose the physical address purpose
-   * @return the first physical address with the specified purpose for the organization or <code>
-   *     null</code> if the physical address could not be found
+   * @return the first physical address with the specified purpose for the organization or <b>
+   *     null</b> if the physical address could not be found
    */
   public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
     return physicalAddresses.stream()
@@ -336,6 +342,11 @@ public class Organization extends Party implements Serializable {
    *
    * @return the physical addresses for the organization
    */
+  @Schema(description = "The physical addresses for the organization")
+  @JsonProperty
+  @JsonManagedReference("physicalAddressReference")
+  @XmlElementWrapper(name = "PhysicalAddresses")
+  @XmlElement(name = "PhysicalAddress")
   public Set<PhysicalAddress> getPhysicalAddresses() {
     return physicalAddresses;
   }
@@ -346,17 +357,22 @@ public class Organization extends Party implements Serializable {
    *
    * @param type the code for the party role type
    * @return the role with the specified type for the organization independent of a party
-   *     association or <code>null</code> if the role could not be found
+   *     association or <b>null</b> if the role could not be found
    */
   public PartyRole getRole(String type) {
     return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst().get();
   }
 
   /**
-   * Returns the roles for the party independent of a party association.
+   * Returns the party roles for the organization independent of a party association.
    *
-   * @return the roles for the party independent of a party association
+   * @return the party roles for the organization independent of a party association
    */
+  @Schema(description = "The party roles for the organization independent of a party association")
+  @JsonProperty
+  @JsonManagedReference("partyRoleReference")
+  @XmlElementWrapper(name = "Roles")
+  @XmlElement(name = "Role")
   public Set<PartyRole> getRoles() {
     return roles;
   }
@@ -365,8 +381,8 @@ public class Organization extends Party implements Serializable {
    * Retrieve the tax number with the specified type for the organization.
    *
    * @param type the tax number type
-   * @return the tax number with the specified type for the organization or <code>null</code> if the
-   *     tax number could not be found
+   * @return the tax number with the specified type for the organization or <b>null</b> if the tax
+   *     number could not be found
    */
   public TaxNumber getTaxNumber(String type) {
     return taxNumbers.stream()
@@ -380,8 +396,41 @@ public class Organization extends Party implements Serializable {
    *
    * @return the tax numbers for the organization
    */
+  @Schema(description = "The tax numbers for the organization")
+  @JsonProperty
+  @JsonManagedReference("taxNumberReference")
+  @XmlElementWrapper(name = "TaxNumbers")
+  @XmlElement(name = "TaxNumber")
   public Set<TaxNumber> getTaxNumbers() {
     return taxNumbers;
+  }
+
+  /**
+   * Returns the Universally Unique Identifier (UUID) for the tenant the organization is associated
+   * with.
+   *
+   * @return the Universally Unique Identifier (UUID) for the tenant the organization is associated
+   *     with
+   */
+  @Schema(
+      description =
+          "The Universally Unique Identifier (UUID) for the tenant the organization is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
+  public UUID getTenantId() {
+    return super.getTenantId();
+  }
+
+  /**
+   * Returns the date and time the organization was last updated.
+   *
+   * @return the date and time the organization was last updated
+   */
+  @JsonIgnore
+  @XmlTransient
+  public LocalDateTime getUpdated() {
+    return super.getUpdated();
   }
 
   /**
@@ -489,7 +538,7 @@ public class Organization extends Party implements Serializable {
   }
 
   /**
-   * Set the roles for the party independent of a party association.
+   * Set the party roles for the organization independent of a party association.
    *
    * @param roles the party roles
    */
@@ -506,5 +555,16 @@ public class Organization extends Party implements Serializable {
   public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
     this.taxNumbers.clear();
     this.taxNumbers.addAll(taxNumbers);
+  }
+
+  /**
+   * Set the Universally Unique Identifier (UUID) for the tenant the organization is associated
+   * with.
+   *
+   * @param tenantId the Universally Unique Identifier (UUID) for the tenant the organization is
+   *     associated with
+   */
+  public void setTenantId(UUID tenantId) {
+    super.setTenantId(tenantId);
   }
 }

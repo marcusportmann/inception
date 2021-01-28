@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2021 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,30 +14,31 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.party;
+// package digital.inception.party;
 //
 //
 //
-//import org.springframework.core.convert.converter.Converter;
-//import org.springframework.data.convert.ReadingConverter;
-//import org.springframework.stereotype.Component;
+// import org.springframework.core.convert.converter.Converter;
+// import org.springframework.data.convert.ReadingConverter;
+// import org.springframework.stereotype.Component;
 //
-///**
-// * The <code>StringToPhysicalAddressTypeConverter</code> class implements the Spring converter that
-// * converts a <code>String</code> type into a <code>PhysicalAddressType</code> type.
+/// **
+// * The <b>StringToPhysicalAddressTypeConverter</b> class implements the Spring converter
+// that
+// * converts a <b>String</b> type into a <b>PhysicalAddressType</b> type.
 // *
 // * @author Marcus Portmann
 // */
-//@Component
-//@ReadingConverter
-//public class StringToPhysicalAddressTypeConverter
+// @Component
+// @ReadingConverter
+// public class StringToPhysicalAddressTypeConverter
 //    implements Converter<String, PhysicalAddressType> {
 //
-//  /** Constructs a new <code>StringToPhysicalAddressTypeConverter</code>. */
+//  /** Constructs a new <b>StringToPhysicalAddressTypeConverter</b>. */
 //  public StringToPhysicalAddressTypeConverter() {}
 //
 //  @Override
 //  public PhysicalAddressType convert(String source) {
 //    return PhysicalAddressType.fromCode(source);
 //  }
-//}
+// }

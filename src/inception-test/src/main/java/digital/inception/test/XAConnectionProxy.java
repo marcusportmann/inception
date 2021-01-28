@@ -24,7 +24,7 @@ import javax.sql.XAConnection;
 import javax.transaction.xa.XAResource;
 
 /**
- * The <code>XAConnectionProxy</code> class implements a proxy for JDBC XA connections.
+ * The <b>XAConnectionProxy</b> class implements a proxy for JDBC XA connections.
  *
  * @author Marcus Portmann
  */

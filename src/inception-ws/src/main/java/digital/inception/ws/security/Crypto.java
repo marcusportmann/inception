@@ -59,7 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <code>Crypto</code> class.
+ * The <b>Crypto</b> class.
  *
  * @author Marcus Portmann
  */
@@ -82,7 +82,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   private final KeyStore trustStore;
 
   /**
-   * Constructs a new <code>Crypto</code>.
+   * Constructs a new <b>Crypto</b>.
    *
    * @param keyStore the key store
    * @param keyStorePassword the key store password
@@ -96,7 +96,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
   }
 
   /**
-   * Constructs a new <code>Crypto</code>.
+   * Constructs a new <b>Crypto</b>.
    *
    * @param keyStore the key store
    * @param keyStorePassword the key store password
@@ -344,7 +344,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the identifier for the X.509 certificate i.e. the key store alias.
    *
    * @param certificate the X.509 certificate
-   * @return the identifier for the X.509 certificate i.e. the key store alias or <code>null</code>
+   * @return the identifier for the X.509 certificate i.e. the key store alias or <b>null</b>
    *     if the X.509 certificate could not be found
    */
   @Override
@@ -605,7 +605,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param skiBytes the subject key identifier bytes
    * @param keyStore the key store
-   * @return the certificate or certificate chain or <code>null</code> if the certificate or
+   * @return the certificate or certificate chain or <b>null</b> if the certificate or
    *     certificate chain identified by the subject key identifier could not be found in the key
    *     store
    */
@@ -793,8 +793,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * key store or trust store.
    *
    * @param alias the key store alias
-   * @return the X.509 certificate or certificate chain that corresponds to the identifier or <code>
-   * null</code> if no X.509 certificate or certificate chain could not be found
+   * @return the X.509 certificate or certificate chain that corresponds to the identifier or <b>
+   * null</b> if no X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForAlias(String alias)
       throws WSSecurityException {
@@ -842,7 +842,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param issuer the issuer
    * @param serialNumber the serial number
-   * @return the X.509 certificate or certificate chain or <code>null</code> if the X.509
+   * @return the X.509 certificate or certificate chain or <b>null</b> if the X.509
    *     certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForIssuerAndSerialNumber(
@@ -887,7 +887,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * the key store or trust store.
    *
    * @param skiBytes the subject key identifier bytes
-   * @return the X.509 certificate or certificate chain or <code>null</code> if the X.509
+   * @return the X.509 certificate or certificate chain or <b>null</b> if the X.509
    *     certificate or certificate chain identified by the subject key identifier could not be
    *     found
    */
@@ -915,8 +915,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * or trust store.
    *
    * @param subjectDN the subject DN
-   * @return the X.509 certificate or certificate chain identified by the subject DN or <code>null
-   * </code> if the X.509 certificate or certificate chain could not be found
+   * @return the X.509 certificate or certificate chain identified by the subject DN or <b>null
+   * </b> if the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForSubject(String subjectDN)
       throws WSSecurityException {
@@ -946,7 +946,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * trust store.
    *
    * @param thumbprint the SHA1 thumbprint
-   * @return the X.509 certificate or certificate chain matching the thumbprint or <code>null</code>
+   * @return the X.509 certificate or certificate chain matching the thumbprint or <b>null</b>
    *     if the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForThumbprint(byte[] thumbprint)
@@ -982,7 +982,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param publicKey the public key to search for
    * @param keyStoreToSearch the key store to search
-   * @return <code>true</code> if the public key is in the key store or <code>false</code> otherwise
+   * @return <b>true</b> if the public key is in the key store or <b>false</b> otherwise
    */
   private boolean isPublicKeyInKeyStore(PublicKey publicKey, KeyStore keyStoreToSearch) {
     if (keyStoreToSearch == null) {

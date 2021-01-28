@@ -27,7 +27,7 @@ import org.w3c.dom.Document;
 
 
 /**
- * The <code>IReportingService</code> interface defines the functionality provided by a Reporting
+ * The <b>IReportingService</b> interface defines the functionality provided by a Reporting
  * Service implementation.
  *
  * @author Marcus Portmann
@@ -41,7 +41,7 @@ public interface IReportingService {
   /**
    * Create the new report definition.
    *
-   * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the information
    *     for the new report definition
    */
   void createReportDefinition(ReportDefinition reportDefinition)
@@ -141,7 +141,7 @@ public interface IReportingService {
    * Check whether the report definition exists.
    *
    * @param reportDefinitionId the ID for the report definition
-   * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
+   * @return <b>true</b> if the report definition exists or <b>false</b> otherwise
    */
   boolean reportDefinitionExists(String reportDefinitionId) throws InvalidArgumentException, ReportingServiceException;
 
@@ -156,7 +156,7 @@ public interface IReportingService {
   /**
    * Update the report definition.
    *
-   * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the updated
    *     information for the report definition
    */
   void updateReportDefinition(ReportDefinition reportDefinition)

@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>GroupMembers</code> class holds the results of a request to retrieve a list of group
+ * The <b>GroupMembers</b> class holds the results of a request to retrieve a list of group
  * members.
  *
  * @author Marcus Portmann
@@ -126,11 +126,11 @@ public class GroupMembers implements Serializable {
   @XmlElement(name = "UserDirectoryId", required = true)
   private UUID userDirectoryId;
 
-  /** Constructs a new <code>GroupMembers</code>. */
+  /** Constructs a new <b>GroupMembers</b>. */
   public GroupMembers() {}
 
   /**
-   * Constructs a new <code>GroupMembers</code>.
+   * Constructs a new <b>GroupMembers</b>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory the group members are associated with

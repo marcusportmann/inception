@@ -21,8 +21,8 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>MessageStatusToStringConverter</code> class implements the Spring converter that
- * converts a <code>MessageStatus</code> type into a <code>String</code> type.
+ * The <b>MessageStatusToStringConverter</b> class implements the Spring converter that
+ * converts a <b>MessageStatus</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class MessageStatusToStringConverter implements Converter<MessageStatus, String> {
 
-  /** Constructs a new <code>MessageStatusToStringConverter</code>. */
+  /** Constructs a new <b>MessageStatusToStringConverter</b>. */
   public MessageStatusToStringConverter() {}
 
   @Override

@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Parties</code> class holds the results of a request to retrieve a list of parties.
+ * The <b>Parties</b> class holds the results of a request to retrieve a list of parties.
  *
  * @author Marcus Portmann
  */
@@ -86,11 +86,11 @@ public class Parties implements Serializable {
   @XmlElement(name = "Total", required = true)
   private long total;
 
-  /** Constructs a new <code>Parties</code>. */
+  /** Constructs a new <b>Parties</b>. */
   public Parties() {}
 
   /**
-   * Constructs a new <code>Parties</code>.
+   * Constructs a new <b>Parties</b>.
    *
    * @param parties the parties
    * @param total the total number of parties

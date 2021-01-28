@@ -1,8 +1,8 @@
-//package demo.test;
+// package demo.test;
 //
-//import org.springframework.context.annotation.Configuration;
+// import org.springframework.context.annotation.Configuration;
 //
-//@Configuration
-//public class DemoTestConfiguration {
+// @Configuration
+// public class DemoTestConfiguration {
 //
-//}
+// }

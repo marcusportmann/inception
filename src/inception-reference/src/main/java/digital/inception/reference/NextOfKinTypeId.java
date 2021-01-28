@@ -16,14 +16,11 @@
 
 package digital.inception.reference;
 
-
-
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>NextOfKinTypeId</code> class implements the ID class for the <code>NextOfKinType</code>
- * class.
+ * The <b>NextOfKinTypeId</b> class implements the ID class for the <b>NextOfKinType</b> class.
  *
  * @author Marcus Portmann
  */
@@ -38,11 +35,11 @@ public class NextOfKinTypeId implements Serializable {
   /** The Unicode locale identifier for the next of kin type. */
   private String localeId;
 
-  /** Constructs a new <code>NextOfKinTypeId</code>. */
+  /** Constructs a new <b>NextOfKinTypeId</b>. */
   public NextOfKinTypeId() {}
 
   /**
-   * Constructs a new <code>NextOfKinTypeId</code>.
+   * Constructs a new <b>NextOfKinTypeId</b>.
    *
    * @param code the code for the next of kin type
    * @param localeId the Unicode locale identifier for the next of kin type
@@ -56,8 +53,7 @@ public class NextOfKinTypeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

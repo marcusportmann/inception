@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>TenantUserDirectory</code> class holds the information for a tenant user directory.
+ * The <b>TenantUserDirectory</b> class holds the information for a tenant user directory.
  *
  * @author Marcus Portmann
  */
@@ -59,11 +59,11 @@ public class TenantUserDirectory implements Serializable {
   @Column(name = "userDirectoryId", nullable = false)
   private UUID userDirectoryId;
 
-  /** Constructs a new <code>TenantUserDirectory</code>. */
+  /** Constructs a new <b>TenantUserDirectory</b>. */
   public TenantUserDirectory() {}
 
   /**
-   * Constructs a new <code>TenantUserDirectory</code>.
+   * Constructs a new <b>TenantUserDirectory</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user

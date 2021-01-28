@@ -16,17 +16,12 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>RaceRepository</code> interface declares the repository for the <code>Race</code>
- * domain type.
+ * The <b>RaceRepository</b> interface declares the repository for the <b>Race</b> domain type.
  *
  * @author Marcus Portmann
  */

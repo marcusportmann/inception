@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- * The <code>ErrorReportSummary</code> class holds the summary information for an error report.
+ * The <b>ErrorReportSummary</b> class holds the summary information for an error report.
  *
  * @author Marcus Portmann
  */
@@ -147,11 +147,11 @@ public class ErrorReportSummary implements Serializable {
   @Column(name = "who", length = 100)
   private String who;
 
-  /** Constructs a new <code>ErrorReportSummary</code>. */
+  /** Constructs a new <b>ErrorReportSummary</b>. */
   public ErrorReportSummary() {}
 
   /**
-   * Constructs a new <code>ErrorReportSummary</code>.
+   * Constructs a new <b>ErrorReportSummary</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the error report
    * @param applicationId the ID for the application that generated the error report
@@ -183,8 +183,8 @@ public class ErrorReportSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

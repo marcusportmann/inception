@@ -36,7 +36,7 @@ import java.util.UUID;
 
 
 /**
- * The <code>GetCodeCategoryRequestData</code> class manages the data for a "Get Code Category
+ * The <b>GetCodeCategoryRequestData</b> class manages the data for a "Get Code Category
  * Request" message.
  *
  * <p>This is a synchronous message.
@@ -62,13 +62,13 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   /** Should the codes for the code category be returned if the code category is current? */
   private boolean returnCodesIfCurrent;
 
-  /** Constructs a new <code>GetCodeCategoryRequestData</code>. */
+  /** Constructs a new <b>GetCodeCategoryRequestData</b>. */
   public GetCodeCategoryRequestData() {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
   }
 
   /**
-   * Constructs a new <code>GetCodeCategoryRequestData</code>.
+   * Constructs a new <b>GetCodeCategoryRequestData</b>.
    *
    * @param codeCategoryId the ID for the code category to retrieve
    * @param lastRetrieved the date and time the code category was last retrieved
@@ -86,7 +86,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Constructs a new <code>GetCodeCategoryRequestData</code>.
+   * Constructs a new <b>GetCodeCategoryRequestData</b>.
    *
    * @param codeCategoryId the ID for the code category to retrieve
    * @param lastRetrieved the date and time the code category was last retrieved
@@ -111,8 +111,8 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    * Extract the message data from the WBXML data for a message.
    *
    * @param messageData the WBXML data for the message
-   * @return <code>true</code> if the message data was extracted successfully from the WBXML data or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the message data was extracted successfully from the WBXML data or
+   *     <b>false</b> otherwise
    */
   @Override
   public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
@@ -193,11 +193,11 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns <code>true</code> if the codes for the code category be returned if the code category
-   * is current or <code>false</code> otherwise.
+   * Returns <b>true</b> if the codes for the code category be returned if the code category
+   * is current or <b>false</b> otherwise.
    *
-   * @return <code>true</code> if the codes for the code category be returned if the code category
-   *     is current or <code>false</code> otherwise
+   * @return <b>true</b> if the codes for the code category be returned if the code category
+   *     is current or <b>false</b> otherwise
    */
   public boolean getReturnCodesIfCurrent() {
     return returnCodesIfCurrent;

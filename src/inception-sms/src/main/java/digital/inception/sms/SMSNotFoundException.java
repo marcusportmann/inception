@@ -25,11 +25,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>SMSNotFoundException</code> exception is thrown to indicate an error condition as a
+ * The <b>SMSNotFoundException</b> exception is thrown to indicate an error condition as a
  * result of a SMS that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -44,7 +43,7 @@ public class SMSNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>SMSNotFoundException</code>.
+   * Constructs a new <b>SMSNotFoundException</b>.
    *
    * @param smsId the Universally Unique Identifier (UUID) for the SMS
    */

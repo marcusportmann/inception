@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>InvalidArgumentError</code> class holds the invalid argument error information.
+ * The <b>InvalidArgumentError</b> class holds the invalid argument error information.
  *
  * @author Marcus Portmann
  */
@@ -67,11 +67,11 @@ public class InvalidArgumentError {
   @XmlSchemaType(name = "dateTime")
   private LocalDateTime when;
 
-  /** Constructs a new <code>InvalidArgumentError</code>. */
+  /** Constructs a new <b>InvalidArgumentError</b>. */
   public InvalidArgumentError() {}
 
   /**
-   * Constructs a new <code>InvalidArgumentError</code>.
+   * Constructs a new <b>InvalidArgumentError</b>.
    *
    * @param cause the cause of the invalid argument error
    */

@@ -16,8 +16,6 @@
 
 package digital.inception.party;
 
-
-
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,14 +23,11 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * The <code>PartyServiceException</code> exception is thrown to indicate an error condition when
- * working with the Party Service.
+ * The <b>PartyServiceException</b> exception is thrown to indicate an error condition when working
+ * with the Party Service.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -50,20 +45,20 @@ public class PartyServiceException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>PartyServiceException</code> with the specified message.
+   * Constructs a new <b>PartyServiceException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public PartyServiceException(String message) {
     super("PartyServiceError", message);
   }
 
   /**
-   * Constructs a new <code>PartyServiceException</code> with the specified message and cause.
+   * Constructs a new <b>PartyServiceException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public PartyServiceException(String message, Throwable cause) {
     super("PartyServiceError", message, cause);

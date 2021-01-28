@@ -17,8 +17,8 @@
 package digital.inception.application.test;
 
 /**
- * The <code>ITestJPAService</code> interface defines the functionality provided by a Test JPA
- * Service implementation.
+ * The <b>ITestJPAService</b> interface defines the functionality provided by a Test JPA Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
@@ -72,7 +72,7 @@ public interface ITestJPAService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return the test data or <code>null</code> if the test data cannot be found
+   * @return the test data or <b>null</b> if the test data cannot be found
    */
   TestData getTestData(String id) throws TestJPAServiceException;
 
@@ -80,7 +80,7 @@ public interface ITestJPAService {
    * Retrieve the test data without a transaction.
    *
    * @param id the ID
-   * @return the test data or <code>null</code> if the test data cannot be found
+   * @return the test data or <b>null</b> if the test data cannot be found
    */
   TestData getTestDataWithoutTransaction(String id) throws TestJPAServiceException;
 }

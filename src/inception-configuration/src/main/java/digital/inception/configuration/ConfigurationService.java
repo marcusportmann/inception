@@ -33,7 +33,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>ConfigurationService</code> class provides the Configuration Service implementation.
+ * The <b>ConfigurationService</b> class provides the Configuration Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -51,7 +51,7 @@ public class ConfigurationService implements IConfigurationService {
   private final Validator validator;
 
   /**
-   * Constructs a new <code>ConfigurationService</code>.
+   * Constructs a new <b>ConfigurationService</b>.
    *
    * @param validator the JSR-303 validator
    * @param configurationRepository the Configuration Repository
@@ -149,10 +149,10 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the <code>Boolean</code> configuration.
+   * Retrieve the <b>Boolean</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the <code>Boolean</code> configuration
+   * @return the <b>Boolean</b> configuration
    */
   @Override
   public boolean getBoolean(String key)
@@ -179,11 +179,11 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the <code>Boolean</code> configuration.
+   * Retrieve the <b>Boolean</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <code>Boolean</code> configuration or the default value if the configuration value
+   * @return the <b>Boolean</b> configuration or the default value if the configuration value
    *     does not exist
    */
   @Override
@@ -264,10 +264,10 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the <code>Double</code> configuration.
+   * Retrieve the <b>Double</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the <code>Double</code> configuration
+   * @return the <b>Double</b> configuration
    */
   @Override
   public Double getDouble(String key)
@@ -294,11 +294,11 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the <code>Double</code> configuration.
+   * Retrieve the <b>Double</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <code>Double</code> configuration or the default value if the configuration entry
+   * @return the <b>Double</b> configuration or the default value if the configuration entry
    *     does not exist
    */
   @Override
@@ -361,10 +361,10 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the <code>Integer</code> configuration.
+   * Retrieve the <b>Integer</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the <code>Integer</code> configuration
+   * @return the <b>Integer</b> configuration
    */
   @Override
   public Integer getInteger(String key)
@@ -391,11 +391,11 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the <code>Integer</code> configuration.
+   * Retrieve the <b>Integer</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <code>Integer</code> configuration or the default value if the configuration entry
+   * @return the <b>Integer</b> configuration or the default value if the configuration entry
    *     does not exist
    */
   @Override
@@ -416,10 +416,10 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the <code>Long</code> configuration.
+   * Retrieve the <b>Long</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the <code>Long</code> configuration
+   * @return the <b>Long</b> configuration
    */
   @Override
   public Long getLong(String key)
@@ -446,11 +446,11 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the <code>Long</code> configuration.
+   * Retrieve the <b>Long</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <code>Long</code> configuration or the default value if the configuration entry
+   * @return the <b>Long</b> configuration or the default value if the configuration entry
    *     does not exist
    */
   @Override
@@ -471,10 +471,10 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the value for the <code>String</code> configuration.
+   * Retrieve the value for the <b>String</b> configuration.
    *
    * @param key the key for the configuration
-   * @return the value for the <code>String</code> configuration
+   * @return the value for the <b>String</b> configuration
    */
   @Override
   public String getString(String key)
@@ -501,11 +501,11 @@ public class ConfigurationService implements IConfigurationService {
   }
 
   /**
-   * Retrieve the value for the <code>String</code> configuration.
+   * Retrieve the value for the <b>String</b> configuration.
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the value for the <code>String</code> configuration or the default value if the
+   * @return the value for the <b>String</b> configuration or the default value if the
    *     configuration does not exist
    */
   @Override
@@ -529,8 +529,8 @@ public class ConfigurationService implements IConfigurationService {
    * Check if a configuration with the specified key exists.
    *
    * @param key the key for the configuration
-   * @return <code>true</code> if a configuration with the specified key exists or <code>false
-   * </code> otherwise
+   * @return <b>true</b> if a configuration with the specified key exists or <b>false
+   * </b> otherwise
    */
   @Override
   public boolean keyExists(String key)

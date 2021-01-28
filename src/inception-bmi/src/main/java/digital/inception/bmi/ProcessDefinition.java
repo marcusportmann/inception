@@ -35,7 +35,7 @@
 // import javax.xml.bind.annotation.*;
 //
 /// **
-// * The <code>ProcessDefinition</code> class holds the information for a process definition.
+// * The <b>ProcessDefinition</b> class holds the information for a process definition.
 // *
 // * @author Marcus Portmann
 // */
@@ -94,12 +94,12 @@
 //  private String version;
 //
 //  /**
-//   * Constructs a new <code>ProcessDefinition</code>.
+//   * Constructs a new <b>ProcessDefinition</b>.
 //   */
 //  public ProcessDefinition() {}
 //
 //  /**
-//   * Constructs a new <code>ProcessDefinition</code>.
+//   * Constructs a new <b>ProcessDefinition</b>.
 //   *
 //   * @param id      the ID for the process definition
 //   * @param name    the name of the process definition
@@ -119,8 +119,8 @@
 //   *
 //   * @param object the reference object with which to compare
 //   *
-//   * @return <code>true</code> if this object is the same as the object argument otherwise
-//   *         <code>false</code>
+//   * @return <b>true</b> if this object is the same as the object argument otherwise
+//   *         <b>false</b>
 //   */
 //  @Override
 //  public boolean equals(Object object)

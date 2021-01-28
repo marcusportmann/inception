@@ -24,8 +24,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>CodeRepository</code> interface declares the repository for the <code>Code</code>
- * domain type.
+ * The <b>CodeRepository</b> interface declares the repository for the <b>Code</b> domain type.
  *
  * @author Marcus Portmann
  */

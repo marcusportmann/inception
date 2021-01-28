@@ -17,7 +17,7 @@
 package digital.inception.ws.security;
 
 /**
- * The <code>WebServiceClientSecurityException</code> exception is thrown to indicate a web service
+ * The <b>WebServiceClientSecurityException</b> exception is thrown to indicate a web service
  * client security error.
  *
  * @author Marcus Portmann
@@ -27,7 +27,7 @@ public class WebServiceClientSecurityException extends RuntimeException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>WebServiceClientSecurityException</code> with <code>null</code> as its
+   * Constructs a new <b>WebServiceClientSecurityException</b> with <b>null</b> as its
    * message.
    */
   @SuppressWarnings("unused")
@@ -36,21 +36,21 @@ public class WebServiceClientSecurityException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <code>WebServiceClientSecurityException</code> with the specified message.
+   * Constructs a new <b>WebServiceClientSecurityException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public WebServiceClientSecurityException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>WebServiceClientSecurityException</code> with the specified message and
+   * Constructs a new <b>WebServiceClientSecurityException</b> with the specified message and
    * cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public WebServiceClientSecurityException(String message, Throwable cause) {
     super(message, cause);

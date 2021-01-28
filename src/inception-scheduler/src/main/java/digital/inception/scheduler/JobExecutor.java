@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <code>JobExecutorThread</code> class.
+ * The <b>JobExecutorThread</b> class.
  *
  * @author Marcus Portmann
  */
@@ -36,7 +36,7 @@ public class JobExecutor implements Runnable {
   private ISchedulerService schedulerService;
 
   /**
-   * Constructs a new <code>JobExecutorThread</code>.
+   * Constructs a new <b>JobExecutorThread</b>.
    *
    * @param schedulerService the Scheduler Service
    * @param job the job

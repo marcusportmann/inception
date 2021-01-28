@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>ReportParameter</code> class holds the information for a report parameter.
+ * The <b>ReportParameter</b> class holds the information for a report parameter.
  *
  * @author Marcus Portmann
  */
@@ -67,11 +67,11 @@ public class ReportParameter implements Serializable {
   @NotNull
   private String value;
 
-  /** Constructs a new <code>ReportParameter</code>. */
+  /** Constructs a new <b>ReportParameter</b>. */
   public ReportParameter() {}
 
   /**
-   * Constructs a new <code>ReportParameter</code>.
+   * Constructs a new <b>ReportParameter</b>.
    *
    * @param name the name of the report parameter
    * @param value the value for the report parameter

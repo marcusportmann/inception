@@ -16,8 +16,6 @@
 
 package digital.inception.application.test;
 
-
-
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +23,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * The <code>TestData</code> class.
+ * The <b>TestData</b> class.
  *
  * @author Marcus Portmann
  */
@@ -46,12 +44,12 @@ public class TestData {
   @Column(name = "value", nullable = false)
   private String value;
 
-  /** Constructs a new <code>TestData</code>. */
+  /** Constructs a new <b>TestData</b>. */
   @SuppressWarnings("unused")
   TestData() {}
 
   /**
-   * Constructs a new <code>TestData</code>.
+   * Constructs a new <b>TestData</b>.
    *
    * @param id the ID
    * @param name the name
@@ -67,8 +65,7 @@ public class TestData {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

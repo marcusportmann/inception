@@ -29,11 +29,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>ExistingTenantUserDirectoryException</code> is thrown to indicate that a security
+ * A <b>ExistingTenantUserDirectoryException</b> is thrown to indicate that a security
  * operation failed as a result of an existing tenant user directory.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -49,7 +48,7 @@ public class ExistingTenantUserDirectoryException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ExistingTenantUserDirectoryException</code>.
+   * Constructs a new <b>ExistingTenantUserDirectoryException</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user

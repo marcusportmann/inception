@@ -16,8 +16,6 @@
 
 package digital.inception.application.test;
 
-
-
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import org.junit.Test;
@@ -34,7 +32,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-/** The <code>TransactionManagerTest</code> class. */
+/** The <b>TransactionManagerTest</b> class. */
 @RunWith(TestClassRunner.class)
 @ContextConfiguration(
     classes = {TestConfiguration.class},

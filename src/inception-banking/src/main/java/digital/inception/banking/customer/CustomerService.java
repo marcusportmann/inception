@@ -35,7 +35,7 @@
 //
 //
 /// **
-// * The <code>CustomerService</code> class provides the Customer Service implementation.
+// * The <b>CustomerService</b> class provides the Customer Service implementation.
 // *
 // * @author Marcus Portmann
 // */
@@ -56,7 +56,7 @@
 //  private final Validator validator;
 //
 //  /**
-//   * Constructs a new <code>CustomerService</code>.
+//   * Constructs a new <b>CustomerService</b>.
 //   *
 //   * @param applicationContext the Spring application context
 //   * @param validator the JSR-303 validator

@@ -61,8 +61,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <code>ProcessServiceTest</code> class contains the implementation of the JUnit tests for the
- * <code>ProcessService</code> class.
+ * The <b>ProcessServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>ProcessService</b> class.
  *
  * @author Marcus Portmann
  */

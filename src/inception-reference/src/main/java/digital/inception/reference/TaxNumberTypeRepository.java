@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>TaxNumberTypeRepository</code> interface declares the repository for the <code>
- * TaxNumberType</code> domain type.
+ * The <b>TaxNumberTypeRepository</b> interface declares the repository for the <b>
+ * TaxNumberType</b> domain type.
  *
  * @author Marcus Portmann
  */

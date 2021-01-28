@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>PasswordChange</code> class holds the information for a password change.
+ * The <b>PasswordChange</b> class holds the information for a password change.
  *
  * @author Marcus Portmann
  */
@@ -122,11 +122,11 @@ public class PasswordChange implements Serializable {
   @XmlElement(name = "SecurityCode")
   private String securityCode;
 
-  /** Constructs a new <code>PasswordChange</code>. */
+  /** Constructs a new <b>PasswordChange</b>. */
   public PasswordChange() {}
 
   /**
-   * Constructs a new <code>PasswordChange</code> for a USER password change.
+   * Constructs a new <b>PasswordChange</b> for a USER password change.
    *
    * @param newPassword the new password
    * @param password the password for the user that is used to authorise the operation when
@@ -139,7 +139,7 @@ public class PasswordChange implements Serializable {
   }
 
   /**
-   * Constructs a new <code>PasswordChange</code> for an ADMINISTRATIVE password change.
+   * Constructs a new <b>PasswordChange</b> for an ADMINISTRATIVE password change.
    *
    * @param newPassword the new password
    * @param expirePassword expire the user's password when performing the administrative password
@@ -161,8 +161,8 @@ public class PasswordChange implements Serializable {
    * Returns whether the user's password should be expired when performing an administrative
    * password change.
    *
-   * @return <code>true</code> if the user's password should be expired when performing an
-   *     administrative password changeor <code>false</code> otherwise
+   * @return <b>true</b> if the user's password should be expired when performing an
+   *     administrative password changeor <b>false</b> otherwise
    */
   public Boolean getExpirePassword() {
     return expirePassword;
@@ -171,8 +171,8 @@ public class PasswordChange implements Serializable {
   /**
    * Returns whether the user should be locked when performing an administrative password change.
    *
-   * @return <code>true</code> if the user should be locked when performing an administrative
-   *     password change or <code>false</code> otherwise
+   * @return <b>true</b> if the user should be locked when performing an administrative
+   *     password change or <b>false</b> otherwise
    */
   public Boolean getLockUser() {
     return lockUser;
@@ -211,8 +211,8 @@ public class PasswordChange implements Serializable {
    * Returns whether the user's password history should be reset when performing an administrative
    * password change.
    *
-   * @return <code>true</code> if the user's password history should be reset when performing an
-   *     administrative password changeor <code>false</code> otherwise
+   * @return <b>true</b> if the user's password history should be reset when performing an
+   *     administrative password changeor <b>false</b> otherwise
    */
   public Boolean getResetPasswordHistory() {
     return resetPasswordHistory;

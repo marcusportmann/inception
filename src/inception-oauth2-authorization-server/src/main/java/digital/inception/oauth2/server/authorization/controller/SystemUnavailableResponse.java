@@ -28,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>SystemUnavailableResponse</code> class holds the information for a response returned to
+ * The <b>SystemUnavailableResponse</b> class holds the information for a response returned to
  * indicated that the system encountered an error and is unable to process the OAuth2 request.
  *
  * @author Marcus Portmann
@@ -54,7 +54,7 @@ public class SystemUnavailableResponse extends Response {
   @JsonProperty private String uri;
 
   /**
-   * Constructs a new <code>SystemUnavailableResponse</code>.
+   * Constructs a new <b>SystemUnavailableResponse</b>.
    *
    * @param message the message
    */
@@ -63,7 +63,7 @@ public class SystemUnavailableResponse extends Response {
   }
 
   /**
-   * Constructs a new <code>SystemUnavailableResponse</code>.
+   * Constructs a new <b>SystemUnavailableResponse</b>.
    *
    * @param message the message
    * @param cause the cause

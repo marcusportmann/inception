@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * The <code>RandomStringGenerator</code> class is a utility class that provides the capability to
+ * The <b>RandomStringGenerator</b> class is a utility class that provides the capability to
  * generate random alphanumeric strings.
  *
  * @author Marcus Portmann
@@ -43,7 +43,7 @@ public class RandomStringGenerator {
   private final char[] symbols;
 
   /**
-   * Constructs a new <code>RandomStringGenerator</code> that can be used to generate session
+   * Constructs a new <b>RandomStringGenerator</b> that can be used to generate session
    * identifiers.
    */
   public RandomStringGenerator() {
@@ -51,7 +51,7 @@ public class RandomStringGenerator {
   }
 
   /**
-   * Constructs a new <code>RandomStringGenerator</code>.
+   * Constructs a new <b>RandomStringGenerator</b>.
    *
    * @param length the length of the random strings that should be generated
    */
@@ -60,7 +60,7 @@ public class RandomStringGenerator {
   }
 
   /**
-   * Constructs a new <code>RandomStringGenerator</code>.
+   * Constructs a new <b>RandomStringGenerator</b>.
    *
    * @param length the length of the random strings that should be generated
    * @param random the random number generator
@@ -70,7 +70,7 @@ public class RandomStringGenerator {
   }
 
   /**
-   * Constructs a new <code>RandomStringGenerator</code>.
+   * Constructs a new <b>RandomStringGenerator</b>.
    *
    * @param length the length of the random strings that should be generated
    * @param random the random number generator

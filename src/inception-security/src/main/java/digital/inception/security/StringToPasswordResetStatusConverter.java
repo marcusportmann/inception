@@ -23,8 +23,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToPasswordResetStatusConverter</code> class implements the Spring converter that
- * converts a <code>String</code> type into a <code>PasswordResetStatus</code> type.
+ * The <b>StringToPasswordResetStatusConverter</b> class implements the Spring converter that
+ * converts a <b>String</b> type into a <b>PasswordResetStatus</b> type.
  *
  * @author Marcus Portmann
  */
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 public class StringToPasswordResetStatusConverter
     implements Converter<String, PasswordResetStatus> {
 
-  /** Constructs a new <code>StringToPasswordResetStatusConverter</code>. */
+  /** Constructs a new <b>StringToPasswordResetStatusConverter</b>. */
   public StringToPasswordResetStatusConverter() {}
 
   @Override

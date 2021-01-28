@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 
 /**
- * The <code>ConfigurationWebService</code> class.
+ * The <b>ConfigurationWebService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -46,7 +46,7 @@ public class ConfigurationWebService {
   private final IConfigurationService configurationService;
 
   /**
-   * Constructs a new <code>ConfigurationWebService</code>.
+   * Constructs a new <b>ConfigurationWebService</b>.
    *
    * @param configurationService the Configuration Service
    */

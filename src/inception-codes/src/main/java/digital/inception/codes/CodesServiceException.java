@@ -24,11 +24,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>CodesServiceException</code> exception is thrown to indicate an error condition when
- * working with the Codes Service.
+ * The <b>CodesServiceException</b> exception is thrown to indicate an error condition when working
+ * with the Codes Service.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -46,20 +45,20 @@ public class CodesServiceException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>CodesServiceException</code> with the specified message.
+   * Constructs a new <b>CodesServiceException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public CodesServiceException(String message) {
     super("CodesServiceError", message);
   }
 
   /**
-   * Constructs a new <code>CodesServiceException</code> with the specified message and cause.
+   * Constructs a new <b>CodesServiceException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public CodesServiceException(String message, Throwable cause) {
     super("CodesServiceError", message, cause);

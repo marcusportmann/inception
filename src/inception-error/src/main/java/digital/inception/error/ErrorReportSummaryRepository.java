@@ -20,8 +20,8 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <code>ErrorRepository</code> interface declares the repository for the <code>
- * ErrorReportSummary</code> domain type.
+ * The <b>ErrorRepository</b> interface declares the repository for the <b>
+ * ErrorReportSummary</b> domain type.
  *
  * @author Marcus Portmann
  */

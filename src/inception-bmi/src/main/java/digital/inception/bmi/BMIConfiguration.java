@@ -30,8 +30,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.PlatformTransactionManager;
 
 /**
- * The <code>BMIConfiguration</code> class provides the Spring configuration for the Business
- * Modeling and Integration (BMI) module.
+ * The <b>BMIConfiguration</b> class provides the Spring configuration for the Business Modeling and
+ * Integration (BMI) module.
  *
  * @author Marcus Portmann
  */
@@ -42,19 +42,19 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class BMIConfiguration {
 
   /** The Spring application context. */
-  private ApplicationContext applicationContext;
+  private final ApplicationContext applicationContext;
 
   /** The data source used to provide connections to the application database. */
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /* The name of the Process Engine instance. */
-  private String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
+  private final String processEngineName = ServiceUtil.getServiceInstanceName("ProcessEngine");
 
   /** The Spring platform transaction manager. */
-  private PlatformTransactionManager transactionManager;
+  private final PlatformTransactionManager transactionManager;
 
   /**
-   * Constructs a new <code>ProcessConfiguration</code>.
+   * Constructs a new <b>ProcessConfiguration</b>.
    *
    * @param applicationContext the Spring application context
    * @param dataSource the data source used to provide connections to the application database

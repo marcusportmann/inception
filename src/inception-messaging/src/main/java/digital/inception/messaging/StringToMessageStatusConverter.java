@@ -23,8 +23,8 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>StringToMessageStatusConverter</code> class implements the Spring converter that
- * converts a <code>String</code> type into a <code>MessageStatus</code> type.
+ * The <b>StringToMessageStatusConverter</b> class implements the Spring converter that
+ * converts a <b>String</b> type into a <b>MessageStatus</b> type.
  *
  * @author Marcus Portmann
  */
@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 @ReadingConverter
 public class StringToMessageStatusConverter implements Converter<String, MessageStatus> {
 
-  /** Constructs a new <code>StringToMessageStatusConverter</code>. */
+  /** Constructs a new <b>StringToMessageStatusConverter</b>. */
   public StringToMessageStatusConverter() {}
 
   @Override

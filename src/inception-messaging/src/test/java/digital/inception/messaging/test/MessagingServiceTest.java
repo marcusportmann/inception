@@ -34,8 +34,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <code>MessagingServiceTest</code> class contains the implementation of the JUnit tests for
- * the <code>MessagingService</code> class.
+ * The <b>MessagingServiceTest</b> class contains the implementation of the JUnit tests for
+ * the <b>MessagingService</b> class.
  *
  * @author Marcus Portmann
  */

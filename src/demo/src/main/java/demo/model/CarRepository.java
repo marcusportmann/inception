@@ -24,17 +24,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>CarRepository</code> interface declares the repository for the <code>Car</code>
- * domain type.
+ * The <b>CarRepository</b> interface declares the repository for the <b>Car</b> domain type.
  *
  * @author Marcus Portmann
  */
 public interface CarRepository extends JpaRepository<Car, UUID> {
 
-  @Query("select c from Car c where c.type = 'car' and (lower(c.name) like lower(:filter))")
+  @Query("select c from Car c where (lower(c.name) like lower(:filter))")
   Page<Car> findFiltered(@Param("filter") String filter, Pageable pageable);
-
-  @Query("select c from Car c where c.type = 'car'")
-  Page<Car> findAll(Pageable pageable);
-
 }

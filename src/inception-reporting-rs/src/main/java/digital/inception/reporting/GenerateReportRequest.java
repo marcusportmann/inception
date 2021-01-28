@@ -28,7 +28,7 @@ import java.util.List;
 
 
 /**
- * The <code>GenerateReportRequest</code> class holds the information for a request to generate a
+ * The <b>GenerateReportRequest</b> class holds the information for a request to generate a
  * report.
  *
  * @author Marcus Portmann
@@ -51,11 +51,11 @@ public class GenerateReportRequest implements Serializable {
   @JsonProperty(required = true)
   private List<ReportParameter> reportParameters;
 
-  /** Constructs a new <code>GenerateReportRequest</code>. */
+  /** Constructs a new <b>GenerateReportRequest</b>. */
   public GenerateReportRequest() {}
 
   /**
-   * Constructs a new <code>GenerateReportRequest</code>.
+   * Constructs a new <b>GenerateReportRequest</b>.
    *
    * @param reportDefinitionId the ID for the report definition
    * @param reportParameters the report parameters

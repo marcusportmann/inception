@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>GroupMemberType</code> enumeration defines the possible group member types.
+ * The <b>GroupMemberType</b> enumeration defines the possible group member types.
  *
  * @author Marcus Portmann
  */

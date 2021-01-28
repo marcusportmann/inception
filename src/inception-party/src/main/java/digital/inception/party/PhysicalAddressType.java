@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>PhysicalAddressType</code> enumeration defines the possible physical address types.
+ * The <b>PhysicalAddressType</b> enumeration defines the possible physical address types.
  *
  * @author Marcus Portmann
  */

@@ -27,7 +27,7 @@
 // import javax.validation.Payload;
 //
 /// **
-// * The <code>ValidIndividualCustomer</code> annotation implements the custom constraint annotation
+// * The <b>ValidIndividualCustomer</b> annotation implements the custom constraint annotation
 // * used to apply the individual customer validation.
 // *
 // * @author Marcus Portmann

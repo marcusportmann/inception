@@ -16,8 +16,6 @@
 
 package digital.inception.application.test;
 
-
-
 import static org.junit.Assert.fail;
 
 import digital.inception.test.TestClassRunner;
@@ -37,8 +35,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
- * The <code>TestTransactionalServiceTest</code> class contains the implementation of the JUnit
- * tests for the <code>TestTransactionalService</code> class.
+ * The <b>TestTransactionalServiceTest</b> class contains the implementation of the JUnit tests for
+ * the <b>TestTransactionalService</b> class.
  *
  * @author Marcus Portmann
  */

@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
- * The <code>Data</code> class.
+ * The <b>Data</b> class.
  *
  * @author Marcus Portmann
  */
@@ -103,11 +103,11 @@ public class Data implements Serializable {
   @Column(name = "string_value")
   private String stringValue;
 
-  /** Constructs a new <code>Data</code>. */
+  /** Constructs a new <b>Data</b>. */
   public Data() {}
 
   /**
-   * Constructs a new <code>Data</code>.
+   * Constructs a new <b>Data</b>.
    *
    * @param id the ID for the data
    * @param integerValue the integer value
@@ -132,8 +132,7 @@ public class Data implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

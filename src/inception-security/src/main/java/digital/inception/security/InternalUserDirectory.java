@@ -38,7 +38,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>InternalUserDirectory</code> class provides the internal user directory implementation.
+ * The <b>InternalUserDirectory</b> class provides the internal user directory implementation.
  *
  * @author Marcus Portmann
  */
@@ -85,7 +85,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
   private final int passwordHistoryMonths;
 
   /**
-   * Constructs a new <code>InternalUserDirectory</code>.
+   * Constructs a new <b>InternalUserDirectory</b>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory
@@ -1265,7 +1265,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    * Does the user with the specified username exist?
    *
    * @param username the username for the user
-   * @return <code>true</code> if a user with specified username exists or <code>false</code>
+   * @return <b>true</b> if a user with specified username exists or <b>false</b>
    *     otherwise
    */
   @Override
@@ -1289,7 +1289,7 @@ public class InternalUserDirectory extends UserDirectoryBase {
    *
    * @param groupName the name of the group
    * @param username the username for the user
-   * @return <code>true</code> if the user is a member of the group or <code>false</code> otherwise
+   * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
    */
   @Override
   public boolean isUserInGroup(String groupName, String username)
@@ -1590,8 +1590,8 @@ public class InternalUserDirectory extends UserDirectoryBase {
    *
    * @param userId the Universally Unique Identifier (UUID) for the user
    * @param passwordHash the password hash
-   * @return <code>true</code> if the password was previously used and cannot be reused for a period
-   *     of time or <code>false</code> otherwise
+   * @return <b>true</b> if the password was previously used and cannot be reused for a period
+   *     of time or <b>false</b> otherwise
    */
   private boolean isPasswordInHistory(UUID userId, String passwordHash) {
     LocalDateTime after = LocalDateTime.now();

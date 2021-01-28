@@ -25,8 +25,8 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * The <code>ValidPerson</code> annotation implements the custom constraint annotation used to apply
- * the person validation.
+ * The <b>ValidPerson</b> annotation implements the custom constraint annotation used to apply the
+ * person validation.
  *
  * @author Marcus Portmann
  */

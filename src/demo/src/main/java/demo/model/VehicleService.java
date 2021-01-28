@@ -31,7 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>VehicleService</code> class provides the Vehicle Service implementation.
+ * The <b>VehicleService</b> class provides the Vehicle Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -59,7 +59,7 @@ public class VehicleService implements IVehicleService {
   private EntityManager entityManager;
 
   /**
-   * Constructs a new <code>VehicleService</code>.
+   * Constructs a new <b>VehicleService</b>.
    *
    * @param validator the JSR-303 validator
    * @param carRepository the Car Repository

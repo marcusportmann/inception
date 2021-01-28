@@ -16,8 +16,6 @@
 
 package digital.inception.party;
 
-
-
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,14 +24,11 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * The <code>OrganizationNotFoundException</code> exception is thrown to indicate an error condition
- * as a result of an organization that could not be found.
+ * The <b>OrganizationNotFoundException</b> exception is thrown to indicate an error condition as a
+ * result of an organization that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -49,10 +44,9 @@ public class OrganizationNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>OrganizationNotFoundException</code>.
+   * Constructs a new <b>OrganizationNotFoundException</b>.
    *
-   * @param organizationId the Universally Unique Identifier (UUID) for the
-   *     organization
+   * @param organizationId the Universally Unique Identifier (UUID) for the organization
    */
   public OrganizationNotFoundException(UUID organizationId) {
     super(

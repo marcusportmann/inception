@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <code>DemoService</code> class provides the Demo Service implementation.
+ * The <b>DemoService</b> class provides the Demo Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -47,7 +47,7 @@ public class DataService implements IDataService {
   private EntityManager entityManager;
 
   /**
-   * Constructs a new <code>DemoService</code>.
+   * Constructs a new <b>DemoService</b>.
    *
    * @param validator the JSR-303 validator
    */
@@ -62,18 +62,18 @@ public class DataService implements IDataService {
    */
   @Override
   @Transactional
-  public void createData(Data data) throws DemoServiceException {
+  public void createData(Data data) throws DataServiceException {
     try {
       entityManager.persist(data);
     } catch (Throwable e) {
-      throw new DemoServiceException("Failed to add the data", e);
+      throw new DataServiceException("Failed to add the data", e);
     }
   }
 
   /** Add the data. */
   @Override
   @Transactional
-  public void createSampleData() throws DemoServiceException {
+  public void createSampleData() throws DataServiceException {
     try {
       Data newData = new Data();
       newData.setId(666);
@@ -83,7 +83,7 @@ public class DataService implements IDataService {
 
       entityManager.persist(newData);
     } catch (Throwable e) {
-      throw new DemoServiceException("Failed to add the data", e);
+      throw new DataServiceException("Failed to add the data", e);
     }
   }
 
@@ -94,13 +94,13 @@ public class DataService implements IDataService {
    */
   @Override
   @Transactional
-  public List<Data> getAllData() throws DemoServiceException {
+  public List<Data> getAllData() throws DataServiceException {
     try {
       TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
 
       return query.getResultList();
     } catch (Throwable e) {
-      throw new DemoServiceException("Failed to retrieve the data", e);
+      throw new DataServiceException("Failed to retrieve the data", e);
     }
   }
 
@@ -112,7 +112,7 @@ public class DataService implements IDataService {
    */
   @Override
   @Transactional
-  public Data getData(long id) throws DemoServiceException {
+  public Data getData(long id) throws DataServiceException {
     try {
       TypedQuery<Data> query =
           entityManager.createQuery("SELECT d FROM Data d WHERE d.id=:id", Data.class);
@@ -127,7 +127,7 @@ public class DataService implements IDataService {
         return null;
       }
     } catch (Throwable e) {
-      throw new DemoServiceException("Failed to retrieve the data (" + id + ")", e);
+      throw new DataServiceException("Failed to retrieve the data (" + id + ")", e);
     }
   }
 
@@ -137,7 +137,7 @@ public class DataService implements IDataService {
    * @return the validation errors
    */
   @Override
-  public List<ValidationError> validateData(Data data) throws DemoServiceException {
+  public List<ValidationError> validateData(Data data) throws DataServiceException {
     try {
       Set<ConstraintViolation<Data>> constraintViolations = validator.validate(data);
 
@@ -149,7 +149,7 @@ public class DataService implements IDataService {
 
       return errors;
     } catch (Throwable e) {
-      throw new DemoServiceException("Failed to validate the data", e);
+      throw new DataServiceException("Failed to validate the data", e);
     }
   }
 }

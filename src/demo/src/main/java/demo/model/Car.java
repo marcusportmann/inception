@@ -26,10 +26,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTable;
-import javax.persistence.SecondaryTables;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -40,7 +38,10 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>Car</code> class.
+ * The <b>Car</b> class.
+ *
+ * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
+ * field-based approach to support the JPA inheritance model.
  *
  * @author Marcus Portmann
  */
@@ -54,32 +55,24 @@ import javax.xml.bind.annotation.XmlType;
     propOrder = {"id", "name", "numberOfDoors"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
-@Table(schema = "demo", name = "vehicles")
-@SecondaryTables({
-  @SecondaryTable(
-      schema = "demo",
-      name = "cars",
-      pkJoinColumns = @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id"))
-})
+@DiscriminatorValue("car")
+@Table(schema = "demo", name = "cars")
 public class Car extends VehicleBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
   /** The number of doors for the car. */
-  @Schema(description = "The number of doors for the car", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "NumberOfDoors", required = true)
   @NotNull
   @Column(table = "cars", name = "number_of_doors", nullable = false)
   private int numberOfDoors;
 
-  /** Constructs a new <code>Car</code>. */
+  /** Constructs a new <b>Car</b>. */
   public Car() {
     super(VehicleType.CAR);
   }
 
   /**
-   * Constructs a new <code>Car</code>.
+   * Constructs a new <b>Car</b>.
    *
    * @param name the name of the car
    * @param numberOfDoors the number of doors
@@ -94,8 +87,7 @@ public class Car extends VehicleBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -159,6 +151,9 @@ public class Car extends VehicleBase implements Serializable {
    *
    * @return the number of doors for the car
    */
+  @Schema(description = "The number of doors for the car", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "NumberOfDoors", required = true)
   public int getNumberOfDoors() {
     return numberOfDoors;
   }

@@ -19,7 +19,7 @@ package digital.inception.oauth2.server.authorization.controller;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <code>UnsupportedGrantTypeErrorResponse</code> class holds the information for an OAuth2
+ * The <b>UnsupportedGrantTypeErrorResponse</b> class holds the information for an OAuth2
  * unsupported grant type error response.
  *
  * @author Marcus Portmann
@@ -30,7 +30,7 @@ public class UnsupportedGrantTypeErrorResponse extends ErrorResponse {
   public static final String ERROR_CODE = "unsupported_grant_type";
 
   /**
-   * Constructs a new <code>UnsupportedGrantTypeErrorResponse</code>.
+   * Constructs a new <b>UnsupportedGrantTypeErrorResponse</b>.
    *
    * @param grantType the unsupported grant type
    */

@@ -29,21 +29,14 @@ COMMENT ON COLUMN demo.data.timestamp_value IS 'The timestamp value for the data
 
 
 
-
-
-
-
-
-
-
 CREATE TABLE demo.vehicles (
-                               created   TIMESTAMP    NOT NULL,
-                               id        UUID         NOT NULL,
-                               name      VARCHAR(100) NOT NULL,
-                               type      VARCHAR(30)  NOT NULL,
-                               updated   TIMESTAMP,
+   created   TIMESTAMP    NOT NULL,
+   id        UUID         NOT NULL,
+   name      VARCHAR(100) NOT NULL,
+   type      VARCHAR(30)  NOT NULL,
+   updated   TIMESTAMP,
 
-                               PRIMARY KEY (id)
+   PRIMARY KEY (id)
 );
 
 CREATE INDEX vehicles_type_ix ON demo.vehicles(type);
@@ -73,7 +66,44 @@ COMMENT ON COLUMN demo.cars.number_of_doors IS 'The number of doors for the car'
 
 
 
+CREATE TABLE demo.vehicle_attribute_types (
+  code         VARCHAR(30)  NOT NULL,
+  name         VARCHAR(50)  NOT NULL,
+  description  VARCHAR(200) NOT NULL DEFAULT '',
 
+  PRIMARY KEY (code)
+);
+
+COMMENT ON COLUMN demo.vehicle_attribute_types.code IS 'The code for the vehicle attribute type';
+
+COMMENT ON COLUMN demo.vehicle_attribute_types.name IS 'The name of the vehicle attribute type';
+
+COMMENT ON COLUMN demo.vehicle_attribute_types.description IS 'The description for the vehicle attribute type';
+
+
+
+
+CREATE TABLE demo.vehicle_attributes (
+  created    TIMESTAMP    NOT NULL,
+  vehicle_id UUID         NOT NULL,
+  type       VARCHAR(30)  NOT NULL,
+  updated    TIMESTAMP,
+  value      VARCHAR(100) NOT NULL,
+
+  PRIMARY KEY (vehicle_id, type),
+  CONSTRAINT vehicle_attributes_vehicle_fk FOREIGN KEY (vehicle_id) REFERENCES demo.vehicles(id) ON DELETE CASCADE,
+  CONSTRAINT vehicle_attributes_vehicle_attribute_type_fk FOREIGN KEY (type) REFERENCES demo.vehicle_attribute_types(code) ON DELETE CASCADE
+);
+
+COMMENT ON COLUMN demo.vehicle_attributes.created IS 'The date and time the vehicle attribute was created';
+
+COMMENT ON COLUMN demo.vehicle_attributes.vehicle_id IS 'The Universally Unique Identifier (UUID) for the vehicle the vehicle attribute is associated with';
+
+COMMENT ON COLUMN demo.vehicle_attributes.type IS 'The code for the vehicle attribute type';
+
+COMMENT ON COLUMN demo.vehicle_attributes.updated IS 'The date and time the vehicle attribute was updated';
+
+COMMENT ON COLUMN demo.vehicle_attributes.value IS 'The value for the vehicle attribute';
 
 
 
@@ -379,9 +409,9 @@ INSERT INTO party.tax_numbers (party_id, type, number, country_of_issue, created
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'za_income_tax_number', '1234567890', 'ZA', NOW());
 INSERT INTO party.physical_addresses (id, party_id, type, line1, line2, city, region, country, postal_code, purposes, created)
   VALUES ('14166574-6564-468a-b845-8a5c127a4345', '54166574-6564-468a-b845-8a5c127a4345', 'street', '145 Apple Street', 'Fairland', 'Johannesburg', 'GP', 'ZA', '2170', 'residential', NOW());
-INSERT INTO party.preferences(party_id, type, value, created)
+INSERT INTO party.preferences(person_id, type, value, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'correspondence_language', 'EN', NOW());
-INSERT INTO party.preferences(party_id, type, value, created)
+INSERT INTO party.preferences(person_id, type, value, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'time_to_contact', 'anytime', NOW());
 
 
@@ -408,8 +438,8 @@ INSERT INTO party.physical_addresses (id, party_id, type, complex_name, complex_
 -- VALUES ('00166574-6564-468a-b845-8a5c127a4345', '34ccdbc9-4a01-46f5-a284-ba13e095675c', 'sally', 1, 'Sally Smith', 'Sally', '', '', '', 'GVE/3J2k+3KkoF62aRdUjTyQ/5TVQZ4fI2PuqJ3+4d0=', 0, PARSEDATETIME('2050-12-31 00:00:00 GMT', 'yyyy-MM-dd HH:mm:ss z', 'en', 'GMT'), NOW());
 
 
-
-
+INSERT INTO demo.vehicle_attribute_types (code, name, description)
+  VALUES ('color', 'Color', 'The vehicle color');
 
 
 

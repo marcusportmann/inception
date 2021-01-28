@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 /**
- * The <code>ValidationConfiguration</code> class provides access to the JSR-303 validation
+ * The <b>ValidationConfiguration</b> class provides access to the JSR-303 validation
  * configuration and initialises the JSR-303 validator.
  *
  * @author Marcus Portmann

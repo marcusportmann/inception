@@ -16,15 +16,13 @@
 
 package digital.inception.party;
 
-
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <code>PartyTypeToStringConverter</code> class implements the Spring converter that converts a
- * <code>PartyType</code> type into a <code>String</code> type.
+ * The <b>PartyTypeToStringConverter</b> class implements the Spring converter that converts a
+ * <b>PartyType</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
@@ -32,7 +30,7 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class PartyTypeToStringConverter implements Converter<PartyType, String> {
 
-  /** Constructs a new <code>PartyTypeToStringConverter</code>. */
+  /** Constructs a new <b>PartyTypeToStringConverter</b>. */
   public PartyTypeToStringConverter() {}
 
   @Override

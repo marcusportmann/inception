@@ -35,7 +35,7 @@ import java.util.UUID;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>OAuth2AccessToken</code> holds the information for an OAuth2 access token.
+ * The <b>OAuth2AccessToken</b> holds the information for an OAuth2 access token.
  *
  * @author Marcus Portmann
  */
@@ -71,7 +71,7 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   private final String subject;
 
   /**
-   * Constructs a new <code>OAuth2AccessToken</code>.
+   * Constructs a new <b>OAuth2AccessToken</b>.
    *
    * @param tokenType the token type
    * @param tokenValue the token value
@@ -93,7 +93,7 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
   }
 
   /**
-   * Build a new <code>OAuth2AccessToken</code>.
+   * Build a new <b>OAuth2AccessToken</b>.
    *
    * @param user the User the token is being issued for
    * @param roleCodes the role codes for the user the token is being issued for
@@ -101,7 +101,7 @@ public class OAuth2AccessToken extends org.springframework.security.oauth2.core.
    * @param tenantIds the IDs for the tenants that the user the token is being issued for is
    *     associated with
    * @param scopes the optional scope(s) associated to the token
-   * @param issuer the optional issuer of the token, which can be <code>null</code>
+   * @param issuer the optional issuer of the token, which can be <b>null</b>
    * @param validFor the number of seconds the token should be valid for
    * @param rsaPrivateKey the RSA private key used to sign the token
    */

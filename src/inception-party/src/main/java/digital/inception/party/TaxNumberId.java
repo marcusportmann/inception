@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <code>TaxNumberId</code> class implements the ID class for the <code>TaxNumber</code> class.
+ * The <b>TaxNumberId</b> class implements the ID class for the <b>TaxNumber</b> class.
  *
  * @author Marcus Portmann
  */
@@ -35,15 +35,14 @@ public class TaxNumberId implements Serializable {
   /** The code for the tax number type. */
   private String type;
 
-  /** Constructs a new <code>TaxNumberId</code>. */
+  /** Constructs a new <b>TaxNumberId</b>. */
   public TaxNumberId() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

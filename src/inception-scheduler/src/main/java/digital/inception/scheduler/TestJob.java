@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <code>TestJob</code> class implements the test job.
+ * The <b>TestJob</b> class implements the test job.
  *
  * @author Marcus Portmann
  */

@@ -45,7 +45,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <code>SMS</code> class holds the information for a SMS.
+ * The <b>SMS</b> class holds the information for a SMS.
  *
  * @author Marcus Portmann
  */
@@ -153,11 +153,11 @@ public class SMS implements Serializable {
   @Column(name = "updated", insertable = false)
   private LocalDateTime updated;
 
-  /** Constructs a new <code>SMS</code>. */
+  /** Constructs a new <b>SMS</b>. */
   public SMS() {}
 
   /**
-   * Constructs a new <code>SMS</code>.
+   * Constructs a new <b>SMS</b>.
    *
    * @param mobileNumber the mobile number to send the SMS to
    * @param message the message to send
@@ -169,7 +169,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Constructs a new <code>SMS</code>.
+   * Constructs a new <b>SMS</b>.
    *
    * @param mobileNumber the mobile number to send the SMS to
    * @param message the message to send
@@ -183,7 +183,7 @@ public class SMS implements Serializable {
   }
 
   /**
-   * Constructs a new <code>SMS</code>.
+   * Constructs a new <b>SMS</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the SMS
    * @param mobileNumber the mobile number to send the SMS to
@@ -214,8 +214,8 @@ public class SMS implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

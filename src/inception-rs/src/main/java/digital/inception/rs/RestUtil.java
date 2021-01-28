@@ -20,7 +20,7 @@ import java.io.StringWriter;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>RestUtil</code> class provides utility methods that are useful when working with
+ * The <b>RestUtil</b> class provides utility methods that are useful when working with
  * RESTful web services.
  *
  * @author Marcus Portmann

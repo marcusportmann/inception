@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>VehicleType</code> enumeration defines the possible vehicle types.
+ * The <b>VehicleType</b> enumeration defines the possible vehicle types.
  *
  * @author Marcus Portmann
  */

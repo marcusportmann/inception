@@ -26,7 +26,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
- * The <code>BackgroundMessageProcessor</code> class implements the Background Message Processor.
+ * The <b>BackgroundMessageProcessor</b> class implements the Background Message Processor.
  *
  * @author Marcus Portmann
  */
@@ -41,7 +41,7 @@ public class BackgroundMessageProcessor implements InitializingBean {
   private final IMessagingService messagingService;
 
   /**
-   * Constructs a new <code>BackgroundMessageProcessor</code>.
+   * Constructs a new <b>BackgroundMessageProcessor</b>.
    *
    * @param messagingService the Messaging Service
    */

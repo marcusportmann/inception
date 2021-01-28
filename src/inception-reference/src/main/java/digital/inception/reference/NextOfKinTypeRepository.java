@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>NextOfKinTypeRepository</code> interface declares the repository for the <code>
- * NextOfKinType</code> domain type.
+ * The <b>NextOfKinTypeRepository</b> interface declares the repository for the <b>
+ * NextOfKinType</b> domain type.
  *
  * @author Marcus Portmann
  */

@@ -16,8 +16,6 @@
 
 package digital.inception.application;
 
-
-
 import digital.inception.core.support.MergedMessageSource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,11 +33,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.stereotype.Component;
 
-
-
 /**
- * The <code>Application</code> class provides the class that all application-specific application
- * classes should be derived from.
+ * The <b>Application</b> class provides the class that all application-specific application classes
+ * should be derived from.
  *
  * @author Marcus Portmann
  */
@@ -59,7 +55,7 @@ public abstract class Application extends ApplicationBase {
   Map<String, Map<?, ?>> caches = new ConcurrentHashMap<>();
 
   /**
-   * Constructs a new <code>Application</code>.
+   * Constructs a new <b>Application</b>.
    *
    * @param applicationContext the Spring application context
    */

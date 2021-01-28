@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>VerificationStatusRepository</code> interface declares the repository for the <code>
- * VerificationStatus</code> domain type.
+ * The <b>VerificationStatusRepository</b> interface declares the repository for the <b>
+ * VerificationStatus</b> domain type.
  *
  * @author Marcus Portmann
  */

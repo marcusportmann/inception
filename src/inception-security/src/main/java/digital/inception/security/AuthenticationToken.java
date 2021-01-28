@@ -22,7 +22,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * The <code>AuthenticationToken</code> class.
+ * The <b>AuthenticationToken</b> class.
  *
  * @author Marcus Portmann
  */
@@ -31,7 +31,7 @@ public class AuthenticationToken extends AbstractAuthenticationToken {
   private final UserDetails userDetails;
 
   /**
-   * Constructs a new <code>AuthenticationToken</code>.
+   * Constructs a new <b>AuthenticationToken</b>.
    *
    * @param userDetails
    */

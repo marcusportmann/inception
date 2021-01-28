@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The <code>Element</code> class stores the data for a WBXML element content type in a WBXML
+ * The <b>Element</b> class stores the data for a WBXML element content type in a WBXML
  * document.
  *
  * <p>This content type represents a node in the WBXML document.
@@ -46,7 +46,7 @@ public class Element implements Serializable, Content {
   protected Element() {}
 
   /**
-   * Constructs an <code>Element</code> with the specified name.
+   * Constructs an <b>Element</b> with the specified name.
    *
    * @param name the name of the element
    */
@@ -55,7 +55,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Constructs an <code>Element</code> with the specified name and content.
+   * Constructs an <b>Element</b> with the specified name and content.
    *
    * @param name the name of the element
    * @param content the content for the element
@@ -66,7 +66,7 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Constructs an <code>Element</code> with the specified name and content.
+   * Constructs an <b>Element</b> with the specified name and content.
    *
    * @param name the name of the element
    * @param content the content for the element
@@ -107,7 +107,7 @@ public class Element implements Serializable, Content {
    * Returns the attribute with the specified name.
    *
    * @param name the name of the attribute
-   * @return the attribute with the specified name or <code>null</code> if no matching attribute
+   * @return the attribute with the specified name or <b>null</b> if no matching attribute
    *     could be found
    */
   public Attribute getAttribute(String name) {
@@ -124,7 +124,7 @@ public class Element implements Serializable, Content {
    * Returns the value for the attribute with the specified name.
    *
    * @param name the name of the attribute
-   * @return the value for the attribute with the specified name or <code>null</code> if no matching
+   * @return the value for the attribute with the specified name or <b>null</b> if no matching
    *     attribute could be found
    */
   public String getAttributeValue(String name) {
@@ -150,7 +150,7 @@ public class Element implements Serializable, Content {
    * Returns the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the child element or <code>null</code> if an element with the specified name could not
+   * @return the child element or <b>null</b> if an element with the specified name could not
    *     be found
    */
   public Element getChild(String name) {
@@ -171,7 +171,7 @@ public class Element implements Serializable, Content {
    * Get the binary data content for the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the binary data content for the child element or <code>null</code> if an element with
+   * @return the binary data content for the child element or <b>null</b> if an element with
    *     the specified name could not be found
    */
   public byte[] getChildOpaque(String name) {
@@ -192,7 +192,7 @@ public class Element implements Serializable, Content {
    * Get the text content for the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the text content for the child element or <code>null</code> if an element with the
+   * @return the text content for the child element or <b>null</b> if an element with the
    *     specified name could not be found
    */
   public String getChildText(String name) {
@@ -305,12 +305,12 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Returns <code>true</code> if the element has an attribute with the specified name or <code>
-   * false</code> otherwise.
+   * Returns <b>true</b> if the element has an attribute with the specified name or <b>
+   * false</b> otherwise.
    *
    * @param name the name of the attribute
-   * @return <code>true</code> if the element has an attribute with the specified name or <code>
-   * false</code> otherwise
+   * @return <b>true</b> if the element has an attribute with the specified name or <b>
+   * false</b> otherwise
    */
   public boolean hasAttribute(String name) {
     for (Attribute attribute : attributes) {
@@ -332,12 +332,12 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Returns <code>true</code> if the element has a child element with the specified name or <code>
-   * false</code> otherwise.
+   * Returns <b>true</b> if the element has a child element with the specified name or <b>
+   * false</b> otherwise.
    *
    * @param name the name of the child element
-   * @return <code>true</code> if the element has a child element with the specified name or <code>
-   * false</code> otherwise
+   * @return <b>true</b> if the element has a child element with the specified name or <b>
+   * false</b> otherwise
    */
   public boolean hasChild(String name) {
     for (Content tmpContent : content) {
@@ -385,9 +385,9 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Print the content to the specified <code>OutputStream</code> using the specified indent level.
+   * Print the content to the specified <b>OutputStream</b> using the specified indent level.
    *
-   * @param out the <code>OuputStream</code> to output the content to
+   * @param out the <b>OuputStream</b> to output the content to
    * @param indent the indent level
    */
   public void print(OutputStream out, int indent) {

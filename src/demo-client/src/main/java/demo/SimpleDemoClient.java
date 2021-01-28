@@ -25,7 +25,7 @@ import java.security.KeyStore;
 import java.util.List;
 
 /**
- * The <code>SimpleDemoClient</code> class.
+ * The <b>SimpleDemoClient</b> class.
  *
  * @author Marcus Portmann
  */

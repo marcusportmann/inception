@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>GroupMember</code> class holds the information for a group member.
+ * The <b>GroupMember</b> class holds the information for a group member.
  *
  * @author Marcus Portmann
  */
@@ -90,11 +90,11 @@ public class GroupMember implements Serializable {
   @NotNull
   private UUID userDirectoryId;
 
-  /** Constructs a new <code>GroupMember</code>. */
+  /** Constructs a new <b>GroupMember</b>. */
   public GroupMember() {}
 
   /**
-   * Constructs a new <code>GroupMember</code>.
+   * Constructs a new <b>GroupMember</b>.
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
    *     directory the group is associated with

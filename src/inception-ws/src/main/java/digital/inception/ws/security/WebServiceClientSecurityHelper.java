@@ -32,7 +32,7 @@ import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.handler.HandlerResolver;
 
 /**
- * The <code>WebServiceClientSecurityHelper</code> class is a utility class that provides support
+ * The <b>WebServiceClientSecurityHelper</b> class is a utility class that provides support
  * for configuring secure web service clients.
  *
  * @author Marcus Portmann
@@ -764,7 +764,7 @@ public class WebServiceClientSecurityHelper {
   }
 
   /**
-   * The <code>WebServiceClient</code> class holds the information for a web service client.
+   * The <b>WebServiceClient</b> class holds the information for a web service client.
    *
    * @author Marcus Portmann
    */
@@ -777,7 +777,7 @@ public class WebServiceClientSecurityHelper {
     private Service service;
 
     /**
-     * Constructs a new <code>CachedWebServiceClient</code>.
+     * Constructs a new <b>CachedWebServiceClient</b>.
      *
      * @param portQName the QName for the port
      * @param service the web service client

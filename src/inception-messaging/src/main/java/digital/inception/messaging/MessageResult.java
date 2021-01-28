@@ -28,7 +28,7 @@ import java.io.PrintWriter;
 
 
 /**
- * The <code>MessageResult</code> class stores the results of processing a message.
+ * The <b>MessageResult</b> class stores the results of processing a message.
  *
  * @author Marcus Portmann
  */
@@ -69,8 +69,8 @@ public class MessageResult {
   private long code;
 
   /**
-   * The user-friendly text description of the result of processing the message. The <code>detail
-   * </code> field may be blank if the message was processed successfully.
+   * The user-friendly text description of the result of processing the message. The <b>detail
+   * </b> field may be blank if the message was processed successfully.
    */
   private String detail;
 
@@ -81,7 +81,7 @@ public class MessageResult {
   private Message message;
 
   /**
-   * Constructs a new <code>MessageResult</code>.
+   * Constructs a new <b>MessageResult</b>.
    *
    * @param document the WBXML document containing the message result information
    */
@@ -114,7 +114,7 @@ public class MessageResult {
   }
 
   /**
-   * Constructs a new <code>MessageResult</code>.
+   * Constructs a new <b>MessageResult</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of processing the message
@@ -125,11 +125,11 @@ public class MessageResult {
   }
 
   /**
-   * Constructs a new <code>MessageResult</code>.
+   * Constructs a new <b>MessageResult</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of processing the message
-   * @param message the message associated with the <code>MessageResult</code>
+   * @param message the message associated with the <b>MessageResult</b>
    */
   public MessageResult(long code, String detail, Message message) {
     this.code = code;
@@ -138,7 +138,7 @@ public class MessageResult {
   }
 
   /**
-   * Constructs a new <code>MessageResult</code>.
+   * Constructs a new <b>MessageResult</b>.
    *
    * @param code the result code
    * @param detail the text description of the result of processing the message
@@ -164,12 +164,12 @@ public class MessageResult {
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message result information or
-   * <code>false</code> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message result information or
+   * <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <code>true</code> if the WBXML document contains valid message result information or
-   *     <code>false</code> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message result information or
+   *     <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element messageResultElement = document.getRootElement();

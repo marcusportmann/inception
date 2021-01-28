@@ -29,8 +29,8 @@ import org.springframework.web.reactive.function.client.WebClient.Builder;
 import reactor.netty.http.client.HttpClient;
 
 /**
- * The <code>SecureWebClientCustomizer</code> class implements the callback interface that can be
- * used to customize the {@link org.springframework.web.reactive.function.client.WebClient.Builder
+ * The <b>SecureWebClientCustomizer</b> class implements the callback interface that can be used to
+ * customize the {@link org.springframework.web.reactive.function.client.WebClient.Builder
  * WebClient.Builder} to apply the security configuration.
  *
  * @author Marcus Portmann

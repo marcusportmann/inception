@@ -24,8 +24,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>FunctionRepository</code> interface declares the repository for the <code>Function
- * </code> domain type.
+ * The <b>FunctionRepository</b> interface declares the repository for the <b>Function
+ * </b> domain type.
  *
  * @author Marcus Portmann
  */

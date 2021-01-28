@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>UserAttribute</code> class stores a user attribute as a name-value pair.
+ * The <b>UserAttribute</b> class stores a user attribute as a name-value pair.
  *
  * @author Marcus Portmann
  */
@@ -72,14 +72,14 @@ public class UserAttribute implements Serializable {
   @Size(max = 4000)
   private String value;
 
-  /** Constructs a new <code>UserAttribute</code>. */
+  /** Constructs a new <b>UserAttribute</b>. */
   public UserAttribute() {}
 
   /**
-   * Constructs a new <code>UserAttribute</code>.
+   * Constructs a new <b>UserAttribute</b>.
    *
    * @param name the name of the user attribute
-   * @param value the <code>BigDecimal</code> value for the user attribute
+   * @param value the <b>BigDecimal</b> value for the user attribute
    */
   public UserAttribute(String name, BigDecimal value) {
     this.name = name;
@@ -87,7 +87,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserAttribute</code>.
+   * Constructs a new <b>UserAttribute</b>.
    *
    * @param name the name of the user attribute
    * @param value the binary value for the user attribute
@@ -98,7 +98,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserAttribute</code>.
+   * Constructs a new <b>UserAttribute</b>.
    *
    * @param name the name of the user attribute
    * @param value the binary value for the user attribute
@@ -109,10 +109,10 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserAttribute</code>.
+   * Constructs a new <b>UserAttribute</b>.
    *
    * @param name the name of the user attribute
-   * @param value the <code>double</code> value for the user attribute
+   * @param value the <b>double</b> value for the user attribute
    */
   public UserAttribute(String name, double value) {
     this.name = name;
@@ -120,10 +120,10 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserAttribute</code>.
+   * Constructs a new <b>UserAttribute</b>.
    *
    * @param name the name of the user attribute
-   * @param value the <code>long</code> value for the user attribute
+   * @param value the <b>long</b> value for the user attribute
    */
   public UserAttribute(String name, long value) {
     this.name = name;
@@ -131,10 +131,10 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Constructs a new <code>UserAttribute</code>.
+   * Constructs a new <b>UserAttribute</b>.
    *
    * @param name the name of the user attribute
-   * @param value the <code>String</code> value for the user attribute
+   * @param value the <b>String</b> value for the user attribute
    */
   public UserAttribute(String name, String value) {
     this.name = name;
@@ -147,8 +147,8 @@ public class UserAttribute implements Serializable {
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return <code>true</code> if the list of user attributes contains a user attribute whose name
-   *     matches the specified name or <code>false</code> otherwise
+   * @return <b>true</b> if the list of user attributes contains a user attribute whose name
+   *     matches the specified name or <b>false</b> otherwise
    */
   public static boolean contains(List<UserAttribute> list, String name) {
     for (UserAttribute userAttribute : list) {
@@ -190,12 +190,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>BigDecimal</code> value for the user attribute with the specified name in the
+   * Returns the <b>BigDecimal</b> value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <code>BigDecimal</code> value for the user attribute with the specified name in the
+   * @return the <b>BigDecimal</b> value for the user attribute with the specified name in the
    *     specified list
    */
   public static BigDecimal getDecimalValue(List<UserAttribute> list, String name)
@@ -221,12 +221,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>double</code> value for the user attribute with the specified name in the
+   * Returns the <b>double</b> value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <code>double</code> value for the user attribute with the specified name in the
+   * @return the <b>double</b> value for the user attribute with the specified name in the
    *     specified list
    */
   public static double getDoubleValue(List<UserAttribute> list, String name)
@@ -252,12 +252,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>long</code> value for the user attribute with the specified name in the
+   * Returns the <b>long</b> value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <code>int</code> value for the user attribute with the specified name in the
+   * @return the <b>int</b> value for the user attribute with the specified name in the
    *     specified list
    */
   public static int getIntegerValue(List<UserAttribute> list, String name)
@@ -283,12 +283,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>long</code> value for the user attribute with the specified name in the
+   * Returns the <b>long</b> value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <code>long</code> value for the user attribute with the specified name in the
+   * @return the <b>long</b> value for the user attribute with the specified name in the
    *     specified list
    */
   public static long getLongValue(List<UserAttribute> list, String name)
@@ -314,12 +314,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>String</code> value for the user attribute with the specified name in the
+   * Returns the <b>String</b> value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <code>String</code> value for the user attribute with the specified name in the
+   * @return the <b>String</b> value for the user attribute with the specified name in the
    *     specified list
    */
   public static String getStringValue(List<UserAttribute> list, String name)
@@ -374,12 +374,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <code>BigDecimal</code> value for the user attribute with the specified name in the
+   * Set the <b>BigDecimal</b> value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @param value the <code>BigDecimal</code> value for the user attribute
+   * @param value the <b>BigDecimal</b> value for the user attribute
    */
   public static void setDecimalValue(List<UserAttribute> list, String name, BigDecimal value)
       throws UserAttributeException {
@@ -399,12 +399,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <code>double</code> value for the user attribute with the specified name in the
+   * Set the <b>double</b> value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @param value the <code>double</code> value for the user attribute
+   * @param value the <b>double</b> value for the user attribute
    */
   public static void setDoubleValue(List<UserAttribute> list, String name, double value)
       throws UserAttributeException {
@@ -424,12 +424,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <code>int</code> value for the user attribute with the specified name in the specified
+   * Set the <b>int</b> value for the user attribute with the specified name in the specified
    * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @param value the <code>int</code> value for the user attribute
+   * @param value the <b>int</b> value for the user attribute
    */
   public static void setIntegerValue(List<UserAttribute> list, String name, int value)
       throws UserAttributeException {
@@ -449,12 +449,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <code>long</code> value for the user attribute with the specified name in the specified
+   * Set the <b>long</b> value for the user attribute with the specified name in the specified
    * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @param value the <code>long</code> value for the user attribute
+   * @param value the <b>long</b> value for the user attribute
    */
   public static void setLongValue(List<UserAttribute> list, String name, long value)
       throws UserAttributeException {
@@ -474,12 +474,12 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <code>String</code> value for the user attribute with the specified name in the
+   * Set the <b>String</b> value for the user attribute with the specified name in the
    * specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @param value the <code>String</code> value for the user attribute
+   * @param value the <b>String</b> value for the user attribute
    */
   public static void setStringValue(List<UserAttribute> list, String name, String value)
       throws UserAttributeException {
@@ -513,9 +513,9 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>BigDecimal</code> value for the user attribute.
+   * Returns the <b>BigDecimal</b> value for the user attribute.
    *
-   * @return the <code>BigDecimal</code> value for the user attribute
+   * @return the <b>BigDecimal</b> value for the user attribute
    */
   public BigDecimal getDecimalValue() throws UserAttributeException {
     try {
@@ -527,9 +527,9 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>double</code> value for the user attribute.
+   * Returns the <b>double</b> value for the user attribute.
    *
-   * @return the <code>double</code> value for the user attribute
+   * @return the <b>double</b> value for the user attribute
    */
   public double getDoubleValue() throws UserAttributeException {
     try {
@@ -541,9 +541,9 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>int</code> value for the user attribute.
+   * Returns the <b>int</b> value for the user attribute.
    *
-   * @return the <code>int</code> value for the user attribute
+   * @return the <b>int</b> value for the user attribute
    */
   public int getIntegerValue() throws UserAttributeException {
     try {
@@ -555,9 +555,9 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>long</code> value for the user attribute.
+   * Returns the <b>long</b> value for the user attribute.
    *
-   * @return the <code>long</code> value for the user attribute
+   * @return the <b>long</b> value for the user attribute
    */
   public long getLongValue() throws UserAttributeException {
     try {
@@ -578,18 +578,18 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <code>String</code> value for the user attribute.
+   * Returns the <b>String</b> value for the user attribute.
    *
-   * @return the <code>String</code> value for the user attribute
+   * @return the <b>String</b> value for the user attribute
    */
   public String getStringValue() {
     return value;
   }
 
   /**
-   * Returns the <code>String</code> value for the user attribute.
+   * Returns the <b>String</b> value for the user attribute.
    *
-   * @return the <code>String</code> value for the user attribute
+   * @return the <b>String</b> value for the user attribute
    */
   public String getValue() {
     return value;
@@ -614,36 +614,36 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <code>BigDecimal</code> value for the user attribute.
+   * Set the <b>BigDecimal</b> value for the user attribute.
    *
-   * @param value the <code>BigDecimal</code> value for the user attribute
+   * @param value the <b>BigDecimal</b> value for the user attribute
    */
   public void setDecimalValue(BigDecimal value) {
     this.value = String.valueOf(value);
   }
 
   /**
-   * Set the <code>double</code> value for the user attribute.
+   * Set the <b>double</b> value for the user attribute.
    *
-   * @param value the <code>double</code> value for the user attribute
+   * @param value the <b>double</b> value for the user attribute
    */
   public void setDoubleValue(double value) {
     this.value = String.valueOf(value);
   }
 
   /**
-   * Set the <code>int</code> value for the user attribute.
+   * Set the <b>int</b> value for the user attribute.
    *
-   * @param value the <code>int</code> value for the user attribute
+   * @param value the <b>int</b> value for the user attribute
    */
   public void setIntegerValue(int value) {
     this.value = String.valueOf(value);
   }
 
   /**
-   * Set the <code>long</code> value for the user attribute.
+   * Set the <b>long</b> value for the user attribute.
    *
-   * @param value the <code>long</code> value for the user attribute
+   * @param value the <b>long</b> value for the user attribute
    */
   public void setLongValue(long value) {
     this.value = String.valueOf(value);
@@ -659,9 +659,9 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <code>String</code> value for the user attribute.
+   * Set the <b>String</b> value for the user attribute.
    *
-   * @param value the <code>String</code> value for the user attribute
+   * @param value the <b>String</b> value for the user attribute
    */
   public void setStringValue(String value) {
     this.value = value;

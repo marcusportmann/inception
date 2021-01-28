@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>DuplicateFunctionException</code> is thrown to indicate that a security operation failed
+ * A <b>DuplicateFunctionException</b> is thrown to indicate that a security operation failed
  * as a result of a duplicate authorised function.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -50,7 +49,7 @@ public class DuplicateFunctionException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>DuplicateFunctionException</code>.
+   * Constructs a new <b>DuplicateFunctionException</b>.
    *
    * @param functionCode the code for the function
    */

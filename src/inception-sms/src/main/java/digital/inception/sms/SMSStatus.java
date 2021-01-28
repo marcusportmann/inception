@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>SMSStatus</code> enumeration defines the possible statuses for a SMS.
+ * The <b>SMSStatus</b> enumeration defines the possible statuses for a SMS.
  *
  * @author Marcus Portmann
  */

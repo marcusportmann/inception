@@ -27,7 +27,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * The <code>PasswordUtil</code> class is a utility class which provides password-related utility
+ * The <b>PasswordUtil</b> class is a utility class which provides password-related utility
  * methods.
  *
  * @author Marcus Portmann

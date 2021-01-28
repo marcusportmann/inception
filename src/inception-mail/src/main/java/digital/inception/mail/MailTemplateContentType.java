@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>MailTemplateContentType</code> enumeration defines the possible content types for mail
+ * The <b>MailTemplateContentType</b> enumeration defines the possible content types for mail
  * templates.
  *
  * @author Marcus Portmann

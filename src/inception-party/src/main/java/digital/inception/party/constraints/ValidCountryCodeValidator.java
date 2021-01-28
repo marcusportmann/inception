@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>ValidCountryCodeValidator</code> class implements the custom constraint validator for
+ * The <b>ValidCountryCodeValidator</b> class implements the custom constraint validator for
  * validating a country code.
  *
  * @author Marcus Portmann

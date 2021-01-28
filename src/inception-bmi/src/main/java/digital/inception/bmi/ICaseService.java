@@ -19,7 +19,7 @@ package digital.inception.bmi;
 import java.util.List;
 
 /**
- * The <code>ICaseService</code> interface defines the functionality provided by a Case Service
+ * The <b>ICaseService</b> interface defines the functionality provided by a Case Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -31,7 +31,7 @@ public interface ICaseService {
    * Check whether the case definition exists.
    *
    * @param caseDefinitionId the ID for the case definition
-   * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
+   * @return <b>true</b> if the case definition exists or <b>false</b> otherwise
    */
   boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException;
 

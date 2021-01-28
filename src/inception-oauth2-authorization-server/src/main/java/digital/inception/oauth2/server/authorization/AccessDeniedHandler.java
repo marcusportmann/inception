@@ -37,7 +37,7 @@
 //
 //
 /// **
-// * The <code>AccessDeniedHandler</code> implements the custom access denied handler.
+// * The <b>AccessDeniedHandler</b> implements the custom access denied handler.
 // *
 // * @author Marcus Portmann
 // */

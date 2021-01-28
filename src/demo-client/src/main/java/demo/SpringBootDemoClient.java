@@ -28,7 +28,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * The <code>DemoClient</code> class.
+ * The <b>DemoClient</b> class.
  *
  * @author Marcus Portmann
  */
@@ -56,7 +56,7 @@ public class SpringBootDemoClient {
   /** The keystore type for the demo client. */
   private static final String DEMO_CLIENT_KEYSTORE_TYPE = "pkcs12";
 
-  /** Constructs a new <code>DemoClient</code>. */
+  /** Constructs a new <b>DemoClient</b>. */
   public SpringBootDemoClient() {}
 
   /**

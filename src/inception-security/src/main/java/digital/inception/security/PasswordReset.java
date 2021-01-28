@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
- * The <code>PasswordReset</code> class holds the information for a password rest.
+ * The <b>PasswordReset</b> class holds the information for a password rest.
  *
  * @author Marcus Portmann
  */
@@ -122,11 +122,11 @@ public class PasswordReset implements Serializable {
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
-  /** Constructs a new <code>PasswordReset</code>. */
+  /** Constructs a new <b>PasswordReset</b>. */
   public PasswordReset() {}
 
   /**
-   * Constructs a new <code>PasswordReset</code>.
+   * Constructs a new <b>PasswordReset</b>.
    *
    * @param username the username for the user associated with the password reset
    * @param securityCodeHash the security code hash
@@ -142,8 +142,8 @@ public class PasswordReset implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

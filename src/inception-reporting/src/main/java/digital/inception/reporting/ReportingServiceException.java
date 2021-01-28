@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * The <code>ReportingServiceException</code> exception is thrown to indicate an error condition
+ * The <b>ReportingServiceException</b> exception is thrown to indicate an error condition
  * when working with the Reporting Service.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -50,20 +49,20 @@ public class ReportingServiceException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>ReportingServiceException</code> with the specified message.
+   * Constructs a new <b>ReportingServiceException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   ReportingServiceException(String message) {
     super("ReportingServiceError", message);
   }
 
   /**
-   * Constructs a new <code>ReportingServiceException</code> with the specified message and cause.
+   * Constructs a new <b>ReportingServiceException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   ReportingServiceException(String message, Throwable cause) {
     super("ReportingServiceError", message, cause);

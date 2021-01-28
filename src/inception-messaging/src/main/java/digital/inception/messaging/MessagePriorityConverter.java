@@ -20,8 +20,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <code>MessagePriorityConverter</code> class implements the custom JPA converter for the
- * <code>MessagePriority</code> enumeration.
+ * The <b>MessagePriorityConverter</b> class implements the custom JPA converter for the
+ * <b>MessagePriority</b> enumeration.
  *
  * @author Marcus Portmann
  */

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The <code>IMailService</code> interface defines the functionality provided by a Mail Service
+ * The <b>IMailService</b> interface defines the functionality provided by a Mail Service
  * implementation.
  *
  * @author Marcus Portmann
@@ -33,7 +33,7 @@ public interface IMailService {
   /**
    * Create the new mail template.
    *
-   * @param mailTemplate the <code>MailTemplate</code> instance containing the information for the
+   * @param mailTemplate the <b>MailTemplate</b> instance containing the information for the
    *     new mail template
    */
   void createMailTemplate(MailTemplate mailTemplate)
@@ -101,7 +101,7 @@ public interface IMailService {
    * Check whether the mail template exists.
    *
    * @param mailTemplateId the ID for the mail template
-   * @return <code>true</code> if the mail template exists or <code>false</code> otherwise
+   * @return <b>true</b> if the mail template exists or <b>false</b> otherwise
    */
   boolean mailTemplateExists(String mailTemplateId)
       throws InvalidArgumentException, MailServiceException;
@@ -138,7 +138,7 @@ public interface IMailService {
   /**
    * Update the mail template.
    *
-   * @param mailTemplate the <code>MailTemplate</code> instance containing the updated information
+   * @param mailTemplate the <b>MailTemplate</b> instance containing the updated information
    *     for the mail template
    */
   void updateMailTemplate(MailTemplate mailTemplate)

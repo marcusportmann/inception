@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 /**
- * The <code>GroupRepository</code> interface declares the repository for the <code>Group</code>
+ * The <b>GroupRepository</b> interface declares the repository for the <b>Group</b>
  * domain type.
  *
  * @author Marcus Portmann

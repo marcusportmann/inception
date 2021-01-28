@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>ResidencyStatusRepository</code> interface declares the repository for the <code>
- * ResidencyStatus</code> domain type.
+ * The <b>ResidencyStatusRepository</b> interface declares the repository for the <b>
+ * ResidencyStatus</b> domain type.
  *
  * @author Marcus Portmann
  */

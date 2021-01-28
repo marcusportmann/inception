@@ -16,14 +16,11 @@
 
 package digital.inception.reference;
 
-
-
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>EmploymentTypeId</code> class implements the ID class for the <code>
- * EmploymentType</code> class.
+ * The <b>EmploymentTypeId</b> class implements the ID class for the <b> EmploymentType</b> class.
  *
  * @author Marcus Portmann
  */
@@ -41,11 +38,11 @@ public class EmploymentTypeId implements Serializable {
   /** The Unicode locale identifier for the employment status. */
   private String localeId;
 
-  /** Constructs a new <code>EmploymentTypeId</code>. */
+  /** Constructs a new <b>EmploymentTypeId</b>. */
   public EmploymentTypeId() {}
 
   /**
-   * Constructs a new <code>EmploymentTypeId</code>.
+   * Constructs a new <b>EmploymentTypeId</b>.
    *
    * @param employmentStatus the code for the employment status the employment type is associated
    *     with
@@ -62,8 +59,7 @@ public class EmploymentTypeId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

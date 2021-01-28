@@ -43,8 +43,8 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * The <code>Function</code> class holds the information for a discrete unit of functionality for an
- * application that can be assigned to <code>Role</code>s.
+ * The <b>Function</b> class holds the information for a discrete unit of functionality for an
+ * application that can be assigned to <b>Role</b>s.
  *
  * @author Marcus Portmann
  */
@@ -99,11 +99,11 @@ public class Function implements java.io.Serializable {
   @ManyToMany(mappedBy = "functions")
   private Set<Role> roles = new HashSet<>();
 
-  /** Constructs a new <code>Function</code>. */
+  /** Constructs a new <b>Function</b>. */
   public Function() {}
 
   /**
-   * Constructs a new <code>Function</code>.
+   * Constructs a new <b>Function</b>.
    *
    * @param code the code for the function
    * @param name the name of the function
@@ -119,8 +119,8 @@ public class Function implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

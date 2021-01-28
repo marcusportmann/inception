@@ -23,8 +23,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <code>ErrorRepository</code> interface declares the repository for the <code>ErrorReport
- * </code> domain type.
+ * The <b>ErrorRepository</b> interface declares the repository for the <b>ErrorReport
+ * </b> domain type.
  *
  * @author Marcus Portmann
  */

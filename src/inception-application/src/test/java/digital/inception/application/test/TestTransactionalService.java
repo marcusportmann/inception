@@ -16,8 +16,6 @@
 
 package digital.inception.application.test;
 
-
-
 import digital.inception.test.DataSourceProxy;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,11 +29,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
- * The <code>TestTransactionalService</code> class provides the Test Transactional Service
- * implementation.
+ * The <b>TestTransactionalService</b> class provides the Test Transactional Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +43,7 @@ public class TestTransactionalService implements ITestTransactionalService {
   private final DataSource dataSource;
 
   /**
-   * Constructs a new <code>TestTransactionalService</code>.
+   * Constructs a new <b>TestTransactionalService</b>.
    *
    * @param dataSource the data source used to provide connections to the application database
    */
@@ -170,7 +165,7 @@ public class TestTransactionalService implements ITestTransactionalService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return the test data or <code>null</code> if the test data cannot be found
+   * @return the test data or <b>null</b> if the test data cannot be found
    */
   public TestData getTestData(String id) throws TestTransactionalServiceException {
     String getTestDataSQL = "SELECT ID, NAME, VALUE FROM TEST.TEST_DATA WHERE ID=?";

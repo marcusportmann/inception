@@ -22,7 +22,7 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * The <code>ValidOrganizationValidator</code> class implements the custom constraint validator for
+ * The <b>ValidOrganizationValidator</b> class implements the custom constraint validator for
  * validating an organization.
  *
  * @author Marcus Portmann

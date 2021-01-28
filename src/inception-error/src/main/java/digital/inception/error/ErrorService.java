@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>ErrorService</code> class provides the Error Service implementation.
+ * The <b>ErrorService</b> class provides the Error Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -50,7 +50,7 @@ public class ErrorService implements IErrorService {
   private final Validator validator;
 
   /**
-   * Constructs a new <code>ErrorService</code>.
+   * Constructs a new <b>ErrorService</b>.
    *
    * @param validator the JSR-303 validator
    * @param errorReportRepository the Error Report Repository
@@ -68,7 +68,7 @@ public class ErrorService implements IErrorService {
   /**
    * Create the new error report.
    *
-   * @param errorReport the <code>ErrorReport</code> instance containing the information for the
+   * @param errorReport the <b>ErrorReport</b> instance containing the information for the
    *     error report
    */
   @Override
@@ -137,7 +137,7 @@ public class ErrorService implements IErrorService {
    * Retrieve the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the error report or <code>null</code> if the error report could not be found
+   * @return the error report or <b>null</b> if the error report could not be found
    */
   @Override
   public ErrorReport getErrorReport(UUID errorReportId)
@@ -166,7 +166,7 @@ public class ErrorService implements IErrorService {
    * Retrieve the summary for the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the summary for the error report or <code>null</code> if the error report could not be
+   * @return the summary for the error report or <b>null</b> if the error report could not be
    *     found
    */
   @Override

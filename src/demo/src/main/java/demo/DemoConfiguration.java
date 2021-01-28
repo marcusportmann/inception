@@ -21,8 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>DemoConfiguration</code> class provides the configuration class for the demo
- * application.
+ * The <b>DemoConfiguration</b> class provides the configuration class for the demo application.
  *
  * @author Marcus Portmann
  */

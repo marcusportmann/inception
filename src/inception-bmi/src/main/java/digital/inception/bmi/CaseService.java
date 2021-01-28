@@ -45,7 +45,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 /**
- * The <code>CaseService</code> class provides the Case Service implementation.
+ * The <b>CaseService</b> class provides the Case Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -54,10 +54,10 @@ import org.xml.sax.SAXParseException;
 public class CaseService implements ICaseService {
 
   /** The Camunda Process Engine. */
-  private ProcessEngine processEngine;
+  private final ProcessEngine processEngine;
 
   /**
-   * Constructs a new <code>CaseService</code>.
+   * Constructs a new <b>CaseService</b>.
    *
    * @param processEngine the Camunda Process Engine
    */
@@ -69,7 +69,7 @@ public class CaseService implements ICaseService {
    * Check whether the case definition exists.
    *
    * @param caseDefinitionId the ID for the case definition
-   * @return <code>true</code> if the case definition exists or <code>false</code> otherwise
+   * @return <b>true</b> if the case definition exists or <b>false</b> otherwise
    */
   @Override
   public boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException {

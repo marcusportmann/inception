@@ -25,11 +25,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <code>DuplicateCarException</code> exception is thrown to indicate an error condition as
- * a result of an attempt to create a duplicate car.
+ * The <b>DuplicateCarException</b> exception is thrown to indicate an error condition as a result
+ * of an attempt to create a duplicate car.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -45,7 +44,7 @@ public class DuplicateCarException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>DuplicateCarException</code>.
+   * Constructs a new <b>DuplicateCarException</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the car
    */

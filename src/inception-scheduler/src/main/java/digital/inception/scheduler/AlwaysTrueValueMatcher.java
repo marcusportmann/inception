@@ -17,8 +17,8 @@
 package digital.inception.scheduler;
 
 /**
- * The <code>AlwaysTrueValueMatcher</code> class implements a <code>ValueMatcher</code> that always
- * returns <code>true</code>.
+ * The <b>AlwaysTrueValueMatcher</b> class implements a <b>ValueMatcher</b> that always
+ * returns <b>true</b>.
  *
  * @author Carlo Pelliccia
  * @author Marcus Portmann
@@ -29,8 +29,8 @@ public class AlwaysTrueValueMatcher implements ValueMatcher {
    * Validate the given integer value against a set of rules.
    *
    * @param value the value
-   * @return <code>true</code> if the given value matches the rules of the <code>ValueMatcher</code>
-   *     , <code>false</code> otherwise
+   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b>
+   *     , <b>false</b> otherwise
    */
   public boolean match(int value) {
     return true;

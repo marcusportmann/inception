@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2021 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,30 +14,31 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.party;
+// package digital.inception.party;
 //
 //
 //
-//import org.springframework.core.convert.converter.Converter;
-//import org.springframework.data.convert.ReadingConverter;
-//import org.springframework.stereotype.Component;
+// import org.springframework.core.convert.converter.Converter;
+// import org.springframework.data.convert.ReadingConverter;
+// import org.springframework.stereotype.Component;
 //
-///**
-// * The <code>StringToContactMechanismTypeConverter</code> class implements the Spring converter that
-// * converts a <code>String</code> type into a <code>ContactMechanismType</code> type.
+/// **
+// * The <b>StringToContactMechanismTypeConverter</b> class implements the Spring converter
+// that
+// * converts a <b>String</b> type into a <b>ContactMechanismType</b> type.
 // *
 // * @author Marcus Portmann
 // */
-//@Component
-//@ReadingConverter
-//public class StringToContactMechanismTypeConverter
+// @Component
+// @ReadingConverter
+// public class StringToContactMechanismTypeConverter
 //    implements Converter<String, ContactMechanismType> {
 //
-//  /** Constructs a new <code>StringToContactMechanismTypeConverter</code>. */
+//  /** Constructs a new <b>StringToContactMechanismTypeConverter</b>. */
 //  public StringToContactMechanismTypeConverter() {}
 //
 //  @Override
 //  public ContactMechanismType convert(String source) {
 //    return ContactMechanismType.fromCode(source);
 //  }
-//}
+// }

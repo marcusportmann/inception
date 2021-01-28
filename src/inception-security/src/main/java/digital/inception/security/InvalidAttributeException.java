@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * A <code>InvalidAttributeException</code> is thrown to indicate that a security operation failed
+ * A <b>InvalidAttributeException</b> is thrown to indicate that a security operation failed
  * as a result of an invalid attribute.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -48,7 +47,7 @@ public class InvalidAttributeException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>InvalidAttributeException</code>.
+   * Constructs a new <b>InvalidAttributeException</b>.
    *
    * @param name the name of the attribute
    */

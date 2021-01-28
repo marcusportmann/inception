@@ -28,7 +28,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 
 /**
- * The <code>UserDetails</code> class stores the details for a user.
+ * The <b>UserDetails</b> class stores the details for a user.
  *
  * @author Marcus Portmann
  */
@@ -41,7 +41,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
   private final User user;
 
   /**
-   * Constructs a new <code>UserDetails</code>.
+   * Constructs a new <b>UserDetails</b>.
    *
    * @param user the user
    * @param roleCodes the codes for the roles that the user has been assigned
@@ -112,7 +112,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
   /**
    * Returns whether the user's account has expired.
    *
-   * @return <code>true</code> if the user's account has NOT expired or <code>false</code> otherwise
+   * @return <b>true</b> if the user's account has NOT expired or <b>false</b> otherwise
    */
   @Override
   public boolean isAccountNonExpired() {
@@ -122,7 +122,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
   /**
    * Returns whether the user's account is locked.
    *
-   * @return <code>true</code> if the user's account is NOT locked or <code>false</code> otherwise
+   * @return <b>true</b> if the user's account is NOT locked or <b>false</b> otherwise
    */
   @Override
   public boolean isAccountNonLocked() {
@@ -132,7 +132,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
   /**
    * Returns whether the user's credentials have expired.
    *
-   * @return <code>true</code> if the user's credentials have NOT expired or <code>false</code>
+   * @return <b>true</b> if the user's credentials have NOT expired or <b>false</b>
    *     otherwise
    */
   @Override
@@ -143,7 +143,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
   /**
    * Returns whether the user's account is enabled.
    *
-   * @return <code>true</code> if the user's account is enabled or <code>false</code> otherwise
+   * @return <b>true</b> if the user's account is enabled or <b>false</b> otherwise
    */
   @Override
   public boolean isEnabled() {

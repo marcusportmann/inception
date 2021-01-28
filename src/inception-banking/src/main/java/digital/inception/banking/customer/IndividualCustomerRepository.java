@@ -24,8 +24,8 @@
 //
 //
 /// **
-// * The <code>IndividualCustomerRepository</code> interface declares the repository for the <code>
-// * IndividualCustomer</code> domain type.
+// * The <b>IndividualCustomerRepository</b> interface declares the repository for the <b>
+// * IndividualCustomer</b> domain type.
 // *
 // * @author Marcus Portmann
 // */

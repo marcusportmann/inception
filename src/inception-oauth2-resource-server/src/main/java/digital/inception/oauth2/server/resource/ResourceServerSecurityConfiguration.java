@@ -29,7 +29,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 
 /**
- * The <code>ResourceServerSecurityConfiguration</code> class provides the OAuth2 resource server
+ * The <b>ResourceServerSecurityConfiguration</b> class provides the OAuth2 resource server
  * security configuration.
  *
  * @author Marcus Portmann

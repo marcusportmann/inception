@@ -22,7 +22,7 @@ import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 
 /**
- * The <code>ISchedulerService</code> interface defines the functionality provided by a Scheduler
+ * The <b>ISchedulerService</b> interface defines the functionality provided by a Scheduler
  * Service implementation.
  *
  * @author Marcus Portmann
@@ -33,7 +33,7 @@ public interface ISchedulerService {
   /**
    * Create the new job.
    *
-   * @param job the <code>Job</code> instance containing the information for the job
+   * @param job the <b>Job</b> instance containing the information for the job
    */
   void createJob(Job job) throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException;
 
@@ -94,7 +94,7 @@ public interface ISchedulerService {
    *
    * <p>The job will be locked to prevent duplicate processing.
    *
-   * @return the next job that is scheduled for execution or <code>null</code> if no jobs are
+   * @return the next job that is scheduled for execution or <b>null</b> if no jobs are
    *     currently scheduled for execution
    */
   Job getNextJobScheduledForExecution() throws SchedulerServiceException;
@@ -127,8 +127,8 @@ public interface ISchedulerService {
   /**
    * Schedule the next unscheduled job for execution.
    *
-   * @return <code>true</code> if a job was successfully scheduled for execution or <code>false
-   * </code> otherwise
+   * @return <b>true</b> if a job was successfully scheduled for execution or <b>false
+   * </b> otherwise
    */
   boolean scheduleNextUnscheduledJobForExecution() throws SchedulerServiceException;
 
@@ -153,7 +153,7 @@ public interface ISchedulerService {
   /**
    * Update the job.
    *
-   * @param job the <code>Job</code> instance containing the updated information for the job
+   * @param job the <b>Job</b> instance containing the updated information for the job
    */
   void updateJob(Job job) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 }

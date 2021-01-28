@@ -16,8 +16,6 @@
 
 package digital.inception.party;
 
-
-
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +23,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
-
 /**
- * The <code>PersonRepository</code> interface declares the repository for the <code>Person</code>
- * domain type.
+ * The <b>PersonRepository</b> interface declares the repository for the <b>Person</b> domain type.
  *
  * @author Marcus Portmann
  */

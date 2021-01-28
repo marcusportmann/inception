@@ -30,7 +30,7 @@ import java.util.Set;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>OAuth2RefreshToken</code> class holds the information for an OAuth2 refresh token.
+ * The <b>OAuth2RefreshToken</b> class holds the information for an OAuth2 refresh token.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +43,7 @@ public class OAuth2RefreshToken
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>OAuth2RefreshToken</code>.
+   * Constructs a new <b>OAuth2RefreshToken</b>.
    *
    * @param tokenValue the token value
    * @param issuedAt the time at which the token was issued
@@ -53,7 +53,7 @@ public class OAuth2RefreshToken
   }
 
   /**
-   * Build a new <code>OAuthRefreshToken</code>.
+   * Build a new <b>OAuthRefreshToken</b>.
    *
    * @param username the username for the user the token is being issued for
    * @param scopes the optional scope(s) associated to the token

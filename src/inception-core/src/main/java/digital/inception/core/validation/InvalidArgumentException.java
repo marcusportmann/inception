@@ -22,11 +22,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 
 /**
- * The <code>InvalidArgumentException</code> exception is thrown to indicate an error condition as a
+ * The <b>InvalidArgumentException</b> exception is thrown to indicate an error condition as a
  * result of an invalid argument.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -50,7 +49,7 @@ public class InvalidArgumentException extends Exception {
   private List<ValidationError> validationErrors;
 
   /**
-   * Constructs a new <code>InvalidArgumentException</code> with <code>null</code> as its message.
+   * Constructs a new <b>InvalidArgumentException</b> with <b>null</b> as its message.
    *
    * @param name the name of the invalid argument
    */
@@ -62,7 +61,7 @@ public class InvalidArgumentException extends Exception {
   }
 
   /**
-   * Constructs a new <code>InvalidArgumentException</code> with <code>null</code> as its message.
+   * Constructs a new <b>InvalidArgumentException</b> with <b>null</b> as its message.
    *
    * @param name the name of the invalid argument
    * @param validationErrors the validation errors associated with the invalid argument
@@ -76,10 +75,10 @@ public class InvalidArgumentException extends Exception {
   }
 
   /**
-   * Constructs a new <code>InvalidArgumentException</code> with the specified message.
+   * Constructs a new <b>InvalidArgumentException</b> with the specified message.
    *
    * @param name the name of the invalid argument
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public InvalidArgumentException(String name, String message) {
     super(message);
@@ -89,13 +88,13 @@ public class InvalidArgumentException extends Exception {
   }
 
   /**
-   * Constructs a new <code>InvalidArgumentException</code> with the specified cause and a message
-   * of <code>(cause==null ? null : cause.toString())</code> (which typically contains the class and
+   * Constructs a new <b>InvalidArgumentException</b> with the specified cause and a message
+   * of <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and
    * message of cause).
    *
    * @param name the name of the invalid argument
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidArgumentException(String name, Throwable cause) {
     super(cause);
@@ -105,10 +104,10 @@ public class InvalidArgumentException extends Exception {
   }
 
   /**
-   * Constructs a new <code>InvalidArgumentException</code> with the specified message.
+   * Constructs a new <b>InvalidArgumentException</b> with the specified message.
    *
    * @param name the name of the invalid argument
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    * @param validationErrors the validation errors associated with the invalid argument
    */
   public InvalidArgumentException(
@@ -121,12 +120,12 @@ public class InvalidArgumentException extends Exception {
   }
 
   /**
-   * Constructs a new <code>InvalidArgumentException</code> with the specified message and cause.
+   * Constructs a new <b>InvalidArgumentException</b> with the specified message and cause.
    *
    * @param name the name of the invalid argument
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
-   * @param cause The cause saved for later retrieval by the <code>getCause()</code> method. (A
-   *     <code>null</code> value is permitted if the cause is nonexistent or unknown)
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
+   * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
+   *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */
   public InvalidArgumentException(String name, String message, Throwable cause) {
     super(message, cause);

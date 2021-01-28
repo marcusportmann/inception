@@ -16,13 +16,11 @@
 
 package digital.inception.reference;
 
-
-
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <code>GenderId</code> class implements the ID class for the <code>Gender</code> class.
+ * The <b>GenderId</b> class implements the ID class for the <b>Gender</b> class.
  *
  * @author Marcus Portmann
  */
@@ -37,11 +35,11 @@ public class GenderId implements Serializable {
   /** The Unicode locale identifier for the gender. */
   private String localeId;
 
-  /** Constructs a new <code>GenderId</code>. */
+  /** Constructs a new <b>GenderId</b>. */
   public GenderId() {}
 
   /**
-   * Constructs a new <code>GenderId</code>.
+   * Constructs a new <b>GenderId</b>.
    *
    * @param code the code for the gender
    * @param localeId the Unicode locale identifier for the gender
@@ -55,8 +53,7 @@ public class GenderId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

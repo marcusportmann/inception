@@ -49,7 +49,7 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * The <code>Message</code> class holds the information for a message.
+ * The <b>Message</b> class holds the information for a message.
  *
  * <p>It provides facilities to convert to and from the WBXML representation of the message.
  *
@@ -265,11 +265,11 @@ public class Message {
   @Column(name = "username", length = 100, nullable = false)
   private String username;
 
-  /** Constructs a new <code>Message</code>. */
+  /** Constructs a new <b>Message</b>. */
   public Message() {}
 
   /**
-   * Constructs a new <code>Message</code> and populates it from the message information stored in
+   * Constructs a new <b>Message</b> and populates it from the message information stored in
    * the specified WBXML document.
    *
    * @param document the WBXML document containing the message information
@@ -327,7 +327,7 @@ public class Message {
   }
 
   /**
-   * Constructs a new <code>Message</code>.
+   * Constructs a new <b>Message</b>.
    *
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the
@@ -349,7 +349,7 @@ public class Message {
   }
 
   /**
-   * Constructs a new <code>Message</code>.
+   * Constructs a new <b>Message</b>.
    *
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the
@@ -378,7 +378,7 @@ public class Message {
   }
 
   /**
-   * Constructs a new <code>Message</code>.
+   * Constructs a new <b>Message</b>.
    *
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the
@@ -416,7 +416,7 @@ public class Message {
   }
 
   /**
-   * Constructs a new <code>Message</code>.
+   * Constructs a new <b>Message</b>.
    *
    * @param username the username for the user associated with the message
    * @param deviceId the Universally Unique Identifier (UUID) for the device the
@@ -457,7 +457,7 @@ public class Message {
   }
 
   /**
-   * Constructs a new <code>Message</code>.
+   * Constructs a new <b>Message</b>.
    *
    * @param id the Universally Unique Identifier (UUID) for the message
    * @param username the username for the user associated with the message
@@ -496,12 +496,12 @@ public class Message {
   }
 
   /**
-   * Returns <code>true</code> if the WBXML document contains valid message information or <code>
-   * false</code> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message information or <b>
+   * false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <code>true</code> if the WBXML document contains valid message information or <code>
-   * false</code> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message information or <b>
+   * false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -519,8 +519,8 @@ public class Message {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -625,10 +625,10 @@ public class Message {
   }
 
   /**
-   * Returns the name of the entity that has locked this message for processing or <code>null</code>
+   * Returns the name of the entity that has locked this message for processing or <b>null</b>
    * if the message is not being processed.
    *
-   * @return the name of the entity that has locked this message for processing or <code>null</code>
+   * @return the name of the entity that has locked this message for processing or <b>null</b>
    *     if the message is not being processed
    */
   public String getLockName() {
@@ -721,10 +721,10 @@ public class Message {
   }
 
   /**
-   * Returns <code>true</code> if the data for the message is encrypted or <code>false</code>
+   * Returns <b>true</b> if the data for the message is encrypted or <b>false</b>
    * otherwise.
    *
-   * @return <code>true</code> if the data for the message is encrypted or <code>false</code>
+   * @return <b>true</b> if the data for the message is encrypted or <b>false</b>
    *     otherwise
    */
   public boolean isEncrypted() {
@@ -816,11 +816,11 @@ public class Message {
   }
 
   /**
-   * Set the name of the entity that has locked this message for processing or <code>null</code> if
+   * Set the name of the entity that has locked this message for processing or <b>null</b> if
    * the message is not being processed.
    *
-   * @param lockName the name of the entity that has locked this message for processing or <code>
-   *                 null</code> if the message is not being processed
+   * @param lockName the name of the entity that has locked this message for processing or <b>
+   *                 null</b> if the message is not being processed
    */
   public void setLockName(String lockName) {
     this.lockName = lockName;

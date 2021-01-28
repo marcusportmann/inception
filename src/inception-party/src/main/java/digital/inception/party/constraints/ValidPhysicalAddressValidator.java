@@ -24,8 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>ValidPhysicalAddressValidator</code> class implements the custom constraint validator
- * for validating a physical address.
+ * The <b>ValidPhysicalAddressValidator</b> class implements the custom constraint validator for
+ * validating a physical address.
  *
  * @author Marcus Portmann
  */

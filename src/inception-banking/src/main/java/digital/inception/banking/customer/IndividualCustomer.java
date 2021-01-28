@@ -31,7 +31,7 @@
 // import javax.xml.bind.annotation.XmlType;
 //
 /// **
-// * The <code>IndividualCustomer</code> class holds the information for an individual customer.
+// * The <b>IndividualCustomer</b> class holds the information for an individual customer.
 // *
 // * @author Marcus Portmann
 // */
@@ -97,7 +97,7 @@
 //  @Column(table = "individual_customers", name = "emancipated_minor")
 //  private Boolean emancipatedMinor = false;
 //
-//  /** Constructs a new <code>IndividualCustomer</code>. */
+//  /** Constructs a new <b>IndividualCustomer</b>. */
 //  public IndividualCustomer() {}
 //
 //  /**
@@ -147,8 +147,8 @@
 //   * @param type the contact mechanism type
 //   * @param purpose the contact mechanism purpose
 //   * @return the contact mechanism with the specified type and purpose for the individual customer
-//   *     or <code>null
-//   *     </code> if the contact mechanism could not be found
+//   *     or <b>null
+//   *     </b> if the contact mechanism could not be found
 //   */
 //  @Override
 //  public ContactMechanism getContactMechanism(
@@ -441,8 +441,8 @@
 //  //   * @param purpose the physical address purpose
 //  //   * @return the physical address with the specified type and purpose for the individual
 //  // customer or
-//  //   *     <code>null
-//  //   *     </code> if the physical address could not be found
+//  //   *     <b>null
+//  //   *     </b> if the physical address could not be found
 //  //   */
 //  //  @Override
 //  //  public PhysicalAddress getPhysicalAddress(
@@ -545,7 +545,7 @@
 //   *
 //   * @param type the code for the tax number type
 //   * @return the tax number with the specified type for the individual customer or
-// <code>null</code>
+// <b>null</b>
 //   *     if the tax number could not be found
 //   */
 //  @Override

@@ -32,7 +32,7 @@ import org.springframework.data.repository.query.Param;
 
 
 /**
- * The <code>JobRepository</code> interface declares the repository for the <code>Job</code> domain
+ * The <b>JobRepository</b> interface declares the repository for the <b>Job</b> domain
  * type.
  *
  * @author Marcus Portmann

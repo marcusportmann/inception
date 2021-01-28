@@ -24,8 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>PersonSortBy</code> enumeration defines the possible methods used to sort a list of
- * persons.
+ * The <b>PersonSortBy</b> enumeration defines the possible methods used to sort a list of persons.
  *
  * @author Marcus Portmann
  */

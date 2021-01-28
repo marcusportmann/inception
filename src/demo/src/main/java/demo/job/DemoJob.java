@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <code>DemoJob</code> class.
+ * The <b>DemoJob</b> class.
  *
  * @author Marcus Portmann
  */

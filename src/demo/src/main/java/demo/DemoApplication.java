@@ -27,10 +27,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <code>DemoApplication</code> class provides the implementation of the Inception Framework
+ * The <b>DemoApplication</b> class provides the implementation of the Inception Framework
  * application class for the demo application.
  *
  * @author Marcus Portmann
@@ -46,7 +45,7 @@ public class DemoApplication extends Application implements InitializingBean {
   private final IReportingService reportingService;
 
   /**
-   * Constructs a new <code>DemoApplication</code>.
+   * Constructs a new <b>DemoApplication</b>.
    *
    * @param applicationContext the Spring application context
    * @param reportingService the Reporting Service

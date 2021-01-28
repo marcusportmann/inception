@@ -47,7 +47,7 @@ import org.w3c.dom.Document;
 
 
 /**
- * The <code>ReportingService</code> class provides the Reporting Service implementation.
+ * The <b>ReportingService</b> class provides the Reporting Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -74,7 +74,7 @@ public class ReportingService implements IReportingService {
   private String localReportFolderPath;
 
   /**
-   * Constructs a new <code>ReportingService</code>.
+   * Constructs a new <b>ReportingService</b>.
    *
    * @param validator the JSR-303 validator
    * @param dataSource the data source used to provide connections to the application database
@@ -95,7 +95,7 @@ public class ReportingService implements IReportingService {
   /**
    * Create the new report definition.
    *
-   * @param reportDefinition the <code>ReportDefinition</code> instance containing the information
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the information
    *     for the new report definition
    */
   @Override
@@ -436,7 +436,7 @@ public class ReportingService implements IReportingService {
    * Check whether the report definition exists.
    *
    * @param reportDefinitionId the ID for the report definition
-   * @return <code>true</code> if the report definition exists or <code>false</code> otherwise
+   * @return <b>true</b> if the report definition exists or <b>false</b> otherwise
    */
   @Override
   public boolean reportDefinitionExists(String reportDefinitionId)
@@ -466,7 +466,7 @@ public class ReportingService implements IReportingService {
   /**
    * Update the report definition.
    *
-   * @param reportDefinition the <code>ReportDefinition</code> instance containing the updated
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the updated
    *     information for the report definition
    */
   @Override

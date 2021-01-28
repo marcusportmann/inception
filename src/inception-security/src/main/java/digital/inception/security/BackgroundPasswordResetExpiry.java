@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <code>BackgroundPasswordResetExpiry</code> class implements the background password reset
+ * The <b>BackgroundPasswordResetExpiry</b> class implements the background password reset
  * expiry.
  *
  * @author Marcus Portmann
@@ -47,7 +47,7 @@ public class BackgroundPasswordResetExpiry {
   private int passwordResetExpiry;
 
   /**
-   * Constructs a new <code>BackgroundPasswordResetExpiry</code>.
+   * Constructs a new <b>BackgroundPasswordResetExpiry</b>.
    *
    * @param passwordResetRepository the Password Reset Repository
    */

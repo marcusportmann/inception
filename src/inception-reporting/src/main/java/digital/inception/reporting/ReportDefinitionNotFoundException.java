@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * The <code>ReportDefinitionNotFoundException</code> exception is thrown to indicate an error
+ * The <b>ReportDefinitionNotFoundException</b> exception is thrown to indicate an error
  * condition as a result of a report definition that could not be found.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -47,7 +46,7 @@ public class ReportDefinitionNotFoundException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * w Constructs a new <code>ReportDefinitionNotFoundException</code>.
+   * w Constructs a new <b>ReportDefinitionNotFoundException</b>.
    *
    * @param reportDefinitionId the ID for the report definition
    */

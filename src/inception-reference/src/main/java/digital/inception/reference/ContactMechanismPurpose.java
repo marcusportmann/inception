@@ -39,35 +39,19 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>ContactMechanismPurpose</code> class holds the information for a possible contact
- * mechanism purpose.
+ * The <b>ContactMechanismPurpose</b> class holds the information for a possible contact mechanism
+ * purpose.
  *
  * @author Marcus Portmann
  */
 @Schema(description = "A contact mechanism purpose")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-  "type",
-  "code",
-  "localeId",
-  "partyTypes",
-  "sortIndex",
-  "name",
-  "description"
-})
+@JsonPropertyOrder({"type", "code", "localeId", "sortIndex", "name", "description", "partyTypes"})
 @XmlRootElement(name = "ContactMechanismPurpose", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "ContactMechanismPurpose",
     namespace = "http://reference.inception.digital",
-    propOrder = {
-      "type",
-      "code",
-      "localeId",
-      "partyTypes",
-      "sortIndex",
-      "name",
-      "description"
-    })
+    propOrder = {"type", "code", "localeId", "sortIndex", "name", "description", "partyTypes"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(schema = "reference", name = "contact_mechanism_purposes")
@@ -145,15 +129,14 @@ public class ContactMechanismPurpose implements Serializable {
   @Column(name = "type", length = 30, nullable = false)
   private String type;
 
-  /** Constructs a new <code>ContactMechanismPurpose</code>. */
+  /** Constructs a new <b>ContactMechanismPurpose</b>. */
   public ContactMechanismPurpose() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

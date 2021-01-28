@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>PartyType</code> enumeration defines the possible party types.
+ * The <b>PartyType</b> enumeration defines the possible party types.
  *
  * @author Marcus Portmann
  */

@@ -16,17 +16,13 @@
 
 package digital.inception.reference;
 
-
-
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-
-
 /**
- * The <code>IdentityDocumentTypeRepository</code> interface declares the repository for the <code>
- * IdentityDocumentType</code> domain type.
+ * The <b>IdentityDocumentTypeRepository</b> interface declares the repository for the <b>
+ * IdentityDocumentType</b> domain type.
  *
  * @author Marcus Portmann
  */

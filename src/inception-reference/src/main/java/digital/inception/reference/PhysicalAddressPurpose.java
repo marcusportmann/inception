@@ -39,14 +39,14 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <code>PhysicalAddressPurpose</code> class holds the information for a possible physical
- * address purpose.
+ * The <b>PhysicalAddressPurpose</b> class holds the information for a possible physical address
+ * purpose.
  *
  * @author Marcus Portmann
  */
 @Schema(description = "A physical address purpose")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
 @XmlRootElement(name = "PhysicalAddressPurpose", namespace = "http://reference.inception.digital")
 @XmlType(
     name = "PhysicalAddressPurpose",
@@ -116,15 +116,14 @@ public class PhysicalAddressPurpose implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <code>PhysicalAddressPurpose</code>. */
+  /** Constructs a new <b>PhysicalAddressPurpose</b>. */
   public PhysicalAddressPurpose() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

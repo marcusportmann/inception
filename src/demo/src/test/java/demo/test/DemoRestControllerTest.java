@@ -38,7 +38,7 @@
 // import org.springframework.test.web.servlet.MockMvc;
 //
 /// **
-// * The <code>DemoRestControllerTest</code> class.
+// * The <b>DemoRestControllerTest</b> class.
 // *
 // * @author Marcus Portmann
 // */

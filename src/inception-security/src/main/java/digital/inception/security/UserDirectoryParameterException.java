@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 /**
- * An <code>UserDirectoryParameterException</code> is thrown to indicate an invalid operation was
- * performed on a <code>UserDirectoryParameter</code> instance.
+ * An <b>UserDirectoryParameterException</b> is thrown to indicate an invalid operation was
+ * performed on a <b>UserDirectoryParameter</b> instance.
  *
- * <p>NOTE: This is a checked exception to prevent the automatic rollback of the current
- * transaction.
+ * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
  * @author Marcus Portmann
  */
@@ -50,9 +49,9 @@ public class UserDirectoryParameterException extends ServiceException {
   private static final long serialVersionUID = 1000000;
 
   /**
-   * Constructs a new <code>UserDirectoryParameterException</code> with the specified message.
+   * Constructs a new <b>UserDirectoryParameterException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <code>getMessage()</code> method.
+   * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    */
   public UserDirectoryParameterException(String message) {
     super("UserDirectoryParameterError", message);

@@ -63,8 +63,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 
 
 /**
- * The <code>PartyServiceTest</code> class contains the implementation of the JUnit tests for the
- * <code>PartyService</code> class.
+ * The <b>PartyServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>PartyService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -1248,7 +1248,7 @@ public class PartyServiceTest {
 
       for (Preference person2Preference : person2.getPreferences()) {
 
-        if (Objects.equals(person1Preference.getParty(), person2Preference.getParty())
+        if (Objects.equals(person1Preference.getPerson(), person2Preference.getPerson())
             && Objects.equals(person1Preference.getType(), person2Preference.getType())) {
 
           comparePreferences(person1Preference, person2Preference);

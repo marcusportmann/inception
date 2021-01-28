@@ -17,7 +17,7 @@
 package digital.inception.application.test;
 
 /**
- * The <code>ITestTransactionalService</code> interface defines the functionality provided by a Test
+ * The <b>ITestTransactionalService</b> interface defines the functionality provided by a Test
  * Transactional Service implementation.
  *
  * @author Marcus Portmann
@@ -74,7 +74,7 @@ public interface ITestTransactionalService {
    * Retrieve the test data.
    *
    * @param id the ID
-   * @return the test data or <code>null</code> if the test data cannot be found
+   * @return the test data or <b>null</b> if the test data cannot be found
    */
   TestData getTestData(String id) throws TestTransactionalServiceException;
 }

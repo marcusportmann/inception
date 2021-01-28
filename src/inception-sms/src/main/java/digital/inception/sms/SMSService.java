@@ -54,7 +54,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
 /**
- * The <code>SMSService</code> class provides the SMS Service implementation.
+ * The <b>SMSService</b> class provides the SMS Service implementation.
  *
  * @author Marcus Portmann
  */
@@ -118,7 +118,7 @@ public class SMSService implements ISMSService {
   private String useProvider;
 
   /**
-   * Constructs a new <code>SMSService</code>.
+   * Constructs a new <b>SMSService</b>.
    *
    * @param applicationContext the Spring application context
    * @param validator the JSR-303 validator
@@ -139,7 +139,7 @@ public class SMSService implements ISMSService {
   /**
    * Create the new SMS.
    *
-   * @param sms the <code>SMS</code> instance containing the information for the SMS
+   * @param sms the <b>SMS</b> instance containing the information for the SMS
    */
   @Override
   @Transactional
@@ -198,7 +198,7 @@ public class SMSService implements ISMSService {
    *
    * <p>The SMS will be locked to prevent duplicate sending.
    *
-   * @return the next SMS that has been queued for sending or <code>null</code> if no SMSs are
+   * @return the next SMS that has been queued for sending or <b>null</b> if no SMSs are
    *     currently queued for sending
    */
   @Override
@@ -279,7 +279,7 @@ public class SMSService implements ISMSService {
    * Retrieve the SMS.
    *
    * @param smsId the ID for the SMS
-   * @return the SMS or <code>null</code> if the SMS could not be found
+   * @return the SMS or <b>null</b> if the SMS could not be found
    */
   @Override
   public SMS getSMS(UUID smsId)
@@ -329,7 +329,7 @@ public class SMSService implements ISMSService {
   /**
    * Send the SMS.
    *
-   * <p>NOTE: This will queue the SMS for sending. The SMS will actually be sent asynchronously.
+   * <p>This will queue the SMS for sending. The SMS will actually be sent asynchronously.
    *
    * @param mobileNumber the mobile number
    * @param message the message
@@ -359,12 +359,12 @@ public class SMSService implements ISMSService {
   /**
    * Send the SMS synchronously.
    *
-   * <p>NOTE: This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
+   * <p>This will NOT queue the SMS for sending. The SMS will actually be sent synchronously.
    *
    * @param smsId the ID of the SMS
    * @param mobileNumber the mobile number
    * @param message the message
-   * @return <code>true</code> if the SMS was sent successfully or <code>false</code> otherwise
+   * @return <b>true</b> if the SMS was sent successfully or <b>false</b> otherwise
    */
   public boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
       throws InvalidArgumentException, SMSServiceException {

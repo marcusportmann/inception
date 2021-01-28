@@ -25,8 +25,8 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 /**
- * The <code>ValidPhysicalAddress</code> annotation implements the custom constraint annotation used
- * to apply the physical address validation.
+ * The <b>ValidPhysicalAddress</b> annotation implements the custom constraint annotation used to
+ * apply the physical address validation.
  *
  * @author Marcus Portmann
  */

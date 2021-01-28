@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <code>MailTemplateSummary</code> class holds the information for a mail template.
+ * The <b>MailTemplateSummary</b> class holds the information for a mail template.
  *
  * @author Marcus Portmann
  */
@@ -82,11 +82,11 @@ public class MailTemplateSummary implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
-  /** Constructs a new <code>MailTemplateSummary</code>. */
+  /** Constructs a new <b>MailTemplateSummary</b>. */
   public MailTemplateSummary() {}
 
   /**
-   * Constructs a new <code>MailTemplateSummary</code>.
+   * Constructs a new <b>MailTemplateSummary</b>.
    *
    * @param id the ID for the mail template
    * @param name the name of the mail template
@@ -102,8 +102,8 @@ public class MailTemplateSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <code>true</code> if this object is the same as the object argument otherwise <code>
-   * false</code>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
+   * false</b>
    */
   @Override
   public boolean equals(Object object) {

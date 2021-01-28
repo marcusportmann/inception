@@ -19,8 +19,8 @@ package digital.inception.codes;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <code>CodeCategorySummaryRepository</code> interface declares the repository for the <code>
- * CodeCategorySummary</code> domain type.
+ * The <b>CodeCategorySummaryRepository</b> interface declares the repository for the <b>
+ * CodeCategorySummary</b> domain type.
  *
  * @author Marcus Portmann
  */
