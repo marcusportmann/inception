@@ -22,9 +22,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -56,8 +53,6 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, length = 30)
-@DiscriminatorValue("unknown")
 @Table(schema = "party", name = "parties")
 public class PartyBase implements Serializable {
 
@@ -90,7 +85,7 @@ public class PartyBase implements Serializable {
 
   /** The party type. */
   @NotNull
-  @Column(name = "type", length = 30, nullable = false, insertable = false, updatable = false)
+  @Column(name = "type", length = 30, nullable = false)
   private PartyType type;
 
   /** The date and time the party was last updated. */

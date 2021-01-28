@@ -25,9 +25,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -61,8 +58,6 @@ import org.hibernate.annotations.UpdateTimestamp;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, length = 30)
-@DiscriminatorValue("unknown")
 @Table(schema = "demo", name = "vehicles")
 public class VehicleBase implements Serializable {
 
@@ -98,13 +93,7 @@ public class VehicleBase implements Serializable {
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(
-      table = "vehicles",
-      name = "type",
-      length = 30,
-      nullable = false,
-      insertable = false,
-      updatable = false)
+  @Column(table = "vehicles", name = "type", length = 30, nullable = false)
   private VehicleType type;
 
   /** The date and time the vehicle was last updated. */

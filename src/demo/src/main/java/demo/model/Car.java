@@ -55,7 +55,6 @@ import javax.xml.bind.annotation.XmlType;
     propOrder = {"id", "name", "numberOfDoors"})
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @Entity
-@DiscriminatorValue("car")
 @Table(schema = "demo", name = "cars")
 public class Car extends VehicleBase implements Serializable {
 

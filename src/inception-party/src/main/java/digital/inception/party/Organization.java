@@ -89,7 +89,6 @@ import org.springframework.util.StringUtils;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidOrganization
 @Entity
-@DiscriminatorValue("organization")
 @Table(schema = "party", name = "organizations")
 public class Organization extends PartyBase implements Serializable {
 

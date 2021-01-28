@@ -137,7 +137,6 @@ import org.springframework.util.StringUtils;
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidPerson
 @Entity
-@DiscriminatorValue("person")
 @Table(schema = "party", name = "persons")
 public class Person extends PartyBase implements Serializable {
 
@@ -980,7 +979,6 @@ public class Person extends PartyBase implements Serializable {
         existingPhysicalAddress -> existingPhysicalAddress.getPurposes().contains(purpose));
   }
 
-  // TODO: Add a method to remove a role with the specified type -- MARCUS
 
   /**
    * Remove the preference with the specified type for the person.

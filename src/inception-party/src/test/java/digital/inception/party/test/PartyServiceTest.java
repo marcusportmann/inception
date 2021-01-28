@@ -16,8 +16,6 @@
 
 package digital.inception.party.test;
 
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -59,8 +57,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-
-
 
 /**
  * The <b>PartyServiceTest</b> class contains the implementation of the JUnit tests for the
