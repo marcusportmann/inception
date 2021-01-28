@@ -15,7 +15,7 @@
  */
 
 @javax.xml.bind.annotation.XmlSchema(
-    namespace = "http://customer.banking.inception.digital",
+    namespace = "http://account.banking.inception.digital",
     elementFormDefault = javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED,
     xmlns = {
       @javax.xml.bind.annotation.XmlNs(
@@ -29,6 +29,9 @@
           namespaceURI = "http://party.inception.digital"),
       @javax.xml.bind.annotation.XmlNs(
           prefix = "customer",
-          namespaceURI = "http://customer.banking.inception.digital")
+          namespaceURI = "http://customer.banking.inception.digital"),
+      @javax.xml.bind.annotation.XmlNs(
+          prefix = "account",
+          namespaceURI = "http://account.banking.inception.digital")
     })
 package digital.inception.banking.customer;
