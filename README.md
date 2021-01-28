@@ -117,13 +117,13 @@ Complete the following steps to checkout and build the Inception Framework on Ma
    cd dist/ngx-inception
    npm link
    ```
-3. To launch the *inception-sample* back-end application, execute the following command
-   in the *src/inception-sample/target* directory in a Terminal window, after building
+3. To launch the *demo* back-end application, execute the following command
+   in the *src/demo/target* directory in a Terminal window, after building
    the Java components of the Inception Framework.
    ```
-   java -jar inception-sample-1.0.0-SNAPSHOT.jar
+   java -jar demo-1.0.0-SNAPSHOT.jar
    ```
-4. To launch the *inception-sample* front-end application, execute the following command
+4. To launch the *demo* front-end application, execute the following command
    in the *inception/src/inception-angular* directory in a Terminal window, after building
    the Angular components of the Inception Framework.
    ```
@@ -190,13 +190,13 @@ Complete the following steps to setup a development environment on Windows.
    cd dist/ngx-inception
    npm link
    ```
-3. To launch the *inception-sample* back-end application, execute the following command
-   in the *src/inception-sample/target* directory in a Terminal window, after building
+3. To launch the *demo* back-end application, execute the following command
+   in the *src/demo/target* directory in a Terminal window, after building
    the Java components of the Inception Framework.
    ```
-   java -jar inception-sample-1.0.0-SNAPSHOT.jar
+   java -jar demo-1.0.0-SNAPSHOT.jar
    ```
-4. To launch the *inception-sample* front-end application, execute the following command
+4. To launch the *demo* front-end application, execute the following command
    in the *inception/src/inception-angular* directory in a Terminal window, after building
    the Angular components of the Inception Framework.
    ```
@@ -242,12 +242,11 @@ Complete the following steps to create a new application based on the Inception 
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <modelVersion>4.0.0</modelVersion>
 
-        <groupId>digital.inception</groupId>
+        <groupId>demo</groupId>
         <artifactId>demo</artifactId>
         <version>1.0.0-SNAPSHOT</version>
 
-        <name>Demo</name>
-        <description></description>
+        <name>demo</name>
 
         <parent>
           <groupId>digital.inception</groupId>
@@ -280,11 +279,11 @@ Complete the following steps to create a new application based on the Inception 
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-oauth2-authorization-server </artifactId>
+            <artifactId>inception-oauth2-authorization-server</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
-            <artifactId>inception-oauth2-resource-server </artifactId>
+            <artifactId>inception-oauth2-resource-server</artifactId>
           </dependency>
           <dependency>
             <groupId>digital.inception</groupId>
@@ -305,10 +304,6 @@ Complete the following steps to create a new application based on the Inception 
           <dependency>
             <groupId>digital.inception</groupId>
             <artifactId>inception-security-rs</artifactId>
-          </dependency>
-          <dependency>
-            <groupId>digital.inception</groupId>
-            <artifactId>inception-validation</artifactId>
           </dependency>
 
           <!-- Dependencies -->
@@ -377,16 +372,31 @@ Complete the following steps to create a new application based on the Inception 
       resources for the application will be created under these packages, e.g. the Spring
       Boot application class, the in-memory H2 database scripts for the application, etc.
       ```
-      mkdir -p src/main/java/digital/inception/demo
-      mkdir -p src/main/resources/digital/inception/demo
+      mkdir -p src/main/java/demo
+      mkdir -p src/main/resources/demo
       ```
-   4. Add the Spring Boot Application class,
-      e.g. *src/main/java/digital/inception/demo/DemoApplication.java*, that extends the
+   4. Add the Spring Boot Configuration class, e.g. *src/main/java/demo/DemoConfiguration.java*.
+      ```
+      package demo;
+
+      import org.springframework.context.annotation.ComponentScan;
+      import org.springframework.context.annotation.Configuration;
+      import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+      @Configuration
+      @ComponentScan(
+          basePackages = {"demo"},
+          lazyInit = true)
+      @EnableJpaRepositories(
+          entityManagerFactoryRef = "applicationPersistenceUnit",
+          basePackages = {"demo"})
+      public class DemoConfiguration {}      
+      ```
+   5. Add the Spring Boot Application class,
+      e.g. *src/main/java/demo/DemoApplication.java*, that extends the
       Inception Framework application class (digital.inception.application.Application).
       ```
-      package digital.inception.demo;
-
-      // ~--- non-JDK imports --------------------------------------------------------
+      package demo;
 
       import digital.inception.application.Application;
       import org.slf4j.Logger;
@@ -394,21 +404,12 @@ Complete the following steps to create a new application based on the Inception 
       import org.springframework.boot.SpringApplication;
       import org.springframework.boot.autoconfigure.SpringBootApplication;
       import org.springframework.context.ApplicationContext;
-      import org.springframework.context.annotation.ComponentScan;
-      import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-      // ~--- JDK imports ------------------------------------------------------------
 
       /**
        * The <code>DemoApplication</code> provides the implementation of the Inception Framework
-       * application class for the Demo application.
+       * application class for the demo application.
        */
       @SpringBootApplication
-      @ComponentScan(
-          basePackages = {"digital.inception.demo"})
-      @EnableJpaRepositories(
-          entityManagerFactoryRef = "applicationPersistenceUnit",
-          basePackages = {"digital.inception.demo"})
       public class DemoApplication extends Application {
 
         /* Logger */
@@ -434,7 +435,7 @@ Complete the following steps to create a new application based on the Inception 
         }
       }
       ```
-   5. Add the Spring application configuration file, *src/main/resources/application.yml*,
+   6. Add the Spring application configuration file, *src/main/resources/application.yml*,
       changing the *spring.application.name* value to the name of the application.
       ```
       server:
@@ -587,7 +588,7 @@ Complete the following steps to create a new application based on the Inception 
 
       const ngxInceptionConfig: InceptionConfig = {
         // Application Information
-        applicationId: 'digital.inception.demo',
+        applicationId: 'demo',
         applicationVersion: '1.0.0',
 
         // OAuth Token URL
