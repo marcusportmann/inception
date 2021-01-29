@@ -99,7 +99,7 @@ import javax.xml.bind.annotation.XmlType;
     name = "IndividualCustomer",
     namespace = "http://customer.banking.inception.digital",
     propOrder = {"emancipatedMinor"})
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidIndividualCustomer
 @Entity
 @Table(schema = "customer", name = "individual_customers")
