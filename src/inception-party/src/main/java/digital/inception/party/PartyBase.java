@@ -29,6 +29,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -51,6 +54,8 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
+@XmlAccessorType(XmlAccessType.NONE)
+@XmlTransient
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "party", name = "parties")
@@ -150,6 +155,7 @@ public class PartyBase implements Serializable {
    *
    * @return the date and time the party was created
    */
+  @XmlTransient
   public LocalDateTime getCreated() {
     return created;
   }
@@ -159,6 +165,7 @@ public class PartyBase implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) for the party
    */
+  @XmlTransient
   public UUID getId() {
     return id;
   }
@@ -168,6 +175,7 @@ public class PartyBase implements Serializable {
    *
    * @return the name of the party
    */
+  @XmlTransient
   public String getName() {
     return name;
   }
@@ -177,6 +185,7 @@ public class PartyBase implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
    */
+  @XmlTransient
   public UUID getTenantId() {
     return tenantId;
   }
@@ -186,6 +195,7 @@ public class PartyBase implements Serializable {
    *
    * @return the party type
    */
+  @XmlTransient
   public PartyType getType() {
     return type;
   }
@@ -195,6 +205,7 @@ public class PartyBase implements Serializable {
    *
    * @return the date and time the party was last updated
    */
+  @XmlTransient
   public LocalDateTime getUpdated() {
     return updated;
   }

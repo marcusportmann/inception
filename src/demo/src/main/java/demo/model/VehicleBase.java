@@ -32,6 +32,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.CreationTimestamp;
@@ -56,6 +58,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  *
  * @author Marcus Portmann
  */
+@XmlAccessorType(XmlAccessType.NONE)
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "demo", name = "vehicles")
@@ -64,41 +67,28 @@ public class VehicleBase implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The date and time the vehicle was created. */
-  @JsonIgnore
-  @XmlTransient
   @CreationTimestamp
   @Column(table = "vehicles", name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
   /** The Universally Unique Identifier (UUID) for the vehicle. */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the vehicle", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Id", required = true)
   @NotNull
   @Id
   @Column(table = "vehicles", name = "id", nullable = false)
   private UUID id;
 
   /** The name of the vehicle. */
-  @Schema(description = "The name of the vehicle", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Name", required = true)
   @NotNull
   @Size(min = 1, max = 100)
   @Column(table = "vehicles", name = "name", length = 100, nullable = false)
   private String name;
 
   /** The vehicle type. */
-  @Schema(description = "The vehicle type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
   @NotNull
   @Column(table = "vehicles", name = "type", length = 30, nullable = false)
   private VehicleType type;
 
   /** The date and time the vehicle was last updated. */
-  @JsonIgnore
-  @XmlTransient
   @UpdateTimestamp
   @Column(table = "vehicles", name = "updated", insertable = false)
   private LocalDateTime updated;
@@ -158,6 +148,7 @@ public class VehicleBase implements Serializable {
    *
    * @return the date and time the vehicle was created
    */
+  @XmlTransient
   public LocalDateTime getCreated() {
     return created;
   }
@@ -167,6 +158,7 @@ public class VehicleBase implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) for the vehicle
    */
+  @XmlTransient
   public UUID getId() {
     return id;
   }
@@ -176,6 +168,7 @@ public class VehicleBase implements Serializable {
    *
    * @return the name of the vehicle
    */
+  @XmlTransient
   public String getName() {
     return name;
   }
@@ -185,6 +178,7 @@ public class VehicleBase implements Serializable {
    *
    * @return the vehicle type
    */
+  @XmlTransient
   public VehicleType getType() {
     return type;
   }
@@ -194,6 +188,7 @@ public class VehicleBase implements Serializable {
    *
    * @return the date and time the vehicle was last updated
    */
+  @XmlTransient
   public LocalDateTime getUpdated() {
     return updated;
   }
