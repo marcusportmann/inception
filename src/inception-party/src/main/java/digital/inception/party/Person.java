@@ -33,7 +33,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -172,7 +171,7 @@ public class Person extends PartyBase implements Serializable {
   /** The preferences for the person. */
   @Valid
   @OneToMany(
-      mappedBy = "person",
+      mappedBy = "party",
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true)
@@ -383,7 +382,7 @@ public class Person extends PartyBase implements Serializable {
     preferences.removeIf(
         existingPreference -> Objects.equals(existingPreference.getType(), preference.getType()));
 
-    preference.setPerson(this);
+    preference.setParty(this);
 
     preferences.add(preference);
   }
@@ -480,7 +479,8 @@ public class Person extends PartyBase implements Serializable {
    */
   @Schema(description = "The optional codes for the countries of tax residence for the person")
   @JsonProperty
-  @XmlElement(name = "CountriesOfTaxResidence")
+  @XmlElementWrapper(name = "CountriesOfTaxResidence")
+  @XmlElement(name = "CountryOfTaxResidence")
   public Set<String> getCountriesOfTaxResidence() {
     return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
   }
@@ -611,7 +611,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) for the person
    */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the person")
+  @Schema(description = "The Universally Unique Identifier (UUID) for the person", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @Override
@@ -707,7 +707,7 @@ public class Person extends PartyBase implements Serializable {
    *
    * @return the personal name or full name of the person
    */
-  @Schema(description = "The personal name or full name of the person")
+  @Schema(description = "The personal name or full name of the person", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @Override
@@ -728,10 +728,22 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
+   * Returns the party type for the person.
+   *
+   * @return the party type for the person
+   */
+  @JsonIgnore
+  @XmlTransient
+  @Override
+  public PartyType getPartyType() {
+    return super.getPartyType();
+  }
+
+  /**
    * Retrieve the first physical address with the specified purpose for the person.
    *
    * @param purpose the physical address purpose
-   * @return the first physical address with the specified purpose for the person or <b>null </b> if
+   * @return the first physical address with the specified purpose for the person or <b>null</b> if
    *     the physical address could not be found
    */
   public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
@@ -913,18 +925,6 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the party type for the person.
-   *
-   * @return the party type for the person
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public PartyType getType() {
-    return super.getType();
-  }
-
-  /**
    * Returns the date and time the person was last updated.
    *
    * @return the date and time the person was last updated
@@ -978,7 +978,6 @@ public class Person extends PartyBase implements Serializable {
     physicalAddresses.removeIf(
         existingPhysicalAddress -> existingPhysicalAddress.getPurposes().contains(purpose));
   }
-
 
   /**
    * Remove the preference with the specified type for the person.

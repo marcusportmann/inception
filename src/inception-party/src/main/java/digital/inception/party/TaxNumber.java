@@ -126,13 +126,13 @@ public class TaxNumber implements Serializable {
   /**
    * Constructs a new <b>TaxNumber</b>.
    *
-   * @param countryOfIssue the code for the country of issue for the tax number
    * @param type the code for the tax number type
+   * @param countryOfIssue the code for the country of issue for the tax number
    * @param number the tax number
    */
-  public TaxNumber(String countryOfIssue, String type, String number) {
-    this.countryOfIssue = countryOfIssue;
+  public TaxNumber(String type, String countryOfIssue, String number) {
     this.type = type;
+    this.countryOfIssue = countryOfIssue;
     this.number = number;
   }
 

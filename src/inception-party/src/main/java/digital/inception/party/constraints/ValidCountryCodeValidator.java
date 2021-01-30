@@ -36,7 +36,7 @@ public class ValidCountryCodeValidator implements ConstraintValidator<ValidCount
   public void initialize(ValidCountryCode constraintAnnotation) {}
 
   @Override
-  public boolean isValid(String code, ConstraintValidatorContext context) {
+  public boolean isValid(String code, ConstraintValidatorContext constraintValidatorContext) {
     if (code == null) {
       return true;
     }

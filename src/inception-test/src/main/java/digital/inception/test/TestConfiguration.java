@@ -17,6 +17,7 @@
 package digital.inception.test;
 
 import digital.inception.core.util.JDBCUtil;
+import digital.inception.core.util.ResourceUtil;
 import digital.inception.persistence.JtaPlatform;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
@@ -24,6 +25,7 @@ import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import io.agroal.narayana.NarayanaTransactionIntegration;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,10 +37,14 @@ import java.util.concurrent.Executor;
 import javax.sql.DataSource;
 import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -47,6 +53,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -60,8 +67,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * The <b>TestConfiguration</b> class provides the base Spring configuration for the JUnit
- * test classes that test the capabilities provided by the <b>Inception</b> framework.
+ * The <b>TestConfiguration</b> class provides the base Spring configuration for the JUnit test
+ * classes that test the capabilities provided by the <b>Inception</b> framework.
  *
  * <p>This configuration class disables the default application data source and Camunda Process
  * Engine bootstrapping using the component scan filters.
@@ -70,6 +77,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 @Configuration
 @EnableAsync
+@EnableCaching
 @EnableConfigurationProperties
 @EnableScheduling
 @ComponentScan(
@@ -93,7 +101,34 @@ import org.springframework.web.reactive.function.client.WebClient;
 @SuppressWarnings("WeakerAccess")
 public class TestConfiguration {
 
+  private static final String[] IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS = {
+    // Core modules
+    "digital/inception/core/inception-core-h2.sql",
+    "digital/inception/application/inception-application-h2.sql",
+    // Utility modules
+    "digital/inception/audit/inception-audit-h2.sql",
+    "digital/inception/bmi/inception-bmi-h2.sql",
+    "digital/inception/bmi/inception-camunda-h2.sql",
+    "digital/inception/codes/inception-codes-h2.sql",
+    "digital/inception/configuration/inception-configuration-h2.sql",
+    "digital/inception/error/inception-error-h2.sql",
+    "digital/inception/mail/inception-mail-h2.sql",
+    "digital/inception/messaging/inception-messaging-h2.sql",
+    "digital/inception/reporting/inception-reporting-h2.sql",
+    "digital/inception/scheduler/inception-scheduler-h2.sql",
+    "digital/inception/security/inception-security-h2.sql",
+    "digital/inception/sms/inception-sms-h2.sql",
+    // Business Modules
+    "digital/inception/reference/inception-reference-h2.sql",
+    "digital/inception/party/inception-party-h2.sql",
+    // Banking Modules
+    "digital/inception/banking/inception-banking-h2.sql",
+  };
+
   private static final Object dataSourceLock = new Object();
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(TestConfiguration.class);
 
   private static DataSource dataSource;
 
@@ -105,6 +140,10 @@ public class TestConfiguration {
    */
   @Value("classpath*:**/*-h2.sql")
   private Resource[] inMemoryInitResources;
+
+  /** The optional comma-delimited packages on the classpath to scan for JPA entities. */
+  @Value("${inception.persistence.entity-packages:#{null}}")
+  private String packagesToScanForEntities;
 
   /**
    * Constructs a new <b>TestConfiguration</b>.
@@ -159,6 +198,16 @@ public class TestConfiguration {
   }
 
   /**
+   * Returns the cache manager.
+   *
+   * @return the cache manager
+   */
+  @Bean
+  public CacheManager cacheManager() {
+    return new ConcurrentMapCacheManager();
+  }
+
+  /**
    * Returns the Spring task executor to use for @Async method invocations.
    *
    * @return the Spring task executor to use for @Async method invocations
@@ -179,9 +228,9 @@ public class TestConfiguration {
   }
 
   /**
-   * Returns the WebClient.Builder bean.
+   * Returns the WebClient.Builder.
    *
-   * @return the default
+   * @return the default WebClient.Builder
    */
   @Bean
   public WebClient.Builder webClientBuilder() {
@@ -195,8 +244,8 @@ public class TestConfiguration {
    * Initialize the in-memory application database and return a data source that can be used to
    * interact with the database.
    *
-   * <p>This data source returned by this method must be closed after use with the <b>
-   * close()</b> method.
+   * <p>This data source returned by this method must be closed after use with the <b> close()</b>
+   * method.
    *
    * @return the data source that can be used to interact with the in-memory database
    */
@@ -251,12 +300,13 @@ public class TestConfiguration {
 
           /*
            * Initialize the in-memory database using the SQL statements contained in the resources
-           * for the Inception framework.
+           * for the Inception framework in a specific order
            */
-          for (Resource databaseInitResource : inMemoryInitResources) {
-            if ((StringUtils.hasText(databaseInitResource.getFilename()))
-                && databaseInitResource.getFilename().startsWith("inception-")) {
-              loadSQL(dataSource, databaseInitResource);
+          for (String inMemoryDatabaseInitResourcePath : IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS) {
+            if (ResourceUtil.classpathResourceExists(inMemoryDatabaseInitResourcePath)) {
+              loadSQL(
+                  dataSource,
+                  ResourceUtil.getClasspathResourceURL(inMemoryDatabaseInitResourcePath));
             }
           }
 
@@ -267,7 +317,7 @@ public class TestConfiguration {
           for (Resource databaseInitResource : inMemoryInitResources) {
             if ((StringUtils.hasText(databaseInitResource.getFilename()))
                 && (!databaseInitResource.getFilename().startsWith("inception-"))) {
-              loadSQL(dataSource, databaseInitResource);
+              loadSQL(dataSource, databaseInitResource.getURL());
             }
           }
         } catch (Throwable e) {
@@ -289,14 +339,55 @@ public class TestConfiguration {
 
     packagesToScan.add("digital.inception");
 
+    // Add the packages to scan for entities explicitly specified in the configuration property
+    if (StringUtils.hasText(this.packagesToScanForEntities)) {
+      for (String packageToScanForEntities : this.packagesToScanForEntities.split(",")) {
+        // Replace any existing packages to scan with the higher level package
+        packagesToScan.removeIf(
+            packageToScan -> packageToScan.startsWith(packageToScanForEntities));
+
+        // Check if there is a higher level package already being scanned
+        if (packagesToScan.stream().noneMatch(packageToScanForEntities::startsWith)) {
+          packagesToScan.add(packageToScanForEntities);
+        }
+      }
+    }
+
+    // Add the base packages specified using the EnableJpaRepositories annotation
+    Map<String, Object> annotatedBeans =
+        applicationContext.getBeansWithAnnotation(EnableJpaRepositories.class);
+
+    for (String beanName : annotatedBeans.keySet()) {
+      Class<?> beanClass = annotatedBeans.get(beanName).getClass();
+
+      EnableJpaRepositories enableJpaRepositories =
+          beanClass.getAnnotation(EnableJpaRepositories.class);
+
+      if (enableJpaRepositories != null) {
+        for (String basePackage : enableJpaRepositories.basePackages()) {
+          // Replace any existing packages to scan with the higher level package
+          packagesToScan.removeIf(packageToScan -> packageToScan.startsWith(basePackage));
+
+          // Check if there is a higher level package already being scanned
+          if (packagesToScan.stream().noneMatch(basePackage::startsWith)) {
+            packagesToScan.add(basePackage);
+          }
+        }
+      }
+    }
+
+    logger.info(
+        "Scanning the following packages for JPA entities: "
+            + StringUtils.collectionToDelimitedString(packagesToScan, ","));
+
     return packagesToScan;
   }
 
-  private void loadSQL(DataSource dataSource, Resource databaseInitResource)
+  private void loadSQL(DataSource dataSource, URL databaseInitResourceUrl)
       throws IOException, SQLException {
     try {
       // Load the SQL statements used to initialize the database tables
-      List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResource.getURL());
+      List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResourceUrl);
 
       // Get a connection to the in-memory database
       try (Connection connection = dataSource.getConnection()) {

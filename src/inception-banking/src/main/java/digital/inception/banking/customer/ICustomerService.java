@@ -17,8 +17,9 @@
 package digital.inception.banking.customer;
 
 import digital.inception.core.validation.InvalidArgumentException;
-import digital.inception.party.PartyServiceException;
+import java.util.Set;
 import java.util.UUID;
+import javax.validation.ConstraintViolation;
 
 /**
  * The <b>ICustomerService</b> interface defines the functionality provided by a Customer Service
@@ -38,6 +39,16 @@ public interface ICustomerService {
           CustomerServiceException;
 
   /**
+   * Delete the individual customer.
+   *
+   * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
+   *     customer
+   */
+  void deleteIndividualCustomer(UUID individualCustomerId)
+      throws InvalidArgumentException, IndividualCustomerNotFoundException,
+          CustomerServiceException;
+
+  /**
    * Retrieve the individual customer.
    *
    * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
@@ -45,5 +56,15 @@ public interface ICustomerService {
    * @return the individual customer
    */
   IndividualCustomer getIndividualCustomer(UUID individualCustomerId)
-      throws InvalidArgumentException, IndividualCustomerNotFoundException, PartyServiceException;
+      throws InvalidArgumentException, IndividualCustomerNotFoundException,
+          CustomerServiceException;
+
+  /**
+   * Validate the individual customer.
+   *
+   * @param individualCustomer the individual customer
+   * @return the constraint violations for the individual customer
+   */
+  Set<ConstraintViolation<IndividualCustomer>> validateIndividualCustomer(
+      IndividualCustomer individualCustomer);
 }

@@ -47,7 +47,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,9 +84,6 @@ public class PartyServiceTest {
   /** The Party Service. */
   @Autowired private IPartyService partyService;
 
-  /** The JSR-303 validator. */
-  @Autowired private Validator validator;
-
   private static synchronized Organization getTestOrganizationDetails() {
     organizationCount++;
 
@@ -118,29 +114,32 @@ public class PartyServiceTest {
                 "GivenName%d MiddleName%d Surname%d", personCount, personCount, personCount));
 
     person.setCountryOfBirth("US");
+    person.setCountryOfResidence("ZA");
     person.setDateOfBirth(LocalDate.of(1976, 3, 7));
-    person.setEmploymentStatus("O");
-    person.setGender("M");
+    person.setEmploymentStatus("employed");
+    person.setEmploymentType("self_employed");
+    person.setGender("female");
     person.setGivenName("GivenName" + personCount);
+    person.setHomeLanguage("EN");
     person.setId(UuidCreator.getShortPrefixComb());
     person.setInitials("G M");
     person.setMaidenName("MaidenName" + personCount);
-    person.setMaritalStatus("M");
-    person.setMarriageType("1");
+    person.setMaritalStatus("married");
+    person.setMarriageType("anc_with_accrual");
     person.setMiddleNames("MiddleName" + personCount);
-    person.setOccupation("15");
+    person.setOccupation("professional_legal");
     person.setPreferredName("PreferredName" + personCount);
-    person.setRace("W");
-    person.setResidencyStatus("P");
-    person.setResidentialType("R");
+    person.setRace("white");
+    person.setResidencyStatus("permanent_resident");
+    person.setResidentialType("renter");
     person.setSurname("Surname" + personCount);
-    person.setTitle("1");
+    person.setTitle("mrs");
 
     person.addIdentityDocument(
-        new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
+        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     person.setCountryOfTaxResidence("ZA");
-    person.addTaxNumber(new TaxNumber("ZA", "ZAITN", "123456789"));
+    person.addTaxNumber(new TaxNumber( "za_income_tax_number", "ZA", "123456789"));
 
     person.addContactMechanism(
         new ContactMechanism(
@@ -179,6 +178,8 @@ public class PartyServiceTest {
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
+    person.addRole(new PartyRole("employee"));
+
     return person;
   }
 
@@ -192,7 +193,7 @@ public class PartyServiceTest {
     person.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 
     person.addIdentityDocument(
-        new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
+        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     return person;
   }
@@ -211,9 +212,9 @@ public class PartyServiceTest {
             "+27835551234"));
 
     person.addIdentityDocument(
-        new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
+        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
-    person.addTaxNumber(new TaxNumber("ZA", "ZAITN", "123456789"));
+    person.addTaxNumber(new TaxNumber( "za_income_tax_number", "ZA", "123456789"));
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
@@ -223,15 +224,11 @@ public class PartyServiceTest {
   /** Test the invalid building address verification functionality. */
   @Test
   public void invalidBuildingAddressTest() {
-    // Validate an empty invalid address
-    // Required: Building Name, Street Name, City, Country Code, Postal Code
-    Person person = getTestBasicPersonDetails();
-
     PhysicalAddress invalidAddress =
         new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressPurpose.RESIDENTIAL);
-    person.addPhysicalAddress(invalidAddress);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<PhysicalAddress>> constraintViolations =
+        partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid building address",
@@ -239,8 +236,6 @@ public class PartyServiceTest {
         constraintViolations.size());
 
     // Validate a fully populated invalid address
-    person = getTestBasicPersonDetails();
-
     invalidAddress =
         new PhysicalAddress(PhysicalAddressType.BUILDING, PhysicalAddressPurpose.RESIDENTIAL);
     invalidAddress.setBuildingFloor("Building Floor");
@@ -263,9 +258,8 @@ public class PartyServiceTest {
     invalidAddress.setStreetName("Street Name");
     invalidAddress.setStreetNumber("Street Number");
     invalidAddress.setSuburb("Suburb");
-    person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = validator.validate(person);
+    constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid building address",
@@ -278,13 +272,11 @@ public class PartyServiceTest {
   public void invalidComplexAddressTest() {
     // Validate an empty invalid address
     // Required: Complex Name, Complex Unit Number, Street Name, City, Country Code, Postal Code
-    Person person = getTestBasicPersonDetails();
-
     PhysicalAddress invalidAddress =
         new PhysicalAddress(PhysicalAddressType.COMPLEX, PhysicalAddressPurpose.RESIDENTIAL);
-    person.addPhysicalAddress(invalidAddress);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<PhysicalAddress>> constraintViolations =
+        partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid complex address",
@@ -292,8 +284,6 @@ public class PartyServiceTest {
         constraintViolations.size());
 
     // Validate a fully populated invalid address
-    person = getTestBasicPersonDetails();
-
     invalidAddress =
         new PhysicalAddress(PhysicalAddressType.COMPLEX, PhysicalAddressPurpose.RESIDENTIAL);
     invalidAddress.setBuildingFloor("Building Floor");
@@ -316,9 +306,8 @@ public class PartyServiceTest {
     invalidAddress.setStreetName("Street Name");
     invalidAddress.setStreetNumber("Street Number");
     invalidAddress.setSuburb("Suburb");
-    person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = validator.validate(person);
+    constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid complex address",
@@ -331,13 +320,11 @@ public class PartyServiceTest {
   public void invalidFarmAddressTest() {
     // Validate an empty invalid address
     // Required: Farm Number, Country Code, Postal Code
-    Person person = getTestBasicPersonDetails();
-
     PhysicalAddress invalidAddress =
         new PhysicalAddress(PhysicalAddressType.FARM, PhysicalAddressPurpose.RESIDENTIAL);
-    person.addPhysicalAddress(invalidAddress);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<PhysicalAddress>> constraintViolations =
+        partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid farm address",
@@ -345,8 +332,6 @@ public class PartyServiceTest {
         constraintViolations.size());
 
     // Validate a fully populated invalid address
-    person = getTestBasicPersonDetails();
-
     invalidAddress =
         new PhysicalAddress(PhysicalAddressType.FARM, PhysicalAddressPurpose.RESIDENTIAL);
     invalidAddress.setBuildingFloor("Building Floor");
@@ -369,9 +354,8 @@ public class PartyServiceTest {
     invalidAddress.setStreetName("Street Name");
     invalidAddress.setStreetNumber("Street Number");
     invalidAddress.setSuburb("Suburb");
-    person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = validator.validate(person);
+    constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid farm address",
@@ -384,13 +368,11 @@ public class PartyServiceTest {
   public void invalidInternationalAddressTest() {
     // Validate an empty invalid address
     // Required: Line 1, Country Code, Postal Code
-    Person person = getTestBasicPersonDetails();
-
     PhysicalAddress invalidAddress =
         new PhysicalAddress(PhysicalAddressType.INTERNATIONAL, PhysicalAddressPurpose.RESIDENTIAL);
-    person.addPhysicalAddress(invalidAddress);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<PhysicalAddress>> constraintViolations =
+        partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid international address",
@@ -398,8 +380,6 @@ public class PartyServiceTest {
         constraintViolations.size());
 
     // Validate a fully populated invalid address
-    person = getTestBasicPersonDetails();
-
     invalidAddress =
         new PhysicalAddress(PhysicalAddressType.INTERNATIONAL, PhysicalAddressPurpose.RESIDENTIAL);
     invalidAddress.setBuildingFloor("Building Floor");
@@ -422,9 +402,8 @@ public class PartyServiceTest {
     invalidAddress.setStreetName("Street Name");
     invalidAddress.setStreetNumber("Street Number");
     invalidAddress.setSuburb("Suburb");
-    person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = validator.validate(person);
+    constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid international address",
@@ -437,13 +416,11 @@ public class PartyServiceTest {
   public void invalidSiteAddressTest() {
     // Validate an empty invalid address
     // Required: Site Block, Site Number, City, Country Code, Postal Code
-    Person person = getTestBasicPersonDetails();
-
     PhysicalAddress invalidAddress =
         new PhysicalAddress(PhysicalAddressType.SITE, PhysicalAddressPurpose.RESIDENTIAL);
-    person.addPhysicalAddress(invalidAddress);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<PhysicalAddress>> constraintViolations =
+        partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid site address",
@@ -451,8 +428,6 @@ public class PartyServiceTest {
         constraintViolations.size());
 
     // Validate a fully populated invalid address
-    person = getTestBasicPersonDetails();
-
     invalidAddress =
         new PhysicalAddress(PhysicalAddressType.SITE, PhysicalAddressPurpose.RESIDENTIAL);
     invalidAddress.setBuildingFloor("Building Floor");
@@ -475,9 +450,8 @@ public class PartyServiceTest {
     invalidAddress.setStreetName("Street Name");
     invalidAddress.setStreetNumber("Street Number");
     invalidAddress.setSuburb("Suburb");
-    person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = validator.validate(person);
+    constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid site address",
@@ -490,13 +464,11 @@ public class PartyServiceTest {
   public void invalidStreetAddressTest() {
     // Validate an empty invalid address
     // Required: Street Name, City, Country Code, Postal Code
-    Person person = getTestBasicPersonDetails();
-
     PhysicalAddress invalidAddress =
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL);
-    person.addPhysicalAddress(invalidAddress);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<PhysicalAddress>> constraintViolations =
+        partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid street address",
@@ -504,8 +476,6 @@ public class PartyServiceTest {
         constraintViolations.size());
 
     // Validate a fully populated invalid address
-    person = getTestBasicPersonDetails();
-
     invalidAddress =
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL);
     invalidAddress.setBuildingFloor("Building Floor");
@@ -528,9 +498,8 @@ public class PartyServiceTest {
     invalidAddress.setStreetName("Street Name");
     invalidAddress.setStreetNumber("Street Number");
     invalidAddress.setSuburb("Suburb");
-    person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = validator.validate(person);
+    constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid street address",
@@ -543,13 +512,11 @@ public class PartyServiceTest {
   public void invalidUnstructuredAddressTest() {
     // Validate an empty invalid address
     // Required: Line 1, Country Code, Postal Code
-    Person person = getTestBasicPersonDetails();
-
     PhysicalAddress invalidAddress =
         new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.RESIDENTIAL);
-    person.addPhysicalAddress(invalidAddress);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<PhysicalAddress>> constraintViolations =
+        partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid unstructured address",
@@ -557,8 +524,6 @@ public class PartyServiceTest {
         constraintViolations.size());
 
     // Validate a fully populated invalid address
-    person = getTestBasicPersonDetails();
-
     invalidAddress =
         new PhysicalAddress(PhysicalAddressType.UNSTRUCTURED, PhysicalAddressPurpose.RESIDENTIAL);
     invalidAddress.setBuildingFloor("Building Floor");
@@ -581,9 +546,8 @@ public class PartyServiceTest {
     invalidAddress.setStreetName("Street Name");
     invalidAddress.setStreetNumber("Street Number");
     invalidAddress.setSuburb("Suburb");
-    person.addPhysicalAddress(invalidAddress);
 
-    constraintViolations = validator.validate(person);
+    constraintViolations = partyService.validatePhysicalAddress(invalidAddress);
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid unstructured address",
@@ -629,6 +593,8 @@ public class PartyServiceTest {
     mainAddress.setPostalCode("2194");
 
     organization.addPhysicalAddress(mainAddress);
+
+    organization.addPreference(new Preference("correspondence_language", "EN"));
 
     partyService.updateOrganization(organization);
 
@@ -768,7 +734,7 @@ public class PartyServiceTest {
     unstructuredAddress.setPostalCode("2194");
     person.addPhysicalAddress(unstructuredAddress);
 
-    Set<ConstraintViolation<Person>> constraintViolations = validator.validate(person);
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 
     assertEquals(
         "The correct number of constraint violations was not found",
@@ -847,40 +813,40 @@ public class PartyServiceTest {
 
     comparePersons(person, filteredPersons.getPersons().get(0));
 
-    person.setCountryOfBirth("UK");
+    person.setCountryOfBirth("GB");
     person.setCountryOfResidence("ZA");
     person.setCountryOfTaxResidence("ZA");
     person.setDateOfBirth(LocalDate.of(1985, 5, 1));
     person.setDateOfDeath(LocalDate.of(2200, 1, 1));
-    person.setEmploymentStatus("E");
-    person.setEmploymentType("F");
-    person.setGender("F");
+    person.setEmploymentStatus("employed");
+    person.setEmploymentType("full_time");
+    person.setGender("female");
     person.setGivenName(person.getGivenName() + " Updated");
     person.setHomeLanguage("AF");
     person.setInitials(person.getInitials() + " Updated");
     person.setMaidenName(person.getMaidenName() + " Updated");
-    person.setMaritalStatus("D");
+    person.setMaritalStatus("divorced");
     person.setMarriageType(null);
     person.setMiddleNames(person.getMiddleNames() + " Updated");
-    person.setOccupation("3");
+    person.setOccupation("professional_business");
     person.setName(person.getName() + " Updated");
     person.setPreferredName(person.getPreferredName() + " Updated");
-    person.setRace("B");
-    person.setResidencyStatus("C");
-    person.setResidentialType("O");
+    person.setRace("black");
+    person.setResidencyStatus("citizen");
+    person.setResidentialType("owner");
     person.setSurname(person.getSurname() + " Updated");
-    person.setTitle("5");
+    person.setTitle("ms");
 
-    person.setCountryOfTaxResidence("UK");
-    person.addTaxNumber(new TaxNumber("UK", "UKUTN", "987654321"));
+    person.setCountryOfTaxResidence("GB");
+    person.addTaxNumber(new TaxNumber( "uk_tax_number", "GB", "987654321"));
 
-    person.removeTaxNumber("ZAITN");
+    person.removeTaxNumber("za_income_tax_number");
 
     person.addIdentityDocument(
         new IdentityDocument(
-            "PASSPORT", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890"));
+            "passport", "ZA", LocalDate.of(2016, 10, 7), LocalDate.of(2025, 9, 1), "A1234567890"));
 
-    person.removeIdentityDocumentByType("ZAIDCARD");
+    person.removeIdentityDocumentByType("za_id_card");
 
     person.removeContactMechanism(
         ContactMechanismType.MOBILE_NUMBER, ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER);
@@ -920,6 +886,35 @@ public class PartyServiceTest {
         filteredParties.getParties().size());
 
     partyService.deletePerson(person.getId());
+  }
+
+  /** Test the organization validation functionality. */
+  @Test
+  public void validateOrganizationTest() throws Exception {
+    Organization organization = getTestOrganizationDetails();
+
+    Set<ConstraintViolation<Organization>> constraintViolations =
+        partyService.validateOrganization(organization);
+  }
+
+  /** Test the party validation functionality. */
+  @Test
+  public void validatePartyTest() throws Exception {
+    Party party = getTestPartyDetails();
+
+    Set<ConstraintViolation<Party>> constraintViolations = partyService.validateParty(party);
+  }
+
+  /** Test the person validation functionality. */
+  @Test
+  public void validatePersonTest() throws Exception {
+    Person person = getTestCompletePersonDetails();
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    if (constraintViolations.size() > 0) {
+      fail("Failed to successfully validate the person");
+    }
   }
 
   private void compareOrganizations(Organization organization1, Organization organization2) {
@@ -994,6 +989,31 @@ public class PartyServiceTest {
 
       if (!foundPhysicalAddress) {
         fail("Failed to find the physical address (" + person1PhysicalAddress.getId() + ")");
+      }
+    }
+
+    assertEquals(
+        "The number of preferences for the two organizations do not match",
+        organization1.getPreferences().size(),
+        organization2.getPreferences().size());
+
+    for (Preference organization1Preference : organization1.getPreferences()) {
+      boolean foundPreference = false;
+
+      for (Preference organization2Preference : organization2.getPreferences()) {
+
+        if (Objects.equals(organization1Preference.getParty(), organization2Preference.getParty())
+            && Objects.equals(
+                organization1Preference.getType(), organization2Preference.getType())) {
+
+          comparePreferences(organization1Preference, organization2Preference);
+
+          foundPreference = true;
+        }
+      }
+
+      if (!foundPreference) {
+        fail("Failed to find the preference (" + organization1Preference.getType() + ")");
       }
     }
   }
@@ -1244,7 +1264,7 @@ public class PartyServiceTest {
 
       for (Preference person2Preference : person2.getPreferences()) {
 
-        if (Objects.equals(person1Preference.getPerson(), person2Preference.getPerson())
+        if (Objects.equals(person1Preference.getParty(), person2Preference.getParty())
             && Objects.equals(person1Preference.getType(), person2Preference.getType())) {
 
           comparePreferences(person1Preference, person2Preference);

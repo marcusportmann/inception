@@ -37,12 +37,13 @@ public class ValidOrganizationValidator
   public void initialize(ValidOrganization constraintAnnotation) {}
 
   @Override
-  public boolean isValid(Organization physicalAddress, ConstraintValidatorContext context) {
+  public boolean isValid(
+      Organization physicalAddress, ConstraintValidatorContext constraintValidatorContext) {
 
     boolean isValid = true;
 
     // Disable the default constraint violation
-    context.disableDefaultConstraintViolation();
+    constraintValidatorContext.disableDefaultConstraintViolation();
 
     // TODO: Implement custom Organization validation.
 

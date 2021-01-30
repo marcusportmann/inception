@@ -18,6 +18,7 @@ package digital.inception.core.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -27,6 +28,21 @@ import java.nio.charset.StandardCharsets;
  * @author Marcus Portmann
  */
 public final class ResourceUtil {
+
+  /**
+   * Confirms whether the resource with the specified path exists on the classpath using the context
+   * class loader.
+   *
+   * @return <b>true</b> if the resource with the specified path exists on the classpath or
+   *     <b>false</b> otherwise.
+   */
+  public static boolean classpathResourceExists(String path) {
+    try {
+      return Thread.currentThread().getContextClassLoader().getResource(path) != null;
+    } catch (Throwable e) {
+      return false;
+    }
+  }
 
   /**
    * Retrieves the resource with the specified path on the classpath using the context class loader.
@@ -60,6 +76,24 @@ public final class ResourceUtil {
       throw e;
     } catch (Throwable e) {
       throw new ResourceException("Failed to read the classpath resource (" + path + ")", e);
+    }
+  }
+
+  /**
+   * Retrieves the URL for the resource with the specified path on the classpath using the context
+   * class loader.
+   *
+   * @param path the path to the resource on the classpath
+   * @return the URL for the resource with the specified path on the classpath using the context
+   *     class loader
+   */
+  public static URL getClasspathResourceURL(String path) {
+    try {
+      return Thread.currentThread().getContextClassLoader().getResource(path);
+
+    } catch (Throwable e) {
+      throw new ResourceException(
+          "Failed to retrieve the URL for the classpath resource (" + path + ")", e);
     }
   }
 

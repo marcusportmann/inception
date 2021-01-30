@@ -39,7 +39,8 @@ public class ValidPhysicalAddressValidator
   public void initialize(ValidPhysicalAddress constraintAnnotation) {}
 
   @Override
-  public boolean isValid(PhysicalAddress physicalAddress, ConstraintValidatorContext context) {
+  public boolean isValid(
+      PhysicalAddress physicalAddress, ConstraintValidatorContext constraintValidatorContext) {
 
     /*
     The following validation rules are applied for the different address types:
@@ -72,12 +73,12 @@ public class ValidPhysicalAddressValidator
     boolean isValid = true;
 
     // Disable the default constraint violation
-    context.disableDefaultConstraintViolation();
+    constraintValidatorContext.disableDefaultConstraintViolation();
 
     // Validate a building address
     if (physicalAddress.getType() == PhysicalAddressType.BUILDING) {
       if (!StringUtils.hasText(physicalAddress.getBuildingName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.buildingNameRequired.message}")
             .addConstraintViolation();
@@ -86,7 +87,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (!StringUtils.hasText(physicalAddress.getCity())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
             .addConstraintViolation();
@@ -95,7 +96,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (!StringUtils.hasText(physicalAddress.getStreetName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
             .addConstraintViolation();
@@ -106,7 +107,7 @@ public class ValidPhysicalAddressValidator
     // Validate a complex address
     else if (physicalAddress.getType() == PhysicalAddressType.COMPLEX) {
       if (!StringUtils.hasText(physicalAddress.getCity())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
             .addConstraintViolation();
@@ -115,7 +116,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (!StringUtils.hasText(physicalAddress.getComplexName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.complexNameRequired.message}")
             .addConstraintViolation();
@@ -124,7 +125,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (!StringUtils.hasText(physicalAddress.getComplexUnitNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.complexUnitNumberRequired.message}")
             .addConstraintViolation();
@@ -133,7 +134,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (!StringUtils.hasText(physicalAddress.getStreetName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
             .addConstraintViolation();
@@ -144,7 +145,7 @@ public class ValidPhysicalAddressValidator
     // Validate a farm address
     else if (physicalAddress.getType() == PhysicalAddressType.FARM) {
       if (!StringUtils.hasText(physicalAddress.getFarmNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.farmNumberRequired.message}")
             .addConstraintViolation();
@@ -155,7 +156,7 @@ public class ValidPhysicalAddressValidator
     // Validate an international address
     else if (physicalAddress.getType() == PhysicalAddressType.INTERNATIONAL) {
       if (!StringUtils.hasText(physicalAddress.getLine1())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.line1InternationalRequired.message}")
             .addConstraintViolation();
@@ -164,7 +165,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getStreetName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
             .addConstraintViolation();
@@ -173,7 +174,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getStreetNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
             .addConstraintViolation();
@@ -182,7 +183,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getSuburb())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.suburbNotSupported.message}")
             .addConstraintViolation();
@@ -193,7 +194,7 @@ public class ValidPhysicalAddressValidator
     // Validate a postal address
     else if (physicalAddress.getType() == PhysicalAddressType.POSTAL) {
       if (!StringUtils.hasText(physicalAddress.getLine1())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.line1PostalRequired.message}")
             .addConstraintViolation();
@@ -202,7 +203,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getStreetName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
             .addConstraintViolation();
@@ -211,7 +212,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getStreetNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
             .addConstraintViolation();
@@ -222,7 +223,7 @@ public class ValidPhysicalAddressValidator
     // Validate a site address
     else if (physicalAddress.getType() == PhysicalAddressType.SITE) {
       if (!StringUtils.hasText(physicalAddress.getCity())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
             .addConstraintViolation();
@@ -231,7 +232,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (!StringUtils.hasText(physicalAddress.getSiteBlock())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.siteBlockRequired.message}")
             .addConstraintViolation();
@@ -240,7 +241,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (!StringUtils.hasText(physicalAddress.getSiteNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.siteNumberRequired.message}")
             .addConstraintViolation();
@@ -251,7 +252,7 @@ public class ValidPhysicalAddressValidator
     // Validate a street address
     else if (physicalAddress.getType() == PhysicalAddressType.STREET) {
       if (!StringUtils.hasText(physicalAddress.getCity())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
             .addConstraintViolation();
@@ -260,7 +261,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (!StringUtils.hasText(physicalAddress.getStreetName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameRequired.message}")
             .addConstraintViolation();
@@ -280,7 +281,7 @@ public class ValidPhysicalAddressValidator
     // Validate an unstructured address
     else if (physicalAddress.getType() == PhysicalAddressType.UNSTRUCTURED) {
       if (!StringUtils.hasText(physicalAddress.getLine1())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.line1UnstructuredRequired.message}")
             .addConstraintViolation();
@@ -289,7 +290,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getStreetName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNameNotSupported.message}")
             .addConstraintViolation();
@@ -298,7 +299,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getStreetNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.streetNumberNotSupported.message}")
             .addConstraintViolation();
@@ -307,7 +308,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getSuburb())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.suburbNotSupported.message}")
             .addConstraintViolation();
@@ -317,7 +318,7 @@ public class ValidPhysicalAddressValidator
     }
 
     if (!StringUtils.hasText(physicalAddress.getCountry())) {
-      context
+      constraintValidatorContext
           .buildConstraintViolationWithTemplate(
               "{digital.inception.party.constraints.ValidPhysicalAddress.countryRequired.message}")
           .addConstraintViolation();
@@ -326,7 +327,7 @@ public class ValidPhysicalAddressValidator
     }
 
     if (!StringUtils.hasText(physicalAddress.getPostalCode())) {
-      context
+      constraintValidatorContext
           .buildConstraintViolationWithTemplate(
               "{digital.inception.party.constraints.ValidPhysicalAddress.postalCodeRequired.message}")
           .addConstraintViolation();
@@ -336,7 +337,7 @@ public class ValidPhysicalAddressValidator
 
     if (StringUtils.hasText(physicalAddress.getSuburb())
         && (!StringUtils.hasText(physicalAddress.getCity()))) {
-      context
+      constraintValidatorContext
           .buildConstraintViolationWithTemplate(
               "{digital.inception.party.constraints.ValidPhysicalAddress.cityRequired.message}")
           .addConstraintViolation();
@@ -350,7 +351,7 @@ public class ValidPhysicalAddressValidator
      */
     if (physicalAddress.getType() != PhysicalAddressType.BUILDING) {
       if (StringUtils.hasText(physicalAddress.getBuildingFloor())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.buildingFloorNotSupported.message}")
             .addConstraintViolation();
@@ -359,7 +360,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getBuildingName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.buildingNameNotSupported.message}")
             .addConstraintViolation();
@@ -368,7 +369,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getBuildingRoom())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.buildingRoomNotSupported.message}")
             .addConstraintViolation();
@@ -383,7 +384,7 @@ public class ValidPhysicalAddressValidator
      */
     if (physicalAddress.getType() != PhysicalAddressType.COMPLEX) {
       if (StringUtils.hasText(physicalAddress.getComplexName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.complexNameNotSupported.message}")
             .addConstraintViolation();
@@ -392,7 +393,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getComplexUnitNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.complexUnitNumberNotSupported.message}")
             .addConstraintViolation();
@@ -407,7 +408,7 @@ public class ValidPhysicalAddressValidator
      */
     if (physicalAddress.getType() != PhysicalAddressType.FARM) {
       if (StringUtils.hasText(physicalAddress.getFarmDescription())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.farmDescriptionNotSupported.message}")
             .addConstraintViolation();
@@ -416,7 +417,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getFarmName())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.farmNameNotSupported.message}")
             .addConstraintViolation();
@@ -425,7 +426,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getFarmNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.farmNumberNotSupported.message}")
             .addConstraintViolation();
@@ -440,7 +441,7 @@ public class ValidPhysicalAddressValidator
      */
     if (physicalAddress.getType() != PhysicalAddressType.SITE) {
       if (StringUtils.hasText(physicalAddress.getSiteBlock())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.siteBlockNotSupported.message}")
             .addConstraintViolation();
@@ -449,7 +450,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getSiteNumber())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.siteNumberNotSupported.message}")
             .addConstraintViolation();
@@ -466,7 +467,7 @@ public class ValidPhysicalAddressValidator
         && (physicalAddress.getType() != PhysicalAddressType.POSTAL)
         && (physicalAddress.getType() != PhysicalAddressType.UNSTRUCTURED)) {
       if (StringUtils.hasText(physicalAddress.getLine1())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.line1NotSupported.message}")
             .addConstraintViolation();
@@ -475,7 +476,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getLine2())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.line2NotSupported.message}")
             .addConstraintViolation();
@@ -484,7 +485,7 @@ public class ValidPhysicalAddressValidator
       }
 
       if (StringUtils.hasText(physicalAddress.getLine3())) {
-        context
+        constraintValidatorContext
             .buildConstraintViolationWithTemplate(
                 "{digital.inception.party.constraints.ValidPhysicalAddress.line3NotSupported.message}")
             .addConstraintViolation();

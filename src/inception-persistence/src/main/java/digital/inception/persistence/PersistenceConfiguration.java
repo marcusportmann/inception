@@ -16,15 +16,14 @@
 
 package digital.inception.persistence;
 
-
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -41,12 +40,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.util.StringUtils;
 
-
-
 /**
- * The <b>PersistenceConfiguration</b> class provides the Spring configuration for the
- * persistence module and initializes the application entity manager factory bean associated with
- * the application data source.
+ * The <b>PersistenceConfiguration</b> class provides the Spring configuration for the persistence
+ * module and initializes the application entity manager factory bean associated with the
+ * application data source.
  *
  * @author Marcus Portmann
  */
@@ -54,6 +51,9 @@ import org.springframework.util.StringUtils;
 @EnableJpaRepositories
 @EnableTransactionManagement
 public class PersistenceConfiguration {
+
+  /* Logger */
+  private static final Logger logger = LoggerFactory.getLogger(PersistenceConfiguration.class);
 
   /** The Spring application context. */
   private final ApplicationContext applicationContext;
@@ -119,7 +119,6 @@ public class PersistenceConfiguration {
       entityManagerFactoryBean.setPersistenceUnitName("applicationPersistenceUnit");
       entityManagerFactoryBean.setJtaDataSource(dataSource);
 
-      // TODO: REMOVE THIS -- MARCUS
       entityManagerFactoryBean.setPackagesToScan(
           StringUtils.toStringArray(packagesToScanForEntities()));
       entityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
@@ -154,20 +153,51 @@ public class PersistenceConfiguration {
    * @return the names of the packages to scan for JPA entities
    */
   private List<String> packagesToScanForEntities() {
-    List<String> packagesToScanForEntities = new ArrayList<>();
+    List<String> packagesToScan = new ArrayList<>();
 
-    packagesToScanForEntities.add("digital.inception");
+    packagesToScan.add("digital.inception");
 
+    // Add the packages to scan for entities explicitly specified in the configuration property
     if (StringUtils.hasText(this.packagesToScanForEntities)) {
-      String[] packagesToScan = this.packagesToScanForEntities.split(",");
+      for (String packageToScanForEntities : this.packagesToScanForEntities.split(",")) {
+        // Replace any existing packages to scan with the higher level package
+        packagesToScan.removeIf(
+            packageToScan -> packageToScan.startsWith(packageToScanForEntities));
 
-      for (String packageToScan : packagesToScan) {
-        if (!packageToScan.startsWith("digital.inception")) {
-          packagesToScanForEntities.add(packageToScan);
+        // Check if there is a higher level package already being scanned
+        if (packagesToScan.stream().noneMatch(packageToScanForEntities::startsWith)) {
+          packagesToScan.add(packageToScanForEntities);
         }
       }
     }
 
-    return packagesToScanForEntities;
+    // Add the base packages specified using the EnableJpaRepositories annotation
+    Map<String, Object> annotatedBeans =
+        applicationContext.getBeansWithAnnotation(EnableJpaRepositories.class);
+
+    for (String beanName : annotatedBeans.keySet()) {
+      Class<?> beanClass = annotatedBeans.get(beanName).getClass();
+
+      EnableJpaRepositories enableJpaRepositories =
+          beanClass.getAnnotation(EnableJpaRepositories.class);
+
+      if (enableJpaRepositories != null) {
+        for (String basePackage : enableJpaRepositories.basePackages()) {
+          // Replace any existing packages to scan with the higher level package
+          packagesToScan.removeIf(packageToScan -> packageToScan.startsWith(basePackage));
+
+          // Check if there is a higher level package already being scanned
+          if (packagesToScan.stream().noneMatch(basePackage::startsWith)) {
+            packagesToScan.add(basePackage);
+          }
+        }
+      }
+    }
+
+    logger.info(
+        "Scanning the following packages for JPA entities: "
+            + StringUtils.collectionToDelimitedString(packagesToScan, ","));
+
+    return packagesToScan;
   }
 }

@@ -18,6 +18,7 @@ package digital.inception.banking.customer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.banking.customer.constraints.ValidIndividualCustomer;
@@ -27,7 +28,6 @@ import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyRole;
 import digital.inception.party.PartyType;
-import digital.inception.party.Person;
 import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.Preference;
@@ -36,17 +36,29 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>IndividualCustomer</b> class holds the information for an individual customer.
@@ -98,14 +110,134 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
     name = "IndividualCustomer",
     namespace = "http://customer.banking.inception.digital",
-    propOrder = {"emancipatedMinor"})
+    propOrder = {
+      "id",
+      "tenantId",
+      "name",
+      "countryOfBirth",
+      "countryOfResidence",
+      "dateOfBirth",
+      "dateOfDeath",
+      "emancipatedMinor",
+      "employmentStatus",
+      "employmentType",
+      "gender",
+      "givenName",
+      "homeLanguage",
+      "initials",
+      "maidenName",
+      "maritalStatus",
+      "marriageType",
+      "middleNames",
+      "occupation",
+      "preferredName",
+      "race",
+      "residencyStatus",
+      "residentialType",
+      "surname",
+      "title",
+      "contactMechanisms",
+      "identityDocuments",
+      "physicalAddresses",
+      "preferences",
+      "countriesOfTaxResidence",
+      "taxNumbers",
+      "roles"
+    })
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @ValidIndividualCustomer
 @Entity
-@Table(schema = "customer", name = "individual_customers")
-public class IndividualCustomer extends Person implements Serializable {
+@Table(schema = "party", name = "persons")
+@SecondaryTable(
+    schema = "customer",
+    name = "individual_customers",
+    pkJoinColumns = @PrimaryKeyJoinColumn(name = "id", referencedColumnName = "id"))
+public class IndividualCustomer extends CustomerBase implements Serializable {
 
   private static final long serialVersionUID = 1000000;
+
+  /** The contact mechanisms for the individual customer. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<ContactMechanism> contactMechanisms = new HashSet<>();
+
+  /** The identity documents for the individual customer. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<IdentityDocument> identityDocuments = new HashSet<>();
+
+  /** The physical addresses for the individual customer. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
+
+  /** The preferences for the individual customer. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Preference> preferences = new HashSet<>();
+
+  /** The party roles for the individual customer independent of a party association. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<PartyRole> roles = new HashSet<>();
+
+  /** The tax numbers for the individual customer. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<TaxNumber> taxNumbers = new HashSet<>();
+
+  /** The comma-delimited codes for the countries of tax residence for the individual customer. */
+  @JsonIgnore
+  @XmlTransient
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "countries_of_tax_residence", length = 100)
+  private String countriesOfTaxResidence;
+
+  /** The code for the country of birth for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "country_of_birth", length = 30)
+  private String countryOfBirth;
+
+  /** The code for the country of residence for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "country_of_residence", length = 30)
+  private String countryOfResidence;
+
+  /** The date of birth for the individual customer. */
+  @NotNull
+  @Column(table = "persons", name = "date_of_birth")
+  private LocalDate dateOfBirth;
+
+  /** The optional date of death for the individual customer. */
+  @Column(table = "persons", name = "date_of_death")
+  private LocalDate dateOfDeath;
 
   /**
    * The optional boolean flag indicating whether the individual customer is an emancipated minor.
@@ -113,17 +245,132 @@ public class IndividualCustomer extends Person implements Serializable {
   @Column(table = "individual_customers", name = "emancipated_minor")
   private Boolean emancipatedMinor = false;
 
+  /** The code for the employment status for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "employment_status", length = 30)
+  private String employmentStatus;
+
+  /** The code for the employment type for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "employment_type", length = 30)
+  private String employmentType;
+
+  /** The code for the gender for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "gender", length = 30)
+  private String gender;
+
+  /** The given name, firstname, forename, or Christian name for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "given_name", length = 100)
+  private String givenName;
+
+  /** The code for the home language for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "home_language", length = 30)
+  private String homeLanguage;
+
+  /** The initials for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 20)
+  @Column(table = "persons", name = "initials", length = 20)
+  private String initials;
+
+  /** The optional maiden name for the individual customer. */
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "maiden_name", length = 100)
+  private String maidenName;
+
+  /** The code for the marital status for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "marital_status", length = 30)
+  private String maritalStatus;
+
+  /**
+   * The optional code for the marriage type for the individual customer if the individual customer
+   * is married.
+   */
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "marriage_type", length = 30)
+  private String marriageType;
+
+  /** The optional middle names for the individual customer. */
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "middle_names", length = 100)
+  private String middleNames;
+
+  /** The code for the occupation for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "occupation", length = 30)
+  private String occupation;
+
+  /**
+   * The optional preferred name for the individual customer.
+   *
+   * <p>In Western culture, this is usually the given name, which is also known as the first name,
+   * forename, or Christian name.
+   */
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "preferred_name", length = 100)
+  private String preferredName;
+
+  /** The code for the race for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "race", length = 30)
+  private String race;
+
+  /** The code for the residency status for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "residency_status", length = 30)
+  private String residencyStatus;
+
+  /** The code for the residential type for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "residential_type", length = 30)
+  private String residentialType;
+
+  /** The surname, last name, or family name for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(table = "persons", name = "surname", length = 100)
+  private String surname;
+
+  /** The code for the title for the individual customer. */
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Column(table = "persons", name = "title", length = 30)
+  private String title;
+
   /** Constructs a new <b>IndividualCustomer</b>. */
-  public IndividualCustomer() {}
+  public IndividualCustomer() {
+    super(PartyType.PERSON, CustomerType.INDIVIDUAL);
+  }
 
   /**
    * Add the contact mechanism for the individual customer.
    *
    * @param contactMechanism the contact mechanism
    */
-  @Override
   public void addContactMechanism(ContactMechanism contactMechanism) {
-    super.addContactMechanism(contactMechanism);
+    contactMechanisms.removeIf(
+        existingContactMechanism ->
+            Objects.equals(existingContactMechanism.getType(), contactMechanism.getType())
+                && Objects.equals(
+                    existingContactMechanism.getPurpose(), contactMechanism.getPurpose()));
+
+    contactMechanism.setParty(this);
+
+    contactMechanisms.add(contactMechanism);
   }
 
   /**
@@ -131,9 +378,14 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param identityDocument the identity document
    */
-  @Override
   public void addIdentityDocument(IdentityDocument identityDocument) {
-    super.addIdentityDocument(identityDocument);
+    identityDocuments.removeIf(
+        existingIdentityDocument ->
+            Objects.equals(existingIdentityDocument.getType(), identityDocument.getType()));
+
+    identityDocument.setParty(this);
+
+    identityDocuments.add(identityDocument);
   }
 
   /**
@@ -141,9 +393,14 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param physicalAddress the physical address
    */
-  @Override
   public void addPhysicalAddress(PhysicalAddress physicalAddress) {
-    super.addPhysicalAddress(physicalAddress);
+    physicalAddresses.removeIf(
+        existingPhysicalAddress ->
+            Objects.equals(existingPhysicalAddress.getId(), physicalAddress.getId()));
+
+    physicalAddress.setParty(this);
+
+    physicalAddresses.add(physicalAddress);
   }
 
   /**
@@ -151,9 +408,13 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param preference the preference
    */
-  @Override
   public void addPreference(Preference preference) {
-    super.addPreference(preference);
+    preferences.removeIf(
+        existingPreference -> Objects.equals(existingPreference.getType(), preference.getType()));
+
+    preference.setParty(this);
+
+    preferences.add(preference);
   }
 
   /**
@@ -161,9 +422,12 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param role the party role
    */
-  @Override
   public void addRole(PartyRole role) {
-    super.addRole(role);
+    roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), role.getType()));
+
+    role.setParty(this);
+
+    roles.add(role);
   }
 
   /**
@@ -171,9 +435,38 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param taxNumber the tax number
    */
-  @Override
   public void addTaxNumber(TaxNumber taxNumber) {
-    super.addTaxNumber(taxNumber);
+    taxNumbers.removeIf(
+        existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), taxNumber.getType()));
+
+    taxNumber.setParty(this);
+
+    taxNumbers.add(taxNumber);
+  }
+
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+
+    if (object == null) {
+      return false;
+    }
+
+    if (getClass() != object.getClass()) {
+      return false;
+    }
+
+    IndividualCustomer other = (IndividualCustomer) object;
+
+    return Objects.equals(getId(), other.getId());
   }
 
   /**
@@ -182,12 +475,17 @@ public class IndividualCustomer extends Person implements Serializable {
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
    * @return the contact mechanism with the specified type and purpose for the individual customer
-   *     or <b>null </b> if the contact mechanism could not be found
+   *     or <b>null</b> if the contact mechanism could not be found
    */
-  @Override
   public ContactMechanism getContactMechanism(
       ContactMechanismType type, ContactMechanismPurpose purpose) {
-    return super.getContactMechanism(type, purpose);
+    return contactMechanisms.stream()
+        .filter(
+            contactMechanism ->
+                Objects.equals(contactMechanism.getType(), type)
+                    && Objects.equals(contactMechanism.getPurpose(), purpose))
+        .findFirst()
+        .get();
   }
 
   /**
@@ -196,9 +494,12 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the contact mechanisms for the individual customer
    */
   @Schema(description = "The contact mechanisms for the individual customer")
-  @Override
+  @JsonProperty
+  @JsonManagedReference("contactMechanismReference")
+  @XmlElementWrapper(name = "ContactMechanisms")
+  @XmlElement(name = "ContactMechanism")
   public Set<ContactMechanism> getContactMechanisms() {
-    return super.getContactMechanisms();
+    return contactMechanisms;
   }
 
   /**
@@ -210,8 +511,10 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The codes for the countries of tax residence for the individual customer",
       required = true)
   @JsonProperty(required = true)
+  @XmlElementWrapper(name = "CountriesOfTaxResidence", required = true)
+  @XmlElement(name = "CountryOfTaxResidence", required = true)
   public Set<String> getCountriesOfTaxResidence() {
-    return super.getCountriesOfTaxResidence();
+    return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
   }
 
   /**
@@ -223,9 +526,9 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The code for the country of birth for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "CountryOfBirth", required = true)
   public String getCountryOfBirth() {
-    return super.getCountryOfBirth();
+    return countryOfBirth;
   }
 
   /**
@@ -237,9 +540,9 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The code for the country of residence for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "CountryOfResidence", required = true)
   public String getCountryOfResidence() {
-    return super.getCountryOfResidence();
+    return countryOfResidence;
   }
 
   /**
@@ -249,7 +552,6 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @JsonIgnore
   @XmlTransient
-  @Override
   public LocalDateTime getCreated() {
     return super.getCreated();
   }
@@ -261,9 +563,9 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(description = "The date of birth for the individual customer", required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "DateOfBirth", required = true)
   public LocalDate getDateOfBirth() {
-    return super.getDateOfBirth();
+    return dateOfBirth;
   }
 
   /**
@@ -273,9 +575,9 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(description = "The optional date of death for the individual customer")
   @JsonProperty
-  @Override
+  @XmlElement(name = "DateOfDeath")
   public LocalDate getDateOfDeath() {
-    return super.getDateOfDeath();
+    return dateOfDeath;
   }
 
   /**
@@ -303,9 +605,9 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The code for the employment status for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "EmploymentStatus", required = true)
   public String getEmploymentStatus() {
-    return super.getEmploymentStatus();
+    return employmentStatus;
   }
 
   /**
@@ -317,9 +619,9 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The code for the employment type for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "EmploymentType", required = true)
   public String getEmploymentType() {
-    return super.getEmploymentType();
+    return employmentType;
   }
 
   /**
@@ -329,9 +631,9 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(description = "The code for the gender for the individual customer", required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "Gender", required = true)
   public String getGender() {
-    return super.getGender();
+    return gender;
   }
 
   /**
@@ -341,12 +643,12 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(
       description =
-          "The given name, firstname, forename, or Christian name for the individual customer.",
+          "The given name, firstname, forename, or Christian name for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "GivenName", required = true)
   public String getGivenName() {
-    return super.getGivenName();
+    return givenName;
   }
 
   /**
@@ -358,9 +660,9 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The code for the home language for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "HomeLanguage", required = true)
   public String getHomeLanguage() {
-    return super.getHomeLanguage();
+    return homeLanguage;
   }
 
   /**
@@ -368,7 +670,11 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) for the individual customer
    */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the individual customer")
+  @Schema(
+      description = "The Universally Unique Identifier (UUID) for the individual customer",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Id", required = true)
   @Override
   public UUID getId() {
     return super.getId();
@@ -380,9 +686,12 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the identity documents for the individual customer
    */
   @Schema(description = "The identity documents for the individual customer")
-  @Override
+  @JsonProperty
+  @JsonManagedReference("identityDocumentReference")
+  @XmlElementWrapper(name = "IdentityDocuments")
+  @XmlElement(name = "IdentityDocument")
   public Set<IdentityDocument> getIdentityDocuments() {
-    return super.getIdentityDocuments();
+    return identityDocuments;
   }
 
   /**
@@ -392,9 +701,9 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(description = "The initials for the individual customer", required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "Initials", required = true)
   public String getInitials() {
-    return super.getInitials();
+    return initials;
   }
 
   /**
@@ -403,9 +712,10 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the optional maiden name for the individual customer
    */
   @Schema(description = "The optional maiden name for the individual customer")
-  @Override
+  @JsonProperty
+  @XmlElement(name = "MaidenName")
   public String getMaidenName() {
-    return super.getMaidenName();
+    return maidenName;
   }
 
   /**
@@ -417,24 +727,25 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The code for the marital status for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "MaritalStatus", required = true)
   public String getMaritalStatus() {
-    return super.getMaritalStatus();
+    return maritalStatus;
   }
 
   /**
-   * Returns the code for the marriage type for the individual customer if the individual customer
-   * is married.
+   * Returns the optional code for the marriage type for the individual customer if the individual
+   * customer is married.
    *
-   * @return the code for the marriage type for the individual customer if the individual customer
-   *     is married
+   * @return the optional code for the marriage type for the individual customer if the individual
+   *     customer is married
    */
   @Schema(
       description =
-          "The code for the marriage type for the individual customer if the person is married")
-  @Override
+          "The optional code for the marriage type for the individual customer if the individual customer is married")
+  @JsonProperty
+  @XmlElement(name = "MarriageType")
   public String getMarriageType() {
-    return super.getMarriageType();
+    return marriageType;
   }
 
   /**
@@ -443,9 +754,10 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the optional middle names for the individual customer
    */
   @Schema(description = "The optional middle names for the individual customer")
-  @Override
+  @JsonProperty
+  @XmlElement(name = "MiddleNames")
   public String getMiddleNames() {
-    return super.getMiddleNames();
+    return middleNames;
   }
 
   /**
@@ -460,7 +772,11 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @return the personal name or full name of the individual customer
    */
-  @Schema(description = "The personal name or full name of the individual customer")
+  @Schema(
+      description = "The personal name or full name of the individual customer",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
   @Override
   public String getName() {
     return super.getName();
@@ -473,9 +789,21 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(description = "The code for the occupation for the individual customer", required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "Occupation", required = true)
   public String getOccupation() {
-    return super.getOccupation();
+    return occupation;
+  }
+
+  /**
+   * Returns the party type for the individual customer.
+   *
+   * @return the party type for the individual customer
+   */
+  @JsonIgnore
+  @XmlTransient
+  @Override
+  public PartyType getPartyType() {
+    return super.getPartyType();
   }
 
   /**
@@ -483,11 +811,13 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param purpose the physical address purpose
    * @return the first physical address with the specified purpose for the individual customer or
-   *     <b>null </b> if the physical address could not be found
+   *     <b>null</b> if the physical address could not be found
    */
-  @Override
   public PhysicalAddress getPhysicalAddress(PhysicalAddressPurpose purpose) {
-    return super.getPhysicalAddress(purpose);
+    return physicalAddresses.stream()
+        .filter(physicalAddress -> physicalAddress.getPurposes().contains(purpose))
+        .findFirst()
+        .get();
   }
 
   /**
@@ -496,9 +826,12 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the physical addresses for the individual customer
    */
   @Schema(description = "The physical addresses for the individual customer")
-  @Override
+  @JsonProperty
+  @JsonManagedReference("physicalAddressReference")
+  @XmlElementWrapper(name = "PhysicalAddresses")
+  @XmlElement(name = "PhysicalAddress")
   public Set<PhysicalAddress> getPhysicalAddresses() {
-    return super.getPhysicalAddresses();
+    return physicalAddresses;
   }
 
   /**
@@ -507,9 +840,12 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the preferences for the individual customer
    */
   @Schema(description = "The preferences for the individual customer")
-  @Override
+  @JsonProperty
+  @JsonManagedReference("preferenceReference")
+  @XmlElementWrapper(name = "Preferences")
+  @XmlElement(name = "Preference")
   public Set<Preference> getPreferences() {
-    return super.getPreferences();
+    return preferences;
   }
 
   /**
@@ -521,9 +857,10 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the optional preferred name for the individual customer
    */
   @Schema(description = "The optional preferred name for the individual customer")
-  @Override
+  @JsonProperty
+  @XmlElement(name = "PreferredName")
   public String getPreferredName() {
-    return super.getPreferredName();
+    return preferredName;
   }
 
   /**
@@ -533,9 +870,9 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(description = "The code for the race for the individual customer", required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "Race", required = true)
   public String getRace() {
-    return super.getRace();
+    return race;
   }
 
   /**
@@ -547,9 +884,9 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The code for the residency status for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "ResidencyStatus", required = true)
   public String getResidencyStatus() {
-    return super.getResidencyStatus();
+    return residencyStatus;
   }
 
   /**
@@ -561,9 +898,9 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The code for the residential type for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "ResidentialType", required = true)
   public String getResidentialType() {
-    return super.getResidentialType();
+    return residentialType;
   }
 
   /**
@@ -574,9 +911,8 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the role with the specified type for the individual customer independent of a party
    *     association or <b>null</b> if the role could not be found
    */
-  @Override
   public PartyRole getRole(String type) {
-    return super.getRole(type);
+    return roles.stream().filter(role -> Objects.equals(role.getType(), type)).findFirst().get();
   }
 
   /**
@@ -584,9 +920,15 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @return the party roles for the individual customer independent of a party association
    */
-  @Override
+  @Schema(
+      description =
+          "The party roles for the individual customer independent of a party association")
+  @JsonProperty
+  @JsonManagedReference("partyRoleReference")
+  @XmlElementWrapper(name = "Roles")
+  @XmlElement(name = "Role")
   public Set<PartyRole> getRoles() {
-    return super.getRoles();
+    return roles;
   }
 
   /**
@@ -598,9 +940,9 @@ public class IndividualCustomer extends Person implements Serializable {
       description = "The surname, last name, or family name for the individual customer",
       required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "Surname", required = true)
   public String getSurname() {
-    return super.getSurname();
+    return surname;
   }
 
   /**
@@ -610,9 +952,11 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the tax number with the specified type for the individual customer or <b>null</b> if
    *     the tax number could not be found
    */
-  @Override
   public TaxNumber getTaxNumber(String type) {
-    return super.getTaxNumber(type);
+    return taxNumbers.stream()
+        .filter(taxNumber -> Objects.equals(taxNumber.getType(), type))
+        .findFirst()
+        .get();
   }
 
   /**
@@ -621,9 +965,12 @@ public class IndividualCustomer extends Person implements Serializable {
    * @return the tax numbers for the individual customer
    */
   @Schema(description = "The tax numbers for the individual customer")
-  @Override
+  @JsonProperty
+  @JsonManagedReference("taxNumberReference")
+  @XmlElementWrapper(name = "TaxNumbers")
+  @XmlElement(name = "TaxNumber")
   public Set<TaxNumber> getTaxNumbers() {
-    return super.getTaxNumbers();
+    return taxNumbers;
   }
 
   /**
@@ -637,7 +984,8 @@ public class IndividualCustomer extends Person implements Serializable {
       description =
           "The Universally Unique Identifier (UUID) for the tenant the individual customer is associated with",
       required = true)
-  @Override
+  @JsonProperty(required = true)
+  @XmlElement(name = "TenantId", required = true)
   public UUID getTenantId() {
     return super.getTenantId();
   }
@@ -649,21 +997,9 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @Schema(description = "The code for the title for the individual customer", required = true)
   @JsonProperty(required = true)
-  @Override
+  @XmlElement(name = "Title", required = true)
   public String getTitle() {
-    return super.getTitle();
-  }
-
-  /**
-   * Returns the party type for the individual customer.
-   *
-   * @return the party type for the individual customer
-   */
-  @JsonIgnore
-  @XmlTransient
-  @Override
-  public PartyType getType() {
-    return super.getType();
+    return title;
   }
 
   /**
@@ -673,9 +1009,18 @@ public class IndividualCustomer extends Person implements Serializable {
    */
   @JsonIgnore
   @XmlTransient
-  @Override
   public LocalDateTime getUpdated() {
     return super.getUpdated();
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((getId() == null) ? 0 : getId().hashCode());
   }
 
   /**
@@ -684,9 +1029,11 @@ public class IndividualCustomer extends Person implements Serializable {
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
    */
-  @Override
   public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
-    super.removeContactMechanism(type, purpose);
+    contactMechanisms.removeIf(
+        existingContactMechanism ->
+            Objects.equals(existingContactMechanism.getType(), type)
+                && Objects.equals(existingContactMechanism.getPurpose(), purpose));
   }
 
   /**
@@ -694,19 +1041,20 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param type the code for the identity document type
    */
-  @Override
   public void removeIdentityDocumentByType(String type) {
-    super.removeIdentityDocumentByType(type);
+    identityDocuments.removeIf(
+        existingIdentityDocument -> Objects.equals(existingIdentityDocument.getType(), type));
   }
+  //
 
   /**
    * Remove any physical addresses with the specified purpose for the individual customer.
    *
    * @param purpose the physical address purpose
    */
-  @Override
   public void removePhysicalAddress(PhysicalAddressPurpose purpose) {
-    super.removePhysicalAddress(purpose);
+    physicalAddresses.removeIf(
+        existingPhysicalAddress -> existingPhysicalAddress.getPurposes().contains(purpose));
   }
 
   /**
@@ -714,9 +1062,8 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param type the code for the preference type
    */
-  @Override
   public void removePreference(String type) {
-    super.removePreference(type);
+    preferences.removeIf(existingPreference -> Objects.equals(existingPreference.getType(), type));
   }
 
   /**
@@ -724,19 +1071,17 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param type the code for party role type
    */
-  @Override
   public void removeRole(String type) {
-    super.removeRole(type);
+    roles.removeIf(existingRole -> Objects.equals(existingRole.getType(), type));
   }
 
   /**
    * Remove the tax number with the specified type for the individual customer.
    *
-   * @param type the code for the tax number type
+   * @param type the tax number type
    */
-  @Override
   public void removeTaxNumber(String type) {
-    super.removeTaxNumber(type);
+    taxNumbers.removeIf(existingTaxNumber -> Objects.equals(existingTaxNumber.getType(), type));
   }
 
   /**
@@ -744,9 +1089,9 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param contactMechanisms the contact mechanisms for the individual customer
    */
-  @Override
   public void setContactMechanisms(Set<ContactMechanism> contactMechanisms) {
-    super.setContactMechanisms(contactMechanisms);
+    this.contactMechanisms.clear();
+    this.contactMechanisms.addAll(contactMechanisms);
   }
 
   /**
@@ -756,7 +1101,8 @@ public class IndividualCustomer extends Person implements Serializable {
    *     customer
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
-    super.setCountriesOfTaxResidence(countriesOfTaxResidence);
+    this.countriesOfTaxResidence =
+        StringUtils.collectionToDelimitedString(countriesOfTaxResidence, ",");
   }
 
   /**
@@ -764,9 +1110,8 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param countryOfBirth the code for the country of birth for the individual customer
    */
-  @Override
   public void setCountryOfBirth(String countryOfBirth) {
-    super.setCountryOfBirth(countryOfBirth);
+    this.countryOfBirth = countryOfBirth;
   }
 
   /**
@@ -774,9 +1119,8 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param countryOfResidence the code for the country of residence for the individual customer
    */
-  @Override
   public void setCountryOfResidence(String countryOfResidence) {
-    super.setCountryOfResidence(countryOfResidence);
+    this.countryOfResidence = countryOfResidence;
   }
 
   /**
@@ -786,19 +1130,17 @@ public class IndividualCustomer extends Person implements Serializable {
    *     individual customer
    */
   @JsonIgnore
-  @Override
   public void setCountryOfTaxResidence(String countryOfTaxResidence) {
-    super.setCountryOfTaxResidence(countryOfTaxResidence);
+    this.countriesOfTaxResidence = countryOfTaxResidence;
   }
 
   /**
-   * Set the date of birth for the individual customer.
+   * Set the optional date of birth for the individual customer.
    *
-   * @param dateOfBirth the date of birth for the individual customer
+   * @param dateOfBirth the optional date of birth for the individual customer
    */
-  @Override
   public void setDateOfBirth(LocalDate dateOfBirth) {
-    super.setDateOfBirth(dateOfBirth);
+    this.dateOfBirth = dateOfBirth;
   }
 
   /**
@@ -806,9 +1148,8 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param dateOfDeath the optional date of death for the individual customer
    */
-  @Override
   public void setDateOfDeath(LocalDate dateOfDeath) {
-    super.setDateOfDeath(dateOfDeath);
+    this.dateOfDeath = dateOfDeath;
   }
 
   /**
@@ -823,53 +1164,50 @@ public class IndividualCustomer extends Person implements Serializable {
   }
 
   /**
-   * Set the code for the employment status for the individual customer.
+   * Set the optional code for the employment status for the individual customer.
    *
-   * @param employmentStatus the code for the employment status for the individual customer
+   * @param employmentStatus the optional code for the employment status for the individual customer
    */
-  @Override
   public void setEmploymentStatus(String employmentStatus) {
-    super.setEmploymentStatus(employmentStatus);
+    this.employmentStatus = employmentStatus;
   }
 
   /**
-   * Set the code for the employment type for the individual customer.
+   * Set the optional code for the employment type for the individual customer.
    *
-   * @param employmentType the code for the employment type for the individual customer
+   * @param employmentType the optional code for the employment type for the individual customer
    */
-  @Override
   public void setEmploymentType(String employmentType) {
-    super.setEmploymentType(employmentType);
+    this.employmentType = employmentType;
   }
 
   /**
-   * Set the code for the gender for the individual customer.
+   * Set the optional code for the gender for the individual customer.
    *
-   * @param gender the code for the gender for the individual customer
+   * @param gender the optional code for the gender for the individual customer
    */
-  @Override
   public void setGender(String gender) {
-    super.setGender(gender);
+    this.gender = gender;
   }
 
   /**
-   * Set the given name, firstname, forename, or Christian name for the individual customer.
+   * Set the optional given name, firstname, forename, or Christian name for the individual
+   * customer.
    *
-   * @param givenName the given name, firstname, forename, or Christian name for the individual customer
+   * @param givenName the optional given name, firstname, forename, or Christian name for the
+   *     individual customer
    */
-  @Override
   public void setGivenName(String givenName) {
-    super.setGivenName(givenName);
+    this.givenName = givenName;
   }
 
   /**
-   * Set the code for the home language for the individual customer.
+   * Set the optional code for the home language for the individual customer.
    *
-   * @param homeLanguage the code for the home language for the individual customer
+   * @param homeLanguage the optional code for the home language for the individual customer
    */
-  @Override
   public void setHomeLanguage(String homeLanguage) {
-    super.setHomeLanguage(homeLanguage);
+    this.homeLanguage = homeLanguage;
   }
 
   /**
@@ -886,19 +1224,18 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param identityDocuments the identity documents for the individual customer
    */
-  @Override
   public void setIdentityDocuments(Set<IdentityDocument> identityDocuments) {
-    super.setIdentityDocuments(identityDocuments);
+    this.identityDocuments.clear();
+    this.identityDocuments.addAll(identityDocuments);
   }
 
   /**
-   * Set the initials for the individual customer.
+   * Set the optional initials for the individual customer.
    *
-   * @param initials the initials for the individual customer
+   * @param initials the optional initials for the individual customer
    */
-  @Override
   public void setInitials(String initials) {
-    super.setInitials(initials);
+    this.initials = initials;
   }
 
   /**
@@ -906,30 +1243,28 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param maidenName the optional maiden name for the individual customer
    */
-  @Override
   public void setMaidenName(String maidenName) {
-    super.setMaidenName(maidenName);
+    this.maidenName = maidenName;
   }
 
   /**
-   * Set the code for the marital status for the individual customer.
+   * Set the optional code for the marital status for the individual customer.
    *
-   * @param maritalStatus the code for the marital status for the individual customer
+   * @param maritalStatus the optional code for the marital status for the individual customer
    */
-  @Override
   public void setMaritalStatus(String maritalStatus) {
-    super.setMaritalStatus(maritalStatus);
+    this.maritalStatus = maritalStatus;
   }
 
   /**
-   * Set the code for the marriage type for the individual customer if the individual customer is married.
+   * Set the optional code for the marriage type for the individual customer if the individual
+   * customer is married.
    *
-   * @param marriageType the code for the marriage type for the individual customer if the
+   * @param marriageType the optional code for the marriage type for the individual customer if the
    *     individual customer is married
    */
-  @Override
   public void setMarriageType(String marriageType) {
-    super.setMarriageType(marriageType);
+    this.marriageType = marriageType;
   }
 
   /**
@@ -937,9 +1272,8 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param middleNames the optional middle names for the individual customer
    */
-  @Override
   public void setMiddleNames(String middleNames) {
-    super.setMiddleNames(middleNames);
+    this.middleNames = middleNames;
   }
 
   /**
@@ -954,19 +1288,17 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param name the personal name or full name of the individual customer
    */
-  @Override
   public void setName(String name) {
     super.setName(name);
   }
 
   /**
-   * Set the code for the occupation for the individual customer.
+   * Set the optional code for the occupation for the individual customer.
    *
-   * @param occupation the code for the occupation for the individual customer
+   * @param occupation the optional code for the occupation for the individual customer
    */
-  @Override
   public void setOccupation(String occupation) {
-    super.setOccupation(occupation);
+    this.occupation = occupation;
   }
 
   /**
@@ -974,9 +1306,9 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param physicalAddresses the physical addresses for the individual customer
    */
-  @Override
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
-    super.setPhysicalAddresses(physicalAddresses);
+    this.physicalAddresses.clear();
+    this.physicalAddresses.addAll(physicalAddresses);
   }
 
   /**
@@ -984,9 +1316,9 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param preferences the preferences for the individual customer
    */
-  @Override
   public void setPreferences(Set<Preference> preferences) {
-    super.setPreferences(preferences);
+    this.preferences.clear();
+    this.preferences.addAll(preferences);
   }
 
   /**
@@ -997,39 +1329,35 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param preferredName the optional preferred name for the individual customer
    */
-  @Override
   public void setPreferredName(String preferredName) {
-    super.setPreferredName(preferredName);
+    this.preferredName = preferredName;
   }
 
   /**
-   * Set the code for the race for the individual customer.
+   * Set the optional code for the race for the individual customer.
    *
-   * @param race the code for the race for the individual customer
+   * @param race the optional code for the race for the individual customer
    */
-  @Override
   public void setRace(String race) {
-    super.setRace(race);
+    this.race = race;
   }
 
   /**
-   * Set the code for the residency status for the individual customer.
+   * Set the optional code for the residency status for the individual customer.
    *
-   * @param residencyStatus the code for the residency status for the individual customer
+   * @param residencyStatus the optional code for the residency status for the individual customer
    */
-  @Override
   public void setResidencyStatus(String residencyStatus) {
-    super.setResidencyStatus(residencyStatus);
+    this.residencyStatus = residencyStatus;
   }
 
   /**
-   * Set the code for the residential type for the individual customer.
+   * Set the optional code for the residential type for the individual customer.
    *
-   * @param residentialType the code for the residential type for the individual customer
+   * @param residentialType the optional code for the residential type for the individual customer
    */
-  @Override
   public void setResidentialType(String residentialType) {
-    super.setResidentialType(residentialType);
+    this.residentialType = residentialType;
   }
 
   /**
@@ -1037,19 +1365,18 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param roles the party roles for the individual customer
    */
-  @Override
   public void setRoles(Set<PartyRole> roles) {
-    super.setRoles(roles);
+    this.roles.clear();
+    this.roles.addAll(roles);
   }
 
   /**
-   * Set the surname, last name, or family name for the individual customer.
+   * Set the optional surname, last name, or family name for the individual customer.
    *
-   * @param surname the surname, last name, or family name for the individual customer
+   * @param surname the optional surname, last name, or family name for the individual customer
    */
-  @Override
   public void setSurname(String surname) {
-    super.setSurname(surname);
+    this.surname = surname;
   }
 
   /**
@@ -1057,9 +1384,9 @@ public class IndividualCustomer extends Person implements Serializable {
    *
    * @param taxNumbers the tax numbers for the individual customer
    */
-  @Override
   public void setTaxNumbers(Set<TaxNumber> taxNumbers) {
-    super.setTaxNumbers(taxNumbers);
+    this.taxNumbers.clear();
+    this.taxNumbers.addAll(taxNumbers);
   }
 
   /**
@@ -1069,18 +1396,16 @@ public class IndividualCustomer extends Person implements Serializable {
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the individual customer
    *     is associated with
    */
-  @Override
   public void setTenantId(UUID tenantId) {
     super.setTenantId(tenantId);
   }
 
   /**
-   * Set the code for the title for the individual customer.
+   * Set the optional code for the title for the individual customer.
    *
-   * @param title the code for the title for the individual customer
+   * @param title the optional code for the title for the individual customer
    */
-  @Override
   public void setTitle(String title) {
-    super.setTitle(title);
+    this.title = title;
   }
 }

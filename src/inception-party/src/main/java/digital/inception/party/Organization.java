@@ -32,7 +32,6 @@ import java.util.Set;
 import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -68,6 +67,7 @@ import org.springframework.util.StringUtils;
   "name",
   "contactMechanisms",
   "physicalAddresses",
+  "preferences",
   "countriesOfTaxResidence",
   "taxNumbers",
   "roles"
@@ -82,6 +82,7 @@ import org.springframework.util.StringUtils;
       "name",
       "contactMechanisms",
       "physicalAddresses",
+      "preferences",
       "countriesOfTaxResidence",
       "taxNumbers",
       "roles"
@@ -111,6 +112,15 @@ public class Organization extends PartyBase implements Serializable {
       fetch = FetchType.EAGER,
       orphanRemoval = true)
   private final Set<PhysicalAddress> physicalAddresses = new HashSet<>();
+
+  /** The preferences for the organization. */
+  @Valid
+  @OneToMany(
+      mappedBy = "party",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true)
+  private final Set<Preference> preferences = new HashSet<>();
 
   /** The party roles for the organization independent of a party association. */
   @Valid
@@ -185,7 +195,19 @@ public class Organization extends PartyBase implements Serializable {
     physicalAddresses.add(physicalAddress);
   }
 
-  // TODO: Add identity documents -- MARCUS
+  /**
+   * Add the preference for the organization.
+   *
+   * @param preference the preference
+   */
+  public void addPreference(Preference preference) {
+    preferences.removeIf(
+        existingPreference -> Objects.equals(existingPreference.getType(), preference.getType()));
+
+    preference.setParty(this);
+
+    preferences.add(preference);
+  }
 
   /**
    * Add the party role to the organization independent of a party association.
@@ -239,13 +261,15 @@ public class Organization extends PartyBase implements Serializable {
     return Objects.equals(getId(), other.getId());
   }
 
+  // TODO: Add identity documents -- MARCUS
+
   /**
    * Retrieve the contact mechanism with the specified type and purpose for the organization.
    *
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
    * @return the contact mechanism with the specified type and purpose for the organization or
-   *     <b>null </b> if the contact mechanism could not be found
+   *     <b>null</b> if the contact mechanism could not be found
    */
   public ContactMechanism getContactMechanism(
       ContactMechanismType type, ContactMechanismPurpose purpose) {
@@ -280,7 +304,8 @@ public class Organization extends PartyBase implements Serializable {
   @Schema(
       description = "The optional codes for the countries of tax residence for the organization")
   @JsonProperty
-  @XmlElement(name = "CountriesOfTaxResidence")
+  @XmlElementWrapper(name = "CountriesOfTaxResidence")
+  @XmlElement(name = "CountryOfTaxResidence")
   public Set<String> getCountriesOfTaxResidence() {
     return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
   }
@@ -301,7 +326,7 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) for the organization
    */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the organization")
+  @Schema(description = "The Universally Unique Identifier (UUID) for the organization", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @Override
@@ -320,6 +345,18 @@ public class Organization extends PartyBase implements Serializable {
   @Override
   public String getName() {
     return super.getName();
+  }
+
+  /**
+   * Returns the party type for the organization.
+   *
+   * @return the party type for the organization
+   */
+  @JsonIgnore
+  @XmlTransient
+  @Override
+  public PartyType getPartyType() {
+    return super.getPartyType();
   }
 
   /**
@@ -348,6 +385,20 @@ public class Organization extends PartyBase implements Serializable {
   @XmlElement(name = "PhysicalAddress")
   public Set<PhysicalAddress> getPhysicalAddresses() {
     return physicalAddresses;
+  }
+
+  /**
+   * Returns the preferences for the organization.
+   *
+   * @return the preferences for the organization
+   */
+  @Schema(description = "The preferences for the organization")
+  @JsonProperty
+  @JsonManagedReference("preferenceReference")
+  @XmlElementWrapper(name = "Preferences")
+  @XmlElement(name = "Preference")
+  public Set<Preference> getPreferences() {
+    return preferences;
   }
 
   /**
@@ -466,6 +517,15 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
+   * Remove the preference with the specified type for the organization.
+   *
+   * @param type the code for the preference type
+   */
+  public void removePreference(String type) {
+    preferences.removeIf(existingPreference -> Objects.equals(existingPreference.getType(), type));
+  }
+
+  /**
    * Remove the tax number with the specified type for the organization.
    *
    * @param type the tax number type
@@ -534,6 +594,16 @@ public class Organization extends PartyBase implements Serializable {
   public void setPhysicalAddresses(Set<PhysicalAddress> physicalAddresses) {
     this.physicalAddresses.clear();
     this.physicalAddresses.addAll(physicalAddresses);
+  }
+
+  /**
+   * Set the preferences for the organization.
+   *
+   * @param preferences the preferences for the organization
+   */
+  public void setPreferences(Set<Preference> preferences) {
+    this.preferences.clear();
+    this.preferences.addAll(preferences);
   }
 
   /**

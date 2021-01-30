@@ -36,7 +36,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 /**
- * The <b>Party</b> class holds the information common to all types of parties.
+ * The <b>PartyBase</b> class holds the information common to all types of parties and is the base
+ * class that the classes for the different party types are derived from, e.g. <b>Person</b>.
  *
  * <p>The <b>Party</b> and <b>PartyBase</b> classes are both JPA entity classes mapped to the same
  * <b>party.parties</b> table. The <b>PartyBase</b> class provides the common base class for all JPA
@@ -83,15 +84,15 @@ public class PartyBase implements Serializable {
   @Column(name = "name", length = 100, nullable = false)
   private String name;
 
+  /** The party type for the party. */
+  @NotNull
+  @Column(name = "type", length = 30, nullable = false)
+  private PartyType partyType;
+
   /** The Universally Unique Identifier (UUID) for the tenant the party is associated with. */
   @NotNull
   @Column(name = "tenant_id", nullable = false)
   private UUID tenantId;
-
-  /** The party type. */
-  @NotNull
-  @Column(name = "type", length = 30, nullable = false)
-  private PartyType type;
 
   /** The date and time the party was last updated. */
   @UpdateTimestamp
@@ -104,10 +105,10 @@ public class PartyBase implements Serializable {
   /**
    * Constructs a new <b>PartyBase</b>.
    *
-   * @param type the party type
+   * @param partyType the party type
    */
-  protected PartyBase(PartyType type) {
-    this.type = type;
+  protected PartyBase(PartyType partyType) {
+    this.partyType = partyType;
   }
 
   /**
@@ -115,13 +116,13 @@ public class PartyBase implements Serializable {
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
    *     with
-   * @param type the party type
+   * @param partyType the party type for the party
    * @param name the name of the party
    */
-  public PartyBase(UUID tenantId, PartyType type, String name) {
+  public PartyBase(UUID tenantId, PartyType partyType, String name) {
     this.id = UuidCreator.getShortPrefixComb();
     this.tenantId = tenantId;
-    this.type = type;
+    this.partyType = partyType;
     this.name = name;
   }
 
@@ -181,6 +182,16 @@ public class PartyBase implements Serializable {
   }
 
   /**
+   * Returns the party type for the party.
+   *
+   * @return the party type for the party
+   */
+  @XmlTransient
+  public PartyType getPartyType() {
+    return partyType;
+  }
+
+  /**
    * Returns the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @return the Universally Unique Identifier (UUID) for the tenant the party is associated with
@@ -188,16 +199,6 @@ public class PartyBase implements Serializable {
   @XmlTransient
   public UUID getTenantId() {
     return tenantId;
-  }
-
-  /**
-   * Returns the party type.
-   *
-   * @return the party type
-   */
-  @XmlTransient
-  public PartyType getType() {
-    return type;
   }
 
   /**
@@ -239,6 +240,15 @@ public class PartyBase implements Serializable {
   }
 
   /**
+   * Set the party type for the party.
+   *
+   * @param partyType the party type for the party
+   */
+  public void setPartyType(PartyType partyType) {
+    this.partyType = partyType;
+  }
+
+  /**
    * Set the Universally Unique Identifier (UUID) for the tenant the party is associated with.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant the party is associated
@@ -246,14 +256,5 @@ public class PartyBase implements Serializable {
    */
   public void setTenantId(UUID tenantId) {
     this.tenantId = tenantId;
-  }
-
-  /**
-   * Set the party type.
-   *
-   * @param type the party type
-   */
-  public void setType(PartyType type) {
-    this.type = type;
   }
 }

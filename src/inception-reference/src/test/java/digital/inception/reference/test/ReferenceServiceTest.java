@@ -108,7 +108,7 @@ public class ReferenceServiceTest {
     Country retrievedCountry = retrievedCountries.get(0);
 
     assertEquals(
-        "The correct number of countries was not retrieved", 490, retrievedCountries.size());
+        "The correct number of countries was not retrieved", 492, retrievedCountries.size());
 
     assertEquals(
         "The correct code was not retrieved for the country", "AF", retrievedCountry.getCode());
@@ -132,7 +132,7 @@ public class ReferenceServiceTest {
     retrievedCountries = referenceService.getCountries("en-US");
 
     assertEquals(
-        "The correct number of countries was not retrieved", 245, retrievedCountries.size());
+        "The correct number of countries was not retrieved", 246, retrievedCountries.size());
 
     retrievedCountry = retrievedCountries.get(0);
 
@@ -230,12 +230,12 @@ public class ReferenceServiceTest {
     List<Language> retrievedLanguages = referenceService.getLanguages();
 
     assertEquals(
-        "The correct number of languages was not retrieved", 184, retrievedLanguages.size());
+        "The correct number of languages was not retrieved", 186, retrievedLanguages.size());
 
     retrievedLanguages = referenceService.getLanguages("en-US");
 
     assertEquals(
-        "The correct number of languages was not retrieved", 92, retrievedLanguages.size());
+        "The correct number of languages was not retrieved", 93, retrievedLanguages.size());
   }
 
   /** Test the marital status reference functionality. */
@@ -486,6 +486,41 @@ public class ReferenceServiceTest {
     retrievedTitles = referenceService.getTitles("en-US");
 
     assertEquals("The correct number of titles was not retrieved", 12, retrievedTitles.size());
+  }
+
+  /** Test the reference validity check functionality. */
+  @Test
+  public void validityTest() throws Exception {
+    referenceService.isValidContactMechanismPurpose("mobile_number", "personal_mobile_number");
+    referenceService.isValidContactMechanismType("mobile_number");
+    referenceService.isValidCountry("ZA");
+    referenceService.isValidEmploymentStatus("employed");
+    referenceService.isValidEmploymentType("employed", "full_time");
+    referenceService.isValidGender("female");
+    referenceService.isValidIdentityDocumentType("passport");
+    referenceService.isValidLanguage("EN");
+    referenceService.isValidMaritalStatus("married");
+    referenceService.isValidMarriageType("married", "anc_with_accrual");
+    // referenceService.isValidMinorType("minor");
+    referenceService.isValidNextOfKinType("mother");
+    referenceService.isValidOccupation("executive");
+    referenceService.isValidPartyRolePurpose("test");
+    referenceService.isValidPartyRoleType("employee");
+    referenceService.isValidPhysicalAddressPurpose("billing");
+    referenceService.isValidPhysicalAddressType("complex");
+    referenceService.isValidPreferenceType("correspondence_language");
+    referenceService.isValidPreferenceTypeCategory("correspondence");
+    referenceService.isValidRace("white");
+    referenceService.isValidRegion("EC");
+    referenceService.isValidResidencePermitType("za_general_work_visa");
+    referenceService.isValidResidencyStatus("permanent_resident");
+    referenceService.isValidResidentialType("owner");
+    referenceService.isValidSourceOfFunds("salary");
+    referenceService.isValidTaxNumberType("za_income_tax_number");
+    referenceService.isValidTimeToContact("anytime");
+    referenceService.isValidTitle("mrs");
+    referenceService.isValidVerificationMethod("system");
+    referenceService.isValidVerificationStatus("complete");
   }
 
   /** Test the verification method functionality. */

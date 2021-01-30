@@ -17,12 +17,14 @@
 package digital.inception.application;
 
 import digital.inception.core.util.JDBCUtil;
+import digital.inception.core.util.ResourceUtil;
 import io.agroal.api.AgroalDataSource;
 import io.agroal.api.configuration.supplier.AgroalDataSourceConfigurationSupplier;
 import io.agroal.api.configuration.supplier.AgroalPropertiesReader;
 import io.agroal.api.transaction.TransactionIntegration;
 import io.agroal.narayana.NarayanaTransactionIntegration;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -54,6 +56,30 @@ import org.springframework.util.StringUtils;
 @ConditionalOnProperty(value = "inception.application.data-source.class-name")
 @SuppressWarnings("unused")
 public class ApplicationDataSourceConfiguration {
+
+  private static final String[] IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS = {
+    // Core modules
+    "digital/inception/core/inception-core-h2.sql",
+    "digital/inception/application/inception-application-h2.sql",
+    // Utility modules
+    "digital/inception/audit/inception-audit-h2.sql",
+    "digital/inception/bmi/inception-bmi-h2.sql",
+    "digital/inception/bmi/inception-camunda-h2.sql",
+    "digital/inception/codes/inception-codes-h2.sql",
+    "digital/inception/configuration/inception-configuration-h2.sql",
+    "digital/inception/error/inception-error-h2.sql",
+    "digital/inception/mail/inception-mail-h2.sql",
+    "digital/inception/messaging/inception-messaging-h2.sql",
+    "digital/inception/reporting/inception-reporting-h2.sql",
+    "digital/inception/scheduler/inception-scheduler-h2.sql",
+    "digital/inception/security/inception-security-h2.sql",
+    "digital/inception/sms/inception-sms-h2.sql",
+    // Business Modules
+    "digital/inception/reference/inception-reference-h2.sql",
+    "digital/inception/party/inception-party-h2.sql",
+    // Banking Modules
+    "digital/inception/banking/inception-banking-h2.sql",
+  };
 
   /* Logger */
   private static final Logger logger =
@@ -243,12 +269,12 @@ public class ApplicationDataSourceConfiguration {
 
         /*
          * Initialize the in-memory database using the SQL statements contained in the resources
-         * for the Inception framework.
+         * for the Inception framework in a specific order
          */
-        for (Resource inMemoryInitResource : inMemoryInitResources) {
-          if ((StringUtils.hasText(inMemoryInitResource.getFilename()))
-              && inMemoryInitResource.getFilename().contains("inception-")) {
-            loadSQL(dataSource, inMemoryInitResource);
+        for (String inMemoryDatabaseInitResourcePath : IN_MEMORY_DATABASE_INIT_RESOURCE_PATHS) {
+          if (ResourceUtil.classpathResourceExists(inMemoryDatabaseInitResourcePath)) {
+            loadSQL(
+                dataSource, ResourceUtil.getClasspathResourceURL(inMemoryDatabaseInitResourcePath));
           }
         }
 
@@ -259,7 +285,13 @@ public class ApplicationDataSourceConfiguration {
         for (Resource inMemoryInitResource : inMemoryInitResources) {
           if ((StringUtils.hasText(inMemoryInitResource.getFilename()))
               && (!inMemoryInitResource.getFilename().contains("inception-"))) {
-            loadSQL(dataSource, inMemoryInitResource);
+
+            logger.info(
+                "Executing the SQL statements in the file '"
+                    + inMemoryInitResource.getFilename()
+                    + "'");
+
+            loadSQL(dataSource, inMemoryInitResource.getURL());
           }
         }
       }
@@ -270,14 +302,11 @@ public class ApplicationDataSourceConfiguration {
     }
   }
 
-  private void loadSQL(DataSource dataSource, Resource databaseInitResource)
+  private void loadSQL(DataSource dataSource, URL databaseInitResourceUrl)
       throws IOException, SQLException {
-    logger.info(
-        "Executing the SQL statements in the file '" + databaseInitResource.getFilename() + "'");
-
     try {
       // Load the SQL statements used to initialize the database tables
-      List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResource.getURL());
+      List<String> sqlStatements = JDBCUtil.loadSQL(databaseInitResourceUrl);
 
       // Get a connection to the in-memory database
       try (Connection connection = dataSource.getConnection()) {

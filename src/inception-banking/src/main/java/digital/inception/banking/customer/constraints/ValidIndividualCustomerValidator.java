@@ -17,6 +17,7 @@
 package digital.inception.banking.customer.constraints;
 
 import digital.inception.banking.customer.IndividualCustomer;
+import digital.inception.reference.IReferenceService;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,25 +31,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ValidIndividualCustomerValidator
     implements ConstraintValidator<ValidIndividualCustomer, IndividualCustomer> {
 
+  private final IReferenceService referenceService;
+
   @Autowired
-  public ValidIndividualCustomerValidator() {}
+  public ValidIndividualCustomerValidator(IReferenceService referenceService) {
+    this.referenceService = referenceService;
+  }
 
   @Override
   public void initialize(ValidIndividualCustomer constraintAnnotation) {}
 
   @Override
   public boolean isValid(
-      IndividualCustomer individualCustomer, ConstraintValidatorContext context) {
+      IndividualCustomer individualCustomer,
+      ConstraintValidatorContext constraintValidatorContext) {
 
     boolean isValid = true;
 
     // Disable the default constraint violation
-    context.disableDefaultConstraintViolation();
+    constraintValidatorContext.disableDefaultConstraintViolation();
+
+    try {
+      var xxx = referenceService.getContactMechanismPurposes();
+
+      var yyy = referenceService.getContactMechanismPurposes("en-US");
+
+      xxx = referenceService.getContactMechanismPurposes();
+
+      yyy = referenceService.getContactMechanismPurposes("en-US");
+
+    } catch (Throwable e) {
+
+    }
 
     // TODO: Implement custom IndividualCustomer validation.
-
-    // TODO: Ensure that required attributes on an IndividualCustomer that were optional on a Person
-    // are validated
 
     return isValid;
   }

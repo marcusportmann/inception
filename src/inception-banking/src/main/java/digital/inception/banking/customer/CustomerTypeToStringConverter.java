@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-package digital.inception.party;
+package digital.inception.banking.customer;
 
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.ReadingConverter;
+import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>StringToPhysicalAddressTypeConverter</b> class implements the Spring converter that
- * converts a <b>String</b> type into a <b>PhysicalAddressType</b> type.
+ * The <b>CustomerTypeToStringConverter</b> class implements the Spring converter that converts a
+ * <b>CustomerType</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */
 @Component
-@ReadingConverter
-public class StringToPhysicalAddressTypeConverter
-    implements Converter<String, PhysicalAddressType> {
+@WritingConverter
+public class CustomerTypeToStringConverter implements Converter<CustomerType, String> {
 
-  /** Constructs a new <b>StringToPhysicalAddressTypeConverter</b>. */
-  public StringToPhysicalAddressTypeConverter() {}
+  /** Constructs a new <b>CustomerTypeToStringConverter</b>. */
+  public CustomerTypeToStringConverter() {}
 
   @Override
-  public PhysicalAddressType convert(String source) {
-    return PhysicalAddressType.fromCode(source);
+  public String convert(CustomerType source) {
+    return source.code();
   }
 }

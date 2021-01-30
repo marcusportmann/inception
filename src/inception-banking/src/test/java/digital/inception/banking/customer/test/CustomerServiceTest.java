@@ -35,7 +35,9 @@ import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,10 +81,13 @@ public class CustomerServiceTest {
     IndividualCustomer individualCustomer = new IndividualCustomer();
 
     individualCustomer.setCountryOfBirth("US");
+    individualCustomer.setCountryOfResidence("ZA");
     individualCustomer.setDateOfBirth(LocalDate.of(1976, 3, 7));
-    individualCustomer.setEmploymentStatus("O");
+    individualCustomer.setEmploymentStatus("other");
+    individualCustomer.setEmploymentType("other");
     individualCustomer.setGender("M");
     individualCustomer.setGivenName("GivenName" + individualCustomerCount);
+    individualCustomer.setHomeLanguage("EN");
     individualCustomer.setId(UuidCreator.getShortPrefixComb());
     individualCustomer.setInitials("G M");
     individualCustomer.setMaidenName("MaidenName" + individualCustomerCount);
@@ -108,10 +113,10 @@ public class CustomerServiceTest {
     individualCustomer.setTitle("1");
 
     individualCustomer.addIdentityDocument(
-        new IdentityDocument("ZAIDCARD", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
+        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     individualCustomer.setCountryOfTaxResidence("ZA");
-    individualCustomer.addTaxNumber(new TaxNumber("ZA", "ZAITN", "123456789"));
+    individualCustomer.addTaxNumber(new TaxNumber( "za_income_tax_number", "ZA", "123456789"));
 
     individualCustomer.addContactMechanism(
         new ContactMechanism(
@@ -165,8 +170,7 @@ public class CustomerServiceTest {
 
     compareIndividualCustomers(individualCustomer, retrievedIndividualCustomer);
 
-    int xxx = 0;
-    xxx++;
+    customerService.deleteIndividualCustomer(individualCustomer.getId());
 
     //    Persons filteredPersons =
     //        partyService.getPersons("", PersonSortBy.NAME, SortDirection.ASCENDING, 0, 100);
@@ -179,6 +183,15 @@ public class CustomerServiceTest {
     //    comparePersons(person, filteredPersons.getPersons().get(0));
     //
     //    partyService.deletePerson(person.getId());
+  }
+
+  /** Test the individual customer validation functionality. */
+  @Test
+  public void validateIndividualCustomerTest() throws Exception {
+    IndividualCustomer individualCustomer = getTestCompleteIndividualCustomerDetails();
+
+    Set<ConstraintViolation<IndividualCustomer>> constraintViolations =
+        customerService.validateIndividualCustomer(individualCustomer);
   }
 
   private void compareIndividualCustomers(
@@ -448,8 +461,7 @@ public class CustomerServiceTest {
       for (Preference individualCustomer2Preference : individualCustomer2.getPreferences()) {
 
         if (Objects.equals(
-                individualCustomer1Preference.getPerson(),
-                individualCustomer2Preference.getPerson())
+                individualCustomer1Preference.getParty(), individualCustomer2Preference.getParty())
             && Objects.equals(
                 individualCustomer1Preference.getType(), individualCustomer2Preference.getType())) {
 

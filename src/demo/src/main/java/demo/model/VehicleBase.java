@@ -59,6 +59,7 @@ import org.hibernate.annotations.UpdateTimestamp;
  * @author Marcus Portmann
  */
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlTransient
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(schema = "demo", name = "vehicles")

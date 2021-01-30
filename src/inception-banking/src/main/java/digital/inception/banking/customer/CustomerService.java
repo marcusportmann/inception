@@ -14,34 +14,29 @@
  * limitations under the License.
  */
 
- package digital.inception.banking.customer;
+package digital.inception.banking.customer;
 
-
-
- import digital.inception.core.validation.InvalidArgumentException;
- import digital.inception.core.validation.ValidationError;
- import digital.inception.party.PartyServiceException;
- import java.util.Optional;
- import java.util.Set;
- import java.util.UUID;
- import javax.validation.ConstraintViolation;
- import javax.validation.Validator;
- import org.slf4j.Logger;
- import org.slf4j.LoggerFactory;
- import org.springframework.context.ApplicationContext;
- import org.springframework.stereotype.Service;
- import org.springframework.transaction.annotation.Transactional;
-
-
+import digital.inception.core.validation.InvalidArgumentException;
+import digital.inception.core.validation.ValidationError;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The <b>CustomerService</b> class provides the Customer Service implementation.
  *
  * @author Marcus Portmann
  */
- @Service
- @SuppressWarnings("unused")
- public class CustomerService implements ICustomerService {
+@Service
+@SuppressWarnings("unused")
+public class CustomerService implements ICustomerService {
 
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
@@ -108,6 +103,35 @@
   }
 
   /**
+   * Delete the individual customer.
+   *
+   * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
+   *     customer
+   */
+  @Override
+  @Transactional
+  public void deleteIndividualCustomer(UUID individualCustomerId)
+      throws InvalidArgumentException, IndividualCustomerNotFoundException,
+          CustomerServiceException {
+    if (individualCustomerId == null) {
+      throw new InvalidArgumentException("individualCustomerId");
+    }
+
+    try {
+      if (!individualCustomerRepository.existsById(individualCustomerId)) {
+        throw new IndividualCustomerNotFoundException(individualCustomerId);
+      }
+
+      individualCustomerRepository.deleteById(individualCustomerId);
+    } catch (IndividualCustomerNotFoundException e) {
+      throw e;
+    } catch (Throwable e) {
+      throw new CustomerServiceException(
+          "Failed to delete the individual customer (" + individualCustomerId + ")", e);
+    }
+  }
+
+  /**
    * Retrieve the individual customer.
    *
    * @param individualCustomerId the Universally Unique Identifier (UUID) for the individual
@@ -116,8 +140,8 @@
    */
   @Override
   public IndividualCustomer getIndividualCustomer(UUID individualCustomerId)
-      throws InvalidArgumentException, IndividualCustomerNotFoundException, PartyServiceException
- {
+      throws InvalidArgumentException, IndividualCustomerNotFoundException,
+          CustomerServiceException {
     if (individualCustomerId == null) {
       throw new InvalidArgumentException("individualCustomerId");
     }
@@ -134,8 +158,19 @@
     } catch (IndividualCustomerNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new PartyServiceException(
+      throw new CustomerServiceException(
           "Failed to retrieve the individual customer (" + individualCustomerId + ")", e);
     }
   }
- }
+
+  /**
+   * Validate the individual customer.
+   *
+   * @param individualCustomer the individual customer
+   * @return the constraint violations for the individual customer
+   */
+  public Set<ConstraintViolation<IndividualCustomer>> validateIndividualCustomer(
+      IndividualCustomer individualCustomer) {
+    return validator.validate(individualCustomer);
+  }
+}

@@ -34,6 +34,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -93,6 +94,15 @@ public class ContactMechanism implements Serializable {
   @XmlTransient
   @NotNull
   @Size(min = 1, max = 30)
+  @Pattern(
+      message = "{digital.inception.party.ContactMechanism.Purpose.Pattern.message}",
+      regexp =
+          "(personal_mobile_number|work_mobile_number|other_mobile_number|main_mobile_number"
+              + "|home_phone_number|work_phone_number|school_phone_number|pager_phone_number"
+              + "|other_phone_number|main_phone_number|home_fax_number|work_fax_number"
+              + "|other_fax_number|main_fax_number|personal_email_address|work_email_address"
+              + "|school_email_address|other_email_address|main_email_address|whatsapp_user_id"
+              + "|twitter_id)")
   @Id
   @Column(name = "purpose", length = 30, nullable = false)
   private String purpose;
@@ -102,6 +112,9 @@ public class ContactMechanism implements Serializable {
   @XmlTransient
   @NotNull
   @Size(min = 1, max = 30)
+  @Pattern(
+      message = "{digital.inception.party.ContactMechanism.Type.Pattern.message}",
+      regexp = "(mobile_number|phone_number|fax_number|email_address|social_media)")
   @Id
   @Column(name = "type", length = 30, nullable = false)
   private String type;

@@ -409,9 +409,9 @@ INSERT INTO party.tax_numbers (party_id, type, number, country_of_issue, created
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'za_income_tax_number', '1234567890', 'ZA', NOW());
 INSERT INTO party.physical_addresses (id, party_id, type, line1, line2, city, region, country, postal_code, purposes, created)
   VALUES ('14166574-6564-468a-b845-8a5c127a4345', '54166574-6564-468a-b845-8a5c127a4345', 'street', '145 Apple Street', 'Fairland', 'Johannesburg', 'GP', 'ZA', '2170', 'residential', NOW());
-INSERT INTO party.preferences(person_id, type, value, created)
+INSERT INTO party.preferences(party_id, type, value, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'correspondence_language', 'EN', NOW());
-INSERT INTO party.preferences(person_id, type, value, created)
+INSERT INTO party.preferences(party_id, type, value, created)
   VALUES ('54166574-6564-468a-b845-8a5c127a4345', 'time_to_contact', 'anytime', NOW());
 
 

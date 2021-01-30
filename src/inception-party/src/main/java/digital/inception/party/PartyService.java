@@ -584,4 +584,49 @@ public class PartyService implements IPartyService {
       throw new PartyServiceException("Failed to update the person (" + person.getId() + ")", e);
     }
   }
+
+  /**
+   * Validate the organization.
+   *
+   * @param organization the organization
+   * @return the constraint violations for the organization
+   */
+  @Override
+  public Set<ConstraintViolation<Organization>> validateOrganization(Organization organization) {
+    return validator.validate(organization);
+  }
+
+  /**
+   * Validate the party.
+   *
+   * @param party the party
+   * @return the constraint violations for the party
+   */
+  @Override
+  public Set<ConstraintViolation<Party>> validateParty(Party party) {
+    return validator.validate(party);
+  }
+
+  /**
+   * Validate the person.
+   *
+   * @param person the person
+   * @return the constraint violations for the person
+   */
+  @Override
+  public Set<ConstraintViolation<Person>> validatePerson(Person person) {
+    return validator.validate(person);
+  }
+
+  /**
+   * Validate the physical address.
+   *
+   * @param physicalAddress the physical address
+   * @return the constraint violations for the physical address
+   */
+  @Override
+  public Set<ConstraintViolation<PhysicalAddress>> validatePhysicalAddress(
+      PhysicalAddress physicalAddress) {
+    return validator.validate(physicalAddress);
+  }
 }

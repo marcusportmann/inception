@@ -17,9 +17,11 @@
 package digital.inception.reference;
 
 import java.util.List;
+import javax.annotation.Resource;
 import javax.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -126,6 +128,9 @@ public class ReferenceService implements IReferenceService {
   /** The Verification Status Repository. */
   private final VerificationStatusRepository verificationStatusRepository;
 
+  /** The internal reference to the Reference Service to enable caching. */
+  @Resource private IReferenceService self;
+
   /**
    * Constructs a new <b>ReferenceService</b>.
    *
@@ -229,6 +234,7 @@ public class ReferenceService implements IReferenceService {
    * @return the contact mechanism purposes
    */
   @Override
+  @Cacheable(value = "reference", key = "'contactMechanismPurposes.ALL'")
   public List<ContactMechanismPurpose> getContactMechanismPurposes()
       throws ReferenceServiceException {
     return getContactMechanismPurposes(null);
@@ -242,6 +248,7 @@ public class ReferenceService implements IReferenceService {
    * @return the contact mechanism purposes
    */
   @Override
+  @Cacheable(value = "reference", key = "'contactMechanismPurposes.' + #localeId")
   public List<ContactMechanismPurpose> getContactMechanismPurposes(String localeId)
       throws ReferenceServiceException {
     try {
@@ -263,6 +270,7 @@ public class ReferenceService implements IReferenceService {
    * @return the contact mechanism types
    */
   @Override
+  @Cacheable(value = "reference", key = "'contactMechanismTypes.ALL'")
   public List<ContactMechanismType> getContactMechanismTypes() throws ReferenceServiceException {
     return getContactMechanismTypes(null);
   }
@@ -275,6 +283,7 @@ public class ReferenceService implements IReferenceService {
    * @return the contact mechanism types
    */
   @Override
+  @Cacheable(value = "reference", key = "'contactMechanismTypes.' + #localeId")
   public List<ContactMechanismType> getContactMechanismTypes(String localeId)
       throws ReferenceServiceException {
     try {
@@ -296,6 +305,7 @@ public class ReferenceService implements IReferenceService {
    * @return the countries
    */
   @Override
+  @Cacheable(value = "reference", key = "'countries.ALL'")
   public List<Country> getCountries() throws ReferenceServiceException {
     return getCountries(null);
   }
@@ -308,6 +318,7 @@ public class ReferenceService implements IReferenceService {
    * @return the countries
    */
   @Override
+  @Cacheable(value = "reference", key = "'countries.' + #localeId")
   public List<Country> getCountries(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -327,6 +338,7 @@ public class ReferenceService implements IReferenceService {
    * @return the employment statuses
    */
   @Override
+  @Cacheable(value = "reference", key = "'employmentStatuses.ALL'")
   public List<EmploymentStatus> getEmploymentStatuses() throws ReferenceServiceException {
     return getEmploymentStatuses(null);
   }
@@ -339,6 +351,7 @@ public class ReferenceService implements IReferenceService {
    * @return the employment statuses
    */
   @Override
+  @Cacheable(value = "reference", key = "'employmentStatuses.' + #localeId")
   public List<EmploymentStatus> getEmploymentStatuses(String localeId)
       throws ReferenceServiceException {
     try {
@@ -359,6 +372,7 @@ public class ReferenceService implements IReferenceService {
    * @return the employment types
    */
   @Override
+  @Cacheable(value = "reference", key = "'employmentTypes.ALL'")
   public List<EmploymentType> getEmploymentTypes() throws ReferenceServiceException {
     return getEmploymentTypes(null);
   }
@@ -371,6 +385,7 @@ public class ReferenceService implements IReferenceService {
    * @return the employment types
    */
   @Override
+  @Cacheable(value = "reference", key = "'employmentTypes.' + #localeId")
   public List<EmploymentType> getEmploymentTypes(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -385,6 +400,17 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
+   * Retrieve all the genders.
+   *
+   * @return the genders
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'genders.ALL'")
+  public List<Gender> getGenders() throws ReferenceServiceException {
+    return getGenders(null);
+  }
+
+  /**
    * Retrieve the genders.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the genders for or
@@ -392,6 +418,7 @@ public class ReferenceService implements IReferenceService {
    * @return the genders
    */
   @Override
+  @Cacheable(value = "reference", key = "'genders.' + #localeId")
   public List<Gender> getGenders(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -406,21 +433,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Retrieve all the genders.
-   *
-   * @return the genders
-   */
-  @Override
-  public List<Gender> getGenders() throws ReferenceServiceException {
-    return getGenders(null);
-  }
-
-  /**
    * Retrieve all the identity document types.
    *
    * @return the identity document types
    */
   @Override
+  @Cacheable(value = "reference", key = "'identityDocumentTypes.ALL'")
   public List<IdentityDocumentType> getIdentityDocumentTypes() throws ReferenceServiceException {
     return getIdentityDocumentTypes(null);
   }
@@ -433,6 +451,7 @@ public class ReferenceService implements IReferenceService {
    * @return the identity document types
    */
   @Override
+  @Cacheable(value = "reference", key = "'identityDocumentTypes.' + #localeId")
   public List<IdentityDocumentType> getIdentityDocumentTypes(String localeId)
       throws ReferenceServiceException {
     try {
@@ -454,6 +473,7 @@ public class ReferenceService implements IReferenceService {
    * @return the languages
    */
   @Override
+  @Cacheable(value = "reference", key = "'languages.ALL'")
   public List<Language> getLanguages() throws ReferenceServiceException {
     return getLanguages(null);
   }
@@ -466,6 +486,7 @@ public class ReferenceService implements IReferenceService {
    * @return the languages
    */
   @Override
+  @Cacheable(value = "reference", key = "'languages.' + #localeId")
   public List<Language> getLanguages(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -485,6 +506,7 @@ public class ReferenceService implements IReferenceService {
    * @return the marital statuses
    */
   @Override
+  @Cacheable(value = "reference", key = "'maritalStatuses.ALL'")
   public List<MaritalStatus> getMaritalStatuses() throws ReferenceServiceException {
     return getMaritalStatuses(null);
   }
@@ -497,6 +519,7 @@ public class ReferenceService implements IReferenceService {
    * @return the marital statuses
    */
   @Override
+  @Cacheable(value = "reference", key = "'maritalStatuses.' + #localeId")
   public List<MaritalStatus> getMaritalStatuses(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -516,6 +539,7 @@ public class ReferenceService implements IReferenceService {
    * @return the marriage types
    */
   @Override
+  @Cacheable(value = "reference", key = "'marriageTypes.ALL'")
   public List<MarriageType> getMarriageTypes() throws ReferenceServiceException {
     return getMarriageTypes(null);
   }
@@ -528,6 +552,7 @@ public class ReferenceService implements IReferenceService {
    * @return the marriage types
    */
   @Override
+  @Cacheable(value = "reference", key = "'marriageTypes.' + #localeId")
   public List<MarriageType> getMarriageTypes(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -547,6 +572,7 @@ public class ReferenceService implements IReferenceService {
    * @return the next of kin types
    */
   @Override
+  @Cacheable(value = "reference", key = "'nextOfKinTypes.ALL'")
   public List<NextOfKinType> getNextOfKinTypes() throws ReferenceServiceException {
     return getNextOfKinTypes(null);
   }
@@ -559,6 +585,7 @@ public class ReferenceService implements IReferenceService {
    * @return the next of kin types
    */
   @Override
+  @Cacheable(value = "reference", key = "'nextOfKinTypes.' + #localeId")
   public List<NextOfKinType> getNextOfKinTypes(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -578,6 +605,7 @@ public class ReferenceService implements IReferenceService {
    * @return the occupations
    */
   @Override
+  @Cacheable(value = "reference", key = "'occupations.ALL'")
   public List<Occupation> getOccupations() throws ReferenceServiceException {
     return getOccupations(null);
   }
@@ -590,6 +618,7 @@ public class ReferenceService implements IReferenceService {
    * @return the occupations
    */
   @Override
+  @Cacheable(value = "reference", key = "'occupations.' + #localeId")
   public List<Occupation> getOccupations(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -609,6 +638,7 @@ public class ReferenceService implements IReferenceService {
    * @return the party role purposes
    */
   @Override
+  @Cacheable(value = "reference", key = "'partyRolePurposes.ALL'")
   public List<PartyRolePurpose> getPartyRolePurposes() throws ReferenceServiceException {
     return getPartyRolePurposes(null);
   }
@@ -621,6 +651,7 @@ public class ReferenceService implements IReferenceService {
    * @return the party role purposes
    */
   @Override
+  @Cacheable(value = "reference", key = "'partyRolePurposes.' + #localeId")
   public List<PartyRolePurpose> getPartyRolePurposes(String localeId)
       throws ReferenceServiceException {
     try {
@@ -641,6 +672,7 @@ public class ReferenceService implements IReferenceService {
    * @return the party role types
    */
   @Override
+  @Cacheable(value = "reference", key = "'partyRoleTypes.ALL'")
   public List<PartyRoleType> getPartyRoleTypes() throws ReferenceServiceException {
     return getPartyRoleTypes(null);
   }
@@ -653,6 +685,7 @@ public class ReferenceService implements IReferenceService {
    * @return the party role types
    */
   @Override
+  @Cacheable(value = "reference", key = "'partyRoleTypes.' + #localeId")
   public List<PartyRoleType> getPartyRoleTypes(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -672,6 +705,7 @@ public class ReferenceService implements IReferenceService {
    * @return the physical address purposes
    */
   @Override
+  @Cacheable(value = "reference", key = "'physicalAddressPurposes.ALL'")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes()
       throws ReferenceServiceException {
     return getPhysicalAddressPurposes(null);
@@ -685,6 +719,7 @@ public class ReferenceService implements IReferenceService {
    * @return the physical address purposes
    */
   @Override
+  @Cacheable(value = "reference", key = "'physicalAddressPurposes.' + #localeId")
   public List<PhysicalAddressPurpose> getPhysicalAddressPurposes(String localeId)
       throws ReferenceServiceException {
     try {
@@ -706,6 +741,7 @@ public class ReferenceService implements IReferenceService {
    * @return the physical address types
    */
   @Override
+  @Cacheable(value = "reference", key = "'physicalAddressTypes.ALL'")
   public List<PhysicalAddressType> getPhysicalAddressTypes() throws ReferenceServiceException {
     return getPhysicalAddressTypes(null);
   }
@@ -718,6 +754,7 @@ public class ReferenceService implements IReferenceService {
    * @return the physical address types
    */
   @Override
+  @Cacheable(value = "reference", key = "'physicalAddressTypes.' + #localeId")
   public List<PhysicalAddressType> getPhysicalAddressTypes(String localeId)
       throws ReferenceServiceException {
     try {
@@ -739,6 +776,7 @@ public class ReferenceService implements IReferenceService {
    * @return the preference type categories
    */
   @Override
+  @Cacheable(value = "reference", key = "'preferenceTypeCategories.ALL'")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories()
       throws ReferenceServiceException {
     return getPreferenceTypeCategories(null);
@@ -752,6 +790,7 @@ public class ReferenceService implements IReferenceService {
    * @return the preference type categories
    */
   @Override
+  @Cacheable(value = "reference", key = "'preferenceTypeCategories.' + #localeId")
   public List<PreferenceTypeCategory> getPreferenceTypeCategories(String localeId)
       throws ReferenceServiceException {
     try {
@@ -773,6 +812,7 @@ public class ReferenceService implements IReferenceService {
    * @return the preference types
    */
   @Override
+  @Cacheable(value = "reference", key = "'preferenceTypes.ALL'")
   public List<PreferenceType> getPreferenceTypes() throws ReferenceServiceException {
     return getPreferenceTypes(null);
   }
@@ -785,6 +825,7 @@ public class ReferenceService implements IReferenceService {
    * @return the preference types
    */
   @Override
+  @Cacheable(value = "reference", key = "'preferenceTypes.' + #localeId")
   public List<PreferenceType> getPreferenceTypes(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -804,6 +845,7 @@ public class ReferenceService implements IReferenceService {
    * @return the races
    */
   @Override
+  @Cacheable(value = "reference", key = "'races.ALL'")
   public List<Race> getRaces() throws ReferenceServiceException {
     return getRaces(null);
   }
@@ -816,6 +858,7 @@ public class ReferenceService implements IReferenceService {
    * @return the races
    */
   @Override
+  @Cacheable(value = "reference", key = "'races.' + #localeId")
   public List<Race> getRaces(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -835,6 +878,7 @@ public class ReferenceService implements IReferenceService {
    * @return the regions
    */
   @Override
+  @Cacheable(value = "reference", key = "'regions.ALL'")
   public List<Region> getRegions() throws ReferenceServiceException {
     return getRegions(null);
   }
@@ -847,6 +891,7 @@ public class ReferenceService implements IReferenceService {
    * @return the regions
    */
   @Override
+  @Cacheable(value = "reference", key = "'regions.' + #localeId")
   public List<Region> getRegions(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -866,6 +911,7 @@ public class ReferenceService implements IReferenceService {
    * @return the residence permit types
    */
   @Override
+  @Cacheable(value = "reference", key = "'residencePermitTypes.ALL'")
   public List<ResidencePermitType> getResidencePermitTypes() throws ReferenceServiceException {
     return getResidencePermitTypes(null);
   }
@@ -878,6 +924,7 @@ public class ReferenceService implements IReferenceService {
    * @return the residence permit types
    */
   @Override
+  @Cacheable(value = "reference", key = "'residencePermitTypes.' + #localeId")
   public List<ResidencePermitType> getResidencePermitTypes(String localeId)
       throws ReferenceServiceException {
     try {
@@ -899,6 +946,7 @@ public class ReferenceService implements IReferenceService {
    * @return the residency statuses
    */
   @Override
+  @Cacheable(value = "reference", key = "'residencyStatuses.ALL'")
   public List<ResidencyStatus> getResidencyStatuses() throws ReferenceServiceException {
     return getResidencyStatuses(null);
   }
@@ -911,6 +959,7 @@ public class ReferenceService implements IReferenceService {
    * @return the residency statuses
    */
   @Override
+  @Cacheable(value = "reference", key = "'residencyStatuses.' + #localeId")
   public List<ResidencyStatus> getResidencyStatuses(String localeId)
       throws ReferenceServiceException {
     try {
@@ -931,6 +980,7 @@ public class ReferenceService implements IReferenceService {
    * @return the residential types
    */
   @Override
+  @Cacheable(value = "reference", key = "'residentialTypes.ALL'")
   public List<ResidentialType> getResidentialTypes() throws ReferenceServiceException {
     return getResidentialTypes(null);
   }
@@ -943,6 +993,7 @@ public class ReferenceService implements IReferenceService {
    * @return the residential types
    */
   @Override
+  @Cacheable(value = "reference", key = "'residentialTypes.' + #localeId")
   public List<ResidentialType> getResidentialTypes(String localeId)
       throws ReferenceServiceException {
     try {
@@ -963,6 +1014,7 @@ public class ReferenceService implements IReferenceService {
    * @return the sources of funds
    */
   @Override
+  @Cacheable(value = "reference", key = "'sourcesOfFunds.ALL'")
   public List<SourceOfFunds> getSourcesOfFunds() throws ReferenceServiceException {
     return getSourcesOfFunds(null);
   }
@@ -975,6 +1027,7 @@ public class ReferenceService implements IReferenceService {
    * @return the sources of funds
    */
   @Override
+  @Cacheable(value = "reference", key = "'sourcesOfFunds.' + #localeId")
   public List<SourceOfFunds> getSourcesOfFunds(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -994,6 +1047,7 @@ public class ReferenceService implements IReferenceService {
    * @return the tax number types
    */
   @Override
+  @Cacheable(value = "reference", key = "'taxNumberTypes.ALL'")
   public List<TaxNumberType> getTaxNumberTypes() throws ReferenceServiceException {
     return getTaxNumberTypes(null);
   }
@@ -1006,6 +1060,7 @@ public class ReferenceService implements IReferenceService {
    * @return the tax number types
    */
   @Override
+  @Cacheable(value = "reference", key = "'taxNumberTypes.' + #localeId")
   public List<TaxNumberType> getTaxNumberTypes(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1025,6 +1080,7 @@ public class ReferenceService implements IReferenceService {
    * @return the times to contact
    */
   @Override
+  @Cacheable(value = "reference", key = "'timesToContact.ALL'")
   public List<TimeToContact> getTimesToContact() throws ReferenceServiceException {
     return getTimesToContact(null);
   }
@@ -1037,6 +1093,7 @@ public class ReferenceService implements IReferenceService {
    * @return the times to contact
    */
   @Override
+  @Cacheable(value = "reference", key = "'timesToContact.' + #localeId")
   public List<TimeToContact> getTimesToContact(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1056,6 +1113,7 @@ public class ReferenceService implements IReferenceService {
    * @return the titles
    */
   @Override
+  @Cacheable(value = "reference", key = "'titles.ALL'")
   public List<Title> getTitles() throws ReferenceServiceException {
     return getTitles(null);
   }
@@ -1068,6 +1126,7 @@ public class ReferenceService implements IReferenceService {
    * @return the titles
    */
   @Override
+  @Cacheable(value = "reference", key = "'titles.' + #localeId")
   public List<Title> getTitles(String localeId) throws ReferenceServiceException {
     try {
       if (!StringUtils.hasText(localeId)) {
@@ -1087,6 +1146,7 @@ public class ReferenceService implements IReferenceService {
    * @return the verification methods
    */
   @Override
+  @Cacheable(value = "reference", key = "'verificationMethods.ALL'")
   public List<VerificationMethod> getVerificationMethods() throws ReferenceServiceException {
     return getVerificationMethods(null);
   }
@@ -1099,6 +1159,7 @@ public class ReferenceService implements IReferenceService {
    * @return the verification methods
    */
   @Override
+  @Cacheable(value = "reference", key = "'verificationMethods.' + #localeId")
   public List<VerificationMethod> getVerificationMethods(String localeId)
       throws ReferenceServiceException {
     try {
@@ -1120,6 +1181,7 @@ public class ReferenceService implements IReferenceService {
    * @return the verification statuses
    */
   @Override
+  @Cacheable(value = "reference", key = "'verificationStatuses.ALL'")
   public List<VerificationStatus> getVerificationStatuses() throws ReferenceServiceException {
     return getVerificationStatuses(null);
   }
@@ -1132,6 +1194,7 @@ public class ReferenceService implements IReferenceService {
    * @return the verification statuses
    */
   @Override
+  @Cacheable(value = "reference", key = "'verificationStatuses.' + #localeId")
   public List<VerificationStatus> getVerificationStatuses(String localeId)
       throws ReferenceServiceException {
     try {
@@ -1145,5 +1208,490 @@ public class ReferenceService implements IReferenceService {
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the verification statuses", e);
     }
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a contact mechanism purpose.
+   *
+   * @param contactMechanismTypeCode the code for the contact mechanism type
+   * @param contactMechanismPurposeCode the code for the contact mechanism purpose
+   * @return <b>true</b> if the code is a valid code for a contact mechanism purpose or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidContactMechanismPurpose(
+      String contactMechanismTypeCode, String contactMechanismPurposeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(contactMechanismPurposeCode)) {
+      return false;
+    }
+
+    return self.getContactMechanismPurposes().stream()
+        .anyMatch(
+            contactMechanismPurpose ->
+                (contactMechanismPurpose.getCode().equals(contactMechanismPurposeCode)
+                    && contactMechanismPurpose.getType().equals(contactMechanismTypeCode)));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a contact mechanism type.
+   *
+   * @param contactMechanismTypeCode the code for the contact mechanism type
+   * @return <b>true</b> if the code is a valid code for a contact mechanism type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidContactMechanismType(String contactMechanismTypeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(contactMechanismTypeCode)) {
+      return false;
+    }
+
+    return self.getContactMechanismTypes().stream()
+        .anyMatch(
+            contactMechanismType ->
+                contactMechanismType.getCode().equals(contactMechanismTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a country.
+   *
+   * @param countryCode the code for the country
+   * @return <b>true</b> if the code is a valid code for a country or <b>false</b> otherwise
+   */
+  public boolean isValidCountry(String countryCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(countryCode)) {
+      return false;
+    }
+
+    return self.getCountries().stream().anyMatch(country -> country.getCode().equals(countryCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for an employment status.
+   *
+   * @param employmentStatusCode the code for the employment status
+   * @return <b>true</b> if the code is a valid code for an employment status or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidEmploymentStatus(String employmentStatusCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(employmentStatusCode)) {
+      return false;
+    }
+
+    return self.getEmploymentStatuses().stream()
+        .anyMatch(employmentStatus -> employmentStatus.getCode().equals(employmentStatusCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for an employment type.
+   *
+   * @param employmentStatusCode the code for the employment status
+   * @param employmentTypeCode the code for the employment type
+   * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidEmploymentType(String employmentStatusCode, String employmentTypeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(employmentTypeCode)) {
+      return false;
+    }
+
+    return self.getEmploymentTypes().stream()
+        .anyMatch(
+            employmentType ->
+                (employmentType.getCode().equals(employmentTypeCode)
+                    && employmentType.getEmploymentStatus().equals(employmentStatusCode)));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a gender.
+   *
+   * @param genderCode the code for the gender
+   * @return <b>true</b> if the code is a valid code for a gender or <b>false</b> otherwise
+   */
+  public boolean isValidGender(String genderCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(genderCode)) {
+      return false;
+    }
+
+    return self.getGenders().stream().anyMatch(gender -> gender.getCode().equals(genderCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a identity document type.
+   *
+   * @param identityDocumentTypeCode the code for the identity document type
+   * @return <b>true</b> if the code is a valid code for a identity document type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidIdentityDocumentType(String identityDocumentTypeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(identityDocumentTypeCode)) {
+      return false;
+    }
+
+    return self.getIdentityDocumentTypes().stream()
+        .anyMatch(
+            identityDocumentType ->
+                identityDocumentType.getCode().equals(identityDocumentTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a language.
+   *
+   * @param languageCode the code for the language
+   * @return <b>true</b> if the code is a valid code for a language or <b>false</b> otherwise
+   */
+  public boolean isValidLanguage(String languageCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(languageCode)) {
+      return false;
+    }
+
+    return self.getLanguages().stream()
+        .anyMatch(language -> language.getCode().equals(languageCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a marital status.
+   *
+   * @param maritalStatusCode the code for the marital status
+   * @return <b>true</b> if the code is a valid code for a marital status or <b>false</b> otherwise
+   */
+  public boolean isValidMaritalStatus(String maritalStatusCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(maritalStatusCode)) {
+      return false;
+    }
+
+    return self.getMaritalStatuses().stream()
+        .anyMatch(maritalStatus -> maritalStatus.getCode().equals(maritalStatusCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a marriage type.
+   *
+   * @param maritalStatusCode the code for the marital status
+   * @param marriageTypeCode the code for the marriage type
+   * @return <b>true</b> if the code is a valid code for a marriage type or <b>false</b> otherwise
+   */
+  public boolean isValidMarriageType(String maritalStatusCode, String marriageTypeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(marriageTypeCode)) {
+      return false;
+    }
+
+    return self.getMarriageTypes().stream()
+        .anyMatch(
+            marriageType ->
+                (marriageType.getCode().equals(marriageTypeCode)
+                    && marriageType.getMaritalStatus().equals(maritalStatusCode)));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a next of kin type.
+   *
+   * @param nextOfKinTypeCode the code for the next of kin type
+   * @return <b>true</b> if the code is a valid code for a next of kin type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidNextOfKinType(String nextOfKinTypeCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(nextOfKinTypeCode)) {
+      return false;
+    }
+
+    return self.getNextOfKinTypes().stream()
+        .anyMatch(nextOfKinType -> nextOfKinType.getCode().equals(nextOfKinTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a occupation.
+   *
+   * @param occupationCode the code for the occupation
+   * @return <b>true</b> if the code is a valid code for a occupation or <b>false</b> otherwise
+   */
+  public boolean isValidOccupation(String occupationCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(occupationCode)) {
+      return false;
+    }
+
+    return self.getOccupations().stream()
+        .anyMatch(occupation -> occupation.getCode().equals(occupationCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a party role purpose.
+   *
+   * @param partyRolePurposeCode the code for the party role purpose
+   * @return <b>true</b> if the code is a valid code for a party role purpose or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidPartyRolePurpose(String partyRolePurposeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(partyRolePurposeCode)) {
+      return false;
+    }
+
+    return self.getPartyRolePurposes().stream()
+        .anyMatch(partyRolePurpose -> partyRolePurpose.getCode().equals(partyRolePurposeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a party role type.
+   *
+   * @param partyRoleTypeCode the code for the party role type
+   * @return <b>true</b> if the code is a valid code for a party role type or <b>false</b> otherwise
+   */
+  public boolean isValidPartyRoleType(String partyRoleTypeCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(partyRoleTypeCode)) {
+      return false;
+    }
+
+    return self.getPartyRoleTypes().stream()
+        .anyMatch(partyRoleType -> partyRoleType.getCode().equals(partyRoleTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a physical address purpose.
+   *
+   * @param physicalAddressPurposeCode the code for the physical address purpose
+   * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidPhysicalAddressPurpose(String physicalAddressPurposeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(physicalAddressPurposeCode)) {
+      return false;
+    }
+
+    return self.getPhysicalAddressPurposes().stream()
+        .anyMatch(
+            physicalAddressPurpose ->
+                physicalAddressPurpose.getCode().equals(physicalAddressPurposeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a physical address type.
+   *
+   * @param physicalAddressTypeCode the code for the physical address type
+   * @return <b>true</b> if the code is a valid code for a physical address type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidPhysicalAddressType(String physicalAddressTypeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(physicalAddressTypeCode)) {
+      return false;
+    }
+
+    return self.getPhysicalAddressTypes().stream()
+        .anyMatch(
+            physicalAddressType -> physicalAddressType.getCode().equals(physicalAddressTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a preference type.
+   *
+   * @param preferenceTypeCode the code for the preference type
+   * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
+   */
+  public boolean isValidPreferenceType(String preferenceTypeCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(preferenceTypeCode)) {
+      return false;
+    }
+
+    return self.getPreferenceTypes().stream()
+        .anyMatch(preferenceType -> preferenceType.getCode().equals(preferenceTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a preference type category.
+   *
+   * @param preferenceTypeCategoryCode the code for the preference type category
+   * @return <b>true</b> if the code is a valid code for a preference type category or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidPreferenceTypeCategory(String preferenceTypeCategoryCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(preferenceTypeCategoryCode)) {
+      return false;
+    }
+
+    return self.getPreferenceTypeCategories().stream()
+        .anyMatch(
+            preferenceTypeCategory ->
+                preferenceTypeCategory.getCode().equals(preferenceTypeCategoryCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a race.
+   *
+   * @param raceCode the code for the race
+   * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
+   */
+  public boolean isValidRace(String raceCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(raceCode)) {
+      return false;
+    }
+
+    return self.getRaces().stream().anyMatch(race -> race.getCode().equals(raceCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a region.
+   *
+   * @param regionCode the code for the region
+   * @return <b>true</b> if the code is a valid code for a region or <b>false</b> otherwise
+   */
+  public boolean isValidRegion(String regionCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(regionCode)) {
+      return false;
+    }
+
+    return self.getRegions().stream().anyMatch(region -> region.getCode().equals(regionCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a residence permit type.
+   *
+   * @param residencePermitTypeCode the code for the residence permit type
+   * @return <b>true</b> if the code is a valid code for a residence permit type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidResidencePermitType(String residencePermitTypeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(residencePermitTypeCode)) {
+      return false;
+    }
+
+    return self.getResidencePermitTypes().stream()
+        .anyMatch(
+            residencePermitType -> residencePermitType.getCode().equals(residencePermitTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a residency status.
+   *
+   * @param residencyStatusCode the code for the residency status
+   * @return <b>true</b> if the code is a valid code for a residency status or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidResidencyStatus(String residencyStatusCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(residencyStatusCode)) {
+      return false;
+    }
+
+    return self.getResidencyStatuses().stream()
+        .anyMatch(residencyStatus -> residencyStatus.getCode().equals(residencyStatusCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a residential type.
+   *
+   * @param residentialTypeCode the code for the residential type
+   * @return <b>true</b> if the code is a valid code for a residential type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidResidentialType(String residentialTypeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(residentialTypeCode)) {
+      return false;
+    }
+
+    return self.getResidentialTypes().stream()
+        .anyMatch(residentialType -> residentialType.getCode().equals(residentialTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a source of funds.
+   *
+   * @param sourceOfFundsCode the code for the source of funds
+   * @return <b>true</b> if the code is a valid code for a source of funds or <b>false</b> otherwise
+   */
+  public boolean isValidSourceOfFunds(String sourceOfFundsCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(sourceOfFundsCode)) {
+      return false;
+    }
+
+    return self.getSourcesOfFunds().stream()
+        .anyMatch(sourceOfFunds -> sourceOfFunds.getCode().equals(sourceOfFundsCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a tax number type.
+   *
+   * @param taxNumberTypeCode the code for the tax number type
+   * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
+   */
+  public boolean isValidTaxNumberType(String taxNumberTypeCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(taxNumberTypeCode)) {
+      return false;
+    }
+
+    return self.getTaxNumberTypes().stream()
+        .anyMatch(taxNumberType -> taxNumberType.getCode().equals(taxNumberTypeCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a time to contact.
+   *
+   * @param timeToContactCode the code for the time to contact
+   * @return <b>true</b> if the code is a valid code for a time to contact or <b>false</b> otherwise
+   */
+  public boolean isValidTimeToContact(String timeToContactCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(timeToContactCode)) {
+      return false;
+    }
+
+    return self.getTimesToContact().stream()
+        .anyMatch(timeToContact -> timeToContact.getCode().equals(timeToContactCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a title.
+   *
+   * @param titleCode the code for the title
+   * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
+   */
+  public boolean isValidTitle(String titleCode) throws ReferenceServiceException {
+    if (!StringUtils.hasText(titleCode)) {
+      return false;
+    }
+
+    return self.getTitles().stream().anyMatch(title -> title.getCode().equals(titleCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a verification method.
+   *
+   * @param verificationMethodCode the code for the verification method
+   * @return <b>true</b> if the code is a valid code for a verification method or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidVerificationMethod(String verificationMethodCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(verificationMethodCode)) {
+      return false;
+    }
+
+    return self.getVerificationMethods().stream()
+        .anyMatch(
+            verificationMethod -> verificationMethod.getCode().equals(verificationMethodCode));
+  }
+
+  /**
+   * Check whether the specified code is a valid code for a verification status.
+   *
+   * @param verificationStatusCode the code for the verification status
+   * @return <b>true</b> if the code is a valid code for a verification status or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidVerificationStatus(String verificationStatusCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(verificationStatusCode)) {
+      return false;
+    }
+
+    return self.getVerificationStatuses().stream()
+        .anyMatch(
+            verificationStatus -> verificationStatus.getCode().equals(verificationStatusCode));
   }
 }

@@ -72,14 +72,14 @@ public class Preference implements Serializable {
   @Column(name = "created", nullable = false, updatable = false)
   private LocalDateTime created;
 
-  /** The person the preference is associated with. */
+  /** The party the preference is associated with. */
   @Schema(hidden = true)
   @JsonBackReference("preferenceReference")
   @XmlTransient
   @Id
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "person_id")
-  private Person person;
+  @JoinColumn(name = "party_id")
+  private PartyBase party;
 
   /** The code for the preference type. */
   @Schema(description = "The code for the preference type", required = true)
@@ -143,7 +143,7 @@ public class Preference implements Serializable {
 
     Preference other = (Preference) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -156,13 +156,13 @@ public class Preference implements Serializable {
   }
 
   /**
-   * Returns the person the preference is associated with.
+   * Returns the party the preference is associated with.
    *
-   * @return the person the preference is associated with
+   * @return the party the preference is associated with
    */
   @Schema(hidden = true)
-  public Person getPerson() {
-    return person;
+  public PartyBase getParty() {
+    return party;
   }
 
   /**
@@ -199,18 +199,18 @@ public class Preference implements Serializable {
    */
   @Override
   public int hashCode() {
-    return (((person == null) || (person.getId() == null)) ? 0 : person.getId().hashCode())
+    return (((party == null) || (party.getId() == null)) ? 0 : party.getId().hashCode())
         + ((type == null) ? 0 : type.hashCode());
   }
 
   /**
-   * Set the person the preference is associated with.
+   * Set the party the preference is associated with.
    *
-   * @param person the person the preference is associated with
+   * @param party the party the preference is associated with
    */
   @Schema(hidden = true)
-  public void setPerson(Person person) {
-    this.person = person;
+  public void setParty(PartyBase party) {
+    this.party = party;
   }
 
   /**

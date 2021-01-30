@@ -20,12 +20,17 @@ import digital.inception.core.configuration.ConfigurationException;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointConfigurator;
 import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.jws.WebService;
 import javax.xml.ws.Endpoint;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -33,7 +38,10 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -46,6 +54,10 @@ import org.springframework.util.StringUtils;
  */
 @Configuration
 public class InceptionWebServiceConfiguration {
+
+  /* Logger */
+  private static final Logger logger =
+      LoggerFactory.getLogger(InceptionWebServiceConfiguration.class);
 
   /** The Spring application context */
   private final ApplicationContext applicationContext;
@@ -212,26 +224,57 @@ public class InceptionWebServiceConfiguration {
   /** Initialize the web services. */
   @PostConstruct
   private void initializeWebServices() {
+    List<String> packagesToScanForWebServices = new ArrayList<>();
+
+    packagesToScanForWebServices.add("digital.inception");
+
+    for (Object annotated : applicationContext.getBeansWithAnnotation(ComponentScan.class).values()) {
+      Class clazz = ClassUtils.getUserClass(annotated);
+
+      ComponentScan componentScan = AnnotatedElementUtils
+          .getMergedAnnotation(clazz, ComponentScan.class);
+      if (componentScan != null) { // For some reasons, this might still be null.
+        for (String basePackage : componentScan.basePackages()) {
+          // Replace any existing packages to scan with the higher level package
+          packagesToScanForWebServices.removeIf(
+              packageToScanForWebServices -> packageToScanForWebServices.startsWith(basePackage));
+
+          // Check if there is a higher level package already being scanned
+          if (packagesToScanForWebServices.stream().noneMatch(basePackage::startsWith)) {
+            packagesToScanForWebServices.add(basePackage);
+          }
+        }
+      }
+    }
+
     ClassPathScanningCandidateComponentProvider scanner =
         new ClassPathScanningCandidateComponentProvider(false);
 
     scanner.addIncludeFilter(new AnnotationTypeFilter(WebService.class));
 
-    for (BeanDefinition beanDefinition : scanner.findCandidateComponents("digital.inception")) {
-      try {
-        if (beanDefinition.getBeanClassName() != null) {
-          Class<?> webServiceClass = ClassUtils.forName(beanDefinition.getBeanClassName(), null);
+    logger.info(
+        "Scanning the following packages for web services: "
+            + StringUtils.collectionToDelimitedString(packagesToScanForWebServices, ","));
 
-          WebService webServiceAnnotation = webServiceClass.getAnnotation(WebService.class);
+    for (String packageToScanForWebServices : packagesToScanForWebServices) {
+      for (BeanDefinition beanDefinition :
+          scanner.findCandidateComponents(packageToScanForWebServices)) {
+        try {
+          if (beanDefinition.getBeanClassName() != null) {
+            Class<?> webServiceClass = ClassUtils.forName(beanDefinition.getBeanClassName(), null);
 
-          Object webServiceImplementation =
-              applicationContext.getAutowireCapableBeanFactory().createBean(webServiceClass);
+            WebService webServiceAnnotation = webServiceClass.getAnnotation(WebService.class);
 
-          createWebServiceEndpoint(webServiceAnnotation.serviceName(), webServiceImplementation);
+            Object webServiceImplementation =
+                applicationContext.getAutowireCapableBeanFactory().createBean(webServiceClass);
+
+            createWebServiceEndpoint(webServiceAnnotation.serviceName(), webServiceImplementation);
+          }
+        } catch (Throwable e) {
+          throw new WebServiceInitializationException(
+              "Failed to initialize the web service (" + beanDefinition.getBeanClassName() + ")",
+              e);
         }
-      } catch (Throwable e) {
-        throw new WebServiceInitializationException(
-            "Failed to initialize the web service (" + beanDefinition.getBeanClassName() + ")", e);
       }
     }
   }

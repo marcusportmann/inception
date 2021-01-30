@@ -18,7 +18,9 @@ package digital.inception.party;
 
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
+import java.util.Set;
 import java.util.UUID;
+import javax.validation.ConstraintViolation;
 
 /**
  * The <b>IPartyService</b> interface defines the functionality provided by a Party Service
@@ -155,4 +157,37 @@ public interface IPartyService {
    */
   void updatePerson(Person person)
       throws InvalidArgumentException, PersonNotFoundException, PartyServiceException;
+
+  /**
+   * Validate the organization.
+   *
+   * @param organization the organization
+   * @return the constraint violations for the organization
+   */
+  Set<ConstraintViolation<Organization>> validateOrganization(Organization organization);
+
+  /**
+   * Validate the party.
+   *
+   * @param party the party
+   * @return the constraint violations for the party
+   */
+  Set<ConstraintViolation<Party>> validateParty(Party party);
+
+  /**
+   * Validate the person.
+   *
+   * @param person the person
+   * @return the constraint violations for the person
+   */
+  Set<ConstraintViolation<Person>> validatePerson(Person person);
+
+  /**
+   * Validate the physical address.
+   *
+   * @param physicalAddress the physical address
+   * @return the constraint violations for the physical address
+   */
+  Set<ConstraintViolation<PhysicalAddress>> validatePhysicalAddress(
+      PhysicalAddress physicalAddress);
 }

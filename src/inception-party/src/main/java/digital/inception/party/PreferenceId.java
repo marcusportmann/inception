@@ -29,8 +29,8 @@ public class PreferenceId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The Universally Unique Identifier (UUID) for the person the preference is associated with. */
-  private UUID person;
+  /** The Universally Unique Identifier (UUID) for the party the preference is associated with. */
+  private UUID party;
 
   /** The code for the preference type. */
   private String type;
@@ -60,7 +60,7 @@ public class PreferenceId implements Serializable {
 
     PreferenceId other = (PreferenceId) object;
 
-    return Objects.equals(person, other.person) && Objects.equals(type, other.type);
+    return Objects.equals(party, other.party) && Objects.equals(type, other.type);
   }
 
   /**
@@ -70,6 +70,6 @@ public class PreferenceId implements Serializable {
    */
   @Override
   public int hashCode() {
-    return ((person == null) ? 0 : person.hashCode()) + ((type == null) ? 0 : type.hashCode());
+    return ((party == null) ? 0 : party.hashCode()) + ((type == null) ? 0 : type.hashCode());
   }
 }

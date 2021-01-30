@@ -312,21 +312,21 @@ COMMENT ON COLUMN party.physical_addresses.updated IS 'The date and time the phy
 
 
 CREATE TABLE party.preferences (
-  created   TIMESTAMP    NOT NULL,
-  person_id UUID        NOT NULL,
-  type      VARCHAR(30)  NOT NULL,
-  updated   TIMESTAMP,
-  value     VARCHAR(200) NOT NULL,
+  created  TIMESTAMP    NOT NULL,
+  party_id UUID         NOT NULL,
+  type     VARCHAR(30)  NOT NULL,
+  updated  TIMESTAMP,
+  value    VARCHAR(200) NOT NULL,
 
-  PRIMARY KEY (person_id, type),
-  CONSTRAINT preferences_person_fk FOREIGN KEY (person_id) REFERENCES party.persons(id) ON DELETE CASCADE
+  PRIMARY KEY (party_id, type),
+  CONSTRAINT preferences_party_fk FOREIGN KEY (party_id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
-CREATE INDEX preferences_person_id_ix ON party.preferences(person_id);
+CREATE INDEX preferences_party_id_ix ON party.preferences(party_id);
 
 COMMENT ON COLUMN party.preferences.created IS 'The date and time the preferences was created';
 
-COMMENT ON COLUMN party.preferences.person_id IS 'The Universally Unique Identifier (UUID) for the person the preference is associated with';
+COMMENT ON COLUMN party.preferences.party_id IS 'The Universally Unique Identifier (UUID) for the party the preference is associated with';
 
 COMMENT ON COLUMN party.preferences.type IS 'The code for the preference type';
 
