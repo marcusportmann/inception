@@ -491,13 +491,14 @@ public class ReferenceServiceTest {
   /** Test the reference validity check functionality. */
   @Test
   public void validityTest() throws Exception {
-    referenceService.isValidContactMechanismPurpose("mobile_number", "personal_mobile_number");
+    referenceService.isValidContactMechanismPurpose(
+        "person", "mobile_number", "personal_mobile_number");
     referenceService.isValidContactMechanismType("mobile_number");
     referenceService.isValidCountry("ZA");
     referenceService.isValidEmploymentStatus("employed");
     referenceService.isValidEmploymentType("employed", "full_time");
     referenceService.isValidGender("female");
-    referenceService.isValidIdentityDocumentType("passport");
+    referenceService.isValidIdentityDocumentType("person", "passport");
     referenceService.isValidLanguage("EN");
     referenceService.isValidMaritalStatus("married");
     referenceService.isValidMarriageType("married", "anc_with_accrual");
@@ -505,10 +506,10 @@ public class ReferenceServiceTest {
     referenceService.isValidNextOfKinType("mother");
     referenceService.isValidOccupation("executive");
     referenceService.isValidPartyRolePurpose("test");
-    referenceService.isValidPartyRoleType("employee");
-    referenceService.isValidPhysicalAddressPurpose("billing");
+    referenceService.isValidPartyRoleType("person", "employee");
+    referenceService.isValidPhysicalAddressPurpose("person", "billing");
     referenceService.isValidPhysicalAddressType("complex");
-    referenceService.isValidPreferenceType("correspondence_language");
+    referenceService.isValidPreferenceType("organization", "correspondence_language");
     referenceService.isValidPreferenceTypeCategory("correspondence");
     referenceService.isValidRace("white");
     referenceService.isValidRegion("EC");

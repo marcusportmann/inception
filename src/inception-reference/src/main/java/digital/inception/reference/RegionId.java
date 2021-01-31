@@ -32,7 +32,7 @@ public class RegionId implements Serializable {
   /** The code for the region. */
   private String code;
 
-  /** The code for the country the region is associated with. */
+  /** The ISO 3166-1 alpha-2 code for the country the region is associated with. */
   private String country;
 
   /** The Unicode locale identifier for the region. */
@@ -44,7 +44,7 @@ public class RegionId implements Serializable {
   /**
    * Constructs a new <b>RegionId</b>.
    *
-   * @param country the code for the country the region is associated with
+   * @param country the ISO 3166-1 alpha-2 code for the country the region is associated with
    * @param code the code for the region
    * @param localeId the Unicode locale identifier for the region
    */

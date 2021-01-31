@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -211,6 +212,18 @@ public class PhysicalAddressPurpose implements Serializable {
   @Override
   public int hashCode() {
     return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+  }
+
+  /**
+   * Returns whether the physical address purpose is valid for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @return <b>true</b> if the physical address purpose is valid for the party type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidForPartyType(String partyTypeCode) {
+    return Arrays.stream(getPartyTypes())
+        .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }
 
   /**

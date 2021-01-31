@@ -19,6 +19,7 @@ package digital.inception.party.constraints;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyRole;
+import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.Preference;
 import digital.inception.party.TaxNumber;
@@ -61,11 +62,21 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
 
     try {
       for (ContactMechanism contactMechanism : person.getContactMechanisms()) {
+        if (!contactMechanism.getPurpose().isValidForPartyType(person.getPartyType())) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("contactMechanismPurpose", contactMechanism.getPurpose().code())
+              .addMessageParameter("partyType", person.getPartyType().code())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.party.constraints.ValidPerson.invalidContactMechanismPurposeCodeForPartyType.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
         if (!contactMechanism.getPurpose().type().equals(contactMechanism.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("contactMechanismType", contactMechanism.getType().code())
-              .addMessageParameter(
-                  "contactMechanismPurpose", contactMechanism.getPurpose().code())
+              .addMessageParameter("contactMechanismPurpose", contactMechanism.getPurpose().code())
               .buildConstraintViolationWithTemplate(
                   "{digital.inception.party.constraints.ValidPerson.invalidContactMechanismPurposeCode.message}")
               .addConstraintViolation();
@@ -75,7 +86,8 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
       }
 
       for (IdentityDocument identityDocument : person.getIdentityDocuments()) {
-        if (!referenceService.isValidIdentityDocumentType(identityDocument.getType())) {
+        if (!referenceService.isValidIdentityDocumentType(
+            PartyType.PERSON.code(), identityDocument.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", identityDocument.getType())
               .buildConstraintViolationWithTemplate(
@@ -97,7 +109,8 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
       }
 
       for (Preference preference : person.getPreferences()) {
-        if (!referenceService.isValidPreferenceType(preference.getType())) {
+        if (!referenceService.isValidPreferenceType(
+            PartyType.PERSON.code(), preference.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", preference.getType())
               .buildConstraintViolationWithTemplate(
@@ -109,7 +122,7 @@ public class ValidPersonValidator implements ConstraintValidator<ValidPerson, Pe
       }
 
       for (PartyRole partyRole : person.getRoles()) {
-        if (!referenceService.isValidPartyRoleType(partyRole.getType())) {
+        if (!referenceService.isValidPartyRoleType(PartyType.PERSON.code(), partyRole.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("type", partyRole.getType())
               .buildConstraintViolationWithTemplate(

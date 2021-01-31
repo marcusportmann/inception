@@ -41,7 +41,7 @@ CREATE TABLE party.organizations (
   CONSTRAINT organizations_party_fk FOREIGN KEY (id) REFERENCES party.parties(id) ON DELETE CASCADE
 );
 
-COMMENT ON COLUMN party.organizations.countries_of_tax_residence IS 'The optional comma-delimited codes for the countries of tax residence for the organization';
+COMMENT ON COLUMN party.organizations.countries_of_tax_residence IS 'The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization';
 
 COMMENT ON COLUMN party.organizations.id IS 'The Universally Unique Identifier (UUID) for the organization';
 
@@ -83,7 +83,7 @@ COMMENT ON COLUMN party.persons.country_of_birth IS 'The optional code for the c
 
 COMMENT ON COLUMN party.persons.country_of_residence IS 'The optional code for the country of residence for the person';
 
-COMMENT ON COLUMN party.persons.countries_of_tax_residence IS 'The optional comma-delimited codes for the countries of tax residence for the person';
+COMMENT ON COLUMN party.persons.countries_of_tax_residence IS 'The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person';
 
 COMMENT ON COLUMN party.persons.date_of_birth IS 'The optional date of birth for the person';
 

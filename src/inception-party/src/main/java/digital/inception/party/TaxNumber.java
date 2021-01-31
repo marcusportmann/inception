@@ -69,13 +69,13 @@ public class TaxNumber implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the country of issue for the tax number. */
-  @Schema(description = "The code for the country of issue for the tax number", required = true)
+  /** The ISO 3166-1 alpha-2 code for the country of issue for the tax number. */
+  @Schema(description = "The ISO 3166-1 alpha-2 code for the country of issue for the tax number", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "country_of_issue", length = 30, nullable = false)
+  @Size(min = 2, max = 2)
+  @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
   /** The date and time the tax number was created. */
@@ -127,7 +127,7 @@ public class TaxNumber implements Serializable {
    * Constructs a new <b>TaxNumber</b>.
    *
    * @param type the code for the tax number type
-   * @param countryOfIssue the code for the country of issue for the tax number
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    * @param number the tax number
    */
   public TaxNumber(String type, String countryOfIssue, String number) {
@@ -162,9 +162,9 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Returns the code for the country of issue for the tax number.
+   * Returns the ISO 3166-1 alpha-2 code for the country of issue for the tax number.
    *
-   * @return the code for the country of issue for the tax number
+   * @return the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    */
   public String getCountryOfIssue() {
     return countryOfIssue;
@@ -228,9 +228,9 @@ public class TaxNumber implements Serializable {
   }
 
   /**
-   * Set the code for the country of issue for the tax number.
+   * Set the ISO 3166-1 alpha-2 code for the country of issue for the tax number.
    *
-   * @param countryOfIssue the code for the country of issue for the tax number
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the tax number
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

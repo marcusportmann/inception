@@ -68,14 +68,16 @@ public class Region implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The code for the country the region is associated with. */
-  @Schema(description = "The code for the country the region is associated with", required = true)
+  /** The ISO 3166-1 alpha-2 code for the country the region is associated with. */
+  @Schema(
+      description = "The ISO 3166-1 alpha-2 code for the country the region is associated with",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Country", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
+  @Size(min = 2, max = 2)
   @Id
-  @Column(name = "country", length = 30, nullable = false)
+  @Column(name = "country", length = 2, nullable = false)
   private String country;
 
   /** The description for the region. */
@@ -154,9 +156,9 @@ public class Region implements Serializable {
   }
 
   /**
-   * Returns the code for the country the region is associated with.
+   * Returns the ISO 3166-1 alpha-2 code for the country the region is associated with.
    *
-   * @return the code for the country the region is associated with
+   * @return the ISO 3166-1 alpha-2 code for the country the region is associated with
    */
   public String getCountry() {
     return country;
@@ -220,9 +222,9 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the code for the country the region is associated with.
+   * Set the ISO 3166-1 alpha-2 code for the country the region is associated with.
    *
-   * @param country the code for the country the region is associated with
+   * @param country the ISO 3166-1 alpha-2 code for the country the region is associated with
    */
   public void setCountry(String country) {
     this.country = country;

@@ -70,15 +70,16 @@ public class ResidencePermitType implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The code for the country of issue for the residence permit type. */
+  /** The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type. */
   @Schema(
-      description = "The code for the country of issue for the residence permit type",
+      description =
+          "The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "country_of_issue", length = 30, nullable = false)
+  @Size(min = 2, max = 2)
+  @Column(name = "country_of_issue", length = 2, nullable = false)
   private String countryOfIssue;
 
   /** The description for the residence permit type. */
@@ -157,9 +158,9 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Returns the code for the country of issue for the residence permit type.
+   * Returns the ISO 3166-1 alpha-2 code for the country of issue for the residence permit type.
    *
-   * @return the code for the country of issue for the residence permit type
+   * @return the ISO 3166-1 alpha-2 code for the country of issue for the residence permit type
    */
   public String getCountryOfIssue() {
     return countryOfIssue;
@@ -221,9 +222,10 @@ public class ResidencePermitType implements Serializable {
   }
 
   /**
-   * Set the code for the country of issue for the residence permit type.
+   * Set the ISO 3166-1 alpha-2 code for the country of issue for the residence permit type.
    *
-   * @param countryOfIssue the code for the country of issue for the identity document type
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity
+   *     document type
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

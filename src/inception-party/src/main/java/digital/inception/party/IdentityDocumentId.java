@@ -31,7 +31,7 @@ public class IdentityDocumentId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the country of issue for the identity document. */
+  /** The ISO 3166-1 alpha-2 code for the country of issue for the identity document. */
   private String countryOfIssue;
 
   /** The date of issue for the identity document. */

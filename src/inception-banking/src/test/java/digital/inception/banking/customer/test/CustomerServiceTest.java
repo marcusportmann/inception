@@ -120,8 +120,8 @@ public class CustomerServiceTest {
 
     individualCustomer.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.MOBILE_NUMBER,
-            ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER,
+            ContactMechanismType.FAX_NUMBER,
+            ContactMechanismPurpose.MAIN_FAX_NUMBER,
             "+27835551234"));
     individualCustomer.addContactMechanism(
         new ContactMechanism(

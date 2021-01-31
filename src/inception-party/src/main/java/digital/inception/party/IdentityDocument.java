@@ -68,14 +68,14 @@ public class IdentityDocument implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the country of issue for the identity document. */
+  /** The ISO 3166-1 alpha-2 code for the country of issue for the identity document. */
   @Schema(
-      description = "The code for the country of issue for the identity document",
+      description = "The ISO 3166-1 alpha-2 code for the country of issue for the identity document",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
+  @Size(min = 2, max = 2)
   @Id
   @Column(name = "country_of_issue", length = 30, nullable = false)
   private String countryOfIssue;
@@ -145,7 +145,7 @@ public class IdentityDocument implements Serializable {
    * Constructs a new <b>IdentityDocument</b>.
    *
    * @param type the code for the identity document type
-   * @param countryOfIssue the code for the country of issue for the identity document
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity document
    * @param dateOfIssue the date of issue for the identity document
    * @param number the number for the identity document
    */
@@ -161,7 +161,7 @@ public class IdentityDocument implements Serializable {
    * Constructs a new <b>IdentityDocument</b>.
    *
    * @param type the code for the identity document type
-   * @param countryOfIssue the code for the country of issue for the identity document
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity document
    * @param dateOfIssue the date of issue for the identity document
    * @param dateOfExpiry the optional date of expiry for the identity document
    * @param number thge number for the identity document
@@ -208,9 +208,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Returns the code for the country of issue for the identity document.
+   * Returns the ISO 3166-1 alpha-2 code for the country of issue for the identity document.
    *
-   * @return the code for the country of issue for the identity document
+   * @return the ISO 3166-1 alpha-2 code for the country of issue for the identity document
    */
   public String getCountryOfIssue() {
     return countryOfIssue;
@@ -294,9 +294,9 @@ public class IdentityDocument implements Serializable {
   }
 
   /**
-   * Set the code for the country of issue for the identity document.
+   * Set the ISO 3166-1 alpha-2 code for the country of issue for the identity document.
    *
-   * @param countryOfIssue the code for the country of issue for the identity document
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity document
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

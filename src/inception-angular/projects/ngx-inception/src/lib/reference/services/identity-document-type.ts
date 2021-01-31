@@ -27,7 +27,7 @@ export class IdentityDocumentType {
   code: string;
 
   /**
-   * The optional code for the country of issue for the identity document type.
+   * The optional ISO 3166-1 alpha-2 code for the country of issue for the identity document type.
    */
   countryOfIssue: string;
 
@@ -59,8 +59,8 @@ export class IdentityDocumentType {
    * @param sortIndex      The sort index for the identity document type.
    * @param name           The name of the identity document type.
    * @param description    The description for the identity document type.
-   * @param countryOfIssue The optional code for the country of issue for the identity
-   *                       document type.
+   * @param countryOfIssue The optional ISO 3166-1 alpha-2 code for the country of issue for the
+   *                       identity document type.
    */
   constructor(code: string, localeId: string, sortIndex: number, name: string, description: string,
               countryOfIssue: string) {

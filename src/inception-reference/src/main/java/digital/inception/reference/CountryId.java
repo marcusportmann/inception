@@ -29,7 +29,7 @@ public class CountryId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the country. */
+  /** The ISO 3166-1 alpha-2 code for the country. */
   private String code;
 
   /** The Unicode locale identifier for the country. */
@@ -41,7 +41,7 @@ public class CountryId implements Serializable {
   /**
    * Constructs a new <b>CountryId</b>.
    *
-   * @param code the code for the country
+   * @param code the ISO 3166-1 alpha-2 code for the country
    * @param localeId the Unicode locale identifier for the country
    */
   public CountryId(String code, String localeId) {

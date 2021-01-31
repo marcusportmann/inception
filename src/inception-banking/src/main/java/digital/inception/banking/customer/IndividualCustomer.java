@@ -210,24 +210,23 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
       orphanRemoval = true)
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
-  /** The comma-delimited codes for the countries of tax residence for the individual customer. */
+  /** The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer. */
   @JsonIgnore
   @XmlTransient
-  @NotNull
   @Size(min = 1, max = 100)
   @Column(table = "persons", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
 
-  /** The code for the country of birth for the individual customer. */
+  /** The ISO 3166-1 alpha-2 code for the country of birth for the individual customer. */
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "country_of_birth", length = 30)
+  @Size(min = 2, max = 2)
+  @Column(table = "persons", name = "country_of_birth", length = 2)
   private String countryOfBirth;
 
-  /** The code for the country of residence for the individual customer. */
+  /** The ISO 3166-1 alpha-2 code for the country of residence for the individual customer. */
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(table = "persons", name = "country_of_residence", length = 30)
+  @Size(min = 2, max = 2)
+  @Column(table = "persons", name = "country_of_residence", length = 2)
   private String countryOfResidence;
 
   /** The date of birth for the individual customer. */
@@ -503,27 +502,26 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   }
 
   /**
-   * Returns the codes for the countries of tax residence for the individual customer.
+   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer.
    *
-   * @return the codes for the countries of tax residence for the individual customer
+   * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer
    */
   @Schema(
-      description = "The codes for the countries of tax residence for the individual customer",
-      required = true)
-  @JsonProperty(required = true)
-  @XmlElementWrapper(name = "CountriesOfTaxResidence", required = true)
-  @XmlElement(name = "CountryOfTaxResidence", required = true)
+      description = "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer")
+  @JsonProperty
+  @XmlElementWrapper(name = "CountriesOfTaxResidence")
+  @XmlElement(name = "CountryOfTaxResidence")
   public Set<String> getCountriesOfTaxResidence() {
     return Set.of(StringUtils.commaDelimitedListToStringArray(countriesOfTaxResidence));
   }
 
   /**
-   * Returns the code for the country of birth for the individual customer.
+   * Returns the ISO 3166-1 alpha-2 code for the country of birth for the individual customer.
    *
-   * @return the code for the country of birth for the individual customer
+   * @return the ISO 3166-1 alpha-2 code for the country of birth for the individual customer
    */
   @Schema(
-      description = "The code for the country of birth for the individual customer",
+      description = "The ISO 3166-1 alpha-2 code for the country of birth for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfBirth", required = true)
@@ -532,12 +530,12 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   }
 
   /**
-   * Returns the code for the country of residence for the individual customer.
+   * Returns the ISO 3166-1 alpha-2 code for the country of residence for the individual customer.
    *
-   * @return the code for the country of residence for the individual customer
+   * @return the ISO 3166-1 alpha-2 code for the country of residence for the individual customer
    */
   @Schema(
-      description = "The code for the country of residence for the individual customer",
+      description = "The ISO 3166-1 alpha-2 code for the country of residence for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfResidence", required = true)
@@ -1095,9 +1093,9 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   }
 
   /**
-   * Set the codes for the countries of tax residence for the individual customer.
+   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer.
    *
-   * @param countriesOfTaxResidence the codes for the countries of tax residence for the individual
+   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual
    *     customer
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
@@ -1106,27 +1104,27 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   }
 
   /**
-   * Set the code for the country of birth for the individual customer.
+   * Set the ISO 3166-1 alpha-2 code for the country of birth for the individual customer.
    *
-   * @param countryOfBirth the code for the country of birth for the individual customer
+   * @param countryOfBirth the ISO 3166-1 alpha-2 code for the country of birth for the individual customer
    */
   public void setCountryOfBirth(String countryOfBirth) {
     this.countryOfBirth = countryOfBirth;
   }
 
   /**
-   * Set the code for the country of residence for the individual customer.
+   * Set the ISO 3166-1 alpha-2 code for the country of residence for the individual customer.
    *
-   * @param countryOfResidence the code for the country of residence for the individual customer
+   * @param countryOfResidence the ISO 3166-1 alpha-2 code for the country of residence for the individual customer
    */
   public void setCountryOfResidence(String countryOfResidence) {
     this.countryOfResidence = countryOfResidence;
   }
 
   /**
-   * Set the code for the single country of tax residence for the individual customer.
+   * Set the optional code for the single country of tax residence for the individual customer.
    *
-   * @param countryOfTaxResidence the code for the single country of tax residence for the
+   * @param countryOfTaxResidence the optional code for the single country of tax residence for the
    *     individual customer
    */
   @JsonIgnore

@@ -1211,15 +1211,17 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a contact mechanism purpose.
+   * Check whether the code is a valid code for a contact mechanism purpose for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismPurposeCode the code for the contact mechanism purpose
    * @return <b>true</b> if the code is a valid code for a contact mechanism purpose or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidContactMechanismPurpose(
-      String contactMechanismTypeCode, String contactMechanismPurposeCode)
+      String partyTypeCode, String contactMechanismTypeCode, String contactMechanismPurposeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(contactMechanismPurposeCode)) {
       return false;
@@ -1233,12 +1235,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a contact mechanism type.
+   * Check whether the code is a valid code for a contact mechanism type.
    *
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @return <b>true</b> if the code is a valid code for a contact mechanism type or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidContactMechanismType(String contactMechanismTypeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(contactMechanismTypeCode)) {
@@ -1252,11 +1255,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a country.
+   * Check whether the code is a valid code for a country.
    *
    * @param countryCode the code for the country
    * @return <b>true</b> if the code is a valid code for a country or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidCountry(String countryCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(countryCode)) {
       return false;
@@ -1266,12 +1270,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for an employment status.
+   * Check whether the code is a valid code for an employment status.
    *
    * @param employmentStatusCode the code for the employment status
    * @return <b>true</b> if the code is a valid code for an employment status or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidEmploymentStatus(String employmentStatusCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(employmentStatusCode)) {
@@ -1283,13 +1288,14 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for an employment type.
+   * Check whether the code is a valid code for an employment type.
    *
    * @param employmentStatusCode the code for the employment status
    * @param employmentTypeCode the code for the employment type
    * @return <b>true</b> if the code is a valid code for an employment type or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidEmploymentType(String employmentStatusCode, String employmentTypeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(employmentTypeCode)) {
@@ -1304,11 +1310,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a gender.
+   * Check whether the code is a valid code for a gender.
    *
    * @param genderCode the code for the gender
    * @return <b>true</b> if the code is a valid code for a gender or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidGender(String genderCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(genderCode)) {
       return false;
@@ -1318,13 +1325,15 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a identity document type.
+   * Check whether the code is a valid code for an identity document type for the party type
    *
+   * @param partyTypeCode the party type code
    * @param identityDocumentTypeCode the code for the identity document type
-   * @return <b>true</b> if the code is a valid code for a identity document type or <b>false</b>
+   * @return <b>true</b> if the code is a valid code for an identity document type or <b>false</b>
    *     otherwise
    */
-  public boolean isValidIdentityDocumentType(String identityDocumentTypeCode)
+  @Override
+  public boolean isValidIdentityDocumentType(String partyTypeCode, String identityDocumentTypeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(identityDocumentTypeCode)) {
       return false;
@@ -1333,15 +1342,17 @@ public class ReferenceService implements IReferenceService {
     return self.getIdentityDocumentTypes().stream()
         .anyMatch(
             identityDocumentType ->
-                identityDocumentType.getCode().equals(identityDocumentTypeCode));
+                (identityDocumentType.getCode().equals(identityDocumentTypeCode)
+                    && identityDocumentType.isValidForPartyType(partyTypeCode)));
   }
 
   /**
-   * Check whether the specified code is a valid code for a language.
+   * Check whether the code is a valid code for a language.
    *
    * @param languageCode the code for the language
    * @return <b>true</b> if the code is a valid code for a language or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidLanguage(String languageCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(languageCode)) {
       return false;
@@ -1352,11 +1363,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a marital status.
+   * Check whether the code is a valid code for a marital status.
    *
    * @param maritalStatusCode the code for the marital status
    * @return <b>true</b> if the code is a valid code for a marital status or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidMaritalStatus(String maritalStatusCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(maritalStatusCode)) {
       return false;
@@ -1367,12 +1379,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a marriage type.
+   * Check whether the code is a valid code for a marriage type.
    *
    * @param maritalStatusCode the code for the marital status
    * @param marriageTypeCode the code for the marriage type
    * @return <b>true</b> if the code is a valid code for a marriage type or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidMarriageType(String maritalStatusCode, String marriageTypeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(marriageTypeCode)) {
@@ -1387,12 +1400,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a next of kin type.
+   * Check whether the code is a valid code for a next of kin type.
    *
    * @param nextOfKinTypeCode the code for the next of kin type
    * @return <b>true</b> if the code is a valid code for a next of kin type or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidNextOfKinType(String nextOfKinTypeCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(nextOfKinTypeCode)) {
       return false;
@@ -1403,11 +1417,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a occupation.
+   * Check whether the code is a valid code for a occupation.
    *
    * @param occupationCode the code for the occupation
    * @return <b>true</b> if the code is a valid code for a occupation or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidOccupation(String occupationCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(occupationCode)) {
       return false;
@@ -1418,12 +1433,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a party role purpose.
+   * Check whether the code is a valid code for a party role purpose.
    *
    * @param partyRolePurposeCode the code for the party role purpose
    * @return <b>true</b> if the code is a valid code for a party role purpose or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidPartyRolePurpose(String partyRolePurposeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(partyRolePurposeCode)) {
@@ -1435,29 +1451,37 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a party role type.
+   * Check whether the code is a valid code for a party role type for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param partyRoleTypeCode the code for the party role type
    * @return <b>true</b> if the code is a valid code for a party role type or <b>false</b> otherwise
    */
-  public boolean isValidPartyRoleType(String partyRoleTypeCode) throws ReferenceServiceException {
+  @Override
+  public boolean isValidPartyRoleType(String partyTypeCode, String partyRoleTypeCode)
+      throws ReferenceServiceException {
     if (!StringUtils.hasText(partyRoleTypeCode)) {
       return false;
     }
 
     return self.getPartyRoleTypes().stream()
-        .anyMatch(partyRoleType -> partyRoleType.getCode().equals(partyRoleTypeCode));
+        .anyMatch(
+            partyRoleType ->
+                (partyRoleType.getCode().equals(partyRoleTypeCode)
+                    && partyRoleType.isValidForPartyType(partyTypeCode)));
   }
 
   /**
-   * Check whether the specified code is a valid code for a physical address purpose.
+   * Check whether the code is a valid code for a physical address purpose for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param physicalAddressPurposeCode the code for the physical address purpose
    * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
    *     otherwise
    */
-  public boolean isValidPhysicalAddressPurpose(String physicalAddressPurposeCode)
-      throws ReferenceServiceException {
+  @Override
+  public boolean isValidPhysicalAddressPurpose(
+      String partyTypeCode, String physicalAddressPurposeCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(physicalAddressPurposeCode)) {
       return false;
     }
@@ -1465,16 +1489,18 @@ public class ReferenceService implements IReferenceService {
     return self.getPhysicalAddressPurposes().stream()
         .anyMatch(
             physicalAddressPurpose ->
-                physicalAddressPurpose.getCode().equals(physicalAddressPurposeCode));
+                (physicalAddressPurpose.getCode().equals(physicalAddressPurposeCode)
+                    && physicalAddressPurpose.isValidForPartyType(partyTypeCode)));
   }
 
   /**
-   * Check whether the specified code is a valid code for a physical address type.
+   * Check whether the code is a valid code for a physical address type.
    *
    * @param physicalAddressTypeCode the code for the physical address type
    * @return <b>true</b> if the code is a valid code for a physical address type or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidPhysicalAddressType(String physicalAddressTypeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(physicalAddressTypeCode)) {
@@ -1487,27 +1513,34 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a preference type.
+   * Check whether the code is a valid code for a preference type for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param preferenceTypeCode the code for the preference type
    * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
    */
-  public boolean isValidPreferenceType(String preferenceTypeCode) throws ReferenceServiceException {
+  @Override
+  public boolean isValidPreferenceType(String partyTypeCode, String preferenceTypeCode)
+      throws ReferenceServiceException {
     if (!StringUtils.hasText(preferenceTypeCode)) {
       return false;
     }
 
     return self.getPreferenceTypes().stream()
-        .anyMatch(preferenceType -> preferenceType.getCode().equals(preferenceTypeCode));
+        .anyMatch(
+            preferenceType ->
+                (preferenceType.getCode().equals(preferenceTypeCode)
+                    && preferenceType.isValidForPartyType(partyTypeCode)));
   }
 
   /**
-   * Check whether the specified code is a valid code for a preference type category.
+   * Check whether the code is a valid code for a preference type category.
    *
    * @param preferenceTypeCategoryCode the code for the preference type category
    * @return <b>true</b> if the code is a valid code for a preference type category or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidPreferenceTypeCategory(String preferenceTypeCategoryCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(preferenceTypeCategoryCode)) {
@@ -1521,11 +1554,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a race.
+   * Check whether the code is a valid code for a race.
    *
    * @param raceCode the code for the race
    * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidRace(String raceCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(raceCode)) {
       return false;
@@ -1535,11 +1569,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a region.
+   * Check whether the code is a valid code for a region.
    *
    * @param regionCode the code for the region
    * @return <b>true</b> if the code is a valid code for a region or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidRegion(String regionCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(regionCode)) {
       return false;
@@ -1549,12 +1584,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a residence permit type.
+   * Check whether the code is a valid code for a residence permit type.
    *
    * @param residencePermitTypeCode the code for the residence permit type
    * @return <b>true</b> if the code is a valid code for a residence permit type or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidResidencePermitType(String residencePermitTypeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(residencePermitTypeCode)) {
@@ -1567,12 +1603,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a residency status.
+   * Check whether the code is a valid code for a residency status.
    *
    * @param residencyStatusCode the code for the residency status
    * @return <b>true</b> if the code is a valid code for a residency status or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidResidencyStatus(String residencyStatusCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(residencyStatusCode)) {
@@ -1584,12 +1621,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a residential type.
+   * Check whether the code is a valid code for a residential type.
    *
    * @param residentialTypeCode the code for the residential type
    * @return <b>true</b> if the code is a valid code for a residential type or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidResidentialType(String residentialTypeCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(residentialTypeCode)) {
@@ -1601,11 +1639,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a source of funds.
+   * Check whether the code is a valid code for a source of funds.
    *
    * @param sourceOfFundsCode the code for the source of funds
    * @return <b>true</b> if the code is a valid code for a source of funds or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidSourceOfFunds(String sourceOfFundsCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(sourceOfFundsCode)) {
       return false;
@@ -1616,11 +1655,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a tax number type.
+   * Check whether the code is a valid code for a tax number type.
    *
    * @param taxNumberTypeCode the code for the tax number type
    * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidTaxNumberType(String taxNumberTypeCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(taxNumberTypeCode)) {
       return false;
@@ -1631,11 +1671,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a time to contact.
+   * Check whether the code is a valid code for a time to contact.
    *
    * @param timeToContactCode the code for the time to contact
    * @return <b>true</b> if the code is a valid code for a time to contact or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidTimeToContact(String timeToContactCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(timeToContactCode)) {
       return false;
@@ -1646,11 +1687,12 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a title.
+   * Check whether the code is a valid code for a title.
    *
    * @param titleCode the code for the title
    * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
    */
+  @Override
   public boolean isValidTitle(String titleCode) throws ReferenceServiceException {
     if (!StringUtils.hasText(titleCode)) {
       return false;
@@ -1660,12 +1702,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a verification method.
+   * Check whether the code is a valid code for a verification method.
    *
    * @param verificationMethodCode the code for the verification method
    * @return <b>true</b> if the code is a valid code for a verification method or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidVerificationMethod(String verificationMethodCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(verificationMethodCode)) {
@@ -1678,12 +1721,13 @@ public class ReferenceService implements IReferenceService {
   }
 
   /**
-   * Check whether the specified code is a valid code for a verification status.
+   * Check whether the code is a valid code for a verification status.
    *
    * @param verificationStatusCode the code for the verification status
    * @return <b>true</b> if the code is a valid code for a verification status or <b>false</b>
    *     otherwise
    */
+  @Override
   public boolean isValidVerificationStatus(String verificationStatusCode)
       throws ReferenceServiceException {
     if (!StringUtils.hasText(verificationStatusCode)) {

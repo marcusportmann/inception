@@ -849,7 +849,7 @@ public class PartyServiceTest {
     person.removeIdentityDocumentByType("za_id_card");
 
     person.removeContactMechanism(
-        ContactMechanismType.MOBILE_NUMBER, ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER);
+        ContactMechanismType.FAX_NUMBER, ContactMechanismPurpose.MAIN_FAX_NUMBER);
 
     person
         .getContactMechanism(

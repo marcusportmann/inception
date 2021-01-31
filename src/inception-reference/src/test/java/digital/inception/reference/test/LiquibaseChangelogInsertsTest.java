@@ -18,6 +18,8 @@ package digital.inception.reference.test;
 
 import static org.junit.Assert.fail;
 
+import digital.inception.reference.ContactMechanismPurpose;
+import digital.inception.reference.ContactMechanismType;
 import digital.inception.reference.Country;
 import digital.inception.reference.EmploymentStatus;
 import digital.inception.reference.EmploymentType;
@@ -29,6 +31,12 @@ import digital.inception.reference.MaritalStatus;
 import digital.inception.reference.MarriageType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
+import digital.inception.reference.PartyRolePurpose;
+import digital.inception.reference.PartyRoleType;
+import digital.inception.reference.PhysicalAddressPurpose;
+import digital.inception.reference.PhysicalAddressType;
+import digital.inception.reference.PreferenceType;
+import digital.inception.reference.PreferenceTypeCategory;
 import digital.inception.reference.Race;
 import digital.inception.reference.Region;
 import digital.inception.reference.ResidencePermitType;
@@ -36,6 +44,7 @@ import digital.inception.reference.ResidencyStatus;
 import digital.inception.reference.ResidentialType;
 import digital.inception.reference.SourceOfFunds;
 import digital.inception.reference.TaxNumberType;
+import digital.inception.reference.TimeToContact;
 import digital.inception.reference.Title;
 import digital.inception.reference.VerificationMethod;
 import digital.inception.reference.VerificationStatus;
@@ -53,6 +62,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.util.StringUtils;
 
 /**
  * The <b>LiquibaseChangelogInsertsTest</b>.
@@ -77,9 +87,12 @@ public class LiquibaseChangelogInsertsTest {
   /** Create the Liquibase changelog inserts. */
   @Test
   public void createLiquibaseChangelogInserts() throws Exception {
-    boolean createLiquibaseInserts = false;
+    boolean createLiquibaseInserts = true;
+    boolean createContactMechanismTypeInserts = createLiquibaseInserts && false;
+    boolean createContactMechanismPurposeInserts = createLiquibaseInserts && false;
     boolean createCountryInserts = createLiquibaseInserts && false;
     boolean createEmploymentStatusInserts = createLiquibaseInserts && false;
+    boolean createEmploymentTypeInserts = createLiquibaseInserts && false;
     boolean createGenderInserts = createLiquibaseInserts && false;
     boolean createIdentityDocumentTypeInserts = createLiquibaseInserts && false;
     boolean createLanguageInserts = createLiquibaseInserts && false;
@@ -88,19 +101,89 @@ public class LiquibaseChangelogInsertsTest {
     boolean createMinorTypeInserts = createLiquibaseInserts && false;
     boolean createNextOfKinInserts = createLiquibaseInserts && false;
     boolean createOccupationInserts = createLiquibaseInserts && false;
-    boolean createResidencePermitTypeInserts = createLiquibaseInserts && false;
+    boolean createPartyRolePurposeInserts = createLiquibaseInserts && false;
+    boolean createPartyRoleTypeInserts = createLiquibaseInserts && false;
+    boolean createPhysicalAddressPurposeInserts = createLiquibaseInserts && false;
+    boolean createPhysicalAddressTypeInserts = createLiquibaseInserts && false;
+    boolean createPreferenceTypeCategoryInserts = createLiquibaseInserts && false;
+    boolean createPreferenceTypeInserts = createLiquibaseInserts && false;
     boolean createRaceInserts = createLiquibaseInserts && false;
     boolean createRegionInserts = createLiquibaseInserts && false;
+    boolean createResidencePermitTypeInserts = createLiquibaseInserts && false;
     boolean createResidencyStatusInserts = createLiquibaseInserts && false;
     boolean createResidentialTypeInserts = createLiquibaseInserts && false;
     boolean createSourceOfFundsInserts = createLiquibaseInserts && false;
-    boolean createTaxNumberTypeInserts = createLiquibaseInserts && false;
-    boolean createTitleInserts = createLiquibaseInserts && false;
-    boolean createVerificationMethodInserts = createLiquibaseInserts && false;
-    boolean createVerificationStatusInserts = createLiquibaseInserts && false;
+    boolean createTaxNumberTypeInserts = createLiquibaseInserts && true;
+    boolean createTimeToContactInserts = createLiquibaseInserts && true;
+    boolean createTitleInserts = createLiquibaseInserts && true;
+    boolean createVerificationMethodInserts = createLiquibaseInserts && true;
+    boolean createVerificationStatusInserts = createLiquibaseInserts && true;
+
+    if (createContactMechanismTypeInserts) {
+      for (ContactMechanismType contactMechanismType :
+          referenceService.getContactMechanismTypes("en-US")) {
+
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"contact_mechanism_types\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + contactMechanismType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\""
+                + contactMechanismType.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + contactMechanismType.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + contactMechanismType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"plural\" value=\"" + contactMechanismType.getPlural() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + contactMechanismType.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createContactMechanismPurposeInserts) {
+      for (ContactMechanismPurpose contactMechanismPurpose :
+          referenceService.getContactMechanismPurposes("en-US")) {
+
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"contact_mechanism_purposes\">");
+        System.out.println(
+            "      <column name=\"type\" value=\"" + contactMechanismPurpose.getType() + "\"/>");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + contactMechanismPurpose.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\""
+                + contactMechanismPurpose.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + contactMechanismPurpose.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + contactMechanismPurpose.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + contactMechanismPurpose.getDescription()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"party_types\" value=\""
+                + StringUtils.arrayToCommaDelimitedString(contactMechanismPurpose.getPartyTypes())
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
 
     if (createCountryInserts) {
-
       List<Country> sortedCountries =
           referenceService.getCountries("en-US").stream()
               .sorted(Comparator.comparing(Country::getName))
@@ -159,7 +242,9 @@ public class LiquibaseChangelogInsertsTest {
       }
 
       System.out.println();
+    }
 
+    if (createEmploymentTypeInserts) {
       for (EmploymentType employmentType : referenceService.getEmploymentTypes("en-US")) {
 
         System.out.println("    <insert schemaName=\"reference\" tableName=\"employment_types\">");
@@ -229,6 +314,11 @@ public class LiquibaseChangelogInsertsTest {
             "      <column name=\"country_of_issue\" value=\""
                 + identityDocumentType.getCountryOfIssue()
                 + "\"/>");
+        System.out.println(
+            "      <column name=\"party_types\" value=\""
+                + StringUtils.arrayToCommaDelimitedString(identityDocumentType.getPartyTypes())
+                + "\"/>");
+
         System.out.println("    </insert>");
       }
 
@@ -302,6 +392,28 @@ public class LiquibaseChangelogInsertsTest {
       System.out.println();
     }
 
+    //    if (createMinorTypeInserts) {
+    //      for (MinorType minorType : referenceService.getMinorTypes("en-US")) {
+    //
+    //        System.out.println("    <insert schemaName=\"reference\" tableName=\"minor_types\">");
+    //        System.out.println(
+    //            "      <column name=\"code\" value=\"" + minorType.getCode() + "\"/>");
+    //        System.out.println(
+    //            "      <column name=\"locale_id\" value=\"" + minorType.getLocaleId() + "\"/>");
+    //        System.out.println(
+    //            "      <column name=\"sort_index\" value=\"" + minorType.getSortIndex() + "\"/>");
+    //        System.out.println(
+    //            "      <column name=\"name\" value=\"" + minorType.getName() + "\"/>");
+    //        System.out.println(
+    //            "      <column name=\"description\" value=\""
+    //                + minorType.getDescription()
+    //                + "\"/>");
+    //        System.out.println("    </insert>");
+    //      }
+    //
+    //      System.out.println();
+    //    }
+
     if (createNextOfKinInserts) {
       for (NextOfKinType nextOfKinType : referenceService.getNextOfKinTypes("en-US")) {
 
@@ -336,6 +448,177 @@ public class LiquibaseChangelogInsertsTest {
         System.out.println("      <column name=\"name\" value=\"" + occupation.getName() + "\"/>");
         System.out.println(
             "      <column name=\"description\" value=\"" + occupation.getDescription() + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createPartyRolePurposeInserts) {
+      for (PartyRolePurpose partyRolePurpose : referenceService.getPartyRolePurposes("en-US")) {
+
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"party_role_purposes\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + partyRolePurpose.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\"" + partyRolePurpose.getLocaleId() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + partyRolePurpose.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + partyRolePurpose.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + partyRolePurpose.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createPartyRoleTypeInserts) {
+      for (PartyRoleType partyRoleType : referenceService.getPartyRoleTypes("en-US")) {
+
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"party_role_types\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + partyRoleType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\"" + partyRoleType.getLocaleId() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + partyRoleType.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + partyRoleType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + partyRoleType.getDescription()
+                + "\"/>");
+
+        System.out.println(
+            "      <column name=\"party_types\" value=\""
+                + StringUtils.arrayToCommaDelimitedString(partyRoleType.getPartyTypes())
+                + "\"/>");
+
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createPhysicalAddressPurposeInserts) {
+      for (PhysicalAddressPurpose physicalAddressPurpose :
+          referenceService.getPhysicalAddressPurposes("en-US")) {
+
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"physical_address_purposes\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + physicalAddressPurpose.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\""
+                + physicalAddressPurpose.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + physicalAddressPurpose.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + physicalAddressPurpose.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + physicalAddressPurpose.getDescription()
+                + "\"/>");
+
+        System.out.println(
+            "      <column name=\"party_types\" value=\""
+                + StringUtils.arrayToCommaDelimitedString(physicalAddressPurpose.getPartyTypes())
+                + "\"/>");
+
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createPhysicalAddressTypeInserts) {
+      for (PhysicalAddressType physicalAddressType :
+          referenceService.getPhysicalAddressTypes("en-US")) {
+
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"physical_address_types\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + physicalAddressType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\""
+                + physicalAddressType.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + physicalAddressType.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + physicalAddressType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + physicalAddressType.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createPreferenceTypeCategoryInserts) {
+      for (PreferenceTypeCategory preferenceTypeCategory :
+          referenceService.getPreferenceTypeCategories("en-US")) {
+
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"preference_type_categories\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + preferenceTypeCategory.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\""
+                + preferenceTypeCategory.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + preferenceTypeCategory.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + preferenceTypeCategory.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + preferenceTypeCategory.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createPreferenceTypeInserts) {
+      for (PreferenceType preferenceType : referenceService.getPreferenceTypes("en-US")) {
+
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"preference_types\">");
+        System.out.println(
+            "      <column name=\"category\" value=\"" + preferenceType.getCategory() + "\"/>");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + preferenceType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\"" + preferenceType.getLocaleId() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + preferenceType.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + preferenceType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + preferenceType.getDescription()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"party_types\" value=\""
+                + StringUtils.arrayToCommaDelimitedString(preferenceType.getPartyTypes())
+                + "\"/>");
         System.out.println("    </insert>");
       }
 
@@ -498,6 +781,28 @@ public class LiquibaseChangelogInsertsTest {
         System.out.println(
             "      <column name=\"country_of_issue\" value=\""
                 + taxNumberType.getCountryOfIssue()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createTimeToContactInserts) {
+      for (TimeToContact timeToContact : referenceService.getTimesToContact("en-US")) {
+
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"times_to_contact\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + timeToContact.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\"" + timeToContact.getLocaleId() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + timeToContact.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + timeToContact.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + timeToContact.getDescription()
                 + "\"/>");
         System.out.println("    </insert>");
       }

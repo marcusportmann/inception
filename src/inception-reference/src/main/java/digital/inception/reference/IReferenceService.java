@@ -499,19 +499,20 @@ public interface IReferenceService {
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a contact mechanism purpose.
+   * Check whether the code is a valid code for a contact mechanism purpose for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @param contactMechanismPurposeCode the code for the contact mechanism purpose
    * @return <b>true</b> if the code is a valid code for a contact mechanism purpose or <b>false</b>
    *     otherwise
    */
   boolean isValidContactMechanismPurpose(
-      String contactMechanismTypeCode, String contactMechanismPurposeCode)
+      String partyTypeCode, String contactMechanismTypeCode, String contactMechanismPurposeCode)
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a contact mechanism type.
+   * Check whether the code is a valid code for a contact mechanism type.
    *
    * @param contactMechanismTypeCode the code for the contact mechanism type
    * @return <b>true</b> if the code is a valid code for a contact mechanism type or <b>false</b>
@@ -521,7 +522,7 @@ public interface IReferenceService {
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a country.
+   * Check whether the code is a valid code for a country.
    *
    * @param countryCode the code for the country
    * @return <b>true</b> if the code is a valid code for a country or <b>false</b> otherwise
@@ -529,7 +530,7 @@ public interface IReferenceService {
   boolean isValidCountry(String countryCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for an employment status.
+   * Check whether the code is a valid code for an employment status.
    *
    * @param employmentStatusCode the code for the employment status
    * @return <b>true</b> if the code is a valid code for an employment status or <b>false</b>
@@ -538,7 +539,7 @@ public interface IReferenceService {
   boolean isValidEmploymentStatus(String employmentStatusCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for an employment type.
+   * Check whether the code is a valid code for an employment type.
    *
    * @param employmentStatusCode the code for the employment status
    * @param employmentTypeCode the code for the employment type
@@ -549,7 +550,7 @@ public interface IReferenceService {
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a gender.
+   * Check whether the code is a valid code for a gender.
    *
    * @param genderCode the code for the gender
    * @return <b>true</b> if the code is a valid code for a gender or <b>false</b> otherwise
@@ -557,16 +558,17 @@ public interface IReferenceService {
   boolean isValidGender(String genderCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a identity document type.
+   * Check whether the code is a valid code for an identity document type for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param identityDocumentTypeCode the code for the identity document type
-   * @return <b>true</b> if the code is a valid code for a identity document type or <b>false</b>
+   * @return <b>true</b> if the code is a valid code for an identity document type or <b>false</b>
    *     otherwise
    */
-  boolean isValidIdentityDocumentType(String identityDocumentTypeCode)
+  boolean isValidIdentityDocumentType(String partyTypeCode, String identityDocumentTypeCode)
       throws ReferenceServiceException;
   /**
-   * Check whether the specified code is a valid code for a language.
+   * Check whether the code is a valid code for a language.
    *
    * @param languageCode the code for the language
    * @return <b>true</b> if the code is a valid code for a language or <b>false</b> otherwise
@@ -574,7 +576,7 @@ public interface IReferenceService {
   boolean isValidLanguage(String languageCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a marital status.
+   * Check whether the code is a valid code for a marital status.
    *
    * @param maritalStatusCode the code for the marital status
    * @return <b>true</b> if the code is a valid code for a marital status or <b>false</b> otherwise
@@ -582,7 +584,7 @@ public interface IReferenceService {
   boolean isValidMaritalStatus(String maritalStatusCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a marriage type.
+   * Check whether the code is a valid code for a marriage type.
    *
    * @param maritalStatusCode the code for the marital status
    * @param marriageTypeCode the code for the marriage type
@@ -592,7 +594,7 @@ public interface IReferenceService {
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a next of kin type.
+   * Check whether the code is a valid code for a next of kin type.
    *
    * @param nextOfKinTypeCode the code for the next of kin type
    * @return <b>true</b> if the code is a valid code for a next of kin type or <b>false</b>
@@ -601,7 +603,7 @@ public interface IReferenceService {
   boolean isValidNextOfKinType(String nextOfKinTypeCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a occupation.
+   * Check whether the code is a valid code for a occupation.
    *
    * @param occupationCode the code for the occupation
    * @return <b>true</b> if the code is a valid code for a occupation or <b>false</b> otherwise
@@ -609,7 +611,7 @@ public interface IReferenceService {
   boolean isValidOccupation(String occupationCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a party role purpose.
+   * Check whether the code is a valid code for a party role purpose.
    *
    * @param partyRolePurposeCode the code for the party role purpose
    * @return <b>true</b> if the code is a valid code for a party role purpose or <b>false</b>
@@ -618,25 +620,28 @@ public interface IReferenceService {
   boolean isValidPartyRolePurpose(String partyRolePurposeCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a party role type.
+   * Check whether the code is a valid code for a party role type for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param partyRoleTypeCode the code for the party role type
    * @return <b>true</b> if the code is a valid code for a party role type or <b>false</b> otherwise
    */
-  boolean isValidPartyRoleType(String partyRoleTypeCode) throws ReferenceServiceException;
+  boolean isValidPartyRoleType(String partyTypeCode, String partyRoleTypeCode)
+      throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a physical address purpose.
+   * Check whether the code is a valid code for a physical address purpose for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param physicalAddressPurposeCode the code for the physical address purpose
    * @return <b>true</b> if the code is a valid code for a physical address purpose or <b>false</b>
    *     otherwise
    */
-  boolean isValidPhysicalAddressPurpose(String physicalAddressPurposeCode)
+  boolean isValidPhysicalAddressPurpose(String partyTypeCode, String physicalAddressPurposeCode)
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a physical address type.
+   * Check whether the code is a valid code for a physical address type.
    *
    * @param physicalAddressTypeCode the code for the physical address type
    * @return <b>true</b> if the code is a valid code for a physical address type or <b>false</b>
@@ -646,15 +651,17 @@ public interface IReferenceService {
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a preference type.
+   * Check whether the code is a valid code for a preference type for the party type.
    *
+   * @param partyTypeCode the party type code
    * @param preferenceTypeCode the code for the preference type
    * @return <b>true</b> if the code is a valid code for a preference type or <b>false</b> otherwise
    */
-  boolean isValidPreferenceType(String preferenceTypeCode) throws ReferenceServiceException;
+  boolean isValidPreferenceType(String partyTypeCode, String preferenceTypeCode)
+      throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a preference type category.
+   * Check whether the code is a valid code for a preference type category.
    *
    * @param preferenceTypeCategoryCode the code for the preference type category
    * @return <b>true</b> if the code is a valid code for a preference type category or <b>false</b>
@@ -664,7 +671,7 @@ public interface IReferenceService {
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a race.
+   * Check whether the code is a valid code for a race.
    *
    * @param raceCode the code for the race
    * @return <b>true</b> if the code is a valid code for a race or <b>false</b> otherwise
@@ -672,14 +679,14 @@ public interface IReferenceService {
   boolean isValidRace(String raceCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a region.
+   * Check whether the code is a valid code for a region.
    *
    * @param regionCode the code for the region
    * @return <b>true</b> if the code is a valid code for a region or <b>false</b> otherwise
    */
   boolean isValidRegion(String regionCode) throws ReferenceServiceException;
   /**
-   * Check whether the specified code is a valid code for a residence permit type.
+   * Check whether the code is a valid code for a residence permit type.
    *
    * @param residencePermitTypeCode the code for the residence permit type
    * @return <b>true</b> if the code is a valid code for a residence permit type or <b>false</b>
@@ -689,7 +696,7 @@ public interface IReferenceService {
       throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a residency status.
+   * Check whether the code is a valid code for a residency status.
    *
    * @param residencyStatusCode the code for the residency status
    * @return <b>true</b> if the code is a valid code for a residency status or <b>false</b>
@@ -698,7 +705,7 @@ public interface IReferenceService {
   boolean isValidResidencyStatus(String residencyStatusCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a residential type.
+   * Check whether the code is a valid code for a residential type.
    *
    * @param residentialTypeCode the code for the residential type
    * @return <b>true</b> if the code is a valid code for a residential type or <b>false</b>
@@ -707,7 +714,7 @@ public interface IReferenceService {
   boolean isValidResidentialType(String residentialTypeCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a source of funds.
+   * Check whether the code is a valid code for a source of funds.
    *
    * @param sourceOfFundsCode the code for the source of funds
    * @return <b>true</b> if the code is a valid code for a source of funds or <b>false</b> otherwise
@@ -715,7 +722,7 @@ public interface IReferenceService {
   boolean isValidSourceOfFunds(String sourceOfFundsCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a tax number type.
+   * Check whether the code is a valid code for a tax number type.
    *
    * @param taxNumberTypeCode the code for the tax number type
    * @return <b>true</b> if the code is a valid code for a tax number type or <b>false</b> otherwise
@@ -723,7 +730,7 @@ public interface IReferenceService {
   boolean isValidTaxNumberType(String taxNumberTypeCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a time to contact.
+   * Check whether the code is a valid code for a time to contact.
    *
    * @param timeToContactCode the code for the time to contact
    * @return <b>true</b> if the code is a valid code for a time to contact or <b>false</b> otherwise
@@ -731,7 +738,7 @@ public interface IReferenceService {
   boolean isValidTimeToContact(String timeToContactCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a title.
+   * Check whether the code is a valid code for a title.
    *
    * @param titleCode the code for the title
    * @return <b>true</b> if the code is a valid code for a title or <b>false</b> otherwise
@@ -739,7 +746,7 @@ public interface IReferenceService {
   boolean isValidTitle(String titleCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a verification method.
+   * Check whether the code is a valid code for a verification method.
    *
    * @param verificationMethodCode the code for the verification method
    * @return <b>true</b> if the code is a valid code for a verification method or <b>false</b>
@@ -748,7 +755,7 @@ public interface IReferenceService {
   boolean isValidVerificationMethod(String verificationMethodCode) throws ReferenceServiceException;
 
   /**
-   * Check whether the specified code is a valid code for a verification status.
+   * Check whether the code is a valid code for a verification status.
    *
    * @param verificationStatusCode the code for the verification status
    * @return <b>true</b> if the code is a valid code for a verification status or <b>false</b>

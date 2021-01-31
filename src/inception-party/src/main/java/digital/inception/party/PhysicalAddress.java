@@ -205,9 +205,9 @@ public class PhysicalAddress implements Serializable {
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Country", required = true)
-  @Size(max = 10)
+  @Size(min = 2, max = 2)
   @ValidCountryCode
-  @Column(name = "country", length = 10)
+  @Column(name = "country", length = 2)
   private String country;
 
   /** The date and time the physical address was created. */

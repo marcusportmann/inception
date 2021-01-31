@@ -68,13 +68,13 @@ COMMENT ON COLUMN reference.contact_mechanism_purposes.party_types IS 'The comma
 
 
 CREATE TABLE reference.countries (
-  code            VARCHAR(30)  NOT NULL,
+  code            CHAR(2)      NOT NULL,
   locale_id       VARCHAR(10)  NOT NULL,
   sort_index      INTEGER      NOT NULL,
   name            VARCHAR(50)  NOT NULL,
   short_name      VARCHAR(30)  NOT NULL,
   description     VARCHAR(200) NOT NULL DEFAULT '',
-  sovereign_state VARCHAR(30)  NOT NULL,
+  sovereign_state CHAR(2)      NOT NULL,
   nationality     VARCHAR(50)  NOT NULL,
 
   PRIMARY KEY (code, locale_id)
@@ -82,7 +82,7 @@ CREATE TABLE reference.countries (
 
 CREATE INDEX countries_locale_id_ix ON reference.countries(locale_id);
 
-COMMENT ON COLUMN reference.countries.code IS 'The code for the country';
+COMMENT ON COLUMN reference.countries.code IS 'The ISO 3166-1 alpha-2 code for the country';
 
 COMMENT ON COLUMN reference.countries.locale_id IS 'The Unicode locale identifier for the country';
 
@@ -94,7 +94,7 @@ COMMENT ON COLUMN reference.countries.short_name IS 'The short name for the coun
 
 COMMENT ON COLUMN reference.countries.description IS 'The description for the country';
 
-COMMENT ON COLUMN reference.countries.sovereign_state IS 'The code for the sovereign state the country is associated with';
+COMMENT ON COLUMN reference.countries.sovereign_state IS 'The ISO 3166-1 alpha-2 code for the sovereign state the country is associated with';
 
 COMMENT ON COLUMN reference.countries.nationality IS 'The nationality for the country';
 
@@ -180,7 +180,7 @@ CREATE TABLE reference.identity_document_types (
   sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
-  country_of_issue VARCHAR(30),
+  country_of_issue CHAR(2),
   party_types      VARCHAR(300) NOT NULL,
 
   PRIMARY KEY (code, locale_id),
@@ -201,7 +201,7 @@ COMMENT ON COLUMN reference.identity_document_types.name IS 'The name of the ide
 
 COMMENT ON COLUMN reference.identity_document_types.description IS 'The description for the identity document type';
 
-COMMENT ON COLUMN reference.identity_document_types.country_of_issue IS 'The optional code for the country of issue for the identity document type';
+COMMENT ON COLUMN reference.identity_document_types.country_of_issue IS 'The optional ISO 3166-1 alpha-2 code for the country of issue for the identity document type';
 
 COMMENT ON COLUMN reference.identity_document_types.party_types IS 'The comma-delimited list of codes for the party types the identity document type is associated with';
 
@@ -475,24 +475,25 @@ COMMENT ON COLUMN reference.preference_type_categories.description IS 'The descr
 
 
 CREATE TABLE reference.preference_types (
-   code        VARCHAR(30)  NOT NULL,
    category    VARCHAR(30)  NOT NULL,
+   code        VARCHAR(30)  NOT NULL,
    locale_id   VARCHAR(10)  NOT NULL,
    sort_index  INTEGER      NOT NULL,
    name        VARCHAR(50)  NOT NULL,
    description VARCHAR(200) NOT NULL DEFAULT '',
    party_types VARCHAR(300) NOT NULL,
 
-   PRIMARY KEY (code, locale_id)
+   PRIMARY KEY (code, locale_id),
+   CONSTRAINT preference_types_preference_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES reference.preference_type_categories(code, locale_id) ON DELETE CASCADE
 );
 
 CREATE INDEX preference_types_category_ix ON reference.preference_types(category);
 
 CREATE INDEX preference_types_locale_id_ix ON reference.preference_types(locale_id);
 
-COMMENT ON COLUMN reference.preference_types.code IS 'The code for the preference type';
-
 COMMENT ON COLUMN reference.preference_types.category IS 'The code for the preference category the preference type is associated with';
+
+COMMENT ON COLUMN reference.preference_types.code IS 'The code for the preference type';
 
 COMMENT ON COLUMN reference.preference_types.locale_id IS 'The Unicode locale identifier for the preference type';
 
@@ -529,7 +530,7 @@ COMMENT ON COLUMN reference.races.description IS 'The description for the race';
 
 
 CREATE TABLE reference.regions (
-  country     VARCHAR(30)  NOT NULL,
+  country     CHAR(2)      NOT NULL,
   code        VARCHAR(30)  NOT NULL,
   locale_id   VARCHAR(10)  NOT NULL,
   sort_index  INTEGER      NOT NULL,
@@ -544,7 +545,7 @@ CREATE INDEX regions_country_ix ON reference.regions(country);
 
 CREATE INDEX regions_locale_id_ix ON reference.regions(locale_id);
 
-COMMENT ON COLUMN reference.regions.country IS 'The code for the country the region is associated with';
+COMMENT ON COLUMN reference.regions.country IS 'The ISO 3166-1 alpha-2 code for the country the region is associated with';
 
 COMMENT ON COLUMN reference.regions.code IS 'The code for the region';
 
@@ -563,7 +564,7 @@ CREATE TABLE reference.residence_permit_types (
   sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
-  country_of_issue VARCHAR(30)  NOT NULL,
+  country_of_issue CHAR(2)      NOT NULL,
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT residence_permit_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
@@ -583,7 +584,7 @@ COMMENT ON COLUMN reference.residence_permit_types.name IS 'The name of the resi
 
 COMMENT ON COLUMN reference.residence_permit_types.description IS 'The description for the residence permit type';
 
-COMMENT ON COLUMN reference.residence_permit_types.country_of_issue IS 'The code for the country of issue for the residence permit type';
+COMMENT ON COLUMN reference.residence_permit_types.country_of_issue IS 'The ISO 3166-1 alpha-2 code for the country of issue for the residence permit type';
 
 
 CREATE TABLE reference.residency_statuses (
@@ -688,7 +689,7 @@ CREATE TABLE reference.tax_number_types (
   sort_index       INTEGER      NOT NULL,
   name             VARCHAR(50)  NOT NULL,
   description      VARCHAR(200) NOT NULL DEFAULT '',
-  country_of_issue VARCHAR(30)  NOT NULL,
+  country_of_issue CHAR(2)      NOT NULL,
 
   PRIMARY KEY (code, locale_id),
   CONSTRAINT tax_number_types_country_fk FOREIGN KEY (country_of_issue, locale_id) REFERENCES reference.countries(code, locale_id) ON DELETE CASCADE
@@ -708,7 +709,7 @@ COMMENT ON COLUMN reference.tax_number_types.name IS 'The name of the tax number
 
 COMMENT ON COLUMN reference.tax_number_types.description IS 'The description for the tax number type';
 
-COMMENT ON COLUMN reference.tax_number_types.country_of_issue IS 'The code for the country of issue for the tax number type';
+COMMENT ON COLUMN reference.tax_number_types.country_of_issue IS 'The ISO 3166-1 alpha-2 code for the country of issue for the tax number type';
 
 
 CREATE TABLE reference.times_to_contact (
@@ -2764,15 +2765,15 @@ INSERT INTO reference.preference_type_categories (code, locale_id, sort_index, n
   VALUES ('correspondence', 'en-ZA', 0, 'Correspondence', 'Correspondence');
 
 
-INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence_language', 'correspondence', 'en-US', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
-INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description, party_types)
-  VALUES ('time_to_contact', 'correspondence', 'en-US', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
+INSERT INTO reference.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence','correspondence_language', 'en-US', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
+INSERT INTO reference.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence','time_to_contact', 'en-US', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
 
-INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description, party_types)
-  VALUES ('correspondence_language', 'correspondence', 'en-ZA', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
-INSERT INTO reference.preference_types (code, category, locale_id, sort_index, name, description, party_types)
-  VALUES ('time_to_contact', 'correspondence', 'en-ZA', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
+INSERT INTO reference.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence', 'correspondence_language', 'en-ZA', 0, 'Correspondence Language', 'Correspondence Language', 'organization,person');
+INSERT INTO reference.preference_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('correspondence', 'time_to_contact', 'en-ZA', 0, 'Time To Contact', 'Suitable Time To Contact', 'person');
 
 
 INSERT INTO reference.races (code, locale_id, sort_index, name, description)

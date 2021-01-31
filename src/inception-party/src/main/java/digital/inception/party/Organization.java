@@ -140,7 +140,7 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
-  /** The optional comma-delimited codes for the countries of tax residence for the organization. */
+  /** The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization. */
   @JsonIgnore
   @XmlTransient
   @Size(min = 1, max = 100)
@@ -297,12 +297,12 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional codes for the countries of tax residence for the organization.
+   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization.
    *
-   * @return the optional codes for the countries of tax residence for the organization
+   * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization
    */
   @Schema(
-      description = "The optional codes for the countries of tax residence for the organization")
+      description = "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization")
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
@@ -545,9 +545,9 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional codes for the countries of tax residence for the organization.
+   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization.
    *
-   * @param countriesOfTaxResidence the optional codes for the countries of tax residence for the
+   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
    *     organization
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {

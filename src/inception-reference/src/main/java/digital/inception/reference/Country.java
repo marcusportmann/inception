@@ -74,14 +74,14 @@ public class Country implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the country. */
-  @Schema(description = "The code for the country", required = true)
+  /** The ISO 3166-1 alpha-2 code for the country. */
+  @Schema(description = "The ISO 3166-1 alpha-2 code for the country", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
+  @Size(min = 2, max = 2)
   @Id
-  @Column(name = "code", length = 30, nullable = false)
+  @Column(name = "code", length = 2, nullable = false)
   private String code;
 
   /** The description for the country. */
@@ -138,15 +138,16 @@ public class Country implements Serializable {
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** The code for the sovereign state the country is associated with. */
+  /** The ISO 3166-1 alpha-2 code for the sovereign state the country is associated with. */
   @Schema(
-      description = "The code for the sovereign state the country is associated with",
+      description =
+          "The ISO 3166-1 alpha-2 code for the sovereign state the country is associated with",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SovereignState", required = true)
   @NotNull
-  @Size(min = 1, max = 30)
-  @Column(name = "sovereign_state", length = 30, nullable = false)
+  @Size(min = 2, max = 2)
+  @Column(name = "sovereign_state", length = 2, nullable = false)
   private String sovereignState;
 
   /** Constructs a new <b>Country</b>. */
@@ -178,9 +179,9 @@ public class Country implements Serializable {
   }
 
   /**
-   * Returns the code for the country.
+   * Returns the ISO 3166-1 alpha-2 code for the country.
    *
-   * @return the code for the country
+   * @return the ISO 3166-1 alpha-2 code for the country
    */
   public String getCode() {
     return code;
@@ -241,9 +242,9 @@ public class Country implements Serializable {
   }
 
   /**
-   * Returns the code for the sovereign state the country is associated with.
+   * Returns the ISO 3166-1 alpha-2 code for the sovereign state the country is associated with.
    *
-   * @return the code for the sovereign state the country is associated with
+   * @return the ISO 3166-1 alpha-2 code for the sovereign state the country is associated with
    */
   public String getSovereignState() {
     return sovereignState;
@@ -260,9 +261,9 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the code for the country.
+   * Set the ISO 3166-1 alpha-2 code for the country.
    *
-   * @param code the code for the country
+   * @param code the ISO 3166-1 alpha-2 code for the country
    */
   public void setCode(String code) {
     this.code = code;
@@ -323,9 +324,10 @@ public class Country implements Serializable {
   }
 
   /**
-   * Set the code for the sovereign state the country is associated with.
+   * Set the ISO 3166-1 alpha-2 code for the sovereign state the country is associated with.
    *
-   * @param sovereignState the code for the sovereign state the country is associated with
+   * @param sovereignState the ISO 3166-1 alpha-2 code for the sovereign state the country is
+   *     associated with
    */
   public void setSovereignState(String sovereignState) {
     this.sovereignState = sovereignState;
