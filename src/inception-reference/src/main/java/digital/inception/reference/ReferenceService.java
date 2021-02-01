@@ -17,6 +17,7 @@
 package digital.inception.reference;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.validation.Validator;
 import org.slf4j.Logger;
@@ -1388,15 +1389,26 @@ public class ReferenceService implements IReferenceService {
   @Override
   public boolean isValidMarriageType(String maritalStatusCode, String marriageTypeCode)
       throws ReferenceServiceException {
-    if (!StringUtils.hasText(marriageTypeCode)) {
-      return false;
+    if (!StringUtils.hasText(maritalStatusCode)) {
+      return true;
     }
 
-    return self.getMarriageTypes().stream()
-        .anyMatch(
-            marriageType ->
-                (marriageType.getCode().equals(marriageTypeCode)
-                    && marriageType.getMaritalStatus().equals(maritalStatusCode)));
+    // Find marriage types for the specified marital status
+    List<MarriageType> marriageTypes =
+        self.getMarriageTypes().stream()
+            .filter(marriageType -> marriageType.getMaritalStatus().equals(maritalStatusCode))
+            .collect(Collectors.toList());
+
+    // If we have marriage types for the specified marital status then check if one matches
+    if (marriageTypes.size() > 0) {
+      return marriageTypes.stream()
+          .anyMatch(
+              marriageType ->
+                  (marriageType.getCode().equals(marriageTypeCode)
+                      && marriageType.getMaritalStatus().equals(maritalStatusCode)));
+    } else {
+      return true;
+    }
   }
 
   /**

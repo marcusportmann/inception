@@ -21,6 +21,8 @@ import digital.inception.party.ContactMechanism;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyRole;
 import digital.inception.party.PartyType;
+import digital.inception.party.PhysicalAddress;
+import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.Preference;
 import digital.inception.party.TaxNumber;
 import digital.inception.reference.IReferenceService;
@@ -64,21 +66,8 @@ public class ValidIndividualCustomerValidator
         constraintValidatorContext.unwrap(HibernateConstraintValidatorContext.class);
 
     try {
-      // Validate the attributes inherited from the Person entity
+      // Validate contact mechanisms
       for (ContactMechanism contactMechanism : individualCustomer.getContactMechanisms()) {
-        if (!(contactMechanism
-            .getPurpose()
-            .isValidForPartyType(individualCustomer.getPartyType()))) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("contactMechanismPurpose", contactMechanism.getPurpose().code())
-              .addMessageParameter("partyType", individualCustomer.getPartyType().code())
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidContactMechanismPurposeCodeForPartyType.message}")
-              .addConstraintViolation();
-
-          isValid = false;
-        }
-
         if (!contactMechanism.getPurpose().type().equals(contactMechanism.getType())) {
           hibernateConstraintValidatorContext
               .addMessageParameter("contactMechanismType", contactMechanism.getType().code())
@@ -89,9 +78,118 @@ public class ValidIndividualCustomerValidator
 
           isValid = false;
         }
+
+        if (!contactMechanism.getPurpose().isValidForPartyType(individualCustomer.getPartyType())) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("contactMechanismPurpose", contactMechanism.getPurpose().code())
+              .addMessageParameter("partyType", individualCustomer.getPartyType().code())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidContactMechanismPurposeCodeForPartyType.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
       }
 
+      // Validate countries of tax residence
+      for (String countryOfTaxResidence : individualCustomer.getCountriesOfTaxResidence()) {
+        if (!referenceService.isValidCountry(countryOfTaxResidence)) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidCountryOfTaxResidenceCode.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+      }
+
+      // Validate country of birth
+      if ((!StringUtils.hasText(individualCustomer.getCountryOfBirth()))
+          || (!referenceService.isValidCountry(individualCustomer.getCountryOfBirth()))) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("countryOfBirth", individualCustomer.getCountryOfBirth())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidCountryOfBirthCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate country of residence
+      if ((!StringUtils.hasText(individualCustomer.getCountryOfResidence()))
+          || (!referenceService.isValidCountry(individualCustomer.getCountryOfResidence()))) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("countryOfResidence", individualCustomer.getCountryOfResidence())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidCountryOfResidenceCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate employment status
+      if ((!StringUtils.hasText(individualCustomer.getEmploymentStatus()))
+          || (!referenceService.isValidEmploymentStatus(
+              individualCustomer.getEmploymentStatus()))) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("employmentStatus", individualCustomer.getEmploymentStatus())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidEmploymentStatusCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate employment type
+      if ((!StringUtils.hasText(individualCustomer.getEmploymentType()))
+          || (!referenceService.isValidEmploymentType(
+              individualCustomer.getEmploymentStatus(), individualCustomer.getEmploymentType()))) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("employmentType", individualCustomer.getEmploymentType())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidEmploymentTypeCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate gender
+      if ((!StringUtils.hasText(individualCustomer.getGender()))
+          || (!referenceService.isValidGender(individualCustomer.getGender()))) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("gender", individualCustomer.getGender())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidGenderCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate home language
+      if ((!StringUtils.hasText(individualCustomer.getHomeLanguage()))
+          || (!referenceService.isValidLanguage(individualCustomer.getHomeLanguage()))) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("homeLanguage", individualCustomer.getHomeLanguage())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidHomeLanguageCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate identity documents
       for (IdentityDocument identityDocument : individualCustomer.getIdentityDocuments()) {
+        if (!referenceService.isValidCountry(identityDocument.getCountryOfIssue())) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("countryOfIssue", identityDocument.getCountryOfIssue())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidIdentityDocumentCountryOfIssueCode.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
         if (!referenceService.isValidIdentityDocumentType(
             PartyType.PERSON.code(), identityDocument.getType())) {
           hibernateConstraintValidatorContext
@@ -102,18 +200,76 @@ public class ValidIndividualCustomerValidator
 
           isValid = false;
         }
+      }
 
-        if (!referenceService.isValidCountry(identityDocument.getCountryOfIssue())) {
+      // Validate marital status
+      if ((!StringUtils.hasText(individualCustomer.getMaritalStatus()))
+          || (!referenceService.isValidMaritalStatus(individualCustomer.getMaritalStatus()))) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("maritalStatus", individualCustomer.getMaritalStatus())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidMaritalStatusCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate marriage type
+      if (!referenceService.isValidMarriageType(
+              individualCustomer.getMaritalStatus(), individualCustomer.getMarriageType())) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("maritalStatus", individualCustomer.getMaritalStatus())
+            .addMessageParameter("marriageType", individualCustomer.getMarriageType())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidMarriageTypeCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate occupation
+      if ((!StringUtils.hasText(individualCustomer.getOccupation()))
+          || (!referenceService.isValidOccupation(individualCustomer.getOccupation()))) {
+        hibernateConstraintValidatorContext
+            .addMessageParameter("occupation", individualCustomer.getOccupation())
+            .buildConstraintViolationWithTemplate(
+                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidOccupationCode.message}")
+            .addConstraintViolation();
+
+        isValid = false;
+      }
+
+      // Validate party roles
+      for (PartyRole partyRole : individualCustomer.getRoles()) {
+        if (!referenceService.isValidPartyRoleType(PartyType.PERSON.code(), partyRole.getType())) {
           hibernateConstraintValidatorContext
-              .addMessageParameter("countryOfIssue", identityDocument.getCountryOfIssue())
+              .addMessageParameter("type", partyRole.getType())
               .buildConstraintViolationWithTemplate(
-                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidIdentityDocumentCountryOfIssueCode.message}")
+                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidPartyRoleTypeCode.message}")
               .addConstraintViolation();
 
           isValid = false;
         }
       }
 
+      // Validate physical addresses
+      for (PhysicalAddress physicalAddress : individualCustomer.getPhysicalAddresses()) {
+        for (PhysicalAddressPurpose physicalAddressPurpose : physicalAddress.getPurposes()) {
+
+          if (!(physicalAddressPurpose.isValidForPartyType(individualCustomer.getPartyType()))) {
+            hibernateConstraintValidatorContext
+                .addMessageParameter("physicalAddressPurpose", physicalAddressPurpose.code())
+                .addMessageParameter("partyType", individualCustomer.getPartyType().code())
+                .buildConstraintViolationWithTemplate(
+                    "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidPhysicalAddressPurposeCodeForPartyType.message}")
+                .addConstraintViolation();
+
+            isValid = false;
+          }
+        }
+      }
+
+      // Validate preferences
       for (Preference preference : individualCustomer.getPreferences()) {
         if (!referenceService.isValidPreferenceType(
             PartyType.PERSON.code(), preference.getType())) {
@@ -127,157 +283,9 @@ public class ValidIndividualCustomerValidator
         }
       }
 
-      for (PartyRole partyRole : individualCustomer.getRoles()) {
-        if (!referenceService.isValidPartyRoleType(PartyType.PERSON.code(), partyRole.getType())) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("type", partyRole.getType())
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidRoleTypeCode.message}")
-              .addConstraintViolation();
-
-          isValid = false;
-        }
-      }
-
-      for (TaxNumber taxNumber : individualCustomer.getTaxNumbers()) {
-        if (!referenceService.isValidTaxNumberType(taxNumber.getType())) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("type", taxNumber.getType())
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidTaxNumberTypeCode.message}")
-              .addConstraintViolation();
-
-          isValid = false;
-        }
-
-        if (!referenceService.isValidCountry(taxNumber.getCountryOfIssue())) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("countryOfIssue", taxNumber.getCountryOfIssue())
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidTaxNumberCountryOfIssueCode.message}")
-              .addConstraintViolation();
-
-          isValid = false;
-        }
-      }
-
-      for (String countryOfTaxResidence : individualCustomer.getCountriesOfTaxResidence()) {
-        if (!referenceService.isValidCountry(countryOfTaxResidence)) {
-          hibernateConstraintValidatorContext
-              .addMessageParameter("countryOfTaxResidence", countryOfTaxResidence)
-              .buildConstraintViolationWithTemplate(
-                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidCountryOfTaxResidenceCode.message}")
-              .addConstraintViolation();
-
-          isValid = false;
-        }
-      }
-
-      if (StringUtils.hasText(individualCustomer.getCountryOfBirth())
-          && (!referenceService.isValidCountry(individualCustomer.getCountryOfBirth()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("countryOfBirth", individualCustomer.getCountryOfBirth())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidCountryOfBirthCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getCountryOfResidence())
-          && (!referenceService.isValidCountry(individualCustomer.getCountryOfResidence()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("countryOfResidence", individualCustomer.getCountryOfResidence())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidCountryOfResidenceCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getEmploymentStatus())
-          && (!referenceService.isValidEmploymentStatus(
-              individualCustomer.getEmploymentStatus()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("employmentStatus", individualCustomer.getEmploymentStatus())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidEmploymentStatusCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getEmploymentType())
-          && (!referenceService.isValidEmploymentType(
-              individualCustomer.getEmploymentStatus(), individualCustomer.getEmploymentType()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("employmentType", individualCustomer.getEmploymentType())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidEmploymentTypeCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getGender())
-          && (!referenceService.isValidGender(individualCustomer.getGender()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("gender", individualCustomer.getGender())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidGenderCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getHomeLanguage())
-          && (!referenceService.isValidLanguage(individualCustomer.getHomeLanguage()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("homeLanguage", individualCustomer.getHomeLanguage())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidHomeLanguageCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getMaritalStatus())
-          && (!referenceService.isValidMaritalStatus(individualCustomer.getMaritalStatus()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("maritalStatus", individualCustomer.getMaritalStatus())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidMaritalStatusCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getMarriageType())
-          && (!referenceService.isValidMarriageType(
-              individualCustomer.getMaritalStatus(), individualCustomer.getMarriageType()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("maritalStatus", individualCustomer.getMaritalStatus())
-            .addMessageParameter("marriageType", individualCustomer.getMarriageType())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidMarriageTypeCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getOccupation())
-          && (!referenceService.isValidOccupation(individualCustomer.getOccupation()))) {
-        hibernateConstraintValidatorContext
-            .addMessageParameter("occupation", individualCustomer.getOccupation())
-            .buildConstraintViolationWithTemplate(
-                "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidOccupationCode.message}")
-            .addConstraintViolation();
-
-        isValid = false;
-      }
-
-      if (StringUtils.hasText(individualCustomer.getRace())
-          && (!referenceService.isValidRace(individualCustomer.getRace()))) {
+      // Validate race
+      if ((!StringUtils.hasText(individualCustomer.getRace()))
+          || (!referenceService.isValidRace(individualCustomer.getRace()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("race", individualCustomer.getRace())
             .buildConstraintViolationWithTemplate(
@@ -287,8 +295,9 @@ public class ValidIndividualCustomerValidator
         isValid = false;
       }
 
-      if (StringUtils.hasText(individualCustomer.getResidencyStatus())
-          && (!referenceService.isValidResidencyStatus(individualCustomer.getResidencyStatus()))) {
+      //  Validate residency status
+      if ((!StringUtils.hasText(individualCustomer.getResidencyStatus()))
+          || (!referenceService.isValidResidencyStatus(individualCustomer.getResidencyStatus()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("residencyStatus", individualCustomer.getResidencyStatus())
             .buildConstraintViolationWithTemplate(
@@ -298,8 +307,9 @@ public class ValidIndividualCustomerValidator
         isValid = false;
       }
 
-      if (StringUtils.hasText(individualCustomer.getResidentialType())
-          && (!referenceService.isValidResidentialType(individualCustomer.getResidentialType()))) {
+      // Validate residential type
+      if ((!StringUtils.hasText(individualCustomer.getResidentialType()))
+          || (!referenceService.isValidResidentialType(individualCustomer.getResidentialType()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("residentialType", individualCustomer.getResidentialType())
             .buildConstraintViolationWithTemplate(
@@ -309,8 +319,32 @@ public class ValidIndividualCustomerValidator
         isValid = false;
       }
 
-      if (StringUtils.hasText(individualCustomer.getTitle())
-          && (!referenceService.isValidTitle(individualCustomer.getTitle()))) {
+      // Validate tax numbers
+      for (TaxNumber taxNumber : individualCustomer.getTaxNumbers()) {
+        if (!referenceService.isValidCountry(taxNumber.getCountryOfIssue())) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("countryOfIssue", taxNumber.getCountryOfIssue())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidTaxNumberCountryOfIssueCode.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+
+        if (!referenceService.isValidTaxNumberType(taxNumber.getType())) {
+          hibernateConstraintValidatorContext
+              .addMessageParameter("type", taxNumber.getType())
+              .buildConstraintViolationWithTemplate(
+                  "{digital.inception.banking.customer.constraints.ValidIndividualCustomer.invalidTaxNumberTypeCode.message}")
+              .addConstraintViolation();
+
+          isValid = false;
+        }
+      }
+
+      // Validate title
+      if ((!StringUtils.hasText(individualCustomer.getTitle()))
+          || (!referenceService.isValidTitle(individualCustomer.getTitle()))) {
         hibernateConstraintValidatorContext
             .addMessageParameter("title", individualCustomer.getTitle())
             .buildConstraintViolationWithTemplate(
@@ -320,10 +354,8 @@ public class ValidIndividualCustomerValidator
         isValid = false;
       }
 
-      // Validate the attributes specific to the Individual Customer entity
-
     } catch (Throwable e) {
-      throw new ValidationException("Failed to validate the individual customer", e);
+      throw new ValidationException("Failed to validate the person", e);
     }
 
     return isValid;

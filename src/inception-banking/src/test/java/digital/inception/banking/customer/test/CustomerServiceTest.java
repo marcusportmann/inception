@@ -84,15 +84,15 @@ public class CustomerServiceTest {
     individualCustomer.setCountryOfResidence("ZA");
     individualCustomer.setDateOfBirth(LocalDate.of(1976, 3, 7));
     individualCustomer.setEmploymentStatus("other");
-    individualCustomer.setEmploymentType("other");
-    individualCustomer.setGender("M");
+    individualCustomer.setEmploymentType("unemployed");
+    individualCustomer.setGender("female");
     individualCustomer.setGivenName("GivenName" + individualCustomerCount);
     individualCustomer.setHomeLanguage("EN");
     individualCustomer.setId(UuidCreator.getShortPrefixComb());
     individualCustomer.setInitials("G M");
     individualCustomer.setMaidenName("MaidenName" + individualCustomerCount);
-    individualCustomer.setMaritalStatus("M");
-    individualCustomer.setMarriageType("1");
+    individualCustomer.setMaritalStatus("married");
+    individualCustomer.setMarriageType("in_community_of_property");
     individualCustomer.setMiddleNames("MiddleName" + individualCustomerCount);
     individualCustomer.setName(
         "GivenName"
@@ -103,14 +103,14 @@ public class CustomerServiceTest {
             + " "
             + "Surname"
             + individualCustomerCount);
-    individualCustomer.setOccupation("15");
+    individualCustomer.setOccupation("professional_business");
     individualCustomer.setPreferredName("PreferredName" + individualCustomerCount);
-    individualCustomer.setRace("W");
-    individualCustomer.setResidencyStatus("P");
-    individualCustomer.setResidentialType("R");
+    individualCustomer.setRace("white");
+    individualCustomer.setResidencyStatus("citizen");
+    individualCustomer.setResidentialType("owner");
     individualCustomer.setSurname("Surname" + individualCustomerCount);
     individualCustomer.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-    individualCustomer.setTitle("1");
+    individualCustomer.setTitle("mrs");
 
     individualCustomer.addIdentityDocument(
         new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
@@ -120,8 +120,8 @@ public class CustomerServiceTest {
 
     individualCustomer.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.FAX_NUMBER,
-            ContactMechanismPurpose.MAIN_FAX_NUMBER,
+            ContactMechanismType.MOBILE_NUMBER,
+            ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER,
             "+27835551234"));
     individualCustomer.addContactMechanism(
         new ContactMechanism(

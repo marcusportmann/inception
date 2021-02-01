@@ -19,6 +19,7 @@ package digital.inception.party;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Arrays;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
@@ -234,6 +235,17 @@ public enum PhysicalAddressPurpose {
    */
   public String description() {
     return description;
+  }
+
+  /**
+   * Returns whether the physical address purpose is valid for the party type.
+   *
+   * @param partyType the party type
+   * @return <b>true</b> if the physical address purpose is valid for the party type or <b>false</b>
+   *     otherwise
+   */
+  public boolean isValidForPartyType(PartyType partyType) {
+    return Arrays.stream(partyTypes).anyMatch(validPartyType -> validPartyType.equals(partyType));
   }
 
   /**

@@ -66,6 +66,28 @@ import org.springframework.util.StringUtils;
  * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
  * field-based approach to support the JPA inheritance model.
  *
+ * <p>The following steps must be completed when adding a new attribute to the individual customer
+ * entity:
+ *
+ * <ol>
+ *   <li>Add a new column for the new attribute to the definition of the <b>party.persons</b> table
+ *       in the <b>inception-party-h2.sql</b> file, if the new attribute is common to all persons,
+ *       or the definition of the <b>customer.individual_customers</b> table in the
+ *       <b>inception-banking-h2.sql</b> file.
+ *   <li>Add a description for the new column for the new attribute to the
+ *       <b>inception-party-h2.sql</b> file, if the new attribute is common to all persons, or
+ *       <b>inception-banking-h2.sql</b> file.
+ *   <li>Add a new property for the new attribute to the <b>Person</b> class if required, if the new
+ *       attribute is common to all persons.
+ *   <li>Add a new property for the new attribute to the <b>IndividualCustomer</b> class.
+ *   <li>Add the appropriate validation for the new attribute to the <b>ValidPersonValidator</b>
+ *       class if required, if the new attribute is common to all persons.
+ *   <li>Add the appropriate validation for the new attribute to the
+ *       <b>ValidIndividualCustomerValidator</b> class.
+ *   <li>Add a new column for the new attribute to the <b>inception-party.changelog.xml</b> file, if
+ *       the new attribute is common to all persons, or the <b>inception-banking.changelog.xml</b>.
+ * </ol>
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "An individual customer")
@@ -210,10 +232,13 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
       orphanRemoval = true)
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
-  /** The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer. */
+  /**
+   * The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for
+   * the individual customer.
+   */
   @JsonIgnore
   @XmlTransient
-  @Size(min = 1, max = 100)
+  @Size(max = 100)
   @Column(table = "persons", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
 
@@ -502,12 +527,15 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   }
 
   /**
-   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer.
+   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
+   * individual customer.
    *
-   * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer
+   * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
+   *     individual customer
    */
   @Schema(
-      description = "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer")
+      description =
+          "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer")
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
@@ -521,7 +549,8 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
    * @return the ISO 3166-1 alpha-2 code for the country of birth for the individual customer
    */
   @Schema(
-      description = "The ISO 3166-1 alpha-2 code for the country of birth for the individual customer",
+      description =
+          "The ISO 3166-1 alpha-2 code for the country of birth for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfBirth", required = true)
@@ -535,7 +564,8 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
    * @return the ISO 3166-1 alpha-2 code for the country of residence for the individual customer
    */
   @Schema(
-      description = "The ISO 3166-1 alpha-2 code for the country of residence for the individual customer",
+      description =
+          "The ISO 3166-1 alpha-2 code for the country of residence for the individual customer",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfResidence", required = true)
@@ -1093,10 +1123,11 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   }
 
   /**
-   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual customer.
+   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual
+   * customer.
    *
-   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the individual
-   *     customer
+   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax
+   *     residence for the individual customer
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =
@@ -1106,7 +1137,8 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   /**
    * Set the ISO 3166-1 alpha-2 code for the country of birth for the individual customer.
    *
-   * @param countryOfBirth the ISO 3166-1 alpha-2 code for the country of birth for the individual customer
+   * @param countryOfBirth the ISO 3166-1 alpha-2 code for the country of birth for the individual
+   *     customer
    */
   public void setCountryOfBirth(String countryOfBirth) {
     this.countryOfBirth = countryOfBirth;
@@ -1115,7 +1147,8 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   /**
    * Set the ISO 3166-1 alpha-2 code for the country of residence for the individual customer.
    *
-   * @param countryOfResidence the ISO 3166-1 alpha-2 code for the country of residence for the individual customer
+   * @param countryOfResidence the ISO 3166-1 alpha-2 code for the country of residence for the
+   *     individual customer
    */
   public void setCountryOfResidence(String countryOfResidence) {
     this.countryOfResidence = countryOfResidence;

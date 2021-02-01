@@ -104,7 +104,7 @@ public class PartyServiceTest {
         "Party Name " + partyCount);
   }
 
-  private static synchronized Person getTestCompletePersonDetails() {
+  private static synchronized Person getTestCompletePersonDetails(boolean isMarried) {
     personCount++;
 
     Person person =
@@ -124,8 +124,14 @@ public class PartyServiceTest {
     person.setId(UuidCreator.getShortPrefixComb());
     person.setInitials("G M");
     person.setMaidenName("MaidenName" + personCount);
-    person.setMaritalStatus("married");
-    person.setMarriageType("anc_with_accrual");
+
+    if (isMarried) {
+      person.setMaritalStatus("married");
+      person.setMarriageType("anc_with_accrual");
+    } else {
+      person.setMaritalStatus("single");
+    }
+
     person.setMiddleNames("MiddleName" + personCount);
     person.setOccupation("professional_legal");
     person.setPreferredName("PreferredName" + personCount);
@@ -263,7 +269,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid building address",
-        10,
+        12,
         constraintViolations.size());
   }
 
@@ -311,7 +317,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid complex address",
-        11,
+        13,
         constraintViolations.size());
   }
 
@@ -359,7 +365,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid farm address",
-        10,
+        12,
         constraintViolations.size());
   }
 
@@ -407,7 +413,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid international address",
-        13,
+        15,
         constraintViolations.size());
   }
 
@@ -455,7 +461,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid site address",
-        11,
+        13,
         constraintViolations.size());
   }
 
@@ -503,7 +509,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid street address",
-        13,
+        15,
         constraintViolations.size());
   }
 
@@ -551,7 +557,7 @@ public class PartyServiceTest {
 
     assertEquals(
         "The correct number of constraint violations was not found for the invalid unstructured address",
-        13,
+        15,
         constraintViolations.size());
   }
 
@@ -628,7 +634,7 @@ public class PartyServiceTest {
 
     partyService.createOrganization(organization);
 
-    Person person = getTestCompletePersonDetails();
+    Person person = getTestCompletePersonDetails(false);
 
     partyService.createPerson(person);
 
@@ -769,7 +775,7 @@ public class PartyServiceTest {
 
     partyService.deletePerson(person.getId());
 
-    person = getTestCompletePersonDetails();
+    person = getTestCompletePersonDetails(true);
 
     partyService.createPerson(person);
 
@@ -908,7 +914,7 @@ public class PartyServiceTest {
   /** Test the person validation functionality. */
   @Test
   public void validatePersonTest() throws Exception {
-    Person person = getTestCompletePersonDetails();
+    Person person = getTestCompletePersonDetails(true);
 
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
 

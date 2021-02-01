@@ -58,6 +58,22 @@ import org.springframework.util.StringUtils;
  * <p>This class exposes the JSON and XML properties using a property-based approach rather than a
  * field-based approach to support the JPA inheritance model.
  *
+ * <p>The following steps must be completed when adding a new attribute to the person entity:
+ *
+ * <ol>
+ *   <li>Add a new column for the new attribute to the definition of the <b>party.persons</b> table
+ *       in the <b>inception-party-h2.sql</b> file.
+ *   <li>Add a description for the new column for the new attribute to the
+ *       <b>inception-party-h2.sql</b> file.
+ *   <li>Add a new property for the new attribute to the <b>Person</b> class.
+ *   <li>Add a new property for the new attribute to the <b>IndividualCustomer</b> class.
+ *   <li>Add the appropriate validation for the new attribute to the <b>ValidPersonValidator</b>
+ *       class.
+ *   <li>Add the appropriate validation for the new attribute to the
+ *       <b>ValidIndividualCustomerValidator</b> class.
+ *   <li>Add a new column for the new attribute to the <b>inception-party.changelog.xml</b> file.
+ * </ol>
+ *
  * @author Marcus Portmann
  */
 @Schema(description = "A person; any member of the species homo sapiens")
@@ -195,10 +211,13 @@ public class Person extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
-  /** The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the person. */
+  /**
+   * The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for
+   * the person.
+   */
   @JsonIgnore
   @XmlTransient
-  @Size(min = 1, max = 100)
+  @Size(max = 100)
   @Column(table = "persons", name = "countries_of_tax_residence", length = 100)
   private String countriesOfTaxResidence;
 
@@ -473,11 +492,14 @@ public class Person extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
+   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
+   * person.
    *
    * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the person
    */
-  @Schema(description = "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the person")
+  @Schema(
+      description =
+          "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the person")
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
@@ -490,7 +512,8 @@ public class Person extends PartyBase implements Serializable {
    *
    * @return the optional ISO 3166-1 alpha-2 code for the country of birth for the person
    */
-  @Schema(description = "The optional ISO 3166-1 alpha-2 code for the country of birth for the person")
+  @Schema(
+      description = "The optional ISO 3166-1 alpha-2 code for the country of birth for the person")
   @JsonProperty
   @XmlElement(name = "CountryOfBirth")
   public String getCountryOfBirth() {
@@ -502,7 +525,9 @@ public class Person extends PartyBase implements Serializable {
    *
    * @return the optional ISO 3166-1 alpha-2 code for the country of residence for the person
    */
-  @Schema(description = "The optional ISO 3166-1 alpha-2 code for the country of residence for the person")
+  @Schema(
+      description =
+          "The optional ISO 3166-1 alpha-2 code for the country of residence for the person")
   @JsonProperty
   @XmlElement(name = "CountryOfResidence")
   public String getCountryOfResidence() {
@@ -1019,8 +1044,8 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the person.
    *
-   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   *     person
+   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax
+   *     residence for the person
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =
@@ -1030,7 +1055,8 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Set the optional ISO 3166-1 alpha-2 code for the country of birth for the person.
    *
-   * @param countryOfBirth the optional ISO 3166-1 alpha-2 code for the country of birth for the person
+   * @param countryOfBirth the optional ISO 3166-1 alpha-2 code for the country of birth for the
+   *     person
    */
   public void setCountryOfBirth(String countryOfBirth) {
     this.countryOfBirth = countryOfBirth;
@@ -1039,7 +1065,8 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Set the optional ISO 3166-1 alpha-2 code for the country of residence for the person.
    *
-   * @param countryOfResidence the optional ISO 3166-1 alpha-2 code for the country of residence for the person
+   * @param countryOfResidence the optional ISO 3166-1 alpha-2 code for the country of residence for
+   *     the person
    */
   public void setCountryOfResidence(String countryOfResidence) {
     this.countryOfResidence = countryOfResidence;
