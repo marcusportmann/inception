@@ -68,7 +68,7 @@ public class ApplicationSecurityConfiguration {
   /**
    * Returns whether the key store configuration has been specified.
    *
-   * @return <b>true</b> if the key store configuration has been specified or <b>false </b>
+   * @return <b>true</b> if the key store configuration has been specified or <b>false</b>
    *     otherwise
    */
   public boolean hasKeyStoreConfiguration() {
@@ -80,7 +80,7 @@ public class ApplicationSecurityConfiguration {
   /**
    * Returns whether the trust store configuration has been specified.
    *
-   * @return <b>true</b> if the trust store configuration has been specified or <b>false </b>
+   * @return <b>true</b> if the trust store configuration has been specified or <b>false</b>
    *     otherwise
    */
   public boolean hasTrustStoreConfiguration() {

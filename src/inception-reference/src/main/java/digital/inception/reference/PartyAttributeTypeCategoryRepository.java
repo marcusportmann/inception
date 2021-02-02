@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-package digital.inception.error;
+package digital.inception.reference;
 
-import java.util.UUID;
+import java.util.List;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>ErrorRepository</b> interface declares the repository for the <b>ErrorReport</b> domain
- * type.
+ * The <b>PartyAttributeTypeCategoryRepository</b> interface declares the repository for the <b>
+ * PartyAttributeTypeCategory</b> domain type.
  *
  * @author Marcus Portmann
  */
-public interface ErrorReportRepository extends JpaRepository<ErrorReport, UUID> {
+public interface PartyAttributeTypeCategoryRepository
+    extends JpaRepository<PartyAttributeTypeCategory, PartyAttributeTypeCategoryId> {
 
-  @Modifying
-  @Query("delete from ErrorReport er where er.id = :errorReportId")
-  void deleteById(@Param("errorReportId") UUID errorReportId);
+  List<PartyAttributeTypeCategory> findByLocaleIdIgnoreCase(String localeId, Sort sort);
 }

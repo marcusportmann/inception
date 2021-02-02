@@ -16,16 +16,14 @@
 
 package digital.inception.security;
 
-
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>FunctionRepository</b> interface declares the repository for the <b>Function
- * </b> domain type.
+ * The <b>FunctionRepository</b> interface declares the repository for the <b>Function</b> domain
+ * type.
  *
  * @author Marcus Portmann
  */

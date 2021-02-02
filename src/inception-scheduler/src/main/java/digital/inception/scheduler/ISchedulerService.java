@@ -16,14 +16,12 @@
 
 package digital.inception.scheduler;
 
-
-
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 
 /**
- * The <b>ISchedulerService</b> interface defines the functionality provided by a Scheduler
- * Service implementation.
+ * The <b>ISchedulerService</b> interface defines the functionality provided by a Scheduler Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
@@ -35,14 +33,16 @@ public interface ISchedulerService {
    *
    * @param job the <b>Job</b> instance containing the information for the job
    */
-  void createJob(Job job) throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException;
+  void createJob(Job job)
+      throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException;
 
   /**
    * Delete the job
    *
    * @param jobId the ID for the job
    */
-  void deleteJob(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+  void deleteJob(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Execute the job.
@@ -65,7 +65,8 @@ public interface ISchedulerService {
    * @param jobId the ID for the job
    * @return the job
    */
-  Job getJob(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+  Job getJob(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Retrieve the name of the job.
@@ -73,7 +74,8 @@ public interface ISchedulerService {
    * @param jobId the ID for the job
    * @return the name of the job
    */
-  String getJobName(String jobId) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+  String getJobName(String jobId)
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 
   /**
    * Retrieve the jobs.
@@ -94,8 +96,8 @@ public interface ISchedulerService {
    *
    * <p>The job will be locked to prevent duplicate processing.
    *
-   * @return the next job that is scheduled for execution or <b>null</b> if no jobs are
-   *     currently scheduled for execution
+   * @return the next job that is scheduled for execution or <b>null</b> if no jobs are currently
+   *     scheduled for execution
    */
   Job getNextJobScheduledForExecution() throws SchedulerServiceException;
 
@@ -127,8 +129,7 @@ public interface ISchedulerService {
   /**
    * Schedule the next unscheduled job for execution.
    *
-   * @return <b>true</b> if a job was successfully scheduled for execution or <b>false
-   * </b> otherwise
+   * @return <b>true</b> if a job was successfully scheduled for execution or <b>false</b> otherwise
    */
   boolean scheduleNextUnscheduledJobForExecution() throws SchedulerServiceException;
 
@@ -155,5 +156,6 @@ public interface ISchedulerService {
    *
    * @param job the <b>Job</b> instance containing the updated information for the job
    */
-  void updateJob(Job job) throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+  void updateJob(Job job)
+      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
 }

@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.PasswordUtil;
 import digital.inception.core.util.RandomStringGenerator;
@@ -51,8 +49,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriUtils;
-
-
 
 /**
  * The <b>SecurityService</b> class provides the Security Service implementation.
@@ -620,8 +616,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
-   * @return the new internal user directory that was created for the tenant or <b>null
-   * </b> if no user directory was created
+   * @return the new internal user directory that was created for the tenant or <b>null</b> if no
+   *     user directory was created
    */
   @Override
   @Transactional
@@ -2200,8 +2196,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *
    * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
-   * @return <b>true</b> if a user with specified username exists or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if a user with specified username exists or <b>false</b> otherwise
    */
   @Override
   public boolean isExistingUser(UUID userDirectoryId, String username)
@@ -2683,8 +2678,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *
    * @param username the username for the internal user
    * @return the Universally Unique Identifier (UUID) for the internal user directory the internal
-   *     user with the specified username is associated with or <b>null
-   * </b> if an internal user with the specified username could not be found
+   *     user with the specified username is associated with or <b>null/b> if an internal user with
+   *     the specified username could not be found
    */
   private UUID getInternalUserDirectoryIdForUser(String username) throws SecurityServiceException {
     try {

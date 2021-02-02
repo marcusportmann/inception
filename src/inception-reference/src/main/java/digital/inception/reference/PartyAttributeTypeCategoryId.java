@@ -20,32 +20,32 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>PartyRolePurposeId</b> class implements the ID class for the <b>PartyRolePurpose</b>
- * class.
+ * The <b>PartyAttributeTypeCategoryId</b> class implements the ID class for the <b>
+ * PartyAttributeTypeCategory</b> class.
  *
  * @author Marcus Portmann
  */
 @SuppressWarnings("unused")
-public class PartyRolePurposeId implements Serializable {
+public class PartyAttributeTypeCategoryId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the party role purpose. */
+  /** The code for the party attribute type category. */
   private String code;
 
-  /** The Unicode locale identifier for the party role purpose. */
+  /** The Unicode locale identifier for the party attribute type category. */
   private String localeId;
 
-  /** Constructs a new <b>PartyRolePurposeId</b>. */
-  public PartyRolePurposeId() {}
+  /** Constructs a new <b>PartyAttributeTypeCategoryId</b>. */
+  public PartyAttributeTypeCategoryId() {}
 
   /**
-   * Constructs a new <b>PartyRolePurposeId</b>.
+   * Constructs a new <b>PartyAttributeTypeCategoryId</b>.
    *
-   * @param code the code for the party role purpose
-   * @param localeId the Unicode locale identifier for the party role purpose
+   * @param code the code for the party attribute type category
+   * @param localeId the Unicode locale identifier for the party attribute type category
    */
-  public PartyRolePurposeId(String code, String localeId) {
+  public PartyAttributeTypeCategoryId(String code, String localeId) {
     this.code = code;
     this.localeId = localeId;
   }
@@ -70,7 +70,7 @@ public class PartyRolePurposeId implements Serializable {
       return false;
     }
 
-    PartyRolePurposeId other = (PartyRolePurposeId) object;
+    PartyAttributeTypeCategoryId other = (PartyAttributeTypeCategoryId) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }

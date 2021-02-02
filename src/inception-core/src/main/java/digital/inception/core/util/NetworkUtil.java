@@ -49,8 +49,7 @@ public class NetworkUtil {
    * method will return simply the first non-loopback address found (IPv4 or IPv6).
    *
    * <p>If this method cannot find a non-loopback address using this selection algorithm, it will
-   * fall back to calling and returning the result of JDK method <b>InetAddress.getLocalHost
-   * </b>.
+   * fall back to calling and returning the result of JDK method <b>InetAddress.getLocalHost</b>.
    *
    * <p>
    */

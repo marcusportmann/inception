@@ -63,8 +63,7 @@ public class BinaryBuffer implements java.io.Serializable {
   }
 
   /**
-   * Append the specified binary data to the binary data already stored in the <b>BinaryBuffer
-   * </b>.
+   * Append the specified binary data to the binary data already stored in the <b>BinaryBuffer</b>.
    *
    * @param data the binary data to append
    */

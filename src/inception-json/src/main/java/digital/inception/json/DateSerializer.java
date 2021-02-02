@@ -24,8 +24,7 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- * The <b>DateDeserializer</b> class implements the Jackson serializer for the <b>Date
- * </b> type.
+ * The <b>DateDeserializer</b> class implements the Jackson serializer for the <b>Date</b> type.
  *
  * @author Marcus Portmann
  */

@@ -16,8 +16,6 @@
 
 package digital.inception.scheduler;
 
-
-
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -42,8 +40,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-
 
 /**
  * The <b>SchedulerService</b> class provides the Scheduler Service implementation.
@@ -330,8 +326,8 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    *
    * <p>The job will be locked to prevent duplicate processing.
    *
-   * @return the next job that is scheduled for execution or <b>null</b> if no jobs are
-   *     currently scheduled for execution
+   * @return the next job that is scheduled for execution or <b>null</b> if no jobs are currently
+   *     scheduled for execution
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -439,8 +435,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   /**
    * Schedule the next unscheduled job for execution.
    *
-   * @return <b>true</b> if a job was successfully scheduled for execution or <b>false
-   * </b> otherwise
+   * @return <b>true</b> if a job was successfully scheduled for execution or <b>false</b> otherwise
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)

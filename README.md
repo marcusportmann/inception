@@ -390,7 +390,7 @@ Complete the following steps to create a new application based on the Inception 
       @EnableJpaRepositories(
           entityManagerFactoryRef = "applicationPersistenceUnit",
           basePackages = {"demo"})
-      public class DemoConfiguration {}      
+      public class DemoConfiguration {}
       ```
    5. Add the Spring Boot Application class,
       e.g. *src/main/java/demo/DemoApplication.java*, that extends the
@@ -462,7 +462,7 @@ Complete the following steps to create a new application based on the Inception 
           name: demo
       ```
    6. Add the in-memory H2 database script for the application,
-      e.g. *src/main/resources/digital/inception/demo/demo-h2.sql*, to the project. This
+      e.g. *src/main/resources/demo/demo-h2.sql*, to the project. This
       file will contain all the Data Definition Language (DDL) and Data Manipulation
       Language (DML) commands use to initialize the in-memory H2 database for the
       application. This database allows developers to run the application locally while

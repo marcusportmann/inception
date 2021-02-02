@@ -344,8 +344,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * Get the identifier for the X.509 certificate i.e. the key store alias.
    *
    * @param certificate the X.509 certificate
-   * @return the identifier for the X.509 certificate i.e. the key store alias or <b>null</b>
-   *     if the X.509 certificate could not be found
+   * @return the identifier for the X.509 certificate i.e. the key store alias or <b>null</b> if the
+   *     X.509 certificate could not be found
    */
   @Override
   public String getX509Identifier(X509Certificate certificate) throws WSSecurityException {
@@ -605,9 +605,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param skiBytes the subject key identifier bytes
    * @param keyStore the key store
-   * @return the certificate or certificate chain or <b>null</b> if the certificate or
-   *     certificate chain identified by the subject key identifier could not be found in the key
-   *     store
+   * @return the certificate or certificate chain or <b>null</b> if the certificate or certificate
+   *     chain identified by the subject key identifier could not be found in the key store
    */
   private Certificate[] getCertificateChainForSKI(byte[] skiBytes, KeyStore keyStore)
       throws WSSecurityException {
@@ -794,7 +793,7 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param alias the key store alias
    * @return the X.509 certificate or certificate chain that corresponds to the identifier or <b>
-   * null</b> if no X.509 certificate or certificate chain could not be found
+   *     null</b> if no X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForAlias(String alias)
       throws WSSecurityException {
@@ -842,8 +841,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    *
    * @param issuer the issuer
    * @param serialNumber the serial number
-   * @return the X.509 certificate or certificate chain or <b>null</b> if the X.509
-   *     certificate or certificate chain could not be found
+   * @return the X.509 certificate or certificate chain or <b>null</b> if the X.509 certificate or
+   *     certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForIssuerAndSerialNumber(
       String issuer, BigInteger serialNumber) throws WSSecurityException {
@@ -887,9 +886,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * the key store or trust store.
    *
    * @param skiBytes the subject key identifier bytes
-   * @return the X.509 certificate or certificate chain or <b>null</b> if the X.509
-   *     certificate or certificate chain identified by the subject key identifier could not be
-   *     found
+   * @return the X.509 certificate or certificate chain or <b>null</b> if the X.509 certificate or
+   *     certificate chain identified by the subject key identifier could not be found
    */
   private X509Certificate[] getX509CertificateChainForSKI(byte[] skiBytes)
       throws WSSecurityException {
@@ -915,8 +913,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * or trust store.
    *
    * @param subjectDN the subject DN
-   * @return the X.509 certificate or certificate chain identified by the subject DN or <b>null
-   * </b> if the X.509 certificate or certificate chain could not be found
+   * @return the X.509 certificate or certificate chain identified by the subject DN or <b>null</b>
+   *     if the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForSubject(String subjectDN)
       throws WSSecurityException {
@@ -946,8 +944,8 @@ public class Crypto extends CryptoBase implements org.apache.wss4j.common.crypto
    * trust store.
    *
    * @param thumbprint the SHA1 thumbprint
-   * @return the X.509 certificate or certificate chain matching the thumbprint or <b>null</b>
-   *     if the X.509 certificate or certificate chain could not be found
+   * @return the X.509 certificate or certificate chain matching the thumbprint or <b>null</b> if
+   *     the X.509 certificate or certificate chain could not be found
    */
   private X509Certificate[] getX509CertificateChainForThumbprint(byte[] thumbprint)
       throws WSSecurityException {

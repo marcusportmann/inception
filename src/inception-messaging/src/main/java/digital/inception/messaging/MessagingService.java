@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.ServiceUtil;
@@ -67,11 +65,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-
-
 /**
- * The <b>MessagingService</b> class provides the implementation of the Messaging Service for
- * the messaging infrastructure.
+ * The <b>MessagingService</b> class provides the implementation of the Messaging Service for the
+ * messaging infrastructure.
  *
  * @author Marcus Portmann
  */
@@ -355,12 +351,12 @@ public class MessagingService implements IMessagingService, InitializingBean {
   }
 
   /**
-   * Returns <b>true</b> if the Messaging Service is capable of processing the specified
-   * message or <b>false</b> otherwise.
+   * Returns <b>true</b> if the Messaging Service is capable of processing the specified message or
+   * <b>false</b> otherwise.
    *
    * @param message the message to process
-   * @return <b>true</b> if the Messaging Service is capable of processing the specified
-   *     message or <b>false</b> otherwise
+   * @return <b>true</b> if the Messaging Service is capable of processing the specified message or
+   *     <b>false</b> otherwise
    */
   @Override
   public boolean canProcessMessage(Message message) {
@@ -368,12 +364,12 @@ public class MessagingService implements IMessagingService, InitializingBean {
   }
 
   /**
-   * Returns <b>true</b> if the Messaging Service is capable of queueing the specified message
-   * part for assembly or <b>false</b> otherwise.
+   * Returns <b>true</b> if the Messaging Service is capable of queueing the specified message part
+   * for assembly or <b>false</b> otherwise.
    *
    * @param messagePart the message part to queue for assembly
-   * @return <b>true</b> if the Messaging Service is capable of queueing the specified message
-   *     part for assembly or <b>false</b> otherwise
+   * @return <b>true</b> if the Messaging Service is capable of queueing the specified message part
+   *     for assembly or <b>false</b> otherwise
    */
   @Override
   public boolean canQueueMessagePartForAssembly(MessagePart messagePart) {
@@ -402,8 +398,8 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Create the new message part.
    *
-   * @param messagePart the <b>MessagePart</b> instance containing the information for the
-   *     message part
+   * @param messagePart the <b>MessagePart</b> instance containing the information for the message
+   *     part
    */
   @Override
   @Transactional
@@ -423,8 +419,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Decrypt the message.
    *
    * @param message the message to decrypt
-   * @return <b>true</b> if the message data was decrypted successfully or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the message data was decrypted successfully or <b>false</b> otherwise
    */
   @Override
   public boolean decryptMessage(Message message) throws MessagingServiceException {
@@ -550,8 +545,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Delete the message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message
-   *     part
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
    */
   @Override
   @Transactional
@@ -634,8 +628,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Encrypt the message.
    *
    * @param message the message to encrypt
-   * @return <b>true</b> if the message data was encrypted successfully or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the message data was encrypted successfully or <b>false</b> otherwise
    */
   @Override
   public boolean encryptMessage(Message message) throws MessagingServiceException {
@@ -920,8 +913,8 @@ public class MessagingService implements IMessagingService, InitializingBean {
    *
    * <p>The message will be locked to prevent duplicate processing.
    *
-   * @return the next message that has been queued for processing or <b>null</b> if no
-   *     messages are currently queued for processing
+   * @return the next message that has been queued for processing or <b>null</b> if no messages are
+   *     currently queued for processing
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -975,8 +968,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Can the specified message be processed asynchronously?
    *
    * @param message the message
-   * @return <b>true</b> if the message can be processed asynchronously or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the message can be processed asynchronously or <b>false</b> otherwise
    */
   @Override
   public boolean isAsynchronousMessage(Message message) {
@@ -987,8 +979,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Has the message already been archived?
    *
    * @param messageId the Universally Unique Identifier (UUID) for the message
-   * @return <b>true</b> if the message has already been archived or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the message has already been archived or <b>false</b> otherwise
    */
   @Override
   public boolean isMessageArchived(UUID messageId)
@@ -1008,10 +999,9 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Has the message part already been queued for assembly?
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message
-   *     part
-   * @return <b>true</b> if the message part has already been queued for assembly or <b>
-   * false</b> otherwise
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
+   * @return <b>true</b> if the message part has already been queued for assembly or <b> false</b>
+   *     otherwise
    */
   @Override
   public boolean isMessagePartQueuedForAssembly(UUID messagePartId)
@@ -1045,8 +1035,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Should the specified message be processed synchronously?
    *
    * @param message the message
-   * @return <b>true</b> if the message should be processed synchronously or <b>false
-   * </b> otherwise
+   * @return <b>true</b> if the message should be processed synchronously or <b>false</b> otherwise
    */
   public boolean isSynchronousMessage(Message message) {
     return isSynchronousMessage(message.getTypeId());
@@ -1382,8 +1371,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Set the status for a message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message
-   *     part
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
    * @param status the new status
    */
   @Override
@@ -1467,8 +1455,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   /**
    * Unlock a locked message part.
    *
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message
-   *     part
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part
    * @param status the new status for the unlocked message part
    */
   @Override
@@ -1583,8 +1570,8 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Should a message with the specified type be archived?
    *
    * @param typeId the Universally Unique Identifier (UUID) for the message type
-   * @return <b>true</b> if a message with the specified type should be archived or <b>
-   * false</b> otherwise
+   * @return <b>true</b> if a message with the specified type should be archived or <b> false</b>
+   *     otherwise
    */
   private boolean isArchivableMessage(UUID typeId) {
     // TODO: Add caching of this check
@@ -1603,8 +1590,8 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Can a message with the specified type be processed asynchronously?
    *
    * @param typeId the Universally Unique Identifier (UUID) for the message type
-   * @return <b>true</b> if a message with the specified type can be processed asynchronously
-   *     or <b>false</b> otherwise
+   * @return <b>true</b> if a message with the specified type can be processed asynchronously or
+   *     <b>false</b> otherwise
    */
   private boolean isAsynchronousMessage(UUID typeId) {
     // TODO: Add caching of this check
@@ -1643,8 +1630,8 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Can a message with the specified type be processed synchronously?
    *
    * @param typeId the Universally Unique Identifier (UUID) for the message type
-   * @return <b>true</b> if a message with the specified type can be processed synchronously
-   *     or <b>false</b> otherwise
+   * @return <b>true</b> if a message with the specified type can be processed synchronously or
+   *     <b>false</b> otherwise
    */
   private boolean isSynchronousMessage(UUID typeId) {
     // TODO: Add caching of this check

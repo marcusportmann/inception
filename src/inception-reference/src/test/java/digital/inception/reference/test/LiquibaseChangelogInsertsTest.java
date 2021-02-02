@@ -31,6 +31,8 @@ import digital.inception.reference.MaritalStatus;
 import digital.inception.reference.MarriageType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
+import digital.inception.reference.PartyAttributeType;
+import digital.inception.reference.PartyAttributeTypeCategory;
 import digital.inception.reference.PartyRolePurpose;
 import digital.inception.reference.PartyRoleType;
 import digital.inception.reference.PhysicalAddressPurpose;
@@ -101,6 +103,8 @@ public class LiquibaseChangelogInsertsTest {
     boolean createMinorTypeInserts = createLiquibaseInserts && false;
     boolean createNextOfKinInserts = createLiquibaseInserts && false;
     boolean createOccupationInserts = createLiquibaseInserts && false;
+    boolean createPartyAttributeTypeCategoryInserts = createLiquibaseInserts && true;
+    boolean createPartyAttributeTypeInserts = createLiquibaseInserts && true;
     boolean createPartyRolePurposeInserts = createLiquibaseInserts && false;
     boolean createPartyRoleTypeInserts = createLiquibaseInserts && false;
     boolean createPhysicalAddressPurposeInserts = createLiquibaseInserts && false;
@@ -113,11 +117,11 @@ public class LiquibaseChangelogInsertsTest {
     boolean createResidencyStatusInserts = createLiquibaseInserts && false;
     boolean createResidentialTypeInserts = createLiquibaseInserts && false;
     boolean createSourceOfFundsInserts = createLiquibaseInserts && false;
-    boolean createTaxNumberTypeInserts = createLiquibaseInserts && true;
-    boolean createTimeToContactInserts = createLiquibaseInserts && true;
-    boolean createTitleInserts = createLiquibaseInserts && true;
-    boolean createVerificationMethodInserts = createLiquibaseInserts && true;
-    boolean createVerificationStatusInserts = createLiquibaseInserts && true;
+    boolean createTaxNumberTypeInserts = createLiquibaseInserts && false;
+    boolean createTimeToContactInserts = createLiquibaseInserts && false;
+    boolean createTitleInserts = createLiquibaseInserts && false;
+    boolean createVerificationMethodInserts = createLiquibaseInserts && false;
+    boolean createVerificationStatusInserts = createLiquibaseInserts && false;
 
     if (createContactMechanismTypeInserts) {
       for (ContactMechanismType contactMechanismType :
@@ -453,6 +457,74 @@ public class LiquibaseChangelogInsertsTest {
 
       System.out.println();
     }
+
+
+
+
+
+    if (createPartyAttributeTypeCategoryInserts) {
+      for (PartyAttributeTypeCategory partyAttributeTypeCategory :
+          referenceService.getPartyAttributeTypeCategories("en-US")) {
+
+        System.out.println(
+            "    <insert schemaName=\"reference\" tableName=\"party_attribute_type_categories\">");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + partyAttributeTypeCategory.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\""
+                + partyAttributeTypeCategory.getLocaleId()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\""
+                + partyAttributeTypeCategory.getSortIndex()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + partyAttributeTypeCategory.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + partyAttributeTypeCategory.getDescription()
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+    if (createPartyAttributeTypeInserts) {
+      for (PartyAttributeType partyAttributeType : referenceService.getPartyAttributeTypes("en-US")) {
+
+        System.out.println("    <insert schemaName=\"reference\" tableName=\"party_attribute_types\">");
+        System.out.println(
+            "      <column name=\"category\" value=\"" + partyAttributeType.getCategory() + "\"/>");
+        System.out.println(
+            "      <column name=\"code\" value=\"" + partyAttributeType.getCode() + "\"/>");
+        System.out.println(
+            "      <column name=\"locale_id\" value=\"" + partyAttributeType.getLocaleId() + "\"/>");
+        System.out.println(
+            "      <column name=\"sort_index\" value=\"" + partyAttributeType.getSortIndex() + "\"/>");
+        System.out.println(
+            "      <column name=\"name\" value=\"" + partyAttributeType.getName() + "\"/>");
+        System.out.println(
+            "      <column name=\"description\" value=\""
+                + partyAttributeType.getDescription()
+                + "\"/>");
+        System.out.println(
+            "      <column name=\"party_types\" value=\""
+                + StringUtils.arrayToCommaDelimitedString(partyAttributeType.getPartyTypes())
+                + "\"/>");
+        System.out.println("    </insert>");
+      }
+
+      System.out.println();
+    }
+
+
+
+
+
+
+
+
 
     if (createPartyRolePurposeInserts) {
       for (PartyRolePurpose partyRolePurpose : referenceService.getPartyRolePurposes("en-US")) {

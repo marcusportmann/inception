@@ -50,8 +50,8 @@ public class Opaque implements Serializable, Content {
   }
 
   /**
-   * Append the specified binary data to the binary data already contained in the <b>Opaque
-   * </b> instance.
+   * Append the specified binary data to the binary data already contained in the <b>Opaque</b>
+   * instance.
    *
    * @param data the binary data to add to the opaque instance
    */
@@ -60,8 +60,8 @@ public class Opaque implements Serializable, Content {
   }
 
   /**
-   * Append the binary data, in the specified <b>Opaque</b> instance, to the binary data
-   * already contained in the <b>Opaque</b> instance.
+   * Append the binary data, in the specified <b>Opaque</b> instance, to the binary data already
+   * contained in the <b>Opaque</b> instance.
    *
    * @param opaque the existing <b>Opaque</b> instance containing the binary data to add
    */
@@ -122,7 +122,7 @@ public class Opaque implements Serializable, Content {
 
       print(baos, 0);
 
-      String result = new String(baos.toByteArray());
+      String result = baos.toString();
 
       baos.close();
 

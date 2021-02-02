@@ -16,15 +16,13 @@
 
 package digital.inception.configuration;
 
-
-
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 
 /**
- * The <b>IConfigurationService</b> interface defines the functionality provided by a
- * Configuration Service implementation, which manages the configuration information for an
- * application or service.
+ * The <b>IConfigurationService</b> interface defines the functionality provided by a Configuration
+ * Service implementation, which manages the configuration information for an application or
+ * service.
  *
  * @author Marcus Portmann
  */
@@ -74,8 +72,8 @@ public interface IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <b>Boolean</b> configuration or the default value if the configuration value
-   *     does not exist
+   * @return the <b>Boolean</b> configuration or the default value if the configuration value does
+   *     not exist
    */
   boolean getBoolean(String key, boolean defaultValue)
       throws InvalidArgumentException, ConfigurationServiceException;
@@ -119,8 +117,8 @@ public interface IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <b>Double</b> configuration or the default value if the configuration entry
-   *     does not exist
+   * @return the <b>Double</b> configuration or the default value if the configuration entry does
+   *     not exist
    */
   double getDouble(String key, double defaultValue)
       throws InvalidArgumentException, ConfigurationServiceException;
@@ -157,8 +155,8 @@ public interface IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <b>Integer</b> configuration or the default value if the configuration entry
-   *     does not exist
+   * @return the <b>Integer</b> configuration or the default value if the configuration entry does
+   *     not exist
    */
   int getInteger(String key, int defaultValue)
       throws InvalidArgumentException, ConfigurationServiceException;
@@ -178,8 +176,8 @@ public interface IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <b>Long</b> configuration or the default value if the configuration entry
-   *     does not exist
+   * @return the <b>Long</b> configuration or the default value if the configuration entry does not
+   *     exist
    */
   long getLong(String key, long defaultValue)
       throws InvalidArgumentException, ConfigurationServiceException;
@@ -199,8 +197,8 @@ public interface IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the value for the <b>String</b> configuration or the default value if the
-   *     configuration does not exist
+   * @return the value for the <b>String</b> configuration or the default value if the configuration
+   *     does not exist
    */
   String getString(String key, String defaultValue)
       throws InvalidArgumentException, ConfigurationServiceException;
@@ -209,8 +207,8 @@ public interface IConfigurationService {
    * Check if a configuration with the specified key exists.
    *
    * @param key the key for the configuration
-   * @return <b>true</b> if the configuration with the specified key exists or <b>false
-   * </b> otherwise
+   * @return <b>true</b> if the configuration with the specified key exists or <b>false</b>
+   *     otherwise
    */
   boolean keyExists(String key) throws InvalidArgumentException, ConfigurationServiceException;
 

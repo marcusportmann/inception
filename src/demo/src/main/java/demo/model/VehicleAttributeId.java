@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>VehicleAttributeId</b> class implements the ID class for the <b>VehicleAttribute </b>
+ * The <b>VehicleAttributeId</b> class implements the ID class for the <b>VehicleAttribute</b>
  * class.
  *
  * @author Marcus Portmann

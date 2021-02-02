@@ -16,16 +16,14 @@
 
 package digital.inception.security;
 
-
-
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>ISecurityService</b> interface defines the functionality provided by a Security
- * Service implementation, which manages the security related information for an application.
+ * The <b>ISecurityService</b> interface defines the functionality provided by a Security Service
+ * implementation, which manages the security related information for an application.
  *
  * @author Marcus Portmann
  */
@@ -34,8 +32,7 @@ public interface ISecurityService {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the group member name
@@ -48,8 +45,7 @@ public interface ISecurityService {
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param roleCode the code for the role
    */
@@ -61,8 +57,7 @@ public interface ISecurityService {
    * Add the user directory to the tenant.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
@@ -71,8 +66,7 @@ public interface ISecurityService {
   /**
    * Add the user to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param username the username for the user
    */
@@ -83,8 +77,7 @@ public interface ISecurityService {
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @param newPassword the new password
    * @param expirePassword expire the user's password
@@ -148,8 +141,8 @@ public interface ISecurityService {
    *
    * @param tenant the tenant
    * @param createUserDirectory should a new internal user directory be created for the tenant
-   * @return the new internal user directory that was created for the tenant or <b>null
-   * </b> if no user directory was created
+   * @return the new internal user directory that was created for the tenant or <b>null</b> if no
+   *     user directory was created
    */
   UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
       throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException;
@@ -184,8 +177,7 @@ public interface ISecurityService {
   /**
    * Delete the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    */
   void deleteGroup(UUID userDirectoryId, String groupName)
@@ -203,8 +195,7 @@ public interface ISecurityService {
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    */
   void deleteUser(UUID userDirectoryId, String username)
@@ -214,8 +205,7 @@ public interface ISecurityService {
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   void deleteUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
@@ -223,8 +213,7 @@ public interface ISecurityService {
   /**
    * Retrieve the users matching the user attribute criteria.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param userAttributes the user attribute criteria used to select the users
    * @return the users whose attributes match the user attribute criteria
    */
@@ -244,8 +233,7 @@ public interface ISecurityService {
   /**
    * Retrieve the authorised function codes for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the authorised function codes for the user
    */
@@ -263,8 +251,7 @@ public interface ISecurityService {
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the group
    */
@@ -275,8 +262,7 @@ public interface ISecurityService {
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the group names
    */
   List<String> getGroupNames(UUID userDirectoryId)
@@ -285,8 +271,7 @@ public interface ISecurityService {
   /**
    * Retrieve the names of the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the names of the groups the user is a member of
    */
@@ -297,8 +282,7 @@ public interface ISecurityService {
   /**
    * Retrieve all the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the groups
    */
   List<Group> getGroups(UUID userDirectoryId)
@@ -307,8 +291,7 @@ public interface ISecurityService {
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param filter the optional filter to apply to the groups
    * @param sortDirection the optional sort direction to apply to the groups
    * @param pageIndex the optional page index
@@ -326,8 +309,7 @@ public interface ISecurityService {
   /**
    * Retrieve the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the groups the user is a member of
    */
@@ -338,8 +320,7 @@ public interface ISecurityService {
   /**
    * Retrieve the group members for the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the group members for the group
    */
@@ -350,8 +331,7 @@ public interface ISecurityService {
   /**
    * Retrieve the group members for the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
@@ -372,8 +352,7 @@ public interface ISecurityService {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the codes for the roles that have been assigned to the group
    */
@@ -384,8 +363,7 @@ public interface ISecurityService {
   /**
    * Retrieve the codes for the roles that the user has been assigned.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the codes for the roles that the user has been assigned
    */
@@ -403,8 +381,7 @@ public interface ISecurityService {
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the roles that have been assigned to the group
    */
@@ -422,11 +399,12 @@ public interface ISecurityService {
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) for the tenants the user directory is associated with.
+   * Retrieve the Universally Unique Identifiers (UUIDs) for the tenants the user directory is
+   * associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
-   * @return the Universally Unique Identifiers (UUIDs) for the tenants the user directory is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
+   * @return the Universally Unique Identifiers (UUIDs) for the tenants the user directory is
+   *     associated with
    */
   List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
@@ -463,8 +441,7 @@ public interface ISecurityService {
   /**
    * Retrieve the tenants the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the tenants the user directory is associated with
    */
   List<Tenant> getTenantsForUserDirectory(UUID userDirectoryId)
@@ -473,8 +450,7 @@ public interface ISecurityService {
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the user
    */
@@ -514,8 +490,7 @@ public interface ISecurityService {
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the user directory
    */
   UserDirectory getUserDirectory(UUID userDirectoryId)
@@ -524,43 +499,43 @@ public interface ISecurityService {
   /**
    * Retrieve the capabilities the user directory supports.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the capabilities the user directory supports
    */
   UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the Universally Unique Identifier (UUID) for the user directory that
-   * the user with the specified username is associated with.
+   * Retrieve the Universally Unique Identifier (UUID) for the user directory that the user with the
+   * specified username is associated with.
    *
    * @param username the username for the user
-   * @return the Universally Unique Identifier (UUID) for the user directory that
-   *     the user with the specified username is associated with or <b>null</b> if the user
-   *     cannot be found
+   * @return the Universally Unique Identifier (UUID) for the user directory that the user with the
+   *     specified username is associated with or <b>null</b> if the user cannot be found
    */
   UUID getUserDirectoryIdForUser(String username)
       throws InvalidArgumentException, SecurityServiceException;
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) for the user directories the tenant is associated with.
+   * Retrieve the Universally Unique Identifiers (UUIDs) for the user directories the tenant is
+   * associated with.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @return the Universally Unique Identifiers (UUIDs) for the user directories the tenant is associated with
+   * @return the Universally Unique Identifiers (UUIDs) for the user directories the tenant is
+   *     associated with
    */
   List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
       throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException;
 
   /**
-   * Retrieve the Universally Unique Identifiers (UUIDs) for the user directories
-   * the user is associated with. Every user is associated with a user directory, which is in turn
-   * associated with one or more tenants, which are in turn associated with one or more user
-   * directories. The user is therefore associated indirectly with all these user directories.
+   * Retrieve the Universally Unique Identifiers (UUIDs) for the user directories the user is
+   * associated with. Every user is associated with a user directory, which is in turn associated
+   * with one or more tenants, which are in turn associated with one or more user directories. The
+   * user is therefore associated indirectly with all these user directories.
    *
    * @param username the username for the user
-   * @return the Universally Unique Identifiers (UUIDs) for the user directories
-   *     the user is associated with
+   * @return the Universally Unique Identifiers (UUIDs) for the user directories the user is
+   *     associated with
    */
   List<UUID> getUserDirectoryIdsForUser(String username)
       throws InvalidArgumentException, UserNotFoundException, SecurityServiceException;
@@ -568,8 +543,7 @@ public interface ISecurityService {
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the name of the user directory
    */
   String getUserDirectoryName(UUID userDirectoryId)
@@ -600,8 +574,7 @@ public interface ISecurityService {
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the user directory type for the user directory
    */
   UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
@@ -618,8 +591,7 @@ public interface ISecurityService {
   /**
    * Retrieve the name of the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the name of the user
    */
@@ -630,8 +602,7 @@ public interface ISecurityService {
   /**
    * Retrieve all the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the users
    */
   List<User> getUsers(UUID userDirectoryId)
@@ -640,8 +611,7 @@ public interface ISecurityService {
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param filter the optional filter to apply to the users
    * @param sortBy the optional method used to sort the users e.g. by name
    * @param sortDirection the optional sort direction to apply to the users
@@ -683,11 +653,9 @@ public interface ISecurityService {
   /**
    * Does the user with the specified username exist?
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
-   * @return <b>true</b> if a user with specified username exists or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if a user with specified username exists or <b>false</b> otherwise
    */
   boolean isExistingUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException;
@@ -695,8 +663,7 @@ public interface ISecurityService {
   /**
    * Is the user in the group?
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param username the username for the user
    * @return <b>true</b> if the user is a member of the group or <b>false</b> otherwise
@@ -711,8 +678,7 @@ public interface ISecurityService {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the group member name
@@ -725,8 +691,7 @@ public interface ISecurityService {
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param roleCode the code for the role
    */
@@ -738,8 +703,7 @@ public interface ISecurityService {
    * Remove the user directory from the tenant.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException,
@@ -748,8 +712,7 @@ public interface ISecurityService {
   /**
    * Remove the user from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param username the username for the user
    */

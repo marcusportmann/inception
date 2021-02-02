@@ -75,6 +75,12 @@ public class ReferenceService implements IReferenceService {
   /** The Occupation Repository. */
   private final OccupationRepository occupationRepository;
 
+  /** The Party Attribute Type Category Repository. */
+  private final PartyAttributeTypeCategoryRepository partyAttributeTypeCategoryRepository;
+
+  /** The Party Attribute Type Repository. */
+  private final PartyAttributeTypeRepository partyAttributeTypeRepository;
+
   /** The Party Role Purpose Repository. */
   private final PartyRolePurposeRepository partyRolePurposeRepository;
 
@@ -148,6 +154,8 @@ public class ReferenceService implements IReferenceService {
    * @param marriageTypeRepository the Marriage Type Repository
    * @param nextOfKinTypeRepository the Next Of Kin Repository
    * @param occupationRepository the Occupation Repository
+   * @param partyAttributeTypeCategoryRepository the Party Attribute Type Category Repository
+   * @param partyAttributeTypeRepository the Party Attribute Type Repository
    * @param partyRolePurposeRepository the Party Role Purpose Repository
    * @param partyRoleTypeRepository the Party Role Type Repository
    * @param physicalAddressPurposeRepository the Physical Address Purpose Repository
@@ -180,6 +188,8 @@ public class ReferenceService implements IReferenceService {
       MarriageTypeRepository marriageTypeRepository,
       NextOfKinTypeRepository nextOfKinTypeRepository,
       OccupationRepository occupationRepository,
+      PartyAttributeTypeCategoryRepository partyAttributeTypeCategoryRepository,
+      PartyAttributeTypeRepository partyAttributeTypeRepository,
       PartyRolePurposeRepository partyRolePurposeRepository,
       PartyRoleTypeRepository partyRoleTypeRepository,
       PhysicalAddressPurposeRepository physicalAddressPurposeRepository,
@@ -210,6 +220,8 @@ public class ReferenceService implements IReferenceService {
     this.marriageTypeRepository = marriageTypeRepository;
     this.nextOfKinTypeRepository = nextOfKinTypeRepository;
     this.occupationRepository = occupationRepository;
+    this.partyAttributeTypeCategoryRepository = partyAttributeTypeCategoryRepository;
+    this.partyAttributeTypeRepository = partyAttributeTypeRepository;
     this.partyRolePurposeRepository = partyRolePurposeRepository;
     this.partyRoleTypeRepository = partyRoleTypeRepository;
     this.physicalAddressPurposeRepository = physicalAddressPurposeRepository;
@@ -630,6 +642,79 @@ public class ReferenceService implements IReferenceService {
       }
     } catch (Throwable e) {
       throw new ReferenceServiceException("Failed to retrieve the occupations", e);
+    }
+  }
+
+  /**
+   * Retrieve all the party attribute type categories.
+   *
+   * @return the party attribute type categories
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'partyAttributeTypeCategories.ALL'")
+  public List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories()
+      throws ReferenceServiceException {
+    return getPartyAttributeTypeCategories(null);
+  }
+
+  /**
+   * Retrieve the party attribute type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
+   *     type categories for or <b>null</b> to retrieve the party attribute type categories for all
+   *     locales
+   * @return the party attribute type categories
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'partyAttributeTypeCategories.' + #localeId")
+  public List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return partyAttributeTypeCategoryRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return partyAttributeTypeCategoryRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException(
+          "Failed to retrieve the party attribute type categories", e);
+    }
+  }
+
+  /**
+   * Retrieve all the party attribute types.
+   *
+   * @return the party attribute types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'partyAttributeTypes.ALL'")
+  public List<PartyAttributeType> getPartyAttributeTypes() throws ReferenceServiceException {
+    return getPartyAttributeTypes(null);
+  }
+
+  /**
+   * Retrieve the party attribute types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
+   *     types for or <b>null</b> to retrieve the party attribute types for all locales
+   * @return the party attribute types
+   */
+  @Override
+  @Cacheable(value = "reference", key = "'partyAttributeTypes.' + #localeId")
+  public List<PartyAttributeType> getPartyAttributeTypes(String localeId)
+      throws ReferenceServiceException {
+    try {
+      if (!StringUtils.hasText(localeId)) {
+        return partyAttributeTypeRepository.findAll(
+            Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      } else {
+        return partyAttributeTypeRepository.findByLocaleIdIgnoreCase(
+            localeId, Sort.by(Direction.ASC, "localeId", "sortIndex"));
+      }
+    } catch (Throwable e) {
+      throw new ReferenceServiceException("Failed to retrieve the party attribute types", e);
     }
   }
 
@@ -1442,6 +1527,48 @@ public class ReferenceService implements IReferenceService {
 
     return self.getOccupations().stream()
         .anyMatch(occupation -> occupation.getCode().equals(occupationCode));
+  }
+
+  /**
+   * Check whether the code is a valid code for a party attribute type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param partyAttributeTypeCode the code for the party attribute type
+   * @return <b>true</b> if the code is a valid code for a party attribute type or <b>false</b>
+   *     otherwise
+   */
+  @Override
+  public boolean isValidPartyAttributeType(String partyTypeCode, String partyAttributeTypeCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(partyAttributeTypeCode)) {
+      return false;
+    }
+
+    return self.getPartyAttributeTypes().stream()
+        .anyMatch(
+            partyAttributeType ->
+                (partyAttributeType.getCode().equals(partyAttributeTypeCode)
+                    && partyAttributeType.isValidForPartyType(partyTypeCode)));
+  }
+
+  /**
+   * Check whether the code is a valid code for a party attribute type category.
+   *
+   * @param partyAttributeTypeCategoryCode the code for the party attribute type category
+   * @return <b>true</b> if the code is a valid code for a party attribute type category or
+   *     <b>false</b> otherwise
+   */
+  @Override
+  public boolean isValidPartyAttributeTypeCategory(String partyAttributeTypeCategoryCode)
+      throws ReferenceServiceException {
+    if (!StringUtils.hasText(partyAttributeTypeCategoryCode)) {
+      return false;
+    }
+
+    return self.getPartyAttributeTypeCategories().stream()
+        .anyMatch(
+            partyAttributeTypeCategory ->
+                partyAttributeTypeCategory.getCode().equals(partyAttributeTypeCategoryCode));
   }
 
   /**

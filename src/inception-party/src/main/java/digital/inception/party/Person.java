@@ -463,8 +463,8 @@ public class Person extends PartyBase implements Serializable {
    *
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
-   * @return the contact mechanism with the specified type and purpose for the person or <b>null
-   *     </b> if the contact mechanism could not be found
+   * @return the contact mechanism with the specified type and purpose for the person or <b>null</b>
+   *     if the contact mechanism could not be found
    */
   public ContactMechanism getContactMechanism(
       ContactMechanismType type, ContactMechanismPurpose purpose) {

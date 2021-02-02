@@ -762,4 +762,69 @@ public interface IReferenceService {
    *     otherwise
    */
   boolean isValidVerificationStatus(String verificationStatusCode) throws ReferenceServiceException;
+
+
+
+
+
+
+
+
+
+
+  /**
+   * Retrieve all the party attribute type categories.
+   *
+   * @return the party attribute type categories
+   */
+  List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the party attribute type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute type
+   *     categories for or <b>null</b> to retrieve the party attribute type categories for all locales
+   * @return the party attribute type categories
+   */
+  List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories(String localeId)
+      throws ReferenceServiceException;
+
+  /**
+   * Retrieve all the party attribute types.
+   *
+   * @return the party attribute types
+   */
+  List<PartyAttributeType> getPartyAttributeTypes() throws ReferenceServiceException;
+
+  /**
+   * Retrieve the party attribute types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute types
+   *     for or <b>null</b> to retrieve the party attribute types for all locales
+   * @return the party attribute types
+   */
+  List<PartyAttributeType> getPartyAttributeTypes(String localeId) throws ReferenceServiceException;
+
+  /**
+   * Check whether the code is a valid code for a party attribute type for the party type.
+   *
+   * @param partyTypeCode the party type code
+   * @param partyAttributeTypeCode the code for the party attribute type
+   * @return <b>true</b> if the code is a valid code for a party attribute type or <b>false</b> otherwise
+   */
+  boolean isValidPartyAttributeType(String partyTypeCode, String partyAttributeTypeCode)
+      throws ReferenceServiceException;
+
+  /**
+   * Check whether the code is a valid code for a party attribute type category.
+   *
+   * @param partyAttributeTypeCategoryCode the code for the party attribute type category
+   * @return <b>true</b> if the code is a valid code for a party attribute type category or <b>false</b>
+   *     otherwise
+   */
+  boolean isValidPartyAttributeTypeCategory(String partyAttributeTypeCategoryCode)
+      throws ReferenceServiceException;
+  
+  
+  
 }

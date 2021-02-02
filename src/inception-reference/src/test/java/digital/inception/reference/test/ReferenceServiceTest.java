@@ -31,6 +31,8 @@ import digital.inception.reference.MaritalStatus;
 import digital.inception.reference.MarriageType;
 import digital.inception.reference.NextOfKinType;
 import digital.inception.reference.Occupation;
+import digital.inception.reference.PartyAttributeType;
+import digital.inception.reference.PartyAttributeTypeCategory;
 import digital.inception.reference.PartyRolePurpose;
 import digital.inception.reference.PartyRoleType;
 import digital.inception.reference.PhysicalAddressPurpose;
@@ -302,6 +304,45 @@ public class ReferenceServiceTest {
         "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
   }
 
+  /** Test the party attribute type category reference functionality. */
+  @Test
+  public void partyAttributeTypeCategoryTest() throws Exception {
+    List<PartyAttributeTypeCategory> retrievedPartyAttributeTypeCategories =
+        referenceService.getPartyAttributeTypeCategories();
+
+    assertEquals(
+        "The correct number of party attribute type categories was not retrieved",
+        2,
+        retrievedPartyAttributeTypeCategories.size());
+
+    retrievedPartyAttributeTypeCategories =
+        referenceService.getPartyAttributeTypeCategories("en-US");
+
+    assertEquals(
+        "The correct number of party attribute type categories was not retrieved",
+        1,
+        retrievedPartyAttributeTypeCategories.size());
+  }
+
+  /** Test the party attribute type reference functionality. */
+  @Test
+  public void partyAttributeTypeTest() throws Exception {
+    List<PartyAttributeType> retrievedPartyAttributeTypes =
+        referenceService.getPartyAttributeTypes();
+
+    assertEquals(
+        "The correct number of party attribute types was not retrieved",
+        6,
+        retrievedPartyAttributeTypes.size());
+
+    retrievedPartyAttributeTypes = referenceService.getPartyAttributeTypes("en-US");
+
+    assertEquals(
+        "The correct number of party attribute types was not retrieved",
+        3,
+        retrievedPartyAttributeTypes.size());
+  }
+
   /** Test the party role purpose functionality. */
   @Test
   public void partyRolePurposeTest() throws Exception {
@@ -473,7 +514,17 @@ public class ReferenceServiceTest {
   public void timeToContactTest() throws Exception {
     List<TimeToContact> retrievedTimesToContact = referenceService.getTimesToContact();
 
+    assertEquals(
+        "The correct number of times to contact was not retrieved",
+        10,
+        retrievedTimesToContact.size());
+
     retrievedTimesToContact = referenceService.getTimesToContact("en-US");
+
+    assertEquals(
+        "The correct number of times to contact was not retrieved",
+        5,
+        retrievedTimesToContact.size());
   }
 
   /** Test the title reference functionality. */
@@ -505,6 +556,8 @@ public class ReferenceServiceTest {
     // referenceService.isValidMinorType("minor");
     referenceService.isValidNextOfKinType("mother");
     referenceService.isValidOccupation("executive");
+    referenceService.isValidPartyAttributeType("person", "height");
+    referenceService.isValidPartyAttributeTypeCategory("anthropometric_measurements");
     referenceService.isValidPartyRolePurpose("test");
     referenceService.isValidPartyRoleType("person", "employee");
     referenceService.isValidPhysicalAddressPurpose("person", "billing");

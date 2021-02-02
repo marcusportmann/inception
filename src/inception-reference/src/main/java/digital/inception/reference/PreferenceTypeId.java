@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>PreferenceTypeId</b> class implements the ID class for the <b>PreferenceType </b> class.
+ * The <b>PreferenceTypeId</b> class implements the ID class for the <b>PreferenceType</b> class.
  *
  * @author Marcus Portmann
  */

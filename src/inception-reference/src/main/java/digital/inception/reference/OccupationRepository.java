@@ -21,7 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>OccupationRepository</b> interface declares the repository for the <b>Occupation </b>
+ * The <b>OccupationRepository</b> interface declares the repository for the <b>Occupation</b>
  * domain type.
  *
  * @author Marcus Portmann

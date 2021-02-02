@@ -16,8 +16,6 @@
 
 package digital.inception.reference;
 
-
-
 import digital.inception.rs.RestControllerError;
 import digital.inception.rs.SecureRestController;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,8 +34,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-
 
 /**
  * The <b>ReferenceRestController</b> class.
@@ -72,8 +68,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the contact mechanism purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the contact mechanism
-   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all
-   *     locales
+   *     purposes for or <b>null</b> to retrieve the contact mechanism purposes for all locales
    * @return the contact mechanism purposes
    */
   @Operation(
@@ -528,6 +523,87 @@ public class ReferenceRestController extends SecureRestController {
   }
 
   /**
+   * Retrieve the party attribute type categories.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
+   *     type categories for or <b>null</b> to retrieve the party attribute type categories for all
+   *     locales
+   * @return the party attribute type categories
+   */
+  @Operation(
+      summary = "Retrieve the party attribute type categories",
+      description = "Retrieve the party attribute type categories")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/party-attribute-type-categories",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<PartyAttributeTypeCategory> getPartyAttributeTypeCategories(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the party attribute type categories for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getPartyAttributeTypeCategories(localeId);
+  }
+
+  /**
+   * Retrieve the party attribute types.
+   *
+   * @param localeId the Unicode locale identifier for the locale to retrieve the party attribute
+   *     types for or <b>null</b> to retrieve the party attribute types for all locales
+   * @return the party attribute types
+   */
+  @Operation(
+      summary = "Retrieve the party attribute types",
+      description = "Retrieve the party attribute types")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "OK"),
+        @ApiResponse(
+            responseCode = "500",
+            description =
+                "An error has occurred and the request could not be processed at this time",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RestControllerError.class)))
+      })
+  @RequestMapping(
+      value = "/party-attribute-types",
+      method = RequestMethod.GET,
+      produces = "application/json")
+  @ResponseStatus(HttpStatus.OK)
+  // @PreAuthorize("isAuthenticated()")
+  public List<PartyAttributeType> getPartyAttributeTypes(
+      @Parameter(
+              name = "localeId",
+              description =
+                  "The optional Unicode locale identifier for the locale to retrieve the party attribute types for",
+              example = "en-US")
+          @RequestParam(value = "localeId", required = false)
+          String localeId)
+      throws ReferenceServiceException {
+    return referenceService.getPartyAttributeTypes(localeId);
+  }
+
+  /**
    * Retrieve the party role purposes.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the party role
@@ -691,8 +767,7 @@ public class ReferenceRestController extends SecureRestController {
    * Retrieve the preference type categories.
    *
    * @param localeId the Unicode locale identifier for the locale to retrieve the preference type
-   *     categories for or <b>null</b> to retrieve the preference type categories for all
-   *     locales
+   *     categories for or <b>null</b> to retrieve the preference type categories for all locales
    * @return the preference type categories
    */
   @Operation(

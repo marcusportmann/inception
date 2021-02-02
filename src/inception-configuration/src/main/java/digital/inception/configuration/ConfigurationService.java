@@ -16,8 +16,6 @@
 
 package digital.inception.configuration;
 
-
-
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -29,8 +27,6 @@ import javax.validation.Validator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-
 
 /**
  * The <b>ConfigurationService</b> class provides the Configuration Service implementation.
@@ -183,8 +179,8 @@ public class ConfigurationService implements IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <b>Boolean</b> configuration or the default value if the configuration value
-   *     does not exist
+   * @return the <b>Boolean</b> configuration or the default value if the configuration value does
+   *     not exist
    */
   @Override
   public boolean getBoolean(String key, boolean defaultValue)
@@ -298,8 +294,8 @@ public class ConfigurationService implements IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <b>Double</b> configuration or the default value if the configuration entry
-   *     does not exist
+   * @return the <b>Double</b> configuration or the default value if the configuration entry does
+   *     not exist
    */
   @Override
   public double getDouble(String key, double defaultValue)
@@ -395,8 +391,8 @@ public class ConfigurationService implements IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <b>Integer</b> configuration or the default value if the configuration entry
-   *     does not exist
+   * @return the <b>Integer</b> configuration or the default value if the configuration entry does
+   *     not exist
    */
   @Override
   public int getInteger(String key, int defaultValue)
@@ -450,8 +446,8 @@ public class ConfigurationService implements IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the <b>Long</b> configuration or the default value if the configuration entry
-   *     does not exist
+   * @return the <b>Long</b> configuration or the default value if the configuration entry does not
+   *     exist
    */
   @Override
   public long getLong(String key, long defaultValue)
@@ -505,8 +501,8 @@ public class ConfigurationService implements IConfigurationService {
    *
    * @param key the key for the configuration
    * @param defaultValue the default value to return if the configuration does not exist
-   * @return the value for the <b>String</b> configuration or the default value if the
-   *     configuration does not exist
+   * @return the value for the <b>String</b> configuration or the default value if the configuration
+   *     does not exist
    */
   @Override
   public String getString(String key, String defaultValue)
@@ -529,8 +525,7 @@ public class ConfigurationService implements IConfigurationService {
    * Check if a configuration with the specified key exists.
    *
    * @param key the key for the configuration
-   * @return <b>true</b> if a configuration with the specified key exists or <b>false
-   * </b> otherwise
+   * @return <b>true</b> if a configuration with the specified key exists or <b>false</b> otherwise
    */
   @Override
   public boolean keyExists(String key)

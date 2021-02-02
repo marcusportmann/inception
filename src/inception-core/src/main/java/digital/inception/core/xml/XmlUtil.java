@@ -53,8 +53,8 @@ public class XmlUtil {
   }
 
   /**
-   * Converts a <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to a <b>
-   * java.util.Date</b> instance.
+   * Converts a <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to a <b> java.util.Date</b>
+   * instance.
    *
    * @param calendar the <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to convert
    * @return the converted <b>java.util.Date</b> instance
@@ -68,8 +68,8 @@ public class XmlUtil {
   }
 
   /**
-   * Converts a <b>java.util.Date</b> instance to a <b>
-   *  javax.xml.datatype.XMLGregorianCalendar</b> instance.
+   * Converts a <b>java.util.Date</b> instance to a <b> javax.xml.datatype.XMLGregorianCalendar</b>
+   * instance.
    *
    * @param date the <b>java.util.Date</b> instance to convert
    * @return the converted <b>javax.xml.datatype.XMLGregorianCalendar</b> instance
@@ -91,8 +91,8 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return the child element or <b>null</b> if a child element with the specified name could
-   *     not be found
+   * @return the child element or <b>null</b> if a child element with the specified name could not
+   *     be found
    */
   public static Element getChildElement(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
@@ -118,8 +118,8 @@ public class XmlUtil {
    *
    * @param element the parent element
    * @param name the name of the child element to return
-   * @return the boolean value of the text content for the child element or <b>null</b> if a
-   *     child element with the specified name could not be found
+   * @return the boolean value of the text content for the child element or <b>null</b> if a child
+   *     element with the specified name could not be found
    */
   public static Boolean getChildElementBoolean(Element element, String name) {
     NodeList nodeList = element.getChildNodes();
@@ -203,9 +203,9 @@ public class XmlUtil {
   /**
    * Returns the <b>javax.xml.namespace.QName</b> instance for the specified QName.
    *
-   * @param document the <b>org.w3c.dom.Document</b> instance used to determine the namespace
-   *     URI for the QName if the namespace is referenced using a prefix as part of the <b>name
-   *                 </b> parameter
+   * @param document the <b>org.w3c.dom.Document</b> instance used to determine the namespace URI
+   *     for the QName if the namespace is referenced using a prefix as part of the <b>name</b>
+   *     parameter
    * @param qname the QName
    * @return the <b>javax.xml.namespace.QName</b> instance for the specified QName
    */
@@ -235,9 +235,9 @@ public class XmlUtil {
   /**
    * Returns the <b>javax.xml.namespace.QName</b> instance for the specified QName.
    *
-   * @param element the <b>org.w3c.dom.Element</b> instance used to determine the namespace
-   *     URI for the QName if the namespace is referenced using a prefix as part of the <b>name
-   *                </b> parameter
+   * @param element the <b>org.w3c.dom.Element</b> instance used to determine the namespace URI for
+   *     the QName if the namespace is referenced using a prefix as part of the <b>name</b>
+   *     parameter
    * @param qname the QName
    * @return the <b>javax.xml.namespace.QName</b> instance for the specified QName
    */

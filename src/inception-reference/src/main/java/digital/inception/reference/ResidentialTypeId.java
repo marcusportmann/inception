@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * The <b>ResidentialTypeId</b> class implements the ID class for the <b>ResidentialType </b> class.
+ * The <b>ResidentialTypeId</b> class implements the ID class for the <b>ResidentialType</b> class.
  *
  * @author Marcus Portmann
  */

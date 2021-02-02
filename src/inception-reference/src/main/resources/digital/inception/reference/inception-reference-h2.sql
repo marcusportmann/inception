@@ -353,6 +353,61 @@ COMMENT ON COLUMN reference.occupations.name IS 'The name of the occupation';
 COMMENT ON COLUMN reference.occupations.description IS 'The description for the occupation';
 
 
+CREATE TABLE reference.party_attribute_type_categories (
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+
+  PRIMARY KEY (code, locale_id)
+);
+
+CREATE INDEX party_attribute_type_categories_locale_id_ix ON reference.party_attribute_type_categories(locale_id);
+
+COMMENT ON COLUMN reference.party_attribute_type_categories.code IS 'The code for the party attribute type category';
+
+COMMENT ON COLUMN reference.party_attribute_type_categories.locale_id IS 'The Unicode locale identifier for the party attribute type category';
+
+COMMENT ON COLUMN reference.party_attribute_type_categories.sort_index IS 'The sort index for the party attribute type category';
+
+COMMENT ON COLUMN reference.party_attribute_type_categories.name IS 'The name of the party attribute type category';
+
+COMMENT ON COLUMN reference.party_attribute_type_categories.description IS 'The description for the party attribute type category';
+
+
+CREATE TABLE reference.party_attribute_types (
+  category    VARCHAR(30)  NOT NULL,
+  code        VARCHAR(30)  NOT NULL,
+  locale_id   VARCHAR(10)  NOT NULL,
+  sort_index  INTEGER      NOT NULL,
+  name        VARCHAR(50)  NOT NULL,
+  description VARCHAR(200) NOT NULL DEFAULT '',
+  party_types VARCHAR(300) NOT NULL,
+
+  PRIMARY KEY (code, locale_id),
+  CONSTRAINT party_attribute_types_party_attribute_type_category_fk FOREIGN KEY (category, locale_id) REFERENCES reference.party_attribute_type_categories(code, locale_id) ON DELETE CASCADE
+);
+
+CREATE INDEX party_attribute_types_category_ix ON reference.party_attribute_types(category);
+
+CREATE INDEX party_attribute_types_locale_id_ix ON reference.party_attribute_types(locale_id);
+
+COMMENT ON COLUMN reference.party_attribute_types.category IS 'The code for the party attribute type category the party attribute type is associated with';
+
+COMMENT ON COLUMN reference.party_attribute_types.code IS 'The code for the party attribute type';
+
+COMMENT ON COLUMN reference.party_attribute_types.locale_id IS 'The Unicode locale identifier for the party attribute type';
+
+COMMENT ON COLUMN reference.party_attribute_types.sort_index IS 'The sort index for the party attribute type';
+
+COMMENT ON COLUMN reference.party_attribute_types.name IS 'The name of the party attribute type';
+
+COMMENT ON COLUMN reference.party_attribute_types.description IS 'The description for the party attribute type';
+
+COMMENT ON COLUMN reference.party_attribute_types.party_types IS 'The comma-delimited list of codes for the party types the party attribute type is associated with';
+
+
 CREATE TABLE reference.party_role_types (
   code         VARCHAR(30)  NOT NULL,
   locale_id    VARCHAR(10)  NOT NULL,
@@ -491,7 +546,7 @@ CREATE INDEX preference_types_category_ix ON reference.preference_types(category
 
 CREATE INDEX preference_types_locale_id_ix ON reference.preference_types(locale_id);
 
-COMMENT ON COLUMN reference.preference_types.category IS 'The code for the preference category the preference type is associated with';
+COMMENT ON COLUMN reference.preference_types.category IS 'The code for the preference type category the preference type is associated with';
 
 COMMENT ON COLUMN reference.preference_types.code IS 'The code for the preference type';
 
@@ -2640,6 +2695,28 @@ INSERT INTO reference.occupations (code, locale_id, sort_index, name, descriptio
   VALUES ('unemployed', 'en-ZA', 50, 'Unemployed', 'Unemployed');
 INSERT INTO reference.occupations (code, locale_id, sort_index, name, description)
   VALUES ('unknown', 'en-ZA', 99, 'Unknown', 'Unknown');
+
+
+INSERT INTO reference.party_attribute_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('anthropometric_measurements', 'en-US', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
+
+INSERT INTO reference.party_attribute_type_categories (code, locale_id, sort_index, name, description)
+  VALUES ('anthropometric_measurements', 'en-ZA', 0, 'Anthropometric Measurements', 'Anthropometric Measurements');
+
+
+INSERT INTO reference.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','bmi', 'en-US', 0, 'Body Mass Index', 'Body Mass Index', 'person');
+INSERT INTO reference.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','height', 'en-US', 0, 'Height', 'Height', 'person');
+INSERT INTO reference.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','weight', 'en-US', 0, 'Weight', 'Weight', 'person');
+
+INSERT INTO reference.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','bmi', 'en-ZA', 0, 'Body Mass Index', 'Body Mass Index', 'person');
+INSERT INTO reference.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','height', 'en-ZA', 0, 'Height', 'Height', 'person');
+INSERT INTO reference.party_attribute_types (category, code, locale_id, sort_index, name, description, party_types)
+  VALUES ('anthropometric_measurements','weight', 'en-ZA', 0, 'Weight', 'Weight', 'person');
 
 
 INSERT INTO reference.party_role_purposes (code, locale_id, sort_index, name, description)

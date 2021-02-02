@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>IdentityDocumentId</b> class implements the ID class for the <b>IdentityDocument </b>
+ * The <b>IdentityDocumentId</b> class implements the ID class for the <b>IdentityDocument</b>
  * class.
  *
  * @author Marcus Portmann

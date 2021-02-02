@@ -16,16 +16,12 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.core.wbxml.Parser;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-
 
 /**
  * The <b>MessageResult</b> class stores the results of processing a message.
@@ -69,8 +65,8 @@ public class MessageResult {
   private long code;
 
   /**
-   * The user-friendly text description of the result of processing the message. The <b>detail
-   * </b> field may be blank if the message was processed successfully.
+   * The user-friendly text description of the result of processing the message. The <b>detail</b>
+   * field may be blank if the message was processed successfully.
    */
   private String detail;
 

@@ -36,29 +36,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>PreferenceTypeCategory</b> class holds the information for a possible preference type
+ * The <b>PartyAttributeTypeCategory</b> class holds the information for a possible party attribute type
  * category.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "A collection of related preference types")
+@Schema(description = "A collection of related party attribute types")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description"})
-@XmlRootElement(name = "PreferenceTypeCategory", namespace = "http://reference.inception.digital")
+@XmlRootElement(name = "PartyAttributeTypeCategory", namespace = "http://reference.inception.digital")
 @XmlType(
-    name = "PreferenceTypeCategory",
+    name = "PartyAttributeTypeCategory",
     namespace = "http://reference.inception.digital",
     propOrder = {"code", "localeId", "sortIndex", "name", "description"})
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
-@Table(schema = "reference", name = "preference_type_categories")
-@IdClass(PreferenceTypeCategoryId.class)
-public class PreferenceTypeCategory implements Serializable {
+@Table(schema = "reference", name = "party_attribute_type_categories")
+@IdClass(PartyAttributeTypeCategoryId.class)
+public class PartyAttributeTypeCategory implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the preference type category. */
-  @Schema(description = "The code for the preference type category", required = true)
+  /** The code for the party attribute type category. */
+  @Schema(description = "The code for the party attribute type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -67,8 +67,8 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "code", length = 30, nullable = false)
   private String code;
 
-  /** The description for the preference type category. */
-  @Schema(description = "The description for the preference type category", required = true)
+  /** The description for the party attribute type category. */
+  @Schema(description = "The description for the party attribute type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Description", required = true)
   @NotNull
@@ -76,9 +76,9 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "description", length = 200, nullable = false)
   private String description;
 
-  /** The Unicode locale identifier for the preference type category. */
+  /** The Unicode locale identifier for the party attribute type category. */
   @Schema(
-      description = "The Unicode locale identifier for the preference type category",
+      description = "The Unicode locale identifier for the party attribute type category",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "LocaleId", required = true)
@@ -88,8 +88,8 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "locale_id", length = 10, nullable = false)
   private String localeId;
 
-  /** The name of the preference type category. */
-  @Schema(description = "The name of the preference type category", required = true)
+  /** The name of the party attribute type category. */
+  @Schema(description = "The name of the party attribute type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Name", required = true)
   @NotNull
@@ -97,16 +97,16 @@ public class PreferenceTypeCategory implements Serializable {
   @Column(name = "name", length = 50, nullable = false)
   private String name;
 
-  /** The sort index for the preference type category. */
-  @Schema(description = "The sort index for the preference type category", required = true)
+  /** The sort index for the party attribute type category. */
+  @Schema(description = "The sort index for the party attribute type category", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "SortIndex", required = true)
   @NotNull
   @Column(name = "sort_index", nullable = false)
   private Integer sortIndex;
 
-  /** Constructs a new <b>PreferenceTypeCategory</b>. */
-  public PreferenceTypeCategory() {}
+  /** Constructs a new <b>PartyAttributeTypeCategory</b>. */
+  public PartyAttributeTypeCategory() {}
 
   /**
    * Indicates whether some other object is "equal to" this one.
@@ -128,51 +128,51 @@ public class PreferenceTypeCategory implements Serializable {
       return false;
     }
 
-    PreferenceTypeCategory other = (PreferenceTypeCategory) object;
+    PartyAttributeTypeCategory other = (PartyAttributeTypeCategory) object;
 
     return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code for the preference type category.
+   * Returns the code for the party attribute type category.
    *
-   * @return the code for the preference type category
+   * @return the code for the party attribute type category
    */
   public String getCode() {
     return code;
   }
 
   /**
-   * Returns the description for the preference type category.
+   * Returns the description for the party attribute type category.
    *
-   * @return the description for the preference type category
+   * @return the description for the party attribute type category
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Returns the Unicode locale identifier for the preference type category.
+   * Returns the Unicode locale identifier for the party attribute type category.
    *
-   * @return the Unicode locale identifier for the preference type category
+   * @return the Unicode locale identifier for the party attribute type category
    */
   public String getLocaleId() {
     return localeId;
   }
 
   /**
-   * Returns the name of the preference type category.
+   * Returns the name of the party attribute type category.
    *
-   * @return the name of the preference type category
+   * @return the name of the party attribute type category
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Returns the sort index for the preference type category.
+   * Returns the sort index for the party attribute type category.
    *
-   * @return the sort index for the preference type category
+   * @return the sort index for the party attribute type category
    */
   public Integer getSortIndex() {
     return sortIndex;
@@ -189,45 +189,45 @@ public class PreferenceTypeCategory implements Serializable {
   }
 
   /**
-   * Set the code for the preference type category.
+   * Set the code for the party attribute type category.
    *
-   * @param code the code for the preference type category
+   * @param code the code for the party attribute type category
    */
   public void setCode(String code) {
     this.code = code;
   }
 
   /**
-   * Set the description for the preference type category.
+   * Set the description for the party attribute type category.
    *
-   * @param description the description for the preference type category
+   * @param description the description for the party attribute type category
    */
   public void setDescription(String description) {
     this.description = description;
   }
 
   /**
-   * Set the Unicode locale identifier for the preference type category.
+   * Set the Unicode locale identifier for the party attribute type category.
    *
-   * @param localeId the Unicode locale identifier for the preference type category
+   * @param localeId the Unicode locale identifier for the party attribute type category
    */
   public void setLocaleId(String localeId) {
     this.localeId = localeId;
   }
 
   /**
-   * Set the name of the preference type category.
+   * Set the name of the party attribute type category.
    *
-   * @param name the name of the preference type category
+   * @param name the name of the party attribute type category
    */
   public void setName(String name) {
     this.name = name;
   }
 
   /**
-   * Set the sort index for the preference type category.
+   * Set the sort index for the party attribute type category.
    *
-   * @param sortIndex the sort index for the preference type category
+   * @param sortIndex the sort index for the party attribute type category
    */
   public void setSortIndex(Integer sortIndex) {
     this.sortIndex = sortIndex;

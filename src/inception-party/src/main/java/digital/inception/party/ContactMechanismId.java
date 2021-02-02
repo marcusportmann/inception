@@ -21,7 +21,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The <b>ContactMechanismId</b> class implements the ID class for the <b>ContactMechanism </b>
+ * The <b>ContactMechanismId</b> class implements the ID class for the <b>ContactMechanism</b>
  * class.
  *
  * @author Marcus Portmann

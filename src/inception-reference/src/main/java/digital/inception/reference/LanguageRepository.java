@@ -21,7 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * The <b>LanguageRepository</b> interface declares the repository for the <b>Language </b> domain
+ * The <b>LanguageRepository</b> interface declares the repository for the <b>Language</b> domain
  * type.
  *
  * @author Marcus Portmann
