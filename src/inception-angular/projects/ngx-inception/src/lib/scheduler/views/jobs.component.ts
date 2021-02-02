@@ -52,7 +52,7 @@ export class JobsComponent extends AdminContainerView implements AfterViewInit {
 
   dataSource: MatTableDataSource<Job> = new MatTableDataSource<Job>();
 
-  displayedColumns = ['name', 'status', 'nextExecution', 'actions'];
+  displayedColumns = ['name', 'status', 'executionAttempts', 'nextExecution', 'actions'];
 
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
 

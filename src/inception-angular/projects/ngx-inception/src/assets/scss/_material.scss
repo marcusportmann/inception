@@ -395,6 +395,10 @@ label {
 
 mat-cell, mat-footer-cell, mat-header-cell {
   padding-left: 12px !important;
+
+  .text-center {
+    text-align: center;
+  }
 }
 
 .mat-header-cell, .mat-cell {

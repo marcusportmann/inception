@@ -16,8 +16,6 @@
 
 package digital.inception.scheduler;
 
-
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,11 +27,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
-
 /**
- * The <b>JobRepository</b> interface declares the repository for the <b>Job</b> domain
- * type.
+ * The <b>JobRepository</b> interface declares the repository for the <b>Job</b> domain type.
  *
  * @author Marcus Portmann
  */
@@ -51,7 +46,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query(
       "select j from Job j where j.enabled = true and j.status = 2 and "
-          + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts is null) "
+          + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts = 0) "
           + "and j.nextExecution <= current_timestamp")
   List<Job> findJobsScheduledForExecutionForWrite(
       @Param("lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
@@ -87,7 +82,7 @@ public interface JobRepository extends JpaRepository<Job, String> {
 
   @Modifying
   @Query(
-      "update Job j set j.status = 2, j.executionAttempts = null, "
+      "update Job j set j.status = 2, j.executionAttempts = 0, "
           + "j.nextExecution = :nextExecution where j.id = :jobId")
   void scheduleJob(
       @Param("jobId") String jobId, @Param("nextExecution") LocalDateTime nextExecution);

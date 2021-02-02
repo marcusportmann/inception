@@ -69,7 +69,7 @@ public class CustomerRestController extends SecureRestController {
       value = {
         @ApiResponse(
             responseCode = "204",
-            description = "The individual custoemr was created successfully"),
+            description = "The individual customer was created successfully"),
         @ApiResponse(
             responseCode = "400",
             description = "Invalid argument",

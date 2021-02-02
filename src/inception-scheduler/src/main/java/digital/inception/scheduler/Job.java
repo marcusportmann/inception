@@ -133,7 +133,7 @@ public class Job implements Serializable {
   @JsonProperty
   @XmlElement(name = "ExecutionAttempts")
   @Column(name = "execution_attempts")
-  private Integer executionAttempts;
+  private Integer executionAttempts = 0;
 
   /** The ID for the job. */
   @Schema(description = "The ID for the job", required = true)

@@ -17,6 +17,12 @@
       <mat-cell *matCellDef="let row">{{ getJobStatusDescription(row.status) }}</mat-cell>
     </ng-container>
 
+    <!-- Execution Attempts Column -->
+    <ng-container matColumnDef="executionAttempts">
+      <mat-header-cell class="d-none d-md-table-cell text-center" *matHeaderCellDef mat-sort-header i18n="@@scheduler_jobs_component_table_header_execution_attempts">Execution Attempts</mat-header-cell>
+      <mat-cell class="d-none d-md-table-cell text-center" *matCellDef="let row">{{ (!!row.executionAttempts) ? row.executionAttempts : '-' }}</mat-cell>
+    </ng-container>
+
     <!-- Next Execution Column -->
     <ng-container matColumnDef="nextExecution">
       <mat-header-cell class="d-none d-md-table-cell" *matHeaderCellDef mat-sort-header i18n="@@scheduler_jobs_component_table_header_next_execution">Next Execution</mat-header-cell>

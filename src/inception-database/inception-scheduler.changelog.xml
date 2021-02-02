@@ -51,7 +51,9 @@
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="job_class"/>
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="enabled"/>
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="status"/>
+    <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="execution_attempts"/>
     <addNotNullConstraint schemaName="scheduler" tableName="jobs" columnName="created"/>
+    <addDefaultValue schemaName="scheduler" tableName="jobs" columnName="execution_attempts" defaultValue="0"/>
 
     <createTable schemaName="scheduler" tableName="job_parameters" remarks="Job Parameters">
       <column name="job_id" type="nvarchar(100)" remarks="The ID for the job"/>

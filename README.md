@@ -385,8 +385,7 @@ Complete the following steps to create a new application based on the Inception 
 
       @Configuration
       @ComponentScan(
-          basePackages = {"demo"},
-          lazyInit = true)
+          basePackages = {"digital.inception", "demo"})
       @EnableJpaRepositories(
           entityManagerFactoryRef = "applicationPersistenceUnit",
           basePackages = {"demo"})

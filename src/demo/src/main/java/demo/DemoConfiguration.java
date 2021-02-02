@@ -26,9 +26,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * @author Marcus Portmann
  */
 @Configuration
-@ComponentScan(
-    basePackages = {"demo"},
-    lazyInit = true)
+@ComponentScan(basePackages = {"digital.inception", "demo"})
 @EnableJpaRepositories(
     entityManagerFactoryRef = "applicationPersistenceUnit",
     basePackages = {"demo"})

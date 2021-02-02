@@ -36,6 +36,10 @@ public class DemoJob implements IJob {
   public void execute(JobExecutionContext context) throws JobExecutionFailedException {
     logger.info("Demo job execution started");
 
+//    if (true) {
+//      throw new JobExecutionFailedException("Testing 1.. 2.. 3..");
+//    }
+
     try {
       Thread.sleep(20000L);
     } catch (Throwable e) {
