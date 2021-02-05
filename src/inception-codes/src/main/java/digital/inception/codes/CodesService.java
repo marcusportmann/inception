@@ -317,10 +317,6 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   public Code getCode(String codeCategoryId, String codeId)
       throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
-
-    if (true)
-      throw new CodeNotFoundException(codeCategoryId, codeId);
-
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
