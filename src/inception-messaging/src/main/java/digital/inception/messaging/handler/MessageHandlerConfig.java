@@ -16,16 +16,14 @@
 
 package digital.inception.messaging.handler;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * The <b>MessageHandlerConfig</b> class stores the configuration information for a message
- * handler. This is the configuration read from the META-INF/MessagingConfig.xml configuration files
- * on the classpath.
+ * The <b>MessageHandlerConfig</b> class stores the configuration information for a message handler.
+ * This is the configuration read from the META-INF/MessagingConfig.xml configuration files on the
+ * classpath.
  *
  * @author Marcus Portmann
  */
@@ -57,8 +55,7 @@ public class MessageHandlerConfig {
    * defines which messages a message handler is capable of processing synchronously and
    * asynchronously.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
-   *     type
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type
    * @param isSynchronous is the handler capable of synchronously processing messages of the
    *     supported message type
    * @param isAsynchronous is the handler capable of asynchronously processing messages of the
@@ -107,8 +104,7 @@ public class MessageHandlerConfig {
   /**
    * Returns whether the messages of the specified message type should be archived.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
-   *     type
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type
    * @return <b>true</b> if messages of the specified message type should be archived or
    *     <b>false</b> otherwise
    */
@@ -125,10 +121,9 @@ public class MessageHandlerConfig {
   /**
    * Returns whether the messages of the specified message type should be processed securely.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
-   *     type
-   * @return <b>true</b> if messages of the specified message type should be processed
-   *     securely or <b>false</b> otherwise
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type
+   * @return <b>true</b> if messages of the specified message type should be processed securely or
+   *     <b>false</b> otherwise
    */
   public boolean isSecure(UUID messageTypeId) {
     for (MessageConfig messageConfig : messagesConfig) {
@@ -153,10 +148,9 @@ public class MessageHandlerConfig {
    * Returns whether the message handler supports asynchronous processing of the specified message
    * type.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
-   *     type
-   * @return <b>true</b> if the message handler supports asynchronous processing of the
-   *     specified message type or <b>false</b> otherwise
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type
+   * @return <b>true</b> if the message handler supports asynchronous processing of the specified
+   *     message type or <b>false</b> otherwise
    */
   public boolean supportsAsynchronousProcessing(UUID messageTypeId) {
     for (MessageConfig messageConfig : messagesConfig) {
@@ -172,10 +166,9 @@ public class MessageHandlerConfig {
    * Returns whether the message handler supports synchronous processing of the specified message
    * type.
    *
-   * @param messageTypeId the Universally Unique Identifier (UUID) for the message
-   *     type
-   * @return <b>true</b> if the message handler supports synchronous processing of the
-   *     specified message type or <b>false</b> otherwise
+   * @param messageTypeId the Universally Unique Identifier (UUID) for the message type
+   * @return <b>true</b> if the message handler supports synchronous processing of the specified
+   *     message type or <b>false</b> otherwise
    */
   public boolean supportsSynchronousProcessing(UUID messageTypeId) {
     for (MessageConfig messageConfig : messagesConfig) {
@@ -188,8 +181,8 @@ public class MessageHandlerConfig {
   }
 
   /**
-   * The <b>MessageConfig</b> inner class stores the configuration information for a a message
-   * that a message handler is capable of processing.
+   * The <b>MessageConfig</b> inner class stores the configuration information for a a message that
+   * a message handler is capable of processing.
    */
   public class MessageConfig {
 
@@ -218,8 +211,7 @@ public class MessageHandlerConfig {
     /**
      * Constructs a new <b>MessageConfig</b>.
      *
-     * @param messageTypeId the Universally Unique Identifier (UUID) for the
-     *     message type
+     * @param messageTypeId the Universally Unique Identifier (UUID) for the message type
      * @param isSynchronous is the handler capable of synchronously processing messages of the
      *     supported message type
      * @param isAsynchronous is the handler capable of asynchronously processing messages of the
@@ -264,8 +256,8 @@ public class MessageHandlerConfig {
      * Returns whether the handler is capable of asynchronously processing messages of the supported
      * message type.
      *
-     * @return <b>true</b> if the handler is capable of asynchronously processing messages of
-     *     the supported message type or <b>false</b> otherwise
+     * @return <b>true</b> if the handler is capable of asynchronously processing messages of the
+     *     supported message type or <b>false</b> otherwise
      */
     public boolean isAsynchronous() {
       return isAsynchronous;
@@ -285,8 +277,8 @@ public class MessageHandlerConfig {
      * Returns whether the handler is capable of synchronously processing messages of the supported
      * message type.
      *
-     * @return <b>true</b> if the handler is capable of synchronously processing messages of
-     *     the supported message type or <b>false</b> otherwise
+     * @return <b>true</b> if the handler is capable of synchronously processing messages of the
+     *     supported message type or <b>false</b> otherwise
      */
     public boolean isSynchronous() {
       return isSynchronous;

@@ -19,8 +19,7 @@ package digital.inception.ws;
 import digital.inception.core.exception.RichRuntimeException;
 
 /**
- * The <b></b> exception is thrown to indicate an error condition when initializing a web
- * service.
+ * The <b></b> exception is thrown to indicate an error condition when initializing a web service.
  *
  * @author Marcus Portmann
  */
@@ -28,10 +27,7 @@ public class WebServiceInitializationException extends RichRuntimeException {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <b>WebServiceInitializationException</b> with <b>null</b> as its
-   * message.
-   */
+  /** Constructs a new <b>WebServiceInitializationException</b> with <b>null</b> as its message. */
   public WebServiceInitializationException() {
     super();
   }
@@ -47,8 +43,8 @@ public class WebServiceInitializationException extends RichRuntimeException {
 
   /**
    * Constructs a new <b>WebServiceInitializationException</b> with the specified cause and a
-   * message of <b>(cause==null ? null : cause.toString())</b> (which typically contains the
-   * class and message of cause).
+   * message of <b>(cause==null ? null : cause.toString())</b> (which typically contains the class
+   * and message of cause).
    *
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
@@ -58,8 +54,7 @@ public class WebServiceInitializationException extends RichRuntimeException {
   }
 
   /**
-   * Constructs a new <b>WebServiceInitializationException</b> with the specified code and
-   * message.
+   * Constructs a new <b>WebServiceInitializationException</b> with the specified code and message.
    *
    * @param code the error code
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
@@ -69,8 +64,7 @@ public class WebServiceInitializationException extends RichRuntimeException {
   }
 
   /**
-   * Constructs a new <b>WebServiceInitializationException</b> with the specified message and
-   * cause.
+   * Constructs a new <b>WebServiceInitializationException</b> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
@@ -81,8 +75,8 @@ public class WebServiceInitializationException extends RichRuntimeException {
   }
 
   /**
-   * Constructs a new <b>WebServiceInitializationException</b> with the specified code,
-   * message and cause.
+   * Constructs a new <b>WebServiceInitializationException</b> with the specified code, message and
+   * cause.
    *
    * @param code the error code
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.

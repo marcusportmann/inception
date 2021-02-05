@@ -24,9 +24,8 @@ import {SecurityService} from '../services/security.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {BackNavigation} from '../../layout/components/back-navigation';
-import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {User} from '../services/user';
 import {UserDirectoryCapabilities} from '../services/user-directory-capabilities';
 import {UserStatus} from '../services/user-status';
@@ -155,8 +154,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
       // tslint:disable-next-line:max-line-length
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -196,8 +194,7 @@ export class NewUserComponent extends AdminContainerView implements AfterViewIni
         });
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

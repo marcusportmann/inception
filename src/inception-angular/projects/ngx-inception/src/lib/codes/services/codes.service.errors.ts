@@ -54,24 +54,6 @@ export class CodeNotFoundError extends Error {
 }
 
 /**
- * The CodesServiceError class holds the information for a Codes Service error.
- *
- * @author Marcus Portmann
- */
-export class CodesServiceError extends Error {
-
-  /**
-   * Constructs a new CodesServiceError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}
-
-/**
  * The DuplicateCodeCategoryError class holds the information for a duplicate code category error.
  *
  * @author Marcus Portmann

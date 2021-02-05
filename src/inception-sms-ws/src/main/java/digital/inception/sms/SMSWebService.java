@@ -16,8 +16,6 @@
 
 package digital.inception.sms;
 
-
-
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 

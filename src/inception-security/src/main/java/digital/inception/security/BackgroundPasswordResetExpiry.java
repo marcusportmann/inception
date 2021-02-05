@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import org.slf4j.Logger;
@@ -28,8 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * The <b>BackgroundPasswordResetExpiry</b> class implements the background password reset
- * expiry.
+ * The <b>BackgroundPasswordResetExpiry</b> class implements the background password reset expiry.
  *
  * @author Marcus Portmann
  */
@@ -43,7 +40,7 @@ public class BackgroundPasswordResetExpiry {
   private final PasswordResetRepository passwordResetRepository;
 
   /** The password reset expiry in seconds */
-  @Value("${application.security.passwordResetExpiry:900}")
+  @Value("${inception.application.security.passwordResetExpiry:900}")
   private int passwordResetExpiry;
 
   /**
@@ -63,7 +60,7 @@ public class BackgroundPasswordResetExpiry {
       LocalDateTime requestedBefore = LocalDateTime.now();
       requestedBefore = requestedBefore.minus(passwordResetExpiry, ChronoUnit.SECONDS);
 
-      passwordResetRepository.expirePasswordResets(requestedBefore);
+      passwordResetRepository.expirePasswordResets(LocalDateTime.now(), requestedBefore);
     } catch (Throwable e) {
       logger.error("Failed to expire the password resets", e);
     }

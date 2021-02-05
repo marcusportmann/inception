@@ -26,8 +26,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
 /**
- * The <b>OAuth2ResourceServerConfiguration</b> class provides the Spring configuration for
- * the OAuth2 Resource Server module.
+ * The <b>OAuth2ResourceServerConfiguration</b> class provides the Spring configuration for the
+ * OAuth2 Resource Server module.
  *
  * @author Marcus Portmann
  */

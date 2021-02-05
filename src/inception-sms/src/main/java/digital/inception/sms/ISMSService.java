@@ -16,6 +16,7 @@
 
 package digital.inception.sms;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public interface ISMSService {
    *
    * @param sms the <b>SMS</b> instance containing the information for the SMS
    */
-  void createSMS(SMS sms) throws InvalidArgumentException, SMSServiceException;
+  void createSMS(SMS sms) throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Delete the existing SMS.
@@ -41,7 +42,7 @@ public interface ISMSService {
    * @param smsId the ID for the SMS
    */
   void deleteSMS(UUID smsId)
-      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
+      throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;
 
   /**
    * Returns the maximum number of send attempts for a SMS.
@@ -55,17 +56,17 @@ public interface ISMSService {
    *
    * <p>The SMS will be locked to prevent duplicate sending.
    *
-   * @return the next SMS that has been queued for sending or <b>null</b> if no SMSs are
-   *     currently queued for sending
+   * @return the next SMS that has been queued for sending or <b>null</b> if no SMSs are currently
+   *     queued for sending
    */
-  SMS getNextSMSQueuedForSending() throws SMSServiceException;
+  SMS getNextSMSQueuedForSending() throws ServiceUnavailableException;
 
   /**
    * Returns the number of SMS credits remaining.
    *
    * @return the number of SMS credits remaining
    */
-  int getNumberOfSMSCreditsRemaining() throws SMSServiceException;
+  int getNumberOfSMSCreditsRemaining() throws ServiceUnavailableException;
 
   /**
    * Retrieve the SMS.
@@ -73,7 +74,8 @@ public interface ISMSService {
    * @param smsId the ID for the SMS
    * @return the SMS or <b>null</b> if the SMS could not be found
    */
-  SMS getSMS(UUID smsId) throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
+  SMS getSMS(UUID smsId)
+      throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;
 
   /**
    * Reset the SMS locks.
@@ -81,7 +83,7 @@ public interface ISMSService {
    * @param status the current status of the SMSs that have been locked
    * @param newStatus the new status for the SMSs that have been unlocked
    */
-  void resetSMSLocks(SMSStatus status, SMSStatus newStatus) throws SMSServiceException;
+  void resetSMSLocks(SMSStatus status, SMSStatus newStatus) throws ServiceUnavailableException;
 
   /**
    * Send the SMS.
@@ -92,7 +94,7 @@ public interface ISMSService {
    * @param message the message
    */
   void sendSMS(String mobileNumber, String message)
-      throws InvalidArgumentException, SMSServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Send the SMS synchronously.
@@ -105,7 +107,7 @@ public interface ISMSService {
    * @return <b>true</b> if the SMS was sent successfully or <b>false</b> otherwise
    */
   boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
-      throws InvalidArgumentException, SMSServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Set the status for the SMS.
@@ -114,7 +116,7 @@ public interface ISMSService {
    * @param status the new status for the SMS
    */
   void setSMSStatus(UUID smsId, SMSStatus status)
-      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
+      throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;
 
   /**
    * Unlock the SMS.
@@ -123,5 +125,5 @@ public interface ISMSService {
    * @param status the new status for the unlocked SMS
    */
   void unlockSMS(UUID smsId, SMSStatus status)
-      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException;
+      throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException;
 }

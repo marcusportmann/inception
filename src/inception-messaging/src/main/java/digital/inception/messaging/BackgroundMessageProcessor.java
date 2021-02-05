@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -114,7 +112,7 @@ public class BackgroundMessageProcessor implements InitializingBean {
 
         if (requestMessage.isEncrypted()) {
           if (!messagingService.decryptMessage(requestMessage)) {
-            throw new MessagingServiceException(
+            throw new MessagingException(
                 String.format(
                     "Failed to decrypt the message (%s) from the user (%s) and device (%s)",
                     requestMessage.getId(),

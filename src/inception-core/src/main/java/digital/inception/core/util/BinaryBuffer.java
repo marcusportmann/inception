@@ -17,8 +17,8 @@
 package digital.inception.core.util;
 
 /**
- * The <b>BinaryBuffer</b> class manages binary data. It provides the capabilities similar to
- * the <b>StringBuffer</b> class when working with binary data (bytes).
+ * The <b>BinaryBuffer</b> class manages binary data. It provides the capabilities similar to the
+ * <b>StringBuffer</b> class when working with binary data (bytes).
  *
  * <p>This class is thread-safe.
  *
@@ -34,8 +34,8 @@ public class BinaryBuffer implements java.io.Serializable {
   /**
    * Constructs a new <b>BinaryBuffer</b> and initializes it using the specified binary data.
    *
-   * @param data <b>BinaryBuffer</b> instance containing the binary data that will be copied
-   *     and managed by the <b>BinaryBuffer</b> instance
+   * @param data <b>BinaryBuffer</b> instance containing the binary data that will be copied and
+   *     managed by the <b>BinaryBuffer</b> instance
    */
   public BinaryBuffer(BinaryBuffer data) {
     this(data.getData());
@@ -44,8 +44,7 @@ public class BinaryBuffer implements java.io.Serializable {
   /**
    * Constructs a new <b>BinaryBuffer</b> and initializes it using the specified binary data.
    *
-   * @param data the binary data that will be copied and managed by the <b>BinaryBuffer</b>
-   *     instance
+   * @param data the binary data that will be copied and managed by the <b>BinaryBuffer</b> instance
    */
   public BinaryBuffer(byte[] data) {
     this.data = new byte[data.length];

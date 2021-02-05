@@ -19,10 +19,9 @@ import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http'
 import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {ApiError} from '../../core/errors/api-error';
-import {CodesServiceError} from '../../codes/services/codes.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
-import {ConfigurationNotFoundError, ConfigurationServiceError} from './configuration.service.errors';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
+import {ConfigurationNotFoundError} from './configuration.service.errors';
 import {Configuration} from './configuration';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 
@@ -65,12 +64,12 @@ export class ConfigurationService {
           if (apiError.code === 'ConfigurationNotFoundError') {
             return throwError(new ConfigurationNotFoundError(apiError));
           } else {
-            return throwError(new ConfigurationServiceError('Failed to delete the configuration.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to delete the configuration.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to delete the configuration.', httpErrorResponse));
         }
       }));
   }
@@ -94,12 +93,12 @@ export class ConfigurationService {
           if (apiError.code === 'ConfigurationNotFoundError') {
             return throwError(new ConfigurationNotFoundError(apiError));
           } else {
-            return throwError(new ConfigurationServiceError('Failed to retrieve the configuration.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to retrieve the configuration.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the configuration.', httpErrorResponse));
         }
       }));
   }
@@ -124,12 +123,12 @@ export class ConfigurationService {
         if (apiError.code === 'ConfigurationNotFoundError') {
           return throwError(new ConfigurationNotFoundError(apiError));
         } else {
-          return throwError(new ConfigurationServiceError('Failed to retrieve the configuration value.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the configuration value.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the configuration value.', httpErrorResponse));
       }
     }));
   }
@@ -148,11 +147,11 @@ export class ConfigurationService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new CodesServiceError('Failed to retrieve the configurations.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the configurations.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the configurations.', httpErrorResponse));
         }
       }));
   }
@@ -173,11 +172,11 @@ export class ConfigurationService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new CodesServiceError('Failed to save the configuration.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to save the configuration.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to save the configuration.', httpErrorResponse));
         }
       }));
   }

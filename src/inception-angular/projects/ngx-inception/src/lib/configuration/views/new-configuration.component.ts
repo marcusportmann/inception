@@ -22,9 +22,8 @@ import {Configuration} from '../services/configuration';
 import {ConfigurationService} from '../services/configuration.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
-import {ConfigurationServiceError} from '../services/configuration.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {BackNavigation} from '../../layout/components/back-navigation';
@@ -104,8 +103,7 @@ export class NewConfigurationComponent extends AdminContainerView implements Aft
         }, (error: Error) => {
           this.spinnerService.hideSpinner();
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof ConfigurationServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

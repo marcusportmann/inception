@@ -16,215 +16,183 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
 import java.util.Arrays;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
+import java.util.Collection;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
- * The <b>PhysicalAddressPurpose</b> enumeration defines the possible physical address purposes.
+ * The <b>PhysicalAddressPurpose</b> class holds the information for a possible physical address
+ * purpose.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The physical address purpose")
-@XmlEnum
-@XmlType(name = "PhysicalAddressPurpose", namespace = "http://party.inception.digital")
-public enum PhysicalAddressPurpose {
-  @XmlEnumValue("Billing")
-  BILLING("billing", new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON}, "Billing Address"),
-  @XmlEnumValue("Business")
-  BUSINESS("business", new PartyType[] {PartyType.ORGANIZATION}, "Business Address"),
-  @XmlEnumValue("Correspondence")
-  CORRESPONDENCE(
-      "correspondence",
-      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
-      "Correspondence Address"),
-  @XmlEnumValue("Delivery")
-  DELIVERY(
-      "delivery", new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON}, "Delivery Address"),
-  @XmlEnumValue("Home")
-  HOME("home", new PartyType[] {PartyType.PERSON}, "Home Address"),
-  @XmlEnumValue("Main")
-  MAIN("main", new PartyType[] {PartyType.ORGANIZATION}, "Main Address"),
-  @XmlEnumValue("Permanent")
-  PERMANENT("permanent", new PartyType[] {PartyType.PERSON}, "Permanent Address"),
-  @XmlEnumValue("RegisteredOffice")
-  REGISTERED_OFFICE(
-      "registered_office", new PartyType[] {PartyType.ORGANIZATION}, "Registered Office Address"),
-  @XmlEnumValue("Residential")
-  RESIDENTIAL("residential", new PartyType[] {PartyType.PERSON}, "Residential Address"),
-  @XmlEnumValue("Service")
-  SERVICE("service", new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON}, "Service Address"),
-  @XmlEnumValue("SoleTrader")
-  SOLE_TRADER("sole_trader", new PartyType[] {PartyType.PERSON}, "Sole Trader Address"),
-  @XmlEnumValue("Temporary")
-  TEMPORARY("temporary", new PartyType[] {PartyType.PERSON}, "Temporary Address"),
-  @XmlEnumValue("Work")
-  WORK("work", new PartyType[] {PartyType.PERSON}, "Work Address");
+@Schema(description = "A physical address purpose")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "description", "partyTypes"})
+@XmlRootElement(name = "PhysicalAddressPurpose", namespace = "http://party.inception.digital")
+@XmlType(
+    name = "PhysicalAddressPurpose",
+    namespace = "http://party.inception.digital",
+    propOrder = {"code", "localeId", "partyTypes", "sortIndex", "name", "description"})
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "party", name = "physical_address_purposes")
+@IdClass(PhysicalAddressPurposeId.class)
+public class PhysicalAddressPurpose implements Serializable {
 
-  private final String code;
+  /** The physical address type code for . */
+  public static final String BILLING = "billing";
 
-  private final String description;
+  /** The physical address type code for . */
+  public static final String BUSINESS = "business";
 
-  private final PartyType[] partyTypes;
+  /** The physical address type code for . */
+  public static final String CORRESPONDENCE = "correspondence";
 
-  PhysicalAddressPurpose(String code, PartyType[] partyTypes, String description) {
-    this.code = code;
-    this.partyTypes = partyTypes;
-    this.description = description;
-  }
+  /** The physical address type code for . */
+  public static final String DELIVERY = "delivery";
+
+  /** The physical address type code for . */
+  public static final String HOME = "home";
+
+  /** The physical address type code for . */
+  public static final String MAIN = "main";
+
+  /** The physical address type code for . */
+  public static final String PERMANENT = "permanent";
+
+  /** The physical address type code for . */
+  public static final String REGISTERED_OFFICE = "registered_office";
+
+  /** The physical address type code for . */
+  public static final String RESIDENTIAL = "residential";
+
+  /** The physical address type code for . */
+  public static final String SERVICE = "service";
+
+  /** The physical address type code for . */
+  public static final String SOLE_TRADER = "sole_trader";
+
+  /** The physical address type code for . */
+  public static final String TEMPORARY = "temporary";
+
+  /** The physical address type code for . */
+  public static final String WORK = "work";
+
+  private static final long serialVersionUID = 1000000;
+
+  /** The code for the physical address purpose. */
+  @Schema(description = "The code for the physical address purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Code", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Id
+  @Column(name = "code", length = 30, nullable = false)
+  private String code;
+
+  /** The description for the physical address purpose. */
+  @Schema(description = "The description for the physical address purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Description", required = true)
+  @NotNull
+  @Size(max = 200)
+  @Column(name = "description", length = 200, nullable = false)
+  private String description;
+
+  /** The Unicode locale identifier for the physical address purpose. */
+  @Schema(
+      description = "The Unicode locale identifier for the physical address purpose",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "LocaleId", required = true)
+  @NotNull
+  @Size(min = 2, max = 10)
+  @Id
+  @Column(name = "locale_id", length = 10, nullable = false)
+  private String localeId;
+
+  /** The name of the physical address purpose. */
+  @Schema(description = "The name of the physical address purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  @Column(name = "name", length = 50, nullable = false)
+  private String name;
 
   /**
-   * Returns the physical address purpose given by the specified code value.
-   *
-   * @param code the code for the physical address purpose
-   * @return the physical address purpose given by the specified code value
+   * The comma-delimited codes for the party types the physical address purpose is associated with.
    */
-  @JsonCreator
-  public static PhysicalAddressPurpose fromCode(String code) {
-    switch (code) {
-      case "billing":
-        return PhysicalAddressPurpose.BILLING;
+  @JsonIgnore
+  @XmlTransient
+  @NotNull
+  @Size(min = 1, max = 300)
+  @Column(name = "party_types", length = 300, nullable = false)
+  private String partyTypes;
 
-      case "business":
-        return PhysicalAddressPurpose.BUSINESS;
+  /** The sort index for the physical address purpose. */
+  @Schema(description = "The sort index for the physical address purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SortIndex", required = true)
+  @NotNull
+  @Column(name = "sort_index", nullable = false)
+  private Integer sortIndex;
 
-      case "correspondence":
-        return PhysicalAddressPurpose.CORRESPONDENCE;
+  /** Constructs a new <b>PhysicalAddressPurpose</b>. */
+  public PhysicalAddressPurpose() {}
 
-      case "delivery":
-        return PhysicalAddressPurpose.DELIVERY;
-
-      case "home":
-        return PhysicalAddressPurpose.HOME;
-
-      case "main":
-        return PhysicalAddressPurpose.MAIN;
-
-      case "permanent":
-        return PhysicalAddressPurpose.PERMANENT;
-
-      case "registered_office":
-        return PhysicalAddressPurpose.REGISTERED_OFFICE;
-
-      case "residential":
-        return PhysicalAddressPurpose.RESIDENTIAL;
-
-      case "service":
-        return PhysicalAddressPurpose.SERVICE;
-
-      case "sole_trader":
-        return PhysicalAddressPurpose.SOLE_TRADER;
-
-      case "temporary":
-        return PhysicalAddressPurpose.TEMPORARY;
-
-      case "work":
-        return PhysicalAddressPurpose.WORK;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the physical address purpose with the invalid code ("
-                + code
-                + ")");
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
     }
-  }
 
-  /**
-   * Returns the physical address purpose for the specified numeric code.
-   *
-   * @param numericCode the numeric code for the physical address purpose
-   * @return the physical address purpose given by the specified numeric code value
-   */
-  public static PhysicalAddressPurpose fromNumericCode(int numericCode) {
-    switch (numericCode) {
-      case 1:
-        return PhysicalAddressPurpose.BILLING;
-      case 2:
-        return PhysicalAddressPurpose.BUSINESS;
-      case 3:
-        return PhysicalAddressPurpose.CORRESPONDENCE;
-      case 4:
-        return PhysicalAddressPurpose.DELIVERY;
-      case 5:
-        return PhysicalAddressPurpose.HOME;
-      case 6:
-        return PhysicalAddressPurpose.MAIN;
-      case 7:
-        return PhysicalAddressPurpose.PERMANENT;
-      case 8:
-        return PhysicalAddressPurpose.REGISTERED_OFFICE;
-      case 9:
-        return PhysicalAddressPurpose.RESIDENTIAL;
-      case 10:
-        return PhysicalAddressPurpose.SERVICE;
-      case 11:
-        return PhysicalAddressPurpose.SOLE_TRADER;
-      case 12:
-        return PhysicalAddressPurpose.TEMPORARY;
-      case 13:
-        return PhysicalAddressPurpose.WORK;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the physical address purpose for the numeric code ("
-                + numericCode
-                + ")");
+    if (object == null) {
+      return false;
     }
-  }
 
-  /**
-   * Returns the numeric code for the physical address purpose.
-   *
-   * @param contactMechanismPurpose the physical address purpose
-   * @return the numeric code for the physical address purpose
-   */
-  public static int toNumericCode(PhysicalAddressPurpose contactMechanismPurpose) {
-    switch (contactMechanismPurpose) {
-      case BILLING:
-        return 1;
-      case BUSINESS:
-        return 2;
-      case CORRESPONDENCE:
-        return 3;
-      case DELIVERY:
-        return 4;
-      case HOME:
-        return 5;
-      case MAIN:
-        return 6;
-      case PERMANENT:
-        return 7;
-      case REGISTERED_OFFICE:
-        return 8;
-      case RESIDENTIAL:
-        return 9;
-      case SERVICE:
-        return 10;
-      case SOLE_TRADER:
-        return 11;
-      case TEMPORARY:
-        return 12;
-      case WORK:
-        return 13;
-      default:
-        throw new RuntimeException(
-            "Failed to determine the numeric code for the physical address purpose ("
-                + contactMechanismPurpose.code()
-                + ")");
+    if (getClass() != object.getClass()) {
+      return false;
     }
+
+    PhysicalAddressPurpose other = (PhysicalAddressPurpose) object;
+
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code value for the physical address purpose.
+   * Returns the code for the physical address purpose.
    *
-   * @return the code value for the physical address purpose
+   * @return the code for the physical address purpose
    */
-  @JsonValue
-  public String code() {
+  public String getCode() {
     return code;
   }
 
@@ -233,27 +201,134 @@ public enum PhysicalAddressPurpose {
    *
    * @return the description for the physical address purpose
    */
-  public String description() {
+  public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the Unicode locale identifier for the physical address purpose.
+   *
+   * @return the Unicode locale identifier for the physical address purpose
+   */
+  public String getLocaleId() {
+    return localeId;
+  }
+
+  /**
+   * Returns the name of the physical address purpose.
+   *
+   * @return the name of the physical address purpose
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the codes for the party types the physical address purpose is associated with.
+   *
+   * @return the codes for the party types the physical address purpose is associated with
+   */
+  @Schema(
+      description = "The codes for the party types the physical address purpose is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PartyTypes", required = true)
+  public String[] getPartyTypes() {
+    return StringUtils.commaDelimitedListToStringArray(partyTypes);
+  }
+
+  /**
+   * Returns the sort index for the physical address purpose.
+   *
+   * @return the sort index for the physical address purpose
+   */
+  public Integer getSortIndex() {
+    return sortIndex;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
    * Returns whether the physical address purpose is valid for the party type.
    *
-   * @param partyType the party type
+   * @param partyTypeCode the party type code
    * @return <b>true</b> if the physical address purpose is valid for the party type or <b>false</b>
    *     otherwise
    */
-  public boolean isValidForPartyType(PartyType partyType) {
-    return Arrays.stream(partyTypes).anyMatch(validPartyType -> validPartyType.equals(partyType));
+  public boolean isValidForPartyType(String partyTypeCode) {
+    return Arrays.stream(getPartyTypes())
+        .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }
 
   /**
-   * Returns the party types the physical address purpose is associated with.
+   * Set the code for the physical address purpose.
    *
-   * @return the party types the physical address purpose is associated with
+   * @param code the code for the physical address purpose
    */
-  public PartyType[] partyTypes() {
-    return partyTypes;
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the description for the physical address purpose.
+   *
+   * @param description the description for the physical address purpose
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the Unicode locale identifier for the physical address purpose.
+   *
+   * @param localeId the Unicode locale identifier for the physical address purpose
+   */
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
+  }
+
+  /**
+   * Set the name of the physical address purpose.
+   *
+   * @param name the name of the physical address purpose
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the codes for the party types the physical address purpose is associated with.
+   *
+   * @param partyTypes the codes for the party types the physical address purpose is associated with
+   */
+  public void setPartyTypes(String[] partyTypes) {
+    this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
+  }
+
+  /**
+   * Set the codes for the party types the physical address purpose is associated with.
+   *
+   * @param partyTypes the codes for the party types the physical address purpose is associated with
+   */
+  @JsonIgnore
+  public void setPartyTypes(Collection<String> partyTypes) {
+    this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
+  }
+
+  /**
+   * Set the sort index for the physical address purpose.
+   *
+   * @param sortIndex the sort index for the physical address purpose
+   */
+  public void setSortIndex(Integer sortIndex) {
+    this.sortIndex = sortIndex;
   }
 }

@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,12 +23,10 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * An <b>ExistingPasswordException</b> is thrown to indicate that a security operation failed
- * as a result of an existing password e.g. when attempting to change a user's password using a
- * password that forms part of the user's password history.
+ * An <b>ExistingPasswordException</b> is thrown to indicate that a security operation failed as a
+ * result of an existing password e.g. when attempting to change a user's password using a password
+ * that forms part of the user's password history.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

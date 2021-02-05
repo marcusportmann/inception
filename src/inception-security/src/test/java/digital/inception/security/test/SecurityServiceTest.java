@@ -16,8 +16,6 @@
 
 package digital.inception.security.test;
 
-
-
 import static digital.inception.test.Assert.assertEqualsToMillisecond;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -73,8 +71,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-
-
 
 /**
  * The <b>SecurityServiceTest</b> class contains the implementation of the JUnit tests for the

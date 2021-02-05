@@ -22,10 +22,9 @@ import {catchError, map} from 'rxjs/operators';
 import {ApiError} from '../../core/errors/api-error';
 import {Observable, throwError} from 'rxjs';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {ErrorReport} from './error-report';
 import {v4 as uuid} from 'uuid';
-import {ErrorServiceError} from './error.service.errors';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 
 /**
@@ -68,11 +67,11 @@ export class ErrorService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ErrorServiceError('Failed to send the error report.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to send the error report.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to send the error report.', httpErrorResponse));
       }
     }));
   }

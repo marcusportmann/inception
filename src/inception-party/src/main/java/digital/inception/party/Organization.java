@@ -140,7 +140,10 @@ public class Organization extends PartyBase implements Serializable {
       orphanRemoval = true)
   private final Set<TaxNumber> taxNumbers = new HashSet<>();
 
-  /** The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization. */
+  /**
+   * The optional comma-delimited ISO 3166-1 alpha-2 codes for the countries of tax residence for
+   * the organization.
+   */
   @JsonIgnore
   @XmlTransient
   @Size(min = 1, max = 100)
@@ -240,7 +243,7 @@ public class Organization extends PartyBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -266,13 +269,12 @@ public class Organization extends PartyBase implements Serializable {
   /**
    * Retrieve the contact mechanism with the specified type and purpose for the organization.
    *
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
+   * @param type the code for the contact mechanism type
+   * @param purpose the code for the contact mechanism purpose
    * @return the contact mechanism with the specified type and purpose for the organization or
    *     <b>null</b> if the contact mechanism could not be found
    */
-  public ContactMechanism getContactMechanism(
-      ContactMechanismType type, ContactMechanismPurpose purpose) {
+  public ContactMechanism getContactMechanism(String type, String purpose) {
     return contactMechanisms.stream()
         .filter(
             contactMechanism ->
@@ -297,12 +299,15 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization.
+   * Returns the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
+   * organization.
    *
-   * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization
+   * @return the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
+   *     organization
    */
   @Schema(
-      description = "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization")
+      description =
+          "The optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization")
   @JsonProperty
   @XmlElementWrapper(name = "CountriesOfTaxResidence")
   @XmlElement(name = "CountryOfTaxResidence")
@@ -326,7 +331,9 @@ public class Organization extends PartyBase implements Serializable {
    *
    * @return the Universally Unique Identifier (UUID) for the organization
    */
-  @Schema(description = "The Universally Unique Identifier (UUID) for the organization", required = true)
+  @Schema(
+      description = "The Universally Unique Identifier (UUID) for the organization",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @Override
@@ -496,10 +503,10 @@ public class Organization extends PartyBase implements Serializable {
   /**
    * Remove the contact mechanism with the specified type and purpose for the organization.
    *
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
+   * @param type the code for the contact mechanism type
+   * @param purpose the code for the contact mechanism purpose
    */
-  public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
+  public void removeContactMechanism(String type, String purpose) {
     contactMechanisms.removeIf(
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), type)
@@ -545,10 +552,11 @@ public class Organization extends PartyBase implements Serializable {
   }
 
   /**
-   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the organization.
+   * Set the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
+   * organization.
    *
-   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax residence for the
-   *     organization
+   * @param countriesOfTaxResidence the optional ISO 3166-1 alpha-2 codes for the countries of tax
+   *     residence for the organization
    */
   public void setCountriesOfTaxResidence(Set<String> countriesOfTaxResidence) {
     this.countriesOfTaxResidence =

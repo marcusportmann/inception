@@ -81,7 +81,7 @@ public class MessageResult {
    *
    * @param document the WBXML document containing the message result information
    */
-  public MessageResult(Document document) throws MessagingServiceException {
+  public MessageResult(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();
 
     this.code = Long.parseLong(rootElement.getAttributeValue("code"));
@@ -103,7 +103,7 @@ public class MessageResult {
 
         message = new Message(messageDocument);
       } catch (Throwable e) {
-        throw new MessagingServiceException(
+        throw new MessagingException(
             "Failed to parse the WBXML for the message associated with the message result", e);
       }
     }

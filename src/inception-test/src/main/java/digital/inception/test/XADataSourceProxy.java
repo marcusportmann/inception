@@ -28,20 +28,19 @@ import javax.sql.XAConnectionBuilder;
 import javax.sql.XADataSource;
 
 /**
- * The <b>DataSourceProxy</b> class provides a proxy that tracks the JDBC connections
- * associated with the current thread and managed by a <b>javax.sql.XADataSource</b>
- * implementation.
+ * The <b>DataSourceProxy</b> class provides a proxy that tracks the JDBC connections associated
+ * with the current thread and managed by a <b>javax.sql.XADataSource</b> implementation.
  *
  * @author Marcus Portmann
  */
 public class XADataSourceProxy implements XADataSource {
 
   /** The active XA database connections associated with the current thread. */
-  private static ThreadLocal<Map<XAConnection, StackTraceElement[]>> activeXADatabaseConnections =
-      ThreadLocal.withInitial(ConcurrentHashMap::new);
+  private static final ThreadLocal<Map<XAConnection, StackTraceElement[]>>
+      activeXADatabaseConnections = ThreadLocal.withInitial(ConcurrentHashMap::new);
 
   /** The XA data source. */
-  private XADataSource xaDataSource;
+  private final XADataSource xaDataSource;
 
   /**
    * Constructs a new <b>XADataSourceProxy</b>.

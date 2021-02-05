@@ -17,8 +17,8 @@
 package digital.inception.core.service;
 
 /**
- * The <b>ServiceException</b> exception is the base class that all service exceptions should
- * be derived from.
+ * The <b>ServiceException</b> exception is the base class that all service exceptions should be
+ * derived from.
  *
  * @author Marcus Portmann
  */
@@ -44,8 +44,8 @@ public abstract class ServiceException extends Exception {
 
   /**
    * Constructs a new <b>ServiceException</b> with the specified cause and a message of <b>
-   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message
-   * of cause).
+   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message of
+   * cause).
    *
    * @param code The code for the service error.
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A

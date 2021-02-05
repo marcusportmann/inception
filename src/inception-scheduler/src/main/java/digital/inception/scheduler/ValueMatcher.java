@@ -30,8 +30,8 @@ public interface ValueMatcher {
    * Validate the given integer value against a set of rules.
    *
    * @param value the value
-   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b>
-   *     , <b>false</b> otherwise
+   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b> ,
+   *     <b>false</b> otherwise
    */
   boolean match(int value);
 }

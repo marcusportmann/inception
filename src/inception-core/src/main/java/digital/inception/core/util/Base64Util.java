@@ -385,8 +385,8 @@ public class Base64Util {
   }
 
   /**
-   * Decodes data from Base64Util notation and returns it as a string. Equivlaent to calling <b>
-   * new String(decode(s))</b>
+   * Decodes data from Base64Util notation and returns it as a string. Equivlaent to calling <b> new
+   * String(decode(s))</b>
    *
    * @param s the string to decode
    * @return the data as a string
@@ -397,8 +397,8 @@ public class Base64Util {
   }
 
   /**
-   * Encodes a byte array into Base64Util notation. Equivalent to calling <b>encodeBytes(source,
-   * 0, source.length)</b>
+   * Encodes a byte array into Base64Util notation. Equivalent to calling <b>encodeBytes(source, 0,
+   * source.length)</b>
    *
    * @param source the data to convert
    * @return the Base64Util encoded string
@@ -409,8 +409,8 @@ public class Base64Util {
   }
 
   /**
-   * Encodes a byte array into Base64Util notation. Equivalent to calling <b>encodeBytes(source,
-   * 0, source.length)</b>
+   * Encodes a byte array into Base64Util notation. Equivalent to calling <b>encodeBytes(source, 0,
+   * source.length)</b>
    *
    * @param source the data to convert
    * @param breakLines break lines at 80 characters or less

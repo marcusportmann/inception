@@ -18,6 +18,7 @@ package digital.inception.sms;
 
 import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.Debug;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -143,7 +144,7 @@ public class SMSService implements ISMSService {
    */
   @Override
   @Transactional
-  public void createSMS(SMS sms) throws InvalidArgumentException, SMSServiceException {
+  public void createSMS(SMS sms) throws InvalidArgumentException, ServiceUnavailableException {
     validateSMS(sms);
 
     try {
@@ -153,7 +154,7 @@ public class SMSService implements ISMSService {
 
       smsRepository.saveAndFlush(sms);
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to create the SMS", e);
+      throw new ServiceUnavailableException("Failed to create the SMS", e);
     }
   }
 
@@ -165,7 +166,7 @@ public class SMSService implements ISMSService {
   @Override
   @Transactional
   public void deleteSMS(UUID smsId)
-      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException {
+      throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {
       throw new InvalidArgumentException("smsId");
     }
@@ -179,7 +180,7 @@ public class SMSService implements ISMSService {
     } catch (SMSNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to delete the SMS (" + smsId + ")", e);
+      throw new ServiceUnavailableException("Failed to delete the SMS (" + smsId + ")", e);
     }
   }
 
@@ -198,12 +199,12 @@ public class SMSService implements ISMSService {
    *
    * <p>The SMS will be locked to prevent duplicate sending.
    *
-   * @return the next SMS that has been queued for sending or <b>null</b> if no SMSs are
-   *     currently queued for sending
+   * @return the next SMS that has been queued for sending or <b>null</b> if no SMSs are currently
+   *     queued for sending
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public SMS getNextSMSQueuedForSending() throws SMSServiceException {
+  public SMS getNextSMSQueuedForSending() throws ServiceUnavailableException {
     try {
       LocalDateTime lastProcessedBefore = LocalDateTime.now();
 
@@ -234,7 +235,7 @@ public class SMSService implements ISMSService {
       }
 
     } catch (Throwable e) {
-      throw new SMSServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the next SMS that has been queued for sending from the database", e);
     }
   }
@@ -245,7 +246,7 @@ public class SMSService implements ISMSService {
    * @return the number of SMS credits remaining
    */
   @Override
-  public int getNumberOfSMSCreditsRemaining() throws SMSServiceException {
+  public int getNumberOfSMSCreditsRemaining() throws ServiceUnavailableException {
     if (PROVIDER_SMS_PORTAL.equalsIgnoreCase(useProvider)) {}
 
     return 0;
@@ -270,7 +271,8 @@ public class SMSService implements ISMSService {
     //          ? 0
     //          : Integer.parseInt(credits);
     //    } catch (Throwable e) {
-    //      throw new SMSServiceException("Failed to retrieve the number of SMS credits remaining",
+    //      throw new ServiceUnavailableException("Failed to retrieve the number of SMS credits
+    // remaining",
     // e);
     //    }
   }
@@ -283,7 +285,7 @@ public class SMSService implements ISMSService {
    */
   @Override
   public SMS getSMS(UUID smsId)
-      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException {
+      throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {
       throw new InvalidArgumentException("smsId");
     }
@@ -299,7 +301,7 @@ public class SMSService implements ISMSService {
     } catch (SMSNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SMSServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the SMS (" + smsId + ") from the database", e);
     }
   }
@@ -312,11 +314,12 @@ public class SMSService implements ISMSService {
    */
   @Override
   @Transactional
-  public void resetSMSLocks(SMSStatus status, SMSStatus newStatus) throws SMSServiceException {
+  public void resetSMSLocks(SMSStatus status, SMSStatus newStatus)
+      throws ServiceUnavailableException {
     try {
       smsRepository.resetSMSLocks(status, newStatus, instanceName);
     } catch (Throwable e) {
-      throw new SMSServiceException(
+      throw new ServiceUnavailableException(
           "Failed to reset the locks for the SMSs with the status ("
               + status
               + ") that have been locked using the lock name ("
@@ -335,7 +338,7 @@ public class SMSService implements ISMSService {
    * @param message the message
    */
   public void sendSMS(String mobileNumber, String message)
-      throws InvalidArgumentException, SMSServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(mobileNumber)) {
       throw new InvalidArgumentException("mobileNumber");
     }
@@ -351,7 +354,7 @@ public class SMSService implements ISMSService {
 
       applicationContext.getBean(BackgroundSMSSender.class).sendSMSs();
     } catch (Throwable e) {
-      throw new SMSServiceException(
+      throw new ServiceUnavailableException(
           "Failed to queue the SMS for the mobile number (" + mobileNumber + ") for sending", e);
     }
   }
@@ -367,7 +370,7 @@ public class SMSService implements ISMSService {
    * @return <b>true</b> if the SMS was sent successfully or <b>false</b> otherwise
    */
   public boolean sendSMSSynchronously(UUID smsId, String mobileNumber, String message)
-      throws InvalidArgumentException, SMSServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (smsId == null) {
       throw new InvalidArgumentException("smsId");
     }
@@ -490,7 +493,7 @@ public class SMSService implements ISMSService {
       */
       return true;
     } catch (Throwable e) {
-      throw new SMSServiceException(
+      throw new ServiceUnavailableException(
           "Failed to send the SMS to the mobile number (" + mobileNumber + ")", e);
     }
   }
@@ -504,7 +507,7 @@ public class SMSService implements ISMSService {
   @Override
   @Transactional
   public void setSMSStatus(UUID smsId, SMSStatus status)
-      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException {
+      throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {
       throw new InvalidArgumentException("smsId");
     }
@@ -518,7 +521,7 @@ public class SMSService implements ISMSService {
     } catch (SMSNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SMSServiceException(
+      throw new ServiceUnavailableException(
           "Failed to set the status for the SMS ("
               + smsId
               + ") to ("
@@ -537,7 +540,7 @@ public class SMSService implements ISMSService {
   @Override
   @Transactional
   public void unlockSMS(UUID smsId, SMSStatus status)
-      throws InvalidArgumentException, SMSNotFoundException, SMSServiceException {
+      throws InvalidArgumentException, SMSNotFoundException, ServiceUnavailableException {
     if (smsId == null) {
       throw new InvalidArgumentException("smsId");
     }
@@ -551,7 +554,7 @@ public class SMSService implements ISMSService {
     } catch (SMSNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SMSServiceException(
+      throw new ServiceUnavailableException(
           "Failed to unlock and set the status for the SMS ("
               + smsId
               + ") to ("
@@ -622,14 +625,14 @@ public class SMSService implements ISMSService {
     return mobileNumber;
   }
 
-  private String getSMSPortalToken() throws SMSServiceException {
+  private String getSMSPortalToken() throws ServiceUnavailableException {
     try {
       // WebClient webClient = WebClient.builder()
 
       return "";
 
     } catch (Throwable e) {
-      throw new SMSServiceException("Failed to retrieve the SMS Portal token", e);
+      throw new ServiceUnavailableException("Failed to retrieve the SMS Portal token", e);
     }
   }
 

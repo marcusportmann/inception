@@ -437,7 +437,7 @@ public class Person extends PartyBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -461,13 +461,12 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Retrieve the contact mechanism with the specified type and purpose for the person.
    *
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
+   * @param type the code for the contact mechanism type
+   * @param purpose the code for the contact mechanism purpose
    * @return the contact mechanism with the specified type and purpose for the person or <b>null</b>
    *     if the contact mechanism could not be found
    */
-  public ContactMechanism getContactMechanism(
-      ContactMechanismType type, ContactMechanismPurpose purpose) {
+  public ContactMechanism getContactMechanism(String type, String purpose) {
     return contactMechanisms.stream()
         .filter(
             contactMechanism ->
@@ -973,10 +972,10 @@ public class Person extends PartyBase implements Serializable {
   /**
    * Remove the contact mechanism with the specified type and purpose for the person.
    *
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
+   * @param type the code for the contact mechanism type
+   * @param purpose the code for the contact mechanism purpose
    */
-  public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
+  public void removeContactMechanism(String type, String purpose) {
     contactMechanisms.removeIf(
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), type)

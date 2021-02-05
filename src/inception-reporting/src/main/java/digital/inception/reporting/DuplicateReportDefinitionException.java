@@ -16,8 +16,6 @@
 
 package digital.inception.reporting;
 
-
-
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,12 +23,10 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * The <b>DuplicateReportDefinitionException</b> exception is thrown to indicate an error
- * condition as a result of an attempt to create a duplicate report definition i.e a report
- * definition with the specified ID already exists.
+ * The <b>DuplicateReportDefinitionException</b> exception is thrown to indicate an error condition
+ * as a result of an attempt to create a duplicate report definition i.e a report definition with
+ * the specified ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

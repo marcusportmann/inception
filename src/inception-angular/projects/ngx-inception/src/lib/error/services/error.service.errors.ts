@@ -19,20 +19,4 @@ import {HttpError} from '../../core/errors/http-error';
 import {Error} from '../../core/errors/error';
 import {ApiError} from '../../core/errors/api-error';
 
-/**
- * The ErrorServiceError class holds the information for a Error Service error.
- *
- * @author Marcus Portmann
- */
-export class ErrorServiceError extends Error {
 
-  /**
-   * Constructs a new ErrorServiceError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}

@@ -25,8 +25,8 @@ import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transport.http.auth.DigestAuthSupplier;
 
 /**
- * The <b>CXFDigestSecurityProxyConfigurator</b> class provides the capability to configure a
- * CXF web service proxy for digest authentication.
+ * The <b>CXFDigestSecurityProxyConfigurator</b> class provides the capability to configure a CXF
+ * web service proxy for digest authentication.
  *
  * @author Marcus Portmann
  */

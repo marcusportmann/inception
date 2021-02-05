@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +28,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 
-
-
 /**
- * The <b>UserRepository</b> interface declares the repository for the <b>User</b>
- * domain type.
+ * The <b>UserRepository</b> interface declares the repository for the <b>User</b> domain type.
  *
  * @author Marcus Portmann
  */

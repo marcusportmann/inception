@@ -17,8 +17,8 @@
 package digital.inception.security;
 
 /**
- * The <b>Credential</b> interface represents the abstract notion of a credential, which is a
- * piece of security information that can be used to confirm the identity of an entity, such as an
+ * The <b>Credential</b> interface represents the abstract notion of a credential, which is a piece
+ * of security information that can be used to confirm the identity of an entity, such as an
  * individual, a corporation, a login id, etc.
  *
  * @author Marcus Portmann

@@ -16,6 +16,7 @@
 
 package digital.inception.codes;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
 import digital.inception.core.xml.DtdJarResolver;
@@ -135,7 +136,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public boolean codeCategoryExists(String codeCategoryId)
-      throws InvalidArgumentException, CodesServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -143,7 +144,7 @@ public class CodesService implements ICodesService, InitializingBean {
     try {
       return codeCategoryRepository.existsById(codeCategoryId);
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the code category (" + codeCategoryId + ") exists", e);
     }
   }
@@ -157,7 +158,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public boolean codeExists(String codeCategoryId, String codeId)
-      throws InvalidArgumentException, CodesServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -169,7 +170,7 @@ public class CodesService implements ICodesService, InitializingBean {
     try {
       return codeRepository.existsById(new CodeId(codeCategoryId, codeId));
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the code ("
               + codeId
               + ") exists for the code category ("
@@ -188,7 +189,7 @@ public class CodesService implements ICodesService, InitializingBean {
   @Transactional
   public void createCode(Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
-          CodesServiceException {
+          ServiceUnavailableException {
     validateCode(code);
 
     try {
@@ -204,7 +205,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (DuplicateCodeException | CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the code ("
               + code.getName()
               + ") for the code category ("
@@ -223,7 +224,7 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void createCodeCategory(CodeCategory codeCategory)
-      throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException {
+      throws InvalidArgumentException, DuplicateCodeCategoryException, ServiceUnavailableException {
     validateCodeCategory(codeCategory);
 
     try {
@@ -235,7 +236,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (DuplicateCodeCategoryException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the code category (" + codeCategory.getId() + ")", e);
     }
   }
@@ -249,7 +250,7 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void deleteCode(String codeCategoryId, String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -269,7 +270,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the code ("
               + codeId
               + ") for the code category ("
@@ -287,7 +288,7 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void deleteCodeCategory(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -301,7 +302,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the code category (" + codeCategoryId + ")", e);
     }
   }
@@ -315,7 +316,11 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public Code getCode(String codeCategoryId, String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
+
+    if (true)
+      throw new CodeNotFoundException(codeCategoryId, codeId);
+
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -342,7 +347,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the code ("
               + codeId
               + ") for the code category ("
@@ -358,11 +363,11 @@ public class CodesService implements ICodesService, InitializingBean {
    * @return all the code categories
    */
   @Override
-  public List<CodeCategory> getCodeCategories() throws CodesServiceException {
+  public List<CodeCategory> getCodeCategories() throws ServiceUnavailableException {
     try {
       return codeCategoryRepository.findAll();
     } catch (Throwable e) {
-      throw new CodesServiceException("Failed to retrieve the code categories", e);
+      throw new ServiceUnavailableException("Failed to retrieve the code categories", e);
     }
   }
 
@@ -374,7 +379,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public CodeCategory getCodeCategory(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -397,7 +402,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the code category (" + codeCategoryId + ")", e);
     }
   }
@@ -413,7 +418,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public String getCodeCategoryData(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -438,7 +443,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the data for the code category (" + codeCategoryId + ")", e);
     }
   }
@@ -456,7 +461,7 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   public String getCodeCategoryDataWithParameters(
       String codeCategoryId, Map<String, String> parameters)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -482,7 +487,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the data for the code category (" + codeCategoryId + ")", e);
     }
   }
@@ -495,7 +500,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public String getCodeCategoryName(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -518,7 +523,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the name of the code category (" + codeCategoryId + ")", e);
     }
   }
@@ -529,11 +534,11 @@ public class CodesService implements ICodesService, InitializingBean {
    * @return the summaries for all the code categories
    */
   @Override
-  public List<CodeCategorySummary> getCodeCategorySummaries() throws CodesServiceException {
+  public List<CodeCategorySummary> getCodeCategorySummaries() throws ServiceUnavailableException {
     try {
       return codeCategorySummaryRepository.findAll();
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the code categories", e);
     }
   }
@@ -546,7 +551,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -570,7 +575,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the date and time the code category ("
               + codeCategoryId
               + ") was last updated",
@@ -587,7 +592,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public String getCodeName(String codeCategoryId, String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -614,7 +619,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the name of the code ("
               + codeId
               + ") for the code category ("
@@ -636,7 +641,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public List<Code> getCodesForCodeCategory(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -657,7 +662,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the codes for the code category (" + codeCategoryId + ")", e);
     }
   }
@@ -676,7 +681,7 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   public List<Code> getCodesForCodeCategoryWithParameters(
       String codeCategoryId, Map<String, String> parameters)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -697,7 +702,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the codes for the code category (" + codeCategoryId + ")", e);
     }
   }
@@ -709,7 +714,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public void updateCode(Code code)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     validateCode(code);
 
     try {
@@ -721,7 +726,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException("Failed to update the code (" + code.getId() + ")", e);
+      throw new ServiceUnavailableException("Failed to update the code (" + code.getId() + ")", e);
     }
   }
 
@@ -733,7 +738,7 @@ public class CodesService implements ICodesService, InitializingBean {
    */
   @Override
   public void updateCodeCategory(CodeCategory codeCategory)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     validateCodeCategory(codeCategory);
 
     try {
@@ -745,7 +750,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to update the code category (" + codeCategory.getId() + ")", e);
     }
   }
@@ -759,7 +764,7 @@ public class CodesService implements ICodesService, InitializingBean {
   @Override
   @Transactional
   public void updateCodeCategoryData(String codeCategoryId, String data)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(codeCategoryId)) {
       throw new InvalidArgumentException("codeCategoryId");
     }
@@ -773,7 +778,7 @@ public class CodesService implements ICodesService, InitializingBean {
     } catch (CodeCategoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CodesServiceException(
+      throw new ServiceUnavailableException(
           "Failed to update the data for the code category (" + codeCategoryId + ")", e);
     }
   }
@@ -834,7 +839,7 @@ public class CodesService implements ICodesService, InitializingBean {
    * Read the code provider configurations from all the <i>META-INF/code-providers.xml</i>
    * configuration files that can be found on the classpath.
    */
-  private void readCodeProviderConfigurations() throws CodesServiceException {
+  private void readCodeProviderConfigurations() throws ServiceUnavailableException {
     try {
       codeProviderConfigs = new ArrayList<>();
 
@@ -884,7 +889,8 @@ public class CodesService implements ICodesService, InitializingBean {
         }
       }
     } catch (Throwable e) {
-      throw new CodesServiceException("Failed to read the code provider configuration files", e);
+      throw new ServiceUnavailableException(
+          "Failed to read the code provider configuration files", e);
     }
   }
 

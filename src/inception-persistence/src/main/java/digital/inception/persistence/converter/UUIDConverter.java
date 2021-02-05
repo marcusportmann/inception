@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2021 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,27 +14,28 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.persistence.converter;
+// package digital.inception.persistence.converter;
 //
 //
 //
-//import java.nio.ByteBuffer;
-//import java.util.UUID;
-//import javax.persistence.AttributeConverter;
-//import javax.persistence.Converter;
+// import java.nio.ByteBuffer;
+// import java.util.UUID;
+// import javax.persistence.AttributeConverter;
+// import javax.persistence.Converter;
 //
-///**
+/// **
 // * The <b>UUIDConverter</b> class implements the custom JPA converter for the UUID type.
 // *
 // * <p>NOTE: This is required for EclipseLink.
 // *
 // * @author Marcus Portmann
 // */
-//@Converter(autoApply = true)
-//public class UUIDConverter implements AttributeConverter<UUID, Object> {
+// @Converter(autoApply = true)
+// public class UUIDConverter implements AttributeConverter<UUID, Object> {
 //
 //  /**
-//   * Converts the value stored in the entity attribute into the data representation to be stored in
+//   * Converts the value stored in the entity attribute into the data representation to be stored
+// in
 //   * the database.
 //   *
 //   * @param attribute the entity attribute value to be converted
@@ -79,4 +80,4 @@
 //            + dbData.getClass().getTypeName()
 //            + ") to a UUID");
 //  }
-//}
+// }

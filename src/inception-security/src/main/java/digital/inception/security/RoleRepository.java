@@ -16,16 +16,13 @@
 
 package digital.inception.security;
 
-
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>RoleRepository</b> interface declares the repository for the <b>Role</b>
- * domain type.
+ * The <b>RoleRepository</b> interface declares the repository for the <b>Role</b> domain type.
  *
  * @author Marcus Portmann
  */

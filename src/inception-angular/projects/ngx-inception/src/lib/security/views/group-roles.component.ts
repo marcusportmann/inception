@@ -29,9 +29,8 @@ import {SecurityService} from '../services/security.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {BackNavigation} from '../../layout/components/back-navigation';
-import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
 
 /**
@@ -124,8 +123,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
         this.selectedRole = undefined;
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
@@ -146,8 +144,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
       this.availableRoles$.next(GroupRolesComponent.calculateAvailableRoles(this.allRoles, this.dataSource.data));
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -170,8 +167,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
       this.loadRolesForGroup();
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -202,8 +198,7 @@ export class GroupRolesComponent extends AdminContainerView implements AfterView
           this.selectedRole = undefined;
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

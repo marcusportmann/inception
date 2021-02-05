@@ -70,7 +70,8 @@ public class IdentityDocument implements Serializable {
 
   /** The ISO 3166-1 alpha-2 code for the country of issue for the identity document. */
   @Schema(
-      description = "The ISO 3166-1 alpha-2 code for the country of issue for the identity document",
+      description =
+          "The ISO 3166-1 alpha-2 code for the country of issue for the identity document",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
@@ -145,7 +146,8 @@ public class IdentityDocument implements Serializable {
    * Constructs a new <b>IdentityDocument</b>.
    *
    * @param type the code for the identity document type
-   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity document
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity
+   *     document
    * @param dateOfIssue the date of issue for the identity document
    * @param number the number for the identity document
    */
@@ -161,7 +163,8 @@ public class IdentityDocument implements Serializable {
    * Constructs a new <b>IdentityDocument</b>.
    *
    * @param type the code for the identity document type
-   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity document
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity
+   *     document
    * @param dateOfIssue the date of issue for the identity document
    * @param dateOfExpiry the optional date of expiry for the identity document
    * @param number thge number for the identity document
@@ -183,7 +186,7 @@ public class IdentityDocument implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -296,7 +299,8 @@ public class IdentityDocument implements Serializable {
   /**
    * Set the ISO 3166-1 alpha-2 code for the country of issue for the identity document.
    *
-   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity document
+   * @param countryOfIssue the ISO 3166-1 alpha-2 code for the country of issue for the identity
+   *     document
    */
   public void setCountryOfIssue(String countryOfIssue) {
     this.countryOfIssue = countryOfIssue;

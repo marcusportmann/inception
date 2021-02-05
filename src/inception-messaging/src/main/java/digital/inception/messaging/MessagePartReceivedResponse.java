@@ -16,15 +16,11 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-
 
 /**
  * The <b>MessagePartReceivedResponse</b> class represents the response to a request sent by a
@@ -55,8 +51,8 @@ public class MessagePartReceivedResponse {
 
   /**
    * The user-friendly text description of the result of processing the message part received
-   * request. The <b>detail</b> field may be blank if the message received request was
-   * processed successfully.
+   * request. The <b>detail</b> field may be blank if the message received request was processed
+   * successfully.
    */
   private String detail;
 

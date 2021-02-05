@@ -16,6 +16,7 @@
 
 package digital.inception.scheduler;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public interface ISchedulerService {
    * @param job the <b>Job</b> instance containing the information for the job
    */
   void createJob(Job job)
-      throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException;
+      throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException;
 
   /**
    * Delete the job
@@ -42,14 +43,14 @@ public interface ISchedulerService {
    * @param jobId the ID for the job
    */
   void deleteJob(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
   /**
    * Execute the job.
    *
    * @param job the job
    */
-  void executeJob(Job job) throws InvalidArgumentException, SchedulerServiceException;
+  void executeJob(Job job) throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the filtered jobs.
@@ -57,7 +58,7 @@ public interface ISchedulerService {
    * @param filter the filter to apply to the jobs
    * @return the jobs
    */
-  List<Job> getFilteredJobs(String filter) throws SchedulerServiceException;
+  List<Job> getFilteredJobs(String filter) throws ServiceUnavailableException;
 
   /**
    * Retrieve the job.
@@ -66,7 +67,7 @@ public interface ISchedulerService {
    * @return the job
    */
   Job getJob(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the name of the job.
@@ -75,14 +76,14 @@ public interface ISchedulerService {
    * @return the name of the job
    */
   String getJobName(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the jobs.
    *
    * @return the jobs
    */
-  List<Job> getJobs() throws SchedulerServiceException;
+  List<Job> getJobs() throws ServiceUnavailableException;
 
   /**
    * Returns the maximum number of times execution will be attempted for a job.
@@ -99,14 +100,14 @@ public interface ISchedulerService {
    * @return the next job that is scheduled for execution or <b>null</b> if no jobs are currently
    *     scheduled for execution
    */
-  Job getNextJobScheduledForExecution() throws SchedulerServiceException;
+  Job getNextJobScheduledForExecution() throws ServiceUnavailableException;
 
   /**
    * Retrieve the unscheduled jobs.
    *
    * @return the unscheduled jobs
    */
-  List<Job> getUnscheduledJobs() throws SchedulerServiceException;
+  List<Job> getUnscheduledJobs() throws ServiceUnavailableException;
 
   /**
    * Reschedule the job for execution.
@@ -116,7 +117,7 @@ public interface ISchedulerService {
    *     next execution time
    */
   void rescheduleJob(String jobId, String schedulingPattern)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
   /**
    * Reset the job locks.
@@ -124,14 +125,14 @@ public interface ISchedulerService {
    * @param status the current status of the jobs that have been locked
    * @param newStatus the new status for the jobs that have been unlocked
    */
-  void resetJobLocks(JobStatus status, JobStatus newStatus) throws SchedulerServiceException;
+  void resetJobLocks(JobStatus status, JobStatus newStatus) throws ServiceUnavailableException;
 
   /**
    * Schedule the next unscheduled job for execution.
    *
    * @return <b>true</b> if a job was successfully scheduled for execution or <b>false</b> otherwise
    */
-  boolean scheduleNextUnscheduledJobForExecution() throws SchedulerServiceException;
+  boolean scheduleNextUnscheduledJobForExecution() throws ServiceUnavailableException;
 
   /**
    * Set the status for the job.
@@ -140,7 +141,7 @@ public interface ISchedulerService {
    * @param status the new status for the job
    */
   void setJobStatus(String jobId, JobStatus status)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
   /**
    * Unlock a locked job.
@@ -149,7 +150,7 @@ public interface ISchedulerService {
    * @param status the new status for the unlocked job
    */
   void unlockJob(String jobId, JobStatus status)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the job.
@@ -157,5 +158,5 @@ public interface ISchedulerService {
    * @param job the <b>Job</b> instance containing the updated information for the job
    */
   void updateJob(Job job)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException;
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException;
 }

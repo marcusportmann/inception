@@ -24,9 +24,8 @@ import {SecurityService} from '../services/security.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {BackNavigation} from '../../layout/components/back-navigation';
-import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Subscription} from 'rxjs';
 import {InternalUserDirectoryComponent} from './internal-user-directory.component';
 import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
@@ -100,8 +99,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
       this.userDirectory = new UserDirectory(uuid(), '', '', []);
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -132,8 +130,7 @@ export class NewUserDirectoryComponent extends AdminContainerView implements Aft
         this.router.navigate(['..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

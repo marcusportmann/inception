@@ -25,9 +25,8 @@ import {DialogService} from '../../dialog/services/dialog.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {FileValidator} from '../../core/validators/file-validator';
 import {BackNavigation} from '../../layout/components/back-navigation';
-import {ReportingServiceError} from '../services/reporting.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Base64} from '../../core/util/base64';
 import {Error} from '../../core/errors/error';
 
@@ -112,12 +111,15 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
         this.nameFormControl.setValue(reportDefinition.name);
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof ReportingServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {
-          this.dialogService.showErrorDialog(error);
+          this.dialogService.showErrorDialog(error).afterClosed()
+          .pipe(first())
+          .subscribe(() => {
+            this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+          });
         }
       });
   }
@@ -146,8 +148,7 @@ export class EditReportDefinitionComponent extends AdminContainerView implements
               this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof ReportingServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
+              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {

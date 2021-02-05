@@ -17,7 +17,7 @@
 package digital.inception.oauth2.server.authorization.token;
 
 import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.nimbusds.jwt. JWTClaimsSet;
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import digital.inception.security.ISecurityService;
 import digital.inception.security.User;

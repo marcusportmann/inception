@@ -16,8 +16,7 @@
 
 package digital.inception.reporting;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
 import java.io.ByteArrayInputStream;
@@ -43,8 +42,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Document;
-
-
 
 /**
  * The <b>ReportingService</b> class provides the Reporting Service implementation.
@@ -95,14 +92,14 @@ public class ReportingService implements IReportingService {
   /**
    * Create the new report definition.
    *
-   * @param reportDefinition the <b>ReportDefinition</b> instance containing the information
-   *     for the new report definition
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the information for the
+   *     new report definition
    */
   @Override
   @Transactional
   public void createReportDefinition(ReportDefinition reportDefinition)
       throws InvalidArgumentException, DuplicateReportDefinitionException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     validateReportDefinition(reportDefinition);
 
     try {
@@ -114,7 +111,7 @@ public class ReportingService implements IReportingService {
     } catch (DuplicateReportDefinitionException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the report definition (" + reportDefinition.getId() + ")", e);
     }
   }
@@ -129,7 +126,7 @@ public class ReportingService implements IReportingService {
   @Override
   public byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -143,7 +140,7 @@ public class ReportingService implements IReportingService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the PDF for the report using the report definition ("
               + reportDefinitionId
               + ")",
@@ -163,7 +160,7 @@ public class ReportingService implements IReportingService {
   public byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Connection connection)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -204,7 +201,7 @@ public class ReportingService implements IReportingService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the PDF for the report using the report definition ("
               + reportDefinitionId
               + ")",
@@ -224,7 +221,7 @@ public class ReportingService implements IReportingService {
   public byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Document document)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -264,7 +261,7 @@ public class ReportingService implements IReportingService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the PDF for the report using the report definintion ("
               + reportDefinitionId
               + ")",
@@ -281,7 +278,7 @@ public class ReportingService implements IReportingService {
   @Transactional
   public void deleteReportDefinition(String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -295,7 +292,7 @@ public class ReportingService implements IReportingService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the report definition (" + reportDefinitionId + ")", e);
     }
   }
@@ -318,7 +315,7 @@ public class ReportingService implements IReportingService {
   @Override
   public ReportDefinition getReportDefinition(String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -335,7 +332,7 @@ public class ReportingService implements IReportingService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the report definition (" + reportDefinitionId + ")", e);
     }
   }
@@ -349,7 +346,7 @@ public class ReportingService implements IReportingService {
   @Override
   public String getReportDefinitionName(String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -365,7 +362,7 @@ public class ReportingService implements IReportingService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the name of the report definition (" + reportDefinitionId + ")", e);
     }
   }
@@ -377,11 +374,11 @@ public class ReportingService implements IReportingService {
    */
   @Override
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
-      throws ReportingServiceException {
+      throws ServiceUnavailableException {
     try {
       return reportDefinitionSummaryRepository.findAll();
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the report definitions", e);
     }
   }
@@ -395,7 +392,7 @@ public class ReportingService implements IReportingService {
   @Override
   public ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -412,7 +409,7 @@ public class ReportingService implements IReportingService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the summary for the report definition (" + reportDefinitionId + ")",
           e);
     }
@@ -424,11 +421,11 @@ public class ReportingService implements IReportingService {
    * @return all the report definitions
    */
   @Override
-  public List<ReportDefinition> getReportDefinitions() throws ReportingServiceException {
+  public List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException {
     try {
       return reportDefinitionRepository.findAll();
     } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to retrieve the report definitions", e);
+      throw new ServiceUnavailableException("Failed to retrieve the report definitions", e);
     }
   }
 
@@ -440,7 +437,7 @@ public class ReportingService implements IReportingService {
    */
   @Override
   public boolean reportDefinitionExists(String reportDefinitionId)
-      throws InvalidArgumentException, ReportingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -448,7 +445,7 @@ public class ReportingService implements IReportingService {
     try {
       return reportDefinitionRepository.existsById(reportDefinitionId);
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the report definition (" + reportDefinitionId + ") exists", e);
     }
   }
@@ -466,14 +463,14 @@ public class ReportingService implements IReportingService {
   /**
    * Update the report definition.
    *
-   * @param reportDefinition the <b>ReportDefinition</b> instance containing the updated
-   *     information for the report definition
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the updated information
+   *     for the report definition
    */
   @Override
   @Transactional
   public void updateReportDefinition(ReportDefinition reportDefinition)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     validateReportDefinition(reportDefinition);
 
     try {
@@ -485,7 +482,7 @@ public class ReportingService implements IReportingService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to update the report definition (" + reportDefinition.getId() + ")", e);
     }
   }

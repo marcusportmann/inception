@@ -42,13 +42,13 @@ public class SystemUnavailableResponse extends Response {
   private String exception;
 
   /** The message. */
-  private String message;
+  private final String message;
 
   /** The optional stack trace associated with the error. */
   private String stackTrace;
 
   /** The date and time the error occurred. */
-  private LocalDateTime timestamp;
+  private final LocalDateTime timestamp;
 
   /** The URI for the HTTP request that resulted in the error. */
   @JsonProperty private String uri;

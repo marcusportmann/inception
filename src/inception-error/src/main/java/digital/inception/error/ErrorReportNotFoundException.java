@@ -25,8 +25,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>ErrorReportNotFoundException</b> exception is thrown to indicate that the required
- * error report could not be found when working with the Error Service.
+ * The <b>ErrorReportNotFoundException</b> exception is thrown to indicate that the required error
+ * report could not be found when working with the Error Service.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

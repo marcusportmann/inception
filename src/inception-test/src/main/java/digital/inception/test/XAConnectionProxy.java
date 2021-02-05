@@ -30,7 +30,7 @@ import javax.transaction.xa.XAResource;
  */
 public class XAConnectionProxy implements XAConnection {
 
-  private XAConnection xaConnection;
+  private final XAConnection xaConnection;
 
   XAConnectionProxy(XAConnection xaConnection) {
     this.xaConnection = xaConnection;

@@ -29,7 +29,7 @@ public class RegionId implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the region. */
+  /** The ISO 3166-2 subdivision code for the region. */
   private String code;
 
   /** The ISO 3166-1 alpha-2 code for the country the region is associated with. */
@@ -45,7 +45,7 @@ public class RegionId implements Serializable {
    * Constructs a new <b>RegionId</b>.
    *
    * @param country the ISO 3166-1 alpha-2 code for the country the region is associated with
-   * @param code the code for the region
+   * @param code the ISO 3166-2 subdivision code for the region
    * @param localeId the Unicode locale identifier for the region
    */
   public RegionId(String country, String code, String localeId) {
@@ -58,7 +58,7 @@ public class RegionId implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {

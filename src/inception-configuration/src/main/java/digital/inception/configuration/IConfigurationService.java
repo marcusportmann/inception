@@ -16,6 +16,7 @@
 
 package digital.inception.configuration;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 
@@ -34,8 +35,7 @@ public interface IConfigurationService {
    * @param key the key for the configuration
    */
   void deleteConfiguration(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException;
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the binary configuration.
@@ -44,8 +44,7 @@ public interface IConfigurationService {
    * @return the binary configuration
    */
   byte[] getBinary(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException;
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the binary configuration.
@@ -55,7 +54,7 @@ public interface IConfigurationService {
    * @return the binary configuration or the default value if the configuration does not exist
    */
   byte[] getBinary(String key, byte[] defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the <b>Boolean</b> configuration.
@@ -64,8 +63,7 @@ public interface IConfigurationService {
    * @return the <b>Boolean</b> configuration
    */
   boolean getBoolean(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException;
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the <b>Boolean</b> configuration.
@@ -76,7 +74,7 @@ public interface IConfigurationService {
    *     not exist
    */
   boolean getBoolean(String key, boolean defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the configuration.
@@ -85,22 +83,21 @@ public interface IConfigurationService {
    * @return the configuration
    */
   Configuration getConfiguration(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException;
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve all the configuration summaries.
    *
    * @return all the configuration summaries
    */
-  List<ConfigurationSummary> getConfigurationSummaries() throws ConfigurationServiceException;
+  List<ConfigurationSummary> getConfigurationSummaries() throws ServiceUnavailableException;
 
   /**
    * Retrieve all the configurations.
    *
    * @return all the configurations
    */
-  List<Configuration> getConfigurations() throws ConfigurationServiceException;
+  List<Configuration> getConfigurations() throws ServiceUnavailableException;
 
   /**
    * Retrieve the <b>Double</b> configuration.
@@ -109,8 +106,7 @@ public interface IConfigurationService {
    * @return the <b>Double</b> configuration
    */
   Double getDouble(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException;
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the <b>Double</b> configuration.
@@ -121,7 +117,7 @@ public interface IConfigurationService {
    *     not exist
    */
   double getDouble(String key, double defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the filtered configuration summaries.
@@ -130,7 +126,7 @@ public interface IConfigurationService {
    * @return the configuration summaries
    */
   List<ConfigurationSummary> getFilteredConfigurationSummaries(String filter)
-      throws ConfigurationServiceException;
+      throws ServiceUnavailableException;
 
   /**
    * Retrieve the filtered configurations.
@@ -138,7 +134,7 @@ public interface IConfigurationService {
    * @param filter the filter to apply to the keys for the configuration
    * @return the configurations
    */
-  List<Configuration> getFilteredConfigurations(String filter) throws ConfigurationServiceException;
+  List<Configuration> getFilteredConfigurations(String filter) throws ServiceUnavailableException;
 
   /**
    * Retrieve the <b>Integer</b> configuration.
@@ -147,8 +143,7 @@ public interface IConfigurationService {
    * @return the <b>Integer</b> configuration
    */
   Integer getInteger(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException;
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the <b>Integer</b> configuration.
@@ -159,7 +154,7 @@ public interface IConfigurationService {
    *     not exist
    */
   int getInteger(String key, int defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the <b>Long</b> configuration.
@@ -168,8 +163,7 @@ public interface IConfigurationService {
    * @return the <b>Long</b> configuration
    */
   Long getLong(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException;
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the <b>Long</b> configuration.
@@ -180,7 +174,7 @@ public interface IConfigurationService {
    *     exist
    */
   long getLong(String key, long defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the value for the <b>String</b> configuration.
@@ -189,8 +183,7 @@ public interface IConfigurationService {
    * @return the value for the <b>String</b> configuration
    */
   String getString(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException;
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the value for the <b>String</b> configuration.
@@ -201,7 +194,7 @@ public interface IConfigurationService {
    *     does not exist
    */
   String getString(String key, String defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Check if a configuration with the specified key exists.
@@ -210,7 +203,7 @@ public interface IConfigurationService {
    * @return <b>true</b> if the configuration with the specified key exists or <b>false</b>
    *     otherwise
    */
-  boolean keyExists(String key) throws InvalidArgumentException, ConfigurationServiceException;
+  boolean keyExists(String key) throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Set the configuration.
@@ -218,7 +211,7 @@ public interface IConfigurationService {
    * @param configuration the configuration
    */
   void setConfiguration(Configuration configuration)
-      throws InvalidArgumentException, ConfigurationServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Set the configuration key to the specified value.
@@ -228,5 +221,5 @@ public interface IConfigurationService {
    * @param description the description for the configuration
    */
   void setConfiguration(String key, Object value, String description)
-      throws InvalidArgumentException, ConfigurationServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 }

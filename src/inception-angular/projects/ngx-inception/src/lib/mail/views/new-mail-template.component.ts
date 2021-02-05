@@ -25,9 +25,8 @@ import {DialogService} from '../../dialog/services/dialog.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {FileValidator} from '../../core/validators/file-validator';
 import {BackNavigation} from '../../layout/components/back-navigation';
-import {MailServiceError} from '../services/mail.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
 import {Base64} from '../../core/util/base64';
 import {MailTemplateContentType} from '../services/mail-template-content-type';
@@ -126,8 +125,7 @@ export class NewMailTemplateComponent extends AdminContainerView implements Afte
             this.router.navigate(['..'], {relativeTo: this.activatedRoute});
           }, (error: Error) => {
             // noinspection SuspiciousTypeOfGuard
-            if ((error instanceof MailServiceError) || (error instanceof AccessDeniedError) ||
-              (error instanceof SystemUnavailableError)) {
+            if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
               // noinspection JSIgnoredPromiseFromCall
               this.router.navigateByUrl('/error/send-error-report', {state: {error}});
             } else {

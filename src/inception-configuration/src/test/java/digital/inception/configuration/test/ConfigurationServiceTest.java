@@ -16,15 +16,12 @@
 
 package digital.inception.configuration.test;
 
-
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import digital.inception.configuration.Configuration;
-import digital.inception.configuration.ConfigurationServiceException;
 import digital.inception.configuration.IConfigurationService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
@@ -39,11 +36,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-
-
 /**
- * The <b>ConfigurationServiceTest</b> class contains the implementation of the JUnit tests
- * for the <b>ConfigurationService</b> class.
+ * The <b>ConfigurationServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>ConfigurationService</b> class.
  *
  * @author Marcus Portmann
  */
@@ -226,7 +221,7 @@ public class ConfigurationServiceTest {
 
   /** Test the configurations. */
   @Test
-  public void configurationsTest() throws ConfigurationServiceException {
+  public void configurationsTest() throws Exception {
     List<Configuration> configurations = configurationService.getConfigurations();
   }
 

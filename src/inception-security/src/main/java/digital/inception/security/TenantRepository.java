@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,11 +26,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
-
 /**
- * The <b>TenantRepository</b> interface declares the repository for the <b>
- * Tenant</b> domain type.
+ * The <b>TenantRepository</b> interface declares the repository for the <b> Tenant</b> domain type.
  *
  * @author Marcus Portmann
  */

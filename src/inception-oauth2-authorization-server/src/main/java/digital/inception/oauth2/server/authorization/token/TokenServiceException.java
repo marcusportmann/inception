@@ -16,17 +16,13 @@
 
 package digital.inception.oauth2.server.authorization.token;
 
-
-
 import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * The <b>TokenServiceException</b> exception is thrown to indicate an error condition when
- * working with the Token Service.
+ * The <b>TokenServiceException</b> exception is thrown to indicate an error condition when working
+ * with the Token Service.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

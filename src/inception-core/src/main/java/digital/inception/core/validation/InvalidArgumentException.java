@@ -88,9 +88,9 @@ public class InvalidArgumentException extends Exception {
   }
 
   /**
-   * Constructs a new <b>InvalidArgumentException</b> with the specified cause and a message
-   * of <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and
-   * message of cause).
+   * Constructs a new <b>InvalidArgumentException</b> with the specified cause and a message of
+   * <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and message
+   * of cause).
    *
    * @param name the name of the invalid argument
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A

@@ -16,6 +16,7 @@
 
 package digital.inception.bmi;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.xml.XmlSchemaClasspathInputSource;
 import java.io.ByteArrayInputStream;
@@ -76,7 +77,8 @@ public class ProcessService implements IProcessService {
   @Override
   @Transactional
   public List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
-      throws InvalidBPMNException, DuplicateProcessDefinitionException, ProcessServiceException {
+      throws InvalidBPMNException, DuplicateProcessDefinitionException,
+          ServiceUnavailableException {
     try {
       List<ProcessDefinitionSummary> processDefinitionSummaries =
           validateBPMN(processDefinitionData);
@@ -103,7 +105,7 @@ public class ProcessService implements IProcessService {
     } catch (InvalidBPMNException | DuplicateProcessDefinitionException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ProcessServiceException("Failed to create the process definition", e);
+      throw new ServiceUnavailableException("Failed to create the process definition", e);
     }
   }
 
@@ -114,7 +116,7 @@ public class ProcessService implements IProcessService {
    */
   @Override
   public List<ProcessDefinitionSummary> getProcessDefinitionSummaries()
-      throws ProcessServiceException {
+      throws ServiceUnavailableException {
     try {
       ProcessDefinitionQuery processDefinitionQuery =
           processEngine.getRepositoryService().createProcessDefinitionQuery().latestVersion();
@@ -131,7 +133,8 @@ public class ProcessService implements IProcessService {
 
       return processDefinitionSummaries;
     } catch (Throwable e) {
-      throw new ProcessServiceException("Failed to retrieve the process definition summaries", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the process definition summaries", e);
     }
   }
 
@@ -143,7 +146,7 @@ public class ProcessService implements IProcessService {
    */
   @Override
   public boolean processDefinitionExists(String processDefinitionId)
-      throws ProcessServiceException {
+      throws ServiceUnavailableException {
     try {
       ProcessDefinitionQuery processDefinitionQuery =
           processEngine.getRepositoryService().createProcessDefinitionQuery();
@@ -151,7 +154,7 @@ public class ProcessService implements IProcessService {
 
       return processDefinitionQuery.count() > 0;
     } catch (Throwable e) {
-      throw new ProcessServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the process definition (" + processDefinitionId + ") exists", e);
     }
   }
@@ -165,7 +168,7 @@ public class ProcessService implements IProcessService {
   @Override
   @Transactional
   public void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)
-      throws ProcessDefinitionNotFoundException, ProcessServiceException {
+      throws ProcessDefinitionNotFoundException, ServiceUnavailableException {
     try {
       if (!processDefinitionExists(processDefinitionId)) {
         throw new ProcessDefinitionNotFoundException(processDefinitionId);
@@ -178,7 +181,7 @@ public class ProcessService implements IProcessService {
     } catch (ProcessDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ProcessServiceException(
+      throw new ServiceUnavailableException(
           "Failed to start the process instance (" + processDefinitionId + ")", e);
     }
   }
@@ -192,7 +195,7 @@ public class ProcessService implements IProcessService {
   @Override
   @Transactional
   public List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
-      throws InvalidBPMNException, ProcessDefinitionNotFoundException, ProcessServiceException {
+      throws InvalidBPMNException, ProcessDefinitionNotFoundException, ServiceUnavailableException {
     try {
       List<ProcessDefinitionSummary> processDefinitionSummaries =
           validateBPMN(processDefinitionData);
@@ -219,7 +222,7 @@ public class ProcessService implements IProcessService {
     } catch (InvalidBPMNException | ProcessDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ProcessServiceException("Failed to update the process definition", e);
+      throw new ServiceUnavailableException("Failed to update the process definition", e);
     }
   }
 
@@ -232,7 +235,7 @@ public class ProcessService implements IProcessService {
    */
   @Override
   public List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
-      throws InvalidBPMNException, ProcessServiceException {
+      throws InvalidBPMNException, ServiceUnavailableException {
     return validateBPMN(bpmnXml.getBytes(StandardCharsets.UTF_8));
   }
 
@@ -245,7 +248,7 @@ public class ProcessService implements IProcessService {
    */
   @Override
   public List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
-      throws InvalidBPMNException, ProcessServiceException {
+      throws InvalidBPMNException, ServiceUnavailableException {
     try {
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
@@ -344,7 +347,7 @@ public class ProcessService implements IProcessService {
     } catch (SAXException e) {
       throw new InvalidBPMNException(e);
     } catch (Throwable e) {
-      throw new ProcessServiceException("Failed to validate the BPMN XML", e);
+      throw new ServiceUnavailableException("Failed to validate the BPMN XML", e);
     }
   }
 }

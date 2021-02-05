@@ -20,10 +20,9 @@ import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {ApiError} from '../../core/errors/api-error';
 import {
-  DuplicateReportDefinitionError, ReportDefinitionNotFoundError, ReportingServiceError
-} from './reporting.service.errors';
+  DuplicateReportDefinitionError, ReportDefinitionNotFoundError} from './reporting.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {ReportDefinition} from './report-definition';
 import {ReportDefinitionSummary} from './report-definition-summary';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
@@ -71,12 +70,12 @@ export class ReportingService {
           } else if (apiError.code === 'DuplicateReportDefinitionError') {
             return throwError(new DuplicateReportDefinitionError(apiError));
           } else {
-            return throwError(new ReportingServiceError('Failed to create the report definition.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to create the report definition.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to create the report definition.', httpErrorResponse));
         }
       }));
   }
@@ -101,12 +100,12 @@ export class ReportingService {
           if (apiError.code === 'ReportDefinitionNotFoundError') {
             return throwError(new ReportDefinitionNotFoundError(apiError));
           } else {
-            return throwError(new ReportingServiceError('Failed to delete the report definition.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to delete the report definition.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to delete the report definition.', httpErrorResponse));
         }
       }));
   }
@@ -131,12 +130,12 @@ export class ReportingService {
           if (apiError.code === 'ReportDefinitionNotFoundError') {
             return throwError(new ReportDefinitionNotFoundError(apiError));
           } else {
-            return throwError(new ReportingServiceError('Failed to retrieve the report definition.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to retrieve the report definition.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the report definition.', httpErrorResponse));
         }
       }));
   }
@@ -161,12 +160,12 @@ export class ReportingService {
         if (apiError.code === 'ReportDefinitionNotFoundError') {
           return throwError(new ReportDefinitionNotFoundError(apiError));
         } else {
-          return throwError(new ReportingServiceError('Failed to retrieve the report definition name.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the report definition name.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the report definition name.', httpErrorResponse));
       }
     }));
   }
@@ -186,11 +185,11 @@ export class ReportingService {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
           return throwError(
-            new ReportingServiceError('Failed to retrieve the summaries for the report definitions.', apiError));
+            new ServiceUnavailableError('Failed to retrieve the summaries for the report definitions.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the report definitions.', httpErrorResponse));
         }
       }));
   }
@@ -209,11 +208,11 @@ export class ReportingService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new ReportingServiceError('Failed to retrieve the report definitions.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the report definitions.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the report definitions.', httpErrorResponse));
         }
       }));
   }
@@ -238,12 +237,12 @@ export class ReportingService {
           if (apiError.code === 'ReportDefinitionNotFoundError') {
             return throwError(new ReportDefinitionNotFoundError(apiError));
           } else {
-            return throwError(new ReportingServiceError('Failed to update the report definition.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to update the report definition.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to update the report definition.', httpErrorResponse));
         }
       }));
   }

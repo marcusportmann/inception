@@ -16,6 +16,7 @@
 
 package digital.inception.security;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.PasswordUtil;
 import digital.inception.core.util.RandomStringGenerator;
@@ -208,7 +209,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   public void addMemberToGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          UserNotFoundException, ExistingGroupMemberException, SecurityServiceException {
+          UserNotFoundException, ExistingGroupMemberException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -245,7 +246,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void addRoleToGroup(UUID userDirectoryId, String groupName, String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
+          RoleNotFoundException, ExistingGroupRoleException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -277,7 +278,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void addUserDirectoryToTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
-          ExistingTenantUserDirectoryException, SecurityServiceException {
+          ExistingTenantUserDirectoryException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -305,7 +306,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
         | ExistingTenantUserDirectoryException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to add the user directory ("
               + userDirectoryId
               + ") to the tenant ("
@@ -326,7 +327,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void addUserToGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          UserNotFoundException, SecurityServiceException {
+          UserNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -370,7 +371,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       boolean resetPasswordHistory,
       PasswordChangeReason reason)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -430,7 +431,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public UUID authenticate(String username, String password)
       throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
-          ExpiredPasswordException, UserNotFoundException, SecurityServiceException {
+          ExpiredPasswordException, UserNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -447,7 +448,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
         IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
         if (internalUserDirectory == null) {
-          throw new SecurityServiceException(
+          throw new ServiceUnavailableException(
               "The user directory ID ("
                   + internalUserDirectoryId
                   + ") for the internal user ("
@@ -485,7 +486,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
         | ExpiredPasswordException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to authenticate the user (" + username + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to authenticate the user (" + username + ")", e);
     }
   }
 
@@ -501,7 +503,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public UUID changePassword(String username, String password, String newPassword)
       throws InvalidArgumentException, AuthenticationFailedException, UserLockedException,
-          UserNotFoundException, ExistingPasswordException, SecurityServiceException {
+          UserNotFoundException, ExistingPasswordException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -522,7 +524,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
         IUserDirectory internalUserDirectory = userDirectories.get(internalUserDirectoryId);
 
         if (internalUserDirectory == null) {
-          throw new SecurityServiceException(
+          throw new ServiceUnavailableException(
               "The user directory ID ("
                   + internalUserDirectoryId
                   + ") for the internal user ("
@@ -560,7 +562,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
         | ExistingPasswordException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to change the password for the user (" + username + ")", e);
     }
   }
@@ -573,7 +575,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void createFunction(Function function)
-      throws InvalidArgumentException, DuplicateFunctionException, SecurityServiceException {
+      throws InvalidArgumentException, DuplicateFunctionException, ServiceUnavailableException {
     validateFunction(function);
 
     try {
@@ -585,7 +587,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (DuplicateFunctionException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the function (" + function.getCode() + ")", e);
     }
   }
@@ -599,7 +601,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void createGroup(Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     validateGroup(group);
 
     IUserDirectory userDirectory = userDirectories.get(group.getUserDirectoryId());
@@ -622,7 +624,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public UserDirectory createTenant(Tenant tenant, boolean createUserDirectory)
-      throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException {
+      throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException {
     validateTenant(tenant);
 
     UserDirectory userDirectory = null;
@@ -654,7 +656,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (DuplicateTenantException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to create the tenant (" + tenant.getId() + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to create the tenant (" + tenant.getId() + ")", e);
     }
   }
 
@@ -669,7 +672,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     validateUser(user);
 
     IUserDirectory userDirectory = userDirectories.get(user.getUserDirectoryId());
@@ -693,7 +696,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void createUserDirectory(UserDirectory userDirectory)
-      throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException {
+      throws InvalidArgumentException, DuplicateUserDirectoryException,
+          ServiceUnavailableException {
     validateUserDirectory(userDirectory);
 
     try {
@@ -716,7 +720,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (DuplicateUserDirectoryException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the user directory (" + userDirectory.getName() + ")", e);
     }
   }
@@ -729,7 +733,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void deleteFunction(String functionCode)
-      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(functionCode)) {
       throw new InvalidArgumentException("functionCode");
     }
@@ -743,7 +747,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (FunctionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to delete the function (" + functionCode + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to delete the function (" + functionCode + ")", e);
     }
   }
 
@@ -757,7 +762,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void deleteGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          ExistingGroupMembersException, SecurityServiceException {
+          ExistingGroupMembersException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -783,7 +788,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void deleteTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -797,7 +802,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to delete the tenant (" + tenantId + ")", e);
+      throw new ServiceUnavailableException("Failed to delete the tenant (" + tenantId + ")", e);
     }
   }
 
@@ -811,7 +816,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void deleteUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -837,7 +842,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void deleteUserDirectory(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -857,7 +862,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the user directory (" + userDirectoryId + ")", e);
     }
   }
@@ -872,7 +877,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public List<User> findUsers(UUID userDirectoryId, List<UserAttribute> userAttributes)
       throws InvalidArgumentException, UserDirectoryNotFoundException, InvalidAttributeException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -898,7 +903,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public Function getFunction(String functionCode)
-      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(functionCode)) {
       throw new InvalidArgumentException("functionCode");
     }
@@ -914,7 +919,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (FunctionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the function (" + functionCode + ")", e);
     }
   }
@@ -929,7 +934,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public List<String> getFunctionCodesForUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -953,11 +958,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the authorised functions
    */
   @Override
-  public List<Function> getFunctions() throws SecurityServiceException {
+  public List<Function> getFunctions() throws ServiceUnavailableException {
     try {
       return functionRepository.findAll();
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to retrieve the functions", e);
+      throw new ServiceUnavailableException("Failed to retrieve the functions", e);
     }
   }
 
@@ -971,7 +976,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public Group getGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -997,7 +1002,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<String> getGroupNames(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1021,7 +1026,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public List<String> getGroupNamesForUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1047,7 +1052,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<Group> getGroups(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1078,7 +1083,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1110,7 +1115,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public List<Group> getGroupsForUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1138,7 +1143,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public List<GroupMember> getMembersForGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1177,7 +1182,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       Integer pageIndex,
       Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1213,7 +1218,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public List<String> getRoleCodesForGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1241,7 +1246,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public List<String> getRoleCodesForUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1265,11 +1270,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the roles
    */
   @Override
-  public List<Role> getRoles() throws SecurityServiceException {
+  public List<Role> getRoles() throws ServiceUnavailableException {
     try {
       return roleRepository.findAll();
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to retrieve the roles", e);
+      throw new ServiceUnavailableException("Failed to retrieve the roles", e);
     }
   }
 
@@ -1283,7 +1288,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public List<GroupRole> getRolesForGroup(UUID userDirectoryId, String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1309,7 +1314,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public Tenant getTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -1325,7 +1330,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to retrieve the tenant (" + tenantId + ")", e);
+      throw new ServiceUnavailableException("Failed to retrieve the tenant (" + tenantId + ")", e);
     }
   }
 
@@ -1339,7 +1344,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UUID> getTenantIdsForUserDirectory(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1353,7 +1358,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the IDs for the tenants for the user directory ("
               + userDirectoryId
               + ")",
@@ -1369,7 +1374,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public String getTenantName(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -1385,7 +1390,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the name of the tenant (" + tenantId + ")", e);
     }
   }
@@ -1396,11 +1401,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the tenants
    */
   @Override
-  public List<Tenant> getTenants() throws SecurityServiceException {
+  public List<Tenant> getTenants() throws ServiceUnavailableException {
     try {
       return tenantRepository.findAll();
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to retrieve the tenants", e);
+      throw new ServiceUnavailableException("Failed to retrieve the tenants", e);
     }
   }
 
@@ -1416,7 +1421,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public Tenants getTenants(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, SecurityServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -1477,7 +1482,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
       message += e.getMessage();
 
-      throw new SecurityServiceException(message, e);
+      throw new ServiceUnavailableException(message, e);
     }
   }
 
@@ -1489,7 +1494,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<Tenant> getTenantsForUserDirectory(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1503,7 +1508,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the tenants associated with the user directory ("
               + userDirectoryId
               + ")",
@@ -1521,7 +1526,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public User getUser(UUID userDirectoryId, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1545,11 +1550,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the user directories
    */
   @Override
-  public List<UserDirectory> getUserDirectories() throws SecurityServiceException {
+  public List<UserDirectory> getUserDirectories() throws ServiceUnavailableException {
     try {
       return userDirectoryRepository.findAll();
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to retrieve the user directories", e);
+      throw new ServiceUnavailableException("Failed to retrieve the user directories", e);
     }
   }
 
@@ -1565,7 +1570,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public UserDirectories getUserDirectories(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, SecurityServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -1616,7 +1621,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to retrieve the filtered user directories", e);
+      throw new ServiceUnavailableException("Failed to retrieve the filtered user directories", e);
     }
   }
 
@@ -1628,7 +1633,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UserDirectory> getUserDirectoriesForTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -1642,7 +1647,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the user directories associated with the tenant (" + tenantId + ")",
           e);
     }
@@ -1656,7 +1661,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public UserDirectory getUserDirectory(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1673,7 +1678,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the user directory (" + userDirectoryId + ")", e);
     }
   }
@@ -1686,7 +1691,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public UserDirectoryCapabilities getUserDirectoryCapabilities(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1710,7 +1715,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public UUID getUserDirectoryIdForUser(String username)
-      throws InvalidArgumentException, SecurityServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -1741,7 +1746,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
         return null;
       }
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the user directory ID for the user (" + username + ")", e);
     }
   }
@@ -1756,7 +1761,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UUID> getUserDirectoryIdsForTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -1770,7 +1775,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the IDs for the user directories associated with the tenant ("
               + tenantId
               + ")",
@@ -1790,7 +1795,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UUID> getUserDirectoryIdsForUser(String username)
-      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -1825,7 +1830,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the IDs for the user directories the user ("
               + username
               + ") is associated with",
@@ -1841,7 +1846,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public String getUserDirectoryName(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1857,7 +1862,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the name of the user directory (" + userDirectoryId + ")", e);
     }
   }
@@ -1874,7 +1879,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public UserDirectorySummaries getUserDirectorySummaries(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, SecurityServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -1927,7 +1932,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the filtered summaries for the user directories", e);
     }
   }
@@ -1940,7 +1945,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<UserDirectorySummary> getUserDirectorySummariesForTenant(UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -1954,7 +1959,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the user "
               + "directories associated with the tenant ("
               + tenantId
@@ -1972,7 +1977,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public UserDirectoryType getUserDirectoryTypeForUserDirectory(UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException,
-          UserDirectoryTypeNotFoundException, SecurityServiceException {
+          UserDirectoryTypeNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -1996,7 +2001,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserDirectoryNotFoundException | UserDirectoryTypeNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the user directory type for the user directory ("
               + userDirectoryId
               + ")",
@@ -2010,11 +2015,11 @@ public class SecurityService implements ISecurityService, InitializingBean {
    * @return the user directory types
    */
   @Override
-  public List<UserDirectoryType> getUserDirectoryTypes() throws SecurityServiceException {
+  public List<UserDirectoryType> getUserDirectoryTypes() throws ServiceUnavailableException {
     try {
       return userDirectoryTypeRepository.findAll();
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to retrieve the user directory types", e);
+      throw new ServiceUnavailableException("Failed to retrieve the user directory types", e);
     }
   }
 
@@ -2028,7 +2033,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public String getUserName(UUID userDirectoryId, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -2054,7 +2059,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public List<User> getUsers(UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -2087,7 +2092,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -2127,7 +2132,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void initiatePasswordReset(String username, String resetPasswordUrl, boolean sendEmail)
-      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
     initiatePasswordReset(username, resetPasswordUrl, sendEmail, null);
   }
 
@@ -2143,7 +2148,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void initiatePasswordReset(
       String username, String resetPasswordUrl, boolean sendEmail, String securityCode)
-      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -2186,7 +2191,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to initiate the password reset process for the user (" + username + ")", e);
     }
   }
@@ -2200,7 +2205,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
    */
   @Override
   public boolean isExistingUser(UUID userDirectoryId, String username)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -2229,7 +2234,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   public boolean isUserInGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          GroupNotFoundException, SecurityServiceException {
+          GroupNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -2253,7 +2258,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
   /** Reload the user directories. */
   @Override
-  public void reloadUserDirectories() throws SecurityServiceException {
+  public void reloadUserDirectories() throws ServiceUnavailableException {
     try {
       Map<UUID, IUserDirectory> reloadedUserDirectories = new ConcurrentHashMap<>();
 
@@ -2282,10 +2287,10 @@ public class SecurityService implements ISecurityService, InitializingBean {
         }
 
         try {
-          Class<?> clazz = userDirectoryType.getUserDirectoryClass();
+          Class<?> clazz = Thread.currentThread().getContextClassLoader().loadClass(userDirectoryType.getUserDirectoryClassName());
 
           if (!IUserDirectory.class.isAssignableFrom(clazz)) {
-            throw new SecurityServiceException(
+            throw new ServiceUnavailableException(
                 "The user directory class ("
                     + userDirectoryType.getUserDirectoryClassName()
                     + ") does not implement the IUserDirectory interface");
@@ -2305,7 +2310,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
                     UserRepository.class,
                     RoleRepository.class);
           } catch (NoSuchMethodException e) {
-            throw new SecurityServiceException(
+            throw new ServiceUnavailableException(
                 "The user directory class ("
                     + userDirectoryType.getUserDirectoryClassName()
                     + ") does not provide a valid constructor (long, Map<String,String>)");
@@ -2323,7 +2328,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
           reloadedUserDirectories.put(userDirectory.getId(), userDirectoryInstance);
         } catch (Throwable e) {
-          throw new SecurityServiceException(
+          throw new ServiceUnavailableException(
               "Failed to initialize the user directory ("
                   + userDirectory.getId()
                   + ")("
@@ -2335,7 +2340,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
 
       this.userDirectories = reloadedUserDirectories;
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to reload the user directories", e);
+      throw new ServiceUnavailableException("Failed to reload the user directories", e);
     }
   }
 
@@ -2352,7 +2357,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   public void removeMemberFromGroup(
       UUID userDirectoryId, String groupName, GroupMemberType memberType, String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          GroupMemberNotFoundException, SecurityServiceException {
+          GroupMemberNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -2389,7 +2394,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void removeRoleFromGroup(UUID userDirectoryId, String groupName, String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          GroupRoleNotFoundException, SecurityServiceException {
+          GroupRoleNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -2421,7 +2426,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void removeUserDirectoryFromTenant(UUID tenantId, UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException,
-          TenantUserDirectoryNotFoundException, SecurityServiceException {
+          TenantUserDirectoryNotFoundException, ServiceUnavailableException {
     if (tenantId == null) {
       throw new InvalidArgumentException("tenantId");
     }
@@ -2443,7 +2448,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (TenantNotFoundException | TenantUserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to add the user directory ("
               + userDirectoryId
               + ") to the tenant ("
@@ -2464,7 +2469,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void removeUserFromGroup(UUID userDirectoryId, String groupName, String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          UserNotFoundException, SecurityServiceException {
+          UserNotFoundException, ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -2497,7 +2502,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void resetPassword(String username, String newPassword, String securityCode)
       throws InvalidArgumentException, UserNotFoundException, UserLockedException,
-          InvalidSecurityCodeException, ExistingPasswordException, SecurityServiceException {
+          InvalidSecurityCodeException, ExistingPasswordException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -2540,7 +2545,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
         | ExistingPasswordException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to reset the password for the user (" + username + ")", e);
     }
   }
@@ -2553,7 +2558,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void updateFunction(Function function)
-      throws InvalidArgumentException, FunctionNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, FunctionNotFoundException, ServiceUnavailableException {
     validateFunction(function);
 
     try {
@@ -2565,7 +2570,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (FunctionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to update the function (" + function.getCode() + ")", e);
     }
   }
@@ -2579,7 +2584,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void updateGroup(Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     validateGroup(group);
 
     IUserDirectory userDirectory = userDirectories.get(group.getUserDirectoryId());
@@ -2599,7 +2604,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void updateTenant(Tenant tenant)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     validateTenant(tenant);
 
     try {
@@ -2618,7 +2623,8 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (TenantNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to update the tenant (" + tenant.getId() + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to update the tenant (" + tenant.getId() + ")", e);
     }
   }
 
@@ -2633,7 +2639,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Transactional
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     validateUser(user);
 
     IUserDirectory userDirectory = userDirectories.get(user.getUserDirectoryId());
@@ -2653,7 +2659,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   @Override
   @Transactional
   public void updateUserDirectory(UserDirectory userDirectory)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     validateUserDirectory(userDirectory);
 
     try {
@@ -2667,7 +2673,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
     } catch (UserDirectoryNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to update the user directory (" + userDirectory.getName() + ")", e);
     }
   }
@@ -2681,14 +2687,15 @@ public class SecurityService implements ISecurityService, InitializingBean {
    *     user with the specified username is associated with or <b>null/b> if an internal user with
    *     the specified username could not be found
    */
-  private UUID getInternalUserDirectoryIdForUser(String username) throws SecurityServiceException {
+  private UUID getInternalUserDirectoryIdForUser(String username)
+      throws ServiceUnavailableException {
     try {
       Optional<UUID> userDirectoryIdOptional =
           userRepository.getUserDirectoryIdByUsernameIgnoreCase(username);
 
       return userDirectoryIdOptional.orElse(null);
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the ID for the internal user directory for the internal user ("
               + username
               + ")",
@@ -2715,7 +2722,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
   }
 
   private UserDirectory newInternalUserDirectoryForTenant(Tenant tenant)
-      throws SecurityServiceException {
+      throws ServiceUnavailableException {
     UserDirectory userDirectory = new UserDirectory();
 
     if (tenant.getId() != null) {
@@ -2734,13 +2741,17 @@ public class SecurityService implements ISecurityService, InitializingBean {
             + "<parameter><name>MaxFilteredUsers</name><value>100</value></parameter>"
             + "</userDirectory>";
 
+    try {
     userDirectory.setConfiguration(buffer);
+    } catch (Throwable e) {
+      throw new ServiceUnavailableException("Failed to set the configuration for the user directory", e);
+    }
 
     return userDirectory;
   }
 
   private void sendPasswordResetEmail(User user, String resetPasswordUrl, String securityCode)
-      throws SecurityServiceException {
+      throws ServiceUnavailableException {
     try {
       if (StringUtils.hasText(user.getEmail())) {
         Map<String, String> parameters = new HashMap<>();
@@ -2763,7 +2774,7 @@ public class SecurityService implements ISecurityService, InitializingBean {
             parameters);
       }
     } catch (Throwable e) {
-      throw new SecurityServiceException("Failed to send the password reset e-mail", e);
+      throw new ServiceUnavailableException("Failed to send the password reset e-mail", e);
     }
   }
 

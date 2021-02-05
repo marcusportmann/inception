@@ -16,6 +16,7 @@
 
 package digital.inception.messaging;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.util.CryptoUtil;
 import digital.inception.core.util.ServiceUtil;
@@ -197,7 +198,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public boolean allMessagePartsForMessageQueuedForAssembly(UUID messageId, int totalParts)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messageId == null) {
       throw new InvalidArgumentException("messageId");
     }
@@ -210,7 +211,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
       return messagePartRepository.countMessagePartsQueuedForAssemblyByMessageId(messageId)
           == totalParts;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether all the message parts for the message ("
               + messageId
               + ") have been queued for assembly",
@@ -226,7 +227,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void archiveMessage(Message message)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     validateMessage(message);
 
     if (isArchivableMessage(message)) {
@@ -235,7 +236,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
         archivedMessageRepository.saveAndFlush(archivedMessage);
       } catch (Throwable e) {
-        throw new MessagingServiceException(
+        throw new ServiceUnavailableException(
             "Failed to archive the message (" + message.getId() + ")", e);
       }
     }
@@ -250,7 +251,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void assembleMessage(UUID messageId, int totalParts)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messageId == null) {
       throw new InvalidArgumentException("messageId");
     }
@@ -345,7 +346,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
         deleteMessagePartsForMessage(messageId);
       }
     } catch (Exception e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to assemble the message parts for the message (" + messageId + ")", e);
     }
   }
@@ -384,13 +385,13 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void createMessage(Message message)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     validateMessage(message);
 
     try {
       messageRepository.saveAndFlush(message);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the message (" + message.getId() + ")", e);
     }
   }
@@ -404,13 +405,13 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void createMessagePart(MessagePart messagePart)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     validateMessageParty(messagePart);
 
     try {
       messagePartRepository.saveAndFlush(messagePart);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to add the message part (" + messagePart.getId() + ") to the database", e);
     }
   }
@@ -422,7 +423,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * @return <b>true</b> if the message data was decrypted successfully or <b>false</b> otherwise
    */
   @Override
-  public boolean decryptMessage(Message message) throws MessagingServiceException {
+  public boolean decryptMessage(Message message) throws MessagingException {
     // If the message is already decrypted then stop here
     if (!message.isEncrypted()) {
       return true;
@@ -488,7 +489,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
         return true;
       }
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new MessagingException(
           "Failed to decrypt the data for the message ("
               + message.getId()
               + ") from the user ("
@@ -508,7 +509,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void deleteMessage(Message message)
-      throws InvalidArgumentException, MessageNotFoundException, MessagingServiceException {
+      throws InvalidArgumentException, MessageNotFoundException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
     }
@@ -524,7 +525,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void deleteMessage(UUID messageId)
-      throws InvalidArgumentException, MessageNotFoundException, MessagingServiceException {
+      throws InvalidArgumentException, MessageNotFoundException, ServiceUnavailableException {
     if (messageId == null) {
       throw new InvalidArgumentException("messageId");
     }
@@ -538,7 +539,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     } catch (MessageNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MessagingServiceException("Failed to delete the message (" + messageId + ")", e);
+      throw new ServiceUnavailableException("Failed to delete the message (" + messageId + ")", e);
     }
   }
 
@@ -550,7 +551,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void deleteMessagePart(UUID messagePartId)
-      throws InvalidArgumentException, MessagePartNotFoundException, MessagingServiceException {
+      throws InvalidArgumentException, MessagePartNotFoundException, ServiceUnavailableException {
     if (messagePartId == null) {
       throw new InvalidArgumentException("messagePartId");
     }
@@ -564,7 +565,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     } catch (MessagePartNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the message part (" + messagePartId + ")", e);
     }
   }
@@ -577,7 +578,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void deleteMessagePartsForMessage(UUID messageId)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messageId == null) {
       throw new InvalidArgumentException("messageId");
     }
@@ -585,7 +586,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     try {
       messagePartRepository.deleteMessagePartsByMessageId(messageId);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the message parts for the message (" + messageId + ")", e);
     }
   }
@@ -599,7 +600,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public byte[] deriveUserDeviceEncryptionKey(String username, UUID deviceId)
-      throws MessagingServiceException {
+      throws MessagingException {
     try {
       String password = deviceId.toString() + username.toLowerCase();
 
@@ -614,7 +615,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
       return cipher.doFinal(key);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new MessagingException(
           "Failed to derive the encryption key for the user ("
               + username
               + ") and device ("
@@ -631,7 +632,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * @return <b>true</b> if the message data was encrypted successfully or <b>false</b> otherwise
    */
   @Override
-  public boolean encryptMessage(Message message) throws MessagingServiceException {
+  public boolean encryptMessage(Message message) throws MessagingException {
     // If the message is already encrypted then stop here
     if (message.isEncrypted()) {
       return true;
@@ -671,7 +672,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
       return true;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new MessagingException(
           "Failed to encrypt the data for the message ("
               + message.getId()
               + ") from the user ("
@@ -700,7 +701,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public Message getMessage(UUID messageId)
-      throws InvalidArgumentException, MessageNotFoundException, MessagingServiceException {
+      throws InvalidArgumentException, MessageNotFoundException, ServiceUnavailableException {
     if (messageId == null) {
       throw new InvalidArgumentException("messageId");
     }
@@ -716,7 +717,8 @@ public class MessagingService implements IMessagingService, InitializingBean {
     } catch (MessageNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MessagingServiceException("Failed to retrieve the message (" + messageId + ")", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the message (" + messageId + ")", e);
     }
   }
 
@@ -731,7 +733,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public List<MessagePart> getMessagePartsQueuedForAssembly(UUID messageId, String lockName)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messageId == null) {
       throw new InvalidArgumentException("messageId");
     }
@@ -752,7 +754,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
       return messageParts;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the message parts that have been queued for assembly for the message "
               + "("
               + messageId
@@ -773,7 +775,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @SuppressWarnings("resource")
   public List<MessagePart> getMessagePartsQueuedForDownload(String username, UUID deviceId)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -813,7 +815,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
       return messageParts;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the message parts for the user ("
               + username
               + ") that have been queued for download by the device ("
@@ -835,7 +837,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   @SuppressWarnings("resource")
   public List<Message> getMessagesQueuedForDownload(String username, UUID deviceId)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -898,7 +900,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
 
       return messages;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the messages for the user ("
               + username
               + ") that have been queued for download by the device ("
@@ -918,7 +920,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public Message getNextMessageQueuedForProcessing() throws MessagingServiceException {
+  public Message getNextMessageQueuedForProcessing() throws ServiceUnavailableException {
     try {
       LocalDateTime processedBefore = LocalDateTime.now();
 
@@ -948,7 +950,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
         return null;
       }
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the next message that has been queued for processing", e);
     }
   }
@@ -983,7 +985,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public boolean isMessageArchived(UUID messageId)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messageId == null) {
       throw new InvalidArgumentException("messageId");
     }
@@ -991,7 +993,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     try {
       return archivedMessageRepository.existsById(messageId);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the message (" + messageId + ") is archived", e);
     }
   }
@@ -1000,12 +1002,12 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Has the message part already been queued for assembly?
    *
    * @param messagePartId the Universally Unique Identifier (UUID) for the message part
-   * @return <b>true</b> if the message part has already been queued for assembly or <b> false</b>
+   * @return <b>true</b> if the message part has already been queued for assembly or <b>false</b>
    *     otherwise
    */
   @Override
   public boolean isMessagePartQueuedForAssembly(UUID messagePartId)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messagePartId == null) {
       throw new InvalidArgumentException("messagePartId");
     }
@@ -1014,7 +1016,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
       return messagePartRepository.existsByIdAndStatus(
           messagePartId, MessagePartStatus.QUEUED_FOR_ASSEMBLY);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the message part (" + messagePartId + ") is queued for assembly",
           e);
     }
@@ -1049,7 +1051,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    */
   @Override
   public Message processMessage(Message message)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
     }
@@ -1060,7 +1062,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     }
 
     if (!messageHandlers.containsKey(message.getTypeId())) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "No message handler registered to process messages with type ("
               + message.getTypeId()
               + ")");
@@ -1071,7 +1073,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     try {
       return messageHandler.processMessage(message);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to process the message ("
               + message.getId()
               + ") with type ("
@@ -1089,7 +1091,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void queueMessageForDownload(Message message)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
     }
@@ -1176,7 +1178,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     } catch (InvalidArgumentException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to queue the message (" + message.getId() + ") for download", e);
     }
 
@@ -1192,7 +1194,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void queueMessageForProcessing(Message message)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
     }
@@ -1209,7 +1211,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     } catch (InvalidArgumentException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to queue the message (" + message.getId() + ") for processing", e);
     }
 
@@ -1234,7 +1236,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void queueMessageForProcessingAndProcessMessage(Message message)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     /*
      * Queue the message for processing in a new transaction so it is available to the
      * Background Message Processor, which will be triggered asynchronously in a different thread.
@@ -1257,7 +1259,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   public void queueMessagePartForAssembly(MessagePart messagePart)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messagePart == null) {
       throw new InvalidArgumentException("messagePart");
     }
@@ -1285,7 +1287,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     } catch (InvalidArgumentException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to queue the message part (" + messagePart.getId() + ") for assembly", e);
     }
   }
@@ -1300,7 +1302,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void queueMessagePartForAssemblyAndAssembleAndProcessMessage(MessagePart messagePart)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     /*
      * Queue the message part for assembly in a new transaction so it is available to the
      * Background Message Assembler, which will be triggered asynchronously in a different thread.
@@ -1329,12 +1331,12 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void resetMessageLocks(MessageStatus status, MessageStatus newStatus)
-      throws MessagingServiceException {
+      throws ServiceUnavailableException {
     try {
       messageRepository.resetStatusAndLocksForMessagesWithStatusAndLock(
           status, newStatus, instanceName);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to reset the locks for the messages with the status ("
               + status
               + ") that have been locked using the lock name ("
@@ -1353,12 +1355,12 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void resetMessagePartLocks(MessagePartStatus status, MessagePartStatus newStatus)
-      throws MessagingServiceException {
+      throws ServiceUnavailableException {
     try {
       messagePartRepository.resetStatusAndLocksForMessagePartsWithStatusAndLock(
           status, newStatus, instanceName);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to reset the locks for the message parts with the status ("
               + status
               + ") that have been locked using the lock name ("
@@ -1377,7 +1379,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void setMessagePartStatus(UUID messagePartId, MessagePartStatus status)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messagePartId == null) {
       throw new InvalidArgumentException("messagePartId");
     }
@@ -1385,7 +1387,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     try {
       messagePartRepository.setStatusById(messagePartId, status);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to set the status for the message part ("
               + messagePartId
               + ") to ("
@@ -1404,7 +1406,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void setMessageStatus(UUID messageId, MessageStatus status)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messageId == null) {
       throw new InvalidArgumentException("messageId");
     }
@@ -1412,7 +1414,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     try {
       messageRepository.setMessageStatus(messageId, status);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to set the status for the message ("
               + messageId
               + ") to ("
@@ -1431,7 +1433,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void unlockMessage(Message message, MessageStatus status)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (message == null) {
       throw new InvalidArgumentException("message");
     }
@@ -1442,7 +1444,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
       message.setStatus(status);
       message.setLockName(null);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to unlock and set the status for the message ("
               + message.getId()
               + ") to ("
@@ -1461,7 +1463,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
   @Override
   @Transactional
   public void unlockMessagePart(UUID messagePartId, MessagePartStatus status)
-      throws InvalidArgumentException, MessagingServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (messagePartId == null) {
       throw new InvalidArgumentException("messagePartId");
     }
@@ -1469,7 +1471,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
     try {
       messagePartRepository.unlockMessagePart(messagePartId, status);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to unlock and set the status for the message part ("
               + messagePartId
               + ") to ("
@@ -1480,16 +1482,16 @@ public class MessagingService implements IMessagingService, InitializingBean {
   }
 
   /** Initialize the configuration for the Messaging Service. */
-  private void initConfiguration() throws MessagingServiceException {
+  private void initConfiguration() throws ServiceUnavailableException {
     try {
       if (!StringUtils.hasText(encryptionKeyBase64)) {
-        throw new MessagingServiceException(
+        throw new ServiceUnavailableException(
             "No inception.messaging.encryptionKey configuration value found");
       } else {
         encryptionMasterKey = Base64Util.decode(encryptionKeyBase64);
       }
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new ServiceUnavailableException(
           "Failed to initialize the configuration for the Messaging Service", e);
     }
   }
@@ -1570,7 +1572,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Should a message with the specified type be archived?
    *
    * @param typeId the Universally Unique Identifier (UUID) for the message type
-   * @return <b>true</b> if a message with the specified type should be archived or <b> false</b>
+   * @return <b>true</b> if a message with the specified type should be archived or <b>false</b>
    *     otherwise
    */
   private boolean isArchivableMessage(UUID typeId) {
@@ -1650,7 +1652,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
    * Read the messaging configuration from all the <i>META-INF/MessagingConfig.xml</i> configuration
    * files that can be found on the classpath.
    */
-  private void readMessagingConfig() throws MessagingServiceException {
+  private void readMessagingConfig() throws ServiceUnavailableException {
     try {
       messageHandlersConfig = new ArrayList<>();
 
@@ -1722,7 +1724,7 @@ public class MessagingService implements IMessagingService, InitializingBean {
         }
       }
     } catch (Throwable e) {
-      throw new MessagingServiceException("Failed to read the messaging configuration", e);
+      throw new ServiceUnavailableException("Failed to read the messaging configuration", e);
     }
   }
 

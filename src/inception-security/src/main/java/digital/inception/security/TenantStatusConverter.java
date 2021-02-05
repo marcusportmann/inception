@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 

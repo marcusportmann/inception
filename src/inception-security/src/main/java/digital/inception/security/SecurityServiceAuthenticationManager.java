@@ -58,8 +58,7 @@ public class SecurityServiceAuthenticationManager implements AuthenticationManag
    * Attempts to authenticate the passed {@link Authentication} object, returning a fully populated
    * <b>Authentication</b> object (including granted authorities) if successful.
    *
-   * <p>An <b>AuthenticationManager</b> must honour the following contract concerning
-   * exceptions:
+   * <p>An <b>AuthenticationManager</b> must honour the following contract concerning exceptions:
    *
    * <ul>
    *   <li>A {@link DisabledException} must be thrown if an account is disabled and the <b>

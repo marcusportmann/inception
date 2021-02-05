@@ -16,19 +16,16 @@
 
 package digital.inception.reporting;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import org.w3c.dom.Document;
 
-
-
 /**
- * The <b>IReportingService</b> interface defines the functionality provided by a Reporting
- * Service implementation.
+ * The <b>IReportingService</b> interface defines the functionality provided by a Reporting Service
+ * implementation.
  *
  * @author Marcus Portmann
  */
@@ -41,11 +38,12 @@ public interface IReportingService {
   /**
    * Create the new report definition.
    *
-   * @param reportDefinition the <b>ReportDefinition</b> instance containing the information
-   *     for the new report definition
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the information for the
+   *     new report definition
    */
   void createReportDefinition(ReportDefinition reportDefinition)
-      throws InvalidArgumentException, DuplicateReportDefinitionException, ReportingServiceException;
+      throws InvalidArgumentException, DuplicateReportDefinitionException,
+          ServiceUnavailableException;
 
   /**
    * Create the PDF for the report using a connection retrieved from the application data source.
@@ -55,7 +53,8 @@ public interface IReportingService {
    * @return the PDF data for the report
    */
   byte[] createReportPDF(String reportDefinitionId, Map<String, Object> parameters)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Create the PDF for the report.
@@ -67,7 +66,8 @@ public interface IReportingService {
    */
   byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Connection connection)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Create the PDF for the report.
@@ -79,7 +79,8 @@ public interface IReportingService {
    */
   byte[] createReportPDF(
       String reportDefinitionId, Map<String, Object> parameters, Document document)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Delete the existing report definition.
@@ -87,7 +88,8 @@ public interface IReportingService {
    * @param reportDefinitionId the ID for the report definition
    */
   void deleteReportDefinition(String reportDefinitionId)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Returns the real path to the folder where the local Jasper reports are stored.
@@ -103,7 +105,8 @@ public interface IReportingService {
    * @return the report definition
    */
   ReportDefinition getReportDefinition(String reportDefinitionId)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Retrieve the name of the report definition.
@@ -112,14 +115,15 @@ public interface IReportingService {
    * @return the name of the report definition
    */
   String getReportDefinitionName(String reportDefinitionId)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Returns the summaries for all the report definitions.
    *
    * @return the summaries for all the report definitions
    */
-  List<ReportDefinitionSummary> getReportDefinitionSummaries() throws ReportingServiceException;
+  List<ReportDefinitionSummary> getReportDefinitionSummaries() throws ServiceUnavailableException;
 
   /**
    * Retrieve the summary for the report definition.
@@ -128,14 +132,15 @@ public interface IReportingService {
    * @return the summary for the report definition
    */
   ReportDefinitionSummary getReportDefinitionSummary(String reportDefinitionId)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ServiceUnavailableException;
 
   /**
    * Returns all the report definitions.
    *
    * @return all the report definitions
    */
-  List<ReportDefinition> getReportDefinitions() throws ReportingServiceException;
+  List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException;
 
   /**
    * Check whether the report definition exists.
@@ -143,7 +148,8 @@ public interface IReportingService {
    * @param reportDefinitionId the ID for the report definition
    * @return <b>true</b> if the report definition exists or <b>false</b> otherwise
    */
-  boolean reportDefinitionExists(String reportDefinitionId) throws InvalidArgumentException, ReportingServiceException;
+  boolean reportDefinitionExists(String reportDefinitionId)
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Set the real path to the folder where the local Jasper reports are stored.
@@ -156,9 +162,10 @@ public interface IReportingService {
   /**
    * Update the report definition.
    *
-   * @param reportDefinition the <b>ReportDefinition</b> instance containing the updated
-   *     information for the report definition
+   * @param reportDefinition the <b>ReportDefinition</b> instance containing the updated information
+   *     for the report definition
    */
   void updateReportDefinition(ReportDefinition reportDefinition)
-      throws InvalidArgumentException, ReportDefinitionNotFoundException, ReportingServiceException;
+      throws InvalidArgumentException, ReportDefinitionNotFoundException,
+          ServiceUnavailableException;
 }

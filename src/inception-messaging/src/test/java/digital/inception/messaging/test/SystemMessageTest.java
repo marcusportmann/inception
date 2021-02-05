@@ -16,8 +16,6 @@
 
 package digital.inception.messaging.test;
 
-
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -67,8 +65,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-
-
 
 /**
  * The <b>SystemMessageTest</b> class contains the implementation of the JUnit tests for the

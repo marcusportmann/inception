@@ -16,16 +16,12 @@
 
 package digital.inception.security;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
-
 
 /**
  * The <b>UserDetailsService</b> class provides the User Details Service implementation that
@@ -42,8 +38,8 @@ public class UserDetailsService
   /**
    * Locates the user based on the username. In the actual implementation, the search may possibly
    * be case sensitive, or case insensitive depending on how the implementation instance is
-   * configured. In this case, the <b>UserDetails</b> object that comes back may have a
-   * username that is of a different case than what was actually requested.
+   * configured. In this case, the <b>UserDetails</b> object that comes back may have a username
+   * that is of a different case than what was actually requested.
    *
    * @param username the username for the user whose data is required.
    * @return a fully populated user record (never <b>null</b>)

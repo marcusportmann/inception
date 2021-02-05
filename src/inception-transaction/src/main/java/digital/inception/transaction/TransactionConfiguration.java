@@ -16,8 +16,6 @@
 
 package digital.inception.transaction;
 
-
-
 import com.arjuna.ats.arjuna.coordinator.TxControl;
 import com.arjuna.ats.arjuna.recovery.RecoveryManager;
 import java.lang.reflect.Constructor;
@@ -31,8 +29,6 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
-
-
 
 /**
  * The <b>TransactionConfiguration</b> class.

@@ -16,12 +16,8 @@
 
 package digital.inception.messaging;
 
-
-
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-
 
 /**
  * The <b>ArchivedMessageRepository</b> interface declares the repository for the <b>

@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,8 +34,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-
 
 /**
  * The <b>UserDirectoryType</b> class holds the information for a user directory type.
@@ -115,8 +111,7 @@ public class UserDirectoryType implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
-   * false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -163,33 +158,6 @@ public class UserDirectoryType implements java.io.Serializable {
   @Override
   public int hashCode() {
     return (code == null) ? 0 : code.hashCode();
-  }
-
-  /**
-   * Returns the Java class that implements the user directory type.
-   *
-   * @return the Java class that implements the user directory type
-   */
-  Class getUserDirectoryClass() throws SecurityServiceException {
-    if (userDirectoryClass == null) {
-      try {
-        userDirectoryClass =
-            Thread.currentThread().getContextClassLoader().loadClass(userDirectoryClassName);
-
-        if (!IUserDirectory.class.isAssignableFrom(userDirectoryClass)) {
-          throw new SecurityServiceException(
-              "The user directory class does not implement the IUserDirectory interface");
-        }
-      } catch (Throwable e) {
-        throw new SecurityServiceException(
-            String.format(
-                "Failed to load the user directory class (%s) for the user directory (%s)",
-                userDirectoryClassName, name),
-            e);
-      }
-    }
-
-    return userDirectoryClass;
   }
 
   /**

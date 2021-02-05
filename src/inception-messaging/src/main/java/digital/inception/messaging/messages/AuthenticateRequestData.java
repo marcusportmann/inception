@@ -16,22 +16,17 @@
 
 package digital.inception.messaging.messages;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
-import digital.inception.messaging.MessagingServiceException;
+import digital.inception.messaging.MessagingException;
 import digital.inception.messaging.WbxmlMessageData;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-
-
 /**
- * The <b>AuthenticateRequestData</b> class manages the data for a "Authenticate Request"
- * message.
+ * The <b>AuthenticateRequestData</b> class manages the data for a "Authenticate Request" message.
  *
  * <p>This is a synchronous message.
  *
@@ -44,8 +39,8 @@ public class AuthenticateRequestData extends WbxmlMessageData {
       UUID.fromString("d21fb54e-5c5b-49e8-881f-ce00c6ced1a3");
 
   /**
-   * The Universally Unique Identifier (UUID) for the device the authentication
-   * request originated from.
+   * The Universally Unique Identifier (UUID) for the device the authentication request originated
+   * from.
    */
   private UUID deviceId;
 
@@ -65,8 +60,8 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    *
    * @param username the username for the user associated with the message
    * @param password the password used to authenticate the user
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     authentication request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the authentication
+   *     request originated from
    */
   public AuthenticateRequestData(String username, String password, UUID deviceId) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -84,7 +79,7 @@ public class AuthenticateRequestData extends WbxmlMessageData {
    *     <b>false</b> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
@@ -107,11 +102,11 @@ public class AuthenticateRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the
-   * authentication request originated from.
+   * Returns the Universally Unique Identifier (UUID) for the device the authentication request
+   * originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the
-   *     authentication request originated from
+   * @return the Universally Unique Identifier (UUID) for the device the authentication request
+   *     originated from
    */
   public UUID getDeviceId() {
     return deviceId;

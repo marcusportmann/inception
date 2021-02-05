@@ -31,8 +31,8 @@ import org.apache.cxf.transport.Conduit;
 import org.apache.cxf.transport.http.HTTPConduit;
 
 /**
- * The <b>CXFMutualSSLSecurityProxyConfigurator</b> class provides the capability to configure
- * a CXF web service proxy for mutual SSL authentication.
+ * The <b>CXFMutualSSLSecurityProxyConfigurator</b> class provides the capability to configure a CXF
+ * web service proxy for mutual SSL authentication.
  *
  * @author Marcus Portmann
  */

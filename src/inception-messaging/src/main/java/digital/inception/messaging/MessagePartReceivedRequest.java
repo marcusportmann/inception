@@ -16,14 +16,10 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.util.UUID;
-
-
 
 /**
  * The <b>MessagePartReceivedRequest</b> class represents a request sent by a mobile device to
@@ -35,20 +31,19 @@ import java.util.UUID;
 public class MessagePartReceivedRequest {
 
   /**
-   * The Universally Unique Identifier (UUID) for the device the message part
-   * received request originated from.
+   * The Universally Unique Identifier (UUID) for the device the message part received request
+   * originated from.
    */
   private final UUID deviceId;
 
   /**
-   * The Universally Unique Identifier (UUID) for the message part that was
-   * successfully downloaded.
+   * The Universally Unique Identifier (UUID) for the message part that was successfully downloaded.
    */
   private final UUID messagePartId;
 
   /**
-   * Constructs a new <b>MessagePartReceivedRequest</b> and populates it from the information
-   * stored in the specified WBXML document.
+   * Constructs a new <b>MessagePartReceivedRequest</b> and populates it from the information stored
+   * in the specified WBXML document.
    *
    * @param document the WBXML document containing the message part received request information
    */
@@ -62,10 +57,10 @@ public class MessagePartReceivedRequest {
   /**
    * Constructs a new <b>MessagePartReceivedRequest</b>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message part received request originated from
-   * @param messagePartId the Universally Unique Identifier (UUID) for the message
-   *     part that was successfully downloaded
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message part
+   *     received request originated from
+   * @param messagePartId the Universally Unique Identifier (UUID) for the message part that was
+   *     successfully downloaded
    */
   public MessagePartReceivedRequest(UUID deviceId, UUID messagePartId) {
     this.deviceId = deviceId;
@@ -90,22 +85,22 @@ public class MessagePartReceivedRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the message
-   * part received request originated from.
+   * Returns the Universally Unique Identifier (UUID) for the device the message part received
+   * request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message
-   *     part received request originated from
+   * @return the Universally Unique Identifier (UUID) for the device the message part received
+   *     request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message part that was
-   * successfully downloaded.
+   * Returns the Universally Unique Identifier (UUID) for the message part that was successfully
+   * downloaded.
    *
-   * @return the Universally Unique Identifier (UUID) for the message part that was
-   *     successfully downloaded
+   * @return the Universally Unique Identifier (UUID) for the message part that was successfully
+   *     downloaded
    */
   public UUID getMessagePartId() {
     return messagePartId;

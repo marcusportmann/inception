@@ -16,8 +16,7 @@
 
 package digital.inception.configuration;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 import javax.jws.WebMethod;
@@ -26,8 +25,6 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
-
-
 
 /**
  * The <b>ConfigurationWebService</b> class.
@@ -61,8 +58,7 @@ public class ConfigurationWebService {
    */
   @WebMethod(operationName = "DeleteConfiguration")
   public void deleteConfiguration(@WebParam(name = "Key") @XmlElement(required = true) String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     configurationService.deleteConfiguration(key);
   }
 
@@ -76,8 +72,7 @@ public class ConfigurationWebService {
   @WebResult(name = "Configuration")
   public Configuration getConfiguration(
       @WebParam(name = "Key") @XmlElement(required = true) String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     return configurationService.getConfiguration(key);
   }
 
@@ -91,8 +86,7 @@ public class ConfigurationWebService {
   @WebResult(name = "ConfigurationValue")
   public String getConfigurationValue(
       @WebParam(name = "Key") @XmlElement(required = true) String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     return configurationService.getString(key);
   }
 
@@ -103,7 +97,7 @@ public class ConfigurationWebService {
    */
   @WebMethod(operationName = "GetConfigurations")
   @WebResult(name = "Configuration")
-  public List<Configuration> getConfigurations() throws ConfigurationServiceException {
+  public List<Configuration> getConfigurations() throws ServiceUnavailableException {
     return configurationService.getConfigurations();
   }
 
@@ -115,7 +109,7 @@ public class ConfigurationWebService {
   @WebMethod(operationName = "SetConfiguration")
   public void setConfiguration(
       @WebParam(name = "Configuration") @XmlElement(required = true) Configuration configuration)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     configurationService.setConfiguration(configuration);
   }
 }

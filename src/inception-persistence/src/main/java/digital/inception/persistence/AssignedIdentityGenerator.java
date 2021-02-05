@@ -16,18 +16,13 @@
 
 package digital.inception.persistence;
 
-
-
 import java.io.Serializable;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentityGenerator;
 
-
-
 /**
- * The <b>AssignedIdentityGenerator</b> implements a Hibernate generator that allows a value
- * to be specified in place of an automatically generated value for an identity column in the
- * database.
+ * The <b>AssignedIdentityGenerator</b> implements a Hibernate generator that allows a value to be
+ * specified in place of an automatically generated value for an identity column in the database.
  *
  * @author Marcus Portmann
  */

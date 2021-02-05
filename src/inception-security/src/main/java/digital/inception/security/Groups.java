@@ -104,8 +104,7 @@ public class Groups implements Serializable {
   private long total;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the groups are
-   * associated with.
+   * The Universally Unique Identifier (UUID) for the user directory the groups are associated with.
    */
   @Schema(
       description =
@@ -121,8 +120,8 @@ public class Groups implements Serializable {
   /**
    * Constructs a new <b>Groups</b>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory the groups are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the
+   *     groups are associated with
    * @param groups the groups
    * @param total the total number of groups
    * @param filter the optional filter that was applied to the groups
@@ -202,11 +201,11 @@ public class Groups implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the user directory the
-   * groups are associated with.
+   * Returns the Universally Unique Identifier (UUID) for the user directory the groups are
+   * associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the user directory the
-   *     groups are associated with
+   * @return the Universally Unique Identifier (UUID) for the user directory the groups are
+   *     associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;

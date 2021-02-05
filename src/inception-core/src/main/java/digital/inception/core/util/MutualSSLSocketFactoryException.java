@@ -17,8 +17,8 @@
 package digital.inception.core.util;
 
 /**
- * The <b>MutualSSLSocketFactoryException</b> exception is thrown to indicate an error when
- * working with the <b>MutualSSLSocketFactory</b>.
+ * The <b>MutualSSLSocketFactoryException</b> exception is thrown to indicate an error when working
+ * with the <b>MutualSSLSocketFactory</b>.
  *
  * @author Marcus Portmann
  */
@@ -27,10 +27,7 @@ public class MutualSSLSocketFactoryException extends RuntimeException {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <b>MutualSSLSocketFactoryException</b> with <b>null</b> as its
-   * message.
-   */
+  /** Constructs a new <b>MutualSSLSocketFactoryException</b> with <b>null</b> as its message. */
   public MutualSSLSocketFactoryException() {
     super();
   }
@@ -45,8 +42,7 @@ public class MutualSSLSocketFactoryException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <b>MutualSSLSocketFactoryException</b> with the specified message and
-   * cause.
+   * Constructs a new <b>MutualSSLSocketFactoryException</b> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A

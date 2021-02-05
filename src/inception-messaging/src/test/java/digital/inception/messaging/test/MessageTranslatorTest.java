@@ -16,8 +16,6 @@
 
 package digital.inception.messaging.test;
 
-
-
 import static org.junit.Assert.assertArrayEquals;
 
 import digital.inception.core.util.CryptoUtil;
@@ -25,8 +23,8 @@ import digital.inception.messaging.MessageTranslator;
 import org.junit.Test;
 
 /**
- * The <b>MessagingServiceTest</b> class contains the implementation of the JUnit tests for
- * the <b>MessageTranslator</b> class.
+ * The <b>MessagingServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>MessageTranslator</b> class.
  *
  * @author Marcus Portmann
  */

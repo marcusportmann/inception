@@ -20,8 +20,8 @@ import digital.inception.core.util.ISO8601Util;
 import java.time.LocalDateTime;
 
 /**
- * The <b>RichRuntimeException</b> exception is thrown when additional information related to
- * an error condition exists including the time the error occurred and an associated error code.
+ * The <b>RichRuntimeException</b> exception is thrown when additional information related to an
+ * error condition exists including the time the error occurred and an associated error code.
  * condition.
  *
  * @author Marcus Portmann
@@ -56,10 +56,9 @@ public class RichRuntimeException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <b>RichRuntimeException</b> with the specified cause and a message of
-   * <b>
-   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message
-   * of cause).
+   * Constructs a new <b>RichRuntimeException</b> with the specified cause and a message of <b>
+   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message of
+   * cause).
    *
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)

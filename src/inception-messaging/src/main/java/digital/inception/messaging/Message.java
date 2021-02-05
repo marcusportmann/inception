@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -45,8 +43,6 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.springframework.util.StringUtils;
-
-
 
 /**
  * The <b>Message</b> class holds the information for a message.
@@ -148,10 +144,7 @@ public class Message {
   @Column(name = "data_hash", length = 100)
   private String dataHash;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the device the message originated
-   * from.
-   */
+  /** The Universally Unique Identifier (UUID) for the device the message originated from. */
   @Schema(
       description =
           "The Universally Unique Identifier (UUID) for the device the message "
@@ -181,9 +174,7 @@ public class Message {
   private String encryptionIV;
 
   /** The Universally Unique Identifier (UUID) for the message. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the message",
-      required = true)
+  @Schema(description = "The Universally Unique Identifier (UUID) for the message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
   @NotNull
@@ -245,8 +236,7 @@ public class Message {
 
   /** The Universally Unique Identifier (UUID) for the message type. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the message type",
+      description = "The Universally Unique Identifier (UUID) for the message type",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TypeId", required = true)
@@ -255,9 +245,7 @@ public class Message {
   private UUID typeId;
 
   /** The username for the user associated with the message. */
-  @Schema(
-      description = "The username for the user associated with the message",
-      required = true)
+  @Schema(description = "The username for the user associated with the message", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Username", required = true)
   @NotNull
@@ -269,12 +257,12 @@ public class Message {
   public Message() {}
 
   /**
-   * Constructs a new <b>Message</b> and populates it from the message information stored in
-   * the specified WBXML document.
+   * Constructs a new <b>Message</b> and populates it from the message information stored in the
+   * specified WBXML document.
    *
    * @param document the WBXML document containing the message information
    */
-  public Message(Document document) throws MessagingServiceException {
+  public Message(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();
 
     this.id = UUID.fromString(rootElement.getAttributeValue("id"));
@@ -304,7 +292,7 @@ public class Message {
     try {
       this.created = ISO8601Util.toLocalDateTime(createdAttributeValue);
     } catch (Throwable e) {
-      throw new MessagingServiceException(
+      throw new MessagingException(
           String.format(
               "Failed to parse the created ISO8601 timestamp (%s) for the message (%s)",
               createdAttributeValue, id),
@@ -330,8 +318,8 @@ public class Message {
    * Constructs a new <b>Message</b>.
    *
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
+   *     from
    * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param priority the message priority
    * @param data the data for the message which is NOT encrypted
@@ -352,8 +340,8 @@ public class Message {
    * Constructs a new <b>Message</b>.
    *
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
+   *     from
    * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
@@ -381,8 +369,8 @@ public class Message {
    * Constructs a new <b>Message</b>.
    *
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
+   *     from
    * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param priority the message priority
    * @param data the data for the message which may be encrypted
@@ -419,8 +407,8 @@ public class Message {
    * Constructs a new <b>Message</b>.
    *
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
+   *     from
    * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
@@ -461,8 +449,8 @@ public class Message {
    *
    * @param id the Universally Unique Identifier (UUID) for the message
    * @param username the username for the user associated with the message
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
+   *     from
    * @param typeId the Universally Unique Identifier (UUID) for the message type
    * @param correlationId the Universally Unique Identifier (UUID) used to correlate the message
    * @param priority the message priority
@@ -496,12 +484,12 @@ public class Message {
   }
 
   /**
-   * Returns <b>true</b> if the WBXML document contains valid message information or <b>
-   * false</b> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message information or <b> false</b>
+   * otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <b>true</b> if the WBXML document contains valid message information or <b>
-   * false</b> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message information or <b> false</b>
+   *     otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -519,8 +507,7 @@ public class Message {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
-   * false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -578,11 +565,9 @@ public class Message {
   }
 
   /**
-   * The Universally Unique Identifier (UUID) for the device the message originated
-   * from.
+   * The Universally Unique Identifier (UUID) for the device the message originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message
-   *     originated from
+   * @return the Universally Unique Identifier (UUID) for the device the message originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -625,11 +610,11 @@ public class Message {
   }
 
   /**
-   * Returns the name of the entity that has locked this message for processing or <b>null</b>
-   * if the message is not being processed.
+   * Returns the name of the entity that has locked this message for processing or <b>null</b> if
+   * the message is not being processed.
    *
-   * @return the name of the entity that has locked this message for processing or <b>null</b>
-   *     if the message is not being processed
+   * @return the name of the entity that has locked this message for processing or <b>null</b> if
+   *     the message is not being processed
    */
   public String getLockName() {
     return lockName;
@@ -721,11 +706,9 @@ public class Message {
   }
 
   /**
-   * Returns <b>true</b> if the data for the message is encrypted or <b>false</b>
-   * otherwise.
+   * Returns <b>true</b> if the data for the message is encrypted or <b>false</b> otherwise.
    *
-   * @return <b>true</b> if the data for the message is encrypted or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the data for the message is encrypted or <b>false</b> otherwise
    */
   public boolean isEncrypted() {
     return (StringUtils.hasText(dataHash));
@@ -768,11 +751,10 @@ public class Message {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device the message
-   * originated from.
+   * Set the Universally Unique Identifier (UUID) for the device the message originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message originated
+   *     from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;
@@ -816,11 +798,11 @@ public class Message {
   }
 
   /**
-   * Set the name of the entity that has locked this message for processing or <b>null</b> if
-   * the message is not being processed.
+   * Set the name of the entity that has locked this message for processing or <b>null</b> if the
+   * message is not being processed.
    *
    * @param lockName the name of the entity that has locked this message for processing or <b>
-   *                 null</b> if the message is not being processed
+   *     null</b> if the message is not being processed
    */
   public void setLockName(String lockName) {
     this.lockName = lockName;

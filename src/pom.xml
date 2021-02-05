@@ -269,7 +269,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-banking-rs</artifactId>
+        <artifactId>inception-banking-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -294,7 +294,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-codes-rs</artifactId>
+        <artifactId>inception-codes-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -309,7 +309,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-configuration-rs</artifactId>
+        <artifactId>inception-configuration-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -329,7 +329,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-error-rs</artifactId>
+        <artifactId>inception-error-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -354,7 +354,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-mail-rs</artifactId>
+        <artifactId>inception-mail-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -369,7 +369,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-messaging-rs</artifactId>
+        <artifactId>inception-messaging-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -394,7 +394,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-party-rs</artifactId>
+        <artifactId>inception-party-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -414,7 +414,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-reference-rs</artifactId>
+        <artifactId>inception-reference-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -429,7 +429,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-reporting-rs</artifactId>
+        <artifactId>inception-reporting-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -439,7 +439,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-rs</artifactId>
+        <artifactId>inception-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -449,7 +449,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-scheduler-rs</artifactId>
+        <artifactId>inception-scheduler-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -464,7 +464,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-security-rs</artifactId>
+        <artifactId>inception-security-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -479,7 +479,7 @@
       </dependency>
       <dependency>
         <groupId>digital.inception</groupId>
-        <artifactId>inception-sms-rs</artifactId>
+        <artifactId>inception-sms-api</artifactId>
         <version>${inception.version}</version>
       </dependency>
       <dependency>
@@ -510,49 +510,49 @@
     <module>inception-application</module>
     <module>inception-audit</module>
     <module>inception-banking</module>
-    <module>inception-banking-rs</module>
+    <module>inception-banking-api</module>
     <module>inception-banking-ws</module>
     <module>inception-bmi</module>
     <module>inception-cache</module>
     <module>inception-codes</module>
-    <module>inception-codes-rs</module>
+    <module>inception-codes-api</module>
     <module>inception-codes-ws</module>
     <module>inception-configuration</module>
-    <module>inception-configuration-rs</module>
+    <module>inception-configuration-api</module>
     <module>inception-configuration-ws</module>
     <module>inception-error</module>
-    <module>inception-error-rs</module>
+    <module>inception-error-api</module>
     <module>inception-error-ws</module>
     <module>inception-core</module>
     <module>inception-json</module>
     <module>inception-kafka</module>
     <module>inception-mail</module>
-    <module>inception-mail-rs</module>
+    <module>inception-mail-api</module>
     <module>inception-mail-ws</module>
     <module>inception-messaging</module>
-    <module>inception-messaging-rs</module>
+    <module>inception-messaging-api</module>
     <module>inception-messaging-ws</module>
     <module>inception-party</module>
-    <module>inception-party-rs</module>
+    <module>inception-party-api</module>
     <module>inception-party-ws</module>
     <module>inception-persistence</module>
     <module>inception-reference</module>
-    <module>inception-reference-rs</module>
+    <module>inception-reference-api</module>
     <module>inception-reference-ws</module>
     <module>inception-reporting</module>
-    <module>inception-reporting-rs</module>
+    <module>inception-reporting-api</module>
     <module>inception-reporting-ws</module>
-    <module>inception-rs</module>
+    <module>inception-api</module>
     <module>inception-oauth2-authorization-server</module>
     <module>inception-oauth2-resource-server</module>
     <module>inception-scheduler</module>
-    <module>inception-scheduler-rs</module>
+    <module>inception-scheduler-api</module>
     <module>inception-scheduler-ws</module>
     <module>inception-security</module>
-    <module>inception-security-rs</module>
+    <module>inception-security-api</module>
     <module>inception-security-ws</module>
     <module>inception-sms</module>
-    <module>inception-sms-rs</module>
+    <module>inception-sms-api</module>
     <module>inception-sms-ws</module>
     <module>inception-test</module>
     <module>inception-transaction</module>

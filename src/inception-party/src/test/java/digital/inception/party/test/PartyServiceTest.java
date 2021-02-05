@@ -24,13 +24,25 @@ import digital.inception.core.sorting.SortDirection;
 import digital.inception.party.ContactMechanism;
 import digital.inception.party.ContactMechanismPurpose;
 import digital.inception.party.ContactMechanismType;
+import digital.inception.party.EmploymentStatus;
+import digital.inception.party.EmploymentType;
+import digital.inception.party.Gender;
 import digital.inception.party.IPartyService;
 import digital.inception.party.IdentityDocument;
+import digital.inception.party.IdentityDocumentType;
+import digital.inception.party.MaritalStatus;
+import digital.inception.party.MarriageType;
+import digital.inception.party.NextOfKinType;
+import digital.inception.party.Occupation;
 import digital.inception.party.Organization;
 import digital.inception.party.Organizations;
 import digital.inception.party.Parties;
 import digital.inception.party.Party;
+import digital.inception.party.PartyAttributeType;
+import digital.inception.party.PartyAttributeTypeCategory;
 import digital.inception.party.PartyRole;
+import digital.inception.party.PartyRolePurpose;
+import digital.inception.party.PartyRoleType;
 import digital.inception.party.PartyType;
 import digital.inception.party.Person;
 import digital.inception.party.PersonSortBy;
@@ -39,10 +51,21 @@ import digital.inception.party.PhysicalAddress;
 import digital.inception.party.PhysicalAddressPurpose;
 import digital.inception.party.PhysicalAddressType;
 import digital.inception.party.Preference;
+import digital.inception.party.PreferenceType;
+import digital.inception.party.PreferenceTypeCategory;
+import digital.inception.party.Race;
+import digital.inception.party.ResidencePermitType;
+import digital.inception.party.ResidencyStatus;
+import digital.inception.party.ResidentialType;
+import digital.inception.party.SourceOfFunds;
 import digital.inception.party.TaxNumber;
+import digital.inception.party.TaxNumberType;
+import digital.inception.party.TimeToContact;
+import digital.inception.party.Title;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -145,18 +168,14 @@ public class PartyServiceTest {
         new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     person.setCountryOfTaxResidence("ZA");
-    person.addTaxNumber(new TaxNumber( "za_income_tax_number", "ZA", "123456789"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     person.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.MOBILE_NUMBER,
-            ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER,
-            "+27835551234"));
+            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27835551234"));
     person.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS,
-            ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS,
-            "test@test.com"));
+            ContactMechanismType.EMAIL_ADDRESS, "personal_email_address", "test@test.com"));
 
     PhysicalAddress residentialAddress =
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL);
@@ -198,9 +217,6 @@ public class PartyServiceTest {
     person.setName("Full Name " + personCount);
     person.setTenantId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
 
-    person.addIdentityDocument(
-        new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
-
     return person;
   }
 
@@ -213,18 +229,101 @@ public class PartyServiceTest {
 
     person.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.MOBILE_NUMBER,
-            ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER,
-            "+27835551234"));
+            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27835551234"));
 
     person.addIdentityDocument(
         new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
-    person.addTaxNumber(new TaxNumber( "za_income_tax_number", "ZA", "123456789"));
+    person.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     person.addPreference(new Preference("correspondence_language", "EN"));
 
     partyService.createPerson(person);
+  }
+
+  /** Test the contact mechanism purpose functionality. */
+  @Test
+  public void contactMechanismPurposesTest() throws Exception {
+    List<ContactMechanismPurpose> retrievedContactMechanismPurposes =
+        partyService.getContactMechanismPurposes();
+
+    retrievedContactMechanismPurposes = partyService.getContactMechanismPurposes("en-US");
+  }
+
+  /** Test the contact mechanism type functionality. */
+  @Test
+  public void contactMechanismTypeTest() throws Exception {
+    List<ContactMechanismType> retrievedContactMechanismTypes =
+        partyService.getContactMechanismTypes();
+
+    retrievedContactMechanismTypes = partyService.getContactMechanismTypes("en-US");
+  }
+
+  /** Test the employment status reference functionality. */
+  @Test
+  public void employmentStatusTest() throws Exception {
+    List<EmploymentStatus> retrievedEmploymentStatuses = partyService.getEmploymentStatuses();
+
+    assertEquals(
+        "The correct number of employment statuses was not retrieved",
+        6,
+        retrievedEmploymentStatuses.size());
+
+    retrievedEmploymentStatuses = partyService.getEmploymentStatuses("en-US");
+
+    assertEquals(
+        "The correct number of employment statuses was not retrieved",
+        3,
+        retrievedEmploymentStatuses.size());
+  }
+
+  /** Test the employment type reference functionality. */
+  @Test
+  public void employmentTypeTest() throws Exception {
+    List<EmploymentType> retrievedEmploymentTypes = partyService.getEmploymentTypes();
+
+    assertEquals(
+        "The correct number of employment types was not retrieved",
+        22,
+        retrievedEmploymentTypes.size());
+
+    retrievedEmploymentTypes = partyService.getEmploymentTypes("en-US");
+
+    assertEquals(
+        "The correct number of employment types was not retrieved",
+        11,
+        retrievedEmploymentTypes.size());
+  }
+
+  /** Test the gender reference functionality. */
+  @Test
+  public void genderTest() throws Exception {
+    List<Gender> retrievedGenders = partyService.getGenders();
+
+    assertEquals("The correct number of genders was not retrieved", 10, retrievedGenders.size());
+
+    retrievedGenders = partyService.getGenders("en-US");
+
+    assertEquals("The correct number of genders was not retrieved", 5, retrievedGenders.size());
+  }
+
+  /** Test the identity document type reference functionality. */
+  @Test
+  public void identityDocumentTypeTest() throws Exception {
+    List<IdentityDocumentType> retrievedIdentityDocumentTypes =
+        partyService.getIdentityDocumentTypes();
+
+    assertEquals(
+        "The correct number of identity document types was not retrieved",
+        8,
+        retrievedIdentityDocumentTypes.size());
+
+    retrievedIdentityDocumentTypes = partyService.getIdentityDocumentTypes("en-US");
+
+    assertEquals(
+        "The correct number of identity document types was not retrieved",
+        4,
+        retrievedIdentityDocumentTypes.size());
   }
 
   /** Test the invalid building address verification functionality. */
@@ -417,6 +516,46 @@ public class PartyServiceTest {
         constraintViolations.size());
   }
 
+  /** Test the invalid physical address purpose for party type verification functionality. */
+  @Test
+  public void invalidPhysicalAddressPurposeForPartyTypeTest() {
+    Person person = getTestBasicPersonDetails();
+
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.MAIN);
+
+    invalidAddress.setStreetNumber("221B");
+    invalidAddress.setStreetName("Baker Street");
+    invalidAddress.setSuburb("Marylebone");
+    invalidAddress.setCity("London");
+    invalidAddress.setCountry("GB");
+    invalidAddress.setPostalCode("NW1 6XE");
+
+    person.addPhysicalAddress(invalidAddress);
+
+    Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid physical address purpose for the party",
+        1,
+        constraintViolations.size());
+  }
+
+  /** Test the invalid physical address type verification functionality. */
+  @Test
+  public void invalidPhysicalAddressTypeAndPurposeTest() {
+    PhysicalAddress invalidAddress =
+        new PhysicalAddress("invalid physical address type", "invalid physical address purpose");
+
+    Set<ConstraintViolation<PhysicalAddress>> constraintViolations =
+        partyService.validatePhysicalAddress(invalidAddress);
+
+    assertEquals(
+        "The correct number of constraint violations was not found for the invalid physical address",
+        1,
+        constraintViolations.size());
+  }
+
   /** Test the invalid site address verification functionality. */
   @Test
   public void invalidSiteAddressTest() {
@@ -561,6 +700,70 @@ public class PartyServiceTest {
         constraintViolations.size());
   }
 
+  /** Test the marital status reference functionality. */
+  @Test
+  public void maritalStatusTest() throws Exception {
+    List<MaritalStatus> retrievedMaritalStatuses = partyService.getMaritalStatuses();
+
+    assertEquals(
+        "The correct number of marital statuses was not retrieved",
+        12,
+        retrievedMaritalStatuses.size());
+
+    retrievedMaritalStatuses = partyService.getMaritalStatuses("en-US");
+
+    assertEquals(
+        "The correct number of marital statuses was not retrieved",
+        6,
+        retrievedMaritalStatuses.size());
+  }
+
+  /** Test the marriage type reference functionality. */
+  @Test
+  public void marriageTypeTest() throws Exception {
+    List<MarriageType> retrievedMarriageTypes = partyService.getMarriageTypes();
+
+    assertEquals(
+        "The correct number of marriage types was not retrieved", 8, retrievedMarriageTypes.size());
+
+    retrievedMarriageTypes = partyService.getMarriageTypes("en-US");
+
+    assertEquals(
+        "The correct number of marriage types was not retrieved", 4, retrievedMarriageTypes.size());
+  }
+
+  /** Test the next of kin type reference functionality. */
+  @Test
+  public void nextOfKinTypeTest() throws Exception {
+    List<NextOfKinType> retrievedNextOfKinTypes = partyService.getNextOfKinTypes();
+
+    assertEquals(
+        "The correct number of next of kin types was not retrieved",
+        34,
+        retrievedNextOfKinTypes.size());
+
+    retrievedNextOfKinTypes = partyService.getNextOfKinTypes("en-US");
+
+    assertEquals(
+        "The correct number of next of kin types was not retrieved",
+        17,
+        retrievedNextOfKinTypes.size());
+  }
+
+  /** Test the occupation reference functionality. */
+  @Test
+  public void occupationTest() throws Exception {
+    List<Occupation> retrievedOccupations = partyService.getOccupations();
+
+    assertEquals(
+        "The correct number of occupations was not retrieved", 58, retrievedOccupations.size());
+
+    retrievedOccupations = partyService.getOccupations("en-US");
+
+    assertEquals(
+        "The correct number of occupations was not retrieved", 29, retrievedOccupations.size());
+  }
+
   /** Test the organization functionality. */
   @Test
   public void organizationTest() throws Exception {
@@ -583,10 +786,7 @@ public class PartyServiceTest {
     organization.setCountriesOfTaxResidence(Set.of("UK", "ZA"));
 
     organization.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.PHONE_NUMBER,
-            ContactMechanismPurpose.MAIN_PHONE_NUMBER,
-            "0115551234"));
+        new ContactMechanism("phone_number", "main_phone_number", "0115551234"));
 
     PhysicalAddress mainAddress =
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.MAIN);
@@ -625,6 +825,43 @@ public class PartyServiceTest {
     compareOrganizations(organization, retrievedOrganization);
 
     partyService.deleteOrganization(organization.getId());
+  }
+
+  /** Test the party attribute type category reference functionality. */
+  @Test
+  public void partyAttributeTypeCategoryTest() throws Exception {
+    List<PartyAttributeTypeCategory> retrievedPartyAttributeTypeCategories =
+        partyService.getPartyAttributeTypeCategories();
+
+    assertEquals(
+        "The correct number of party attribute type categories was not retrieved",
+        2,
+        retrievedPartyAttributeTypeCategories.size());
+
+    retrievedPartyAttributeTypeCategories = partyService.getPartyAttributeTypeCategories("en-US");
+
+    assertEquals(
+        "The correct number of party attribute type categories was not retrieved",
+        1,
+        retrievedPartyAttributeTypeCategories.size());
+  }
+
+  /** Test the party attribute type reference functionality. */
+  @Test
+  public void partyAttributeTypeTest() throws Exception {
+    List<PartyAttributeType> retrievedPartyAttributeTypes = partyService.getPartyAttributeTypes();
+
+    assertEquals(
+        "The correct number of party attribute types was not retrieved",
+        6,
+        retrievedPartyAttributeTypes.size());
+
+    retrievedPartyAttributeTypes = partyService.getPartyAttributeTypes("en-US");
+
+    assertEquals(
+        "The correct number of party attribute types was not retrieved",
+        3,
+        retrievedPartyAttributeTypes.size());
   }
 
   /** Test the party inheritance functionality. */
@@ -756,6 +993,22 @@ public class PartyServiceTest {
     partyService.deleteParty(person.getId());
   }
 
+  /** Test the party role purpose functionality. */
+  @Test
+  public void partyRolePurposeTest() throws Exception {
+    List<PartyRolePurpose> retrievedPartyRolePurposes = partyService.getPartyRolePurposes();
+
+    retrievedPartyRolePurposes = partyService.getPartyRolePurposes("en-US");
+  }
+
+  /** Test the party role type functionality. */
+  @Test
+  public void partyRoleTypeTest() throws Exception {
+    List<PartyRoleType> retrievedPartyRoleTypes = partyService.getPartyRoleTypes();
+
+    retrievedPartyRoleTypes = partyService.getPartyRoleTypes("en-US");
+  }
+
   /** Test the person functionality. */
   @Test
   public void personTest() throws Exception {
@@ -844,7 +1097,7 @@ public class PartyServiceTest {
     person.setTitle("ms");
 
     person.setCountryOfTaxResidence("GB");
-    person.addTaxNumber(new TaxNumber( "uk_tax_number", "GB", "987654321"));
+    person.addTaxNumber(new TaxNumber("uk_tax_number", "GB", "987654321"));
 
     person.removeTaxNumber("za_income_tax_number");
 
@@ -854,19 +1107,14 @@ public class PartyServiceTest {
 
     person.removeIdentityDocumentByType("za_id_card");
 
-    person.removeContactMechanism(
-        ContactMechanismType.FAX_NUMBER, ContactMechanismPurpose.MAIN_FAX_NUMBER);
+    person.removeContactMechanism("fax_number", "main_fax_number");
 
     person
-        .getContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS, ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS)
+        .getContactMechanism(ContactMechanismType.EMAIL_ADDRESS, "personal_email_address")
         .setValue("test.updated@test.com");
 
     person.addContactMechanism(
-        new ContactMechanism(
-            ContactMechanismType.PHONE_NUMBER,
-            ContactMechanismPurpose.HOME_PHONE_NUMBER,
-            "0115551234"));
+        new ContactMechanism("phone_number", "home_phone_number", "0115551234"));
 
     partyService.updatePerson(person);
 
@@ -894,9 +1142,177 @@ public class PartyServiceTest {
     partyService.deletePerson(person.getId());
   }
 
+  /** Test the physical address purpose functionality. */
+  @Test
+  public void physicalAddressPurposeTest() throws Exception {
+    List<PhysicalAddressPurpose> retrievedPhysicalAddressPurposes =
+        partyService.getPhysicalAddressPurposes();
+
+    retrievedPhysicalAddressPurposes = partyService.getPhysicalAddressPurposes("en-US");
+  }
+
+  /** Test the physical address type functionality. */
+  @Test
+  public void physicalAddressTypeTest() throws Exception {
+    List<PhysicalAddressType> retrievedPhysicalAddressTypes =
+        partyService.getPhysicalAddressTypes();
+
+    retrievedPhysicalAddressTypes = partyService.getPhysicalAddressTypes("en-US");
+  }
+
+  /** Test the preference type category functionality. */
+  @Test
+  public void preferenceTypeCategoryTest() throws Exception {
+    List<PreferenceTypeCategory> retrievedPreferenceTypeCategories =
+        partyService.getPreferenceTypeCategories();
+
+    retrievedPreferenceTypeCategories = partyService.getPreferenceTypeCategories("en-US");
+  }
+
+  /** Test the preference type functionality. */
+  @Test
+  public void preferenceTypeTest() throws Exception {
+    List<PreferenceType> retrievedPreferenceTypes = partyService.getPreferenceTypes();
+
+    retrievedPreferenceTypes = partyService.getPreferenceTypes("en-US");
+  }
+
+  /** Test the race reference functionality. */
+  @Test
+  public void raceTest() throws Exception {
+    List<Race> retrievedRaces = partyService.getRaces();
+
+    assertEquals("The correct number of races was not retrieved", 12, retrievedRaces.size());
+
+    retrievedRaces = partyService.getRaces("en-US");
+
+    assertEquals("The correct number of races was not retrieved", 6, retrievedRaces.size());
+  }
+
+  /** Test the residence permit type reference functionality. */
+  @Test
+  public void residencePermitTypeTest() throws Exception {
+    List<ResidencePermitType> retrievedResidencePermitTypes =
+        partyService.getResidencePermitTypes();
+
+    assertEquals(
+        "The correct number of residence permit types was not retrieved",
+        18,
+        retrievedResidencePermitTypes.size());
+
+    retrievedResidencePermitTypes = partyService.getResidencePermitTypes("en-US");
+
+    assertEquals(
+        "The correct number of residence permit types was not retrieved",
+        9,
+        retrievedResidencePermitTypes.size());
+  }
+
+  /** Test the residency status reference functionality. */
+  @Test
+  public void residencyStatusTest() throws Exception {
+    List<ResidencyStatus> retrievedResidencyStatuses = partyService.getResidencyStatuses();
+
+    assertEquals(
+        "The correct number of residency statuses was not retrieved",
+        10,
+        retrievedResidencyStatuses.size());
+
+    retrievedResidencyStatuses = partyService.getResidencyStatuses("en-US");
+
+    assertEquals(
+        "The correct number of residency statuses was not retrieved",
+        5,
+        retrievedResidencyStatuses.size());
+  }
+
+  /** Test the residential type reference functionality. */
+  @Test
+  public void residentialTypeTest() throws Exception {
+    List<ResidentialType> retrievedResidentialTypes = partyService.getResidentialTypes();
+
+    assertEquals(
+        "The correct number of residential types was not retrieved",
+        14,
+        retrievedResidentialTypes.size());
+
+    retrievedResidentialTypes = partyService.getResidentialTypes("en-US");
+
+    assertEquals(
+        "The correct number of residential types was not retrieved",
+        7,
+        retrievedResidentialTypes.size());
+  }
+
+  /** Test the sources of funds reference functionality. */
+  @Test
+  public void sourceOfFundsTest() throws Exception {
+    List<SourceOfFunds> retrievedSourceOfFunds = partyService.getSourcesOfFunds();
+
+    assertEquals(
+        "The correct number of sources of funds was not retrieved",
+        38,
+        retrievedSourceOfFunds.size());
+
+    retrievedSourceOfFunds = partyService.getSourcesOfFunds("en-US");
+
+    assertEquals(
+        "The correct number of sources of funds was not retrieved",
+        19,
+        retrievedSourceOfFunds.size());
+  }
+
+  /** Test the tax number type reference functionality. */
+  @Test
+  public void taxNumberTypeTest() throws Exception {
+    List<TaxNumberType> retrievedTaxNumberTypes = partyService.getTaxNumberTypes();
+
+    assertEquals(
+        "The correct number of tax number types was not retrieved",
+        14,
+        retrievedTaxNumberTypes.size());
+
+    retrievedTaxNumberTypes = partyService.getTaxNumberTypes("en-US");
+
+    assertEquals(
+        "The correct number of tax number types was not retrieved",
+        7,
+        retrievedTaxNumberTypes.size());
+  }
+
+  /** Test the time to contact functionality. */
+  @Test
+  public void timeToContactTest() throws Exception {
+    List<TimeToContact> retrievedTimesToContact = partyService.getTimesToContact();
+
+    assertEquals(
+        "The correct number of times to contact was not retrieved",
+        10,
+        retrievedTimesToContact.size());
+
+    retrievedTimesToContact = partyService.getTimesToContact("en-US");
+
+    assertEquals(
+        "The correct number of times to contact was not retrieved",
+        5,
+        retrievedTimesToContact.size());
+  }
+
+  /** Test the title reference functionality. */
+  @Test
+  public void titleTest() throws Exception {
+    List<Title> retrievedTitles = partyService.getTitles();
+
+    assertEquals("The correct number of titles was not retrieved", 24, retrievedTitles.size());
+
+    retrievedTitles = partyService.getTitles("en-US");
+
+    assertEquals("The correct number of titles was not retrieved", 12, retrievedTitles.size());
+  }
+
   /** Test the organization validation functionality. */
   @Test
-  public void validateOrganizationTest() throws Exception {
+  public void validateOrganizationTest() {
     Organization organization = getTestOrganizationDetails();
 
     Set<ConstraintViolation<Organization>> constraintViolations =
@@ -905,7 +1321,7 @@ public class PartyServiceTest {
 
   /** Test the party validation functionality. */
   @Test
-  public void validatePartyTest() throws Exception {
+  public void validatePartyTest() {
     Party party = getTestPartyDetails();
 
     Set<ConstraintViolation<Party>> constraintViolations = partyService.validateParty(party);
@@ -913,7 +1329,7 @@ public class PartyServiceTest {
 
   /** Test the person validation functionality. */
   @Test
-  public void validatePersonTest() throws Exception {
+  public void validatePersonTest() {
     Person person = getTestCompletePersonDetails(true);
 
     Set<ConstraintViolation<Person>> constraintViolations = partyService.validatePerson(person);
@@ -921,6 +1337,39 @@ public class PartyServiceTest {
     if (constraintViolations.size() > 0) {
       fail("Failed to successfully validate the person");
     }
+  }
+
+  /** Test the reference data validity check functionality. */
+  @Test
+  public void validityTest() throws Exception {
+    partyService.isValidContactMechanismPurpose(
+        "person", ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number");
+    partyService.isValidContactMechanismType(ContactMechanismType.MOBILE_NUMBER);
+    partyService.isValidEmploymentStatus("employed");
+    partyService.isValidEmploymentType("employed", "full_time");
+    partyService.isValidGender("female");
+    partyService.isValidIdentityDocumentType("person", "passport");
+    partyService.isValidMaritalStatus("married");
+    partyService.isValidMarriageType("married", "anc_with_accrual");
+    // referenceService.isValidMinorType("minor");
+    partyService.isValidNextOfKinType("mother");
+    partyService.isValidOccupation("executive");
+    partyService.isValidPartyAttributeType("person", "height");
+    partyService.isValidPartyAttributeTypeCategory("anthropometric_measurements");
+    partyService.isValidPartyRolePurpose("test");
+    partyService.isValidPartyRoleType("person", "employee");
+    partyService.isValidPhysicalAddressPurpose("person", "billing");
+    partyService.isValidPhysicalAddressType("complex");
+    partyService.isValidPreferenceType("organization", "correspondence_language");
+    partyService.isValidPreferenceTypeCategory("correspondence");
+    partyService.isValidRace("white");
+    partyService.isValidResidencePermitType("za_general_work_visa");
+    partyService.isValidResidencyStatus("permanent_resident");
+    partyService.isValidResidentialType("owner");
+    partyService.isValidSourceOfFunds("salary");
+    partyService.isValidTaxNumberType("za_income_tax_number");
+    partyService.isValidTimeToContact("anytime");
+    partyService.isValidTitle("mrs");
   }
 
   private void compareOrganizations(Organization organization1, Organization organization2) {

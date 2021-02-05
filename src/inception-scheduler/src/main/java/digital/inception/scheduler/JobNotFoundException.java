@@ -16,8 +16,6 @@
 
 package digital.inception.scheduler;
 
-
-
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,11 +23,9 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * The <b>JobNotFoundException</b> exception is thrown to indicate an error condition as a
- * result of a job that could not be found.
+ * The <b>JobNotFoundException</b> exception is thrown to indicate an error condition as a result of
+ * a job that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

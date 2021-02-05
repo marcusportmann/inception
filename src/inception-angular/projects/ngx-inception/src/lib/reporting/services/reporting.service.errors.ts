@@ -54,21 +54,3 @@ export class ReportDefinitionNotFoundError extends Error {
     super($localize`:@@reporting_report_definition_not_found_error:The report definition could not be found.`, cause);
   }
 }
-
-/**
- * The ReportingServiceError class holds the information for a Reporting Service error.
- *
- * @author Marcus Portmann
- */
-export class ReportingServiceError extends Error {
-
-  /**
-   * Constructs a new ReportingServiceError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}

@@ -16,6 +16,7 @@
 
 package digital.inception.banking.customer;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.Set;
 import java.util.UUID;
@@ -36,7 +37,7 @@ public interface ICustomerService {
    */
   void createIndividualCustomer(IndividualCustomer individualCustomer)
       throws InvalidArgumentException, DuplicateIndividualCustomerException,
-          CustomerServiceException;
+          ServiceUnavailableException;
 
   /**
    * Delete the individual customer.
@@ -46,7 +47,7 @@ public interface ICustomerService {
    */
   void deleteIndividualCustomer(UUID individualCustomerId)
       throws InvalidArgumentException, IndividualCustomerNotFoundException,
-          CustomerServiceException;
+          ServiceUnavailableException;
 
   /**
    * Retrieve the individual customer.
@@ -57,7 +58,7 @@ public interface ICustomerService {
    */
   IndividualCustomer getIndividualCustomer(UUID individualCustomerId)
       throws InvalidArgumentException, IndividualCustomerNotFoundException,
-          CustomerServiceException;
+          ServiceUnavailableException;
 
   /**
    * Validate the individual customer.

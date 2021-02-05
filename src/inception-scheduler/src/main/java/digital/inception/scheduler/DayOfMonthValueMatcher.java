@@ -16,13 +16,11 @@
 
 package digital.inception.scheduler;
 
-
-
 import java.util.List;
 
 /**
- * The <b>DayOfMonthValueMatcher</b> class implements a <b>ValueMatcher</b> whose rules
- * are in a plain array of integer values.
+ * The <b>DayOfMonthValueMatcher</b> class implements a <b>ValueMatcher</b> whose rules are in a
+ * plain array of integer values.
  *
  * <p>When asked to validate a value, this ValueMatcher checks if it is in the array and, if not,
  * checks whether the last-day-of-month setting applies.
@@ -47,14 +45,14 @@ public class DayOfMonthValueMatcher extends IntArrayValueMatcher {
   }
 
   /**
-   * Returns <b>true</b> if the given value is included in the matcher list or the
-   * last-day-of-month setting applies otherwise <b>false</b>.
+   * Returns <b>true</b> if the given value is included in the matcher list or the last-day-of-month
+   * setting applies otherwise <b>false</b>.
    *
    * @param value the value
    * @param month the month
    * @param isLeapYear <b>true</b> if this is a leap year <b>false</b> otherwise
-   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b>
-   *     , <b>false</b> otherwise
+   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b> ,
+   *     <b>false</b> otherwise
    */
   public boolean match(int value, int month, boolean isLeapYear) {
     return (super.match(value)

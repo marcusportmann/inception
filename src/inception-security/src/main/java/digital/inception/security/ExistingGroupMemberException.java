@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import digital.inception.core.service.ServiceException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,11 +23,9 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * A <b>ExistingGroupMemberException</b> is thrown to indicate that a security operation
- * failed as a result of an existing group member.
+ * A <b>ExistingGroupMemberException</b> is thrown to indicate that a security operation failed as a
+ * result of an existing group member.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

@@ -24,9 +24,8 @@ import {SecurityService} from '../services/security.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {BackNavigation} from '../../layout/components/back-navigation';
-import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Tenant} from '../services/tenant';
 import {v4 as uuid} from 'uuid';
 import {TenantStatus} from '../services/tenant-status';
@@ -96,8 +95,7 @@ export class NewTenantComponent extends AdminContainerView implements AfterViewI
         this.router.navigate(['..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

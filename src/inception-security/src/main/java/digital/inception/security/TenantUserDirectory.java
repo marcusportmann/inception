@@ -1,7 +1,5 @@
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -16,8 +14,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-
 
 /**
  * The <b>TenantUserDirectory</b> class holds the information for a tenant user directory.
@@ -37,9 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 public class TenantUserDirectory implements Serializable {
 
   /** The Universally Unique Identifier (UUID) for the tenant. */
-  @Schema(
-      description = "The Universally Unique Identifier (UUID) for the tenant",
-      required = true)
+  @Schema(description = "The Universally Unique Identifier (UUID) for the tenant", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "TenantId", required = true)
   @NotNull
@@ -49,8 +43,7 @@ public class TenantUserDirectory implements Serializable {
 
   /** The Universally Unique Identifier (UUID) for the user directory. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the user directory",
+      description = "The Universally Unique Identifier (UUID) for the user directory",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "UserDirectoryId", required = true)
@@ -66,8 +59,7 @@ public class TenantUserDirectory implements Serializable {
    * Constructs a new <b>TenantUserDirectory</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   public TenantUserDirectory(UUID tenantId, UUID userDirectoryId) {
     this.tenantId = tenantId;
@@ -104,8 +96,7 @@ public class TenantUserDirectory implements Serializable {
   /**
    * Set the Universally Unique Identifier (UUID) for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

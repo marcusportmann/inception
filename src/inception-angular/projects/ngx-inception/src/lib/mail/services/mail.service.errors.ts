@@ -38,24 +38,6 @@ export class DuplicateMailTemplateError extends Error {
 }
 
 /**
- * The MailServiceError class holds the information for a Mail Service error.
- *
- * @author Marcus Portmann
- */
-export class MailServiceError extends Error {
-
-  /**
-   * Constructs a new MailServiceError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}
-
-/**
  * The MailTemplateNotFoundError class holds the information for a mail template not found
  * error.
  *

@@ -16,19 +16,15 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 
-
-
 /**
- * The <b>MessageReceivedResponse</b> class represents the response to a request sent by a
- * mobile device to acknowledge the successful download of a message.
+ * The <b>MessageReceivedResponse</b> class represents the response to a request sent by a mobile
+ * device to acknowledge the successful download of a message.
  *
  * @author Marcus Portmann
  */
@@ -67,8 +63,8 @@ public class MessageReceivedResponse {
   private String exception;
 
   /**
-   * Constructs a new <b>MessageReceivedResponse</b> and populates it from the information
-   * stored in the specified WBXML document.
+   * Constructs a new <b>MessageReceivedResponse</b> and populates it from the information stored in
+   * the specified WBXML document.
    *
    * @param document the WBXML document containing the message received response information
    */
@@ -125,12 +121,12 @@ public class MessageReceivedResponse {
   }
 
   /**
-   * Returns <b>true</b> if the WBXML document contains valid message received response
-   * information or <b>false</b> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message received response information
+   * or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <b>true</b> if the WBXML document contains valid message received response
-   *     information or <b>false</b> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message received response information
+   *     or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();

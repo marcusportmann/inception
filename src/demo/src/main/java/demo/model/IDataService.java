@@ -16,6 +16,7 @@
 
 package demo.model;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.ValidationError;
 import java.util.List;
 
@@ -33,17 +34,17 @@ public interface IDataService {
    *
    * @param data the data
    */
-  void createData(Data data) throws DataServiceException;
+  void createData(Data data) throws ServiceUnavailableException;
 
   /** Create the sample data. */
-  void createSampleData() throws DataServiceException;
+  void createSampleData() throws ServiceUnavailableException;
 
   /**
    * Returns the data.
    *
    * @return the data
    */
-  List<Data> getAllData() throws DataServiceException;
+  List<Data> getAllData() throws ServiceUnavailableException;
 
   /**
    * Returns the data.
@@ -51,12 +52,12 @@ public interface IDataService {
    * @param id the ID for the data
    * @return the data
    */
-  Data getData(long id) throws DataServiceException;
+  Data getData(long id) throws ServiceUnavailableException;
 
   /**
    * Validate the data.
    *
    * @return the validation errors
    */
-  List<ValidationError> validateData(Data data) throws DataServiceException;
+  List<ValidationError> validateData(Data data) throws ServiceUnavailableException;
 }

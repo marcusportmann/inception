@@ -16,8 +16,7 @@
 
 package digital.inception.party;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
 import javax.jws.WebMethod;
@@ -66,7 +65,7 @@ public class PartyWebService {
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws InvalidArgumentException, PartyServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return partyService.getOrganizations(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -85,7 +84,7 @@ public class PartyWebService {
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws InvalidArgumentException, PartyServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return partyService.getParties(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -105,7 +104,7 @@ public class PartyWebService {
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws InvalidArgumentException, PartyServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return partyService.getPersons(filter, sortBy, sortDirection, pageIndex, pageSize);
   }
 }

@@ -16,14 +16,12 @@
 
 package digital.inception.security;
 
-
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>StringToUserSortByConverter</b> class implements the Spring converter that converts
- * a <b>String</b> type into a <b>UserSortBy</b> type.
+ * The <b>StringToUserSortByConverter</b> class implements the Spring converter that converts a
+ * <b>String</b> type into a <b>UserSortBy</b> type.
  *
  * @author Marcus Portmann
  */

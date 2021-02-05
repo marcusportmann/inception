@@ -16,14 +16,12 @@
 
 package digital.inception.messaging.messages;
 
-
-
 import digital.inception.core.util.ISO8601Util;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
-import digital.inception.messaging.MessagingServiceException;
+import digital.inception.messaging.MessagingException;
 import digital.inception.messaging.WbxmlMessageData;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -33,11 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
-
 /**
- * The <b>GetCodeCategoryRequestData</b> class manages the data for a "Get Code Category
- * Request" message.
+ * The <b>GetCodeCategoryRequestData</b> class manages the data for a "Get Code Category Request"
+ * message.
  *
  * <p>This is a synchronous message.
  *
@@ -115,7 +111,7 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
    *     <b>false</b> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingException {
     Element rootElement = parseWBXML(messageData).getRootElement();
 
     if (!rootElement.getName().equals("GetCodeCategoryRequest")) {
@@ -193,11 +189,11 @@ public class GetCodeCategoryRequestData extends WbxmlMessageData {
   }
 
   /**
-   * Returns <b>true</b> if the codes for the code category be returned if the code category
-   * is current or <b>false</b> otherwise.
+   * Returns <b>true</b> if the codes for the code category be returned if the code category is
+   * current or <b>false</b> otherwise.
    *
-   * @return <b>true</b> if the codes for the code category be returned if the code category
-   *     is current or <b>false</b> otherwise
+   * @return <b>true</b> if the codes for the code category be returned if the code category is
+   *     current or <b>false</b> otherwise
    */
   public boolean getReturnCodesIfCurrent() {
     return returnCodesIfCurrent;

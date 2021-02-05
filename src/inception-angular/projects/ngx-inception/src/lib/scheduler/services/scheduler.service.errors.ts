@@ -53,20 +53,3 @@ export class JobNotFoundError extends Error {
   }
 }
 
-/**
- * The SchedulerServiceError class holds the information for a Scheduler Service error.
- *
- * @author Marcus Portmann
- */
-export class SchedulerServiceError extends Error {
-
-  /**
-   * Constructs a new SchedulerServiceError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}

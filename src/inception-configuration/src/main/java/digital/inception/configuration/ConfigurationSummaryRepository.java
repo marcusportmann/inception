@@ -16,12 +16,8 @@
 
 package digital.inception.configuration;
 
-
-
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-
 
 /**
  * The <b>ConfigurationSummaryRepository</b> interface declares the repository for the <b>

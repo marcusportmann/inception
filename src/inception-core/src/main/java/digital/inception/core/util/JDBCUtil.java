@@ -158,8 +158,8 @@ public class JDBCUtil {
    * Is the database associated with the specified data source an in-memory H2 database.
    *
    * @param dataSource the data source
-   * @return <b>true</b> if the database associated with the specified data source is an
-   *     in-memory H2 database or <b>false</b> otherwise
+   * @return <b>true</b> if the database associated with the specified data source is an in-memory
+   *     H2 database or <b>false</b> otherwise
    */
   public static boolean isInMemoryH2Database(DataSource dataSource) throws SQLException {
     try (Connection connection = dataSource.getConnection()) {

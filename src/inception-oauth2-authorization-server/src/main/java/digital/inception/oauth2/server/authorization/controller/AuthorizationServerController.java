@@ -42,8 +42,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * The <b>AuthorizationServerController</b> class implements a simple OAuth authorization
- * server that provides support for the Resource Owner Password Grant.
+ * The <b>AuthorizationServerController</b> class implements a simple OAuth authorization server
+ * that provides support for the Resource Owner Password Grant.
  */
 @Controller
 @RequestMapping("oauth")

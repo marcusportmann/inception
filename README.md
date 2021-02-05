@@ -459,6 +459,9 @@ Complete the following steps to create a new application based on the Inception 
       spring:
         application:
           name: demo
+
+      springdoc:
+        writer-with-order-by-keys: true
       ```
    6. Add the in-memory H2 database script for the application,
       e.g. *src/main/resources/demo/demo-h2.sql*, to the project. This

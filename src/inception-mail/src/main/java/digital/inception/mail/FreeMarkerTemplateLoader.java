@@ -31,7 +31,7 @@ import java.time.ZoneOffset;
 public class FreeMarkerTemplateLoader implements TemplateLoader {
 
   /** The Mail Service. */
-  private IMailService mailService;
+  private final IMailService mailService;
 
   /**
    * Constructs a new <b>FreeMarkerTemplateLoader</b>.

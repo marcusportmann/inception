@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,11 +24,9 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * An <b>TenantNotFoundException</b> is thrown to indicate that a security operation failed as
- * a result of a tenant that could not be found.
+ * An <b>TenantNotFoundException</b> is thrown to indicate that a security operation failed as a
+ * result of a tenant that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

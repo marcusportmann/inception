@@ -22,8 +22,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>LocalDateTimeToStringConverter</b> class implements the Spring converter that
- * converts a <b>LocalDateTime</b> type into a <b>String</b> type.
+ * The <b>LocalDateTimeToStringConverter</b> class implements the Spring converter that converts a
+ * <b>LocalDateTime</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */

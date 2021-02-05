@@ -16,6 +16,7 @@
 
 package digital.inception.mail;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
 import freemarker.cache.TemplateLookupContext;
@@ -125,13 +126,13 @@ public class MailService implements IMailService, InitializingBean {
   /**
    * Create the new mail template.
    *
-   * @param mailTemplate the <b>MailTemplate</b> instance containing the information for the
-   *     new mail template
+   * @param mailTemplate the <b>MailTemplate</b> instance containing the information for the new
+   *     mail template
    */
   @Override
   @Transactional
   public void createMailTemplate(MailTemplate mailTemplate)
-      throws InvalidArgumentException, DuplicateMailTemplateException, MailServiceException {
+      throws InvalidArgumentException, DuplicateMailTemplateException, ServiceUnavailableException {
     validateMailTemplate(mailTemplate);
 
     try {
@@ -143,7 +144,7 @@ public class MailService implements IMailService, InitializingBean {
     } catch (DuplicateMailTemplateException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the mail template (" + mailTemplate.getId() + ")", e);
     }
   }
@@ -157,7 +158,7 @@ public class MailService implements IMailService, InitializingBean {
   @Transactional
   @CacheEvict(value = "mailTemplates", key = "#mailTemplateId")
   public void deleteMailTemplate(String mailTemplateId)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
       throw new InvalidArgumentException("mailTemplateId");
     }
@@ -178,7 +179,7 @@ public class MailService implements IMailService, InitializingBean {
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the mail template (" + mailTemplateId + ")", e);
     }
   }
@@ -192,7 +193,7 @@ public class MailService implements IMailService, InitializingBean {
   @Override
   @Cacheable("mailTemplates")
   public MailTemplate getMailTemplate(String mailTemplateId)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
       throw new InvalidArgumentException("mailTemplateId");
     }
@@ -208,7 +209,7 @@ public class MailService implements IMailService, InitializingBean {
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the mail template (" + mailTemplateId + ")", e);
     }
   }
@@ -221,7 +222,7 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public String getMailTemplateName(String mailTemplateId)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
       throw new InvalidArgumentException("mailTemplateId");
     }
@@ -237,7 +238,7 @@ public class MailService implements IMailService, InitializingBean {
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the name of the mail template (" + mailTemplateId + ")", e);
     }
   }
@@ -248,11 +249,12 @@ public class MailService implements IMailService, InitializingBean {
    * @return the summaries for all the mail templates
    */
   @Override
-  public List<MailTemplateSummary> getMailTemplateSummaries() throws MailServiceException {
+  public List<MailTemplateSummary> getMailTemplateSummaries() throws ServiceUnavailableException {
     try {
       return mailTemplateSummaryRepository.findAll();
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to retrieve the summaries for the mail templates", e);
+      throw new ServiceUnavailableException(
+          "Failed to retrieve the summaries for the mail templates", e);
     }
   }
 
@@ -264,7 +266,7 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public MailTemplateSummary getMailTemplateSummary(String mailTemplateId)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
       throw new InvalidArgumentException("mailTemplateId");
     }
@@ -281,7 +283,7 @@ public class MailService implements IMailService, InitializingBean {
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the summary for the mail template (" + mailTemplateId + ")", e);
     }
   }
@@ -294,7 +296,7 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public LocalDateTime getMailTemplateUpdated(String mailTemplateId)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
       throw new InvalidArgumentException("mailTemplateId");
     }
@@ -311,7 +313,7 @@ public class MailService implements IMailService, InitializingBean {
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the date and time the mail template ("
               + mailTemplateId
               + ") was last updated",
@@ -325,11 +327,11 @@ public class MailService implements IMailService, InitializingBean {
    * @return all the mail templates
    */
   @Override
-  public List<MailTemplate> getMailTemplates() throws MailServiceException {
+  public List<MailTemplate> getMailTemplates() throws ServiceUnavailableException {
     try {
       return mailTemplateRepository.findAll();
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to retrieve the mail templates", e);
+      throw new ServiceUnavailableException("Failed to retrieve the mail templates", e);
     }
   }
 
@@ -341,7 +343,7 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public boolean mailTemplateExists(String mailTemplateId)
-      throws InvalidArgumentException, MailServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
       throw new InvalidArgumentException("mailTemplateId");
     }
@@ -349,7 +351,7 @@ public class MailService implements IMailService, InitializingBean {
     try {
       return mailTemplateRepository.existsById(mailTemplateId);
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the mail template (" + mailTemplateId + ") exists", e);
     }
   }
@@ -363,7 +365,7 @@ public class MailService implements IMailService, InitializingBean {
    */
   @Override
   public String processMailTemplate(String mailTemplateId, Map<String, String> templateParameters)
-      throws InvalidArgumentException, MailServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(mailTemplateId)) {
       throw new InvalidArgumentException("mailTemplateId");
     }
@@ -380,7 +382,7 @@ public class MailService implements IMailService, InitializingBean {
 
       return sw.toString();
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to process the mail template (" + mailTemplateId + ")", e);
     }
   }
@@ -402,7 +404,7 @@ public class MailService implements IMailService, InitializingBean {
       String fromName,
       String mailTemplateId,
       Map<String, String> mailTemplateParameters)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     if (to == null) {
       throw new InvalidArgumentException("to");
     }
@@ -455,26 +457,26 @@ public class MailService implements IMailService, InitializingBean {
 
         javaMailSender.send(helper.getMimeMessage());
       } else {
-        throw new MailServiceException("No JavaMailSender bean has been configured");
+        throw new ServiceUnavailableException("No JavaMailSender bean has been configured");
       }
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException("Failed to send the mail", e);
+      throw new ServiceUnavailableException("Failed to send the mail", e);
     }
   }
 
   /**
    * Update the mail template.
    *
-   * @param mailTemplate the <b>MailTemplate</b> instance containing the updated information
-   *     for the mail template
+   * @param mailTemplate the <b>MailTemplate</b> instance containing the updated information for the
+   *     mail template
    */
   @Override
   @Transactional
   @CacheEvict(value = "mailTemplates", key = "#mailTemplate.id")
   public void updateMailTemplate(MailTemplate mailTemplate)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     validateMailTemplate(mailTemplate);
 
     try {
@@ -493,7 +495,7 @@ public class MailService implements IMailService, InitializingBean {
     } catch (MailTemplateNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new MailServiceException(
+      throw new ServiceUnavailableException(
           "Failed to update the mail template (" + mailTemplate.getId() + ")", e);
     }
   }

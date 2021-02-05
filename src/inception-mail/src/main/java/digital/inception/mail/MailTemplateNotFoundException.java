@@ -24,8 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>MailTemplateNotFoundException</b> exception is thrown to indicate an error condition
- * as a result of a mail template that could not be found.
+ * The <b>MailTemplateNotFoundException</b> exception is thrown to indicate an error condition as a
+ * result of a mail template that could not be found.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

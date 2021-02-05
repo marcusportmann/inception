@@ -16,8 +16,7 @@
 
 package digital.inception.reporting;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.sql.Connection;
 import java.util.HashMap;
@@ -32,8 +31,6 @@ import javax.sql.DataSource;
 import javax.xml.bind.annotation.XmlElement;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
-
-
 
 /**
  * The <b>ReportingWebService</b> class.
@@ -77,7 +74,7 @@ public class ReportingWebService {
       @WebParam(name = "ReportDefinition") @XmlElement(required = true)
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, DuplicateReportDefinitionException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     reportingService.createReportDefinition(reportDefinition);
   }
 
@@ -90,7 +87,7 @@ public class ReportingWebService {
   public void deleteReportDefinition(
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     reportingService.deleteReportDefinition(reportDefinitionId);
   }
 
@@ -108,7 +105,7 @@ public class ReportingWebService {
       @WebParam(name = "ReportParameters") @XmlElement(required = true)
           List<ReportParameter> reportParameters)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     if (!StringUtils.hasText(reportDefinitionId)) {
       throw new InvalidArgumentException("reportDefinitionId");
     }
@@ -124,7 +121,7 @@ public class ReportingWebService {
     } catch (ReportDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ReportingServiceException("Failed to generate the PDF report", e);
+      throw new ServiceUnavailableException("Failed to generate the PDF report", e);
     }
   }
 
@@ -139,7 +136,7 @@ public class ReportingWebService {
   public ReportDefinition getReportDefinition(
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     return reportingService.getReportDefinition(reportDefinitionId);
   }
 
@@ -154,7 +151,7 @@ public class ReportingWebService {
   public String getReportDefinitionName(
       @WebParam(name = "ReportDefinitionId") @XmlElement(required = true) String reportDefinitionId)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     return reportingService.getReportDefinitionName(reportDefinitionId);
   }
 
@@ -166,7 +163,7 @@ public class ReportingWebService {
   @WebMethod(operationName = "GetReportDefinitionSummaries")
   @WebResult(name = "ReportDefinitionSummary")
   public List<ReportDefinitionSummary> getReportDefinitionSummaries()
-      throws ReportingServiceException {
+      throws ServiceUnavailableException {
     return reportingService.getReportDefinitionSummaries();
   }
 
@@ -177,7 +174,7 @@ public class ReportingWebService {
    */
   @WebMethod(operationName = "GetReportDefinitions")
   @WebResult(name = "ReportDefinition")
-  public List<ReportDefinition> getReportDefinitions() throws ReportingServiceException {
+  public List<ReportDefinition> getReportDefinitions() throws ServiceUnavailableException {
     return reportingService.getReportDefinitions();
   }
 
@@ -191,7 +188,7 @@ public class ReportingWebService {
       @WebParam(name = "ReportDefinition") @XmlElement(required = true)
           ReportDefinition reportDefinition)
       throws InvalidArgumentException, ReportDefinitionNotFoundException,
-          ReportingServiceException {
+          ServiceUnavailableException {
     reportingService.updateReportDefinition(reportDefinition);
   }
 }

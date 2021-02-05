@@ -16,6 +16,7 @@
 
 package digital.inception.error;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
 import java.util.List;
@@ -68,13 +69,13 @@ public class ErrorService implements IErrorService {
   /**
    * Create the new error report.
    *
-   * @param errorReport the <b>ErrorReport</b> instance containing the information for the
-   *     error report
+   * @param errorReport the <b>ErrorReport</b> instance containing the information for the error
+   *     report
    */
   @Override
   @Transactional
   public void createErrorReport(ErrorReport errorReport)
-      throws InvalidArgumentException, ErrorServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (errorReport == null) {
       throw new InvalidArgumentException("errorReport");
     }
@@ -128,7 +129,7 @@ public class ErrorService implements IErrorService {
 
       errorReportRepository.saveAndFlush(errorReport);
     } catch (Throwable e) {
-      throw new ErrorServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the error report (" + errorReport.getId() + ")", e);
     }
   }
@@ -141,7 +142,7 @@ public class ErrorService implements IErrorService {
    */
   @Override
   public ErrorReport getErrorReport(UUID errorReportId)
-      throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException {
+      throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException {
     if (errorReportId == null) {
       throw new InvalidArgumentException("errorReportId");
     }
@@ -157,7 +158,7 @@ public class ErrorService implements IErrorService {
     } catch (ErrorReportNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ErrorServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the error report (" + errorReportId + ")", e);
     }
   }
@@ -166,12 +167,11 @@ public class ErrorService implements IErrorService {
    * Retrieve the summary for the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the summary for the error report or <b>null</b> if the error report could not be
-   *     found
+   * @return the summary for the error report or <b>null</b> if the error report could not be found
    */
   @Override
   public ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-      throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException {
+      throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException {
     if (errorReportId == null) {
       throw new InvalidArgumentException("errorReportId");
     }
@@ -188,7 +188,7 @@ public class ErrorService implements IErrorService {
     } catch (ErrorReportNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ErrorServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the summary for the error report (" + errorReportId + ")", e);
     }
   }
@@ -202,7 +202,7 @@ public class ErrorService implements IErrorService {
    */
   @Override
   public List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-      throws InvalidArgumentException, ErrorServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (maximumNumberOfEntries < 0) {
       throw new InvalidArgumentException("maximumNumberOfEntries");
     }
@@ -216,7 +216,7 @@ public class ErrorService implements IErrorService {
 
       return errorReportSummaryPage.getContent();
     } catch (Throwable e) {
-      throw new ErrorServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the summaries for the most recent error reports", e);
     }
   }

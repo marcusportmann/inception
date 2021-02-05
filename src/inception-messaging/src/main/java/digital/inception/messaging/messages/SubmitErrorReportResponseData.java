@@ -16,18 +16,14 @@
 
 package digital.inception.messaging.messages;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
-import digital.inception.messaging.MessagingServiceException;
+import digital.inception.messaging.MessagingException;
 import digital.inception.messaging.WbxmlMessageData;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
-
-
 
 /**
  * The <b>SubmitErrorReportResponseData</b> class manages the data for a "Submit Error Report
@@ -56,8 +52,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
   private String errorMessage;
 
   /**
-   * The Universally Unique Identifier (UUID) for the error report that was
-   * submitted for processing.
+   * The Universally Unique Identifier (UUID) for the error report that was submitted for
+   * processing.
    */
   private UUID errorReportId;
 
@@ -72,8 +68,8 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    * @param errorCode the error code indicating the result of processing the submitted error report
    * @param errorMessage the error message describing the result of processing the submitted error
    *     report
-   * @param errorReportId the Universally Unique Identifier (UUID) for the error
-   *     report that was submitted for processing
+   * @param errorReportId the Universally Unique Identifier (UUID) for the error report that was
+   *     submitted for processing
    */
   public SubmitErrorReportResponseData(int errorCode, String errorMessage, UUID errorReportId) {
     super(MESSAGE_TYPE_ID, MessagePriority.HIGH);
@@ -91,7 +87,7 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
    *     <b>false</b> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();
@@ -134,11 +130,11 @@ public class SubmitErrorReportResponseData extends WbxmlMessageData {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the error report that was
-   * submitted for processing.
+   * Returns the Universally Unique Identifier (UUID) for the error report that was submitted for
+   * processing.
    *
-   * @return the Universally Unique Identifier (UUID) for the error report that was
-   *     submitted for processing
+   * @return the Universally Unique Identifier (UUID) for the error report that was submitted for
+   *     processing
    */
   public UUID getErrorReportId() {
     return errorReportId;

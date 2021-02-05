@@ -22,7 +22,7 @@
 export class Region {
 
   /**
-   * The code for the region.
+   * The ISO 3166-2 subdivision code for the region.
    */
   code: string;
 
@@ -55,7 +55,7 @@ export class Region {
    * Constructs a new Region.
    *
    * @param country     The ISO 3166-1 alpha-2 code for the country the region is associated with.
-   * @param code        The code for the region.
+   * @param code        The ISO 3166-2 subdivision code for the region.
    * @param localeId    The Unicode locale identifier for the region.
    * @param sortIndex   The sort index for the region.
    * @param name        The name of the region.

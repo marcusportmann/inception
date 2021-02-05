@@ -16,8 +16,6 @@
 
 package digital.inception.messaging.messages;
 
-
-
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.core.util.ISO8601Util;
@@ -30,8 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.util.StringUtils;
-
-
 
 /**
  * The <b>CodeCategoryData</b> class holds the information for a code category.

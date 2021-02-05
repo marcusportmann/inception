@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The <b>Parser</b> class generates a WBXML object hierarchy from the binary data
- * representation of a WBXML document.
+ * The <b>Parser</b> class generates a WBXML object hierarchy from the binary data representation of
+ * a WBXML document.
  *
  * @author Marcus Portmann
  */

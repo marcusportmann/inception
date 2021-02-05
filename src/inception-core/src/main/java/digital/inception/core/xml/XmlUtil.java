@@ -53,7 +53,7 @@ public class XmlUtil {
   }
 
   /**
-   * Converts a <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to a <b> java.util.Date</b>
+   * Converts a <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to a <b>java.util.Date</b>
    * instance.
    *
    * @param calendar the <b>javax.xml.datatype.XMLGregorianCalendar</b> instance to convert
@@ -68,7 +68,7 @@ public class XmlUtil {
   }
 
   /**
-   * Converts a <b>java.util.Date</b> instance to a <b> javax.xml.datatype.XMLGregorianCalendar</b>
+   * Converts a <b>java.util.Date</b> instance to a <b>javax.xml.datatype.XMLGregorianCalendar</b>
    * instance.
    *
    * @param date the <b>java.util.Date</b> instance to convert

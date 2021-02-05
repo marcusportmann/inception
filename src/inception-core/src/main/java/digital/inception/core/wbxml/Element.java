@@ -25,8 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The <b>Element</b> class stores the data for a WBXML element content type in a WBXML
- * document.
+ * The <b>Element</b> class stores the data for a WBXML element content type in a WBXML document.
  *
  * <p>This content type represents a node in the WBXML document.
  *
@@ -107,8 +106,8 @@ public class Element implements Serializable, Content {
    * Returns the attribute with the specified name.
    *
    * @param name the name of the attribute
-   * @return the attribute with the specified name or <b>null</b> if no matching attribute
-   *     could be found
+   * @return the attribute with the specified name or <b>null</b> if no matching attribute could be
+   *     found
    */
   public Attribute getAttribute(String name) {
     for (Attribute attribute : attributes) {
@@ -150,8 +149,8 @@ public class Element implements Serializable, Content {
    * Returns the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the child element or <b>null</b> if an element with the specified name could not
-   *     be found
+   * @return the child element or <b>null</b> if an element with the specified name could not be
+   *     found
    */
   public Element getChild(String name) {
     for (Content tmpContent : content) {
@@ -171,8 +170,8 @@ public class Element implements Serializable, Content {
    * Get the binary data content for the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the binary data content for the child element or <b>null</b> if an element with
-   *     the specified name could not be found
+   * @return the binary data content for the child element or <b>null</b> if an element with the
+   *     specified name could not be found
    */
   public byte[] getChildOpaque(String name) {
     for (Content tmpContent : content) {
@@ -192,8 +191,8 @@ public class Element implements Serializable, Content {
    * Get the text content for the child element with the specified name.
    *
    * @param name the name of the child element
-   * @return the text content for the child element or <b>null</b> if an element with the
-   *     specified name could not be found
+   * @return the text content for the child element or <b>null</b> if an element with the specified
+   *     name could not be found
    */
   public String getChildText(String name) {
     for (Content tmpContent : content) {
@@ -305,12 +304,12 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Returns <b>true</b> if the element has an attribute with the specified name or <b>
-   * false</b> otherwise.
+   * Returns <b>true</b> if the element has an attribute with the specified name or <b> false</b>
+   * otherwise.
    *
    * @param name the name of the attribute
-   * @return <b>true</b> if the element has an attribute with the specified name or <b>
-   * false</b> otherwise
+   * @return <b>true</b> if the element has an attribute with the specified name or <b> false</b>
+   *     otherwise
    */
   public boolean hasAttribute(String name) {
     for (Attribute attribute : attributes) {
@@ -332,12 +331,12 @@ public class Element implements Serializable, Content {
   }
 
   /**
-   * Returns <b>true</b> if the element has a child element with the specified name or <b>
-   * false</b> otherwise.
+   * Returns <b>true</b> if the element has a child element with the specified name or <b> false</b>
+   * otherwise.
    *
    * @param name the name of the child element
-   * @return <b>true</b> if the element has a child element with the specified name or <b>
-   * false</b> otherwise
+   * @return <b>true</b> if the element has a child element with the specified name or <b> false</b>
+   *     otherwise
    */
   public boolean hasChild(String name) {
     for (Content tmpContent : content) {
@@ -510,7 +509,7 @@ public class Element implements Serializable, Content {
 
       print(baos, 0);
 
-      String result = new String(baos.toByteArray());
+      String result = baos.toString();
 
       baos.close();
 

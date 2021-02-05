@@ -19,8 +19,8 @@ package digital.inception.oauth2.server.authorization.controller;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>UnauthorizedClientErrorResponse</b> class holds the information for an OAuth2
- * unauthorized client error response.
+ * The <b>UnauthorizedClientErrorResponse</b> class holds the information for an OAuth2 unauthorized
+ * client error response.
  *
  * @author Marcus Portmann
  */

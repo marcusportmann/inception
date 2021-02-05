@@ -16,6 +16,7 @@
 
 package digital.inception.bmi;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public interface ICaseService {
    * @param caseDefinitionId the ID for the case definition
    * @return <b>true</b> if the case definition exists or <b>false</b> otherwise
    */
-  boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException;
+  boolean caseDefinitionExists(String caseDefinitionId) throws ServiceUnavailableException;
 
   //  /**
   //   * Delete the existing case definition.
@@ -41,7 +42,7 @@ public interface ICaseService {
   //   * @param caseDefinitionId the ID for the case definition
   //   */
   //  void deleteCaseDefinition(String caseDefinitionId)
-  //    throws CaseDefinitionNotFoundException, CaseServiceException;
+  //    throws CaseDefinitionNotFoundException, ServiceUnavailableException;
 
   //  /**
   //   * Retrieve the case definition.
@@ -51,7 +52,7 @@ public interface ICaseService {
   //   * @return the case definition
   //   */
   //  CaseDefinition getCaseDefinition(String caseDefinitionId)
-  //    throws CaseDefinitionNotFoundException, CaseServiceException;
+  //    throws CaseDefinitionNotFoundException, ServiceUnavailableException;
 
   //  /**
   //   * Retrieve the name of the case definition.
@@ -61,7 +62,7 @@ public interface ICaseService {
   //   * @return the name of the case definition
   //   */
   //  String getCaseDefinitionName(String caseDefinitionId)
-  //    throws CaseDefinitionNotFoundException, CaseServiceException;
+  //    throws CaseDefinitionNotFoundException, ServiceUnavailableException;
 
   /**
    * Create the new case definition(s).
@@ -70,7 +71,7 @@ public interface ICaseService {
    * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
   List<CaseDefinitionSummary> createCaseDefinition(byte[] caseDefinitionData)
-      throws InvalidCMMNException, DuplicateCaseDefinitionException, CaseServiceException;
+      throws InvalidCMMNException, DuplicateCaseDefinitionException, ServiceUnavailableException;
 
   //  /**
   //   * Retrieve the summary for the case definition.
@@ -80,7 +81,7 @@ public interface ICaseService {
   //   * @return the summary for the case definition
   //   */
   //  CaseDefinitionSummary getCaseDefinitionSummary(String caseDefinitionId)
-  //    throws CaseDefinitionNotFoundException, CaseServiceException;
+  //    throws CaseDefinitionNotFoundException, ServiceUnavailableException;
   //
   //  /**
   //   * Returns all the case definitions.
@@ -88,14 +89,14 @@ public interface ICaseService {
   //   * @return all the case definitions
   //   */
   //  List<CaseDefinition> getCaseDefinitions()
-  //    throws CaseServiceException;
+  //    throws ServiceUnavailableException;
 
   /**
    * Returns the summaries for all the case definitions.
    *
    * @return the summaries for all the case definitions
    */
-  List<CaseDefinitionSummary> getCaseDefinitionSummaries() throws CaseServiceException;
+  List<CaseDefinitionSummary> getCaseDefinitionSummaries() throws ServiceUnavailableException;
 
   /**
    * Update the case definition(s).
@@ -104,7 +105,7 @@ public interface ICaseService {
    * @return the case definition summaries for the CMMN cases defined by the CMMN XML data
    */
   List<CaseDefinitionSummary> updateCaseDefinition(byte[] caseDefinitionData)
-      throws InvalidCMMNException, CaseDefinitionNotFoundException, CaseServiceException;
+      throws InvalidCMMNException, CaseDefinitionNotFoundException, ServiceUnavailableException;
 
   /**
    * Validate the CMMN XML data.
@@ -114,7 +115,7 @@ public interface ICaseService {
    *     validated
    */
   List<CaseDefinitionSummary> validateCMMN(byte[] cmmnXml)
-      throws InvalidCMMNException, CaseServiceException;
+      throws InvalidCMMNException, ServiceUnavailableException;
 
   /**
    * Validate the CMMN XML data.
@@ -124,5 +125,5 @@ public interface ICaseService {
    *     validated
    */
   List<CaseDefinitionSummary> validateCMMN(String cmmnXml)
-      throws InvalidCMMNException, CaseServiceException;
+      throws InvalidCMMNException, ServiceUnavailableException;
 }

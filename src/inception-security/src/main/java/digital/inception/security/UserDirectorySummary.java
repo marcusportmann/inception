@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,8 +41,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
-
-
 
 /**
  * The <b>UserDirectorySummary</b> class holds the summary information for a user directory.
@@ -80,8 +76,7 @@ public class UserDirectorySummary implements java.io.Serializable {
 
   /** The Universally Unique Identifier (UUID) for the user directory. */
   @Schema(
-      description =
-          "The Universally Unique Identifier (UUID) for the user directory",
+      description = "The Universally Unique Identifier (UUID) for the user directory",
       required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Id", required = true)
@@ -115,8 +110,7 @@ public class UserDirectorySummary implements java.io.Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
-   * false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

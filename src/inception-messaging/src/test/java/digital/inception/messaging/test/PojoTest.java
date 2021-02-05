@@ -16,8 +16,6 @@
 
 package digital.inception.messaging.test;
 
-
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -33,11 +31,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.Test;
 
-
-
 /**
- * The <b>PojoTest</b> class contains the implementation of the JUnit tests for the POJOs that
- * form part of the messaging infrastructure.
+ * The <b>PojoTest</b> class contains the implementation of the JUnit tests for the POJOs that form
+ * part of the messaging infrastructure.
  *
  * @author Marcus Portmann
  */

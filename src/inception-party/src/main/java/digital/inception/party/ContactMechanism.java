@@ -89,9 +89,35 @@ public class ContactMechanism implements Serializable {
   @JoinColumn(name = "party_id")
   private PartyBase party;
 
-  /** The contact mechanism purpose. */
-  @JsonIgnore
-  @XmlTransient
+  /** The code for the contact mechanism purpose. */
+  @Schema(
+      description = "The code for the contact mechanism purpose",
+      required = true,
+      allowableValues = {
+        "personal_mobile_number",
+        "work_mobile_number",
+        "other_mobile_number",
+        "main_mobile_number",
+        "home_phone_number",
+        "work_phone_number",
+        "school_phone_number",
+        "pager_phone_number",
+        "other_phone_number",
+        "main_phone_number",
+        "home_fax_number",
+        "work_fax_number",
+        "other_fax_number",
+        "main_fax_number",
+        "personal_email_address",
+        "work_email_address",
+        "school_email_address",
+        "other_email_address",
+        "main_email_address",
+        "whatsapp_user_id",
+        "twitter_id"
+      })
+  @JsonProperty(required = true)
+  @XmlElement(name = "Purpose", required = true)
   @NotNull
   @Size(min = 1, max = 30)
   @Pattern(
@@ -107,9 +133,19 @@ public class ContactMechanism implements Serializable {
   @Column(name = "purpose", length = 30, nullable = false)
   private String purpose;
 
-  /** The contact mechanism type. */
-  @JsonIgnore
-  @XmlTransient
+  /** The code for the contact mechanism type. */
+  @Schema(
+      description = "The code for the contact mechanism type",
+      required = true,
+      allowableValues = {
+        "mobile_number",
+        "phone_number",
+        "fax_number",
+        "email_address",
+        "social_media"
+      })
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
   @NotNull
   @Size(min = 1, max = 30)
   @Pattern(
@@ -141,14 +177,13 @@ public class ContactMechanism implements Serializable {
   /**
    * Constructs a new <b>ContactMechanism</b>.
    *
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
+   * @param type the code for the contact mechanism type
+   * @param purpose the code for the contact mechanism purpose
    * @param value the value for the contact mechanism
    */
-  public ContactMechanism(
-      ContactMechanismType type, ContactMechanismPurpose purpose, String value) {
-    this.type = type.code();
-    this.purpose = purpose.code();
+  public ContactMechanism(String type, String purpose, String value) {
+    this.type = type;
+    this.purpose = purpose;
     this.value = value;
   }
 
@@ -156,7 +191,7 @@ public class ContactMechanism implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -199,27 +234,21 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Returns the contact mechanism purpose.
+   * Returns the code for the contact mechanism purpose.
    *
-   * @return the contact mechanism purpose
+   * @return the code for the contact mechanism purpose
    */
-  @Schema(description = "The contact mechanism purpose", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Purpose", required = true)
-  public ContactMechanismPurpose getPurpose() {
-    return ContactMechanismPurpose.fromCode(purpose);
+  public String getPurpose() {
+    return purpose;
   }
 
   /**
-   * Returns the contact mechanism type.
+   * Returns the code for the contact mechanism type.
    *
-   * @return the contact mechanism type
+   * @return the code for the contact mechanism type
    */
-  @Schema(description = "The contact mechanism type", required = true)
-  @JsonProperty(required = true)
-  @XmlElement(name = "Type", required = true)
-  public ContactMechanismType getType() {
-    return ContactMechanismType.fromCode(type);
+  public String getType() {
+    return type;
   }
 
   /**
@@ -263,21 +292,21 @@ public class ContactMechanism implements Serializable {
   }
 
   /**
-   * Set the contact mechanism purpose.
+   * Set the code for the contact mechanism purpose.
    *
-   * @param purpose the contact mechanism purpose
+   * @param purpose the code for the contact mechanism purpose
    */
-  public void setPurpose(ContactMechanismPurpose purpose) {
-    this.purpose = purpose.code();
+  public void setPurpose(String purpose) {
+    this.purpose = purpose;
   }
 
   /**
-   * Set the contact mechanism type.
+   * Set the code for the contact mechanism type.
    *
-   * @param type the contact mechanism type
+   * @param type the code for the contact mechanism type
    */
-  public void setType(ContactMechanismType type) {
-    this.type = type.code();
+  public void setType(String type) {
+    this.type = type;
   }
 
   /**

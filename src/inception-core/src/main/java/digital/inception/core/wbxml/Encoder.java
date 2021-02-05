@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The <b>Encoder</b> class generates the binary data representation of a WBXML document from
- * a WBXML object hierarchy.
+ * The <b>Encoder</b> class generates the binary data representation of a WBXML document from a
+ * WBXML object hierarchy.
  *
  * @author Marcus Portmann
  */

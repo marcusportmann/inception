@@ -16,15 +16,13 @@
 
 package digital.inception.security;
 
-
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.WritingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>GroupMemberTypeToStringConverter</b> class implements the Spring converter that
- * converts a <b>GroupMemberType</b> type into a <b>String</b> type.
+ * The <b>GroupMemberTypeToStringConverter</b> class implements the Spring converter that converts a
+ * <b>GroupMemberType</b> type into a <b>String</b> type.
  *
  * @author Marcus Portmann
  */

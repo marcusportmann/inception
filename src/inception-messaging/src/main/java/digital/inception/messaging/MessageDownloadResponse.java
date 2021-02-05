@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
@@ -27,11 +25,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 /**
- * The <b>MessageDownloadResponse</b> class represents the response to a request sent by a
- * mobile device to download the queued messages for the device.
+ * The <b>MessageDownloadResponse</b> class represents the response to a request sent by a mobile
+ * device to download the queued messages for the device.
  *
  * @author Marcus Portmann
  */
@@ -73,12 +69,12 @@ public class MessageDownloadResponse {
   private List<Message> messages;
 
   /**
-   * Constructs a new <b>MessageDownloadResponse</b> and populates it from the information
-   * stored in the specified WBXML document.
+   * Constructs a new <b>MessageDownloadResponse</b> and populates it from the information stored in
+   * the specified WBXML document.
    *
    * @param document the WBXML document containing the message download response information
    */
-  public MessageDownloadResponse(Document document) throws MessagingServiceException {
+  public MessageDownloadResponse(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();
 
     this.code = Long.parseLong(rootElement.getAttributeValue("code"));
@@ -102,9 +98,8 @@ public class MessageDownloadResponse {
 
         this.messages.add(new Message(messageDocument));
       } catch (Throwable e) {
-        throw new MessagingServiceException(
-            "Failed to parse the WBXML for a message associated with "
-                + "the message download response",
+        throw new MessagingException(
+            "Failed to parse the WBXML for a message associated with the message download response",
             e);
       }
     }
@@ -159,12 +154,12 @@ public class MessageDownloadResponse {
   }
 
   /**
-   * Returns <b>true</b> if the WBXML document contains valid message download response
-   * information or <b>false</b> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message download response information
+   * or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <b>true</b> if the WBXML document contains valid message download response
-   *     information or <b>false</b> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message download response information
+   *     or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();

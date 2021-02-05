@@ -31,9 +31,8 @@ import {SpinnerService} from '../../layout/services/spinner.service';
 import {BackNavigation} from '../../layout/components/back-navigation';
 import {GroupMemberType} from '../services/group-member-type';
 import {SortDirection} from '../../core/sorting/sort-direction';
-import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {GroupMember} from '../services/group-member';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
 
@@ -133,8 +132,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
@@ -184,8 +182,7 @@ export class GroupMembersComponent extends AdminContainerView implements AfterVi
           this.loadGroupMembers();
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {

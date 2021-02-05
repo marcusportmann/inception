@@ -16,14 +16,11 @@
 
 package digital.inception.security;
 
-
-
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /**
- * The <b>SecurityConfiguration</b> class provides the Spring configuration for the Security
- * module.
+ * The <b>SecurityConfiguration</b> class provides the Spring configuration for the Security module.
  *
  * @author Marcus Portmann
  */

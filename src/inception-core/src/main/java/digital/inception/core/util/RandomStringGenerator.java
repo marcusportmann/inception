@@ -43,8 +43,7 @@ public class RandomStringGenerator {
   private final char[] symbols;
 
   /**
-   * Constructs a new <b>RandomStringGenerator</b> that can be used to generate session
-   * identifiers.
+   * Constructs a new <b>RandomStringGenerator</b> that can be used to generate session identifiers.
    */
   public RandomStringGenerator() {
     this(21);

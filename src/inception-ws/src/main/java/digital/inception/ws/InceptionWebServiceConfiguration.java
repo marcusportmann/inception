@@ -22,7 +22,6 @@ import digital.inception.ws.security.CXFWSSX509CertificateTokenProfileEndpointCo
 import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.jws.WebService;
 import javax.xml.ws.Endpoint;
@@ -41,7 +40,6 @@ import org.springframework.context.annotation.ClassPathScanningCandidateComponen
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -228,11 +226,12 @@ public class InceptionWebServiceConfiguration {
 
     packagesToScanForWebServices.add("digital.inception");
 
-    for (Object annotated : applicationContext.getBeansWithAnnotation(ComponentScan.class).values()) {
+    for (Object annotated :
+        applicationContext.getBeansWithAnnotation(ComponentScan.class).values()) {
       Class clazz = ClassUtils.getUserClass(annotated);
 
-      ComponentScan componentScan = AnnotatedElementUtils
-          .getMergedAnnotation(clazz, ComponentScan.class);
+      ComponentScan componentScan =
+          AnnotatedElementUtils.getMergedAnnotation(clazz, ComponentScan.class);
       if (componentScan != null) { // For some reasons, this might still be null.
         for (String basePackage : componentScan.basePackages()) {
           // Replace any existing packages to scan with the higher level package

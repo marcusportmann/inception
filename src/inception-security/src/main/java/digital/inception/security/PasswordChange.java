@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -30,8 +28,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-
 
 /**
  * The <b>PasswordChange</b> class holds the information for a password change.
@@ -161,8 +157,8 @@ public class PasswordChange implements Serializable {
    * Returns whether the user's password should be expired when performing an administrative
    * password change.
    *
-   * @return <b>true</b> if the user's password should be expired when performing an
-   *     administrative password changeor <b>false</b> otherwise
+   * @return <b>true</b> if the user's password should be expired when performing an administrative
+   *     password changeor <b>false</b> otherwise
    */
   public Boolean getExpirePassword() {
     return expirePassword;
@@ -171,8 +167,8 @@ public class PasswordChange implements Serializable {
   /**
    * Returns whether the user should be locked when performing an administrative password change.
    *
-   * @return <b>true</b> if the user should be locked when performing an administrative
-   *     password change or <b>false</b> otherwise
+   * @return <b>true</b> if the user should be locked when performing an administrative password
+   *     change or <b>false</b> otherwise
    */
   public Boolean getLockUser() {
     return lockUser;

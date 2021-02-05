@@ -16,18 +16,14 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.util.UUID;
 
-
-
 /**
- * The <b>MessagePartDownloadRequest</b> class represents a request sent a mobile device to
- * download the queued message parts for the device.
+ * The <b>MessagePartDownloadRequest</b> class represents a request sent a mobile device to download
+ * the queued message parts for the device.
  *
  * @author Marcus Portmann
  */
@@ -35,8 +31,8 @@ import java.util.UUID;
 public class MessagePartDownloadRequest {
 
   /**
-   * The Universally Unique Identifier (UUID) for the device the message part
-   * download request originated from.
+   * The Universally Unique Identifier (UUID) for the device the message part download request
+   * originated from.
    */
   private UUID deviceId;
 
@@ -44,8 +40,8 @@ public class MessagePartDownloadRequest {
   private String username;
 
   /**
-   * Constructs a new <b>MessagePartDownloadRequest</b> and populates it from the information
-   * stored in the specified WBXML document.
+   * Constructs a new <b>MessagePartDownloadRequest</b> and populates it from the information stored
+   * in the specified WBXML document.
    *
    * @param document the WBXML document containing the message part download information
    */
@@ -59,8 +55,8 @@ public class MessagePartDownloadRequest {
   /**
    * Constructs a new <b>MessagePartDownloadRequest</b>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message part download request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message part
+   *     download request originated from
    * @param username the username for the user whose message parts should be downloaded
    */
   public MessagePartDownloadRequest(UUID deviceId, String username) {
@@ -86,11 +82,11 @@ public class MessagePartDownloadRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the message
-   * part download request originated from.
+   * Returns the Universally Unique Identifier (UUID) for the device the message part download
+   * request originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message
-   *     part download request originated from
+   * @return the Universally Unique Identifier (UUID) for the device the message part download
+   *     request originated from
    */
   public UUID getDeviceId() {
     return deviceId;
@@ -106,11 +102,11 @@ public class MessagePartDownloadRequest {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the device the message part
-   * download request originated from.
+   * Set the Universally Unique Identifier (UUID) for the device the message part download request
+   * originated from.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message part download request originated from
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message part
+   *     download request originated from
    */
   public void setDeviceId(UUID deviceId) {
     this.deviceId = deviceId;

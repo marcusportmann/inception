@@ -17,8 +17,8 @@
 package digital.inception.oauth2.server.authorization.token;
 
 /**
- * The <b>OAuth2AccessTokenException</b> exception is thrown to indicate an error condition
- * when working with an OAuth2 access token.
+ * The <b>OAuth2AccessTokenException</b> exception is thrown to indicate an error condition when
+ * working with an OAuth2 access token.
  *
  * @author Marcus Portmann
  */

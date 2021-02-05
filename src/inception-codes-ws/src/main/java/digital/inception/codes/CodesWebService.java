@@ -16,6 +16,7 @@
 
 package digital.inception.codes;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.time.ZoneId;
 import java.util.Date;
@@ -61,7 +62,7 @@ public class CodesWebService {
   @WebMethod(operationName = "CreateCode")
   public void createCode(@WebParam(name = "Code") @XmlElement(required = true) Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
-          CodesServiceException {
+          ServiceUnavailableException {
     codesService.createCode(code);
   }
 
@@ -73,7 +74,7 @@ public class CodesWebService {
   @WebMethod(operationName = "CreateCodeCategory")
   public void createCodeCategory(
       @WebParam(name = "CodeCategory") @XmlElement(required = true) CodeCategory codeCategory)
-      throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException {
+      throws InvalidArgumentException, DuplicateCodeCategoryException, ServiceUnavailableException {
     codesService.createCodeCategory(codeCategory);
   }
 
@@ -86,7 +87,7 @@ public class CodesWebService {
   public void deleteCode(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     codesService.deleteCode(codeCategoryId, codeId);
   }
 
@@ -98,7 +99,7 @@ public class CodesWebService {
   @WebMethod(operationName = "DeleteCodeCategory")
   public void deleteCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     codesService.deleteCodeCategory(codeCategoryId);
   }
 
@@ -114,7 +115,7 @@ public class CodesWebService {
   public Code getCode(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     return codesService.getCode(codeCategoryId, codeId);
   }
 
@@ -125,7 +126,7 @@ public class CodesWebService {
    */
   @WebMethod(operationName = "GetCodeCategories")
   @WebResult(name = "CodeCategory")
-  public List<CodeCategory> getCodeCategories() throws CodesServiceException {
+  public List<CodeCategory> getCodeCategories() throws ServiceUnavailableException {
     return codesService.getCodeCategories();
   }
 
@@ -139,7 +140,7 @@ public class CodesWebService {
   @WebResult(name = "CodeCategory")
   public CodeCategory getCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     return codesService.getCodeCategory(codeCategoryId);
   }
 
@@ -153,7 +154,7 @@ public class CodesWebService {
   @WebResult(name = "CodeCategoryData")
   public String getCodeCategoryData(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     String data = codesService.getCodeCategoryData(codeCategoryId);
 
     return StringUtils.hasText(data) ? data : "";
@@ -169,7 +170,7 @@ public class CodesWebService {
   @WebResult(name = "GetCodeCategoryName")
   public String getCodeCategoryName(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     return codesService.getCodeCategoryName(codeCategoryId);
   }
 
@@ -180,7 +181,7 @@ public class CodesWebService {
    */
   @WebMethod(operationName = "GetCodeCategorySummaries")
   @WebResult(name = "CodeCategorySummary")
-  public List<CodeCategorySummary> getCodeCategorySummaries() throws CodesServiceException {
+  public List<CodeCategorySummary> getCodeCategorySummaries() throws ServiceUnavailableException {
     return codesService.getCodeCategorySummaries();
   }
 
@@ -194,7 +195,7 @@ public class CodesWebService {
   @WebResult(name = "CodeCategoryUpdated")
   public Date getCodeCategoryUpdated(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     return Date.from(
         codesService
             .getCodeCategoryUpdated(codeCategoryId)
@@ -214,7 +215,7 @@ public class CodesWebService {
   public String getCodeName(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId,
       @WebParam(name = "CodeId") @XmlElement(required = true) String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     return codesService.getCodeName(codeCategoryId, codeId);
   }
 
@@ -228,7 +229,7 @@ public class CodesWebService {
   @WebResult(name = "Code")
   public List<Code> getCodesForCodeCategory(
       @WebParam(name = "CodeCategoryId") @XmlElement(required = true) String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     return codesService.getCodesForCodeCategory(codeCategoryId);
   }
 
@@ -239,7 +240,7 @@ public class CodesWebService {
    */
   @WebMethod(operationName = "UpdateCode")
   public void updateCode(@WebParam(name = "Code") @XmlElement(required = true) Code code)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException {
     codesService.updateCode(code);
   }
 
@@ -251,7 +252,7 @@ public class CodesWebService {
   @WebMethod(operationName = "UpdateCodeCategory")
   public void updateCodeCategory(
       @WebParam(name = "CodeCategory") @XmlElement(required = true) CodeCategory codeCategory)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException {
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException {
     codesService.updateCodeCategory(codeCategory);
   }
 }

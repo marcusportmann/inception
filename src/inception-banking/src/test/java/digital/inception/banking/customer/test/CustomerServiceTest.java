@@ -23,7 +23,6 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import digital.inception.banking.customer.ICustomerService;
 import digital.inception.banking.customer.IndividualCustomer;
 import digital.inception.party.ContactMechanism;
-import digital.inception.party.ContactMechanismPurpose;
 import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PhysicalAddress;
@@ -116,18 +115,14 @@ public class CustomerServiceTest {
         new IdentityDocument("za_id_card", "ZA", LocalDate.of(2012, 5, 1), "8904085800089"));
 
     individualCustomer.setCountryOfTaxResidence("ZA");
-    individualCustomer.addTaxNumber(new TaxNumber( "za_income_tax_number", "ZA", "123456789"));
+    individualCustomer.addTaxNumber(new TaxNumber("za_income_tax_number", "ZA", "123456789"));
 
     individualCustomer.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.MOBILE_NUMBER,
-            ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER,
-            "+27835551234"));
+            ContactMechanismType.MOBILE_NUMBER, "personal_mobile_number", "+27835551234"));
     individualCustomer.addContactMechanism(
         new ContactMechanism(
-            ContactMechanismType.EMAIL_ADDRESS,
-            ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS,
-            "test@test.com"));
+            ContactMechanismType.EMAIL_ADDRESS, "personal_email_address", "test@test.com"));
 
     PhysicalAddress residentialAddress =
         new PhysicalAddress(PhysicalAddressType.STREET, PhysicalAddressPurpose.RESIDENTIAL);

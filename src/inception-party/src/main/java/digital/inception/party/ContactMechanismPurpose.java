@@ -16,253 +16,222 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.io.Serializable;
 import java.util.Arrays;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
+import java.util.Collection;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+import org.springframework.util.StringUtils;
 
 /**
- * The <b>ContactMechanismPurpose</b> enumeration defines the possible contact mechanism purposes.
+ * The <b>ContactMechanismPurpose</b> class holds the information for a possible contact mechanism
+ * purpose.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The contact mechanism purpose")
-@XmlEnum
-@XmlType(name = "ContactMechanismPurpose", namespace = "http://party.inception.digital")
-public enum ContactMechanismPurpose {
-  @XmlEnumValue("PersonalMobileNumber")
-  PERSONAL_MOBILE_NUMBER(
-      "personal_mobile_number",
-      ContactMechanismType.MOBILE_NUMBER,
-      new PartyType[] {PartyType.PERSON},
-      "Personal Mobile Number"),
-  @XmlEnumValue("WorkMobileNumber")
-  WORK_MOBILE_NUMBER(
-      "work_mobile_number",
-      ContactMechanismType.MOBILE_NUMBER,
-      new PartyType[] {PartyType.PERSON},
-      "Work Mobile Number"),
-  @XmlEnumValue("OtherMobileNumber")
-  OTHER_MOBILE_NUMBER(
-      "other_mobile_number",
-      ContactMechanismType.MOBILE_NUMBER,
-      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
-      "Other Mobile Number"),
-  @XmlEnumValue("MainMobileNumber")
-  MAIN_MOBILE_NUMBER(
-      "main_mobile_number",
-      ContactMechanismType.MOBILE_NUMBER,
-      new PartyType[] {PartyType.ORGANIZATION},
-      "Main Mobile Number"),
-  @XmlEnumValue("HomePhoneNumber")
-  HOME_PHONE_NUMBER(
-      "home_phone_number",
-      ContactMechanismType.PHONE_NUMBER,
-      new PartyType[] {PartyType.PERSON},
-      "Home Phone Number"),
-  @XmlEnumValue("WorkPhoneNumber")
-  WORK_PHONE_NUMBER(
-      "work_phone_number",
-      ContactMechanismType.PHONE_NUMBER,
-      new PartyType[] {PartyType.PERSON},
-      "Work Phone Number"),
-  @XmlEnumValue("SchoolPhoneNumber")
-  SCHOOL_PHONE_NUMBER(
-      "school_phone_number",
-      ContactMechanismType.PHONE_NUMBER,
-      new PartyType[] {PartyType.PERSON},
-      "School Phone Number"),
-  @XmlEnumValue("PagerPhoneNumber")
-  PAGER_PHONE_NUMBER(
-      "pager_phone_number",
-      ContactMechanismType.PHONE_NUMBER,
-      new PartyType[] {PartyType.PERSON},
-      "Pager Phone Number"),
-  @XmlEnumValue("OtherPhoneNumber")
-  OTHER_PHONE_NUMBER(
-      "other_phone_number",
-      ContactMechanismType.PHONE_NUMBER,
-      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
-      "Other Phone Number"),
-  @XmlEnumValue("MainPhoneNumber")
-  MAIN_PHONE_NUMBER(
-      "main_phone_number",
-      ContactMechanismType.PHONE_NUMBER,
-      new PartyType[] {PartyType.ORGANIZATION},
-      "Main Phone Number"),
-  @XmlEnumValue("HomeFaxNumber")
-  HOME_FAX_NUMBER(
-      "home_fax_number",
-      ContactMechanismType.FAX_NUMBER,
-      new PartyType[] {PartyType.PERSON},
-      "Home Fax Number"),
-  @XmlEnumValue("WorkFaxNumber")
-  WORK_FAX_NUMBER(
-      "work_fax_number",
-      ContactMechanismType.FAX_NUMBER,
-      new PartyType[] {PartyType.PERSON},
-      "Work Fax Number"),
-  @XmlEnumValue("OtherFaxNumber")
-  OTHER_FAX_NUMBER(
-      "other_fax_number",
-      ContactMechanismType.FAX_NUMBER,
-      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
-      "Other Fax Number"),
-  @XmlEnumValue("MainFaxNumber")
-  MAIN_FAX_NUMBER(
-      "main_fax_number",
-      ContactMechanismType.FAX_NUMBER,
-      new PartyType[] {PartyType.ORGANIZATION},
-      "Main Fax Number"),
-  @XmlEnumValue("PersonalEmailAddress")
-  PERSONAL_EMAIL_ADDRESS(
-      "personal_email_address",
-      ContactMechanismType.EMAIL_ADDRESS,
-      new PartyType[] {PartyType.PERSON},
-      "Personal E-mail Address"),
-  @XmlEnumValue("WorkEmailAddress")
-  WORK_EMAIL_ADDRESS(
-      "work_email_address",
-      ContactMechanismType.EMAIL_ADDRESS,
-      new PartyType[] {PartyType.PERSON},
-      "Work E-mail Address"),
-  @XmlEnumValue("SchoolEmailAddress")
-  SCHOOL_EMAIL_ADDRESS(
-      "school_email_address",
-      ContactMechanismType.EMAIL_ADDRESS,
-      new PartyType[] {PartyType.PERSON},
-      "School E-mail Address"),
-  @XmlEnumValue("OtherEmailAddress")
-  OTHER_EMAIL_ADDRESS(
-      "other_email_address",
-      ContactMechanismType.EMAIL_ADDRESS,
-      new PartyType[] {PartyType.ORGANIZATION, PartyType.PERSON},
-      "Other E-mail Address"),
-  @XmlEnumValue("MainEmailAddress")
-  MAIN_EMAIL_ADDRESS(
-      "main_email_address",
-      ContactMechanismType.EMAIL_ADDRESS,
-      new PartyType[] {PartyType.ORGANIZATION},
-      "Main E-mail Address"),
-  @XmlEnumValue("WhatsAppUserID")
-  WHATSAPP_USER_ID(
-      "whatsapp_user_id",
-      ContactMechanismType.SOCIAL_MEDIA,
-      new PartyType[] {PartyType.PERSON},
-      "WhatsApp User ID"),
-  @XmlEnumValue("TwitterID")
-  TWITTER_ID(
-      "twitter_id",
-      ContactMechanismType.SOCIAL_MEDIA,
-      new PartyType[] {PartyType.PERSON},
-      "Twitter ID");
+@Schema(description = "A contact mechanism purpose")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"type", "code", "localeId", "sortIndex", "name", "description", "partyTypes"})
+@XmlRootElement(name = "ContactMechanismPurpose", namespace = "http://party.inception.digital")
+@XmlType(
+    name = "ContactMechanismPurpose",
+    namespace = "http://party.inception.digital",
+    propOrder = {"type", "code", "localeId", "sortIndex", "name", "description", "partyTypes"})
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "party", name = "contact_mechanism_purposes")
+@IdClass(ContactMechanismPurposeId.class)
+public class ContactMechanismPurpose implements Serializable {
 
-  private final String code;
+  /** The contact mechanism purpose code for a home fax number. */
+  public static final String HOME_FAX_NUMBER = "home_fax_number";
 
-  private final String description;
+  /** The contact mechanism purpose code for a home phone number. */
+  public static final String HOME_PHONE_NUMBER = "home_phone_number";
 
-  private final PartyType[] partyTypes;
+  /** The contact mechanism purpose code for a main e-mail address. */
+  public static final String MAIN_EMAIL_ADDRESS = "main_email_address";
 
-  private final ContactMechanismType type;
+  /** The contact mechanism purpose code for a main fax number. */
+  public static final String MAIN_FAX_NUMBER = "main_fax_number";
 
-  ContactMechanismPurpose(
-      String code, ContactMechanismType type, PartyType[] partyTypes, String description) {
-    this.code = code;
-    this.type = type;
-    this.partyTypes = partyTypes;
-    this.description = description;
-  }
+  /** The contact mechanism purpose code for a main mobile number. */
+  public static final String MAIN_MOBILE_NUMBER = "main_mobile_number";
+
+  /** The contact mechanism purpose code for a main phone number. */
+  public static final String MAIN_PHONE_NUMBER = "main_phone_number";
+
+  /** The contact mechanism purpose code for an other e-mail address. */
+  public static final String OTHER_EMAIL_ADDRESS = "other_email_address";
+
+  /** The contact mechanism purpose code for a other fax number. */
+  public static final String OTHER_FAX_NUMBER = "other_fax_number";
+
+  /** The contact mechanism purpose code for an other mobile number. */
+  public static final String OTHER_MOBILE_NUMBER = "other_mobile_number";
+
+  /** The contact mechanism purpose code for an other phone number. */
+  public static final String OTHER_PHONE_NUMBER = "other_phone_number";
+
+  /** The contact mechanism purpose code for a pager phone number. */
+  public static final String PAGER_PHONE_NUMBER = "pager_phone_number";
+
+  /** The contact mechanism purpose code for a personal e-mail address. */
+  public static final String PERSONAL_EMAIL_ADDRESS = "personal_email_address";
+
+  /** The contact mechanism purpose code for personal mobile number. */
+  public static final String PERSONAL_MOBILE_NUMBER = "personal_mobile_number";
+
+  /** The contact mechanism purpose code for a school e-mail address. */
+  public static final String SCHOOL_EMAIL_ADDRESS = "school_email_address";
+
+  /** The contact mechanism purpose code for a school phone number. */
+  public static final String SCHOOL_PHONE_NUMBER = "school_phone_number";
+
+  /** The contact mechanism purpose code for a Twitter ID. */
+  public static final String TWITTER_ID = "twitter_id";
+
+  /** The contact mechanism purpose code for a WhatsApp User ID. */
+  public static final String WHATSAPP_USER_ID = "whatsapp_user_id";
+
+  /** The contact mechanism purpose code for a work e-mail address. */
+  public static final String WORK_EMAIL_ADDRESS = "work_email_address";
+
+  /** The contact mechanism purpose code for a work fax number. */
+  public static final String WORK_FAX_NUMBER = "work_fax_number";
+
+  /** The contact mechanism purpose code for work mobile number. */
+  public static final String WORK_MOBILE_NUMBER = "work_mobile_number";
+
+  /** The contact mechanism purpose code for a work phone number. */
+  public static final String WORK_PHONE_NUMBER = "work_phone_number";
+
+  private static final long serialVersionUID = 1000000;
+
+  /** The code for the contact mechanism purpose. */
+  @Schema(description = "The code for the contact mechanism purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Code", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Id
+  @Column(name = "code", length = 30, nullable = false)
+  private String code;
+
+  /** The description for the contact mechanism purpose. */
+  @Schema(description = "The description for the contact mechanism purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Description", required = true)
+  @NotNull
+  @Size(max = 200)
+  @Column(name = "description", length = 200, nullable = false)
+  private String description;
+
+  /** The Unicode locale identifier for the contact mechanism purpose. */
+  @Schema(
+      description = "The Unicode locale identifier for the contact mechanism purpose",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "LocaleId", required = true)
+  @NotNull
+  @Size(min = 2, max = 10)
+  @Id
+  @Column(name = "locale_id", length = 10, nullable = false)
+  private String localeId;
+
+  /** The name of the contact mechanism purpose. */
+  @Schema(description = "The name of the contact mechanism purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  @Column(name = "name", length = 50, nullable = false)
+  private String name;
 
   /**
-   * Returns the contact mechanism purpose given by the specified code value.
-   *
-   * @param code the code for the contact mechanism purpose
-   * @return the contact mechanism purpose given by the specified code value
+   * The comma-delimited codes for the party types the contact mechanism purpose is associated with.
    */
-  @JsonCreator
-  public static ContactMechanismPurpose fromCode(String code) {
-    switch (code) {
-      case "personal_mobile_number":
-        return ContactMechanismPurpose.PERSONAL_MOBILE_NUMBER;
+  @JsonIgnore
+  @XmlTransient
+  @NotNull
+  @Size(min = 1, max = 300)
+  @Column(name = "party_types", length = 300, nullable = false)
+  private String partyTypes;
 
-      case "work_mobile_number":
-        return ContactMechanismPurpose.WORK_MOBILE_NUMBER;
+  /** The sort index for the contact mechanism purpose. */
+  @Schema(description = "The sort index for the contact mechanism purpose", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SortIndex", required = true)
+  @NotNull
+  @Column(name = "sort_index", nullable = false)
+  private Integer sortIndex;
 
-      case "other_mobile_number":
-        return ContactMechanismPurpose.OTHER_MOBILE_NUMBER;
+  /** The code for the contact mechanism type the contact mechanism purpose is associated with. */
+  @Schema(
+      description =
+          "The code for the contact mechanism type the contact mechanism purpose is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Type", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Id
+  @Column(name = "type", length = 30, nullable = false)
+  private String type;
 
-      case "main_mobile_number":
-        return ContactMechanismPurpose.MAIN_MOBILE_NUMBER;
+  /** Constructs a new <b>ContactMechanismPurpose</b>. */
+  public ContactMechanismPurpose() {}
 
-      case "home_phone_number":
-        return ContactMechanismPurpose.HOME_PHONE_NUMBER;
-
-      case "work_phone_number":
-        return ContactMechanismPurpose.WORK_PHONE_NUMBER;
-
-      case "school_phone_number":
-        return ContactMechanismPurpose.SCHOOL_PHONE_NUMBER;
-
-      case "pager_phone_number":
-        return ContactMechanismPurpose.PAGER_PHONE_NUMBER;
-
-      case "other_phone_number":
-        return ContactMechanismPurpose.OTHER_PHONE_NUMBER;
-
-      case "main_phone_number":
-        return ContactMechanismPurpose.MAIN_PHONE_NUMBER;
-
-      case "home_fax_number":
-        return ContactMechanismPurpose.HOME_FAX_NUMBER;
-
-      case "work_fax_number":
-        return ContactMechanismPurpose.WORK_FAX_NUMBER;
-
-      case "other_fax_number":
-        return ContactMechanismPurpose.OTHER_FAX_NUMBER;
-
-      case "main_fax_number":
-        return ContactMechanismPurpose.MAIN_FAX_NUMBER;
-
-      case "personal_email_address":
-        return ContactMechanismPurpose.PERSONAL_EMAIL_ADDRESS;
-
-      case "work_email_address":
-        return ContactMechanismPurpose.WORK_EMAIL_ADDRESS;
-
-      case "school_email_address":
-        return ContactMechanismPurpose.SCHOOL_EMAIL_ADDRESS;
-
-      case "other_email_address":
-        return ContactMechanismPurpose.OTHER_EMAIL_ADDRESS;
-
-      case "main_email_address":
-        return ContactMechanismPurpose.MAIN_EMAIL_ADDRESS;
-
-      case "whatsapp_user_id":
-        return ContactMechanismPurpose.WHATSAPP_USER_ID;
-
-      case "twitter_id":
-        return ContactMechanismPurpose.TWITTER_ID;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the contact mechanism purpose with the invalid code ("
-                + code
-                + ")");
+  /**
+   * Indicates whether some other object is "equal to" this one.
+   *
+   * @param object the reference object with which to compare
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
+   */
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
     }
+
+    if (object == null) {
+      return false;
+    }
+
+    if (getClass() != object.getClass()) {
+      return false;
+    }
+
+    ContactMechanismPurpose other = (ContactMechanismPurpose) object;
+
+    return Objects.equals(type, other.type)
+        && Objects.equals(code, other.code)
+        && Objects.equals(localeId, other.localeId);
   }
 
   /**
-   * Returns the code value for the contact mechanism purpose.
+   * Returns the code for the contact mechanism purpose.
    *
-   * @return the code value for the contact mechanism purpose
+   * @return the code for the contact mechanism purpose
    */
-  @JsonValue
-  public String code() {
+  public String getCode() {
     return code;
   }
 
@@ -271,36 +240,160 @@ public enum ContactMechanismPurpose {
    *
    * @return the description for the contact mechanism purpose
    */
-  public String description() {
+  public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the Unicode locale identifier for the contact mechanism purpose.
+   *
+   * @return the Unicode locale identifier for the contact mechanism purpose
+   */
+  public String getLocaleId() {
+    return localeId;
+  }
+
+  /**
+   * Returns the name of the contact mechanism purpose.
+   *
+   * @return the name of the contact mechanism purpose
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the codes for the party types the contact mechanism purpose is associated with.
+   *
+   * @return the codes for the party types the contact mechanism purpose is associated with
+   */
+  @Schema(
+      description =
+          "The codes for the party types the contact mechanism purpose is associated with",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "PartyTypes", required = true)
+  public String[] getPartyTypes() {
+    return StringUtils.commaDelimitedListToStringArray(partyTypes);
+  }
+
+  /**
+   * Returns the sort index for the contact mechanism purpose.
+   *
+   * @return the sort index for the contact mechanism purpose
+   */
+  public Integer getSortIndex() {
+    return sortIndex;
+  }
+
+  /**
+   * Returns the code for the contact mechanism type the contact mechanism purpose is associated
+   * with.
+   *
+   * @return the code for the contact mechanism type the contact mechanism purpose is associated
+   *     with
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((type == null) ? 0 : type.hashCode())
+        + ((code == null) ? 0 : code.hashCode())
+        + ((localeId == null) ? 0 : localeId.hashCode());
   }
 
   /**
    * Returns whether the contact mechanism purpose is valid for the party type.
    *
-   * @param partyType the party type
+   * @param partyTypeCode the party type code
    * @return <b>true</b> if the contact mechanism purpose is valid for the party type or
    *     <b>false</b> otherwise
    */
-  public boolean isValidForPartyType(PartyType partyType) {
-    return Arrays.stream(partyTypes).anyMatch(validPartyType -> validPartyType.equals(partyType));
+  public boolean isValidForPartyType(String partyTypeCode) {
+    return Arrays.stream(getPartyTypes())
+        .anyMatch(validPartyType -> validPartyType.equals(partyTypeCode));
   }
 
   /**
-   * Returns the party types the contact mechanism purpose is associated with.
+   * Set the code for the contact mechanism purpose.
    *
-   * @return the party types the contact mechanism purpose is associated with
+   * @param code the code for the contact mechanism purpose
    */
-  public PartyType[] partyTypes() {
-    return partyTypes;
+  public void setCode(String code) {
+    this.code = code;
   }
 
   /**
-   * Returns the contact mechanism type the contact mechanism purpose is associated with.
+   * Set the description for the contact mechanism purpose.
    *
-   * @return the contact mechanism type the contact mechanism purpose is associated with
+   * @param description the description for the contact mechanism purpose
    */
-  public ContactMechanismType type() {
-    return type;
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the Unicode locale identifier for the contact mechanism purpose.
+   *
+   * @param localeId the Unicode locale identifier for the contact mechanism purpose
+   */
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
+  }
+
+  /**
+   * Set the name of the contact mechanism purpose.
+   *
+   * @param name the name of the contact mechanism purpose
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the codes for the party types the contact mechanism purpose is associated with.
+   *
+   * @param partyTypes the codes for the party types the contact mechanism purpose is associated
+   *     with
+   */
+  public void setPartyTypes(String[] partyTypes) {
+    this.partyTypes = StringUtils.arrayToCommaDelimitedString(partyTypes);
+  }
+
+  /**
+   * Set the codes for the party types the contact mechanism purpose is associated with.
+   *
+   * @param partyTypes the codes for the party types the contact mechanism purpose is associated
+   *     with
+   */
+  @JsonIgnore
+  public void setPartyTypes(Collection<String> partyTypes) {
+    this.partyTypes = StringUtils.collectionToDelimitedString(partyTypes, ",");
+  }
+
+  /**
+   * Set the sort index for the contact mechanism purpose.
+   *
+   * @param sortIndex the sort index for the contact mechanism purpose
+   */
+  public void setSortIndex(Integer sortIndex) {
+    this.sortIndex = sortIndex;
+  }
+
+  /**
+   * Set the code for the contact mechanism type the contact mechanism purpose is associated with.
+   *
+   * @param type the code for the contact mechanism type the contact mechanism purpose is associated
+   *     with
+   */
+  public void setType(String type) {
+    this.type = type;
   }
 }

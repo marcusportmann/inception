@@ -26,9 +26,8 @@ import {CodesService} from '../services/codes.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
-import {CodesServiceError} from '../services/codes.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
 import {Code} from '../services/code';
 import {BackNavigation} from '../../layout/components/back-navigation';
@@ -106,8 +105,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
           this.loadCodes();
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
@@ -132,7 +130,7 @@ export class CodesComponent extends AdminContainerView implements AfterViewInit 
       this.dataSource.data = codes;
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof CodesServiceError) || (error instanceof AccessDeniedError) || (error instanceof SystemUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {

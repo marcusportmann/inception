@@ -17,8 +17,8 @@
 package digital.inception.ws.security;
 
 /**
- * The <b>WebServiceClientSecurityException</b> exception is thrown to indicate a web service
- * client security error.
+ * The <b>WebServiceClientSecurityException</b> exception is thrown to indicate a web service client
+ * security error.
  *
  * @author Marcus Portmann
  */
@@ -26,10 +26,7 @@ public class WebServiceClientSecurityException extends RuntimeException {
 
   private static final long serialVersionUID = 1000000;
 
-  /**
-   * Constructs a new <b>WebServiceClientSecurityException</b> with <b>null</b> as its
-   * message.
-   */
+  /** Constructs a new <b>WebServiceClientSecurityException</b> with <b>null</b> as its message. */
   @SuppressWarnings("unused")
   public WebServiceClientSecurityException() {
     super();
@@ -45,8 +42,7 @@ public class WebServiceClientSecurityException extends RuntimeException {
   }
 
   /**
-   * Constructs a new <b>WebServiceClientSecurityException</b> with the specified message and
-   * cause.
+   * Constructs a new <b>WebServiceClientSecurityException</b> with the specified message and cause.
    *
    * @param message The message saved for later retrieval by the <b>getMessage()</b> method.
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A

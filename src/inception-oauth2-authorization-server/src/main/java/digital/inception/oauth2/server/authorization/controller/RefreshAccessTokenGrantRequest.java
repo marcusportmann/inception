@@ -20,8 +20,8 @@ import java.util.Map;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>RefreshAccessTokenGrantRequest</b> class holds the information for a Refresh Access
- * Token Grant request.
+ * The <b>RefreshAccessTokenGrantRequest</b> class holds the information for a Refresh Access Token
+ * Grant request.
  *
  * <p>See <a href="https://tools.ietf.org/html/rfc6749#section-6">Refreshing an Access Token</a>
  *

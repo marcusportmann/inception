@@ -23,8 +23,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>StringToLocalDateTimeConverter</b> class implements the Spring converter that
- * converts a <b>String</b> type into a <b>LocalDateTime</b> type.
+ * The <b>StringToLocalDateTimeConverter</b> class implements the Spring converter that converts a
+ * <b>String</b> type into a <b>LocalDateTime</b> type.
  *
  * @author Marcus Portmann
  */

@@ -16,70 +16,145 @@
 
 package digital.inception.party;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
+import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>ContactMechanismType</b> enumeration defines the possible contact mechanism types.
+ * The <b>ContactMechanismType</b> class holds the information for a possible contact mechanism
+ * type.
  *
  * @author Marcus Portmann
  */
-@Schema(description = "The contact mechanism type")
-@XmlEnum
-@XmlType(name = "ContactMechanismType", namespace = "http://party.inception.digital")
-public enum ContactMechanismType {
-  @XmlEnumValue("MobileNumber")
-  MOBILE_NUMBER("mobile_number", "Mobile Number"),
-  @XmlEnumValue("PhoneNumber")
-  PHONE_NUMBER("phone_number", "Phone Number"),
-  @XmlEnumValue("FaxNumber")
-  FAX_NUMBER("fax_number", "Fax Number"),
-  @XmlEnumValue("EmailAddress")
-  EMAIL_ADDRESS("email_address", "E-mail Address"),
-  @XmlEnumValue("SocialMedia")
-  SOCIAL_MEDIA("social_media", "Social Media");
+@Schema(description = "A type of contact mechanism")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({"code", "localeId", "sortIndex", "name", "plural", "description"})
+@XmlRootElement(name = "ContactMechanismType", namespace = "http://party.inception.digital")
+@XmlType(
+    name = "ContactMechanismType",
+    namespace = "http://party.inception.digital",
+    propOrder = {"code", "localeId", "sortIndex", "name", "plural", "description"})
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(schema = "party", name = "contact_mechanism_types")
+@IdClass(ContactMechanismTypeId.class)
+public class ContactMechanismType implements Serializable {
 
-  private final String code;
+  /** The contact mechanism type code for an e-mail address. */
+  public static final String EMAIL_ADDRESS = "email_address";
 
-  private final String description;
+  /** The contact mechanism type code for a fax number. */
+  public static final String FAX_NUMBER = "fax_number";
 
-  ContactMechanismType(String code, String description) {
-    this.code = code;
-    this.description = description;
-  }
+  /** The contact mechanism type code for a mobile number. */
+  public static final String MOBILE_NUMBER = "mobile_number";
+
+  /** The contact mechanism type code for a phone number. */
+  public static final String PHONE_NUMBER = "phone_number";
+
+  /** The contact mechanism type code for a social media identifier. */
+  public static final String SOCIAL_MEDIA = "social_media";
+
+  private static final long serialVersionUID = 1000000;
+
+  /** The code for the contact mechanism type. */
+  @Schema(description = "The code for the contact mechanism type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Code", required = true)
+  @NotNull
+  @Size(min = 1, max = 30)
+  @Id
+  @Column(name = "code", length = 30, nullable = false)
+  private String code;
+
+  /** The description for the contact mechanism type. */
+  @Schema(description = "The description for the contact mechanism type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Description", required = true)
+  @NotNull
+  @Size(max = 200)
+  @Column(name = "description", length = 200, nullable = false)
+  private String description;
+
+  /** The Unicode locale identifier for the contact mechanism type. */
+  @Schema(
+      description = "The Unicode locale identifier for the contact mechanism type",
+      required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "LocaleId", required = true)
+  @NotNull
+  @Size(min = 2, max = 10)
+  @Id
+  @Column(name = "locale_id", length = 10, nullable = false)
+  private String localeId;
+
+  /** The name of the contact mechanism type. */
+  @Schema(description = "The name of the contact mechanism type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Name", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  @Column(name = "name", length = 50, nullable = false)
+  private String name;
+
+  /** The plural for the contact mechanism type. */
+  @Schema(description = "The plural for the contact mechanism type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "Plural", required = true)
+  @NotNull
+  @Size(min = 1, max = 50)
+  @Column(name = "plural", length = 50, nullable = false)
+  private String plural;
+
+  /** The sort index for the contact mechanism type. */
+  @Schema(description = "The sort index for the contact mechanism type", required = true)
+  @JsonProperty(required = true)
+  @XmlElement(name = "SortIndex", required = true)
+  @NotNull
+  @Column(name = "sort_index", nullable = false)
+  private Integer sortIndex;
+
+  /** Constructs a new <b>ContactMechanismType</b>. */
+  public ContactMechanismType() {}
 
   /**
-   * Returns the contact mechanism type given by the specified code value.
+   * Indicates whether some other object is "equal to" this one.
    *
-   * @param code the code for the contact mechanism type
-   * @return the contact mechanism type given by the specified code value
+   * @param object the reference object with which to compare
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
-  @JsonCreator
-  public static ContactMechanismType fromCode(String code) {
-    switch (code) {
-      case "mobile_number":
-        return ContactMechanismType.MOBILE_NUMBER;
-
-      case "phone_number":
-        return ContactMechanismType.PHONE_NUMBER;
-
-      case "fax_number":
-        return ContactMechanismType.FAX_NUMBER;
-
-      case "email_address":
-        return ContactMechanismType.EMAIL_ADDRESS;
-
-      case "social_media":
-        return ContactMechanismType.SOCIAL_MEDIA;
-
-      default:
-        throw new RuntimeException(
-            "Failed to determine the contact mechanism type with the invalid code (" + code + ")");
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
     }
+
+    if (object == null) {
+      return false;
+    }
+
+    if (getClass() != object.getClass()) {
+      return false;
+    }
+
+    ContactMechanismType other = (ContactMechanismType) object;
+
+    return Objects.equals(code, other.code) && Objects.equals(localeId, other.localeId);
   }
 
   /**
@@ -87,8 +162,7 @@ public enum ContactMechanismType {
    *
    * @return the code for the contact mechanism type
    */
-  @JsonValue
-  public String code() {
+  public String getCode() {
     return code;
   }
 
@@ -97,7 +171,107 @@ public enum ContactMechanismType {
    *
    * @return the description for the contact mechanism type
    */
-  public String description() {
+  public String getDescription() {
     return description;
+  }
+
+  /**
+   * Returns the Unicode locale identifier for the contact mechanism type.
+   *
+   * @return the Unicode locale identifier for the contact mechanism type
+   */
+  public String getLocaleId() {
+    return localeId;
+  }
+
+  /**
+   * Returns the name of the contact mechanism type.
+   *
+   * @return the name of the contact mechanism type
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Returns the plural for the contact mechanism type.
+   *
+   * @return the plural for the contact mechanism type
+   */
+  public String getPlural() {
+    return plural;
+  }
+
+  /**
+   * Returns the sort index for the contact mechanism type.
+   *
+   * @return the sort index for the contact mechanism type
+   */
+  public Integer getSortIndex() {
+    return sortIndex;
+  }
+
+  /**
+   * Returns a hash code value for the object.
+   *
+   * @return a hash code value for the object
+   */
+  @Override
+  public int hashCode() {
+    return ((code == null) ? 0 : code.hashCode()) + ((localeId == null) ? 0 : localeId.hashCode());
+  }
+
+  /**
+   * Set the code for the contact mechanism type.
+   *
+   * @param code the code for the contact mechanism type
+   */
+  public void setCode(String code) {
+    this.code = code;
+  }
+
+  /**
+   * Set the description for the contact mechanism type.
+   *
+   * @param description the description for the contact mechanism type
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Set the Unicode locale identifier for the contact mechanism type.
+   *
+   * @param localeId the Unicode locale identifier for the contact mechanism type
+   */
+  public void setLocaleId(String localeId) {
+    this.localeId = localeId;
+  }
+
+  /**
+   * Set the name of the contact mechanism type.
+   *
+   * @param name the name of the contact mechanism type
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Set the plural for the contact mechanism type.
+   *
+   * @param plural the plural for the contact mechanism type
+   */
+  public void setPlural(String plural) {
+    this.plural = plural;
+  }
+
+  /**
+   * Set the sort index for the contact mechanism type.
+   *
+   * @param sortIndex the sort index for the contact mechanism type
+   */
+  public void setSortIndex(Integer sortIndex) {
+    this.sortIndex = sortIndex;
   }
 }

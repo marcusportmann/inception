@@ -293,24 +293,6 @@ export class PasswordExpiredError extends Error {
 }
 
 /**
- * The SecurityServiceError class holds the information for a Security Service error.
- *
- * @author Marcus Portmann
- */
-export class SecurityServiceError extends Error {
-
-  /**
-   * Constructs a new SecurityServiceError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}
-
-/**
  * The SessionError class holds the information for a session error.
  *
  * @author Marcus Portmann
@@ -318,9 +300,9 @@ export class SecurityServiceError extends Error {
 export class SessionError extends Error {
 
   /**
-   * Constructs a new SecurityServiceError.
+   * Constructs a new SessionError.
    *
-   * @param message The error SessionError.
+   * @param message The error message.
    * @param cause   The optional cause of the error.
    */
   constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {

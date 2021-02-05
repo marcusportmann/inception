@@ -22,6 +22,92 @@
       create schema party
     </sql>
 
+    <createTable schemaName="party" tableName="contact_mechanism_types" remarks="Contact Mechanism Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the contact mechanism type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the contact mechanism type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the contact mechanism type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the contact mechanism type"/>
+      <column name="plural" type="nvarchar(50)" remarks="The plural name for the contact mechanism type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the contact mechanism type"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="contact_mechanism_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_types" columnName="plural"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_types" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="contact_mechanism_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="contact_mechanism_types_locale_id_ix" schemaName="party" tableName="contact_mechanism_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="contact_mechanism_purposes" remarks="Contact Mechanism Purposes">
+      <column name="type" type="nvarchar(30)" remarks="The code for the contact mechanism type the contact mechanism purpose is associated with"/>
+      <column name="code" type="nvarchar(30)" remarks="The code for the contact mechanism purpose"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the contact mechanism purpose"/>
+      <column name="sort_index" type="int" remarks="The sort index for the contact mechanism purpose"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the contact mechanism purpose"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the contact mechanism purpose"/>
+      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the contact mechanism purpose is associated with"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="contact_mechanism_purposes" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="type"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="contact_mechanism_purposes" columnName="party_types"/>
+    <addForeignKeyConstraint constraintName="contact_mechanism_purposes_contact_mechanism_type_fk" baseTableSchemaName="reference"
+      baseTableName="contact_mechanism_purposes" baseColumnNames="type,locale_id" referencedTableSchemaName="reference"
+      referencedTableName="contact_mechanism_types" referencedColumnNames="code,locale_id" deleteCascade="true"/>
+    <addDefaultValue schemaName="party" tableName="contact_mechanism_purposes" columnName="description" defaultValue=""/>
+    <createIndex indexName="contact_mechanism_purposes_type_ix" schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type"/>
+    </createIndex>
+    <createIndex indexName="contact_mechanism_purposes_locale_id_ix" schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="physical_address_types" remarks="Physical Address Types">
+      <column name="code" type="nvarchar(30)" remarks="The code for the physical address type"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the physical address type"/>
+      <column name="sort_index" type="int" remarks="The sort index for the physical address type"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the physical address type"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the physical address"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="physical_address_types" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_types" columnName="description"/>
+    <addDefaultValue schemaName="party" tableName="physical_address_types" columnName="description" defaultValue=""/>
+    <createIndex indexName="physical_address_types_locale_id_ix" schemaName="party" tableName="physical_address_types">
+      <column name="locale_id"/>
+    </createIndex>
+
+    <createTable schemaName="party" tableName="physical_address_purposes" remarks="Physical Address Purposes">
+      <column name="code" type="nvarchar(30)" remarks="The code for the physical address purpose"/>
+      <column name="locale_id" type="nvarchar(10)" remarks="The Unicode locale identifier for the physical address purpose"/>
+      <column name="sort_index" type="int" remarks="The sort index for the physical address purpose"/>
+      <column name="name" type="nvarchar(50)" remarks="The name of the physical address purpose"/>
+      <column name="description" type="nvarchar(200)" remarks="The description for the physical address purpose"/>
+      <column name="party_types" type="nvarchar(300)" remarks="The comma-delimited list of codes for the party types the physical address purpose is associated with"/>
+    </createTable>
+    <addPrimaryKey schemaName="party" tableName="physical_address_purposes" columnNames="code,locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_purposes" columnName="code"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_purposes" columnName="locale_id"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_purposes" columnName="sort_index"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_purposes" columnName="name"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_purposes" columnName="description"/>
+    <addNotNullConstraint schemaName="party" tableName="physical_address_purposes" columnName="party_types"/>
+    <addDefaultValue schemaName="party" tableName="physical_address_purposes" columnName="description" defaultValue=""/>
+    <createIndex indexName="physical_address_purposes_locale_id_ix" schemaName="party" tableName="physical_address_purposes">
+      <column name="locale_id"/>
+    </createIndex>
+
     <createTable schemaName="party" tableName="party" remarks="Parties">
       <column name="id" type="uuid"
         remarks="The Universally Unique Identifier (UUID) for the party"/>
@@ -32,6 +118,399 @@
     <addNotNullConstraint schemaName="party" tableName="party" columnName="id"/>
     <addNotNullConstraint schemaName="party" tableName="party" columnName="type"/>
     <addNotNullConstraint schemaName="party" tableName="party" columnName="name"/>
-  </changeSet>
 
+    <insert schemaName="party" tableName="contact_mechanism_types">
+      <column name="code" value="mobile_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Mobile Number"/>
+      <column name="plural" value="Mobile Numbers"/>
+      <column name="description" value="Mobile Number"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_types">
+      <column name="code" value="phone_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Phone Number"/>
+      <column name="plural" value="Phone Numbers"/>
+      <column name="description" value="Phone Number"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_types">
+      <column name="code" value="fax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Fax Number"/>
+      <column name="plural" value="Fax Numbers"/>
+      <column name="description" value="Fax Number"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_types">
+      <column name="code" value="email_address"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="E-mail Address"/>
+      <column name="plural" value="E-mail Addresses"/>
+      <column name="description" value="E-mail Address"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_types">
+      <column name="code" value="social_media"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Social Media"/>
+      <column name="plural" value="Social Media"/>
+      <column name="description" value="Social Media"/>
+    </insert>
+
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="mobile_number"/>
+      <column name="code" value="personal_mobile_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="100"/>
+      <column name="name" value="Personal Mobile Number"/>
+      <column name="description" value="Personal Mobile Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="mobile_number"/>
+      <column name="code" value="work_mobile_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="101"/>
+      <column name="name" value="Work Mobile Number"/>
+      <column name="description" value="Work Mobile Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="mobile_number"/>
+      <column name="code" value="other_mobile_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="102"/>
+      <column name="name" value="Other Mobile Number"/>
+      <column name="description" value="Other Mobile Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="mobile_number"/>
+      <column name="code" value="main_mobile_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="110"/>
+      <column name="name" value="Main Mobile Number"/>
+      <column name="description" value="Main Mobile Number"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="phone_number"/>
+      <column name="code" value="home_phone_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="200"/>
+      <column name="name" value="Home Phone Number"/>
+      <column name="description" value="Home Phone Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="phone_number"/>
+      <column name="code" value="work_phone_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="201"/>
+      <column name="name" value="Work Phone Number"/>
+      <column name="description" value="Work Phone Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="phone_number"/>
+      <column name="code" value="school_phone_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="202"/>
+      <column name="name" value="School Phone Number"/>
+      <column name="description" value="School Phone Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="phone_number"/>
+      <column name="code" value="pager_phone_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="203"/>
+      <column name="name" value="Pager Phone Number"/>
+      <column name="description" value="Pager Phone Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="phone_number"/>
+      <column name="code" value="other_phone_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="204"/>
+      <column name="name" value="Other Phone Number"/>
+      <column name="description" value="Other Phone Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="phone_number"/>
+      <column name="code" value="main_phone_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="210"/>
+      <column name="name" value="Main Phone Number"/>
+      <column name="description" value="Main Phone Number"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="fax_number"/>
+      <column name="code" value="home_fax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="300"/>
+      <column name="name" value="Home Fax Number"/>
+      <column name="description" value="Home Fax Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="fax_number"/>
+      <column name="code" value="work_fax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="301"/>
+      <column name="name" value="Work Fax Number"/>
+      <column name="description" value="Work Fax Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="fax_number"/>
+      <column name="code" value="other_fax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="302"/>
+      <column name="name" value="Other Fax Number"/>
+      <column name="description" value="Other Fax Number"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="fax_number"/>
+      <column name="code" value="main_fax_number"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="310"/>
+      <column name="name" value="Main Fax Number"/>
+      <column name="description" value="Main Fax Number"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="email_address"/>
+      <column name="code" value="personal_email_address"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="400"/>
+      <column name="name" value="Personal E-mail Address"/>
+      <column name="description" value="Personal E-mail Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="email_address"/>
+      <column name="code" value="work_email_address"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="401"/>
+      <column name="name" value="Work E-mail Address"/>
+      <column name="description" value="Work E-mail Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="email_address"/>
+      <column name="code" value="school_email_address"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="402"/>
+      <column name="name" value="School E-mail Address"/>
+      <column name="description" value="School E-mail Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="email_address"/>
+      <column name="code" value="other_email_address"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="403"/>
+      <column name="name" value="Other E-mail Address"/>
+      <column name="description" value="Other E-mail Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="email_address"/>
+      <column name="code" value="main_email_address"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="410"/>
+      <column name="name" value="Main E-mail Address"/>
+      <column name="description" value="Main E-mail Address"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="social_media"/>
+      <column name="code" value="whatsapp_user_id"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="500"/>
+      <column name="name" value="WhatsApp User ID"/>
+      <column name="description" value="WhatsApp User ID"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="contact_mechanism_purposes">
+      <column name="type" value="social_media"/>
+      <column name="code" value="twitter_id"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="501"/>
+      <column name="name" value="Twitter ID"/>
+      <column name="description" value="Twitter ID"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="billing"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Billing"/>
+      <column name="description" value="Billing Address"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="business"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Business"/>
+      <column name="description" value="Business Address"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="correspondence"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Correspondence"/>
+      <column name="description" value="Correspondence Address"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="delivery"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="Delivery"/>
+      <column name="description" value="Delivery Address"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="home"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Home"/>
+      <column name="description" value="Home Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="main"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Main"/>
+      <column name="description" value="Main Address"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="permanent"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Permanent"/>
+      <column name="description" value="Permanent Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="registered_office"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="8"/>
+      <column name="name" value="Registered Office"/>
+      <column name="description" value="Registered Office Address"/>
+      <column name="party_types" value="organization"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="residential"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="9"/>
+      <column name="name" value="Residential"/>
+      <column name="description" value="Residential Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="service"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="10"/>
+      <column name="name" value="Service"/>
+      <column name="description" value="Service Address"/>
+      <column name="party_types" value="organization,person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="sole_trader"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="11"/>
+      <column name="name" value="Sole Trader"/>
+      <column name="description" value="Sole Trader Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="temporary"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="12"/>
+      <column name="name" value="Temporary"/>
+      <column name="description" value="Temporary Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_purposes">
+      <column name="code" value="work"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="13"/>
+      <column name="name" value="Work"/>
+      <column name="description" value="Work Address"/>
+      <column name="party_types" value="person"/>
+    </insert>
+
+    <insert schemaName="party" tableName="physical_address_types">
+      <column name="code" value="building"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="1"/>
+      <column name="name" value="Building"/>
+      <column name="description" value="Building"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_types">
+      <column name="code" value="complex"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="2"/>
+      <column name="name" value="Complex"/>
+      <column name="description" value="Complex"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_types">
+      <column name="code" value="farm"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="3"/>
+      <column name="name" value="Farm"/>
+      <column name="description" value="Farm"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_types">
+      <column name="code" value="international"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="4"/>
+      <column name="name" value="International"/>
+      <column name="description" value="International"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_types">
+      <column name="code" value="postal"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="5"/>
+      <column name="name" value="Postal"/>
+      <column name="description" value="Postal"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_types">
+      <column name="code" value="site"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="6"/>
+      <column name="name" value="Site"/>
+      <column name="description" value="Site"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_types">
+      <column name="code" value="street"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="7"/>
+      <column name="name" value="Street"/>
+      <column name="description" value="Street"/>
+    </insert>
+    <insert schemaName="party" tableName="physical_address_types">
+      <column name="code" value="unstructured"/>
+      <column name="locale_id" value="en-US"/>
+      <column name="sort_index" value="99"/>
+      <column name="name" value="Unstructured"/>
+      <column name="description" value="Unstructured"/>
+    </insert>
+
+  </changeSet>
 </databaseChangeLog>

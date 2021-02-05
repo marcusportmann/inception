@@ -47,9 +47,9 @@ public interface JobRepository extends JpaRepository<Job, String> {
   @Query(
       "select j from Job j where j.enabled = true and j.status = 2 and "
           + "(j.lastExecuted < :lastExecutedBefore or j.executionAttempts = 0) "
-          + "and j.nextExecution <= current_timestamp")
+          + "and j.nextExecution <= :currentTimestamp")
   List<Job> findJobsScheduledForExecutionForWrite(
-      @Param("lastExecutedBefore") LocalDateTime lastExecutedBefore, Pageable pageable);
+      @Param("lastExecutedBefore") LocalDateTime lastExecutedBefore, @Param("currentTimestamp") LocalDateTime currentTimestamp, Pageable pageable);
 
   @Query("select j from Job j where j.enabled = true and j.status = 1")
   List<Job> findUnscheduledJobs();

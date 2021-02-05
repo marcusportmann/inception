@@ -16,22 +16,18 @@
 
 package digital.inception.messaging.messages;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import digital.inception.messaging.MessagePriority;
-import digital.inception.messaging.MessagingServiceException;
+import digital.inception.messaging.MessagingException;
 import digital.inception.messaging.WbxmlMessageData;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
 
-
-
 /**
- * The <b>CheckUserExistsResponseData</b> class manages the data for a "Check User Exists
- * Response" message.
+ * The <b>CheckUserExistsResponseData</b> class manages the data for a "Check User Exists Response"
+ * message.
  *
  * <p>This is a synchronous message.
  *
@@ -100,7 +96,7 @@ public class CheckUserExistsResponseData extends WbxmlMessageData {
    *     <b>false</b> otherwise
    */
   @Override
-  public boolean fromMessageData(byte[] messageData) throws MessagingServiceException {
+  public boolean fromMessageData(byte[] messageData) throws MessagingException {
     Document document = parseWBXML(messageData);
 
     Element rootElement = document.getRootElement();

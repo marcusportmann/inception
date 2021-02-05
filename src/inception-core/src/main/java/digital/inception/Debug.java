@@ -62,11 +62,11 @@ public class Debug {
   }
 
   /**
-   * Returns <b>true</b> if the application infrastructure is running in debug mode or <b>
-   * false</b> otherwise.
+   * Returns <b>true</b> if the application infrastructure is running in debug mode or <b> false</b>
+   * otherwise.
    *
-   * @return <b>true</b> if the application infrastructure is running in debug mode or <b>
-   * false</b> otherwise
+   * @return <b>true</b> if the application infrastructure is running in debug mode or <b> false</b>
+   *     otherwise
    */
   public static boolean inDebugMode() {
     if (System.getProperty("digital.inception.debugMode") != null) {

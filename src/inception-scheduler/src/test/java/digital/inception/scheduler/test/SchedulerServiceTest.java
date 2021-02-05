@@ -16,8 +16,6 @@
 
 package digital.inception.scheduler.test;
 
-
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -39,11 +37,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-
-
 /**
- * The <b>SchedulerServiceTest</b> class contains the implementation of the JUnit tests for
- * the Scheduler Service.
+ * The <b>SchedulerServiceTest</b> class contains the implementation of the JUnit tests for the
+ * Scheduler Service.
  *
  * @author Marcus Portmann
  */

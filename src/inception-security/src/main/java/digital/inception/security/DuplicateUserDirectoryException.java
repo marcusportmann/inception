@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,11 +24,9 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * A <b>DuplicateUserDirectoryException</b> is thrown to indicate that a security operation
- * failed as a result of a duplicate user directory.
+ * A <b>DuplicateUserDirectoryException</b> is thrown to indicate that a security operation failed
+ * as a result of a duplicate user directory.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -63,8 +59,7 @@ public class DuplicateUserDirectoryException extends ServiceException {
   /**
    * Constructs a new <b>DuplicateUserDirectoryException</b>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   public DuplicateUserDirectoryException(UUID userDirectoryId) {
     super(

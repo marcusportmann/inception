@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -29,11 +27,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-
 /**
- * The <b>UserDirectoryCapabilities</b> class holds the information that describes the
- * capabilities supported by a user directory.
+ * The <b>UserDirectoryCapabilities</b> class holds the information that describes the capabilities
+ * supported by a user directory.
  *
  * @author Marcus Portmann
  */
@@ -178,8 +174,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the admin change password capability.
    *
-   * @return <b>true</b> if the user directory supports the admin change password capability
-   *     or <b>false</b> otherwise
+   * @return <b>true</b> if the user directory supports the admin change password capability or
+   *     <b>false</b> otherwise
    */
   public boolean getSupportsAdminChangePassword() {
     return supportsAdminChangePassword;
@@ -208,8 +204,8 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the group member administration capability.
    *
-   * @return <b>true</b> if the user directory supports the group member administration
-   *     capability or <b>false</b> otherwise
+   * @return <b>true</b> if the user directory supports the group member administration capability
+   *     or <b>false</b> otherwise
    */
   public boolean getSupportsGroupMemberAdministration() {
     return supportsGroupMemberAdministration;
@@ -248,8 +244,7 @@ public class UserDirectoryCapabilities {
   /**
    * Returns whether the user directory supports the user locks capability.
    *
-   * @return <b>true</b> if the user directory supports the user locks capability or <b>
-   * false</b>
+   * @return <b>true</b> if the user directory supports the user locks capability or <b> false</b>
    */
   public boolean getSupportsUserLocks() {
     return supportsUserLocks;

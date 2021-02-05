@@ -83,8 +83,8 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
    * Creates a socket and connects it to the specified port number at the specified address.
    *
    * <p>This socket is configured using the socket options established for this factory. If there is
-   * a security manager, its <b>checkConnect</b> method is called with the host address and
-   * port as its arguments. This could result in a <b>SecurityException</b>.
+   * a security manager, its <b>checkConnect</b> method is called with the host address and port as
+   * its arguments. This could result in a <b>SecurityException</b>.
    *
    * @param host the address of the server host
    * @param port the server port
@@ -99,8 +99,8 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
    * Creates a socket and connects it to the specified remote host at the specified remote port.
    *
    * <p>This socket is configured using the socket options established for this factory. If there is
-   * a security manager, its <b>checkConnect</b> method is called with the host address and
-   * port as its arguments. This could result in a <b>SecurityException</b>.
+   * a security manager, its <b>checkConnect</b> method is called with the host address and port as
+   * its arguments. This could result in a <b>SecurityException</b>.
    *
    * @param host the server host
    * @param port the server port
@@ -116,8 +116,8 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
    * socket will also be bound to the local address and port supplied.
    *
    * <p>This socket is configured using the socket options established for this factory. If there is
-   * a security manager, its <b>checkConnect</b> method is called with the host address and
-   * port as its arguments. This could result in a <b>SecurityException</b>.
+   * a security manager, its <b>checkConnect</b> method is called with the host address and port as
+   * its arguments. This could result in a <b>SecurityException</b>.
    *
    * @param host the address of the server host
    * @param port the server port
@@ -156,8 +156,8 @@ public class NoTrustSSLSocketFactory extends SSLSocketFactory {
    * socket will also be bound to the local address and port supplied.
    *
    * <p>This socket is configured using the socket options established for this factory. If there is
-   * a security manager, its <b>checkConnect</b> method is called with the host address and
-   * port as its arguments. This could result in a <b>SecurityException</b>.
+   * a security manager, its <b>checkConnect</b> method is called with the host address and port as
+   * its arguments. This could result in a <b>SecurityException</b>.
    *
    * @param host the server host
    * @param port the server port

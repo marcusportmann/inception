@@ -1,4 +1,4 @@
-///*
+/// *
 // * Copyright 2021 Marcus Portmann
 // *
 // * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,19 +14,19 @@
 // * limitations under the License.
 // */
 //
-//package digital.inception.persistence;
+// package digital.inception.persistence;
 //
-//import org.eclipse.persistence.transaction.JTATransactionController;
+// import org.eclipse.persistence.transaction.JTATransactionController;
 //
-///**
+/// **
 // * The <b>JtaTransactionController</b> class implements the external JTA transaction
 // * controller for the EclipseLink persistence provider.
 // *
 // * @author Marcus Portmann
 // */
-//public class EclipseLinkJtaTransactionController extends JTATransactionController {
+// public class EclipseLinkJtaTransactionController extends JTATransactionController {
 //
 //  public EclipseLinkJtaTransactionController() {
 //    super(com.arjuna.ats.jta.TransactionManager.transactionManager());
 //  }
-//}
+// }

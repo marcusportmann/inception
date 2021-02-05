@@ -22,8 +22,8 @@ import digital.inception.core.wbxml.Encoder;
 import java.util.UUID;
 
 /**
- * The <b>MessageDownloadRequest</b> class represents a request sent by a mobile device to
- * download the queued messages for the device.
+ * The <b>MessageDownloadRequest</b> class represents a request sent by a mobile device to download
+ * the queued messages for the device.
  *
  * <p>No information in the download request is encrypted and the request itself is not
  * authenticated. This is because the queued messages returned will themselves be encrypted.
@@ -43,8 +43,8 @@ public class MessageDownloadRequest {
   private String username;
 
   /**
-   * Constructs a new <b>MessageDownloadRequest</b> and populates it from the information
-   * stored in the specified WBXML document.
+   * Constructs a new <b>MessageDownloadRequest</b> and populates it from the information stored in
+   * the specified WBXML document.
    *
    * @param document the WBXML document containing the message download information
    */
@@ -68,12 +68,12 @@ public class MessageDownloadRequest {
   }
 
   /**
-   * Returns <b>true</b> if the WBXML document contains valid message download request
-   * information or <b>false</b> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message download request information
+   * or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <b>true</b> if the WBXML document contains valid message download request
-   *     information or <b>false</b> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message download request information
+   *     or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();

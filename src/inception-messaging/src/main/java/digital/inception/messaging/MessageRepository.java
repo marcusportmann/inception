@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -29,11 +27,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
-
 /**
- * The <b>MessageRepository</b> interface declares the repository for the <b>Message</b>
- * domain type.
+ * The <b>MessageRepository</b> interface declares the repository for the <b>Message</b> domain
+ * type.
  *
  * @author Marcus Portmann
  */

@@ -42,7 +42,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-banking-rs</artifactId>
+      <artifactId>inception-banking-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -50,7 +50,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-codes-rs</artifactId>
+      <artifactId>inception-codes-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -58,7 +58,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-configuration-rs</artifactId>
+      <artifactId>inception-configuration-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -66,7 +66,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-error-rs</artifactId>
+      <artifactId>inception-error-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -74,7 +74,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-mail-rs</artifactId>
+      <artifactId>inception-mail-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -90,7 +90,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-party-rs</artifactId>
+      <artifactId>inception-party-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -102,11 +102,11 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-reference-rs</artifactId>
+      <artifactId>inception-reference-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-reporting-rs</artifactId>
+      <artifactId>inception-reporting-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -114,11 +114,11 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-rs</artifactId>
+      <artifactId>inception-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-scheduler-rs</artifactId>
+      <artifactId>inception-scheduler-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -126,7 +126,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-security-rs</artifactId>
+      <artifactId>inception-security-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
@@ -134,7 +134,7 @@
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>
-      <artifactId>inception-sms-rs</artifactId>
+      <artifactId>inception-sms-api</artifactId>
     </dependency>
     <dependency>
       <groupId>digital.inception</groupId>

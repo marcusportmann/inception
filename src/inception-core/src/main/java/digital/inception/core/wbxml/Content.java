@@ -19,8 +19,8 @@ package digital.inception.core.wbxml;
 import java.io.OutputStream;
 
 /**
- * The <b>Content</b> interface is implemented by all of the WBXML content types e.g. <b>
- * CDATA</b>, <b>Element</b>, <b>Opaque</b>, etc.
+ * The <b>Content</b> interface is implemented by all of the WBXML content types e.g. <b> CDATA</b>,
+ * <b>Element</b>, <b>Opaque</b>, etc.
  *
  * @author Marcus Portmann
  */

@@ -16,6 +16,7 @@
 
 package demo.model;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.ValidationError;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -62,18 +63,18 @@ public class DataService implements IDataService {
    */
   @Override
   @Transactional
-  public void createData(Data data) throws DataServiceException {
+  public void createData(Data data) throws ServiceUnavailableException {
     try {
       entityManager.persist(data);
     } catch (Throwable e) {
-      throw new DataServiceException("Failed to add the data", e);
+      throw new ServiceUnavailableException("Failed to add the data", e);
     }
   }
 
   /** Add the data. */
   @Override
   @Transactional
-  public void createSampleData() throws DataServiceException {
+  public void createSampleData() throws ServiceUnavailableException {
     try {
       Data newData = new Data();
       newData.setId(666);
@@ -83,7 +84,7 @@ public class DataService implements IDataService {
 
       entityManager.persist(newData);
     } catch (Throwable e) {
-      throw new DataServiceException("Failed to add the data", e);
+      throw new ServiceUnavailableException("Failed to add the data", e);
     }
   }
 
@@ -94,13 +95,13 @@ public class DataService implements IDataService {
    */
   @Override
   @Transactional
-  public List<Data> getAllData() throws DataServiceException {
+  public List<Data> getAllData() throws ServiceUnavailableException {
     try {
       TypedQuery<Data> query = entityManager.createQuery("SELECT d FROM Data d", Data.class);
 
       return query.getResultList();
     } catch (Throwable e) {
-      throw new DataServiceException("Failed to retrieve the data", e);
+      throw new ServiceUnavailableException("Failed to retrieve the data", e);
     }
   }
 
@@ -112,7 +113,7 @@ public class DataService implements IDataService {
    */
   @Override
   @Transactional
-  public Data getData(long id) throws DataServiceException {
+  public Data getData(long id) throws ServiceUnavailableException {
     try {
       TypedQuery<Data> query =
           entityManager.createQuery("SELECT d FROM Data d WHERE d.id=:id", Data.class);
@@ -127,7 +128,7 @@ public class DataService implements IDataService {
         return null;
       }
     } catch (Throwable e) {
-      throw new DataServiceException("Failed to retrieve the data (" + id + ")", e);
+      throw new ServiceUnavailableException("Failed to retrieve the data (" + id + ")", e);
     }
   }
 
@@ -137,7 +138,7 @@ public class DataService implements IDataService {
    * @return the validation errors
    */
   @Override
-  public List<ValidationError> validateData(Data data) throws DataServiceException {
+  public List<ValidationError> validateData(Data data) throws ServiceUnavailableException {
     try {
       Set<ConstraintViolation<Data>> constraintViolations = validator.validate(data);
 
@@ -149,7 +150,7 @@ public class DataService implements IDataService {
 
       return errors;
     } catch (Throwable e) {
-      throw new DataServiceException("Failed to validate the data", e);
+      throw new ServiceUnavailableException("Failed to validate the data", e);
     }
   }
 }

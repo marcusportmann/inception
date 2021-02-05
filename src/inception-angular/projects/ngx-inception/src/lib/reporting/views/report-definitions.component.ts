@@ -27,9 +27,8 @@ import {ReportingService} from '../services/reporting.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
-import {ReportingServiceError} from '../services/reporting.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
 
 /**
@@ -89,8 +88,7 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
               this.loadReportDefinitions();
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof ReportingServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
+              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {
@@ -116,7 +114,7 @@ export class ReportDefinitionsComponent extends AdminContainerView implements Af
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
         if ((error instanceof ReportingService) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+          (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

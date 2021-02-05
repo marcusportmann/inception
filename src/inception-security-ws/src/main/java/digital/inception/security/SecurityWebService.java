@@ -16,8 +16,7 @@
 
 package digital.inception.security;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -33,8 +32,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.xml.bind.annotation.XmlElement;
 import org.springframework.util.StringUtils;
-
-
 
 //  For get functions use classes with this naming convention...
 //
@@ -73,8 +70,7 @@ public class SecurityWebService {
   /**
    * Add the group member to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the name of the group member
@@ -86,15 +82,14 @@ public class SecurityWebService {
       @WebParam(name = "MemberType") @XmlElement(required = true) GroupMemberType memberType,
       @WebParam(name = "MemberName") @XmlElement(required = true) String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          UserNotFoundException, ExistingGroupMemberException, SecurityServiceException {
+          UserNotFoundException, ExistingGroupMemberException, ServiceUnavailableException {
     securityService.addMemberToGroup(userDirectoryId, groupName, memberType, memberName);
   }
 
   /**
    * Add the role to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param roleCode the code for the role
    */
@@ -104,7 +99,7 @@ public class SecurityWebService {
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName,
       @WebParam(name = "RoleCode") @XmlElement(required = true) String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          RoleNotFoundException, ExistingGroupRoleException, SecurityServiceException {
+          RoleNotFoundException, ExistingGroupRoleException, ServiceUnavailableException {
     securityService.addRoleToGroup(userDirectoryId, groupName, roleCode);
   }
 
@@ -112,23 +107,21 @@ public class SecurityWebService {
    * Add the user directory to the tenant.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   @WebMethod(operationName = "AddUserDirectoryToTenant")
   public void addUserDirectoryToTenant(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException, UserDirectoryNotFoundException,
-          ExistingTenantUserDirectoryException, SecurityServiceException {
+          ExistingTenantUserDirectoryException, ServiceUnavailableException {
     securityService.addUserDirectoryToTenant(tenantId, userDirectoryId);
   }
 
   /**
    * Administratively change the password for the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @param passwordChange the password change
    */
@@ -138,7 +131,7 @@ public class SecurityWebService {
       @WebParam(name = "Username") @XmlElement(required = true) String username,
       @WebParam(name = "PasswordChange") @XmlElement(required = true) PasswordChange passwordChange)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (passwordChange == null) {
       throw new InvalidArgumentException("passwordChange");
     }
@@ -178,7 +171,7 @@ public class SecurityWebService {
       @WebParam(name = "PasswordChange") @XmlElement(required = true) PasswordChange passwordChange)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
           AuthenticationFailedException, InvalidSecurityCodeException, ExistingPasswordException,
-          UserLockedException, SecurityServiceException {
+          UserLockedException, ServiceUnavailableException {
     if (!StringUtils.hasText(username)) {
       throw new InvalidArgumentException("username");
     }
@@ -236,7 +229,7 @@ public class SecurityWebService {
   @WebMethod(operationName = "CreateGroup")
   public void createGroup(@WebParam(name = "Group") @XmlElement(required = true) Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateGroupException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     securityService.createGroup(group);
   }
 
@@ -251,7 +244,7 @@ public class SecurityWebService {
       @WebParam(name = "Tenant") @XmlElement(required = true) Tenant tenant,
       @WebParam(name = "CreateUserDirectory") @XmlElement(required = true)
           Boolean createUserDirectory)
-      throws InvalidArgumentException, DuplicateTenantException, SecurityServiceException {
+      throws InvalidArgumentException, DuplicateTenantException, ServiceUnavailableException {
     securityService.createTenant(tenant, (createUserDirectory != null) && createUserDirectory);
   }
 
@@ -268,7 +261,7 @@ public class SecurityWebService {
       @WebParam(name = "ExpiredPassword") @XmlElement(required = true) Boolean expiredPassword,
       @WebParam(name = "UserLocked") @XmlElement(required = true) Boolean userLocked)
       throws InvalidArgumentException, UserDirectoryNotFoundException, DuplicateUserException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     securityService.createUser(
         user, (expiredPassword != null) && expiredPassword, (userLocked != null) && userLocked);
   }
@@ -281,15 +274,15 @@ public class SecurityWebService {
   @WebMethod(operationName = "CreateUserDirectory")
   public void createUserDirectory(
       @WebParam(name = "UserDirectory") @XmlElement(required = true) UserDirectory userDirectory)
-      throws InvalidArgumentException, DuplicateUserDirectoryException, SecurityServiceException {
+      throws InvalidArgumentException, DuplicateUserDirectoryException,
+          ServiceUnavailableException {
     securityService.createUserDirectory(userDirectory);
   }
 
   /**
    * Delete the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    */
   @WebMethod(operationName = "DeleteGroup")
@@ -297,7 +290,7 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          ExistingGroupMembersException, SecurityServiceException {
+          ExistingGroupMembersException, ServiceUnavailableException {
     securityService.deleteGroup(userDirectoryId, groupName);
   }
 
@@ -308,15 +301,14 @@ public class SecurityWebService {
    */
   @WebMethod(operationName = "DeleteTenant")
   public void deleteTenant(@WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     securityService.deleteTenant(tenantId);
   }
 
   /**
    * Delete the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    */
   @WebMethod(operationName = "DeleteUser")
@@ -324,28 +316,26 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     securityService.deleteUser(userDirectoryId, username);
   }
 
   /**
    * Delete the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   @WebMethod(operationName = "DeleteUserDirectory")
   public void deleteUserDirectory(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     securityService.deleteUserDirectory(userDirectoryId);
   }
 
   /**
    * Retrieve the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the group
    */
@@ -355,30 +345,28 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     return securityService.getGroup(userDirectoryId, groupName);
   }
 
   /**
    * Retrieve all the group names.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the group names
    */
   @WebMethod(operationName = "GetGroupNames")
   @WebResult(name = "GroupName")
   public List<String> getGroupNames(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     return securityService.getGroupNames(userDirectoryId);
   }
 
   /**
    * Retrieve the names of the groups the user is a member of.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the names of the groups the user is a member of
    */
@@ -388,15 +376,14 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     return securityService.getGroupNamesForUser(userDirectoryId, username);
   }
 
   /**
    * Retrieve the groups.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param filter the optional filter to apply to the groups
    * @param sortDirection the optional sort direction to apply to the groups
    * @param pageIndex the optional page index
@@ -411,15 +398,14 @@ public class SecurityWebService {
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     return securityService.getGroups(userDirectoryId, filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Retrieve the group members.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param filter the optional filter to apply to the group members
    * @param sortDirection the optional sort direction to apply to the group members
@@ -436,7 +422,7 @@ public class SecurityWebService {
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     return securityService.getMembersForGroup(
         userDirectoryId, groupName, filter, sortDirection, pageIndex, pageSize);
   }
@@ -444,8 +430,7 @@ public class SecurityWebService {
   /**
    * Retrieve the codes for the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the codes for the roles that have been assigned to the group
    */
@@ -455,7 +440,7 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     return securityService.getRoleCodesForGroup(userDirectoryId, groupName);
   }
 
@@ -466,15 +451,14 @@ public class SecurityWebService {
    */
   @WebMethod(operationName = "GetRoles")
   @WebResult(name = "Role")
-  public List<Role> getRoles() throws SecurityServiceException {
+  public List<Role> getRoles() throws ServiceUnavailableException {
     return securityService.getRoles();
   }
 
   /**
    * Retrieve the roles that have been assigned to the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @return the roles that have been assigned to the group
    */
@@ -484,7 +468,7 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (userDirectoryId == null) {
       throw new InvalidArgumentException("userDirectoryId");
     }
@@ -505,7 +489,7 @@ public class SecurityWebService {
   @WebMethod(operationName = "GetTenant")
   @WebResult(name = "Tenant")
   public Tenant getTenant(@WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     return securityService.getTenant(tenantId);
   }
 
@@ -519,7 +503,7 @@ public class SecurityWebService {
   @WebResult(name = "TenantName")
   public String getTenantName(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     return securityService.getTenantName(tenantId);
   }
 
@@ -539,30 +523,28 @@ public class SecurityWebService {
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws InvalidArgumentException, SecurityServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return securityService.getTenants(filter, sortDirection, pageIndex, pageSize);
   }
 
   /**
    * Retrieve the tenants the user directory is associated with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the tenants the user directory is associated with
    */
   @WebMethod(operationName = "GetTenantsForUserDirectory")
   @WebResult(name = "Tenant")
   public List<Tenant> getTenantsForUserDirectory(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     return securityService.getTenantsForUserDirectory(userDirectoryId);
   }
 
   /**
    * Retrieve the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the user
    */
@@ -572,7 +554,7 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     User user = securityService.getUser(userDirectoryId, username);
 
     // Remove the password information
@@ -599,7 +581,7 @@ public class SecurityWebService {
       @WebParam(name = "SortDirection") @XmlElement(required = true) SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement(required = true) Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement(required = true) Integer pageSize)
-      throws InvalidArgumentException, SecurityServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return securityService.getUserDirectories(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -613,52 +595,49 @@ public class SecurityWebService {
   @WebResult(name = "UserDirectory")
   public List<UserDirectory> getUserDirectoriesForTenant(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     return securityService.getUserDirectoriesForTenant(tenantId);
   }
 
   /**
    * Retrieve the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the user directory
    */
   @WebMethod(operationName = "GetUserDirectory")
   @WebResult(name = "UserDirectory")
   public UserDirectory getUserDirectory(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     return securityService.getUserDirectory(userDirectoryId);
   }
 
   /**
    * Retrieve the capabilities the user directory supports.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the capabilities the user directory supports
    */
   @WebMethod(operationName = "GetUserDirectoryCapabilities")
   @WebResult(name = "UserDirectoryCapabilities")
   public UserDirectoryCapabilities getUserDirectoryCapabilities(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     return securityService.getUserDirectoryCapabilities(userDirectoryId);
   }
 
   /**
    * Retrieve the name of the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the name of user directory
    */
   @WebMethod(operationName = "GetUserDirectoryName")
   @WebResult(name = "UserDirectoryName")
   public String getUserDirectoryName(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     return securityService.getUserDirectoryName(userDirectoryId);
   }
 
@@ -678,7 +657,7 @@ public class SecurityWebService {
       @WebParam(name = "SortDirection") @XmlElement(required = true) SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement(required = true) Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement(required = true) Integer pageSize)
-      throws InvalidArgumentException, SecurityServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     return securityService.getUserDirectorySummaries(filter, sortDirection, pageIndex, pageSize);
   }
 
@@ -692,15 +671,14 @@ public class SecurityWebService {
   @WebResult(name = "UserDirectorySummary")
   public List<UserDirectorySummary> getUserDirectorySummariesForTenant(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     return securityService.getUserDirectorySummariesForTenant(tenantId);
   }
 
   /**
    * Retrieve the user directory type for the user directory.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @return the user directory type for the user directory
    */
   @WebMethod(operationName = "GetUserDirectoryTypeForUserDirectory")
@@ -708,7 +686,7 @@ public class SecurityWebService {
   public UserDirectoryType getUserDirectoryTypeForUserDirectory(
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, UserDirectoryNotFoundException,
-          UserDirectoryTypeNotFoundException, SecurityServiceException {
+          UserDirectoryTypeNotFoundException, ServiceUnavailableException {
     return securityService.getUserDirectoryTypeForUserDirectory(userDirectoryId);
   }
 
@@ -719,15 +697,14 @@ public class SecurityWebService {
    */
   @WebMethod(operationName = "GetUserDirectoryTypes")
   @WebResult(name = "UserDirectoryType")
-  public List<UserDirectoryType> getUserDirectoryTypes() throws SecurityServiceException {
+  public List<UserDirectoryType> getUserDirectoryTypes() throws ServiceUnavailableException {
     return securityService.getUserDirectoryTypes();
   }
 
   /**
    * Retrieve the name of the user.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param username the username for the user
    * @return the name of the user
    */
@@ -737,15 +714,14 @@ public class SecurityWebService {
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId,
       @WebParam(name = "Username") @XmlElement(required = true) String username)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     return securityService.getUserName(userDirectoryId, username);
   }
 
   /**
    * Retrieve the users.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param filter the optional filter to apply to the users
    * @param sortBy The optional method used to sort the users e.g. by name.
    * @param sortDirection the optional sort direction to apply to the users
@@ -762,7 +738,7 @@ public class SecurityWebService {
       @WebParam(name = "SortDirection") @XmlElement SortDirection sortDirection,
       @WebParam(name = "PageIndex") @XmlElement Integer pageIndex,
       @WebParam(name = "PageSize") @XmlElement Integer pageSize)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     return securityService.getUsers(
         userDirectoryId, filter, sortBy, sortDirection, pageIndex, pageSize);
   }
@@ -770,8 +746,7 @@ public class SecurityWebService {
   /**
    * Remove the group member from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the name of the group member
@@ -783,15 +758,14 @@ public class SecurityWebService {
       @WebParam(name = "MemberType") @XmlElement(required = true) GroupMemberType memberType,
       @WebParam(name = "MemberName") @XmlElement(required = true) String memberName)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          GroupMemberNotFoundException, SecurityServiceException {
+          GroupMemberNotFoundException, ServiceUnavailableException {
     securityService.removeMemberFromGroup(userDirectoryId, groupName, memberType, memberName);
   }
 
   /**
    * Remove the role from the group.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param groupName the name of the group
    * @param roleCode the code for the role
    */
@@ -801,7 +775,7 @@ public class SecurityWebService {
       @WebParam(name = "GroupName") @XmlElement(required = true) String groupName,
       @WebParam(name = "RoleCode") @XmlElement(required = true) String roleCode)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          GroupRoleNotFoundException, SecurityServiceException {
+          GroupRoleNotFoundException, ServiceUnavailableException {
     securityService.removeRoleFromGroup(userDirectoryId, groupName, roleCode);
   }
 
@@ -809,15 +783,14 @@ public class SecurityWebService {
    * Remove the user directory from the tenant.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   @WebMethod(operationName = "RemoveUserDirectoryFromTenant")
   public void removeUserDirectoryFromTenant(
       @WebParam(name = "TenantId") @XmlElement(required = true) UUID tenantId,
       @WebParam(name = "UserDirectoryId") @XmlElement(required = true) UUID userDirectoryId)
       throws InvalidArgumentException, TenantNotFoundException,
-          TenantUserDirectoryNotFoundException, SecurityServiceException {
+          TenantUserDirectoryNotFoundException, ServiceUnavailableException {
     securityService.removeUserDirectoryFromTenant(tenantId, userDirectoryId);
   }
 
@@ -831,7 +804,7 @@ public class SecurityWebService {
   public void resetPassword(
       @WebParam(name = "Username") @XmlElement(required = true) String username,
       @WebParam(name = "ResetPasswordUrl") @XmlElement(required = true) String resetPasswordUrl)
-      throws InvalidArgumentException, UserNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserNotFoundException, ServiceUnavailableException {
     securityService.initiatePasswordReset(username, resetPasswordUrl, true);
   }
 
@@ -843,7 +816,7 @@ public class SecurityWebService {
   @WebMethod(operationName = "UpdateGroup")
   public void updateGroup(@WebParam(name = "Group") @XmlElement(required = true) Group group)
       throws InvalidArgumentException, UserDirectoryNotFoundException, GroupNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     securityService.updateGroup(group);
   }
 
@@ -854,7 +827,7 @@ public class SecurityWebService {
    */
   @WebMethod(operationName = "UpdateTenant")
   public void updateTenant(@WebParam(name = "Tenant") @XmlElement(required = true) Tenant tenant)
-      throws InvalidArgumentException, TenantNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, TenantNotFoundException, ServiceUnavailableException {
     securityService.updateTenant(tenant);
   }
 
@@ -871,7 +844,7 @@ public class SecurityWebService {
       @WebParam(name = "ExpirePassword") @XmlElement(required = true) boolean expirePassword,
       @WebParam(name = "LockUser") @XmlElement(required = true) boolean lockUser)
       throws InvalidArgumentException, UserDirectoryNotFoundException, UserNotFoundException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     securityService.updateUser(user, expirePassword, lockUser);
   }
 
@@ -883,7 +856,7 @@ public class SecurityWebService {
   @WebMethod(operationName = "UpdateUserDirectory")
   public void updateUserDirectory(
       @WebParam(name = "UserDirectory") @XmlElement(required = true) UserDirectory userDirectory)
-      throws InvalidArgumentException, UserDirectoryNotFoundException, SecurityServiceException {
+      throws InvalidArgumentException, UserDirectoryNotFoundException, ServiceUnavailableException {
     securityService.updateUserDirectory(userDirectory);
   }
 }

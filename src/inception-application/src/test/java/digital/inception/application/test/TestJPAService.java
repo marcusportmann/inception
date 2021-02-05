@@ -34,12 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 @SuppressWarnings("JpaQlInspection")
 public class TestJPAService implements ITestJPAService {
 
+  /** The Spring platform transaction manager. */
+  private final PlatformTransactionManager transactionManager;
+
   /* Entity Manager */
   @PersistenceContext(unitName = "applicationPersistenceUnit")
   private EntityManager entityManager;
-
-  /** The Spring platform transaction manager. */
-  private final PlatformTransactionManager transactionManager;
 
   /**
    * Constructs a new <b>TestJPAService</b>.

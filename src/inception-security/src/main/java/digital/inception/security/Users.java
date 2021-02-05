@@ -105,8 +105,7 @@ public class Users implements Serializable {
   private long total;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the users are
-   * associated with.
+   * The Universally Unique Identifier (UUID) for the user directory the users are associated with.
    */
   @Schema(
       description =
@@ -129,8 +128,8 @@ public class Users implements Serializable {
   /**
    * Constructs a new <b>Users</b>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory the users are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the
+   *     users are associated with
    * @param users the users
    * @param total the total number of users
    * @param filter the optional filter that was applied to the users
@@ -213,11 +212,11 @@ public class Users implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the user directory the
-   * users are associated with.
+   * Returns the Universally Unique Identifier (UUID) for the user directory the users are
+   * associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the user directory the
-   *     users are associated with
+   * @return the Universally Unique Identifier (UUID) for the user directory the users are
+   *     associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;

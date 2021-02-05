@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -34,8 +32,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-
 
 /**
  * The <b>UserAttribute</b> class stores a user attribute as a name-value pair.
@@ -147,8 +143,8 @@ public class UserAttribute implements Serializable {
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return <b>true</b> if the list of user attributes contains a user attribute whose name
-   *     matches the specified name or <b>false</b> otherwise
+   * @return <b>true</b> if the list of user attributes contains a user attribute whose name matches
+   *     the specified name or <b>false</b> otherwise
    */
   public static boolean contains(List<UserAttribute> list, String name) {
     for (UserAttribute userAttribute : list) {
@@ -221,13 +217,13 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <b>double</b> value for the user attribute with the specified name in the
-   * specified list.
+   * Returns the <b>double</b> value for the user attribute with the specified name in the specified
+   * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <b>double</b> value for the user attribute with the specified name in the
-   *     specified list
+   * @return the <b>double</b> value for the user attribute with the specified name in the specified
+   *     list
    */
   public static double getDoubleValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -252,13 +248,13 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <b>long</b> value for the user attribute with the specified name in the
-   * specified list.
+   * Returns the <b>long</b> value for the user attribute with the specified name in the specified
+   * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <b>int</b> value for the user attribute with the specified name in the
-   *     specified list
+   * @return the <b>int</b> value for the user attribute with the specified name in the specified
+   *     list
    */
   public static int getIntegerValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -283,13 +279,13 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <b>long</b> value for the user attribute with the specified name in the
-   * specified list.
+   * Returns the <b>long</b> value for the user attribute with the specified name in the specified
+   * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <b>long</b> value for the user attribute with the specified name in the
-   *     specified list
+   * @return the <b>long</b> value for the user attribute with the specified name in the specified
+   *     list
    */
   public static long getLongValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -314,13 +310,13 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Returns the <b>String</b> value for the user attribute with the specified name in the
-   * specified list.
+   * Returns the <b>String</b> value for the user attribute with the specified name in the specified
+   * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
-   * @return the <b>String</b> value for the user attribute with the specified name in the
-   *     specified list
+   * @return the <b>String</b> value for the user attribute with the specified name in the specified
+   *     list
    */
   public static String getStringValue(List<UserAttribute> list, String name)
       throws UserAttributeException {
@@ -374,8 +370,8 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <b>BigDecimal</b> value for the user attribute with the specified name in the
-   * specified list.
+   * Set the <b>BigDecimal</b> value for the user attribute with the specified name in the specified
+   * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
@@ -399,8 +395,8 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <b>double</b> value for the user attribute with the specified name in the
-   * specified list.
+   * Set the <b>double</b> value for the user attribute with the specified name in the specified
+   * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
@@ -424,8 +420,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <b>int</b> value for the user attribute with the specified name in the specified
-   * list.
+   * Set the <b>int</b> value for the user attribute with the specified name in the specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
@@ -449,8 +444,7 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <b>long</b> value for the user attribute with the specified name in the specified
-   * list.
+   * Set the <b>long</b> value for the user attribute with the specified name in the specified list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute
@@ -474,8 +468,8 @@ public class UserAttribute implements Serializable {
   }
 
   /**
-   * Set the <b>String</b> value for the user attribute with the specified name in the
-   * specified list.
+   * Set the <b>String</b> value for the user attribute with the specified name in the specified
+   * list.
    *
    * @param list the user attributes to search
    * @param name the name of the attribute

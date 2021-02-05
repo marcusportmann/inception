@@ -214,8 +214,7 @@ public class XmlSchemaClasspathInputSource implements LSInput {
   /**
    * Set whether the input source is certified.
    *
-   * @param certifiedText <b>true</b> if the input source is certified or <b>false</b>
-   *     otherwise
+   * @param certifiedText <b>true</b> if the input source is certified or <b>false</b> otherwise
    */
   @Override
   public void setCertifiedText(boolean certifiedText) {

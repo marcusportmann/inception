@@ -16,8 +16,6 @@
 
 package digital.inception.reporting;
 
-
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

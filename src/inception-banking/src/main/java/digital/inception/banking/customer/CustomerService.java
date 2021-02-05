@@ -16,6 +16,7 @@
 
 package digital.inception.banking.customer;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
 import java.util.Optional;
@@ -75,7 +76,7 @@ public class CustomerService implements ICustomerService {
   @Transactional
   public void createIndividualCustomer(IndividualCustomer individualCustomer)
       throws InvalidArgumentException, DuplicateIndividualCustomerException,
-          CustomerServiceException {
+          ServiceUnavailableException {
     if (individualCustomer == null) {
       throw new InvalidArgumentException("individualCustomer");
     }
@@ -97,7 +98,7 @@ public class CustomerService implements ICustomerService {
     } catch (DuplicateIndividualCustomerException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CustomerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the individual customer (" + individualCustomer.getId() + ")", e);
     }
   }
@@ -112,7 +113,7 @@ public class CustomerService implements ICustomerService {
   @Transactional
   public void deleteIndividualCustomer(UUID individualCustomerId)
       throws InvalidArgumentException, IndividualCustomerNotFoundException,
-          CustomerServiceException {
+          ServiceUnavailableException {
     if (individualCustomerId == null) {
       throw new InvalidArgumentException("individualCustomerId");
     }
@@ -126,7 +127,7 @@ public class CustomerService implements ICustomerService {
     } catch (IndividualCustomerNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CustomerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the individual customer (" + individualCustomerId + ")", e);
     }
   }
@@ -141,7 +142,7 @@ public class CustomerService implements ICustomerService {
   @Override
   public IndividualCustomer getIndividualCustomer(UUID individualCustomerId)
       throws InvalidArgumentException, IndividualCustomerNotFoundException,
-          CustomerServiceException {
+          ServiceUnavailableException {
     if (individualCustomerId == null) {
       throw new InvalidArgumentException("individualCustomerId");
     }
@@ -158,7 +159,7 @@ public class CustomerService implements ICustomerService {
     } catch (IndividualCustomerNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CustomerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the individual customer (" + individualCustomerId + ")", e);
     }
   }

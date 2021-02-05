@@ -17,8 +17,8 @@
 package digital.inception.core.wbxml;
 
 /**
- * The <b>ParserException</b> exception is thrown to indicate an error condition when parsing
- * a WBXML document.
+ * The <b>ParserException</b> exception is thrown to indicate an error condition when parsing a
+ * WBXML document.
  *
  * @author Marcus Portmann
  */
@@ -43,8 +43,8 @@ public class ParserException extends Exception {
 
   /**
    * Constructs a new <b>ParserException</b> with the specified cause and a message of <b>
-   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message
-   * of cause).
+   * (cause==null ? null : cause.toString())</b> (which typically contains the class and message of
+   * cause).
    *
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)

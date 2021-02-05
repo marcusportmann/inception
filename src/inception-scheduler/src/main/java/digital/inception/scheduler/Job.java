@@ -16,8 +16,6 @@
 
 package digital.inception.scheduler;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -51,8 +49,6 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-
 
 /**
  * The <b>Job</b> class holds the information for a job.
@@ -273,8 +269,7 @@ public class Job implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
-   * false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -449,8 +444,7 @@ public class Job implements Serializable {
   /**
    * Set whether the job is enabled for execution.
    *
-   * @param enabled <b>true</b> if the job is enabled for execution or <b>false</b>
-   *     otherwise
+   * @param enabled <b>true</b> if the job is enabled for execution or <b>false</b> otherwise
    */
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;

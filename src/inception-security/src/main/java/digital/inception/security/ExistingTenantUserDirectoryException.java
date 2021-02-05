@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -26,11 +24,9 @@ import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
-
 /**
- * A <b>ExistingTenantUserDirectoryException</b> is thrown to indicate that a security
- * operation failed as a result of an existing tenant user directory.
+ * A <b>ExistingTenantUserDirectoryException</b> is thrown to indicate that a security operation
+ * failed as a result of an existing tenant user directory.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -51,8 +47,7 @@ public class ExistingTenantUserDirectoryException extends ServiceException {
    * Constructs a new <b>ExistingTenantUserDirectoryException</b>.
    *
    * @param tenantId the Universally Unique Identifier (UUID) for the tenant
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    */
   public ExistingTenantUserDirectoryException(UUID tenantId, UUID userDirectoryId) {
     super(

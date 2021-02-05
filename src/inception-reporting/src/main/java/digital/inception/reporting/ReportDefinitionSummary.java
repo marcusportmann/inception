@@ -16,8 +16,6 @@
 
 package digital.inception.reporting;
 
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -36,11 +34,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-
 /**
- * The <b>ReportDefinitionSummary</b> class holds the summary information for a report
- * definition.
+ * The <b>ReportDefinitionSummary</b> class holds the summary information for a report definition.
  *
  * @author Marcus Portmann
  */
@@ -98,8 +93,7 @@ public class ReportDefinitionSummary implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
-   * false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {

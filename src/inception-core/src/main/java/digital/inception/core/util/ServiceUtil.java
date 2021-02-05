@@ -21,8 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>ServiceUtil</b> class provides utility methods that are useful when creating
- * internal application services.
+ * The <b>ServiceUtil</b> class provides utility methods that are useful when creating internal
+ * application services.
  */
 public class ServiceUtil {
 

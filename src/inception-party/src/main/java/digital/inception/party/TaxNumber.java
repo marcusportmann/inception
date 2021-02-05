@@ -70,7 +70,9 @@ public class TaxNumber implements Serializable {
   private static final long serialVersionUID = 1000000;
 
   /** The ISO 3166-1 alpha-2 code for the country of issue for the tax number. */
-  @Schema(description = "The ISO 3166-1 alpha-2 code for the country of issue for the tax number", required = true)
+  @Schema(
+      description = "The ISO 3166-1 alpha-2 code for the country of issue for the tax number",
+      required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "CountryOfIssue", required = true)
   @NotNull
@@ -140,7 +142,7 @@ public class TaxNumber implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {

@@ -58,8 +58,8 @@ public class Region implements Serializable {
 
   private static final long serialVersionUID = 1000000;
 
-  /** The code for the region. */
-  @Schema(description = "The code for the region", required = true)
+  /** The ISO 3166-2 subdivision code for the region. */
+  @Schema(description = "The ISO 3166-2 subdivision code for the region", required = true)
   @JsonProperty(required = true)
   @XmlElement(name = "Code", required = true)
   @NotNull
@@ -123,7 +123,7 @@ public class Region implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -147,9 +147,9 @@ public class Region implements Serializable {
   }
 
   /**
-   * Returns the code for the region.
+   * Returns the ISO 3166-2 subdivision code for the region.
    *
-   * @return the code for the region
+   * @return the ISO 3166-2 subdivision code for the region
    */
   public String getCode() {
     return code;
@@ -213,9 +213,9 @@ public class Region implements Serializable {
   }
 
   /**
-   * Set the code for the region.
+   * Set the ISO 3166-2 subdivision code for the region.
    *
-   * @param code the code for the region
+   * @param code the ISO 3166-2 subdivision code for the region
    */
   public void setCode(String code) {
     this.code = code;

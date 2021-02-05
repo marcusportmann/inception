@@ -30,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The <b>TransactionManagerProxy</b> class provides a proxy that tracks the Java Transaction
- * (JTA) API transactions associated with the current thread and managed by a <b>
+ * The <b>TransactionManagerProxy</b> class provides a proxy that tracks the Java Transaction (JTA)
+ * API transactions associated with the current thread and managed by a <b>
  * javax.transaction.TransactionManager</b> implementation.
  *
  * @author Marcus Portmann
@@ -39,15 +39,15 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings({"unused"})
 public class TransactionManagerProxy implements TransactionManager {
 
+  /** The stack traces for the active transactions associated with the current thread. */
+  private static final ThreadLocal<Map<Transaction, StackTraceElement[]>>
+      activeTransactionStackTraces = ThreadLocal.withInitial(ConcurrentHashMap::new);
+
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(TransactionManagerProxy.class);
 
-  /** The stack traces for the active transactions associated with the current thread. */
-  private static ThreadLocal<Map<Transaction, StackTraceElement[]>> activeTransactionStackTraces =
-      ThreadLocal.withInitial(ConcurrentHashMap::new);
-
   /** The JTA transaction manager. */
-  private TransactionManager transactionManager;
+  private final TransactionManager transactionManager;
 
   /**
    * Constructs a new <b>TransactionManagerProxy</b>.

@@ -16,13 +16,9 @@
 
 package digital.inception.oauth2.server.authorization.token;
 
-
-
 import digital.inception.core.service.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-
 
 /**
  * The <b>TokenCreationException</b> exception is thrown to indicate an error condition when

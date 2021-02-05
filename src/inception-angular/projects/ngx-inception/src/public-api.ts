@@ -36,7 +36,7 @@ export * from './lib/core/errors/communication-error';
 export * from './lib/core/errors/error';
 export * from './lib/core/errors/http-error';
 export * from './lib/core/errors/oauth-error';
-export * from './lib/core/errors/system-unavailable-error';
+export * from './lib/core/errors/service-unavailable-error';
 export * from './lib/core/errors/validation-error';
 
 // Dialog

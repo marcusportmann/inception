@@ -17,8 +17,8 @@
 package digital.inception.messaging.handler;
 
 /**
- * The <b>MessageHandlerException</b> exception is thrown to indicate an error condition when
- * a message handler processes a message.
+ * The <b>MessageHandlerException</b> exception is thrown to indicate an error condition when a
+ * message handler processes a message.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *
@@ -32,8 +32,8 @@ public class MessageHandlerException extends Exception {
   /**
    * Constructs a new <b>MessageHandlerException</b> with the specified message.
    *
-   * @param message The message saved for later retrieval by the <b>buildMessageFromResultSet
-   *                ()</b> method.
+   * @param message The message saved for later retrieval by the <b>buildMessageFromResultSet ()</b>
+   *     method.
    */
   public MessageHandlerException(String message) {
     super(message);
@@ -42,8 +42,8 @@ public class MessageHandlerException extends Exception {
   /**
    * Constructs a new <b>MessageHandlerException</b> with the specified message and cause.
    *
-   * @param message The message saved for later retrieval by the <b>buildMessageFromResultSet
-   *                ()</b> method.
+   * @param message The message saved for later retrieval by the <b>buildMessageFromResultSet ()</b>
+   *     method.
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)
    */

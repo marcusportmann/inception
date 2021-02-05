@@ -19,8 +19,8 @@ package digital.inception.oauth2.server.authorization.controller;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>InvalidGrantErrorResponse</b> class holds the information for an OAuth2 invalid
- * grant error response.
+ * The <b>InvalidGrantErrorResponse</b> class holds the information for an OAuth2 invalid grant
+ * error response.
  *
  * @author Marcus Portmann
  */

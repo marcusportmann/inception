@@ -16,6 +16,7 @@
 
 package demo.model;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -80,7 +81,7 @@ public class VehicleService implements IVehicleService {
   @Override
   @Transactional
   public void createCar(Car car)
-      throws InvalidArgumentException, DuplicateCarException, VehicleServiceException {
+      throws InvalidArgumentException, DuplicateCarException, ServiceUnavailableException {
     if (car == null) {
       throw new InvalidArgumentException("car");
     }
@@ -101,7 +102,7 @@ public class VehicleService implements IVehicleService {
     } catch (DuplicateCarException e) {
       throw e;
     } catch (Throwable e) {
-      throw new VehicleServiceException("Failed to create the car (" + car.getId() + ")", e);
+      throw new ServiceUnavailableException("Failed to create the car (" + car.getId() + ")", e);
     }
   }
 
@@ -113,7 +114,7 @@ public class VehicleService implements IVehicleService {
   @Override
   @Transactional
   public void createVehicle(Vehicle vehicle)
-      throws InvalidArgumentException, DuplicateVehicleException, VehicleServiceException {
+      throws InvalidArgumentException, DuplicateVehicleException, ServiceUnavailableException {
     if (vehicle == null) {
       throw new InvalidArgumentException("vehicle");
     }
@@ -134,7 +135,7 @@ public class VehicleService implements IVehicleService {
     } catch (DuplicateVehicleException e) {
       throw e;
     } catch (Throwable e) {
-      throw new VehicleServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the vehicle (" + vehicle.getId() + ")", e);
     }
   }
@@ -151,7 +152,7 @@ public class VehicleService implements IVehicleService {
   @Override
   public Cars getCars(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, VehicleServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -181,7 +182,7 @@ public class VehicleService implements IVehicleService {
       return new Cars(
           carPage.toList(), carPage.getTotalElements(), filter, sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
-      throw new VehicleServiceException("Failed to retrieve the filtered cars", e);
+      throw new ServiceUnavailableException("Failed to retrieve the filtered cars", e);
     }
   }
 
@@ -197,7 +198,7 @@ public class VehicleService implements IVehicleService {
   @Override
   public Vehicles getVehicles(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, VehicleServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if ((pageIndex != null) && (pageIndex < 0)) {
       throw new InvalidArgumentException("pageIndex");
     }
@@ -233,7 +234,7 @@ public class VehicleService implements IVehicleService {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-      throw new VehicleServiceException("Failed to retrieve the filtered vehicles", e);
+      throw new ServiceUnavailableException("Failed to retrieve the filtered vehicles", e);
     }
   }
 }

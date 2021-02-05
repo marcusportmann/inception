@@ -16,17 +16,13 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
 import java.util.UUID;
 
-
-
 /**
- * The <b>WbxmlMessageData</b> class provides the abstract base class from which all
- * WBXML-based infrastructural and application-specific message data classes should be derived.
+ * The <b>WbxmlMessageData</b> class provides the abstract base class from which all WBXML-based
+ * infrastructural and application-specific message data classes should be derived.
  *
  * @author Marcus Portmann
  */
@@ -56,7 +52,7 @@ public abstract class WbxmlMessageData {
    * @return <b>true</b> if the message data was extracted successfully from the WBXML data or
    *     <b>false</b> otherwise
    */
-  public abstract boolean fromMessageData(byte[] messageData) throws MessagingServiceException;
+  public abstract boolean fromMessageData(byte[] messageData) throws MessagingException;
 
   /**
    * Returns the UUID for the message type for the message data.
@@ -83,7 +79,7 @@ public abstract class WbxmlMessageData {
    * @return the WBXML data representation of the message data that will be sent as part of a
    *     message
    */
-  public abstract byte[] toMessageData() throws MessagingServiceException;
+  public abstract byte[] toMessageData() throws MessagingException;
 
   /**
    * Parse the WBXML data representation of the message data.
@@ -91,13 +87,13 @@ public abstract class WbxmlMessageData {
    * @param data the WBXML data representation of the message data
    * @return the WBXML document representing the message data
    */
-  protected Document parseWBXML(byte[] data) throws MessagingServiceException {
+  protected Document parseWBXML(byte[] data) throws MessagingException {
     try {
       Parser parser = new Parser();
 
       return parser.parse(data);
     } catch (Throwable e) {
-      throw new MessagingServiceException("Failed to parse the WBXML message data", e);
+      throw new MessagingException("Failed to parse the WBXML message data", e);
     }
   }
 }

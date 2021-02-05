@@ -22,12 +22,12 @@ import {SecurityService} from '../services/security.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {Error} from '../../core/errors/error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {Session} from '../services/session';
 import {Tenants} from '../services/tenants';
-import {PasswordExpiredError, SecurityServiceError} from '../services/security.service.errors';
+import {PasswordExpiredError} from '../services/security.service.errors';
 import {Tenant} from '../services/tenant';
 
 /**
@@ -113,8 +113,7 @@ export class LoginComponent implements OnInit {
               }
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
+              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {
@@ -138,8 +137,7 @@ export class LoginComponent implements OnInit {
               }
             }, (error: Error) => {
               // noinspection SuspiciousTypeOfGuard
-              if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-                (error instanceof SystemUnavailableError)) {
+              if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
                 // noinspection JSIgnoredPromiseFromCall
                 this.router.navigateByUrl('/error/send-error-report', {state: {error}});
               } else {
@@ -157,8 +155,7 @@ export class LoginComponent implements OnInit {
         this.spinnerService.hideSpinner();
 
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else if (error instanceof PasswordExpiredError) {

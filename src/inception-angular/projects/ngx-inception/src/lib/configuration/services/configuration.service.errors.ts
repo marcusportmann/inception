@@ -36,21 +36,4 @@ export class ConfigurationNotFoundError extends Error {
   }
 }
 
-/**
- * The ConfigurationServiceError class holds the information for a Configuration Service error.
- *
- * @author Marcus Portmann
- */
-export class ConfigurationServiceError extends Error {
-
-  /**
-   * Constructs a new ConfigurationServiceError.
-   *
-   * @param message The error message.
-   * @param cause   The optional cause of the error.
-   */
-  constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
-    super(message, cause);
-  }
-}
 

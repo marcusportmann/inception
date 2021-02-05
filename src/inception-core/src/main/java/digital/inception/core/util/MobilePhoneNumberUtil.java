@@ -19,8 +19,8 @@ package digital.inception.core.util;
 import java.util.regex.Pattern;
 
 /**
- * The <b>MobilePhoneNumberUtil</b> class is a utility class which provides methods for
- * working with mobile phone numbers and MSISDNs.
+ * The <b>MobilePhoneNumberUtil</b> class is a utility class which provides methods for working with
+ * mobile phone numbers and MSISDNs.
  *
  * @author Marcus Portmann
  */

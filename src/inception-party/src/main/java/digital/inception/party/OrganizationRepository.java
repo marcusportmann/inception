@@ -24,7 +24,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 /**
- * The <b>OrganizationRepository</b> interface declares the repository for the <b> Organization</b>
+ * The <b>OrganizationRepository</b> interface declares the repository for the <b>Organization</b>
  * domain type.
  *
  * @author Marcus Portmann

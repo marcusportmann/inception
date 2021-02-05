@@ -42,7 +42,7 @@ import java.util.concurrent.Executor;
  */
 public class ConnectionProxy implements Connection {
 
-  private Connection connection;
+  private final Connection connection;
 
   ConnectionProxy(Connection connection) {
     this.connection = connection;

@@ -16,15 +16,11 @@
 
 package digital.inception.configuration;
 
-
-
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-
 
 /**
  * The <b>ConfigurationRepository</b> interface declares the repository for the <b>

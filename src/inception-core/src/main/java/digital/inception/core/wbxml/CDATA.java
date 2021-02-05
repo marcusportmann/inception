@@ -104,7 +104,7 @@ public class CDATA implements Serializable, Content {
 
       print(baos, 0);
 
-      String result = new String(baos.toByteArray());
+      String result = baos.toString();
 
       baos.close();
 

@@ -16,9 +16,8 @@
 
 package digital.inception.security;
 
-
-
 import com.github.f4b6a3.uuid.UuidCreator;
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.util.JNDIUtil;
 import java.util.ArrayList;
@@ -46,8 +45,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.StringUtils;
-
-
 
 /**
  * The <b>LDAPUserDirectory</b> class provides the LDAP user directory implementation.
@@ -132,8 +129,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   /**
    * Constructs a new <b>LDAPUserDirectory</b>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param parameters the parameters for the user directory
    * @param groupRepository the Group Repository
    * @param userRepository the User Repository
@@ -145,21 +141,21 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       GroupRepository groupRepository,
       UserRepository userRepository,
       RoleRepository roleRepository)
-      throws SecurityServiceException {
+      throws ServiceUnavailableException {
     super(userDirectoryId, parameters, groupRepository, userRepository, roleRepository);
 
     try {
       if (UserDirectoryParameter.contains(parameters, "Host")) {
         host = UserDirectoryParameter.getStringValue(parameters, "Host");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No Host parameter found for the user directory (" + userDirectoryId + ")");
       }
 
       if (UserDirectoryParameter.contains(parameters, "Port")) {
         port = UserDirectoryParameter.getIntegerValue(parameters, "Port");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No Port parameter found for the user directory (" + userDirectoryId + ")");
       }
 
@@ -170,28 +166,28 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "BindDN")) {
         bindDN = UserDirectoryParameter.getStringValue(parameters, "BindDN");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No BindDN parameter found for the user directory (" + userDirectoryId + ")");
       }
 
       if (UserDirectoryParameter.contains(parameters, "BindPassword")) {
         bindPassword = UserDirectoryParameter.getStringValue(parameters, "BindPassword");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No BindPassword parameter found for the user directory (" + userDirectoryId + ")");
       }
 
       if (UserDirectoryParameter.contains(parameters, "BaseDN")) {
         baseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters, "BaseDN"));
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No BindDN parameter found for the user directory (" + userDirectoryId + ")");
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserBaseDN")) {
         userBaseDN = new LdapName(UserDirectoryParameter.getStringValue(parameters, "UserBaseDN"));
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No UserBaseDN parameter found for the user directory (" + userDirectoryId + ")");
       }
 
@@ -199,14 +195,14 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         groupBaseDN =
             new LdapName(UserDirectoryParameter.getStringValue(parameters, "GroupBaseDN"));
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No GroupBaseDN parameter found for the user directory (" + userDirectoryId + ")");
       }
 
       if (UserDirectoryParameter.contains(parameters, "UserObjectClass")) {
         userObjectClass = UserDirectoryParameter.getStringValue(parameters, "UserObjectClass");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No UserObjectClass parameter found for the user directory (" + userDirectoryId + ")");
       }
 
@@ -214,7 +210,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         userUsernameAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserUsernameAttribute");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No UserUsernameAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
@@ -223,7 +219,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "UserNameAttribute")) {
         userNameAttribute = UserDirectoryParameter.getStringValue(parameters, "UserNameAttribute");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No UserNameAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
@@ -233,7 +229,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         userPreferredNameAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserPreferredNameAttribute");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No UserPreferredNameAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
@@ -243,7 +239,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         userPhoneNumberAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserPhoneNumberAttribute");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No UserPhoneNumberAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
@@ -253,7 +249,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         userMobileNumberAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserMobileNumberAttribute");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No UserMobileNumberAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
@@ -263,7 +259,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         userEmailAttribute =
             UserDirectoryParameter.getStringValue(parameters, "UserEmailAttribute");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No UserEmailAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
@@ -272,7 +268,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       if (UserDirectoryParameter.contains(parameters, "GroupObjectClass")) {
         groupObjectClass = UserDirectoryParameter.getStringValue(parameters, "GroupObjectClass");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No GroupObjectClass parameter found for the user directory (" + userDirectoryId + ")");
       }
 
@@ -280,7 +276,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
         groupNameAttribute =
             UserDirectoryParameter.getStringValue(parameters, "GroupNameAttribute");
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No GroupNameAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
@@ -292,7 +288,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
         groupMemberAttributeArray = new String[] {groupMemberAttribute};
       } else {
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             "No GroupMemberAttribute parameter found for the user directory ("
                 + userDirectoryId
                 + ")");
@@ -363,7 +359,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
               supportsUserAdministration,
               false);
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to initialize the user directory (" + userDirectoryId + ")", e);
     }
   }
@@ -378,16 +374,16 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   @Override
   public void addMemberToGroup(String groupName, GroupMemberType memberType, String memberName)
       throws GroupNotFoundException, UserNotFoundException, ExistingGroupMemberException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (!capabilities.getSupportsGroupMemberAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The group member administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
     }
 
     if (memberType != GroupMemberType.USER) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Unsupported group member type (" + memberType.description() + ")");
     }
 
@@ -407,7 +403,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   @Override
   public void addRoleToGroup(String groupName, String roleCode)
       throws GroupNotFoundException, RoleNotFoundException, ExistingGroupRoleException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -449,7 +445,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException | RoleNotFoundException | ExistingGroupRoleException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to add the role ("
               + roleCode
               + ") to the group ("
@@ -471,9 +467,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void addUserToGroup(String groupName, String username)
-      throws UserNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, GroupNotFoundException, ServiceUnavailableException {
     if (!capabilities.getSupportsGroupMemberAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The group member administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -524,7 +520,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException | GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to add the user ("
               + username
               + ") to the group ("
@@ -556,9 +552,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       boolean lockUser,
       boolean resetPasswordHistory,
       PasswordChangeReason reason)
-      throws UserNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, ServiceUnavailableException {
     if (!capabilities.getSupportsAdminChangePassword()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The admin change password capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -586,7 +582,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to change the password for the user ("
               + username
               + ") for the user directory ("
@@ -607,7 +603,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   @Override
   public void authenticate(String username, String password)
       throws AuthenticationFailedException, UserLockedException, ExpiredPasswordException,
-          UserNotFoundException, SecurityServiceException {
+          UserNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -662,7 +658,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     //    throw e;
     //  }
     catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to authenticate the user ("
               + username
               + ") for the user directory ("
@@ -684,9 +680,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   @Override
   public void changePassword(String username, String password, String newPassword)
       throws AuthenticationFailedException, UserLockedException, UserNotFoundException,
-          ExistingPasswordException, SecurityServiceException {
+          ExistingPasswordException, ServiceUnavailableException {
     if (!capabilities.getSupportsChangePassword()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The change password capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -755,7 +751,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     // throw e;
     // }
     catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to change the password for the user ("
               + username
               + ") for the user directory ("
@@ -773,9 +769,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @param group the group
    */
   @Override
-  public void createGroup(Group group) throws DuplicateGroupException, SecurityServiceException {
+  public void createGroup(Group group) throws DuplicateGroupException, ServiceUnavailableException {
     if (!capabilities.getSupportsGroupAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The group administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -830,7 +826,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (DuplicateGroupException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the group ("
               + group.getName()
               + ") for the user directory ("
@@ -851,9 +847,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void createUser(User user, boolean expiredPassword, boolean userLocked)
-      throws DuplicateUserException, SecurityServiceException {
+      throws DuplicateUserException, ServiceUnavailableException {
     if (!capabilities.getSupportsUserAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The user administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -912,7 +908,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (DuplicateUserException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to create the user ("
               + user.getUsername()
               + ") for the user directory ("
@@ -931,9 +927,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void deleteGroup(String groupName)
-      throws GroupNotFoundException, ExistingGroupMembersException, SecurityServiceException {
+      throws GroupNotFoundException, ExistingGroupMembersException, ServiceUnavailableException {
     if (!capabilities.getSupportsGroupAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The group administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -977,7 +973,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException | ExistingGroupMembersException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the group ("
               + groupName
               + ") for the user directory ("
@@ -995,9 +991,10 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @param username the username for the user
    */
   @Override
-  public void deleteUser(String username) throws UserNotFoundException, SecurityServiceException {
+  public void deleteUser(String username)
+      throws UserNotFoundException, ServiceUnavailableException {
     if (!capabilities.getSupportsUserAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The user administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -1067,7 +1064,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the user ("
               + username
               + ") for the user directory ("
@@ -1088,7 +1085,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public List<User> findUsers(List<UserAttribute> userAttributes)
-      throws InvalidAttributeException, SecurityServiceException {
+      throws InvalidAttributeException, ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1134,7 +1131,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       return users;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to find the users for the user directory (" + getUserDirectoryId() + ")", e);
     } finally {
       JNDIUtil.close(searchResults);
@@ -1160,7 +1157,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public List<String> getFunctionCodesForUser(String username)
-      throws UserNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1205,7 +1202,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the function codes for the user ("
               + username
               + ") for the user directory ("
@@ -1225,7 +1222,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @return the group
    */
   @Override
-  public Group getGroup(String groupName) throws GroupNotFoundException, SecurityServiceException {
+  public Group getGroup(String groupName)
+      throws GroupNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1250,7 +1248,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the group ("
               + groupName
               + ") for the user directory ("
@@ -1269,7 +1267,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @return the group names
    */
   @Override
-  public List<String> getGroupNames() throws SecurityServiceException {
+  public List<String> getGroupNames() throws ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1298,7 +1296,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       return groupNames;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the group names for the user directory ("
               + getUserDirectoryId()
               + ")",
@@ -1317,7 +1315,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public List<String> getGroupNamesForUser(String username)
-      throws UserNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1356,7 +1354,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the names of the groups the user ("
               + username
               + ") is a member of for the user directory ("
@@ -1375,7 +1373,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @return the groups
    */
   @Override
-  public List<Group> getGroups() throws SecurityServiceException {
+  public List<Group> getGroups() throws ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1399,7 +1397,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       return groups;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the groups for the user directory (" + getUserDirectoryId() + ")", e);
     } finally {
       JNDIUtil.close(searchResults);
@@ -1419,7 +1417,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   @Override
   public Groups getGroups(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws SecurityServiceException {
+      throws ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1466,7 +1464,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       return new Groups(
           getUserDirectoryId(), groups, totalGroups, filter, sortDirection, pageIndex, pageSize);
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the filtered groups for the user directory ("
               + getUserDirectoryId()
               + ")",
@@ -1485,7 +1483,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public List<Group> getGroupsForUser(String username)
-      throws UserNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1519,7 +1517,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the groups the user is a member of ("
               + username
               + ") for the user directory ("
@@ -1540,7 +1538,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public List<GroupMember> getMembersForGroup(String groupName)
-      throws GroupNotFoundException, SecurityServiceException {
+      throws GroupNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1590,7 +1588,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the members for the group ("
               + groupName
               + ") for the user directory ("
@@ -1620,7 +1618,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws GroupNotFoundException, SecurityServiceException {
+      throws GroupNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1719,7 +1717,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the filtered members for the group ("
               + groupName
               + ") for the user directory ("
@@ -1740,7 +1738,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public List<String> getRoleCodesForGroup(String groupName)
-      throws GroupNotFoundException, SecurityServiceException {
+      throws GroupNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -1764,7 +1762,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the role codes for the group ("
               + groupName
               + ") for the user directory ("
@@ -1784,7 +1782,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public List<String> getRoleCodesForUser(String username)
-      throws UserNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -1829,7 +1827,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the role codes for the user ("
               + username
               + ") for the user directory ("
@@ -1850,7 +1848,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public List<GroupRole> getRolesForGroup(String groupName)
-      throws GroupNotFoundException, SecurityServiceException {
+      throws GroupNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -1878,7 +1876,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the roles for the group ("
               + groupName
               + ") for the user directory ("
@@ -1897,7 +1895,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @return the user
    */
   @Override
-  public User getUser(String username) throws UserNotFoundException, SecurityServiceException {
+  public User getUser(String username) throws UserNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -1913,7 +1911,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the user ("
               + username
               + ") for the user directory ("
@@ -1933,7 +1931,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public String getUserName(String username)
-      throws UserNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -1960,7 +1958,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the name of the user ("
               + username
               + ") for the user directory ("
@@ -1978,7 +1976,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @return the users
    */
   @Override
-  public List<User> getUsers() throws SecurityServiceException {
+  public List<User> getUsers() throws ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -2002,7 +2000,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       return users;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the users for the user directory (" + getUserDirectoryId() + ")", e);
     } finally {
       JNDIUtil.close(searchResults);
@@ -2026,7 +2024,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
       SortDirection sortDirection,
       Integer pageIndex,
       Integer pageSize)
-      throws SecurityServiceException {
+      throws ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -2104,7 +2102,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
           pageIndex,
           pageSize);
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the filtered users for the user directory ("
               + getUserDirectoryId()
               + ")",
@@ -2119,11 +2117,10 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * Does the user with the specified username exist?
    *
    * @param username the username for the user
-   * @return <b>true</b> if a user with specified username exists or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if a user with specified username exists or <b>false</b> otherwise
    */
   @Override
-  public boolean isExistingUser(String username) throws SecurityServiceException {
+  public boolean isExistingUser(String username) throws ServiceUnavailableException {
     DirContext dirContext = null;
     NamingEnumeration<SearchResult> searchResults = null;
 
@@ -2142,7 +2139,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       return searchResults.hasMore();
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the user ("
               + username
               + ") is an existing user for the user directory ("
@@ -2164,7 +2161,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public boolean isUserInGroup(String groupName, String username)
-      throws UserNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, GroupNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -2200,7 +2197,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException | GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check if the user ("
               + username
               + ") is in the group ("
@@ -2223,16 +2220,16 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void removeMemberFromGroup(String groupName, GroupMemberType memberType, String memberName)
-      throws GroupNotFoundException, GroupMemberNotFoundException, SecurityServiceException {
+      throws GroupNotFoundException, GroupMemberNotFoundException, ServiceUnavailableException {
     if (!capabilities.getSupportsGroupMemberAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The group member administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
     }
 
     if (memberType != GroupMemberType.USER) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Unsupported group member type (" + memberType.description() + ")");
     }
 
@@ -2251,7 +2248,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void removeRoleFromGroup(String groupName, String roleCode)
-      throws GroupNotFoundException, GroupRoleNotFoundException, SecurityServiceException {
+      throws GroupNotFoundException, GroupRoleNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -2277,7 +2274,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException | GroupRoleNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to remove the role ("
               + roleCode
               + ") from the group ("
@@ -2299,7 +2296,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void removeUserFromGroup(String groupName, String username)
-      throws UserNotFoundException, GroupNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, GroupNotFoundException, ServiceUnavailableException {
     DirContext dirContext = null;
 
     try {
@@ -2347,7 +2344,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException | GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to remove the user ("
               + username
               + ") from the group ("
@@ -2370,9 +2367,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   @Override
   public void resetPassword(String username, String newPassword)
       throws UserNotFoundException, UserLockedException, ExistingPasswordException,
-          SecurityServiceException {
+          ServiceUnavailableException {
     if (!capabilities.getSupportsChangePassword()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The change password capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -2408,7 +2405,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     // throw e;
     // }
     catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to reset the password for the user ("
               + username
               + ") for the user directory ("
@@ -2426,9 +2423,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    * @param group the group
    */
   @Override
-  public void updateGroup(Group group) throws GroupNotFoundException, SecurityServiceException {
+  public void updateGroup(Group group) throws GroupNotFoundException, ServiceUnavailableException {
     if (!capabilities.getSupportsGroupAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The group administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -2475,7 +2472,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (GroupNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to update the group ("
               + group.getName()
               + ") for the user directory ("
@@ -2496,9 +2493,9 @@ public class LDAPUserDirectory extends UserDirectoryBase {
    */
   @Override
   public void updateUser(User user, boolean expirePassword, boolean lockUser)
-      throws UserNotFoundException, SecurityServiceException {
+      throws UserNotFoundException, ServiceUnavailableException {
     if (!capabilities.getSupportsUserAdministration()) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "The user administration capability is not supported for the user directory ("
               + getUserDirectoryId()
               + "");
@@ -2595,7 +2592,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     } catch (UserNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           "Failed to update the user ("
               + user.getUsername()
               + ") for the user directory ("
@@ -2675,7 +2672,8 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     return user;
   }
 
-  private DirContext getDirContext(String userDN, String password) throws SecurityServiceException {
+  private DirContext getDirContext(String userDN, String password)
+      throws ServiceUnavailableException {
     try {
       String url = useSSL ? "ldaps://" : "ldap://";
       url += host;
@@ -2694,7 +2692,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
 
       return new InitialDirContext(environment);
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           String.format(
               "Failed to retrieve the JNDI directory context for the user directory (%s)",
               getUserDirectoryId()),
@@ -2703,7 +2701,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   }
 
   private LdapName getGroupDN(DirContext dirContext, String groupName)
-      throws SecurityServiceException {
+      throws ServiceUnavailableException {
     NamingEnumeration<SearchResult> searchResults = null;
 
     try {
@@ -2739,13 +2737,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
           buffer.append("(").append(groupDN).append(")");
         }
 
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             String.format(
                 "Found multiple groups (%d) with the name of the group (%s) with DNs %s",
                 groupDNs.size(), groupName, buffer.toString()));
       }
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           String.format(
               "Failed to retrieve the DN for the group (%s) from the LDAP directory (%s:%d)",
               groupName, host, port),
@@ -2755,7 +2753,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
     }
   }
 
-  private User getUser(DirContext dirContext, String username) throws SecurityServiceException {
+  private User getUser(DirContext dirContext, String username) throws ServiceUnavailableException {
     NamingEnumeration<SearchResult> searchResults = null;
 
     try {
@@ -2791,13 +2789,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
           buffer.append("(").append(user.getId()).append(")");
         }
 
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             String.format(
                 "Found multiple users (%d) with the username (%s) with DNs %s",
                 users.size(), username, buffer.toString()));
       }
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           String.format(
               "Failed to retrieve the details for the user (%s) from the LDAP directory (%s:%d)",
               username, host, port),
@@ -2808,7 +2806,7 @@ public class LDAPUserDirectory extends UserDirectoryBase {
   }
 
   private LdapName getUserDN(DirContext dirContext, String username)
-      throws SecurityServiceException {
+      throws ServiceUnavailableException {
     NamingEnumeration<SearchResult> searchResults = null;
 
     try {
@@ -2844,13 +2842,13 @@ public class LDAPUserDirectory extends UserDirectoryBase {
           buffer.append("(").append(userDN).append(")");
         }
 
-        throw new SecurityServiceException(
+        throw new ServiceUnavailableException(
             String.format(
                 "Found multiple users (%d) with the username (%s) with DNs %s",
                 userDNs.size(), username, buffer.toString()));
       }
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new ServiceUnavailableException(
           String.format(
               "Failed to retrieve the DN for the user (%s) from the LDAP directory (%s:%d)",
               username, host, port),

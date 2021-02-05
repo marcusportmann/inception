@@ -16,6 +16,7 @@
 
 package digital.inception.banking.customer;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -58,7 +59,7 @@ public class CustomerWebService {
       @WebParam(name = "IndividualCustomer") @XmlElement(required = true)
           IndividualCustomer individualCustomer)
       throws InvalidArgumentException, DuplicateIndividualCustomerException,
-          CustomerServiceException {
+          ServiceUnavailableException {
     customerService.createIndividualCustomer(individualCustomer);
   }
 }

@@ -25,8 +25,8 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
- * The <b>DateTimeModule</b> implements the custom Jackson module that registers the
- * serializer and deserializer extensions that support the Java 8 Date/Time API.
+ * The <b>DateTimeModule</b> implements the custom Jackson module that registers the serializer and
+ * deserializer extensions that support the Java 8 Date/Time API.
  *
  * @author Marcus Portmann
  */

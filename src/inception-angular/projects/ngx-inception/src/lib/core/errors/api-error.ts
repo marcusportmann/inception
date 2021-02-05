@@ -105,17 +105,39 @@ export class ApiError {
     this.url = (!!httpErrorResponse.url) ? httpErrorResponse.url : '';
   }
 
+  // /**
+  //  * Returns whether the specified HTTP error response is as a result of an API error with the
+  //  * specified error code.
+  //  *
+  //  * @param httpErrorResponse The HTTP error response.
+  //  * @param errorCode         The error code.
+  //  *
+  //  * @return True if the HTTP error response is as a result of an API error with the specified
+  //  * error code or false otherwise.
+  //  */
+  // static isApiError(httpErrorResponse: HttpErrorResponse, errorCode: string): boolean {
+  //   return !!((httpErrorResponse.name === 'HttpErrorResponse') && httpErrorResponse.error &&
+  //     (httpErrorResponse.error.timestamp) && (httpErrorResponse.error.message) &&
+  //     (httpErrorResponse.error.status) && (httpErrorResponse.error.statusText) &&
+  //     (httpErrorResponse.error.uri));
+  // }
+
   /**
-   * Returns whether the specified HTTP error response is as a result of an API error.
+   * Returns whether the specified HTTP error response is as a result of an API error and optionally
+   * whether the API error has the specified error code.
    *
    * @param httpErrorResponse The HTTP error response.
+   * @param errorCode         The optional error code.
    *
-   * @return True if the HTTP error response is as a result of an API error or false otherwise.
+   * @return True if the HTTP error response is as a result of an API error, and if specified
+   *         whether the API error code matches, or false otherwise.
    */
-  static isApiError(httpErrorResponse: HttpErrorResponse): boolean {
+  static isApiError(httpErrorResponse: HttpErrorResponse, errorCode?: string): boolean {
     return !!((httpErrorResponse.name === 'HttpErrorResponse') && httpErrorResponse.error &&
-      (httpErrorResponse.error.timestamp) && (httpErrorResponse.error.message) && (httpErrorResponse.error.status) &&
-      (httpErrorResponse.error.statusText) && (httpErrorResponse.error.uri));
+      (httpErrorResponse.error.timestamp) && (httpErrorResponse.error.message) &&
+      (httpErrorResponse.error.status) && (httpErrorResponse.error.statusText) &&
+      (httpErrorResponse.error.uri) && (((errorCode == null) || (errorCode == undefined)) ||
+      ((httpErrorResponse.error.code) && (httpErrorResponse.error.code == errorCode))));
   }
 }
 

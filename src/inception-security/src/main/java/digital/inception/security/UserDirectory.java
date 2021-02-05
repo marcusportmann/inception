@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -62,8 +60,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-
-
 
 /**
  * The <b>UserDirectory</b> class holds the information for a user directory.
@@ -151,8 +147,7 @@ public class UserDirectory implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b>
-   * false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -282,7 +277,7 @@ public class UserDirectory implements Serializable {
    *
    * @param configuration the XML configuration data for the user directory
    */
-  public void setConfiguration(String configuration) throws SecurityServiceException {
+  public void setConfiguration(String configuration) throws InvalidConfigurationException {
     try {
       // Parse the XML configuration data
       DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -315,7 +310,7 @@ public class UserDirectory implements Serializable {
                 XmlUtil.getChildElementText(parameterElement, "value")));
       }
     } catch (Throwable e) {
-      throw new SecurityServiceException(
+      throw new InvalidConfigurationException(
           "Failed to parse the XML configuration data for the user directory", e);
     }
   }

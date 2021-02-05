@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
@@ -26,8 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 /**
  * The <b>MessagePartDownloadResponse</b> class represents the response to a request sent by a
@@ -58,8 +54,8 @@ public class MessagePartDownloadResponse {
 
   /**
    * The user-friendly text description of the result of processing the message part download
-   * request. The <b>detail</b> field may be blank if the message download request was
-   * processed successfully.
+   * request. The <b>detail</b> field may be blank if the message download request was processed
+   * successfully.
    */
   private final String detail;
 
@@ -78,7 +74,7 @@ public class MessagePartDownloadResponse {
    *
    * @param document the WBXML document containing the message part download response information
    */
-  public MessagePartDownloadResponse(Document document) throws MessagingServiceException {
+  public MessagePartDownloadResponse(Document document) throws MessagingException {
     Element rootElement = document.getRootElement();
 
     this.code = Long.parseLong(rootElement.getAttributeValue("code"));
@@ -102,9 +98,8 @@ public class MessagePartDownloadResponse {
 
         this.messageParts.add(new MessagePart(messagePartDocument));
       } catch (Throwable e) {
-        throw new MessagingServiceException(
-            "Failed to parse the WBXML for a message part associated with "
-                + "the message part download response",
+        throw new MessagingException(
+            "Failed to parse the WBXML for a message part associated with the message part download response",
             e);
       }
     }

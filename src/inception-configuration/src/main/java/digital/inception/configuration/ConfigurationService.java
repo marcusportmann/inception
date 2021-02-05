@@ -16,6 +16,7 @@
 
 package digital.inception.configuration;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.Base64Util;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -70,8 +71,7 @@ public class ConfigurationService implements IConfigurationService {
   @Override
   @Transactional
   public void deleteConfiguration(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -85,7 +85,7 @@ public class ConfigurationService implements IConfigurationService {
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to delete the configuration with the key (" + key + ")", e);
     }
   }
@@ -98,8 +98,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public byte[] getBinary(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -115,7 +114,7 @@ public class ConfigurationService implements IConfigurationService {
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the binary configuration with the key (" + key + ")", e);
     }
   }
@@ -129,7 +128,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public byte[] getBinary(String key, byte[] defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -139,7 +138,7 @@ public class ConfigurationService implements IConfigurationService {
 
       return valueOptional.map(Base64Util::decode).orElse(defaultValue);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the binary configuration with the key (" + key + ")", e);
     }
   }
@@ -152,8 +151,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public boolean getBoolean(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -169,7 +167,7 @@ public class ConfigurationService implements IConfigurationService {
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the Boolean configuration with the key (" + key + ")", e);
     }
   }
@@ -184,7 +182,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public boolean getBoolean(String key, boolean defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -194,7 +192,7 @@ public class ConfigurationService implements IConfigurationService {
 
       return valueOptional.map(Boolean::parseBoolean).orElse(defaultValue);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the Boolean configuration with the key (" + key + ")", e);
     }
   }
@@ -207,8 +205,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public Configuration getConfiguration(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -225,7 +222,7 @@ public class ConfigurationService implements IConfigurationService {
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the configuration with the key (" + key + ")", e);
     }
   }
@@ -236,12 +233,11 @@ public class ConfigurationService implements IConfigurationService {
    * @return all the configuration summaries
    */
   @Override
-  public List<ConfigurationSummary> getConfigurationSummaries()
-      throws ConfigurationServiceException {
+  public List<ConfigurationSummary> getConfigurationSummaries() throws ServiceUnavailableException {
     try {
       return configurationSummaryRepository.findAllByOrderByKeyDesc();
     } catch (Throwable e) {
-      throw new ConfigurationServiceException("Failed to retrieve the configuration summaries", e);
+      throw new ServiceUnavailableException("Failed to retrieve the configuration summaries", e);
     }
   }
 
@@ -251,11 +247,11 @@ public class ConfigurationService implements IConfigurationService {
    * @return all the configurations
    */
   @Override
-  public List<Configuration> getConfigurations() throws ConfigurationServiceException {
+  public List<Configuration> getConfigurations() throws ServiceUnavailableException {
     try {
       return configurationRepository.findAllByOrderByKeyDesc();
     } catch (Throwable e) {
-      throw new ConfigurationServiceException("Failed to retrieve the configurations", e);
+      throw new ServiceUnavailableException("Failed to retrieve the configurations", e);
     }
   }
 
@@ -267,8 +263,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public Double getDouble(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -284,7 +279,7 @@ public class ConfigurationService implements IConfigurationService {
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the Double configuration with the key (" + key + ")", e);
     }
   }
@@ -299,7 +294,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public double getDouble(String key, double defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -309,7 +304,7 @@ public class ConfigurationService implements IConfigurationService {
 
       return valueOptional.map(Double::parseDouble).orElse(defaultValue);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the Double configuration with the key (" + key + ")", e);
     }
   }
@@ -322,7 +317,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public List<ConfigurationSummary> getFilteredConfigurationSummaries(String filter)
-      throws ConfigurationServiceException {
+      throws ServiceUnavailableException {
     try {
       if (StringUtils.hasText(filter)) {
         return configurationSummaryRepository.findByKeyIgnoreCaseContaining(filter);
@@ -330,7 +325,7 @@ public class ConfigurationService implements IConfigurationService {
         return configurationSummaryRepository.findAllByOrderByKeyDesc();
       }
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the configuration summaries matching the filter (" + filter + ")", e);
     }
   }
@@ -343,7 +338,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public List<Configuration> getFilteredConfigurations(String filter)
-      throws ConfigurationServiceException {
+      throws ServiceUnavailableException {
     try {
       if (StringUtils.hasText(filter)) {
         return configurationRepository.findByKeyIgnoreCaseContaining(filter);
@@ -351,7 +346,7 @@ public class ConfigurationService implements IConfigurationService {
         return configurationRepository.findAllByOrderByKeyDesc();
       }
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the configuration matching the filter (" + filter + ")", e);
     }
   }
@@ -364,8 +359,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public Integer getInteger(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -381,7 +375,7 @@ public class ConfigurationService implements IConfigurationService {
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the Integer configuration with the key (" + key + ")", e);
     }
   }
@@ -396,7 +390,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public int getInteger(String key, int defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -406,7 +400,7 @@ public class ConfigurationService implements IConfigurationService {
 
       return valueOptional.map(Integer::parseInt).orElse(defaultValue);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the Integer configuration with the key (" + key + ")", e);
     }
   }
@@ -419,8 +413,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public Long getLong(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -436,7 +429,7 @@ public class ConfigurationService implements IConfigurationService {
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the Long configuration with the key (" + key + ")", e);
     }
   }
@@ -451,7 +444,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public long getLong(String key, long defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -461,7 +454,7 @@ public class ConfigurationService implements IConfigurationService {
 
       return valueOptional.map(Long::parseLong).orElse(defaultValue);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the Long configuration with the key (" + key + ")", e);
     }
   }
@@ -474,8 +467,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public String getString(String key)
-      throws InvalidArgumentException, ConfigurationNotFoundException,
-          ConfigurationServiceException {
+      throws InvalidArgumentException, ConfigurationNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -491,7 +483,7 @@ public class ConfigurationService implements IConfigurationService {
     } catch (ConfigurationNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the String configuration with the key (" + key + ")", e);
     }
   }
@@ -506,7 +498,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public String getString(String key, String defaultValue)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -516,7 +508,7 @@ public class ConfigurationService implements IConfigurationService {
 
       return valueOptional.orElse(defaultValue);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the String configuration with the key (" + key + ")", e);
     }
   }
@@ -529,7 +521,7 @@ public class ConfigurationService implements IConfigurationService {
    */
   @Override
   public boolean keyExists(String key)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -537,7 +529,7 @@ public class ConfigurationService implements IConfigurationService {
     try {
       return configurationRepository.existsByKeyIgnoreCase(key);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to checked whether the configuration key (" + key + ") exists", e);
     }
   }
@@ -550,7 +542,7 @@ public class ConfigurationService implements IConfigurationService {
   @Override
   @Transactional
   public void setConfiguration(Configuration configuration)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (configuration == null) {
       throw new InvalidArgumentException("configuration");
     }
@@ -566,7 +558,7 @@ public class ConfigurationService implements IConfigurationService {
     try {
       configurationRepository.saveAndFlush(configuration);
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to set the configuration with the key (" + configuration.getKey() + ")", e);
     }
   }
@@ -581,7 +573,7 @@ public class ConfigurationService implements IConfigurationService {
   @Override
   @Transactional
   public void setConfiguration(String key, Object value, String description)
-      throws InvalidArgumentException, ConfigurationServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(key)) {
       throw new InvalidArgumentException("key");
     }
@@ -607,7 +599,7 @@ public class ConfigurationService implements IConfigurationService {
 
       configurationRepository.save(new Configuration(key, stringValue, description));
     } catch (Throwable e) {
-      throw new ConfigurationServiceException(
+      throw new ServiceUnavailableException(
           "Failed to set the configuration with the key (" + key + ")", e);
     }
   }

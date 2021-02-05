@@ -28,9 +28,8 @@ import {SecurityService} from '../services/security.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {ConfirmationDialogComponent} from '../../dialog/components/confirmation-dialog.component';
-import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {SortDirection} from '../../core/sorting/sort-direction';
 import {Error} from '../../core/errors/error';
 
@@ -81,8 +80,7 @@ export class TenantsComponent extends AdminContainerView implements AfterViewIni
           this.loadTenants();
         }, (error: Error) => {
           // noinspection SuspiciousTypeOfGuard
-          if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-            (error instanceof SystemUnavailableError)) {
+          if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigateByUrl('/error/send-error-report', {state: {error}});
           } else {
@@ -126,8 +124,7 @@ export class TenantsComponent extends AdminContainerView implements AfterViewIni
       }
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {

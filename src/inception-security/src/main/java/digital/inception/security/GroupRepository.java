@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,11 +27,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
 /**
- * The <b>GroupRepository</b> interface declares the repository for the <b>Group</b>
- * domain type.
+ * The <b>GroupRepository</b> interface declares the repository for the <b>Group</b> domain type.
  *
  * @author Marcus Portmann
  */

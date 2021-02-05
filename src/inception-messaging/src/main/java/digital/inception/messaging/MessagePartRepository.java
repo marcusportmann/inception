@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.LockModeType;
@@ -28,11 +26,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
-
 /**
- * The <b>MessagePartRepository</b> interface declares the repository for the <b>
- * MessagePart</b> domain type.
+ * The <b>MessagePartRepository</b> interface declares the repository for the <b> MessagePart</b>
+ * domain type.
  *
  * @author Marcus Portmann
  */

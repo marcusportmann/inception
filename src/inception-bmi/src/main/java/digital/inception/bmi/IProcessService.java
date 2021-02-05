@@ -16,6 +16,7 @@
 
 package digital.inception.bmi;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public interface IProcessService {
    * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
    */
   List<ProcessDefinitionSummary> createProcessDefinition(byte[] processDefinitionData)
-      throws InvalidBPMNException, DuplicateProcessDefinitionException, ProcessServiceException;
+      throws InvalidBPMNException, DuplicateProcessDefinitionException, ServiceUnavailableException;
 
   /// **
   // * Delete the existing process definition.
@@ -43,7 +44,7 @@ public interface IProcessService {
   // * @param processDefinitionId the ID for the process definition
   // */
   // void deleteProcessDefinition(String processDefinitionId)
-  //  throws ProcessDefinitionNotFoundException, ProcessServiceException;
+  //  throws ProcessDefinitionNotFoundException, ServiceUnavailableException;
 
   /// **
   // * Retrieve the process definition.
@@ -53,7 +54,7 @@ public interface IProcessService {
   // * @return the process definition
   // */
   // ProcessDefinition getProcessDefinition(String processDefinitionId)
-  //  throws ProcessDefinitionNotFoundException, ProcessServiceException;
+  //  throws ProcessDefinitionNotFoundException, ServiceUnavailableException;
 
   /// **
   // * Retrieve the name of the process definition.
@@ -63,14 +64,14 @@ public interface IProcessService {
   // * @return the name of the process definition
   // */
   // String getProcessDefinitionName(String processDefinitionId)
-  //  throws ProcessDefinitionNotFoundException, ProcessServiceException;
+  //  throws ProcessDefinitionNotFoundException, ServiceUnavailableException;
 
   /**
    * Returns the summaries for all the process definitions.
    *
    * @return the summaries for all the process definitions
    */
-  List<ProcessDefinitionSummary> getProcessDefinitionSummaries() throws ProcessServiceException;
+  List<ProcessDefinitionSummary> getProcessDefinitionSummaries() throws ServiceUnavailableException;
 
   /**
    * Check whether the process definition exists.
@@ -78,7 +79,7 @@ public interface IProcessService {
    * @param processDefinitionId the ID for the process definition
    * @return <b>true</b> if the process definition exists or <b>false</b> otherwise
    */
-  boolean processDefinitionExists(String processDefinitionId) throws ProcessServiceException;
+  boolean processDefinitionExists(String processDefinitionId) throws ServiceUnavailableException;
 
   /// **
   // * Retrieve the summary for the process definition.
@@ -88,7 +89,7 @@ public interface IProcessService {
   // * @return the summary for the process definition
   // */
   // ProcessDefinitionSummary getProcessDefinitionSummary(String processDefinitionId)
-  //  throws ProcessDefinitionNotFoundException, ProcessServiceException;
+  //  throws ProcessDefinitionNotFoundException, ServiceUnavailableException;
   //
   /// **
   // * Returns all the process definitions.
@@ -96,7 +97,7 @@ public interface IProcessService {
   // * @return all the process definitions
   // */
   // List<ProcessDefinition> getProcessDefinitions()
-  //  throws ProcessServiceException;
+  //  throws ServiceUnavailableException;
 
   /**
    * Start a process instance.
@@ -105,7 +106,7 @@ public interface IProcessService {
    * @param parameters the parameters for the process instance
    */
   void startProcessInstance(String processDefinitionId, Map<String, Object> parameters)
-      throws ProcessDefinitionNotFoundException, ProcessServiceException;
+      throws ProcessDefinitionNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the process definition(s).
@@ -114,7 +115,7 @@ public interface IProcessService {
    * @return the process definition summaries for the BPMN processes defined by the BPMN XML data
    */
   List<ProcessDefinitionSummary> updateProcessDefinition(byte[] processDefinitionData)
-      throws InvalidBPMNException, ProcessDefinitionNotFoundException, ProcessServiceException;
+      throws InvalidBPMNException, ProcessDefinitionNotFoundException, ServiceUnavailableException;
 
   /**
    * Validate the BPMN XML data.
@@ -124,7 +125,7 @@ public interface IProcessService {
    *     successfully validated
    */
   List<ProcessDefinitionSummary> validateBPMN(byte[] bpmnXml)
-      throws InvalidBPMNException, ProcessServiceException;
+      throws InvalidBPMNException, ServiceUnavailableException;
 
   /**
    * Validate the BPMN XML data.
@@ -134,5 +135,5 @@ public interface IProcessService {
    *     successfully validated
    */
   List<ProcessDefinitionSummary> validateBPMN(String bpmnXml)
-      throws InvalidBPMNException, ProcessServiceException;
+      throws InvalidBPMNException, ServiceUnavailableException;
 }

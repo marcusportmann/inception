@@ -160,7 +160,10 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "building_room", length = 30)
   private String buildingRoom;
 
-  /** The town or city for the physical address that is required for a building, complex, postal, site or street address. */
+  /**
+   * The town or city for the physical address that is required for a building, complex, postal,
+   * site or street address.
+   */
   @Schema(
       description =
           "The town or city for the physical address that is required for a building, complex, postal, site or street address")
@@ -273,7 +276,10 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "latitude", length = 50)
   private String latitude;
 
-  /** The address line 1 for the physical address that is required for an international, postal or unstructured address. */
+  /**
+   * The address line 1 for the physical address that is required for an international, postal or
+   * unstructured address.
+   */
   @Schema(
       description =
           "The address line 1 for the physical address that is required for an international, postal or unstructured address")
@@ -344,15 +350,17 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "purposes", length = 300)
   private String purposes;
 
-  /** The optional code for the region for the physical address. */
-  @Schema(description = "The optional code for the region for the physical address")
+  /** The optional ISO 3166-2 subdivision code for the region for the physical address. */
+  @Schema(
+      description =
+          "The optional ISO 3166-2 subdivision code for the region for the physical address")
   @JsonProperty
   @XmlElement(name = "Region")
-  @Size(min = 1, max = 30)
+  @Size(min = 2, max = 3)
   @Pattern(
       message = "{digital.inception.party.PhysicalAddress.Region.Pattern.message}",
       regexp = "^[\\pL\\pN-' ]*$")
-  @Column(name = "region", length = 30)
+  @Column(name = "region", length = 3)
   private String region;
 
   /** The site block for the physical address that is required for a site address. */
@@ -416,13 +424,26 @@ public class PhysicalAddress implements Serializable {
   @Column(name = "suburb", length = 50)
   private String suburb;
 
-  /** The physical address type. */
-  @Schema(description = "The physical address type", required = true)
+  /** The code for the physical address type. */
+  @Schema(
+      description = "The code for the physical address type",
+      required = true,
+      allowableValues = {
+        "building",
+        "complex",
+        "farm",
+        "international",
+        "postal",
+        "site",
+        "street",
+        "unstructured"
+      })
   @JsonProperty(required = true)
   @XmlElement(name = "Type", required = true)
   @NotNull
-  @Column(name = "type", nullable = false)
-  private PhysicalAddressType type;
+  @Size(min = 1, max = 30)
+  @Column(name = "type", length = 30, nullable = false)
+  private String type;
 
   /** The date and time the physical address was last updated. */
   @JsonIgnore
@@ -437,9 +458,9 @@ public class PhysicalAddress implements Serializable {
   /**
    * Constructs a new <b>PhysicalAddress</b>.
    *
-   * @param type the physical address type
+   * @param type the code for the physical address type
    */
-  public PhysicalAddress(PhysicalAddressType type) {
+  public PhysicalAddress(String type) {
     this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
   }
@@ -447,35 +468,27 @@ public class PhysicalAddress implements Serializable {
   /**
    * Constructs a new <b>PhysicalAddress</b>.
    *
-   * @param type the physical address type
-   * @param purpose the physical address purpose
+   * @param type the code for the physical address type
+   * @param purpose the code for the physical address purpose
    */
-  public PhysicalAddress(PhysicalAddressType type, PhysicalAddressPurpose purpose) {
+  public PhysicalAddress(String type, String purpose) {
     this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
-    this.purposes = purpose.code();
+    this.purposes = purpose;
   }
 
   /**
    * Constructs a new <b>PhysicalAddress</b>.
    *
-   * @param type the physical address type
+   * @param type the code for the physical address type
    * @param purposes the codes for the physical address purposes
    */
-  public PhysicalAddress(PhysicalAddressType type, Set<PhysicalAddressPurpose> purposes) {
+  public PhysicalAddress(String type, Set<String> purposes) {
     this.id = UuidCreator.getShortPrefixComb();
     this.type = type;
 
     if ((purposes != null) && (purposes.size() > 0)) {
-      this.purposes = "";
-
-      for (PhysicalAddressPurpose purpose : purposes) {
-        if (this.purposes.length() > 0) {
-          this.purposes += ",";
-        }
-
-        this.purposes += purpose.code();
-      }
+      this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
     }
   }
 
@@ -483,7 +496,7 @@ public class PhysicalAddress implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -685,24 +698,18 @@ public class PhysicalAddress implements Serializable {
   @JsonProperty(required = true)
   @XmlElementWrapper(name = "Purposes", required = true)
   @XmlElement(name = "Purpose", required = true)
-  public Set<PhysicalAddressPurpose> getPurposes() {
+  public Set<String> getPurposes() {
     if (this.purposes != null) {
-      Set<PhysicalAddressPurpose> purposes = new LinkedHashSet<>();
-
-      for (String purposeCode : StringUtils.commaDelimitedListToStringArray(this.purposes)) {
-        purposes.add(PhysicalAddressPurpose.fromCode(purposeCode));
-      }
-
-      return purposes;
+      return StringUtils.commaDelimitedListToSet(this.purposes);
     } else {
       return new LinkedHashSet<>();
     }
   }
 
   /**
-   * Returns the optional code for the region for the physical address.
+   * Returns the optional ISO 3166-2 subdivision code for the region for the physical address.
    *
-   * @return the optional code for the region for the physical address
+   * @return the optional ISO 3166-2 subdivision code for the region for the physical address
    */
   public String getRegion() {
     return region;
@@ -754,11 +761,11 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Returns the physical address type.
+   * Returns the code for the physical address type.
    *
-   * @return the physical address type
+   * @return the code for the physical address type
    */
-  public PhysicalAddressType getType() {
+  public String getType() {
     return type;
   }
 
@@ -949,26 +956,18 @@ public class PhysicalAddress implements Serializable {
    *
    * @param purposes the optional codes for the physical address purposes
    */
-  public void setPurposes(Set<PhysicalAddressPurpose> purposes) {
+  public void setPurposes(Set<String> purposes) {
     if ((purposes != null) && (purposes.size() > 0)) {
-      this.purposes = "";
-
-      for (PhysicalAddressPurpose purpose : purposes) {
-        if (this.purposes.length() > 0) {
-          this.purposes += ",";
-        }
-
-        this.purposes += purpose.code();
-      }
+      this.purposes = StringUtils.collectionToCommaDelimitedString(purposes);
     } else {
       this.purposes = null;
     }
   }
 
   /**
-   * Set the optional code for the region for the physical address.
+   * Set the optional ISO 3166-2 subdivision code for the region for the physical address.
    *
-   * @param region the optional code for the region for the physical address
+   * @param region the optional ISO 3166-2 subdivision code for the region for the physical address
    */
   public void setRegion(String region) {
     this.region = region;
@@ -1020,11 +1019,11 @@ public class PhysicalAddress implements Serializable {
   }
 
   /**
-   * Set the physical address type.
+   * Set the code for the physical address type.
    *
-   * @param type the physical address type
+   * @param type the code for the physical address type
    */
-  public void setType(PhysicalAddressType type) {
+  public void setType(String type) {
     this.type = type;
   }
 }

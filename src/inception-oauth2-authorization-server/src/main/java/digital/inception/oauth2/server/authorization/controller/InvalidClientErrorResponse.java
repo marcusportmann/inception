@@ -19,8 +19,8 @@ package digital.inception.oauth2.server.authorization.controller;
 import org.springframework.http.HttpStatus;
 
 /**
- * The <b>InvalidClientErrorResponse</b> class holds the information for an OAuth2 invalid
- * client error response.
+ * The <b>InvalidClientErrorResponse</b> class holds the information for an OAuth2 invalid client
+ * error response.
  *
  * <p>See: <a href="https://tools.ietf.org/html/rfc6749#section-5.2">Error Response</a>
  *

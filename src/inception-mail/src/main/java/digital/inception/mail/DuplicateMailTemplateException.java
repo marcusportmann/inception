@@ -24,9 +24,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The <b>DuplicateMailTemplateException</b> exception is thrown to indicate an error
- * condition as a result of an attempt to create a duplicate mail template i.e a mail template with
- * the specified ID already exists.
+ * The <b>DuplicateMailTemplateException</b> exception is thrown to indicate an error condition as a
+ * result of an attempt to create a duplicate mail template i.e a mail template with the specified
+ * ID already exists.
  *
  * <p>This is a checked exception to prevent the automatic rollback of the current transaction.
  *

@@ -31,8 +31,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>UserDirectorySummaries</b> class holds the results of a request to retrieve a list
- * of user directory summaries.
+ * The <b>UserDirectorySummaries</b> class holds the results of a request to retrieve a list of user
+ * directory summaries.
  *
  * @author Marcus Portmann
  */

@@ -28,20 +28,19 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- * The <b>DataSourceProxy</b> class provides a proxy that tracks the JDBC connections
- * associated with the current thread and managed by a <b>javax.sql.DataSource</b>
- * implementation.
+ * The <b>DataSourceProxy</b> class provides a proxy that tracks the JDBC connections associated
+ * with the current thread and managed by a <b>javax.sql.DataSource</b> implementation.
  *
  * @author Marcus Portmann
  */
 public class DataSourceProxy implements DataSource {
 
   /** The active database connections associated with the current thread. */
-  private static ThreadLocal<Map<Connection, StackTraceElement[]>> activeDatabaseConnections =
+  private static final ThreadLocal<Map<Connection, StackTraceElement[]>> activeDatabaseConnections =
       ThreadLocal.withInitial(ConcurrentHashMap::new);
 
   /** The data source. */
-  private DataSource dataSource;
+  private final DataSource dataSource;
 
   /**
    * Constructs a new <b>DataSourceProxy</b>.

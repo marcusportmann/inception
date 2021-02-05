@@ -70,7 +70,12 @@
               "projects/ngx-inception/src/assets/scss/default-theme.scss",
               "projects/demo/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "sourceMap": {
+              "scripts": true,
+              "styles": true,
+              "vendor": true
+            }
           },
           "configurations": {
             "production": {

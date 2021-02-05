@@ -22,23 +22,22 @@ import java.net.UnknownHostException;
 import java.util.Enumeration;
 
 /**
- * The <b>NetworkUtil</b> class is a utility class which provides network-related utility
- * methods.
+ * The <b>NetworkUtil</b> class is a utility class which provides network-related utility methods.
  *
  * @author Marcus Portmann
  */
 public class NetworkUtil {
 
   /**
-   * Returns an <b>InetAddress</b> object encapsulating what is most likely the machine's LAN
-   * IP address.
+   * Returns an <b>InetAddress</b> object encapsulating what is most likely the machine's LAN IP
+   * address.
    *
    * <p>This method is intended for use as a replacement of JDK method <b>
-   * InetAddress.getLocalHost</b>, because that method is ambiguous on Linux systems. Linux
-   * systems enumerate the loopback network interface the same way as regular LAN network
-   * interfaces, but the JDK <b>InetAddress.getLocalHost</b> method does not specify the
-   * algorithm used to select the address returned under such circumstances, and will often return
-   * the loopback address, which is not valid for network communication. Details <a
+   * InetAddress.getLocalHost</b>, because that method is ambiguous on Linux systems. Linux systems
+   * enumerate the loopback network interface the same way as regular LAN network interfaces, but
+   * the JDK <b>InetAddress.getLocalHost</b> method does not specify the algorithm used to select
+   * the address returned under such circumstances, and will often return the loopback address,
+   * which is not valid for network communication. Details <a
    * href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4665037">here</a>.
    *
    * <p>This method will scan all IP addresses on all network interfaces on the host machine to

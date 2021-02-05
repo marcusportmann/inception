@@ -16,8 +16,6 @@
 
 package digital.inception.messaging.handler;
 
-
-
 import digital.inception.codes.Code;
 import digital.inception.codes.CodeCategory;
 import digital.inception.codes.CodeCategoryNotFoundException;
@@ -53,11 +51,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-
 /**
- * The <b>SystemMessageHandler</b> class implements the message handler that processes the
- * "system" messages for the messaging infrastructure.
+ * The <b>SystemMessageHandler</b> class implements the message handler that processes the "system"
+ * messages for the messaging infrastructure.
  *
  * @author Marcus Portmann
  */

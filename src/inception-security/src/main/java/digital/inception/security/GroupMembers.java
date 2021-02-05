@@ -32,8 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * The <b>GroupMembers</b> class holds the results of a request to retrieve a list of group
- * members.
+ * The <b>GroupMembers</b> class holds the results of a request to retrieve a list of group members.
  *
  * @author Marcus Portmann
  */
@@ -115,8 +114,8 @@ public class GroupMembers implements Serializable {
   private long total;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the group
-   * members are associated with.
+   * The Universally Unique Identifier (UUID) for the user directory the group members are
+   * associated with.
    */
   @Schema(
       description =
@@ -132,8 +131,8 @@ public class GroupMembers implements Serializable {
   /**
    * Constructs a new <b>GroupMembers</b>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory the group members are associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the
+   *     group members are associated with
    * @param groupName the name of the group the group members are associated with
    * @param groupMembers the group members
    * @param total the total number of group members
@@ -225,11 +224,11 @@ public class GroupMembers implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the user directory the
-   * group members are associated with.
+   * Returns the Universally Unique Identifier (UUID) for the user directory the group members are
+   * associated with.
    *
-   * @return the Universally Unique Identifier (UUID) for the user directory the
-   *     group members are associated with
+   * @return the Universally Unique Identifier (UUID) for the user directory the group members are
+   *     associated with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;

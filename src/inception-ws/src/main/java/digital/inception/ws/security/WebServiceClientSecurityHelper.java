@@ -32,8 +32,8 @@ import javax.xml.ws.WebEndpoint;
 import javax.xml.ws.handler.HandlerResolver;
 
 /**
- * The <b>WebServiceClientSecurityHelper</b> class is a utility class that provides support
- * for configuring secure web service clients.
+ * The <b>WebServiceClientSecurityHelper</b> class is a utility class that provides support for
+ * configuring secure web service clients.
  *
  * @author Marcus Portmann
  */
@@ -49,6 +49,10 @@ public class WebServiceClientSecurityHelper {
   /** The name of the JAX-WS property that allows the SSL socket factory to be configured. */
   public static final String JAX_WS_PROPERTIES_SSL_SOCKET_FACTORY =
       "com.sun.xml.ws.transport.https.client.SSLSocketFactory";
+
+  /* The web service client cache. */
+  private static final ConcurrentMap<String, WebServiceClient> webServiceClientCache =
+      new ConcurrentHashMap<>();
 
   private static boolean apacheCxfCheckFailed;
 
@@ -75,10 +79,6 @@ public class WebServiceClientSecurityHelper {
    * certificate.
    */
   private static NoTrustSSLSocketFactory noTrustSSLSocketFactory;
-
-  /* The web service client cache. */
-  private static ConcurrentMap<String, WebServiceClient> webServiceClientCache =
-      new ConcurrentHashMap<>();
 
   /**
    * Returns the secure web service proxy for the web service that has been secured with digest
@@ -771,10 +771,10 @@ public class WebServiceClientSecurityHelper {
   public static class WebServiceClient {
 
     /** The QName for the port. */
-    private QName portQName;
+    private final QName portQName;
 
     /** The web service client. */
-    private Service service;
+    private final Service service;
 
     /**
      * Constructs a new <b>CachedWebServiceClient</b>.

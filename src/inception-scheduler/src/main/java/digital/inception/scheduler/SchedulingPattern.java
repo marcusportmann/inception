@@ -16,8 +16,6 @@
 
 package digital.inception.scheduler;
 
-
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,8 +24,8 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 /**
- * The <b>SchedulingPattern</b> class supports a UNIX crontab-like pattern is a string split
- * in five space separated parts.
+ * The <b>SchedulingPattern</b> class supports a UNIX crontab-like pattern is a string split in five
+ * space separated parts.
  *
  * <p>Each part is intented as:
  *
@@ -137,6 +135,9 @@ public class SchedulingPattern {
   /** The parser for the month values. */
   private static final ValueParser MONTH_VALUE_PARSER = new MonthValueParser();
 
+  /** The pattern as a string. */
+  private final String asString;
+
   /** The ValueMatcher list for the "day of month" field. */
   protected List<ValueMatcher> dayOfMonthMatchers = new ArrayList<>();
 
@@ -154,9 +155,6 @@ public class SchedulingPattern {
 
   /** The ValueMatcher list for the "month" field. */
   protected List<ValueMatcher> monthMatchers = new ArrayList<>();
-
-  /** The pattern as a string. */
-  private String asString;
 
   /**
    * Builds a SchedulingPattern by parsing it from a string.
@@ -228,8 +226,8 @@ public class SchedulingPattern {
    * Validates a string as a scheduling pattern.
    *
    * @param schedulingPattern the pattern to validate
-   * @return <b>true</b> if the given string represents a valid scheduling pattern or <b>
-   * false</b> otherwise
+   * @return <b>true</b> if the given string represents a valid scheduling pattern or <b> false</b>
+   *     otherwise
    */
   @SuppressWarnings("unused")
   public static boolean validate(String schedulingPattern) {
@@ -261,13 +259,12 @@ public class SchedulingPattern {
   }
 
   /**
-   * Returns <b>true</b> if the EPOCH timestamp in milliseconds matches the pattern, according
-   * to the given time zone.
+   * Returns <b>true</b> if the EPOCH timestamp in milliseconds matches the pattern, according to
+   * the given time zone.
    *
    * @param timezone the time zone
    * @param timestamp the EPOCH timestamp in milliseconds
-   * @return <b>true</b> if the given timestamp matches the pattern or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the given timestamp matches the pattern or <b>false</b> otherwise
    */
   public boolean match(TimeZone timezone, long timestamp) {
     GregorianCalendar gc = new GregorianCalendar();
@@ -307,12 +304,11 @@ public class SchedulingPattern {
   }
 
   /**
-   * Returns <b>true</b> if the given EPOCH timestamp in milliseconds matches the pattern,
-   * according to the system default time zone.
+   * Returns <b>true</b> if the given EPOCH timestamp in milliseconds matches the pattern, according
+   * to the system default time zone.
    *
    * @param timestamp the EPOCH timestamp in milliseconds
-   * @return <b>true</b> if the given timestamp matches the pattern or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the given timestamp matches the pattern or <b>false</b> otherwise
    */
   public boolean match(long timestamp) {
     return match(TimeZone.getDefault(), timestamp);
@@ -553,7 +549,7 @@ public class SchedulingPattern {
   private static class DayOfWeekValueParser extends SimpleValueParser {
 
     /** Days of week aliases. */
-    private static String[] ALIASES = {"sun", "mon", "tue", "wed", "thu", "fri", "sat"};
+    private static final String[] ALIASES = {"sun", "mon", "tue", "wed", "thu", "fri", "sat"};
 
     /** Builds the months value parser. */
     public DayOfWeekValueParser() {
@@ -599,7 +595,7 @@ public class SchedulingPattern {
   private static class MonthValueParser extends SimpleValueParser {
 
     /** Months aliases. */
-    private static String[] ALIASES = {
+    private static final String[] ALIASES = {
       "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
     };
 

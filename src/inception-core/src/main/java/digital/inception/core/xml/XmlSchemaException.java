@@ -17,8 +17,8 @@
 package digital.inception.core.xml;
 
 /**
- * The <b>XmlSchemaException</b> exception is thrown to indicate an error condition when
- * working with an XML schema.
+ * The <b>XmlSchemaException</b> exception is thrown to indicate an error condition when working
+ * with an XML schema.
  *
  * @author Marcus Portmann
  */
@@ -42,8 +42,8 @@ public class XmlSchemaException extends RuntimeException {
 
   /**
    * Constructs a new <b>XmlSchemaException</b> with the specified cause and a message of
-   * <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and
-   * message of cause).
+   * <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and message
+   * of cause).
    *
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)

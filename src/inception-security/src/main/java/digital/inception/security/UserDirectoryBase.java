@@ -16,16 +16,12 @@
 
 package digital.inception.security;
 
-
-
 import java.util.List;
 import java.util.UUID;
 
-
-
 /**
- * The <b>UserDirectoryBase</b> class provides the base class from which all user directory
- * classes should be derived.
+ * The <b>UserDirectoryBase</b> class provides the base class from which all user directory classes
+ * should be derived.
  *
  * @author Marcus Portmann
  */
@@ -50,8 +46,7 @@ public abstract class UserDirectoryBase implements IUserDirectory {
   /**
    * Constructs a new <b>UserDirectoryBase</b>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory
    * @param parameters the parameters for the user directory
    * @param groupRepository the Group Repository
    * @param userRepository the User Repository

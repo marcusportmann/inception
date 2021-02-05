@@ -16,14 +16,10 @@
 
 package digital.inception.persistence;
 
-
-
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 import org.hibernate.engine.transaction.jta.platform.internal.AbstractJtaPlatform;
 import org.springframework.transaction.jta.JtaTransactionManager;
-
-
 
 /**
  * The <b>JtaPlatform</b> class.

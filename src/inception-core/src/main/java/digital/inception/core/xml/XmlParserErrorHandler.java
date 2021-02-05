@@ -21,8 +21,8 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXParseException;
 
 /**
- * The <b>XmlParserErrorHandler</b> class handles warnings and errors that arise while parsing
- * an XML document.
+ * The <b>XmlParserErrorHandler</b> class handles warnings and errors that arise while parsing an
+ * XML document.
  *
  * @author Marcus Portmann
  */

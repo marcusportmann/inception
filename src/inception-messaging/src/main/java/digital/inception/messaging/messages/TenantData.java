@@ -16,15 +16,11 @@
 
 package digital.inception.messaging.messages;
 
-
-
 import digital.inception.core.wbxml.Element;
 import digital.inception.security.Tenant;
 import java.io.Serializable;
 import java.util.UUID;
 import org.springframework.util.StringUtils;
-
-
 
 /**
  * The <b>TenantData</b> class holds the information for a tenant.

@@ -16,6 +16,7 @@
 
 package digital.inception.error;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 import java.util.UUID;
@@ -31,11 +32,11 @@ public interface IErrorService {
   /**
    * Create the new entry for the error report in the database.
    *
-   * @param errorReport the <b>ErrorReport</b> instance containing the information for the
-   *     error report
+   * @param errorReport the <b>ErrorReport</b> instance containing the information for the error
+   *     report
    */
   void createErrorReport(ErrorReport errorReport)
-      throws InvalidArgumentException, ErrorServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the error report.
@@ -44,17 +45,16 @@ public interface IErrorService {
    * @return the error report or <b>null</b> if the error report could not be found
    */
   ErrorReport getErrorReport(UUID errorReportId)
-      throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException;
+      throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the summary for the error report.
    *
    * @param errorReportId the Universally Unique Identifier (UUID) for the error report
-   * @return the summary for the error report or <b>null</b> if the error report could not be
-   *     found
+   * @return the summary for the error report or <b>null</b> if the error report could not be found
    */
   ErrorReportSummary getErrorReportSummary(UUID errorReportId)
-      throws InvalidArgumentException, ErrorReportNotFoundException, ErrorServiceException;
+      throws InvalidArgumentException, ErrorReportNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the summaries for the most recent error reports.
@@ -64,5 +64,5 @@ public interface IErrorService {
    * @return the summaries for the most recent error reports
    */
   List<ErrorReportSummary> getMostRecentErrorReportSummaries(int maximumNumberOfEntries)
-      throws InvalidArgumentException, ErrorServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 }

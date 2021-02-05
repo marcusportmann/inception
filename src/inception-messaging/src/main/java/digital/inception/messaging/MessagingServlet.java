@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.Debug;
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Parser;
@@ -35,8 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 
 /**
  * The <b>MessageServlet</b> servlet.
@@ -230,7 +226,7 @@ public class MessagingServlet extends HttpServlet {
   }
 
   private boolean processMessage(Document document, HttpServletResponse response)
-      throws MessagingServiceException {
+      throws MessagingException {
     // Is the WBXML document valid
     if (!Message.isValidWBXML(document)) {
       logger.warn("Failed to process the invalid message WBXML document: " + document.toString());

@@ -18,6 +18,7 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
 import {PartyService} from "./party.service";
+import {PartyReferenceService} from "./party-reference.service";
 
 /**
  * The PartyServicesModule class implements the Inception Party Services Module.
@@ -40,7 +41,7 @@ export class PartyServicesModule {
     return {
       ngModule: PartyServicesModule,
       providers: [
-        PartyService
+        PartyReferenceService, PartyService
       ]
     };
   }

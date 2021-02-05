@@ -22,11 +22,10 @@ import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http'
 import {ApiError} from '../../core/errors/api-error';
 import {
   DuplicateJobError,
-  JobNotFoundError,
-  SchedulerServiceError
+  JobNotFoundError
 } from './scheduler.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {JobStatus} from "./job-status";
 
@@ -96,12 +95,12 @@ export class SchedulerService {
           } else if (apiError.code === 'DuplicateJobError') {
             return throwError(new DuplicateJobError(apiError));
           } else {
-            return throwError(new SchedulerServiceError('Failed to create the job.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to create the job.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to create the job.', httpErrorResponse));
         }
       }));
   }
@@ -125,12 +124,12 @@ export class SchedulerService {
           if (apiError.code === 'JobNotFoundError') {
             return throwError(new JobNotFoundError(apiError));
           } else {
-            return throwError(new SchedulerServiceError('Failed to delete the job.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to delete the job.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to delete the job.', httpErrorResponse));
         }
       }));
   }
@@ -154,12 +153,12 @@ export class SchedulerService {
           if (apiError.code === 'JobNotFoundError') {
             return throwError(new JobNotFoundError(apiError));
           } else {
-            return throwError(new SchedulerServiceError('Failed to retrieve the job.', apiError));
+            return throwError(new ServiceUnavailableError('Failed to retrieve the job.', apiError));
           }
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the job.', httpErrorResponse));
         }
       }));
   }
@@ -184,12 +183,12 @@ export class SchedulerService {
         if (apiError.code === 'JobNotFoundError') {
           return throwError(new JobNotFoundError(apiError));
         } else {
-          return throwError(new SchedulerServiceError('Failed to retrieve the job name.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the job name.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the job name.', httpErrorResponse));
       }
     }));
   }
@@ -207,11 +206,11 @@ export class SchedulerService {
         if (ApiError.isApiError(httpErrorResponse)) {
           const apiError: ApiError = new ApiError(httpErrorResponse);
 
-          return throwError(new SchedulerServiceError('Failed to retrieve the jobs.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the jobs.', apiError));
         } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
           return throwError(new CommunicationError(httpErrorResponse));
         } else {
-          return throwError(new SystemUnavailableError(httpErrorResponse));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the jobs.', httpErrorResponse));
         }
       }));
   }
@@ -234,12 +233,12 @@ export class SchedulerService {
         if (apiError.code === 'JobNotFoundError') {
           return throwError(new JobNotFoundError(apiError));
         } else {
-          return throwError(new SchedulerServiceError('Failed to update the job.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to update the job.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to update the job.', httpErrorResponse));
       }
     }));
   }

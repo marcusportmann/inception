@@ -16,8 +16,6 @@
 
 package digital.inception.scheduler;
 
-
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,8 +25,8 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
- * The <b>Predictor</b> class provides the capability to predict when a scheduling pattern
- * will be matched.
+ * The <b>Predictor</b> class provides the capability to predict when a scheduling pattern will be
+ * matched.
  *
  * <p>Suppose you want to know when the scheduler will execute a job scheduled with the pattern
  * <em>0 3 * jan-jun,sep-dec mon-fri</em>. You can predict the next <em>n</em> execution of the job

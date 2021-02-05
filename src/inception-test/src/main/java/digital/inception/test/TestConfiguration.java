@@ -244,7 +244,7 @@ public class TestConfiguration {
    * Initialize the in-memory application database and return a data source that can be used to
    * interact with the database.
    *
-   * <p>This data source returned by this method must be closed after use with the <b> close()</b>
+   * <p>This data source returned by this method must be closed after use with the <b>close()</b>
    * method.
    *
    * @return the data source that can be used to interact with the in-memory database

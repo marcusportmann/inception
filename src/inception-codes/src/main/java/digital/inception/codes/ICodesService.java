@@ -16,6 +16,7 @@
 
 package digital.inception.codes;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,7 +37,7 @@ public interface ICodesService {
    * @return <b>true</b> if the code category exists or <b>false</b> otherwise
    */
   boolean codeCategoryExists(String codeCategoryId)
-      throws InvalidArgumentException, CodesServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Check whether the code exists.
@@ -46,7 +47,7 @@ public interface ICodesService {
    * @return <b>true</b> if the code exists or <b>false</b> otherwise
    */
   boolean codeExists(String codeCategoryId, String codeId)
-      throws InvalidArgumentException, CodesServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Create the new code.
@@ -55,7 +56,7 @@ public interface ICodesService {
    */
   void createCode(Code code)
       throws InvalidArgumentException, DuplicateCodeException, CodeCategoryNotFoundException,
-          CodesServiceException;
+          ServiceUnavailableException;
 
   /**
    * Create the new code category.
@@ -64,7 +65,7 @@ public interface ICodesService {
    *     code category
    */
   void createCodeCategory(CodeCategory codeCategory)
-      throws InvalidArgumentException, DuplicateCodeCategoryException, CodesServiceException;
+      throws InvalidArgumentException, DuplicateCodeCategoryException, ServiceUnavailableException;
 
   /**
    * Delete the code.
@@ -73,7 +74,7 @@ public interface ICodesService {
    * @param codeId the ID for the code
    */
   void deleteCode(String codeCategoryId, String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException;
 
   /**
    * Delete the code category.
@@ -81,7 +82,7 @@ public interface ICodesService {
    * @param codeCategoryId the ID for the code category
    */
   void deleteCodeCategory(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the code.
@@ -91,14 +92,14 @@ public interface ICodesService {
    * @return the code
    */
   Code getCode(String codeCategoryId, String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException;
 
   /**
    * Returns all the code categories.
    *
    * @return all the code categories
    */
-  List<CodeCategory> getCodeCategories() throws CodesServiceException;
+  List<CodeCategory> getCodeCategories() throws ServiceUnavailableException;
 
   /**
    * Retrieve the code category.
@@ -107,7 +108,7 @@ public interface ICodesService {
    * @return the code category
    */
   CodeCategory getCodeCategory(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the XML or JSON data for the code category.
@@ -119,7 +120,7 @@ public interface ICodesService {
    * @return the XML or JSON data for the code category
    */
   String getCodeCategoryData(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the XML or JSON data for the code category using the specified parameters.
@@ -132,7 +133,7 @@ public interface ICodesService {
    * @return the XML or JSON data for the code category
    */
   String getCodeCategoryDataWithParameters(String codeCategoryId, Map<String, String> parameters)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the name of the code category.
@@ -141,14 +142,14 @@ public interface ICodesService {
    * @return the name of the code category
    */
   String getCodeCategoryName(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Returns the summaries for all the code categories.
    *
    * @return the summaries for all the code categories
    */
-  List<CodeCategorySummary> getCodeCategorySummaries() throws CodesServiceException;
+  List<CodeCategorySummary> getCodeCategorySummaries() throws ServiceUnavailableException;
 
   /**
    * Returns the date and time the code category was last updated.
@@ -157,7 +158,7 @@ public interface ICodesService {
    * @return the date and time the code category was last updated
    */
   LocalDateTime getCodeCategoryUpdated(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the name of the code.
@@ -167,7 +168,7 @@ public interface ICodesService {
    * @return the name of the code
    */
   String getCodeName(String codeCategoryId, String codeId)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the codes for the code category.
@@ -180,7 +181,7 @@ public interface ICodesService {
    * @return the codes for the code category
    */
   List<Code> getCodesForCodeCategory(String codeCategoryId)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Retrieve the codes for the code category using the specified parameters.
@@ -195,7 +196,7 @@ public interface ICodesService {
    */
   List<Code> getCodesForCodeCategoryWithParameters(
       String codeCategoryId, Map<String, String> parameters)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the existing code.
@@ -203,7 +204,7 @@ public interface ICodesService {
    * @param code the <b>Code</b> instance containing the updated information for the code
    */
   void updateCode(Code code)
-      throws InvalidArgumentException, CodeNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the existing code category.
@@ -212,7 +213,7 @@ public interface ICodesService {
    *     code category
    */
   void updateCodeCategory(CodeCategory codeCategory)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 
   /**
    * Update the XML or JSON data for the code category.
@@ -221,5 +222,5 @@ public interface ICodesService {
    * @param data the updated XML or JSON data
    */
   void updateCodeCategoryData(String codeCategoryId, String data)
-      throws InvalidArgumentException, CodeCategoryNotFoundException, CodesServiceException;
+      throws InvalidArgumentException, CodeCategoryNotFoundException, ServiceUnavailableException;
 }

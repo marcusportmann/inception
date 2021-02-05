@@ -16,8 +16,6 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.service.ServiceException;
 import java.util.UUID;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -25,8 +23,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.ws.WebFault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-
 
 /**
  * The <b>MessageNotFoundException</b> exception is thrown to indicate an error condition as a

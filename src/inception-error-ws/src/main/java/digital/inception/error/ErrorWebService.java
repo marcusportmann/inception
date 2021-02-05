@@ -16,16 +16,13 @@
 
 package digital.inception.error;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
-
-
 
 /**
  * The <b>ErrorWebService</b> class.
@@ -60,7 +57,7 @@ public class ErrorWebService {
   @WebMethod(operationName = "CreateErrorReport")
   public void createErrorReport(
       @WebParam(name = "ErrorReport") @XmlElement(required = true) ErrorReport errorReport)
-      throws InvalidArgumentException, ErrorServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     errorService.createErrorReport(errorReport);
   }
 }

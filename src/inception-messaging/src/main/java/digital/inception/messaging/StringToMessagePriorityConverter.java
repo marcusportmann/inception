@@ -16,15 +16,13 @@
 
 package digital.inception.messaging;
 
-
-
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.stereotype.Component;
 
 /**
- * The <b>StringToMessagePriorityConverter</b> class implements the Spring converter that
- * converts a <b>String</b> type into a <b>MessagePriority</b> type.
+ * The <b>StringToMessagePriorityConverter</b> class implements the Spring converter that converts a
+ * <b>String</b> type into a <b>MessagePriority</b> type.
  *
  * @author Marcus Portmann
  */

@@ -16,8 +16,7 @@
 
 package digital.inception.scheduler;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 import javax.jws.WebMethod;
@@ -59,7 +58,7 @@ public class SchedulerWebService {
    */
   @WebMethod(operationName = "CreateJob")
   public void createJob(@WebParam(name = "Job") @XmlElement(required = true) Job job)
-      throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException {
+      throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException {
     schedulerService.createJob(job);
   }
 
@@ -70,7 +69,7 @@ public class SchedulerWebService {
    */
   @WebMethod(operationName = "DeleteJob")
   public void deleteJob(@WebParam(name = "JobId") @XmlElement(required = true) String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     schedulerService.deleteJob(jobId);
   }
 
@@ -83,7 +82,7 @@ public class SchedulerWebService {
   @WebMethod(operationName = "GetJob")
   @WebResult(name = "Job")
   public Job getJob(@WebParam(name = "JobId") @XmlElement(required = true) String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     return schedulerService.getJob(jobId);
   }
 
@@ -96,7 +95,7 @@ public class SchedulerWebService {
   @WebMethod(operationName = "GetJobName")
   @WebResult(name = "JobName")
   public String getJobName(@WebParam(name = "jobId") @XmlElement(required = true) String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     return schedulerService.getJobName(jobId);
   }
 
@@ -107,7 +106,7 @@ public class SchedulerWebService {
    */
   @WebMethod(operationName = "GetJobs")
   @WebResult(name = "Job")
-  public List<Job> getJobs() throws SchedulerServiceException {
+  public List<Job> getJobs() throws ServiceUnavailableException {
     return schedulerService.getJobs();
   }
 
@@ -118,7 +117,7 @@ public class SchedulerWebService {
    */
   @WebMethod(operationName = "UpdateJob")
   public void updateJob(@WebParam(name = "Job") @XmlElement(required = true) Job job)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     schedulerService.updateJob(job);
   }
 }

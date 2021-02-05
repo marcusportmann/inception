@@ -22,8 +22,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * The <b>OAuth2AuthorizationServerConfiguration</b> class provides the Spring configuration
- * for the OAuth2 Authorization Server module.
+ * The <b>OAuth2AuthorizationServerConfiguration</b> class provides the Spring configuration for the
+ * OAuth2 Authorization Server module.
  *
  * @author Marcus Portmann
  */

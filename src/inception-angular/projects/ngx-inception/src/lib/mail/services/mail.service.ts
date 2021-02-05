@@ -21,11 +21,10 @@ import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http'
 import {ApiError} from '../../core/errors/api-error';
 import {
   DuplicateMailTemplateError,
-  MailServiceError,
   MailTemplateNotFoundError
 } from './mail.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {MailTemplate} from './mail-template';
 import {MailTemplateSummary} from './mail-template-summary';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
@@ -85,12 +84,12 @@ export class MailService {
         } else if (apiError.code === 'DuplicateMailTemplateError') {
           return throwError(new DuplicateMailTemplateError(apiError));
         } else {
-          return throwError(new MailServiceError('Failed to create the mail template.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to create the mail template.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to create the mail template.', httpErrorResponse));
       }
     }));
   }
@@ -114,12 +113,12 @@ export class MailService {
         if (apiError.code === 'MailTemplateNotFoundError') {
           return throwError(new MailTemplateNotFoundError(apiError));
         } else {
-          return throwError(new MailServiceError('Failed to delete the mail template.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to delete the mail template.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to delete the mail template.', httpErrorResponse));
       }
     }));
   }
@@ -143,12 +142,12 @@ export class MailService {
         if (apiError.code === 'MailTemplateNotFoundError') {
           return throwError(new MailTemplateNotFoundError(apiError));
         } else {
-          return throwError(new MailServiceError('Failed to retrieve the mail template.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the mail template.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the mail template.', httpErrorResponse));
       }
     }));
   }
@@ -173,12 +172,12 @@ export class MailService {
         if (apiError.code === 'MailTemplateNotFoundError') {
           return throwError(new MailTemplateNotFoundError(apiError));
         } else {
-          return throwError(new MailServiceError('Failed to retrieve the mail template name.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to retrieve the mail template name.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the mail template name.', httpErrorResponse));
       }
     }));
   }
@@ -197,11 +196,11 @@ export class MailService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new MailServiceError('Failed to retrieve the summaries for the mail templates.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the mail templates.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the summaries for the mail templates.', httpErrorResponse));
       }
     }));
   }
@@ -219,11 +218,11 @@ export class MailService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new MailServiceError('Failed to retrieve the mail templates.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the mail templates.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the mail templates.', httpErrorResponse));
       }
     }));
   }
@@ -248,12 +247,12 @@ export class MailService {
         if (apiError.code === 'MailTemplateNotFoundError') {
           return throwError(new MailTemplateNotFoundError(apiError));
         } else {
-          return throwError(new MailServiceError('Failed to update the mail template.', apiError));
+          return throwError(new ServiceUnavailableError('Failed to update the mail template.', apiError));
         }
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to update the mail template.', httpErrorResponse));
       }
     }));
   }

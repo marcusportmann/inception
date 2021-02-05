@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,11 +23,8 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-
-
 /**
- * The <b>UserSortBy</b> enumeration defines the possible methods used to sort a list of
- * users.
+ * The <b>UserSortBy</b> enumeration defines the possible methods used to sort a list of users.
  *
  * @author Marcus Portmann
  */

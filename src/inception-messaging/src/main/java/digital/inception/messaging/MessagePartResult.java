@@ -16,15 +16,11 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-
-
 
 /**
  * The <b>MessagePartResult</b> class stores the results of a message part being uploaded by a
@@ -71,8 +67,8 @@ public class MessagePartResult {
   private String exception;
 
   /**
-   * Constructs a new <b>MessagePartResult</b> and populates it from the information stored in
-   * the specified WBXML document.
+   * Constructs a new <b>MessagePartResult</b> and populates it from the information stored in the
+   * specified WBXML document.
    *
    * @param document the WBXML document containing the message part result information
    */
@@ -129,12 +125,12 @@ public class MessagePartResult {
   }
 
   /**
-   * Returns <b>true</b> if the WBXML document contains valid message received response
-   * information or <b>false</b> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message received response information
+   * or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <b>true</b> if the WBXML document contains valid message received response
-   *     information or <b>false</b> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message received response information
+   *     or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();

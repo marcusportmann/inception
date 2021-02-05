@@ -16,8 +16,6 @@
 
 package digital.inception.messaging.handler;
 
-
-
 import digital.inception.messaging.Message;
 
 /**

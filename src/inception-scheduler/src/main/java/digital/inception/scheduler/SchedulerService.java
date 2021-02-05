@@ -16,6 +16,7 @@
 
 package digital.inception.scheduler;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ServiceUtil;
 import digital.inception.core.validation.InvalidArgumentException;
 import digital.inception.core.validation.ValidationError;
@@ -108,7 +109,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void createJob(Job job)
-      throws InvalidArgumentException, DuplicateJobException, SchedulerServiceException {
+      throws InvalidArgumentException, DuplicateJobException, ServiceUnavailableException {
     validateJob(job);
 
     try {
@@ -120,7 +121,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (DuplicateJobException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SchedulerServiceException("Failed to create the job (" + job.getName() + ")", e);
+      throw new ServiceUnavailableException("Failed to create the job (" + job.getName() + ")", e);
     }
   }
 
@@ -132,7 +133,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void deleteJob(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
@@ -146,7 +147,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (JobNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SchedulerServiceException("Failed to delete the job (" + jobId + ")", e);
+      throw new ServiceUnavailableException("Failed to delete the job (" + jobId + ")", e);
     }
   }
 
@@ -156,7 +157,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * @param job the job
    */
   @Override
-  public void executeJob(Job job) throws InvalidArgumentException, SchedulerServiceException {
+  public void executeJob(Job job) throws InvalidArgumentException, ServiceUnavailableException {
     validateJob(job);
 
     Class<?> jobClass;
@@ -165,7 +166,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     try {
       jobClass = Thread.currentThread().getContextClassLoader().loadClass(job.getJobClass());
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to execute the job ("
               + job.getName()
               + ") with ID ("
@@ -185,7 +186,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
 
       // Check if the job is a valid job
       if (!(jobObject instanceof IJob)) {
-        throw new SchedulerServiceException(
+        throw new ServiceUnavailableException(
             "The job class ("
                 + job.getJobClass()
                 + ") does not implement the digital.inception.scheduler.IJob interface");
@@ -196,7 +197,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
       // Perform dependency injection for the job implementation
       applicationContext.getAutowireCapableBeanFactory().autowireBean(jobImplementation);
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to initialize the job (" + job.getName() + ") with ID (" + job.getId() + ")", e);
     }
 
@@ -215,7 +216,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
       // Execute the job
       jobImplementation.execute(context);
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to execute the job (" + job.getName() + ") with ID (" + job.getId() + ")", e);
     }
   }
@@ -227,7 +228,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * @return the jobs
    */
   @Override
-  public List<Job> getFilteredJobs(String filter) throws SchedulerServiceException {
+  public List<Job> getFilteredJobs(String filter) throws ServiceUnavailableException {
     try {
       if (StringUtils.hasText(filter)) {
         return jobRepository.findFiltered("%" + filter + "%");
@@ -235,7 +236,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
         return jobRepository.findAll();
       }
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the jobs matching the filter (" + filter + ")", e);
     }
   }
@@ -248,7 +249,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    */
   @Override
   public Job getJob(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
@@ -264,7 +265,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (JobNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SchedulerServiceException("Failed to retrieve the job (" + jobId + ")", e);
+      throw new ServiceUnavailableException("Failed to retrieve the job (" + jobId + ")", e);
     }
   }
 
@@ -276,7 +277,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    */
   @Override
   public String getJobName(String jobId)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
@@ -292,7 +293,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (JobNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the name of the job (" + jobId + ")", e);
     }
   }
@@ -303,11 +304,11 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * @return the jobs
    */
   @Override
-  public List<Job> getJobs() throws SchedulerServiceException {
+  public List<Job> getJobs() throws ServiceUnavailableException {
     try {
       return jobRepository.findAll();
     } catch (Throwable e) {
-      throw new SchedulerServiceException("Failed to retrieve the jobs", e);
+      throw new ServiceUnavailableException("Failed to retrieve the jobs", e);
     }
   }
 
@@ -331,7 +332,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public Job getNextJobScheduledForExecution() throws SchedulerServiceException {
+  public Job getNextJobScheduledForExecution() throws ServiceUnavailableException {
     try {
       LocalDateTime lastExecutedBefore = LocalDateTime.now();
 
@@ -340,7 +341,8 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
       PageRequest pageRequest = PageRequest.of(0, 1);
 
       List<Job> jobs =
-          jobRepository.findJobsScheduledForExecutionForWrite(lastExecutedBefore, pageRequest);
+          jobRepository.findJobsScheduledForExecutionForWrite(
+              lastExecutedBefore, LocalDateTime.now(), pageRequest);
 
       if (jobs.size() > 0) {
         Job job = jobs.get(0);
@@ -361,7 +363,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
         return null;
       }
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to retrieve the next job that has been scheduled for execution", e);
     }
   }
@@ -372,11 +374,11 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    * @return the unscheduled jobs
    */
   @Override
-  public List<Job> getUnscheduledJobs() throws SchedulerServiceException {
+  public List<Job> getUnscheduledJobs() throws ServiceUnavailableException {
     try {
       return jobRepository.findUnscheduledJobs();
     } catch (Throwable e) {
-      throw new SchedulerServiceException("Failed to retrieve the unscheduled jobs", e);
+      throw new ServiceUnavailableException("Failed to retrieve the unscheduled jobs", e);
     }
   }
 
@@ -390,7 +392,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void rescheduleJob(String jobId, String schedulingPattern)
-      throws InvalidArgumentException, SchedulerServiceException {
+      throws InvalidArgumentException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
@@ -404,7 +406,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
 
       jobRepository.scheduleJob(jobId, predictor.nextMatchingLocalDateTime());
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to reschedule the job (" + jobId + ") for execution", e);
     }
   }
@@ -418,11 +420,11 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void resetJobLocks(JobStatus status, JobStatus newStatus)
-      throws SchedulerServiceException {
+      throws ServiceUnavailableException {
     try {
       jobRepository.resetJobLocks(status, newStatus, instanceName);
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to reset the locks for the jobs with status ("
               + status
               + ") that have been locked using the lock name ("
@@ -439,7 +441,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    */
   @Override
   @Transactional(propagation = Propagation.REQUIRES_NEW)
-  public boolean scheduleNextUnscheduledJobForExecution() throws SchedulerServiceException {
+  public boolean scheduleNextUnscheduledJobForExecution() throws ServiceUnavailableException {
     try {
       PageRequest pageRequest = PageRequest.of(0, 1);
 
@@ -483,7 +485,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
         return false;
       }
     } catch (Throwable e) {
-      throw new SchedulerServiceException("Failed to schedule the next unscheduled job", e);
+      throw new ServiceUnavailableException("Failed to schedule the next unscheduled job", e);
     }
   }
 
@@ -496,7 +498,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void setJobStatus(String jobId, JobStatus status)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
@@ -510,7 +512,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (JobNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to set the status (" + status + ") for the job (" + jobId + ")", e);
     }
   }
@@ -524,7 +526,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
   @Override
   @Transactional
   public void unlockJob(String jobId, JobStatus status)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     if (!StringUtils.hasText(jobId)) {
       throw new InvalidArgumentException("jobId");
     }
@@ -538,7 +540,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (JobNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SchedulerServiceException(
+      throw new ServiceUnavailableException(
           "Failed to unlock and set the status for the job (" + jobId + ") to (" + status + ")", e);
     }
   }
@@ -550,7 +552,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
    */
   @Override
   public void updateJob(Job job)
-      throws InvalidArgumentException, JobNotFoundException, SchedulerServiceException {
+      throws InvalidArgumentException, JobNotFoundException, ServiceUnavailableException {
     validateJob(job);
 
     try {
@@ -578,7 +580,7 @@ public class SchedulerService implements ISchedulerService, InitializingBean {
     } catch (JobNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new SchedulerServiceException("Failed to update the job (" + job.getId() + ")", e);
+      throw new ServiceUnavailableException("Failed to update the job (" + job.getId() + ")", e);
     }
   }
 

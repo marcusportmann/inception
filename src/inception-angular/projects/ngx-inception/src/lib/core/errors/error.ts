@@ -52,22 +52,59 @@ export class Error {
     this.timestamp = new Date();
 
     if (cause) {
-      if (cause instanceof ApiError) {
+      if (cause instanceof HttpErrorResponse) {
+        if (ApiError.isApiError(cause)) {
+          const apiError: ApiError = new ApiError(cause);
+          this.timestamp = apiError.timestamp;
+          this.cause = apiError;
+        } else {
+          if (cause.error) {
+            this.cause = new HttpError(cause.error.error ? cause.error.error : '',
+              cause.error.error_description ? cause.error.error_description : '', cause.message, cause.status,
+              cause.statusText, cause.url ? cause.url : '');
+          } else {
+            this.cause = new HttpError('', '', cause.message, cause.status, cause.statusText, cause.url ? cause.url : '');
+          }
+        }
+      }
+      else if (cause instanceof ApiError) {
         this.timestamp = cause.timestamp;
         this.cause = cause;
-      } else if (cause instanceof HttpErrorResponse) {
-        if (cause.error) {
-          this.cause = new HttpError(cause.error.error ? cause.error.error : '',
-            cause.error.error_description ? cause.error.error_description : '', cause.message, cause.status,
-            cause.statusText, cause.url ? cause.url : '');
-        } else {
-          this.cause = new HttpError('', '', cause.message, cause.status, cause.statusText, cause.url ? cause.url : '');
-        }
       } else {
         this.cause = cause;
       }
     }
   }
+
+
+  // /**
+  //  * Constructs a new Error.
+  //  *
+  //  * @param message The error message.
+  //  * @param cause   The optional cause of the error.
+  //  */
+  // constructor(message: string, cause?: ApiError | HttpErrorResponse | HttpError) {
+  //
+  //   this.message = message;
+  //   this.timestamp = new Date();
+  //
+  //   if (cause) {
+  //     if (cause instanceof ApiError) {
+  //       this.timestamp = cause.timestamp;
+  //       this.cause = cause;
+  //     } else if (cause instanceof HttpErrorResponse) {
+  //       if (cause.error) {
+  //         this.cause = new HttpError(cause.error.error ? cause.error.error : '',
+  //           cause.error.error_description ? cause.error.error_description : '', cause.message, cause.status,
+  //           cause.statusText, cause.url ? cause.url : '');
+  //       } else {
+  //         this.cause = new HttpError('', '', cause.message, cause.status, cause.statusText, cause.url ? cause.url : '');
+  //       }
+  //     } else {
+  //       this.cause = cause;
+  //     }
+  //   }
+  // }
 }
 
 

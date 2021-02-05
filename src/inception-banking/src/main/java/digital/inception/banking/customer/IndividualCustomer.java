@@ -23,8 +23,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import digital.inception.banking.customer.constraints.ValidIndividualCustomer;
 import digital.inception.party.ContactMechanism;
-import digital.inception.party.ContactMechanismPurpose;
-import digital.inception.party.ContactMechanismType;
 import digital.inception.party.IdentityDocument;
 import digital.inception.party.PartyRole;
 import digital.inception.party.PartyType;
@@ -472,7 +470,7 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {
@@ -496,13 +494,12 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
   /**
    * Retrieve the contact mechanism with the specified type and purpose for the individual customer.
    *
-   * @param type the contact mechanism type
-   * @param purpose the contact mechanism purpose
+   * @param type the code for the contact mechanism type
+   * @param purpose the code for the contact mechanism purpose
    * @return the contact mechanism with the specified type and purpose for the individual customer
    *     or <b>null</b> if the contact mechanism could not be found
    */
-  public ContactMechanism getContactMechanism(
-      ContactMechanismType type, ContactMechanismPurpose purpose) {
+  public ContactMechanism getContactMechanism(String type, String purpose) {
     return contactMechanisms.stream()
         .filter(
             contactMechanism ->
@@ -1057,7 +1054,7 @@ public class IndividualCustomer extends CustomerBase implements Serializable {
    * @param type the contact mechanism type
    * @param purpose the contact mechanism purpose
    */
-  public void removeContactMechanism(ContactMechanismType type, ContactMechanismPurpose purpose) {
+  public void removeContactMechanism(String type, String purpose) {
     contactMechanisms.removeIf(
         existingContactMechanism ->
             Objects.equals(existingContactMechanism.getType(), type)

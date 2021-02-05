@@ -16,13 +16,11 @@
 
 package digital.inception.scheduler;
 
-
-
 import java.util.List;
 
 /**
- * The <b>IntArrayValueMatcher</b> class implements a <b>ValueMatcher</b> whose rules
- * are in a plain array of integer values.
+ * The <b>IntArrayValueMatcher</b> class implements a <b>ValueMatcher</b> whose rules are in a plain
+ * array of integer values.
  *
  * <p>When asked to validate a value, this ValueMatcher checks if it is in the array.
  *
@@ -60,8 +58,8 @@ public class IntArrayValueMatcher implements ValueMatcher {
    * <p>Returns <b>true</b> if the given value is included in the matcher list.
    *
    * @param value the value
-   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b>
-   *     , <b>false</b> otherwise
+   * @return <b>true</b> if the given value matches the rules of the <b>ValueMatcher</b> ,
+   *     <b>false</b> otherwise
    */
   public boolean match(int value) {
     for (int value1 : values) {

@@ -20,8 +20,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <b>MailTemplateContentTypeConverter</b> class implements the custom JPA converter for
- * the <b>MailTemplateContentType</b> enumeration.
+ * The <b>MailTemplateContentTypeConverter</b> class implements the custom JPA converter for the
+ * <b>MailTemplateContentType</b> enumeration.
  *
  * @author Marcus Portmann
  */

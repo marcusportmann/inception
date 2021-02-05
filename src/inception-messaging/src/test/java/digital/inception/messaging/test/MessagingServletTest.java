@@ -16,8 +16,6 @@
 
 package digital.inception.messaging.test;
 
-
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -79,11 +77,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-
-
 /**
- * The <b>MessagingServletTest</b> class contains the implementation of the JUnit tests for
- * the <b>MessagingServlet</b> class.
+ * The <b>MessagingServletTest</b> class contains the implementation of the JUnit tests for the
+ * <b>MessagingServlet</b> class.
  *
  * @author Marcus Portmann
  */

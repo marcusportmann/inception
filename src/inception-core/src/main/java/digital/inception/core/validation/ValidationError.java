@@ -35,8 +35,8 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.util.StringUtils;
 
 /**
- * The <b>ValidationError</b> class represents a validation error that occurred while
- * validating an entity.
+ * The <b>ValidationError</b> class represents a validation error that occurred while validating an
+ * entity.
  *
  * @author Marcus Portmann
  */

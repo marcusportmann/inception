@@ -16,8 +16,6 @@
 
 package digital.inception.scheduler;
 
-
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -27,8 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-
 
 /**
  * The <b>BackgroundJobExecutor</b> class implements the Background Job Executor.
@@ -57,11 +53,11 @@ public class BackgroundJobExecutor implements InitializingBean {
   /* Logger */
   private static final Logger logger = LoggerFactory.getLogger(BackgroundJobExecutor.class);
 
-  /** The executor responsible for processing jobs. */
-  private Executor jobProcessor;
-
   /** The Scheduler Service. */
   private final ISchedulerService schedulerService;
+
+  /** The executor responsible for processing jobs. */
+  private Executor jobProcessor;
 
   /**
    * Constructs a new <b>BackgroundJobExecutor</b>.
@@ -98,7 +94,7 @@ public class BackgroundJobExecutor implements InitializingBean {
 
       // Schedule any unscheduled jobs
       try {
-      while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
+        while (schedulerService.scheduleNextUnscheduledJobForExecution()) {}
       } catch (Throwable e) {
         logger.error("Failed to schedule the unscheduled jobs for execution");
       }

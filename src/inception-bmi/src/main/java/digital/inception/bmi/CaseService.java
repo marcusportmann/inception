@@ -16,6 +16,7 @@
 
 package digital.inception.bmi;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.util.ResourceUtil;
 import digital.inception.core.xml.XmlSchemaClasspathInputSource;
 import java.io.ByteArrayInputStream;
@@ -72,7 +73,7 @@ public class CaseService implements ICaseService {
    * @return <b>true</b> if the case definition exists or <b>false</b> otherwise
    */
   @Override
-  public boolean caseDefinitionExists(String caseDefinitionId) throws CaseServiceException {
+  public boolean caseDefinitionExists(String caseDefinitionId) throws ServiceUnavailableException {
     try {
       CaseDefinitionQuery caseDefinitionQuery =
           processEngine.getRepositoryService().createCaseDefinitionQuery();
@@ -82,7 +83,7 @@ public class CaseService implements ICaseService {
 
       return caseDefinitionQuery.count() > 0;
     } catch (Throwable e) {
-      throw new CaseServiceException(
+      throw new ServiceUnavailableException(
           "Failed to check whether the case definition (" + caseDefinitionId + ") exists", e);
     }
   }
@@ -96,7 +97,7 @@ public class CaseService implements ICaseService {
   @Override
   @Transactional
   public List<CaseDefinitionSummary> createCaseDefinition(byte[] caseDefinitionData)
-      throws InvalidCMMNException, DuplicateCaseDefinitionException, CaseServiceException {
+      throws InvalidCMMNException, DuplicateCaseDefinitionException, ServiceUnavailableException {
     try {
       List<CaseDefinitionSummary> caseDefinitionSummaries = validateCMMN(caseDefinitionData);
 
@@ -122,7 +123,7 @@ public class CaseService implements ICaseService {
     } catch (InvalidCMMNException | DuplicateCaseDefinitionException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CaseServiceException("Failed to create the case definition", e);
+      throw new ServiceUnavailableException("Failed to create the case definition", e);
     }
   }
 
@@ -132,7 +133,8 @@ public class CaseService implements ICaseService {
    * @return the summaries for all the case definitions
    */
   @Override
-  public List<CaseDefinitionSummary> getCaseDefinitionSummaries() throws CaseServiceException {
+  public List<CaseDefinitionSummary> getCaseDefinitionSummaries()
+      throws ServiceUnavailableException {
     try {
       CaseDefinitionQuery caseDefinitionQuery =
           processEngine.getRepositoryService().createCaseDefinitionQuery().latestVersion();
@@ -146,7 +148,7 @@ public class CaseService implements ICaseService {
 
       return caseDefinitionSummaries;
     } catch (Throwable e) {
-      throw new CaseServiceException("Failed to retrieve the case definition summaries", e);
+      throw new ServiceUnavailableException("Failed to retrieve the case definition summaries", e);
     }
   }
 
@@ -159,7 +161,7 @@ public class CaseService implements ICaseService {
   @Override
   @Transactional
   public List<CaseDefinitionSummary> updateCaseDefinition(byte[] caseDefinitionData)
-      throws InvalidCMMNException, CaseDefinitionNotFoundException, CaseServiceException {
+      throws InvalidCMMNException, CaseDefinitionNotFoundException, ServiceUnavailableException {
     try {
       List<CaseDefinitionSummary> caseDefinitionSummaries = validateCMMN(caseDefinitionData);
 
@@ -185,7 +187,7 @@ public class CaseService implements ICaseService {
     } catch (InvalidCMMNException | CaseDefinitionNotFoundException e) {
       throw e;
     } catch (Throwable e) {
-      throw new CaseServiceException("Failed to update the case definition", e);
+      throw new ServiceUnavailableException("Failed to update the case definition", e);
     }
   }
 
@@ -197,7 +199,7 @@ public class CaseService implements ICaseService {
    *     validated
    */
   public List<CaseDefinitionSummary> validateCMMN(byte[] cmmnXml)
-      throws InvalidCMMNException, CaseServiceException {
+      throws InvalidCMMNException, ServiceUnavailableException {
     try {
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
@@ -295,7 +297,7 @@ public class CaseService implements ICaseService {
     } catch (SAXException e) {
       throw new InvalidCMMNException(e);
     } catch (Throwable e) {
-      throw new CaseServiceException("Failed to validate the CMMN XML", e);
+      throw new ServiceUnavailableException("Failed to validate the CMMN XML", e);
     }
   }
 
@@ -307,7 +309,7 @@ public class CaseService implements ICaseService {
    *     validated
    */
   public List<CaseDefinitionSummary> validateCMMN(String cmmnXml)
-      throws InvalidCMMNException, CaseServiceException {
+      throws InvalidCMMNException, ServiceUnavailableException {
     return validateCMMN(cmmnXml.getBytes(StandardCharsets.UTF_8));
   }
 }

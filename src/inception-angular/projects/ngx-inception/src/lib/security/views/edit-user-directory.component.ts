@@ -24,9 +24,8 @@ import {SecurityService} from '../services/security.service';
 import {SpinnerService} from '../../layout/services/spinner.service';
 import {DialogService} from '../../dialog/services/dialog.service';
 import {BackNavigation} from '../../layout/components/back-navigation';
-import {SecurityServiceError} from '../services/security.service.errors';
 import {AccessDeniedError} from '../../core/errors/access-denied-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {combineLatest, Subscription} from 'rxjs';
 import {InternalUserDirectoryComponent} from './internal-user-directory.component';
 import {LdapUserDirectoryComponent} from './ldap-user-directory.component';
@@ -114,12 +113,15 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
       this.userDirectoryTypeFormControl.setValue(results[1].type);
     }, (error: Error) => {
       // noinspection SuspiciousTypeOfGuard
-      if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-        (error instanceof SystemUnavailableError)) {
+      if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
         // noinspection JSIgnoredPromiseFromCall
         this.router.navigateByUrl('/error/send-error-report', {state: {error}});
       } else {
-        this.dialogService.showErrorDialog(error);
+        this.dialogService.showErrorDialog(error).afterClosed()
+        .pipe(first())
+        .subscribe(() => {
+          this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
+        });
       }
     });
   }
@@ -148,8 +150,7 @@ export class EditUserDirectoryComponent extends AdminContainerView implements Af
         this.router.navigate(['../..'], {relativeTo: this.activatedRoute});
       }, (error: Error) => {
         // noinspection SuspiciousTypeOfGuard
-        if ((error instanceof SecurityServiceError) || (error instanceof AccessDeniedError) ||
-          (error instanceof SystemUnavailableError)) {
+        if ((error instanceof AccessDeniedError) || (error instanceof ServiceUnavailableError)) {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigateByUrl('/error/send-error-report', {state: {error}});
         } else {

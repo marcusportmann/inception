@@ -16,14 +16,12 @@
 
 package digital.inception.scheduler;
 
-
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
- * The <b>JobStatusConverter</b> class implements the custom JPA converter for the <b>
- * JobStatus</b> enumeration.
+ * The <b>JobStatusConverter</b> class implements the custom JPA converter for the <b> JobStatus</b>
+ * enumeration.
  *
  * @author Marcus Portmann
  */

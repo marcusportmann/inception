@@ -16,8 +16,6 @@
 
 package digital.inception.reporting.test;
 
-
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -45,11 +43,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-
-
 /**
- * The <b>ReportingServiceTest</b> class contains the implementation of the JUnit tests for
- * the <b>ReportingService</b> class.
+ * The <b>ReportingServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>ReportingService</b> class.
  *
  * @author Marcus Portmann
  */

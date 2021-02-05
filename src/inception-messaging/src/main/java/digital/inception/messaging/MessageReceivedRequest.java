@@ -16,14 +16,10 @@
 
 package digital.inception.messaging;
 
-
-
 import digital.inception.core.wbxml.Document;
 import digital.inception.core.wbxml.Element;
 import digital.inception.core.wbxml.Encoder;
 import java.util.UUID;
-
-
 
 /**
  * The <b>MessageReceivedRequest</b> class represents a request sent by a mobile device to
@@ -35,20 +31,17 @@ import java.util.UUID;
 public class MessageReceivedRequest {
 
   /**
-   * The Universally Unique Identifier (UUID) for the device the message received
-   * request originated from.
+   * The Universally Unique Identifier (UUID) for the device the message received request originated
+   * from.
    */
   private final UUID deviceId;
 
-  /**
-   * The Universally Unique Identifier (UUID) for the message that was successfully
-   * downloaded.
-   */
+  /** The Universally Unique Identifier (UUID) for the message that was successfully downloaded. */
   private final UUID messageId;
 
   /**
-   * Constructs a new <b>MessageReceivedRequest</b> and populates it from the information
-   * stored in the specified WBXML document.
+   * Constructs a new <b>MessageReceivedRequest</b> and populates it from the information stored in
+   * the specified WBXML document.
    *
    * @param document the WBXML document containing the message received request information
    */
@@ -62,10 +55,10 @@ public class MessageReceivedRequest {
   /**
    * Constructs a new <b>MessageReceivedRequest</b>.
    *
-   * @param deviceId the Universally Unique Identifier (UUID) for the device the
-   *     message received request originated from
-   * @param messageId the Universally Unique Identifier (UUID) for the message that
-   *     was successfully downloaded
+   * @param deviceId the Universally Unique Identifier (UUID) for the device the message received
+   *     request originated from
+   * @param messageId the Universally Unique Identifier (UUID) for the message that was successfully
+   *     downloaded
    */
   public MessageReceivedRequest(UUID deviceId, UUID messageId) {
     this.deviceId = deviceId;
@@ -73,12 +66,12 @@ public class MessageReceivedRequest {
   }
 
   /**
-   * Returns <b>true</b> if the WBXML document contains valid message received request
-   * information or <b>false</b> otherwise.
+   * Returns <b>true</b> if the WBXML document contains valid message received request information
+   * or <b>false</b> otherwise.
    *
    * @param document the WBXML document to validate
-   * @return <b>true</b> if the WBXML document contains valid message received request
-   *     information or <b>false</b> otherwise
+   * @return <b>true</b> if the WBXML document contains valid message received request information
+   *     or <b>false</b> otherwise
    */
   public static boolean isValidWBXML(Document document) {
     Element rootElement = document.getRootElement();
@@ -90,22 +83,22 @@ public class MessageReceivedRequest {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the device the message
-   * received request originated from.
+   * Returns the Universally Unique Identifier (UUID) for the device the message received request
+   * originated from.
    *
-   * @return the Universally Unique Identifier (UUID) for the device the message
-   *     received request originated from
+   * @return the Universally Unique Identifier (UUID) for the device the message received request
+   *     originated from
    */
   public UUID getDeviceId() {
     return deviceId;
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the message that was
-   * successfully downloaded.
+   * Returns the Universally Unique Identifier (UUID) for the message that was successfully
+   * downloaded.
    *
-   * @return the Universally Unique Identifier (UUID) for the message that was
-   *     successfully downloaded
+   * @return the Universally Unique Identifier (UUID) for the message that was successfully
+   *     downloaded
    */
   public UUID getMessageId() {
     return messageId;

@@ -20,8 +20,8 @@ import digital.inception.core.exception.RichRuntimeException;
 import org.xml.sax.SAXParseException;
 
 /**
- * The <b>XmlParserException</b> exception is thrown to indicate an error condition when
- * parsing an XML file.
+ * The <b>XmlParserException</b> exception is thrown to indicate an error condition when parsing an
+ * XML file.
  *
  * @author Marcus Portmann
  */
@@ -36,8 +36,8 @@ public class XmlParserException extends RichRuntimeException {
   }
 
   /**
-   * Constructs a new <b>XmlParserException</b> using the information contained in the
-   * specified <b>SAXParseException</b>.
+   * Constructs a new <b>XmlParserException</b> using the information contained in the specified
+   * <b>SAXParseException</b>.
    *
    * @param cause the <b>SAXParseException</b> giving the cause of the exception
    */
@@ -66,8 +66,8 @@ public class XmlParserException extends RichRuntimeException {
 
   /**
    * Constructs a new <b>XmlParserException</b> with the specified cause and a message of
-   * <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and
-   * message of cause).
+   * <b>(cause==null ? null : cause.toString())</b> (which typically contains the class and message
+   * of cause).
    *
    * @param cause The cause saved for later retrieval by the <b>getCause()</b> method. (A
    *     <b>null</b> value is permitted if the cause is nonexistent or unknown)

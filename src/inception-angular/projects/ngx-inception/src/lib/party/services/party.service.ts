@@ -19,9 +19,8 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {ApiError} from '../../core/errors/api-error';
-import {PartyServiceError} from './party.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 
 /**

@@ -16,6 +16,7 @@
 
 package demo.model;
 
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.sorting.SortDirection;
 import digital.inception.core.validation.InvalidArgumentException;
 
@@ -34,7 +35,7 @@ public interface IVehicleService {
    * @param car the car
    */
   void createCar(Car car)
-      throws InvalidArgumentException, DuplicateCarException, VehicleServiceException;
+      throws InvalidArgumentException, DuplicateCarException, ServiceUnavailableException;
 
   /**
    * Create the new vehicle.
@@ -42,7 +43,7 @@ public interface IVehicleService {
    * @param vehicle the vehicle
    */
   void createVehicle(Vehicle vehicle)
-      throws InvalidArgumentException, DuplicateVehicleException, VehicleServiceException;
+      throws InvalidArgumentException, DuplicateVehicleException, ServiceUnavailableException;
 
   /**
    * Retrieve the cars.
@@ -54,7 +55,7 @@ public interface IVehicleService {
    * @return the cars
    */
   Cars getCars(String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, VehicleServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 
   /**
    * Retrieve the vehicles.
@@ -67,5 +68,5 @@ public interface IVehicleService {
    */
   Vehicles getVehicles(
       String filter, SortDirection sortDirection, Integer pageIndex, Integer pageSize)
-      throws InvalidArgumentException, VehicleServiceException;
+      throws InvalidArgumentException, ServiceUnavailableException;
 }

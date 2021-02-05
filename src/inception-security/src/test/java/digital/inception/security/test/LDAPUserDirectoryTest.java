@@ -62,11 +62,11 @@
 // */
 // @RunWith(TestClassRunner.class)
 //
-//import digital.inception.test.TestConfiguration;
-//import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
-//import org.springframework.test.context.ContextConfiguration;
+// import digital.inception.test.TestConfiguration;
+// import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+// import org.springframework.test.context.ContextConfiguration;
 //
-//@ContextConfiguration(
+// @ContextConfiguration(
 //    classes = {TestConfiguration.class},
 //    initializers = {ConfigDataApplicationContextInitializer.class})
 // @TestExecutionListeners(

@@ -36,17 +36,17 @@ public class ContactMechanismId implements Serializable {
    */
   private UUID party;
 
-  /** The contact mechanism purpose. */
+  /** The code for the contact mechanism purpose. */
   private String purpose;
 
-  /** The contact mechanism type. */
+  /** The code for the contact mechanism type. */
   private String type;
 
   /**
    * Indicates whether some other object is "equal to" this one.
    *
    * @param object the reference object with which to compare
-   * @return <b>true</b> if this object is the same as the object argument otherwise <b> false</b>
+   * @return <b>true</b> if this object is the same as the object argument otherwise <b>false</b>
    */
   @Override
   public boolean equals(Object object) {

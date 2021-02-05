@@ -16,8 +16,6 @@
 
 package digital.inception.messaging.test;
 
-
-
 import digital.inception.messaging.IMessagingService;
 import digital.inception.test.TestClassRunner;
 import digital.inception.test.TestConfiguration;
@@ -34,8 +32,8 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 /**
- * The <b>MessagingServiceTest</b> class contains the implementation of the JUnit tests for
- * the <b>MessagingService</b> class.
+ * The <b>MessagingServiceTest</b> class contains the implementation of the JUnit tests for the
+ * <b>MessagingService</b> class.
  *
  * @author Marcus Portmann
  */

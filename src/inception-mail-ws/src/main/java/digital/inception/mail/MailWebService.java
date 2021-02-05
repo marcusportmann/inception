@@ -16,8 +16,7 @@
 
 package digital.inception.mail;
 
-
-
+import digital.inception.core.service.ServiceUnavailableException;
 import digital.inception.core.validation.InvalidArgumentException;
 import java.util.List;
 import javax.jws.WebMethod;
@@ -26,8 +25,6 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.xml.bind.annotation.XmlElement;
-
-
 
 /**
  * The <b>MailWebService</b> class.
@@ -62,7 +59,7 @@ public class MailWebService {
   @WebMethod(operationName = "CreateMailTemplate")
   public void createMailTemplate(
       @WebParam(name = "MailTemplate") @XmlElement(required = true) MailTemplate mailTemplate)
-      throws InvalidArgumentException, DuplicateMailTemplateException, MailServiceException {
+      throws InvalidArgumentException, DuplicateMailTemplateException, ServiceUnavailableException {
     mailService.createMailTemplate(mailTemplate);
   }
 
@@ -74,7 +71,7 @@ public class MailWebService {
   @WebMethod(operationName = "DeleteMailTemplate")
   public void deleteMailTemplate(
       @WebParam(name = "MailTemplateId") @XmlElement(required = true) String mailTemplateId)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     mailService.deleteMailTemplate(mailTemplateId);
   }
 
@@ -88,7 +85,7 @@ public class MailWebService {
   @WebResult(name = "MailTemplate")
   public MailTemplate getMailTemplate(
       @WebParam(name = "MailTemplateId") @XmlElement(required = true) String mailTemplateId)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     return mailService.getMailTemplate(mailTemplateId);
   }
 
@@ -102,7 +99,7 @@ public class MailWebService {
   @WebResult(name = "MailTemplateName")
   public String getMailTemplateName(
       @WebParam(name = "MailTemplateId") @XmlElement(required = true) String mailTemplateId)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     return mailService.getMailTemplateName(mailTemplateId);
   }
 
@@ -113,7 +110,7 @@ public class MailWebService {
    */
   @WebMethod(operationName = "GetMailTemplateSummaries")
   @WebResult(name = "MailTemplateSummary")
-  public List<MailTemplateSummary> getMailTemplateSummaries() throws MailServiceException {
+  public List<MailTemplateSummary> getMailTemplateSummaries() throws ServiceUnavailableException {
     return mailService.getMailTemplateSummaries();
   }
 
@@ -124,7 +121,7 @@ public class MailWebService {
    */
   @WebMethod(operationName = "GetMailTemplates")
   @WebResult(name = "MailTemplate")
-  public List<MailTemplate> getMailTemplates() throws MailServiceException {
+  public List<MailTemplate> getMailTemplates() throws ServiceUnavailableException {
     return mailService.getMailTemplates();
   }
 
@@ -136,7 +133,7 @@ public class MailWebService {
   @WebMethod(operationName = "UpdateMailTemplate")
   public void updateMailTemplate(
       @WebParam(name = "MailTemplate") @XmlElement(required = true) MailTemplate mailTemplate)
-      throws InvalidArgumentException, MailTemplateNotFoundException, MailServiceException {
+      throws InvalidArgumentException, MailTemplateNotFoundException, ServiceUnavailableException {
     mailService.updateMailTemplate(mailTemplate);
   }
 }

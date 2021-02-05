@@ -16,8 +16,6 @@
 
 package digital.inception.security;
 
-
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -31,8 +29,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-
 
 /**
  * The <b>GroupMember</b> class holds the information for a group member.
@@ -77,8 +73,7 @@ public class GroupMember implements Serializable {
   private GroupMemberType memberType;
 
   /**
-   * The Universally Unique Identifier (UUID) for the user directory the group is
-   * associated with.
+   * The Universally Unique Identifier (UUID) for the user directory the group is associated with.
    */
   @Schema(
       description =
@@ -96,8 +91,8 @@ public class GroupMember implements Serializable {
   /**
    * Constructs a new <b>GroupMember</b>.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the
+   *     group is associated with
    * @param groupName the name of the group
    * @param memberType the group member type
    * @param memberName the name of the group member
@@ -138,11 +133,11 @@ public class GroupMember implements Serializable {
   }
 
   /**
-   * Returns the Universally Unique Identifier (UUID) for the user directory the
-   * group is associated with.
+   * Returns the Universally Unique Identifier (UUID) for the user directory the group is associated
+   * with.
    *
-   * @return the Universally Unique Identifier (UUID) for the user directory the
-   *     group is associated with
+   * @return the Universally Unique Identifier (UUID) for the user directory the group is associated
+   *     with
    */
   public UUID getUserDirectoryId() {
     return userDirectoryId;
@@ -176,11 +171,11 @@ public class GroupMember implements Serializable {
   }
 
   /**
-   * Set the Universally Unique Identifier (UUID) for the user directory the group
-   * is associated with.
+   * Set the Universally Unique Identifier (UUID) for the user directory the group is associated
+   * with.
    *
-   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user
-   *     directory the group is associated with
+   * @param userDirectoryId the Universally Unique Identifier (UUID) for the user directory the
+   *     group is associated with
    */
   public void setUserDirectoryId(UUID userDirectoryId) {
     this.userDirectoryId = userDirectoryId;

@@ -31,16 +31,16 @@ import org.springframework.util.StringUtils;
 public class ResourceOwnerPasswordCredentialsGrantResponse extends Response {
 
   /** The access token. */
-  private String accessToken;
+  private final String accessToken;
 
   /** The lifetime in seconds of the access token. */
-  private long expiresIn;
+  private final long expiresIn;
 
   /** The refresh token. */
-  private String refreshToken;
+  private final String refreshToken;
 
   /** The access token scope. */
-  private String scope;
+  private final String scope;
 
   /**
    * Constructs a new <b>ResourceOwnerPasswordCredentialsGrantResponse</b>.

@@ -19,9 +19,8 @@ import {Observable, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {ApiError} from '../../core/errors/api-error';
-import {ReferenceServiceError} from './reference.service.errors';
 import {CommunicationError} from '../../core/errors/communication-error';
-import {SystemUnavailableError} from '../../core/errors/system-unavailable-error';
+import {ServiceUnavailableError} from '../../core/errors/service-unavailable-error';
 import {INCEPTION_CONFIG, InceptionConfig} from '../../inception-config';
 import {Country} from './country';
 import {EmploymentStatus} from './employment-status';
@@ -86,11 +85,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the contact mechanism purposes.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism purposes.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism purposes.', httpErrorResponse));
       }
     }));
   }
@@ -113,11 +112,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the contact mechanism types.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the contact mechanism types.', httpErrorResponse));
       }
     }));
   }
@@ -140,11 +139,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the countries.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the countries.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the countries.', httpErrorResponse));
       }
     }));
   }
@@ -167,11 +166,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the employment statuses.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the employment statuses.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the employment statuses.', httpErrorResponse));
       }
     }));
   }
@@ -194,11 +193,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the employment types.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the employment types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the employment types.', httpErrorResponse));
       }
     }));
   }
@@ -221,11 +220,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the genders.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the genders.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the genders.', httpErrorResponse));
       }
     }));
   }
@@ -248,11 +247,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the identity document types.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the identity document types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the identity document types.', httpErrorResponse));
       }
     }));
   }
@@ -275,11 +274,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the languages.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the languages.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the languages.', httpErrorResponse));
       }
     }));
   }
@@ -302,11 +301,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the marital statuses.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the marital statuses.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the marital statuses.', httpErrorResponse));
       }
     }));
   }
@@ -329,11 +328,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the marriage types.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the marriage types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the marriage types.', httpErrorResponse));
       }
     }));
   }
@@ -356,11 +355,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the next of kin types.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the next of kin types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the next of kin types.', httpErrorResponse));
       }
     }));
   }
@@ -383,11 +382,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the occupations.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the occupations.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the occupations.', httpErrorResponse));
       }
     }));
   }
@@ -410,11 +409,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the races.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the races.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the races.', httpErrorResponse));
       }
     }));
   }
@@ -437,11 +436,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the regions.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the regions.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the regions.',httpErrorResponse));
       }
     }));
   }
@@ -464,11 +463,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the residence permit types.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the residence permit types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the residence permit types.', httpErrorResponse));
       }
     }));
   }
@@ -491,11 +490,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the residency statuses.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the residency statuses.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the residency statuses.', httpErrorResponse));
       }
     }));
   }
@@ -518,11 +517,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the residential types.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the residential types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the residential types.', httpErrorResponse));
       }
     }));
   }
@@ -545,11 +544,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the sources of funds.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the sources of funds.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the sources of funds.', httpErrorResponse));
       }
     }));
   }
@@ -572,11 +571,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the tax number types.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the tax number types.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the tax number types.', httpErrorResponse));
       }
     }));
   }
@@ -599,11 +598,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the titles.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the titles.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the titles.', httpErrorResponse));
       }
     }));
   }
@@ -626,11 +625,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the verification methods.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the verification methods.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the verification methods.', httpErrorResponse));
       }
     }));
   }
@@ -653,11 +652,11 @@ export class ReferenceService {
       if (ApiError.isApiError(httpErrorResponse)) {
         const apiError: ApiError = new ApiError(httpErrorResponse);
 
-        return throwError(new ReferenceServiceError('Failed to retrieve the verification statuses.', apiError));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the verification statuses.', apiError));
       } else if (CommunicationError.isCommunicationError(httpErrorResponse)) {
         return throwError(new CommunicationError(httpErrorResponse));
       } else {
-        return throwError(new SystemUnavailableError(httpErrorResponse));
+        return throwError(new ServiceUnavailableError('Failed to retrieve the verification statuses.', httpErrorResponse));
       }
     }));
   }

@@ -17,8 +17,8 @@
 package digital.inception.core.util;
 
 /**
- * The <b>CryptoException</b> exception is thrown to indicate an error condition when working
- * with the cryptography utilities.
+ * The <b>CryptoException</b> exception is thrown to indicate an error condition when working with
+ * the cryptography utilities.
  *
  * @author Marcus Portmann
  */

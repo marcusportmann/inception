@@ -16,16 +16,12 @@
 
 package digital.inception.security;
 
-
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-
 
 /**
  * The <b>UserDetails</b> class stores the details for a user.
@@ -46,9 +42,11 @@ public class UserDetails implements org.springframework.security.core.userdetail
    * @param user the user
    * @param roleCodes the codes for the roles that the user has been assigned
    * @param functionCodes the function codes for the user
-   * @param tenantIds the Universally Unique Identifiers (UUIDs) for the tenants the user is associated with
-   * @param userDirectoryIds the list of Universally Unique Identifiers (UUIDs) for the user
-   *     user directories the user is associated with as a result of being associated with one or more tenants
+   * @param tenantIds the Universally Unique Identifiers (UUIDs) for the tenants the user is
+   *     associated with
+   * @param userDirectoryIds the list of Universally Unique Identifiers (UUIDs) for the user user
+   *     directories the user is associated with as a result of being associated with one or more
+   *     tenants
    */
   UserDetails(
       User user,
@@ -132,8 +130,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
   /**
    * Returns whether the user's credentials have expired.
    *
-   * @return <b>true</b> if the user's credentials have NOT expired or <b>false</b>
-   *     otherwise
+   * @return <b>true</b> if the user's credentials have NOT expired or <b>false</b> otherwise
    */
   @Override
   public boolean isCredentialsNonExpired() {
