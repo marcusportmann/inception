@@ -1055,6 +1055,7 @@ public class PartyService implements IPartyService {
    * @return the person
    */
   @Override
+  //@Cacheable(value = "persons", key = "#personId")
   public Person getPerson(UUID personId)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (personId == null) {
@@ -2113,6 +2114,7 @@ public class PartyService implements IPartyService {
    */
   @Override
   @Transactional
+  // @CacheEvict(value="persons", allEntries=true)
   public void updatePerson(Person person)
       throws InvalidArgumentException, PersonNotFoundException, ServiceUnavailableException {
     if (person == null) {
